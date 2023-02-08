@@ -17,9 +17,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.support.l10n.Messages;
-import org.eclipse.chemclipse.support.messages.ISupportMessages;
-import org.eclipse.chemclipse.support.messages.SupportMessages;
+import org.eclipse.chemclipse.support.l10n.SupportMessages;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -117,15 +115,14 @@ public abstract class AbstractWizard extends Wizard implements IFileWizard {
 		/*
 		 * Run
 		 */
-		Messages messages = SupportMessages.INSTANCE();
 		try {
 			getContainer().run(true, false, runnable);
 		} catch(InterruptedException e) {
-			MessageDialog.openError(getShell(), messages.getMessage(ISupportMessages.PROCESSING_ERROR), messages.getMessage(ISupportMessages.PROCESSING_PROCESS_INTERRUPTED));
+			MessageDialog.openError(getShell(), SupportMessages.processingError, SupportMessages.processingProcessInterrupted);
 			Thread.currentThread().interrupt();
 			return false;
 		} catch(InvocationTargetException e) {
-			MessageDialog.openError(getShell(), messages.getMessage(ISupportMessages.PROCESSING_ERROR), messages.getMessage(ISupportMessages.PROCESSING_SOMETHING_WRONG));
+			MessageDialog.openError(getShell(), SupportMessages.processingError, SupportMessages.processingSomethingWrong);
 			return false;
 		}
 		return true;

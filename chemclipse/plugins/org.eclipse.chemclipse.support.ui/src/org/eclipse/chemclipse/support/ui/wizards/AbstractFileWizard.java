@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,8 +12,7 @@
 package org.eclipse.chemclipse.support.ui.wizards;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.support.messages.ISupportMessages;
-import org.eclipse.chemclipse.support.messages.SupportMessages;
+import org.eclipse.chemclipse.support.l10n.SupportMessages;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -34,10 +33,12 @@ public abstract class AbstractFileWizard extends AbstractWizard {
 	private String fileExtension;
 
 	public AbstractFileWizard(String defaultFileName, String fileExtension) {
+
 		this(new WizardElements(), defaultFileName, fileExtension);
 	}
 
 	public AbstractFileWizard(IWizardElements wizardElements, String defaultFileName, String fileExtension) {
+
 		super(wizardElements);
 		this.defaultFileName = defaultFileName;
 		this.fileExtension = fileExtension;
@@ -67,9 +68,8 @@ public abstract class AbstractFileWizard extends AbstractWizard {
 		/*
 		 * Prepare
 		 */
-		monitor.subTask(SupportMessages.INSTANCE().getMessage(ISupportMessages.TASK_PREPARE_PROJECT));
-		if(container instanceof IProject) {
-			IProject project = (IProject)container;
+		monitor.subTask(SupportMessages.taskPrepareProject);
+		if(container instanceof IProject project) {
 			if(!project.exists()) {
 				/*
 				 * Creates and opens the project if necessary.
@@ -101,9 +101,10 @@ public abstract class AbstractFileWizard extends AbstractWizard {
 		/*
 		 * Open the editor
 		 */
-		monitor.subTask(SupportMessages.INSTANCE().getMessage(ISupportMessages.TASK_OPEN_EDITOR));
+		monitor.subTask(SupportMessages.taskOpenEditor);
 		getShell().getDisplay().asyncExec(new Runnable() {
 
+			@Override
 			public void run() {
 
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();

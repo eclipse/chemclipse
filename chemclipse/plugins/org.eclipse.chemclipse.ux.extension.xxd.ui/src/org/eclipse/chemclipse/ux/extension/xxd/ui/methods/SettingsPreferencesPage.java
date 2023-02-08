@@ -17,8 +17,7 @@ import java.io.IOException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences.DialogBehavior;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -114,10 +113,10 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 	private Button createButtonDefault(Composite parent) {
 
 		Button button = new Button(parent, SWT.RADIO);
-		button.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.USE_SYSTEM_OPTIONS));
+		button.setText(ExtensionMessages.useSystemOptions);
 		if(preferences.requiresUserSettings()) {
 			button.setEnabled(false);
-			button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NO_SYSTEM_OPTIONS_AVAILABLE));
+			button.setToolTipText(ExtensionMessages.noSystemOptionsAvailable);
 		}
 		//
 		return button;
@@ -138,7 +137,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 	private Button createButtonUser(Composite parent) {
 
 		Button button = new Button(parent, SWT.RADIO);
-		button.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.USE_SPECIFIC_OPTIONS));
+		button.setText(ExtensionMessages.useSpecificOptions);
 		//
 		return button;
 	}

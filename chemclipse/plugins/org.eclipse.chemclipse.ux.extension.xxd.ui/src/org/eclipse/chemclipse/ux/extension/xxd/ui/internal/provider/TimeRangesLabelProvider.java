@@ -19,16 +19,15 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class TimeRangesLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String IDENTIFIER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IDENTIFIER);
-	public static final String START = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.START_TIME_MIN);
-	public static final String CENTER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CENTER_TIME_MIN);
-	public static final String STOP = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.STOP_TIME_MIN);
+	public static final String IDENTIFIER = ExtensionMessages.identifier;
+	public static final String START = ExtensionMessages.startTimeMin;
+	public static final String CENTER = ExtensionMessages.centerTimeMin;
+	public static final String STOP = ExtensionMessages.stopTimeMin;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 	//

@@ -17,8 +17,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -40,7 +39,7 @@ public abstract class AbstractIdentificationsHandler {
 			if(chromatogram != null) {
 				MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.YES | SWT.NO | SWT.CANCEL);
 				messageBox.setText(text);
-				messageBox.setMessage(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REALLY_SAVE_IDENTIFICATIONS));
+				messageBox.setMessage(ExtensionMessages.reallySaveIdentifications);
 				int decision = messageBox.open();
 				if(SWT.YES == decision) {
 					/*

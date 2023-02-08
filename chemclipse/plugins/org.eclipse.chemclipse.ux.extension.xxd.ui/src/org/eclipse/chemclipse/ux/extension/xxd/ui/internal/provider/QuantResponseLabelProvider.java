@@ -18,15 +18,14 @@ import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class QuantResponseLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String SIGNAL = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SIGNAL);
-	public static final String CONCENTRATION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONCENTRATION);
-	public static final String RESPONSE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RESPONSE);
+	public static final String SIGNAL = ExtensionMessages.signal;
+	public static final String CONCENTRATION = ExtensionMessages.concentration;
+	public static final String RESPONSE = ExtensionMessages.response;
 	//
 	public static final String[] TITLES = { //
 			SIGNAL, //

@@ -13,8 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCode;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCodes;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -73,6 +72,7 @@ public class ColorCodeDialog extends TitleAreaDialog {
 	/*
 	 * (non-Javadoc) Method declared on Dialog.
 	 */
+	@Override
 	protected void buttonPressed(int buttonId) {
 
 		if(buttonId == IDialogConstants.OK_ID) {
@@ -88,6 +88,7 @@ public class ColorCodeDialog extends TitleAreaDialog {
 	/*
 	 * (non-Javadoc) Method declared on Dialog.
 	 */
+	@Override
 	protected Control createDialogArea(Composite parent) {
 
 		Composite composite = (Composite)super.createDialogArea(parent);
@@ -110,7 +111,7 @@ public class ColorCodeDialog extends TitleAreaDialog {
 
 		textName = new Text(parent, SWT.BORDER);
 		textName.setText((colorCode != null) ? colorCode.getName() : "");
-		textName.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FIELD_FOR_COLOR_CODE_NAME));
+		textName.setToolTipText(ExtensionMessages.fieldForColorCodeName);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.widthHint = 300;
@@ -129,7 +130,7 @@ public class ColorCodeDialog extends TitleAreaDialog {
 
 		colorWidget = new Label(parent, SWT.BORDER);
 		colorWidget.setText("");
-		colorWidget.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COLOR_IS_USED));
+		colorWidget.setToolTipText(ExtensionMessages.colorIsUsed);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.widthHint = 150;
@@ -141,14 +142,15 @@ public class ColorCodeDialog extends TitleAreaDialog {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Color");
-		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_COLOR));
+		button.setToolTipText(ExtensionMessages.selectColor);
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 
 				ColorDialog colorDialog = new ColorDialog(event.display.getActiveShell());
 				colorDialog.setRGB(colorWidget.getBackground().getRGB());
-				colorDialog.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_COLOR));
+				colorDialog.setText(ExtensionMessages.selectColor);
 				RGB rgb = colorDialog.open();
 				if(rgb != null) {
 					Color color = Colors.getColor(rgb);
@@ -171,10 +173,10 @@ public class ColorCodeDialog extends TitleAreaDialog {
 		//
 		String name = getName();
 		if(name.equals("")) {
-			setErrorMessage(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME_MUST_BE_SPECIFIED));
+			setErrorMessage(ExtensionMessages.nameMustBeSpecified);
 			getButton(OK).setEnabled(false);
 		} else {
-			String NameMustNotContain = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME_MUST_NOT_CONTAIN);
+			String NameMustNotContain = ExtensionMessages.nameMustNotContain;
 			if(name.contains(ColorCodes.VALUE_DELIMITER)) {
 				setErrorMessage(NameMustNotContain + " '" + ColorCodes.VALUE_DELIMITER + "'");
 				getButton(OK).setEnabled(false);

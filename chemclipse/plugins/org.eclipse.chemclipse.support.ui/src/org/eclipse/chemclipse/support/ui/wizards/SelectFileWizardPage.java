@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.wizards;
 
-import org.eclipse.chemclipse.support.l10n.Messages;
-import org.eclipse.chemclipse.support.messages.ISupportMessages;
-import org.eclipse.chemclipse.support.messages.SupportMessages;
+import org.eclipse.chemclipse.support.l10n.SupportMessages;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -37,9 +35,10 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 	private Text reportNameText;
 
 	public SelectFileWizardPage(IWizardElements wizardElements, String defaultReportName, String reportExtension) {
+
 		super("SelectFileWizardPage"); // $NON-NLS-1$
-		setTitle(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_FILE_NAME));
-		setDescription(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_FILE_NAME_INFO));
+		setTitle(SupportMessages.labelFileName);
+		setDescription(SupportMessages.labelFileNameInfo);
 		this.wizardElements = wizardElements;
 		this.defaultReportName = defaultReportName;
 		this.reportExtension = reportExtension;
@@ -76,7 +75,6 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 	@Override
 	public void createControl(Composite parent) {
 
-		Messages messages = SupportMessages.INSTANCE();
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, true));
 		//
@@ -86,7 +84,7 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 		 * Project name
 		 */
 		Label labelProject = new Label(composite, SWT.NONE);
-		labelProject.setText(messages.getMessage(ISupportMessages.LABEL_FILE_CREATION_PROJECT_PATH));
+		labelProject.setText(SupportMessages.labelFileCreationProjectPath);
 		labelProject.setLayoutData(gridData);
 		//
 		labelProjectName = new Label(composite, SWT.WRAP);
@@ -97,7 +95,7 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 		 * Report name
 		 */
 		Label labelReport = new Label(composite, SWT.NONE);
-		labelReport.setText(messages.getMessage(ISupportMessages.LABEL_SELECT_FILE_NAME));
+		labelReport.setText(SupportMessages.labelSelectFileName);
 		labelReport.setLayoutData(gridData);
 		//
 		reportNameText = new Text(composite, SWT.BORDER);
@@ -105,6 +103,7 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 		reportNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		reportNameText.addModifyListener(new ModifyListener() {
 
+			@Override
 			public void modifyText(ModifyEvent e) {
 
 				validateReportName();
@@ -123,7 +122,7 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 		if(wizardElements.getContainer() != null) {
 			labelProjectName.setText(wizardElements.getContainer().getFullPath().toString());
 		} else {
-			labelProjectName.setText(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_SELECT_PROJECT));
+			labelProjectName.setText(SupportMessages.labelSelectProject);
 		}
 	}
 
@@ -132,12 +131,11 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 	 */
 	private void validateReportName() {
 
-		Messages messages = SupportMessages.INSTANCE();
 		String message = null;
 		//
 		String fileName = reportNameText.getText().trim();
 		if(fileName == null || fileName.equals("")) {
-			message = messages.getMessage(ISupportMessages.PROCESSING_SELECT_FILE_NAME);
+			message = SupportMessages.processingSelectFileName;
 		} else {
 			/*
 			 * Add the extension
@@ -157,7 +155,7 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 					if(container instanceof IFolder folder) {
 						IFile file = folder.getFile(fileName);
 						if(file.exists()) {
-							message = messages.getMessage(ISupportMessages.PROCESSING_FILE_EXISTS);
+							message = SupportMessages.processingFileExists;
 						} else {
 							/*
 							 * O.K. - all checks are passed.
@@ -171,7 +169,7 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 						if(project.exists()) {
 							IFile file = project.getFile(fileName);
 							if(file.exists()) {
-								message = messages.getMessage(ISupportMessages.PROCESSING_FILE_EXISTS);
+								message = SupportMessages.processingFileExists;
 							} else {
 								/*
 								 * O.K. - all checks are passed.
@@ -185,7 +183,7 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 							wizardElements.setFileName(fileName);
 						}
 					} else {
-						message = messages.getMessage(ISupportMessages.PROCESSING_SELECT_VALID_FOLDER_FILE);
+						message = SupportMessages.processingSelectValidFolderFile;
 					}
 				} else {
 					/*
@@ -196,7 +194,7 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 					wizardElements.setFileName(fileName);
 				}
 			} else {
-				message = messages.getMessage(ISupportMessages.PROCESSING_SELECT_VALID_FOLDER_FILE);
+				message = SupportMessages.processingSelectValidFolderFile;
 			}
 		}
 		/*

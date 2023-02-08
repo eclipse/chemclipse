@@ -14,15 +14,15 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import org.eclipse.chemclipse.model.traces.NamedTrace;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class NamedTracesLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String IDENTIFIER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IDENTIFIER);
-	public static final String TRACES = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TRACES);
+	public static final String IDENTIFIER = ExtensionMessages.identifier;
+	public static final String TRACES = ExtensionMessages.traces;
 	//
 	public static final String[] TITLES = { //
 			IDENTIFIER, //
@@ -46,8 +46,7 @@ public class NamedTracesLabelProvider extends AbstractChemClipseLabelProvider {
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof NamedTrace) {
-			NamedTrace namedTrace = (NamedTrace)element;
+		if(element instanceof NamedTrace namedTrace) {
 			switch(columnIndex) {
 				case 0:
 					text = namedTrace.getIdentifier();
@@ -63,6 +62,6 @@ public class NamedTracesLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK_TRACES, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK_TRACES, IApplicationImageProvider.SIZE_16x16);
 	}
 }

@@ -19,8 +19,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.WavelengthSupport;
@@ -63,7 +62,7 @@ public class TracesSupport {
 					if(libraryInformation != null) {
 						traces = libraryInformation.getName() + " | " + traces;
 					} else {
-						traces = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.UNKNOWN) + " | " + traces;
+						traces = ExtensionMessages.unknown + " | " + traces;
 					}
 					break;
 				default:

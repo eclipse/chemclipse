@@ -13,8 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.swtchart.extensions.charts.ChartOptions;
@@ -27,15 +26,15 @@ public class PreferencePageBaseline extends FieldEditorPreferencePage implements
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.BASELINE));
+		setTitle(ExtensionMessages.baseline);
 		setDescription("");
 	}
 
 	@Override
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_BASELINE_CHART_COMPRESSION_TYPE, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COMPRESSION_TYPE), ChartOptions.COMPRESSION_TYPES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_BASELINE, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DISPLAY_COLOR_SCHEME), Colors.getAvailableColorSchemes(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_BASELINE_CHART_COMPRESSION_TYPE, ExtensionMessages.compressionType, ChartOptions.COMPRESSION_TYPES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_BASELINE, ExtensionMessages.displayColorScheme, Colors.getAvailableColorSchemes(), getFieldEditorParent()));
 	}
 
 	@Override

@@ -66,8 +66,7 @@ import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.DynamicSettingsUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.NMRMeasurementsUI;
@@ -100,7 +99,7 @@ public class ScanEditorNMR implements IScanEditorNMR {
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanEditorNMR";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR";
 	public static final String ICON_URI = ApplicationImageFactory.getInstance().getURI(IApplicationImage.IMAGE_SCAN_NMR, IApplicationImageProvider.SIZE_16x16);
-	public static final String TOOLTIP = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NMR_EDITOR);
+	public static final String TOOLTIP = ExtensionMessages.editorNMR;
 	//
 	private final ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(2));
 	//

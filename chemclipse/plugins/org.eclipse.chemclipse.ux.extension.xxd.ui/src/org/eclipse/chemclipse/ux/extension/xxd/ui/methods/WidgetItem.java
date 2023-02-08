@@ -25,8 +25,7 @@ import org.eclipse.chemclipse.support.text.ILabel;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.AdapterLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -330,7 +329,7 @@ public class WidgetItem {
 		label.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
 		String value = getValueAsString();
 		if(value == null || value.isEmpty()) {
-			label.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHOOSE_LOCATION));
+			label.setText(ExtensionMessages.chooseLocation);
 		} else {
 			label.setText(value);
 		}

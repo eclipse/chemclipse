@@ -24,8 +24,7 @@ import java.util.Map.Entry;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider.SettingsUIControl;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.Adapters;
@@ -159,7 +158,7 @@ public class SettingsUI<T> extends Composite {
 		private void createNoOptionsMessage(Composite parent) {
 
 			Label label = new Label(parent, SWT.NONE);
-			label.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_OFFERS_NO_OPTIONS));
+			label.setText(ExtensionMessages.processorOffersNoOptions);
 			label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		}
 

@@ -14,8 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTraceValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -39,7 +38,7 @@ public class NamedTraceInputValidator implements IInputValidator {
 		if(status.isOK()) {
 			String name = validator.getIdentifier();
 			if(identifier.contains(name)) {
-				return ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAMED_TRACE_ALREADY_EXISTS);
+				return ExtensionMessages.namedTraceAlreadyExists;
 			}
 		} else {
 			return status.getMessage();

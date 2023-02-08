@@ -18,8 +18,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
@@ -37,7 +36,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 
 	public DeletePeaksOperation(Display display, IChromatogramSelection chromatogramSelection, List<IPeak> peaksToDelete) {
 
-		super(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_PEAKS));
+		super(ExtensionMessages.deletePeaks);
 		this.display = display;
 		this.chromatogramSelection = chromatogramSelection;
 		this.peaksToDelete = peaksToDelete;
@@ -67,7 +66,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		chromatogram.removePeaks(peaksToDelete);
-		update(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PEAKS_DELETED));
+		update(ExtensionMessages.peaksDeleted);
 		return Status.OK_STATUS;
 	}
 
@@ -81,7 +80,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 	@Override
 	public String getLabel() {
 
-		return ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_PEAKS);
+		return ExtensionMessages.deletePeaks;
 	}
 
 	@Override
@@ -98,7 +97,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 		for(IPeak peak : peaksToDelete) {
 			chromatogram.addPeak(peak);
 		}
-		update(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PEAKS_UNDELETED));
+		update(ExtensionMessages.peaksUndeleted);
 		return Status.OK_STATUS;
 	}
 }

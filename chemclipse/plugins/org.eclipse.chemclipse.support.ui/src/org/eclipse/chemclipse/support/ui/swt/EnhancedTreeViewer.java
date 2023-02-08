@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,8 +14,7 @@ package org.eclipse.chemclipse.support.ui.swt;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.chemclipse.support.messages.ISupportMessages;
-import org.eclipse.chemclipse.support.messages.SupportMessages;
+import org.eclipse.chemclipse.support.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -48,6 +47,7 @@ public class EnhancedTreeViewer extends Composite {
 	private Clipboard clipboard;
 
 	public EnhancedTreeViewer(Composite parent, int style) {
+
 		super(parent, style);
 		setLayout(new FillLayout());
 		createControl();
@@ -131,7 +131,7 @@ public class EnhancedTreeViewer extends Composite {
 						copyToClipboard();
 					}
 				};
-				action.setText(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_COPY_SELECTION_CLIPBOARD));
+				action.setText(SupportMessages.labelCopySelectionClipboard);
 				manager.add(action);
 			}
 		});
@@ -161,7 +161,7 @@ public class EnhancedTreeViewer extends Composite {
 		 * If the builder is empty, give a note that items needs to be selected.
 		 */
 		if(builder.length() == 0) {
-			builder.append(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_COPY_LINES_INFO));
+			builder.append(SupportMessages.labelCopyLinesInfo);
 			builder.append(END_OF_LINE);
 		}
 		/*

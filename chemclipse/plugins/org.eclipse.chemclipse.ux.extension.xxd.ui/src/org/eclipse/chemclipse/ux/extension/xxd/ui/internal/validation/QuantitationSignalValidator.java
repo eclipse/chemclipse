@@ -15,8 +15,7 @@ import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.model.quantitation.QuantitationSignal;
 import org.eclipse.chemclipse.support.util.ValueParserSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -26,7 +25,7 @@ public class QuantitationSignalValidator extends ValueParserSupport implements I
 	public static final String DEMO = "TIC | 100.0 | 0.0 | true";
 	//
 	private static final String DELIMITER = "|";
-	private static final String ERROR_TARGET = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ENTER_SIGNAL_EXAMPLE) + ": " + DEMO;
+	private static final String ERROR_TARGET = ExtensionMessages.enterSignalExample + ": " + DEMO;
 	//
 	private double signal;
 	private float relativeResponse;

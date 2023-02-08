@@ -12,13 +12,12 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.model;
 
 import org.eclipse.chemclipse.support.text.ILabel;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 
 public enum TracesExportOption implements ILabel {
 
-	SIMPLE_TEXT(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TEXT)), //
-	NAMED_TRACE(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAMED_TRACE)); //
+	SIMPLE_TEXT(ExtensionMessages.text), //
+	NAMED_TRACE(ExtensionMessages.namedTrace); //
 
 	private String label = "";
 

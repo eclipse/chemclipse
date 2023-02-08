@@ -17,24 +17,24 @@ import org.eclipse.chemclipse.model.core.SignalSupport;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String[] TITLES = { //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHEMICAL_CLASS), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONCENTRATION), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONCENTRATION_UNIT), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.AREA), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TRACE), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CALIBRATION_METHOD), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CROSS_ZERO), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FLAG), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DESCRIPTION) //
+			ExtensionMessages.name, //
+			ExtensionMessages.chemicalClass, //
+			ExtensionMessages.concentration, //
+			ExtensionMessages.concentrationUnit, //
+			ExtensionMessages.area, //
+			ExtensionMessages.trace, //
+			ExtensionMessages.calibrationMethod, //
+			ExtensionMessages.crossZero, //
+			ExtensionMessages.flag, //
+			ExtensionMessages.description //
 	};
 	public static final int[] BOUNDS = { //
 			100, //
@@ -105,6 +105,6 @@ public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvid
 	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_QUANTITATION_RESULTS, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_QUANTITATION_RESULTS, IApplicationImageProvider.SIZE_16x16);
 	}
 }

@@ -23,8 +23,7 @@ import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
 import org.eclipse.e4.core.di.annotations.Execute;
@@ -39,7 +38,7 @@ public abstract class AbstractOpenHandler {
 		DataType dataType = getDataType();
 		InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), getPreferenceKey(), getDataType());
 		inputWizardSettings.setTitle("Open " + dataType + " Files"); // TODO: l10n
-		inputWizardSettings.setDescription(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_FILES_TO_BE_OPENED));
+		inputWizardSettings.setDescription(ExtensionMessages.selectFilesToBeOpened);
 		Map<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> selected = InputEntriesWizard.openWizard(shell, inputWizardSettings);
 		for(Entry<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> entry : selected.entrySet()) {
 			File file = entry.getKey();

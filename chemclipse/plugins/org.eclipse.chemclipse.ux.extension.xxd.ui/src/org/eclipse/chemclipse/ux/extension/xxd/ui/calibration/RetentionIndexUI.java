@@ -21,8 +21,7 @@ import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -155,8 +154,8 @@ public class RetentionIndexUI extends Composite {
 					int index = table.getSelectionIndex();
 					if(index >= 0) {
 						MessageBox messageBox = new MessageBox(calibrationEditUI.getShell(), SWT.ICON_WARNING);
-						messageBox.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_REFERENCES));
-						messageBox.setMessage(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SHALL_DELETE_REFERENCES));
+						messageBox.setText(ExtensionMessages.deleteReferences);
+						messageBox.setMessage(ExtensionMessages.shallDeleteReferences);
 						if(messageBox.open() == SWT.OK) {
 							List<Integer> keysToRemove = new ArrayList<>();
 							TableItem[] tableItems = table.getSelection();

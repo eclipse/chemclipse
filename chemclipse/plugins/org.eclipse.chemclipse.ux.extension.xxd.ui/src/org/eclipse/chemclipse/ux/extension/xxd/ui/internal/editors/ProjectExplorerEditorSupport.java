@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -39,7 +39,7 @@ public class ProjectExplorerEditorSupport extends AbstractSupplierFileEditorSupp
 	private static final Logger logger = Logger.getLogger(ProjectExplorerEditorSupport.class);
 	//
 	private String type = "";
-	private static final String DATA_EXPLORER = IExtensionMessages.DATA_EXPLORER;
+	private static final String DATA_EXPLORER = ExtensionMessages.dataExplorer;
 
 	public ProjectExplorerEditorSupport(DataType dataType) {
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,8 +13,7 @@ package org.eclipse.chemclipse.support.history;
 
 import java.util.Date;
 
-import org.eclipse.chemclipse.support.messages.ISupportMessages;
-import org.eclipse.chemclipse.support.messages.SupportMessages;
+import org.eclipse.chemclipse.support.l10n.SupportMessages;
 
 public class EditInformation implements IEditInformation {
 
@@ -22,18 +21,21 @@ public class EditInformation implements IEditInformation {
 	private String description = "";
 	private String editor = "";
 	//
-	public static final String NO_DESCRIPTION = SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_NO_DESCRIPTION);
-	public static final String NO_EDITOR = SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_NOT_AVAILABLE);
+	public static final String NO_DESCRIPTION = SupportMessages.labelNoDescription;
+	public static final String NO_EDITOR = SupportMessages.labelNotAvailable;
 
 	public EditInformation(String description) {
+
 		this(new Date(), description, "");
 	}
 
 	public EditInformation(String description, String editor) {
+
 		this(new Date(), description, editor);
 	}
 
 	public EditInformation(Date date, String description) {
+
 		this(date, description, "");
 	}
 
@@ -44,6 +46,7 @@ public class EditInformation implements IEditInformation {
 	 * @param description
 	 */
 	public EditInformation(Date date, String description, String editor) {
+
 		setDate(date);
 		setDescription(description);
 		setEditor(editor);
@@ -124,28 +127,37 @@ public class EditInformation implements IEditInformation {
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj)
+		if(this == obj) {
 			return true;
-		if(obj == null)
+		}
+		if(obj == null) {
 			return false;
-		if(getClass() != obj.getClass())
+		}
+		if(getClass() != obj.getClass()) {
 			return false;
+		}
 		EditInformation other = (EditInformation)obj;
 		if(date == null) {
-			if(other.date != null)
+			if(other.date != null) {
 				return false;
-		} else if(!date.equals(other.date))
+			}
+		} else if(!date.equals(other.date)) {
 			return false;
+		}
 		if(description == null) {
-			if(other.description != null)
+			if(other.description != null) {
 				return false;
-		} else if(!description.equals(other.description))
+			}
+		} else if(!description.equals(other.description)) {
 			return false;
+		}
 		if(editor == null) {
-			if(other.editor != null)
+			if(other.editor != null) {
 				return false;
-		} else if(!editor.equals(other.editor))
+			}
+		} else if(!editor.equals(other.editor)) {
 			return false;
+		}
 		return true;
 	}
 

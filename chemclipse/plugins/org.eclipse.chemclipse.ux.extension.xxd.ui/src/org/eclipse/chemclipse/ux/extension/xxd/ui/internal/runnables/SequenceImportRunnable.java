@@ -20,8 +20,7 @@ import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
 import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -46,7 +45,7 @@ public class SequenceImportRunnable implements IRunnableWithProgress {
 	@Override
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.READ_SEQUENCE), 2);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ExtensionMessages.readSequence, 2);
 		try {
 			subMonitor.worked(1);
 			IProcessingInfo<ISequence<? extends ISequenceRecord>> processingInfo = SequenceConverter.convert(file, monitor);

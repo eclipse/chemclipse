@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -83,7 +83,7 @@ public abstract class AbstractFilterAction<FilterType extends Filter<?>, ResultT
 			ProcessingInfoPartSupport.getInstance().update(consumer);
 		} catch(InvocationTargetException e) {
 			IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-			processingInfo.addErrorMessage(filter.getName(), IExtensionMessages.PROCESSING_FAILED, e.getTargetException());
+			processingInfo.addErrorMessage(filter.getName(), ExtensionMessages.processingFailed, e.getTargetException());
 			ProcessingInfoPartSupport.getInstance().update(processingInfo);
 		} catch(InterruptedException e) {
 			// user canceled

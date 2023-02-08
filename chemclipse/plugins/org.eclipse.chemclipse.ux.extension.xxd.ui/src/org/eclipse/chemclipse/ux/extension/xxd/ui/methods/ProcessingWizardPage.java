@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,8 +32,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.xxd.process.comparators.NameComparator;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -81,8 +81,8 @@ public class ProcessingWizardPage extends WizardPage {
 			Collections.sort(this.dataCategories, (c1, c2) -> c1.name().compareTo(c2.name()));
 		}
 		processContext = contexts.entrySet().iterator().next().getKey();
-		setTitle(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_ENTRY));
-		setDescription(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_PROCESS_ENTRY));
+		setTitle(ExtensionMessages.processEntry);
+		setDescription(ExtensionMessages.selectProcessEntry);
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class ProcessingWizardPage extends WizardPage {
 		composite.setLayout(new GridLayout(1, false));
 		//
 		if(dataCategories.size() > 1) {
-			createLabel(composite, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_DATA_CATEGORIES));
+			createLabel(composite, ExtensionMessages.selectDataCategories);
 			for(DataCategory dataCategory : dataCategories) {
 				/*
 				 * Set the default visibility.
@@ -112,13 +112,13 @@ public class ProcessingWizardPage extends WizardPage {
 		}
 		//
 		if(processSupplierContextMap.size() > 1) {
-			createLabel(composite, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONTEXT));
+			createLabel(composite, ExtensionMessages.context);
 			createComboViewerContext(composite);
 		}
 		//
-		createLabel(composite, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CATEGROY));
+		createLabel(composite, ExtensionMessages.category);
 		comboViewerCategory = createComboViewerCategory(composite);
-		createLabel(composite, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR));
+		createLabel(composite, ExtensionMessages.processor);
 		comboViewerProcessor = createComboViewerProcessor(composite);
 		//
 		updateComboDataCategoryItems();
@@ -158,7 +158,7 @@ public class ProcessingWizardPage extends WizardPage {
 		Button button = new Button(parent, SWT.CHECK);
 		button.setData(dataCategory);
 		button.setText(dataCategory.label());
-		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_CATEGORY_PROCESSOR_ITEMS, dataCategory.name()));
+		button.setToolTipText(MessageFormat.format(ExtensionMessages.selectCategoryProcessorItems, dataCategory.name()));
 		button.setSelection(getDataTypeSelection(dataCategory));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -266,7 +266,7 @@ public class ProcessingWizardPage extends WizardPage {
 			}
 		});
 		//
-		combo.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_CATEGORY));
+		combo.setToolTipText(ExtensionMessages.selectCategory);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		combo.setLayoutData(gridData);
@@ -322,7 +322,7 @@ public class ProcessingWizardPage extends WizardPage {
 			}
 		});
 		//
-		combo.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_PROCESSOR));
+		combo.setToolTipText(ExtensionMessages.selectProcessor);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		combo.setLayoutData(gridData);
@@ -365,20 +365,20 @@ public class ProcessingWizardPage extends WizardPage {
 			}
 			if(selected < 1) {
 				setPageComplete(false);
-				setErrorMessage(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_ONE_DATA_TYPE));
+				setErrorMessage(ExtensionMessages.selectOneDataType);
 				return;
 			}
 		}
 		//
 		if(comboViewerCategory.getSelection().isEmpty()) {
 			setPageComplete(false);
-			setErrorMessage(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_CATEGORY));
+			setErrorMessage(ExtensionMessages.selectCategory);
 			return;
 		}
 		//
 		if(comboViewerProcessor.getSelection().isEmpty()) {
 			setPageComplete(false);
-			setErrorMessage(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_PROCESSOR));
+			setErrorMessage(ExtensionMessages.selectProcessor);
 			return;
 		}
 		//

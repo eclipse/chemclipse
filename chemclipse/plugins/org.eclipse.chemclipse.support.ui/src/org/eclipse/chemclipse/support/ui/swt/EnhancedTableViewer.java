@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.support.messages.ISupportMessages;
-import org.eclipse.chemclipse.support.messages.SupportMessages;
+import org.eclipse.chemclipse.support.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -184,7 +183,7 @@ public class EnhancedTableViewer extends Composite {
 		 * If the builder is empty, give a note that items needs to be selected.
 		 */
 		if(builder.length() == 0) {
-			builder.append(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_COPY_LINES_INFO));
+			builder.append(SupportMessages.labelCopyLinesInfo);
 			builder.append(END_OF_LINE);
 		}
 		/*
@@ -216,7 +215,7 @@ public class EnhancedTableViewer extends Composite {
 						copyToClipboard();
 					}
 				};
-				action.setText(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_COPY_SELECTION_CLIPBOARD));
+				action.setText(SupportMessages.labelCopySelectionClipboard);
 				manager.add(action);
 			}
 		});

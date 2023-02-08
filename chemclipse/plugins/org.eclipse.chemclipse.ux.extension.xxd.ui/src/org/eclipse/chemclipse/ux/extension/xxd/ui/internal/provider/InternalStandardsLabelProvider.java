@@ -17,17 +17,16 @@ import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class InternalStandardsLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME);
-	public static final String CONCENTRATION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONCENTRATION);
-	public static final String UNIT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.UNIT);
-	public static final String RESPONSE_FACTOR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RESPONSE_FACTOR);
-	public static final String CHEMICAL_CLASS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHEMICAL_CLASS);
+	public static final String NAME = ExtensionMessages.name;
+	public static final String CONCENTRATION = ExtensionMessages.concentration;
+	public static final String UNIT = ExtensionMessages.unit;
+	public static final String RESPONSE_FACTOR = ExtensionMessages.responseFactor;
+	public static final String CHEMICAL_CLASS = ExtensionMessages.chemicalClass;
 	//
 	public static final String[] TITLES = {//
 			NAME, //

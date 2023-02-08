@@ -14,15 +14,14 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCode;
 import org.eclipse.swt.graphics.Image;
 
 public class ColorCodeLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME);
-	public static final String COLOR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COLOR);
+	public static final String NAME = ExtensionMessages.name;
+	public static final String COLOR = ExtensionMessages.color;
 	//
 	public static final int INDEX_COLOR = 1;
 	//
@@ -49,8 +48,7 @@ public class ColorCodeLabelProvider extends AbstractChemClipseLabelProvider {
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof ColorCode) {
-			ColorCode colorCode = (ColorCode)element;
+		if(element instanceof ColorCode colorCode) {
 			switch(columnIndex) {
 				case 0:
 					text = colorCode.getName();
@@ -65,6 +63,7 @@ public class ColorCodeLabelProvider extends AbstractChemClipseLabelProvider {
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PLATE_PCR, IApplicationImage.SIZE_16x16);

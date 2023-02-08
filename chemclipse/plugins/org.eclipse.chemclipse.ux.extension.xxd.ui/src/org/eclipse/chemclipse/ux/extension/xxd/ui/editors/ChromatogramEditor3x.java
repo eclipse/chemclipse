@@ -24,8 +24,7 @@ import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -100,12 +99,12 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		if(input instanceof IFileEditorInput fileEditorInput) {
 			File file = fileEditorInput.getFile().getLocation().toFile();
 			//
-			part.setLabel(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHROMATOGRAM));
+			part.setLabel(ExtensionMessages.chromatogram);
 			Map<String, Object> map = new HashMap<>();
 			map.put(EditorSupport.MAP_FILE, file.getAbsolutePath());
 			map.put(EditorSupport.MAP_BATCH, false);
 			part.setObject(map);
-			part.setTooltip(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHROMATOGRAM_FROM_PROJECT_EXPLORER));
+			part.setTooltip(ExtensionMessages.chromatogramFromProjectExplorer);
 		} else {
 			throw new PartInitException("The file could't be loaded.");
 		}

@@ -33,8 +33,7 @@ import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.SequenceImportRunnable;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedSequenceListUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -55,7 +54,7 @@ public class SequenceEditor {
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.sequenceEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor";
 	public static final String ICON_URI = ApplicationImageFactory.getInstance().getURI(IApplicationImage.IMAGE_SEQUENCE_LIST_DEFAULT, IApplicationImageProvider.SIZE_16x16);
-	public static final String TOOLTIP = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SEQUENCE_EDITOR);
+	public static final String TOOLTIP = ExtensionMessages.sequenceEditor;
 	//
 	private final MPart part;
 	private final MDirtyable dirtyable;

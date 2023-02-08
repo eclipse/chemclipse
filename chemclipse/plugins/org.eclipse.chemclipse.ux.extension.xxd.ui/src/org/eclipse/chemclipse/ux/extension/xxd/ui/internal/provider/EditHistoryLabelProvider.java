@@ -15,17 +15,16 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.history.IEditInformation;
-import org.eclipse.chemclipse.support.messages.ISupportMessages;
-import org.eclipse.chemclipse.support.messages.SupportMessages;
+import org.eclipse.chemclipse.support.l10n.SupportMessages;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 public class EditHistoryLabelProvider extends LabelProvider implements ITableLabelProvider {
 
-	public static final String DATE = SupportMessages.INSTANCE().getMessage(ISupportMessages.COLUMN_DATE);
-	public static final String DESCRIPTION = SupportMessages.INSTANCE().getMessage(ISupportMessages.COLUMN_DESCRIPTION);
-	public static final String EDITOR = SupportMessages.INSTANCE().getMessage(ISupportMessages.COLUMN_EDITOR);
+	public static final String DATE = SupportMessages.columnDate;
+	public static final String DESCRIPTION = SupportMessages.columnDescription;
+	public static final String EDITOR = SupportMessages.columnEditor;
 	//
 	public static final String[] TITLES = {//
 			DATE, //
@@ -62,7 +61,7 @@ public class EditHistoryLabelProvider extends LabelProvider implements ITableLab
 					text = editInformation.getEditor();
 					break;
 				default:
-					text = SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_NOT_AVAILABLE);
+					text = SupportMessages.labelNotAvailable;
 			}
 		}
 		return text;

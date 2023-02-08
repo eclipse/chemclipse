@@ -60,8 +60,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramImportRunnable;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.MeasurementResultNotification;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ObjectChangedListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ProcessMethodNotifications;
@@ -95,7 +94,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramEditor.class);
 	//
 	public static final String ICON_URI = ApplicationImageFactory.getInstance().getURI(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImageProvider.SIZE_16x16);
-	public static final String TOOLTIP = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHROMATOGRAM_EDITOR);
+	public static final String TOOLTIP = ExtensionMessages.chromatogramEditor;
 	//
 	private static final String TOPIC_CHROMATOGRAM = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 	private static final String TOPIC_SCAN = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
@@ -189,7 +188,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 				try {
-					monitor.beginTask(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SAVE_CHROMATOGRAM), IProgressMonitor.UNKNOWN);
+					monitor.beginTask(ExtensionMessages.saveChromatogram, IProgressMonitor.UNKNOWN);
 					try {
 						saveChromatogram(monitor);
 					} catch(NoChromatogramConverterAvailableException e) {
@@ -407,7 +406,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			String converterId = chromatogram.getConverterId();
 			if(converterId != null && !converterId.equals("") && chromatogramFile != null) {
-				monitor.subTask(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SAVE_CHROMATOGRAM));
+				monitor.subTask(ExtensionMessages.saveChromatogram);
 				//
 				IProcessingInfo processingInfo = null;
 				if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {

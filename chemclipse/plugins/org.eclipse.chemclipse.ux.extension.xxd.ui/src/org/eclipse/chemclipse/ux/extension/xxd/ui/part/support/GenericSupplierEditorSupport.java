@@ -20,8 +20,7 @@ import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
@@ -44,7 +43,7 @@ public class GenericSupplierEditorSupport implements ISupplierFileEditorSupport 
 	@Override
 	public String getType() {
 
-		return ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.GENERIC);
+		return ExtensionMessages.generic;
 	}
 
 	@Override

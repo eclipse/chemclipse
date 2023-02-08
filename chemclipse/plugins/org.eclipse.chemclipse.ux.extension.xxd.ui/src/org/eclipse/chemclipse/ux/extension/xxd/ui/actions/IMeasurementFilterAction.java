@@ -28,8 +28,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Shell;
@@ -71,7 +70,7 @@ public class IMeasurementFilterAction extends AbstractFilterAction<IMeasurementF
 					}
 				} catch(IOException e) {
 					IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-					processingInfo.addErrorMessage(filter.getName(), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CANT_PROCESS_SETTINGS), e);
+					processingInfo.addErrorMessage(filter.getName(), ExtensionMessages.cantProcessSettings, e);
 					ProcessingInfoPartSupport.getInstance().update(processingInfo);
 				} catch(CancellationException e) {
 					return;

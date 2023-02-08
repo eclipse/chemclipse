@@ -28,8 +28,7 @@ import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -165,7 +164,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private Button createButtonToggleToolbarInfo(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TOGGLE_INFO_TOOLBAR));
+		button.setToolTipText(ExtensionMessages.toggleInfoToolbar);
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -199,7 +198,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 			}
 		});
 		//
-		combo.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_CHROMATOGRAM_COLUMN));
+		combo.setToolTipText(ExtensionMessages.selectChromatogramColumn);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
 
@@ -220,7 +219,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private Button createButtonToggleToolbarSearch(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TOGGLE_SEARCH_TOOLBAR));
+		button.setToolTipText(ExtensionMessages.toggleSearchToolbar);
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -239,7 +238,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private Button createButtonToggleToolbarModify(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TOGGLE_MODIFY_TOOLBAR));
+		button.setToolTipText(ExtensionMessages.toggleModifyToolbar);
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -262,7 +261,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private Button createButtonToggleToolbarEdit(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TOGGLE_EDIT_TOOLBAR));
+		button.setToolTipText(ExtensionMessages.toggleEditToolbar);
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -282,7 +281,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private Button createButtonAddLibraryToProcess(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ADD_LIBRARY_TO_SEARCH));
+		button.setToolTipText(ExtensionMessages.addLibraryToSearch);
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -291,7 +290,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 			public void widgetSelected(SelectionEvent e) {
 
 				UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS, retentionIndexFile);
-				MessageDialog.openConfirm(e.display.getActiveShell(), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX_CALCULATOR), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX_LIBRARY_ADDED));
+				MessageDialog.openConfirm(e.display.getActiveShell(), ExtensionMessages.retentionIndexCalculator, ExtensionMessages.retentionIndexLibraryAdded);
 			}
 		});
 		//
@@ -301,7 +300,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private Button createButtonRemoveLibraryFromProcess(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REMOVE_LIBRARY_FROM_SEARCH));
+		button.setToolTipText(ExtensionMessages.removeLibraryFromSearch);
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_REMOVE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -310,7 +309,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 			public void widgetSelected(SelectionEvent e) {
 
 				UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS, retentionIndexFile);
-				MessageDialog.openConfirm(e.display.getActiveShell(), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX_CALCULATOR), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX_LIBRARY_REMOVED));
+				MessageDialog.openConfirm(e.display.getActiveShell(), ExtensionMessages.retentionIndexCalculator, ExtensionMessages.retentionIndexLibraryRemoved);
 			}
 		});
 		//
@@ -396,7 +395,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 		 */
 		RetentionIndexTableViewerUI tableViewer = getRetentionIndexTableViewerUI();
 		labelInfoTop.setText(builder.toString());
-		String editInformation = getRetentionIndexTableViewerUI().isEditEnabled() ? ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EDIT_ENABLED) : ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EDIT_DISABLED);
+		String editInformation = getRetentionIndexTableViewerUI().isEditEnabled() ? ExtensionMessages.editEnabled : ExtensionMessages.editDisabled;
 		labelInfoBottom.setText("Retention Indices: " + tableViewer.getTable().getItemCount() + " [" + retentionIndexUI.getSearchText() + "] - " + editInformation);
 	}
 

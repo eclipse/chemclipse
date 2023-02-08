@@ -11,16 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
 public class ResponseFactorValidator implements IValidator<Object> {
 
-	private static final String ERROR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ENTER_CORRECT_RESPONSE_FACTOR);
-	private static final String ERROR_VALUE_RANGE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RESPONSE_FACTOR_MUST_NOT_BE_NEGATIVE);
+	private static final String ERROR = ExtensionMessages.enterCorrectResponseFactor;
+	private static final String ERROR_VALUE_RANGE = ExtensionMessages.responseFactorMustNotBeNegative;
 	//
 	private double responseFactor = 0.0d;
 
