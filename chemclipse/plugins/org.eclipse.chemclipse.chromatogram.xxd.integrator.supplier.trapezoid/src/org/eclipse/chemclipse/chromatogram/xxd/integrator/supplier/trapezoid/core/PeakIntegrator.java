@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakIntegrator extends AbstractPeakIntegrator<IPeakIntegrationResults> {
 
-	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(PeakIntegrator.class);
 
 	@Override
@@ -38,9 +37,9 @@ public class PeakIntegrator extends AbstractPeakIntegrator<IPeakIntegrationResul
 
 		IProcessingInfo<IPeakIntegrationResults> processingInfo = super.validate(peak, peakIntegrationSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(peakIntegrationSettings instanceof PeakIntegrationSettings) {
+			if(peakIntegrationSettings instanceof PeakIntegrationSettings settings) {
 				PeakIntegratorSupport firstDerivativePeakIntegratorSupport = new PeakIntegratorSupport();
-				IPeakIntegrationResult peakIntegrationResult = firstDerivativePeakIntegratorSupport.calculatePeakIntegrationResult(peak, (PeakIntegrationSettings)peakIntegrationSettings, monitor);
+				IPeakIntegrationResult peakIntegrationResult = firstDerivativePeakIntegratorSupport.calculatePeakIntegrationResult(peak, settings, monitor);
 				IPeakIntegrationResults peakIntegrationResults = new PeakIntegrationResults();
 				peakIntegrationResults.add(peakIntegrationResult);
 				processingInfo.setProcessingResult(peakIntegrationResults);
@@ -61,9 +60,9 @@ public class PeakIntegrator extends AbstractPeakIntegrator<IPeakIntegrationResul
 
 		IProcessingInfo<IPeakIntegrationResults> processingInfo = super.validate(peaks, peakIntegrationSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(peakIntegrationSettings instanceof PeakIntegrationSettings) {
+			if(peakIntegrationSettings instanceof PeakIntegrationSettings settings) {
 				PeakIntegratorSupport firstDerivativePeakIntegratorSupport = new PeakIntegratorSupport();
-				IPeakIntegrationResults peakIntegrationResults = firstDerivativePeakIntegratorSupport.calculatePeakIntegrationResults(peaks, (PeakIntegrationSettings)peakIntegrationSettings, monitor);
+				IPeakIntegrationResults peakIntegrationResults = firstDerivativePeakIntegratorSupport.calculatePeakIntegrationResults(peaks, settings, monitor);
 				processingInfo.setProcessingResult(peakIntegrationResults);
 			}
 		}
@@ -77,15 +76,14 @@ public class PeakIntegrator extends AbstractPeakIntegrator<IPeakIntegrationResul
 		return integrate(peaks, peakIntegrationSettings, monitor);
 	}
 
-
 	@Override
 	public IProcessingInfo<IPeakIntegrationResults> integrate(IChromatogramSelection<?, ?> chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<IPeakIntegrationResults> processingInfo = super.validate(chromatogramSelection, peakIntegrationSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(peakIntegrationSettings instanceof PeakIntegrationSettings) {
+			if(peakIntegrationSettings instanceof PeakIntegrationSettings settings) {
 				PeakIntegratorSupport firstDerivativePeakIntegratorSupport = new PeakIntegratorSupport();
-				IPeakIntegrationResults peakIntegrationResults = firstDerivativePeakIntegratorSupport.calculatePeakIntegrationResults(chromatogramSelection, (PeakIntegrationSettings)peakIntegrationSettings, monitor);
+				IPeakIntegrationResults peakIntegrationResults = firstDerivativePeakIntegratorSupport.calculatePeakIntegrationResults(chromatogramSelection, settings, monitor);
 				processingInfo.setProcessingResult(peakIntegrationResults);
 			}
 		}

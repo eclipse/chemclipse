@@ -4,30 +4,30 @@
    <extension
          point="org.eclipse.chemclipse.chromatogram.xxd.integrator.combinedIntegratorSupplier">
       <CombinedIntegratorSupplier
-            description="This extension point tries to implement a ChemStation similar integrator."
+            description="%PeakIntegratorTrapezoidDescription"
             id="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.combinedIntegrator"
             integrator="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.core.CombinedIntegrator"
-            integratorName="Combined Integrator Trapezoid"
+            integratorName="%CombinedIntegratorTrapezoid"
             integratorSettings="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.CombinedIntegrationSettings">
       </CombinedIntegratorSupplier>
    </extension>
    <extension
          point="org.eclipse.chemclipse.chromatogram.xxd.integrator.chromatogramIntegratorSupplier">
       <ChromatogramIntegratorSupplier
-            description="This extension point tries to implement a ChemStation similar chromatogram integrator."
+            description="%PeakIntegratorTrapezoidDescription"
             id="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.chromatogramIntegrator"
             integrator="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.core.ChromatogramIntegrator"
-            integratorName="Chromatogram Integrator Trapezoid"
+            integratorName="%ChromatogramIntegratorTrapezoid"
             integratorSettings="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings">
       </ChromatogramIntegratorSupplier>
    </extension>
    <extension
          point="org.eclipse.chemclipse.chromatogram.xxd.integrator.peakIntegratorSupplier">
       <PeakIntegratorSupplier
-            description="This extension point tries to implement a ChemStation similar peak integrator."
+            description="%PeakIntegratorTrapezoidDescription"
             id="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.peakIntegrator"
             integrator="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.core.PeakIntegrator"
-            integratorName="Peak Integrator Trapezoid"
+            integratorName="%PeakIntegratorTrapezoid"
             integratorSettings="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings">
       </PeakIntegratorSupplier>
    </extension>

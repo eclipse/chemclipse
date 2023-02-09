@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -39,7 +39,7 @@ public class TrapezoidPeakIntegrator_2_Test extends DefaultPeakTestCase {
 	public void testIntegrate_1() {
 
 		try {
-			integrator.integrate(super.getPeak(), null, new NullProgressMonitor());
+			integrator.integrate(super.getPeak(), null);
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", true);
 		}
@@ -47,7 +47,7 @@ public class TrapezoidPeakIntegrator_2_Test extends DefaultPeakTestCase {
 
 	public void testIntegrate_2() {
 
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
+		List<IPeakMSD> peaks = new ArrayList<>();
 		peaks.add(super.getPeak());
 		try {
 			integrator.integrate(peaks, null, new NullProgressMonitor());

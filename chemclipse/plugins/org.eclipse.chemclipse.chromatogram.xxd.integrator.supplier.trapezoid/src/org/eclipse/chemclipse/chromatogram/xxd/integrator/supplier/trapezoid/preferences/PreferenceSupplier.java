@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2022 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -85,7 +85,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static PeakIntegrationSettings getPeakIntegrationSettings() {
 
 		PeakIntegrationSettings integrationSettings = new PeakIntegrationSettings();
-		// baselineSupport.setBaselineHoldOn(5000, 100000);
 		integrationSettings.setIncludeBackground(getPeakAreaIncludeBackground());
 		integrationSettings.setUseAreaConstraint(isUseAreaConstraint());
 		/*

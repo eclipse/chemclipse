@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramInt
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor.BackgroundIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor.ChromatogramIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
@@ -28,21 +29,24 @@ import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.support.l10n.TranslationSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.e4.core.services.translation.TranslationService;
 
 public class ChromatogramIntegratorSupport {
 
-	public static final String INTEGRATOR_DESCRIPTION = "Trapezoid";
+	private static TranslationService translationService = TranslationSupport.getTranslationService();
+	//
+	public static final String INTEGRATOR_DESCRIPTION = translationService.translate("%Trapezoid", Activator.getContributorURI());
 
-	@SuppressWarnings("rawtypes")
-	public IChromatogramIntegrationResults calculateChromatogramIntegrationResults(IChromatogramSelection chromatogramSelection, ChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor) {
+	public IChromatogramIntegrationResults calculateChromatogramIntegrationResults(IChromatogramSelection<?, ?> chromatogramSelection, ChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Get the chromatogram and background area.
 		 */
 		List<IIntegrationEntry> chromatogramIntegrationEntries = calculateChromatogramIntegrationEntry(chromatogramSelection, monitor);
 		List<IIntegrationEntry> backgroundIntegrationEntries = calculateBackgroundIntegrationEntry(chromatogramSelection, monitor);
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		chromatogram.setIntegratedArea(chromatogramIntegrationEntries, backgroundIntegrationEntries, INTEGRATOR_DESCRIPTION);
 		/*
 		 * Chromatogram Results
@@ -62,10 +66,9 @@ public class ChromatogramIntegratorSupport {
 	 * @param monitor
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	private List<IIntegrationEntry> calculateChromatogramIntegrationEntry(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	private List<IIntegrationEntry> calculateChromatogramIntegrationEntry(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
-		List<IIntegrationEntry> chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> chromatogramIntegrationEntries = new ArrayList<>();
 		ChromatogramIntegrator chromatogramIntegrator = new ChromatogramIntegrator();
 		double chromatogramArea = chromatogramIntegrator.integrate(chromatogramSelection);
 		/*
@@ -85,10 +88,9 @@ public class ChromatogramIntegratorSupport {
 		return chromatogramIntegrationEntries;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private List<IIntegrationEntry> calculateBackgroundIntegrationEntry(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	private List<IIntegrationEntry> calculateBackgroundIntegrationEntry(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
-		List<IIntegrationEntry> backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> backgroundIntegrationEntries = new ArrayList<>();
 		BackgroundIntegrator backgroundIntegrator = new BackgroundIntegrator();
 		double backgroundArea = backgroundIntegrator.integrate(chromatogramSelection);
 		/*
