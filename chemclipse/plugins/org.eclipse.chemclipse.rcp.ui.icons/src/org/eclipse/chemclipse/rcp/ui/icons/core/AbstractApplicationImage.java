@@ -88,11 +88,11 @@ public abstract class AbstractApplicationImage implements IApplicationImage {
 		//
 		try {
 			StringBuilder builder = new StringBuilder();
-			builder.append(File.separator);
+			builder.append(PATH_SEPARATOR);
 			builder.append(FOLDER_ICONS);
-			builder.append(File.separator);
+			builder.append(PATH_SEPARATOR);
 			builder.append(size);
-			builder.append(File.separator);
+			builder.append(PATH_SEPARATOR);
 			//
 			IPath path = new Path(builder.toString());
 			URL url = FileLocator.find(bundle, path, null);
