@@ -23,8 +23,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.CalibrationNameValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionIndexValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionTimeValidator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -119,7 +118,7 @@ public class CalibrationEditUI extends Composite {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
-		text.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SET_RETENTION_TIME_MINUTES));
+		text.setToolTipText(ExtensionMessages.setRetentionTimeMinutes);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		retentionTimeValidator = new RetentionTimeValidator();
@@ -140,7 +139,7 @@ public class CalibrationEditUI extends Composite {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
-		text.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SET_RETENTION_INDEX));
+		text.setToolTipText(ExtensionMessages.setRetentionIndex);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		retentionIndexValidator = new RetentionIndexValidator();

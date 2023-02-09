@@ -15,15 +15,14 @@ import org.eclipse.chemclipse.model.instruments.Instrument;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class InstrumentLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String IDENTIFIER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IDENTIFIER);
-	public static final String NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME);
-	public static final String DESCRIPTION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DESCRIPTION);
+	public static final String IDENTIFIER = ExtensionMessages.identifier;
+	public static final String NAME = ExtensionMessages.name;
+	public static final String DESCRIPTION = ExtensionMessages.description;
 	//
 	public static final String[] TITLES = { //
 			IDENTIFIER, //

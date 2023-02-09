@@ -15,8 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.wsd.identifier.wavespectrum.WaveSpectrumIdentifier;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -36,7 +35,7 @@ public class WaveSpectrumIdentifierRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SCAN_IDENTIFICATION), IProgressMonitor.UNKNOWN);
+			monitor.beginTask(ExtensionMessages.scanIdentification, IProgressMonitor.UNKNOWN);
 			WaveSpectrumIdentifier.identify(scans, identifierId, monitor);
 		} finally {
 			monitor.done();

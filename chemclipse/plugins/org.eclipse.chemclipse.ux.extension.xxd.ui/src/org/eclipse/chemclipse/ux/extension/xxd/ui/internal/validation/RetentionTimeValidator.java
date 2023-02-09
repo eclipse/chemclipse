@@ -11,16 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
 public class RetentionTimeValidator implements IValidator<Object> {
 
-	private static final String ERROR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ENTER_CORRECT_RETION_TIME_MINUTES_EXAMPLE) + " 4.25";
-	private static final String ERROR_VALUE_RANGE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_TIME_MUST_NOT_BE_NEGATIVE);
+	private static final String ERROR = ExtensionMessages.enterCorrectRetentionTimeMinutesExample + " 4.25";
+	private static final String ERROR_VALUE_RANGE = ExtensionMessages.retentionTimeMustNotBeNegative;
 	//
 	private double retentionTime = 0.0d;
 

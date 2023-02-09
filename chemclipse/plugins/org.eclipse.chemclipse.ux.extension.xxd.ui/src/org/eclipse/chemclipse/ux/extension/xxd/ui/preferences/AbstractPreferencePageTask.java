@@ -16,8 +16,7 @@ import java.util.List;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.GroupHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.IGroupHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.IPartHandler;
@@ -35,7 +34,7 @@ public abstract class AbstractPreferencePageTask extends FieldEditorPreferencePa
 		super(GRID);
 		this.groupHandler = groupHandler;
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle(groupHandler != null ? groupHandler.getName() : ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NA));
+		setTitle(groupHandler != null ? groupHandler.getName() : ExtensionMessages.na);
 		setDescription("");
 	}
 
@@ -43,7 +42,7 @@ public abstract class AbstractPreferencePageTask extends FieldEditorPreferencePa
 	public void createFieldEditors() {
 
 		if(groupHandler != null) {
-			addField(new LabelFieldEditor(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MANDATORY), getFieldEditorParent()));
+			addField(new LabelFieldEditor(ExtensionMessages.mandatory, getFieldEditorParent()));
 			List<IPartHandler> partHandlersMandatory = groupHandler.getPartHandlerMandatory();
 			for(IPartHandler partHandler : partHandlersMandatory) {
 				addField(new ComboFieldEditor(partHandler.getPartStackReference().getStackPositionKey(), partHandler.getName() + ":", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
@@ -52,7 +51,7 @@ public abstract class AbstractPreferencePageTask extends FieldEditorPreferencePa
 			List<IPartHandler> partHandlersAdditional = groupHandler.getPartHandlerAdditional();
 			if(!partHandlersAdditional.isEmpty()) {
 				addField(new SpacerFieldEditor(getFieldEditorParent()));
-				addField(new LabelFieldEditor(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ADDITIONAL), getFieldEditorParent()));
+				addField(new LabelFieldEditor(ExtensionMessages.additional, getFieldEditorParent()));
 				for(IPartHandler partHandler : partHandlersAdditional) {
 					addField(new ComboFieldEditor(partHandler.getPartStackReference().getStackPositionKey(), partHandler.getName() + ":", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 				}

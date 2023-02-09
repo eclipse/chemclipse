@@ -21,16 +21,15 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 public class RetentionIndexLabelProvider extends LabelProvider implements ITableLabelProvider {
 
-	public static final String RETENTION_TIME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_TIME_MINUTES);
-	public static final String RETENTION_INDEX = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX);
+	public static final String RETENTION_TIME = ExtensionMessages.retentionTimeMinutes;
+	public static final String RETENTION_INDEX = ExtensionMessages.retentionIndex;
 	public static final String NAME = "Name";
 	//
 	public static final String[] TITLES = { //

@@ -18,8 +18,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -34,7 +33,7 @@ public class ProcessingWizard extends Wizard {
 
 	private ProcessingWizard() {
 
-		setWindowTitle(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SETTINGS));
+		setWindowTitle(ExtensionMessages.settings);
 		setDialogSettings(new DialogSettings(PROCESSING_SECTION));
 		setNeedsProgressMonitor(true);
 	}

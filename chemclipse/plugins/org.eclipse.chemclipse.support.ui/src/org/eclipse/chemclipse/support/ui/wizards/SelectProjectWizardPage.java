@@ -14,9 +14,7 @@ package org.eclipse.chemclipse.support.ui.wizards;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.support.l10n.Messages;
-import org.eclipse.chemclipse.support.messages.ISupportMessages;
-import org.eclipse.chemclipse.support.messages.SupportMessages;
+import org.eclipse.chemclipse.support.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.internal.provider.ProjectContentProvider;
 import org.eclipse.chemclipse.support.ui.internal.provider.ProjectLabelProvider;
 import org.eclipse.core.resources.IContainer;
@@ -49,17 +47,16 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 	private ISelection selection;
 	private IWizardElements wizardElements;
 	private Text projectNameText;
-	private Button buttonSelectExistingProject;
-	private Button buttonCreateNewProject;
 	private Combo comboExistingProjects;
 	private TreeViewer treeViewerProject;
 	//
 	private IWorkspaceRoot workspaceRoot;
 
 	public SelectProjectWizardPage(ISelection selection, IWizardElements wizardElements) {
+
 		super("SelectProjectWizardPage"); // $NON-NLS-1$
-		setTitle(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_SELECT_CREATE_PROJECT));
-		setDescription(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_SELECT_CREATE_PROJECT_INFO));
+		setTitle(SupportMessages.labelSelectCreateProject);
+		setDescription(SupportMessages.labelSelectCreateProjectInfo);
 		this.selection = selection;
 		this.wizardElements = wizardElements;
 		workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
@@ -86,7 +83,6 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 	@Override
 	public void createControl(Composite parent) {
 
-		Messages messages = SupportMessages.INSTANCE();
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, true));
 		//
@@ -98,8 +94,8 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 		/*
 		 * Radio: Select project -------------------------------------------------------------------------
 		 */
-		buttonSelectExistingProject = new Button(composite, SWT.RADIO);
-		buttonSelectExistingProject.setText(messages.getMessage(ISupportMessages.LABEL_SELECT_EXISTING_PROJECT));
+		Button buttonSelectExistingProject = new Button(composite, SWT.RADIO);
+		buttonSelectExistingProject.setText(SupportMessages.labelSelectExistingProject);
 		buttonSelectExistingProject.setLayoutData(gridData);
 		buttonSelectExistingProject.addSelectionListener(new SelectionAdapter() {
 
@@ -153,8 +149,8 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 		/*
 		 * Radio: New project -------------------------------------------------------------------------
 		 */
-		buttonCreateNewProject = new Button(composite, SWT.RADIO);
-		buttonCreateNewProject.setText(messages.getMessage(ISupportMessages.LABEL_CREATE_NEW_PROJECT));
+		Button buttonCreateNewProject = new Button(composite, SWT.RADIO);
+		buttonCreateNewProject.setText(SupportMessages.labelCreateNewProject);
 		buttonCreateNewProject.setLayoutData(gridData);
 		buttonCreateNewProject.addSelectionListener(new SelectionAdapter() {
 
@@ -173,6 +169,7 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 		projectNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		projectNameText.addModifyListener(new ModifyListener() {
 
+			@Override
 			public void modifyText(ModifyEvent e) {
 
 				validateTextSelection();
@@ -186,14 +183,12 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 			 * Try to set the selected project name.
 			 */
 			IContainer container = null;
-			if(selection instanceof IStructuredSelection) {
-				IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+			if(selection instanceof IStructuredSelection structuredSelection) {
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof IResource) {
-					if(object instanceof IContainer) {
-						container = (IContainer)object;
+				if(object instanceof IResource resource) {
+					if(object instanceof IContainer resourceContainer) {
+						container = resourceContainer;
 					} else {
-						IResource resource = (IResource)object;
 						container = resource.getParent();
 					}
 					/*
@@ -236,7 +231,7 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 	private String[] getProjectItems() {
 
 		IProject[] projects = workspaceRoot.getProjects();
-		List<IProject> projectsAccessible = new ArrayList<IProject>();
+		List<IProject> projectsAccessible = new ArrayList<>();
 		for(IProject project : projects) {
 			/*
 			 * Add the project only if it is open and accessible.
@@ -274,12 +269,11 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 	 */
 	private void updateExistingProjectSelection() {
 
-		Messages messages = SupportMessages.INSTANCE();
 		String message = null;
 		//
 		String projectName = comboExistingProjects.getText().trim();
 		if(projectName == null || projectName.equals("")) {
-			message = messages.getMessage(ISupportMessages.PROCESSING_SELECT_PROJECT);
+			message = SupportMessages.processingSelectProject;
 		} else {
 			IProject project = workspaceRoot.getProject(projectName);
 			if(!project.exists()) {
@@ -288,7 +282,7 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 				 * It's a combo box, he shouldn't edit the field.
 				 * But we know, he will.
 				 */
-				message = messages.getMessage(ISupportMessages.PROCESSING_PROJECT_NOT_EXISTS);
+				message = SupportMessages.processingProjectNotExists;
 			} else {
 				/*
 				 * O.K. - all checks are passed.
@@ -309,12 +303,11 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 	 */
 	private void validateTreeViewSelection(Object object) {
 
-		Messages messages = SupportMessages.INSTANCE();
 		String message = null;
 		//
 		if(object instanceof IFolder folder) {
 			if(!folder.exists()) {
-				message = messages.getMessage(ISupportMessages.PROCESSING_SELECT_VALID_FOLDER);
+				message = SupportMessages.processingSelectValidFolder;
 			} else {
 				/*
 				 * O.K. - all checks are passed.
@@ -322,7 +315,7 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 				wizardElements.setContainer(folder);
 			}
 		} else {
-			message = messages.getMessage(ISupportMessages.PROCESSING_SELECT_VALID_PROJECT);
+			message = SupportMessages.processingSelectValidProject;
 		}
 		/*
 		 * Updates the status
@@ -335,19 +328,18 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 	 */
 	private void validateComboBoxSelection() {
 
-		Messages messages = SupportMessages.INSTANCE();
 		String message = null;
 		//
 		String containerName = comboExistingProjects.getText().trim();
 		if(containerName == null || containerName.equals("")) {
-			message = messages.getMessage(ISupportMessages.PROCESSING_SELECT_PROJECT);
+			message = SupportMessages.processingSelectProject;
 		} else {
 			/*
 			 * Existing project
 			 */
 			IProject project = workspaceRoot.getProject(containerName);
 			if(!project.exists()) {
-				message = messages.getMessage(ISupportMessages.PROCESSING_PROJECT_NOT_EXISTS);
+				message = SupportMessages.processingProjectNotExists;
 			} else {
 				/*
 				 * O.K. - all checks are passed.
@@ -366,19 +358,18 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 	 */
 	private void validateTextSelection() {
 
-		Messages messages = SupportMessages.INSTANCE();
 		String message = null;
 		//
 		String containerName = projectNameText.getText().trim();
 		if(containerName == null || containerName.equals("")) {
-			message = messages.getMessage(ISupportMessages.PROCESSING_TYPE_PROJECT_NAME);
+			message = SupportMessages.processingTypeProjectName;
 		} else {
 			/*
 			 * Check that the new project doesn't exists.
 			 */
 			IProject project = workspaceRoot.getProject(containerName);
 			if(project.exists()) {
-				message = messages.getMessage(ISupportMessages.PROCESSING_PROJECT_ALREADY_EXISTS);
+				message = SupportMessages.processingProjectAlreadyExists;
 			} else {
 				/*
 				 * O.K. - all checks are passed.

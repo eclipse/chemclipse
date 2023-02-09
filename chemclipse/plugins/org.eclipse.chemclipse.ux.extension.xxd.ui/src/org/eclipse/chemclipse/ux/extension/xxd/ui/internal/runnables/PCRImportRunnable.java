@@ -18,8 +18,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -44,7 +43,7 @@ public class PCRImportRunnable implements IRunnableWithProgress {
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IMPORT_PLATE), IProgressMonitor.UNKNOWN);
+			monitor.beginTask(ExtensionMessages.importPlate, IProgressMonitor.UNKNOWN);
 			IProcessingInfo<?> processingInfo = PlateConverterPCR.convert(file, monitor);
 			plate = (IPlate)processingInfo.getProcessingResult();
 		} catch(Exception e) {

@@ -15,16 +15,13 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class SynonymsLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String SYNONYM = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SYNONYM);
-	//
 	public static final String[] TITLES = { //
-			SYNONYM //
+			ExtensionMessages.synonym //
 	};
 	//
 	public static final int[] BOUNDS = { //

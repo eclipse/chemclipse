@@ -19,16 +19,15 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class QuantSignalsLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String SIGNAL = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SIGNAL);
-	public static final String RELATIVE_RESPONSE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RELATIVE_RESPONSE);
-	public static final String UNCERTAINTY = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.UNCERTAINTY);
-	public static final String USE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.USE);
+	public static final String SIGNAL = ExtensionMessages.signal;
+	public static final String RELATIVE_RESPONSE = ExtensionMessages.relativeResponse;
+	public static final String UNCERTAINTY = ExtensionMessages.uncertainty;
+	public static final String USE = ExtensionMessages.use;
 	//
 	public static final String[] TITLES = { //
 			SIGNAL, //

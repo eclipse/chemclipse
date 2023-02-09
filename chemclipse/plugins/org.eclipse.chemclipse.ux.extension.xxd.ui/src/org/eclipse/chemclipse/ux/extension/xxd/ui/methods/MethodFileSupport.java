@@ -22,8 +22,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -41,7 +40,7 @@ public class MethodFileSupport {
 
 		Shell shell = Display.getDefault().getActiveShell();
 		File currentFile = processMethod.getSourceFile();
-		String filename = currentFile != null ? currentFile.getName() : ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_METHOD_FILENAME);
+		String filename = currentFile != null ? currentFile.getName() : ExtensionMessages.processMethodFilename;
 		return saveProccessMethod(shell, processMethod, filename);
 	}
 
@@ -54,7 +53,7 @@ public class MethodFileSupport {
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
 		dialog.setFileName(fileName);
-		dialog.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SAVE_PROCESS_METHOD_AS) + "...");
+		dialog.setText(ExtensionMessages.saveProcessMethodAs + "...");
 		dialog.setOverwrite(true);
 		//
 		MethodConverterSupport converterSupport = MethodConverter.getMethodConverterSupport();
@@ -68,7 +67,7 @@ public class MethodFileSupport {
 		//
 		ISupplier selectedSupplier = converterSupport.getSupplier().get(index);
 		if(selectedSupplier == null) {
-			MessageDialog.openInformation(shell, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SAVE_PROCESS_METHOD_AS), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REQUESTED_CONVERTER_DOES_NOT_EXIST));
+			MessageDialog.openInformation(shell, ExtensionMessages.saveProcessMethodAs, ExtensionMessages.requestedConverterDoesNotExist);
 			return false;
 		}
 		//

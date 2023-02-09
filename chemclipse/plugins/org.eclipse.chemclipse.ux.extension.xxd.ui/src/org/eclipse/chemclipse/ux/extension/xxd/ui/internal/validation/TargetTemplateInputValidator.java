@@ -15,8 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.targets.TargetValidator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IInputValidator;
 
@@ -39,7 +38,7 @@ public class TargetTemplateInputValidator implements IInputValidator {
 		if(status.isOK()) {
 			String name = targetValidator.getName();
 			if(names.contains(name)) {
-				return ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TARGET_TEMPLATE_ALREADY_EXISTS);
+				return ExtensionMessages.targetTemplateAlreadyExists;
 			}
 		} else {
 			return status.getMessage();

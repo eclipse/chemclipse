@@ -19,8 +19,7 @@ import org.eclipse.chemclipse.pcr.model.core.support.LabelSetting;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorTSD;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesExportOption;
 import org.eclipse.swt.SWT;
 import org.eclipse.swtchart.IAxis.Position;
@@ -32,12 +31,12 @@ public class PreferenceConstants {
 
 	public static final String[][] PART_STACKS = new String[][]{ //
 			{"--", PartSupport.PARTSTACK_NONE}, //
-			{ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.LEFT_TOP), PartSupport.PARTSTACK_LEFT_TOP}, //
-			{ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.LEFT_CENTER), PartSupport.PARTSTACK_LEFT_CENTER}, //
-			{ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RIGHT_TOP), PartSupport.PARTSTACK_RIGHT_TOP}, //
-			{ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.BOTTOM_LEFT), PartSupport.PARTSTACK_BOTTOM_LEFT}, //
-			{ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.BOTTOM_CENTER), PartSupport.PARTSTACK_BOTTOM_CENTER}, //
-			{ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.BOTTOM_RIGHT), PartSupport.PARTSTACK_BOTTOM_RIGHT}//
+			{ExtensionMessages.leftTop, PartSupport.PARTSTACK_LEFT_TOP}, //
+			{ExtensionMessages.leftCenter, PartSupport.PARTSTACK_LEFT_CENTER}, //
+			{ExtensionMessages.rightTop, PartSupport.PARTSTACK_RIGHT_TOP}, //
+			{ExtensionMessages.bottomLeft, PartSupport.PARTSTACK_BOTTOM_LEFT}, //
+			{ExtensionMessages.bottomCenter, PartSupport.PARTSTACK_BOTTOM_CENTER}, //
+			{ExtensionMessages.bottomRight, PartSupport.PARTSTACK_BOTTOM_RIGHT}//
 	};
 	//
 	public static final int MIN_SYMBOL_SIZE = 1;

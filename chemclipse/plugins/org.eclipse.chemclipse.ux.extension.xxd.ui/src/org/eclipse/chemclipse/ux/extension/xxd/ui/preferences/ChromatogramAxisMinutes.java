@@ -13,8 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -31,30 +30,30 @@ public class ChromatogramAxisMinutes extends FieldEditorPreferencePage implement
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHROMATOGRAM_MINUTES_X_AXIS));
+		setTitle(ExtensionMessages.chromatogramMinutesXAxis);
 		setDescription("");
 	}
 
 	@Override
 	public void createFieldEditors() {
 
-		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TITLE) + ":", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_FORMAT_X_AXIS_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FORMAT) + ":", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SHOW), getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.POSITION) + ":", ChartOptions.POSITIONS, getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_MINUTES, ExtensionMessages.title + ":", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_FORMAT_X_AXIS_MINUTES, ExtensionMessages.format + ":", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MINUTES, ExtensionMessages.show, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MINUTES, ExtensionMessages.position + ":", ChartOptions.POSITIONS, getFieldEditorParent()));
 		if(Display.isSystemDarkTheme()) {
-			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MINUTES_DARKTHEME, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COLOR) + ":", getFieldEditorParent()));
+			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MINUTES_DARKTHEME, ExtensionMessages.color + ":", getFieldEditorParent()));
 		} else {
-			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COLOR) + ":", getFieldEditorParent()));
+			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MINUTES, ExtensionMessages.color + ":", getFieldEditorParent()));
 		}
-		addField(new StringFieldEditor(PreferenceConstants.P_FONT_NAME_X_AXIS_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FONT_NAME) + ":", getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceConstants.P_FONT_SIZE_X_AXIS_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FONT_SIZE) + ":", PreferenceConstants.MIN_FONT_SIZE, PreferenceConstants.MAX_FONT_SIZE, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_FONT_STYLE_X_AXIS_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FONT_STYLE) + ":", ChartOptions.FONT_STYLES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.GRID_LINE_STYLE) + ":", ChartOptions.LINE_STYLES, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.GRID_LINE_COLOR) + ":", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SHOW_AXIS_TITLE), getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_LINE_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SHOW_AXIS_LINE), getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_POSITION_MARKER_MINUTES, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SHOW_AXIS_POSITION_MARKER), getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_FONT_NAME_X_AXIS_MINUTES, ExtensionMessages.fontName + ":", getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceConstants.P_FONT_SIZE_X_AXIS_MINUTES, ExtensionMessages.fontSize + ":", PreferenceConstants.MIN_FONT_SIZE, PreferenceConstants.MAX_FONT_SIZE, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_FONT_STYLE_X_AXIS_MINUTES, ExtensionMessages.fontStyle + ":", ChartOptions.FONT_STYLES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES, ExtensionMessages.gridLineStyle + ":", ChartOptions.LINE_STYLES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES, ExtensionMessages.gridLineColor + ":", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MINUTES, ExtensionMessages.showAxisTitle, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_LINE_MINUTES, ExtensionMessages.showAxisLine, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_POSITION_MARKER_MINUTES, ExtensionMessages.showAxisPositionMarker, getFieldEditorParent()));
 	}
 
 	@Override

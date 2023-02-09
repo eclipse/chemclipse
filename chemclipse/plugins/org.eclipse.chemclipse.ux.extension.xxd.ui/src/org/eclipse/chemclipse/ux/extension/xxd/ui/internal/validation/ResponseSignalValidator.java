@@ -15,8 +15,7 @@ import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.model.quantitation.ResponseSignal;
 import org.eclipse.chemclipse.support.util.ValueParserSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -26,7 +25,7 @@ public class ResponseSignalValidator extends ValueParserSupport implements IVali
 	public static final String DEMO = "TIC | 1.5 | 289893.38";
 	//
 	private static final String DELIMITER = "|";
-	private static final String ERROR_TARGET = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ENTER_RESPONSE_SIGNAL_EXAMPLE) + DEMO;
+	private static final String ERROR_TARGET = ExtensionMessages.enterResponseSignalExample + DEMO;
 	//
 	private double signal;
 	private double concentration;

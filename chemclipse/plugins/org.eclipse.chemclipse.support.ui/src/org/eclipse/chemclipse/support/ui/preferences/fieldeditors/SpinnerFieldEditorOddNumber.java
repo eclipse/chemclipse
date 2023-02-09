@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.fieldeditors;
 
-import org.eclipse.chemclipse.support.ui.messages.SupportMessages;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.swt.widgets.Composite;
 
 public class SpinnerFieldEditorOddNumber extends SpinnerFieldEditorBounded {
@@ -33,7 +33,7 @@ public class SpinnerFieldEditorOddNumber extends SpinnerFieldEditorBounded {
 
 		int value = getIntValue();
 		if(value % 2 == 0) {
-			setErrorMessage(SupportMessages.INSTANCE().getMessage("SpinnerFieldEditorOddNumber.errorMessage"));
+			setErrorMessage(SupportMessages.errorMessageOdd);
 			return false;
 		}
 		return super.doCheckState();

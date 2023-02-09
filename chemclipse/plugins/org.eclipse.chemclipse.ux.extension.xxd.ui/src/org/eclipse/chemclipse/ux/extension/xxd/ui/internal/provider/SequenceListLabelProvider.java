@@ -18,36 +18,23 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String SAMPLE_NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SAMPLE_NAME);
-	public static final String DATA_PATH = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DATA_PATH);
-	public static final String DATA_FILE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DATA_FILE);
-	public static final String ADVICE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ADVICE);
-	public static final String VIAL = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.VIAL);
-	public static final String SUBSTANCE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SUBSTANCE);
-	public static final String DESCRIPTION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DESCRIPTION);
-	public static final String PROCESS_METHOD = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_METHOD);
-	public static final String MULTIPLIER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MULTIPLIER);
-	public static final String INJECTION_VOLUME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.INJECTION_VOLUME);
-	public static final String REPORT_METHOD = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REPORT_METHOD);
-	//
 	public static String[] TITLES = {//
-			SAMPLE_NAME, //
-			DATA_PATH, //
-			DATA_FILE, //
-			ADVICE, //
-			VIAL, //
-			SUBSTANCE, //
-			DESCRIPTION, //
-			PROCESS_METHOD, //
-			REPORT_METHOD, //
-			MULTIPLIER, //
-			INJECTION_VOLUME //
+			ExtensionMessages.sampleName, //
+			ExtensionMessages.dataPath, //
+			ExtensionMessages.dataFile, //
+			ExtensionMessages.advice, //
+			ExtensionMessages.vial, //
+			ExtensionMessages.substance, //
+			ExtensionMessages.description, //
+			ExtensionMessages.processMethod, //
+			ExtensionMessages.reportMethod, //
+			ExtensionMessages.multiplier, //
+			ExtensionMessages.injectionVolume //
 	};
 	//
 	public static int[] BOUNDS = {//
@@ -73,11 +60,11 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 			if(element instanceof ISequenceRecord sequenceRecord) {
 				switch(sequenceRecord.getAdvice()) {
 					case NONE:
-						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_EMPTY, IApplicationImage.SIZE_16x16);
+						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_EMPTY, IApplicationImageProvider.SIZE_16x16);
 					case DATA_IS_VALID:
-						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_OK, IApplicationImage.SIZE_16x16);
+						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_OK, IApplicationImageProvider.SIZE_16x16);
 					case FILE_NOT_AVAILABLE:
-						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_ERROR, IApplicationImage.SIZE_16x16);
+						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_ERROR, IApplicationImageProvider.SIZE_16x16);
 				}
 			}
 		}

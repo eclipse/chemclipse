@@ -11,15 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
 public class ShiftValidator implements IValidator<Object> {
 
-	private static final String ERROR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ENTER_VALID_NUMBER);
 	private double shift = 0.0d;
 
 	@Override
@@ -40,7 +38,7 @@ public class ShiftValidator implements IValidator<Object> {
 		}
 		//
 		if(parseError) {
-			return ValidationStatus.error(ERROR);
+			return ValidationStatus.error(ExtensionMessages.enterValidNumber);
 		} else {
 			return ValidationStatus.ok();
 		}

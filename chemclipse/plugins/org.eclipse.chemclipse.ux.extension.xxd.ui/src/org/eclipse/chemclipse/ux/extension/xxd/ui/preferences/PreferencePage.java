@@ -13,8 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.services.EditorServicesSupport;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
@@ -35,8 +34,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	public void createFieldEditors() {
 
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TIME_RANGE_PATH), getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_EDITOR_TSD, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EDITOR_TSD), EditorServicesSupport.getAvailableEditors(ISupplierFileIdentifier.TYPE_TSD), getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, ExtensionMessages.timeRangePath, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_EDITOR_TSD, ExtensionMessages.editorTSD, EditorServicesSupport.getAvailableEditors(ISupplierFileIdentifier.TYPE_TSD), getFieldEditorParent()));
 	}
 
 	@Override

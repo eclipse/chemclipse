@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,8 +41,7 @@ import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.Utils;
-import org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.messages.HeaderMessages;
-import org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.messages.IHeaderMessages;
+import org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.l10n.HeaderMessages;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMapping;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMappings;
@@ -120,7 +119,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 
 	void printHeader(String targetSubset, CSVPrinter csvPrinter) throws IOException {
 
-		csvPrinter.print(HeaderMessages.INSTANCE().getMessage(IHeaderMessages.SAMPLE));
+		csvPrinter.print(HeaderMessages.sample);
 		ChannelMappings channelMappings = PreferenceSupplier.getChannelMappings();
 		List<ChannelMapping> targetMappings = channelMappings.stream().filter(m -> StringUtils.equalsIgnoreCase(targetSubset, m.getSubset())).collect(Collectors.toList());
 		List<ChannelMapping> sortedMappings = targetMappings.stream().sorted(Comparator.comparing(ChannelMapping::getChannel)).collect(Collectors.toList());

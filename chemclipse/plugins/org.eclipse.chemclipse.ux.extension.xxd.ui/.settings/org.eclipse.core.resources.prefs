@@ -1,3 +1,4 @@
 eclipse.preferences.version=1
 encoding//OSGI-INF/l10n/bundle_de.properties=UTF-8
+encoding//src/org/eclipse/chemclipse/ux/extension/xxd/ui/l10n/messages_de.properties=UTF-8
 encoding/<project>=utf8

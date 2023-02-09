@@ -16,8 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -44,7 +43,7 @@ public class ScanXIRImportRunnable implements IRunnableWithProgress {
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IMPORT_SCAN), IProgressMonitor.UNKNOWN);
+			monitor.beginTask(ExtensionMessages.importScan, IProgressMonitor.UNKNOWN);
 			IProcessingInfo<?> processingInfo = ScanConverterXIR.convert(file, monitor);
 			scanXIR = (IScanXIR)processingInfo.getProcessingResult();
 		} catch(Exception e) {

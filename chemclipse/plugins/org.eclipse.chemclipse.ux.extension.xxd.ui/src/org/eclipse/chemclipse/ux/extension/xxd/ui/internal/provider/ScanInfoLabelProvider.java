@@ -21,24 +21,23 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Image;
 
 public class ScanInfoLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String LABEL_EMPTY = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EMPTY_CAPS);
-	public static final String LABEL_SIM = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SIM);
-	public static final String LABEL_SCAN = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SCAN_CAPS);
+	public static final String LABEL_EMPTY = ExtensionMessages.emptyCaps;
+	public static final String LABEL_SIM = ExtensionMessages.sim;
+	public static final String LABEL_SCAN = ExtensionMessages.scanCaps;
 	public static final String LABEL_DOTS = "...";
 	public static final String LABEL_BLANK = "--";
 	//
-	public static final String SCAN = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SCAN_HASH);
-	public static final String RETENTION_TIME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TIME_MIN);
-	public static final String COUNT_IONS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COUNT_IONS);
-	public static final String CLASSIFICATION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SIM_SCAN);
+	public static final String SCAN = ExtensionMessages.scanHash;
+	public static final String RETENTION_TIME = ExtensionMessages.timeMin;
+	public static final String COUNT_IONS = ExtensionMessages.countIons;
+	public static final String CLASSIFICATION = ExtensionMessages.simScan;
 	public static final String IONS = "m/z...";
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();

@@ -16,14 +16,13 @@ import java.util.Map;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class HeaderDataLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME);
-	public static final String VALUE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.VALUE);
+	public static final String NAME = ExtensionMessages.name;
+	public static final String VALUE = ExtensionMessages.value;
 	//
 	public static final int INDEX_COLUMN_NAME = 0;
 	//

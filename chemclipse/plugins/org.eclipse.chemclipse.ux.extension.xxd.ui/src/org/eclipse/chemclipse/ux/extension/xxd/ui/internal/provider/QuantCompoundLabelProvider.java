@@ -13,31 +13,31 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME);
-	public static final String CHEMICAL_CLASS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHEMICAL_CLASS);
-	public static final String CONCENTRATION_UNIT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONCENTRATION_UNIT);
-	public static final String CALIBRATION_METHOD = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CALIBRATION_METHOD);
-	public static final String CROSS_ZERO = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CROSS_ZERO);
-	public static final String USE_TIC = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.USE_TIC);
-	public static final String RETENTION_TIME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_TIME);
-	public static final String RETENTION_TIME_LOWER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_TIME_LOWER);
-	public static final String RETENTION_TIME_UPPER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_TIME_UPPER);
-	public static final String RETENTION_INDEX = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX);
-	public static final String RETENTION_INDEX_LOWER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX_LOWER);
-	public static final String RETENTION_INDEX_UPPER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX_UPPER);
+	public static final String NAME = ExtensionMessages.name;
+	public static final String CHEMICAL_CLASS = ExtensionMessages.chemicalClass;
+	public static final String CONCENTRATION_UNIT = ExtensionMessages.concentrationUnit;
+	public static final String CALIBRATION_METHOD = ExtensionMessages.calibrationMethod;
+	public static final String CROSS_ZERO = ExtensionMessages.crossZero;
+	public static final String USE_TIC = ExtensionMessages.useTic;
+	public static final String RETENTION_TIME = ExtensionMessages.retentionTime;
+	public static final String RETENTION_TIME_LOWER = ExtensionMessages.retentionTimeLower;
+	public static final String RETENTION_TIME_UPPER = ExtensionMessages.retentionTimeUpper;
+	public static final String RETENTION_INDEX = ExtensionMessages.retentionIndex;
+	public static final String RETENTION_INDEX_LOWER = ExtensionMessages.retentionIndexLower;
+	public static final String RETENTION_INDEX_UPPER = ExtensionMessages.retentionIndexUpper;
 	//
 	public static final String[] TITLES = {//
 			NAME, //
@@ -76,16 +76,14 @@ public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider 
 			return getImage(element);
 		}
 		if(columnIndex == 4) {
-			if(element instanceof IQuantitationCompound) {
-				IQuantitationCompound quantitationCompound = (IQuantitationCompound)element;
+			if(element instanceof IQuantitationCompound quantitationCompound) {
 				String fileName = (quantitationCompound.isCrossZero()) ? IApplicationImage.IMAGE_SELECTED : IApplicationImage.IMAGE_DESELECTED;
-				return ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImage.SIZE_16x16);
+				return ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImageProvider.SIZE_16x16);
 			}
 		} else if(columnIndex == 5) {
-			if(element instanceof IQuantitationCompound) {
-				IQuantitationCompound quantitationCompound = (IQuantitationCompound)element;
+			if(element instanceof IQuantitationCompound quantitationCompound) {
 				String fileName = (quantitationCompound.isUseTIC()) ? IApplicationImage.IMAGE_SELECTED : IApplicationImage.IMAGE_DESELECTED;
-				return ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImage.SIZE_16x16);
+				return ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImageProvider.SIZE_16x16);
 			}
 		}
 		//
@@ -97,8 +95,7 @@ public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider 
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IQuantitationCompound) {
-			IQuantitationCompound compound = (IQuantitationCompound)element;
+		if(element instanceof IQuantitationCompound compound) {
 			IRetentionTimeWindow retentionTimeWindow = compound.getRetentionTimeWindow();
 			IRetentionIndexWindow retentionIndexWindow = compound.getRetentionIndexWindow();
 			//
@@ -122,13 +119,13 @@ public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider 
 					text = ""; // Icon
 					break;
 				case 6:
-					text = decimalFormat.format(retentionTimeWindow.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = decimalFormat.format(retentionTimeWindow.getRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 7:
-					text = decimalFormat.format(retentionTimeWindow.getAllowedNegativeDeviation() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = decimalFormat.format(retentionTimeWindow.getAllowedNegativeDeviation() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 8:
-					text = decimalFormat.format(retentionTimeWindow.getAllowedPositiveDeviation() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = decimalFormat.format(retentionTimeWindow.getAllowedPositiveDeviation() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 9:
 					text = decimalFormat.format(retentionIndexWindow.getRetentionIndex());
@@ -149,6 +146,6 @@ public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider 
 	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_QUANTIFY_SELECTED_PEAK, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_QUANTIFY_SELECTED_PEAK, IApplicationImageProvider.SIZE_16x16);
 	}
 }

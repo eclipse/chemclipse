@@ -9,25 +9,23 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.messages;
+package org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.l10n;
 
-import org.eclipse.chemclipse.support.l10n.Messages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.osgi.util.NLS;
 
-public class ExtensionMessages implements IExtensionMessages {
+public class HeaderMessages extends NLS {
 
-	private static Messages messages;
+	public static String pos;
+	public static String name;
+	public static String analysis;
+	public static String subset;
+	public static String results;
+	//
+	static {
+		NLS.initializeMessages("org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.l10n.messages", HeaderMessages.class); //$NON-NLS-1$
+	}
 
-	/**
-	 * Returns the messages instance to get a translation.
-	 * 
-	 * @return {@link Messages}
-	 */
-	public static Messages INSTANCE() {
+	private HeaderMessages() {
 
-		if(messages == null) {
-			messages = new Messages(Activator.getContext().getBundle());
-		}
-		return messages;
 	}
 }

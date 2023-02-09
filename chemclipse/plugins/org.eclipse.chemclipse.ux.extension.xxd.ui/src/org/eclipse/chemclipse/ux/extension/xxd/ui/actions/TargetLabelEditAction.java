@@ -30,8 +30,7 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizard;
@@ -54,7 +53,7 @@ public class TargetLabelEditAction extends Action {
 
 		super("Labels", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImageProvider.SIZE_16x16));
 		this.labelEditSettings = labelEditSettings;
-		setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MANAGE_LABEL_CHROMATOGRAM));
+		setToolTipText(ExtensionMessages.manageLabelsChromatogram);
 		setShowPreviewDefault(DEF_SHOW_PREVIEW);
 	}
 

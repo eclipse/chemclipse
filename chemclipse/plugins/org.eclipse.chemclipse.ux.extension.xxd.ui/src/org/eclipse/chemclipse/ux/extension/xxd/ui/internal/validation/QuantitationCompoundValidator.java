@@ -14,8 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.support.util.ValueParserSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.xxd.model.quantitation.QuantitationCompound;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -26,7 +25,7 @@ public class QuantitationCompoundValidator extends ValueParserSupport implements
 	public static final String DEMO = "Styrene | mg/kg | 5.68";
 	//
 	private static final String DELIMITER = "|";
-	private static final String ERROR_TARGET = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ENTER_COMPOUND_EXAMPLE) + ": " + DEMO;
+	private static final String ERROR_TARGET = ExtensionMessages.enterCompoundExample + ": " + DEMO;
 	//
 	private String name;
 	private String concentrationUnit;

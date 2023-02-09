@@ -20,8 +20,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
@@ -40,7 +39,7 @@ public class DeleteScanTargetsOperation extends AbstractOperation {
 
 	public DeleteScanTargetsOperation(Display display, IChromatogramSelection chromatogramSelection, List<IScan> scansToClear) {
 
-		super(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_SCAN_TARGETS));
+		super(ExtensionMessages.deleteScanTargets);
 		this.display = display;
 		this.chromatogramSelection = chromatogramSelection;
 		this.scansToClear = scansToClear;
@@ -92,7 +91,7 @@ public class DeleteScanTargetsOperation extends AbstractOperation {
 	@Override
 	public String getLabel() {
 
-		return ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_SCAN_TARGETS);
+		return ExtensionMessages.deleteScanTargets;
 	}
 
 	@Override

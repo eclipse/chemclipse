@@ -19,8 +19,7 @@ import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -45,7 +44,7 @@ public class MethodImportRunnable implements IRunnableWithProgress {
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IMPORT_PROCESS_METHOD), IProgressMonitor.UNKNOWN);
+			monitor.beginTask(ExtensionMessages.importProcessMethod, IProgressMonitor.UNKNOWN);
 			IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(file, monitor);
 			processMethod = processingInfo.getProcessingResult();
 		} catch(Exception e) {

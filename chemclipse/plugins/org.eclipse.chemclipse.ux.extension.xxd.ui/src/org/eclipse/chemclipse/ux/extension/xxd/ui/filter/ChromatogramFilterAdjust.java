@@ -20,8 +20,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 
@@ -35,8 +34,8 @@ public class ChromatogramFilterAdjust extends AbstractChromatogramFilter impleme
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			if(chromatogramFilterSettings instanceof FilterSettingsAdjust) {
-				UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_ADJUST, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ADJUST_CHROMATOGRAM_EDITOR));
-				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHROMATOGRAM_EDITOR_RESET)));
+				UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_ADJUST, ExtensionMessages.adjustChromatogramEditor);
+				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, ExtensionMessages.chromatogramEditorReset));
 			}
 		}
 		//

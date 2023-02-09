@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
@@ -24,8 +25,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.graphics.Image;
@@ -37,11 +37,11 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	//
 	public static final String[] TITLES = {//
 			"", //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DESCRIPTION), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TYPE), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SETTINGS), //
-			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ID) //
+			ExtensionMessages.name, //
+			ExtensionMessages.description, //
+			ExtensionMessages.type, //
+			ExtensionMessages.settings, //
+			ExtensionMessages.id //
 	};
 	//
 	public static final int[] BOUNDS = {//
@@ -176,40 +176,40 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		 * Validation
 		 */
 		if(processEntry == null) {
-			return ValidationStatus.error(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_NOT_AVAILABLE));
+			return ValidationStatus.error(ExtensionMessages.processorNotAvailable);
 		}
 		//
 		if(preferencesSupplier == null) {
-			return ValidationStatus.error(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PREFERENCES_SUPPLIER_NOT_AVAILABLE));
+			return ValidationStatus.error(ExtensionMessages.preferenceSupplierNotAvailable);
 		}
 		//
 		if(processTypeSupport == null) {
-			return ValidationStatus.error(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_TYPE_SUPPORT_NOT_AVAILABLE));
+			return ValidationStatus.error(ExtensionMessages.processTypeSupportNotAvailable);
 		}
 		/*
 		 * Checks
 		 */
 		if(processEntry.isSkipValidation()) {
-			return ValidationStatus.info(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_SKIP_VALIDATION_OPTIOIN_SET, processEntry.getName()));
+			return ValidationStatus.info(MessageFormat.format(ExtensionMessages.processorSkipValidationOptionSet, processEntry.getName()));
 		}
 		IProcessorPreferences<?> processorPreferences = preferencesSupplier.apply(processEntry, processTypeSupport);
 		//
 		if(processorPreferences == null) {
-			return ValidationStatus.error(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_PREFERENCES_NOT_AVAILABLE, processEntry.getName()));
+			return ValidationStatus.error(MessageFormat.format(ExtensionMessages.processorPreferencesNotAvailable, processEntry.getName()));
 		}
 		//
 		if(processorPreferences.getSupplier().getSettingsClass() == null) {
-			return ValidationStatus.warning(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_HAS_NO_SETTINGS_CLASS, processEntry.getName()));
+			return ValidationStatus.warning(MessageFormat.format(ExtensionMessages.processorHasNoSettingsClass, processEntry.getName()));
 		}
 		//
 		if(processorPreferences.isUseSystemDefaults()) {
-			return ValidationStatus.info(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_USES_SYSTEM_DEFAULT_SETTINGS, processEntry.getName()));
+			return ValidationStatus.info(MessageFormat.format(ExtensionMessages.processorUsesSystemDefaultSettings, processEntry.getName()));
 		}
 		try {
 			processorPreferences.getUserSettings();
 			return ValidationStatus.ok();
 		} catch(Exception e) {
-			return ValidationStatus.error(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_SETTINGS_CANNOT_BE_PARSED, processEntry.getName()), e);
+			return ValidationStatus.error(MessageFormat.format(ExtensionMessages.processorSettingsCannotBetParsed, processEntry.getName()), e);
 		}
 	}
 }

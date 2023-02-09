@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,8 +38,7 @@ import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.pcr.model.core.Position;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.Utils;
-import org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.messages.HeaderMessages;
-import org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.messages.IHeaderMessages;
+import org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.l10n.HeaderMessages;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMapping;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMappings;
@@ -59,7 +58,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		//
 		try (XSSFWorkbook workbook = new XSSFWorkbook();) {
-			XSSFSheet sheet = workbook.createSheet(HeaderMessages.INSTANCE().getMessage(IHeaderMessages.RESULTS));
+			XSSFSheet sheet = workbook.createSheet(HeaderMessages.results);
 			XSSFCellStyle style = workbook.createCellStyle();
 			style.setBorderBottom(BorderStyle.THIN);
 			style.setBorderTop(BorderStyle.THIN);
@@ -132,16 +131,16 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 		//
 		XSSFRow header = sheet.createRow(sheet.getLastRowNum() + 1);
 		XSSFCell positionHeaderCell = header.createCell(0);
-		positionHeaderCell.setCellValue(HeaderMessages.INSTANCE().getMessage(IHeaderMessages.POS));
+		positionHeaderCell.setCellValue(HeaderMessages.pos);
 		positionHeaderCell.setCellStyle(headerStyle);
 		XSSFCell nameHeaderCell = header.createCell(1);
-		nameHeaderCell.setCellValue(HeaderMessages.INSTANCE().getMessage(IHeaderMessages.NAME));
+		nameHeaderCell.setCellValue(HeaderMessages.name);
 		nameHeaderCell.setCellStyle(headerStyle);
 		XSSFCell requestHeaderCell = header.createCell(2);
-		requestHeaderCell.setCellValue(HeaderMessages.INSTANCE().getMessage(IHeaderMessages.ANALYSIS));
+		requestHeaderCell.setCellValue(HeaderMessages.analysis);
 		requestHeaderCell.setCellStyle(headerStyle);
 		XSSFCell subsetHeaderCell = header.createCell(3);
-		subsetHeaderCell.setCellValue(HeaderMessages.INSTANCE().getMessage(IHeaderMessages.SUBSET));
+		subsetHeaderCell.setCellValue(HeaderMessages.subset);
 		subsetHeaderCell.setCellStyle(headerStyle);
 		//
 		ChannelMappings channelMappings = PreferenceSupplier.getChannelMappings();

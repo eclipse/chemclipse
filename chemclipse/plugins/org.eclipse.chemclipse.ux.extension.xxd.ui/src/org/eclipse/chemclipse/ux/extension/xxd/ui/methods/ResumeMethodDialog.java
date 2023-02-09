@@ -19,8 +19,7 @@ import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -59,8 +58,8 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 	public void create() {
 
 		super.create();
-		setTitle(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_METHOD));
-		setMessage(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RESUME_PROCESS_METHOD_AT_ENTRY), IMessageProvider.INFORMATION);
+		setTitle(ExtensionMessages.processMethod);
+		setMessage(ExtensionMessages.resumeProcessMethodAtEntry, IMessageProvider.INFORMATION);
 		getButton(IDialogConstants.CANCEL_ID).setEnabled(true);
 		getButton(IDialogConstants.OK_ID).setText("Process");
 	}
@@ -78,7 +77,7 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite.setLayout(new GridLayout(1, true));
 		//
-		createLabel(composite, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RESUME_FOLLOWING_ENTRY_DEFAULT_COMPLETE));
+		createLabel(composite, ExtensionMessages.resumeFollowingEntryDefaultComplete);
 		comboViewer = createComboViewerProcessEntry(composite);
 		labelDescription = createLabel(composite, "");
 		createButtonResumeMethodOption(composite);
@@ -91,7 +90,7 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 	private void initialize() {
 
 		List<Object> processEntries = new ArrayList<>();
-		processEntries.add(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COMPLETE_METHOD));
+		processEntries.add(ExtensionMessages.completeMethod);
 		//
 		if(container != null) {
 			for(IProcessEntry processEntry : container) {
@@ -158,8 +157,8 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 
 		Button button = new Button(parent, SWT.CHECK);
 		button.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false));
-		button.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REMEMBER_DECISION_DONT_SHOW_AGAIN));
-		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REVERT_DECISION_IN_SETTINGS));
+		button.setText(ExtensionMessages.rememberDecisionDontShowAgain);
+		button.setToolTipText(ExtensionMessages.revertDecisionInSettings);
 		button.setSelection(!Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_SHOW_RESUME_METHOD_DIALOG));
 		button.addSelectionListener(new SelectionAdapter() {
 

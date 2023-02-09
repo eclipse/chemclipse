@@ -11,15 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
 public class NameValidator implements IValidator<Object> {
 
-	private static final String ERROR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ENTER_CORRECT_NAME);
+	private static final String ERROR = ExtensionMessages.enterCorrectName;
 	//
 	private String name = "";
 

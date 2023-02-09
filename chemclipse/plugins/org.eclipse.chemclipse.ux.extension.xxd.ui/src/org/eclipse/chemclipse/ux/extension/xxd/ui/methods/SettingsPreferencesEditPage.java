@@ -27,8 +27,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences.DialogBe
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -155,7 +154,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private void createToolItemEdit(ToolBar toolBar) {
 
 		ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-		toolItem.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EDIT_STORED_DATA_FOR_SELECTED_PROCESSOR));
+		toolItem.setToolTipText(ExtensionMessages.editStoredDataForSelectedProcessor);
 		toolItem.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -184,7 +183,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 		});
 		//
 		toolItem.setEnabled(false);
-		toolItem.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REMOVE_STORED_DATA_RESET_DEFAULT_FOR_SELECTED_PROCESSOR));
+		toolItem.setToolTipText(ExtensionMessages.removeStoredDataResetDefaultsForSelectedProcessor);
 		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		//
 		toolItemDeleteControl.set(toolItem);
@@ -193,14 +192,14 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private void createToolItemDeleteAll(ToolBar toolBar) {
 
 		ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-		toolItem.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REMOVE_ALL_STORED_DATA_RESET_DEFAULTS));
+		toolItem.setToolTipText(ExtensionMessages.removeAllStoredDataResetDefaults);
 		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImageProvider.SIZE_16x16));
 		toolItem.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openConfirm(e.display.getActiveShell(), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SETTINGS), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RESET_SETTINGS_FOR_ALL_PROCESSORS))) {
+				if(MessageDialog.openConfirm(e.display.getActiveShell(), ExtensionMessages.settings, ExtensionMessages.resetSettingsForAllProcessors)) {
 					for(IProcessorPreferences<?> preferences : preferenceSupplier.get()) {
 						preferences.reset();
 					}
@@ -213,7 +212,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private void createToolItemExpand(ToolBar toolBar) {
 
 		ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-		toolItem.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EXPAND_ALL_PROCESSOR_ITEMS));
+		toolItem.setToolTipText(ExtensionMessages.expandAllProcessorItems);
 		toolItem.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -230,7 +229,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private void createToolItemCollapse(ToolBar toolBar) {
 
 		ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-		toolItem.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COLLAPSE_ALL_PROCESSOR_ITEMS));
+		toolItem.setToolTipText(ExtensionMessages.collapseAllProcessorItems);
 		toolItem.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -271,7 +270,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 
 		TreeViewerColumn column = new TreeViewerColumn(treeViewer, SWT.CENTER);
 		column.getColumn().setWidth(125);
-		column.getColumn().setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DISPLAY_SETTINGS));
+		column.getColumn().setText(ExtensionMessages.displaySettings);
 		column.setLabelProvider(new ColumnLabelProvider() {
 
 			@Override
@@ -280,9 +279,9 @@ public class SettingsPreferencesEditPage extends WizardPage {
 				IProcessorPreferences<?> preferences = getEntry(element);
 				if(preferences != null) {
 					if(preferences.getDialogBehaviour() == DialogBehavior.SHOW) {
-						return ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.YES);
+						return ExtensionMessages.yes;
 					} else {
-						return ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NO);
+						return ExtensionMessages.no;
 					}
 				}
 				//
@@ -295,7 +294,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 
 		TreeViewerColumn column = new TreeViewerColumn(treeViewer, SWT.NONE);
 		column.getColumn().setWidth(500);
-		column.getColumn().setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.OPTIONS));
+		column.getColumn().setText(ExtensionMessages.options);
 		column.setLabelProvider(new ColumnLabelProvider() {
 
 			@Override
@@ -308,7 +307,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 				IProcessorPreferences<Object> preferences = getEntry(element);
 				if(preferences != null) {
 					if(preferences.isUseSystemDefaults()) {
-						return "(" + ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SYSTEM_DEFAULT) + ")";
+						return "(" + ExtensionMessages.systemDefault + ")";
 					} else {
 						return preferences.getUserSettingsAsString();
 					}
@@ -321,7 +320,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 
 	private void resetSettings(Shell shell) {
 
-		if(MessageDialog.openConfirm(shell, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SETTINGS), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RESET_SETTINGS_FOR_SELECTED_PROCESSORS))) {
+		if(MessageDialog.openConfirm(shell, ExtensionMessages.settings, ExtensionMessages.resetSettingsForSelectedProcessors)) {
 			Object[] array = treeViewerControl.get().getStructuredSelection().toArray();
 			for(Object object : array) {
 				getEntry(object).reset();

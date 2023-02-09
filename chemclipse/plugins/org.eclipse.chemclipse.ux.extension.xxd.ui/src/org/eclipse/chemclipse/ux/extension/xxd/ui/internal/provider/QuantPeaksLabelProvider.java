@@ -17,15 +17,14 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
 import org.eclipse.swt.graphics.Image;
 
 public class QuantPeaksLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String CONCENTRATION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONCENTRATION);
-	public static final String CONCENTRATION_UNIT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.UNIT);
+	public static final String CONCENTRATION = ExtensionMessages.concentration;
+	public static final String CONCENTRATION_UNIT = ExtensionMessages.unit;
 	//
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//

@@ -20,16 +20,15 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class TargetReferenceLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String VISIBLE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.VISIBLE);
-	public static final String ID = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ID);
-	public static final String TYPE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TYPE);
-	public static final String LIBRARY_FIELD = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.LIBRARY_FIELD);
+	public static final String VISIBLE = ExtensionMessages.visible;
+	public static final String ID = ExtensionMessages.id;
+	public static final String TYPE = ExtensionMessages.type;
+	public static final String LIBRARY_FIELD = ExtensionMessages.libraryField;
 	//
 	private ITargetDisplaySettings targetDisplaySettings = null;
 	private Predicate<ITargetReference> visibilityFilter = null;

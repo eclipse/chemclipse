@@ -13,8 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -38,21 +37,21 @@ public class ChromatogramAxisRelativeIntensity extends FieldEditorPreferencePage
 	@Override
 	public void createFieldEditors() {
 
-		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TITLE) + ":", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_FORMAT_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FORMAT) + ":", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SHOW), getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.POSITION) + ":", ChartOptions.POSITIONS, getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.title + ":", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_FORMAT_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.format + ":", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.show, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.position + ":", ChartOptions.POSITIONS, getFieldEditorParent()));
 		if(Display.isSystemDarkTheme()) {
-			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY_DARKTHEME, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COLOR) + ":", getFieldEditorParent()));
+			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY_DARKTHEME, ExtensionMessages.color + ":", getFieldEditorParent()));
 		} else {
-			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COLOR) + ":", getFieldEditorParent()));
+			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.color + ":", getFieldEditorParent()));
 		}
-		addField(new StringFieldEditor(PreferenceConstants.P_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FONT_NAME) + ":", getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceConstants.P_FONT_SIZE_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FONT_SIZE) + ":", PreferenceConstants.MIN_FONT_SIZE, PreferenceConstants.MAX_FONT_SIZE, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FONT_STYLE) + ":", ChartOptions.FONT_STYLES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.GRID_LINE_STYLE) + ":", ChartOptions.LINE_STYLES, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.GRID_LINE_COLOR) + ":", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SHOW_AXIS_TITLE), getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.fontName + ":", getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceConstants.P_FONT_SIZE_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.fontSize + ":", PreferenceConstants.MIN_FONT_SIZE, PreferenceConstants.MAX_FONT_SIZE, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.fontStyle + ":", ChartOptions.FONT_STYLES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.gridLineStyle + ":", ChartOptions.LINE_STYLES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.gridLineColor + ":", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY, ExtensionMessages.showAxisTitle, getFieldEditorParent()));
 	}
 
 	@Override

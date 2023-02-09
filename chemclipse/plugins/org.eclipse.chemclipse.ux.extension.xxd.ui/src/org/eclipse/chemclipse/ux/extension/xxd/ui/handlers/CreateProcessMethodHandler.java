@@ -23,8 +23,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.DataTypeTypeSelectionWizard;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -38,14 +37,14 @@ import org.eclipse.swt.widgets.Shell;
 public class CreateProcessMethodHandler {
 
 	private static final String FILTER_EXTENSION = "*.ocm";
-	private static final String PROCESS_METHOD = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_METHOD);
+	private static final String PROCESS_METHOD = ExtensionMessages.processMethod;
 	private static final String FILTER_NAME = PROCESS_METHOD + "(" + FILTER_EXTENSION + ")";
 	private static final String FILE_NAME = PROCESS_METHOD + FILTER_EXTENSION;
 
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell, IEclipseContext eclipseContext) {
 
-		DataCategoryGroup dataCategoryGroup = DataTypeTypeSelectionWizard.open(shell, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHOOSE_DESIRED_CATEGORIES_TO_CREATE_NEW_METHOD), Activator.getDefault().getPreferenceStore());
+		DataCategoryGroup dataCategoryGroup = DataTypeTypeSelectionWizard.open(shell, ExtensionMessages.chooseDesiredCategoriesToCreateNewMethod, Activator.getDefault().getPreferenceStore());
 		if(dataCategoryGroup != null) {
 			if(OperatingSystemUtils.isWindows()) {
 				WindowsFileDialog.ClearInitialDirectoryWorkaround();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,7 @@
 package org.eclipse.chemclipse.support.ui.preferences.fieldeditors;
 
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
-import org.eclipse.chemclipse.support.ui.messages.SupportMessages;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -70,18 +70,18 @@ public class ExtendedIntegerFieldEditor extends org.eclipse.jface.preference.Int
 						return true;
 					}
 					if(number % 2 == 0) {
-						showErrorMessage(SupportMessages.INSTANCE().getMessage("ExtendedIntegerFieldEditor.errorMessageOddIncludingZero"));
+						showErrorMessage(SupportMessages.errorMessageOddIncludingZero);
 						return false;
 					}
 				}
 				if(validation == Validation.ODD_NUMBER) {
 					if(number % 2 == 0) {
-						showErrorMessage(SupportMessages.INSTANCE().getMessage("ExtendedIntegerFieldEditor.errorMessageOdd"));
+						showErrorMessage(SupportMessages.errorMessageOdd);
 						return false;
 					}
 				} else if(validation == Validation.EVEN_NUMBER) {
 					if(number % 2 != 0) {
-						showErrorMessage(SupportMessages.INSTANCE().getMessage("ExtendedIntegerFieldEditor.errorMessageEven"));
+						showErrorMessage(SupportMessages.errorMessageEven);
 						return false;
 					}
 				}
