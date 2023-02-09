@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -31,15 +31,13 @@ public class CombinedIntegrator extends AbstractCombinedIntegrator {
 
 	private static final Logger logger = Logger.getLogger(CombinedIntegrator.class);
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo<ICombinedIntegrationResult> integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings integrationSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<ICombinedIntegrationResult> integrate(IChromatogramSelection<?, ?> chromatogramSelection, ICombinedIntegrationSettings integrationSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<ICombinedIntegrationResult> processingInfo = validate(chromatogramSelection, integrationSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(integrationSettings instanceof CombinedIntegrationSettings) {
+			if(integrationSettings instanceof CombinedIntegrationSettings combinedIntegrationSettings) {
 				try {
-					CombinedIntegrationSettings combinedIntegrationSettings = (CombinedIntegrationSettings)integrationSettings;
 					/*
 					 * Peak Integration Results.
 					 */

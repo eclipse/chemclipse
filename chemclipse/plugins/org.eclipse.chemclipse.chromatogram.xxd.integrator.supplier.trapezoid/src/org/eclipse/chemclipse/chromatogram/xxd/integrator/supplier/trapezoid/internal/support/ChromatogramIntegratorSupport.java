@@ -34,15 +34,14 @@ public class ChromatogramIntegratorSupport {
 
 	public static final String INTEGRATOR_DESCRIPTION = "Trapezoid";
 
-	@SuppressWarnings("rawtypes")
-	public IChromatogramIntegrationResults calculateChromatogramIntegrationResults(IChromatogramSelection chromatogramSelection, ChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor) {
+	public IChromatogramIntegrationResults calculateChromatogramIntegrationResults(IChromatogramSelection<?, ?> chromatogramSelection, ChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Get the chromatogram and background area.
 		 */
 		List<IIntegrationEntry> chromatogramIntegrationEntries = calculateChromatogramIntegrationEntry(chromatogramSelection, monitor);
 		List<IIntegrationEntry> backgroundIntegrationEntries = calculateBackgroundIntegrationEntry(chromatogramSelection, monitor);
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		chromatogram.setIntegratedArea(chromatogramIntegrationEntries, backgroundIntegrationEntries, INTEGRATOR_DESCRIPTION);
 		/*
 		 * Chromatogram Results
@@ -62,10 +61,9 @@ public class ChromatogramIntegratorSupport {
 	 * @param monitor
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	private List<IIntegrationEntry> calculateChromatogramIntegrationEntry(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	private List<IIntegrationEntry> calculateChromatogramIntegrationEntry(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
-		List<IIntegrationEntry> chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> chromatogramIntegrationEntries = new ArrayList<>();
 		ChromatogramIntegrator chromatogramIntegrator = new ChromatogramIntegrator();
 		double chromatogramArea = chromatogramIntegrator.integrate(chromatogramSelection);
 		/*
@@ -85,10 +83,9 @@ public class ChromatogramIntegratorSupport {
 		return chromatogramIntegrationEntries;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private List<IIntegrationEntry> calculateBackgroundIntegrationEntry(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	private List<IIntegrationEntry> calculateBackgroundIntegrationEntry(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
-		List<IIntegrationEntry> backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> backgroundIntegrationEntries = new ArrayList<>();
 		BackgroundIntegrator backgroundIntegrator = new BackgroundIntegrator();
 		double backgroundArea = backgroundIntegrator.integrate(chromatogramSelection);
 		/*

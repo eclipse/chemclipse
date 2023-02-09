@@ -60,9 +60,9 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 		return markedTraces;
 	}
 
-	public void setSelectedIon(String ionsToIntegrate) {
+	public void setSelectedTraces(String tracesToIntegrate) {
 
-		this.tracesToIntegrate = ionsToIntegrate;
+		this.tracesToIntegrate = tracesToIntegrate;
 	}
 
 	@JsonProperty(value = "Include Background", defaultValue = "false")

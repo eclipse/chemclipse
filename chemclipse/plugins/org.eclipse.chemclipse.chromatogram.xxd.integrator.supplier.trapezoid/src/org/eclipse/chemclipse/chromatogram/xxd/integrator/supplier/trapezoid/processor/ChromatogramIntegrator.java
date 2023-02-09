@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor;
 
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.ISegment;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.Segment;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.SegmentAreaCalculator;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -22,7 +21,6 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
-import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 
 public class ChromatogramIntegrator {
@@ -31,11 +29,10 @@ public class ChromatogramIntegrator {
 	//
 	private static final double CORRECTION_FACTOR_TRAPEZOID = 100.0d; // ChemStation Factor
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public double integrate(IChromatogramSelection chromatogramSelection) {
+	public double integrate(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		double chromatogramArea = 0.0d;
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		try {
 			ITotalScanSignalExtractor totalScanSignalExtractor = new TotalScanSignalExtractor(chromatogram);
 			int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
@@ -43,7 +40,6 @@ public class ChromatogramIntegrator {
 			ITotalScanSignals totalIonSignals = totalScanSignalExtractor.getTotalScanSignals(startScan, stopScan);
 			ITotalScanSignal startSignal;
 			ITotalScanSignal stopSignal;
-			double segmentArea = 0.0d;
 			/*
 			 * Calculates the area for each segment.
 			 */
@@ -51,7 +47,7 @@ public class ChromatogramIntegrator {
 				startSignal = totalIonSignals.getTotalScanSignal(scan);
 				stopSignal = totalIonSignals.getTotalScanSignal(scan + 1);
 				if(startSignal != null && stopSignal != null) {
-					segmentArea = calculateArea(startSignal.getRetentionTime(), stopSignal.getRetentionTime(), startSignal.getTotalSignal(), stopSignal.getTotalSignal());
+					double segmentArea = calculateArea(startSignal.getRetentionTime(), stopSignal.getRetentionTime(), startSignal.getTotalSignal(), stopSignal.getTotalSignal());
 					chromatogramArea += segmentArea;
 				}
 			}
@@ -62,25 +58,18 @@ public class ChromatogramIntegrator {
 	}
 
 	/**
-	 * Calculates the area assume the baseline is 0.
+	 * Calculate the area of the peak in the given retention time
+	 * segment assume the baseline is 0.
 	 */
 	private double calculateArea(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) {
 
-		IPoint psp1, psp2; // PeakSignalPoint
-		IPoint pbp1, pbp2; // PeakBaselinePoint, in this case 0
-		ISegment segment;
-		double integratedArea = 0.0f;
-		/*
-		 * Calculate the area of the peak in the given retention time
-		 * segment.<br/> Use the FirstDerivative
-		 * (IFirstDerivativePeakIntegrator.INTEGRATION_STEPS).
-		 */
-		psp1 = new Point(startRetentionTime, startAbundance);
-		psp2 = new Point(stopRetentionTime, stopAbundance);
-		pbp1 = new Point(startRetentionTime, 0.0d);
-		pbp2 = new Point(stopRetentionTime, 0.0d);
-		segment = new Segment(pbp1, pbp2, psp1, psp2);
-		integratedArea = SegmentAreaCalculator.calculateSegmentArea(segment) / CORRECTION_FACTOR_TRAPEZOID;
-		return integratedArea;
+		// PeakSignalPoint
+		Point psp1 = new Point(startRetentionTime, startAbundance);
+		Point psp2 = new Point(stopRetentionTime, stopAbundance);
+		// PeakBaselinePoint
+		Point pbp1 = new Point(startRetentionTime, 0.0d);
+		Point pbp2 = new Point(stopRetentionTime, 0.0d);
+		Segment segment = new Segment(pbp1, pbp2, psp1, psp2);
+		return SegmentAreaCalculator.calculateSegmentArea(segment) / CORRECTION_FACTOR_TRAPEZOID;
 	}
 }
