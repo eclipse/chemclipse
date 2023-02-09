@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,15 +39,27 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 	private int xStop;
 	private int yStop;
 	//
+	private boolean useTemplateModus = true;
 	private TimeRanges timeRanges;
 	private TimeRangeLabels timeRangeLabels = new TimeRangeLabels();
 	//
-	private ITimeRangeUpdateListener updateListener;
+	private ITimeRangeUpdateListener timeRangeUpdateListener;
+	private ITimeRangePeakListener timeRangePeakListener;
 
 	public TimeRangesChart(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
+	}
+
+	public boolean isUseTemplateModus() {
+
+		return useTemplateModus;
+	}
+
+	public void setUseTemplateModus(boolean useTemplateModus) {
+
+		this.useTemplateModus = useTemplateModus;
 	}
 
 	public void setTimeRangeLabels(TimeRangeLabels timeRangeLabels) {
@@ -57,7 +69,12 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 
 	public void setUpdateListener(ITimeRangeUpdateListener updateListener) {
 
-		this.updateListener = updateListener;
+		this.timeRangeUpdateListener = updateListener;
+	}
+
+	public void setUpdateListener(ITimeRangePeakListener updateListener) {
+
+		this.timeRangePeakListener = updateListener;
 	}
 
 	public void setInput(TimeRanges timeRanges) {
@@ -67,7 +84,7 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 
 	public void select(TimeRange timeRange) {
 
-		fireUpdate(timeRange);
+		fireUpdateTimeRange(timeRange);
 	}
 
 	@Override
@@ -97,7 +114,11 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 		super.handleMouseUpEvent(event);
 		if(isControlKeyPressed(event)) {
 			stopBaselineSelection(event.x, event.y);
-			adjustTimeRange(event);
+			if(isUseTemplateModus()) {
+				adjustTimeRange(event);
+			} else {
+				fireUpdatePeakRange(xStart, yStart, xStop, yStop);
+			}
 			setCursorDefault();
 			resetSelectedRange();
 		}
@@ -190,7 +211,7 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 			timeRange.update(startRetentionTime, stopRetentionTime);
 		}
 		//
-		fireUpdate(timeRange);
+		fireUpdateTimeRange(timeRange);
 	}
 
 	private boolean isControlKeyPressed(Event event) {
@@ -255,10 +276,17 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 		getBaseChart().redraw();
 	}
 
-	private void fireUpdate(TimeRange timeRange) {
+	private void fireUpdateTimeRange(TimeRange timeRange) {
 
-		if(updateListener != null) {
-			updateListener.update(timeRange);
+		if(timeRangeUpdateListener != null) {
+			timeRangeUpdateListener.update(timeRange);
+		}
+	}
+
+	private void fireUpdatePeakRange(int xStart, int yStart, int xStop, int yStop) {
+
+		if(timeRangePeakListener != null) {
+			timeRangePeakListener.update(xStart, yStart, xStop, yStop);
 		}
 	}
 }

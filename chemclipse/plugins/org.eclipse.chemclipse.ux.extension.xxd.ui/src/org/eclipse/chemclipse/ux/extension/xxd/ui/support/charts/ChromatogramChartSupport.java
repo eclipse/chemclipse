@@ -348,6 +348,9 @@ public class ChromatogramChartSupport {
 			case ICompressionSupport.COMPRESSION_EXTREME:
 				compressionToLength = ICompressionSupport.EXTREME_COMPRESSION;
 				break;
+			default:
+				compressionToLength = ICompressionSupport.MEDIUM_COMPRESSION;
+				break;
 		}
 		//
 		return compressionToLength;

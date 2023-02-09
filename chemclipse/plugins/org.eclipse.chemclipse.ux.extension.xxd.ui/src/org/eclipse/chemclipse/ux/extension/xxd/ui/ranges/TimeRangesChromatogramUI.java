@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -48,6 +48,16 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 
 		super.update();
 		rangesControl.get().setInput(timeRanges);
+	}
+
+	public boolean isUseTemplateModus() {
+
+		return chartControl.get().isUseTemplateModus();
+	}
+
+	public void setUseTemplateModus(boolean useTemplateModus) {
+
+		chartControl.get().setUseTemplateModus(useTemplateModus);
 	}
 
 	public void setTimeRangeLabels(TimeRangeLabels timeRangeLabels) {
