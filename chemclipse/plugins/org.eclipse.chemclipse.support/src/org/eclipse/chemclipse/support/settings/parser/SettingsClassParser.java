@@ -131,8 +131,10 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Double.class));
 							} else if(annotation instanceof StringSettingsProperty settingsProperty) {
 								String regExp = settingsProperty.regExp();
+								String description = translationService.translate(settingsProperty.description(), contributorURI);
+								String name = translationService.translate(property.getName(), contributorURI);
 								if(regExp != null && !regExp.isEmpty()) {
-									inputValue.addValidator(new RegularExpressionValidator(property.getName(), Pattern.compile(regExp), settingsProperty.description(), settingsProperty.isMultiLine(), settingsProperty.allowEmpty()));
+									inputValue.addValidator(new RegularExpressionValidator(name, Pattern.compile(regExp), description, settingsProperty.isMultiLine(), settingsProperty.allowEmpty()));
 								}
 								inputValue.setMultiLine(settingsProperty.isMultiLine());
 							} else if(annotation instanceof FileSettingProperty fileSettingProperty) {
