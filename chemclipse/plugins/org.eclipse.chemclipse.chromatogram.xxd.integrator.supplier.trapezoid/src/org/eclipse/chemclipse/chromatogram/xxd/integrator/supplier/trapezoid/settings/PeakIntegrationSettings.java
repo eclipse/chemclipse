@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,13 +28,10 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 	@JsonIgnore
 	private static final String TIC = "0";
 	//
-	@JsonProperty(value = "Traces to Integrate", defaultValue = TIC)
-	@JsonPropertyDescription(value = "List the ions to integrate, separated by a white space. 0 = TIC")
-	@StringSettingsProperty(regExp = "(\\d+[;|\\s]?)+", description = "must be space separated digits.", isMultiLine = false, allowEmpty = false)
+	@JsonProperty(value = "%TracesToIntegrate", defaultValue = TIC)
+	@JsonPropertyDescription(value = "%TracesToIntegrateDescription")
+	@StringSettingsProperty(regExp = "(\\d+[;|\\s]?)+", description = "%MustBeSpaceSeparatedDigits", isMultiLine = false, allowEmpty = false)
 	private String tracesToIntegrate = TIC;
-	@JsonProperty(value = "Area Constraint", defaultValue = "true")
-	@JsonPropertyDescription(value = "If selected, calculated areas < 1 are set to 0.")
-	private boolean useAreaConstraint = true;
 	/*
 	 * The selected ions are handled separately.
 	 * They must not be persisted. If selected ions is
@@ -65,8 +62,8 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 		this.tracesToIntegrate = tracesToIntegrate;
 	}
 
-	@JsonProperty(value = "Include Background", defaultValue = "false")
-	@JsonPropertyDescription(value = "This value should be false. If true, the complete background is included.")
+	@JsonProperty(value = "%IncludeBackground", defaultValue = "false")
+	@JsonPropertyDescription(value = "%IncludeBackgroundDescription")
 	private boolean includeBackground = false;
 
 	public boolean isIncludeBackground() {
@@ -78,6 +75,10 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 
 		this.includeBackground = includeBackground;
 	}
+
+	@JsonProperty(value = "%AreaConstraint", defaultValue = "true")
+	@JsonPropertyDescription(value = "%AreaConstraintDescription")
+	private boolean useAreaConstraint = true;
 
 	public boolean isUseAreaConstraint() {
 

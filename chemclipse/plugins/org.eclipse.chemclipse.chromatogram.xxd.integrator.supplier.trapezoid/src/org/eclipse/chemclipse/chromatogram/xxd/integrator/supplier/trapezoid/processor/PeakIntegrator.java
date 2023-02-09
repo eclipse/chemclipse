@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,8 +26,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegratio
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.ISegment;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.Segment;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.SegmentAreaCalculator;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
@@ -46,14 +47,15 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IIonPercentages;
 import org.eclipse.chemclipse.msd.model.core.support.IonPercentages;
-import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
+import org.eclipse.chemclipse.support.l10n.TranslationSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakModelWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.WavelengthPercentages;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.e4.core.services.translation.TranslationService;
 
 /**
  * This integrator implements the chemstation peak integrator routines.<br/>
@@ -70,7 +72,8 @@ public class PeakIntegrator {
 	 * The FirstDerivative seems to use a correction factor.
 	 * Otherwise, the peak areas are too high.
 	 */
-	private static final String INTEGRATOR_DESCRIPTION = "Trapezoid";
+	private static TranslationService translationService = TranslationSupport.getTranslationService();
+	private static final String INTEGRATOR_DESCRIPTION = translationService.translate("%Trapezoid", Activator.getContributorURI());
 	//
 	private static final double CORRECTION_FACTOR_TRAPEZOID = 100.0d; // ChemStation Factor
 
@@ -114,7 +117,7 @@ public class PeakIntegrator {
 		 * Iterate through all peaks and decide if they should be reported.
 		 */
 		for(IPeak peak : peaks) {
-			monitor.subTask("Integrate Peak " + peakNumber++);
+			monitor.subTask(MessageFormat.format(translationService.translate("%IntegratePeakNumber", Activator.getContributorURI()), peakNumber++));
 			try {
 				peakIntegrationResult = integrate(peak, peakIntegrationSettings);
 			} catch(ValueMustNotBeNullException e) {
@@ -522,7 +525,7 @@ public class PeakIntegrator {
 		 * Reset some values. A summed peak has no S/N ration, respectively
 		 * purity ...
 		 */
-		peakIntegrationSumResult.setPeakType("Summed integrated area");
+		peakIntegrationSumResult.setPeakType(translationService.translate("%SummedIntegratedArea", Activator.getContributorURI()));
 		peakIntegrationSumResult.setPurity(0.0f);
 		peakIntegrationSumResult.setSN(0.0f);
 		peakIntegrationSumResult.setTailing(0.0f);
