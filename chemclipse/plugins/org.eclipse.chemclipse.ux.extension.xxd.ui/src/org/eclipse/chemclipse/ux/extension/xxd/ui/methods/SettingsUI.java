@@ -23,12 +23,14 @@ import java.util.Map.Entry;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
+import org.eclipse.chemclipse.support.l10n.TranslationSupport;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider.SettingsUIControl;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.e4.core.services.translation.TranslationService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -144,8 +146,10 @@ public class SettingsUI<T> extends Composite {
 
 			for(WidgetItem widgetItem : widgetItems) {
 				Label label = new Label(parent, SWT.NONE);
-				label.setText(widgetItem.getInputValue().getName());
-				label.setToolTipText(widgetItem.getInputValue().getDescription());
+				String contributorURI = widgetItem.getInputValue().getContributorURI();
+				TranslationService translationService = TranslationSupport.getTranslationService();
+				label.setText(translationService.translate(widgetItem.getInputValue().getName(), contributorURI));
+				label.setToolTipText(translationService.translate(widgetItem.getInputValue().getDescription(), contributorURI));
 				GridData data = new GridData(SWT.LEFT, SWT.TOP, false, false);
 				data.verticalIndent = 5;
 				data.horizontalIndent = 5;

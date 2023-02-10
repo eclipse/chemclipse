@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -63,29 +64,28 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
-			if(element instanceof IProcessEntry) {
+			if(element instanceof IProcessEntry processEntry) {
 				/*
 				 * Validate
 				 */
-				IProcessEntry processEntry = (IProcessEntry)element;
 				IStatus status = validate(processEntry);
 				//
 				if(status.matches(IStatus.ERROR)) {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_ERROR, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_ERROR, IApplicationImageProvider.SIZE_16x16);
 				}
 				if(status.matches(IStatus.WARNING)) {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_WARN, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_WARN, IApplicationImageProvider.SIZE_16x16);
 				}
 				if(status.matches(IStatus.INFO)) {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_EMPTY, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_EMPTY, IApplicationImageProvider.SIZE_16x16);
 				}
 				if(status.isOK()) {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_OK, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_OK, IApplicationImageProvider.SIZE_16x16);
 				}
 			} else if(element instanceof IProcessMethod) {
-				return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16);
+				return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImageProvider.SIZE_16x16);
 			} else if(element instanceof ProcessEntryContainer) {
-				return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16);
+				return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImageProvider.SIZE_16x16);
 			}
 		}
 		return null;
@@ -94,8 +94,8 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public String getToolTipText(Object element) {
 
-		if(element instanceof IProcessEntry) {
-			IStatus status = validate((IProcessEntry)element);
+		if(element instanceof IProcessEntry processEntry) {
+			IStatus status = validate(processEntry);
 			if(!status.isOK()) {
 				return status.getMessage();
 			}
@@ -110,10 +110,10 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 			return "";
 		}
 		//
-		if(element instanceof IProcessEntry) {
-			IProcessEntry processEntry = (IProcessEntry)element;
+		if(element instanceof IProcessEntry processEntry) {
 			IProcessSupplierContext supplierContext = IProcessEntry.getContext(processEntry, processTypeSupport);
 			IProcessSupplier<?> processSupplier = supplierContext.getSupplier(processEntry.getProcessorId());
+			//
 			switch(columnIndex) {
 				case 1:
 					return processEntry.getName();
@@ -149,8 +149,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 				default:
 					break;
 			}
-		} else if(element instanceof ProcessEntryContainer) {
-			ProcessEntryContainer method = (ProcessEntryContainer)element;
+		} else if(element instanceof ProcessEntryContainer method) {
 			switch(columnIndex) {
 				case 1:
 					return method.getName();
@@ -167,7 +166,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PROCESS_CONTROL, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PROCESS_CONTROL, IApplicationImageProvider.SIZE_16x16);
 	}
 
 	private IStatus validate(IProcessEntry processEntry) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,10 +32,11 @@ public class InputValue {
 	private FileSettingProperty fileSettingProperty;
 	private final List<IValidator<Object>> validators = new ArrayList<>();
 	private ComboSupplier<?> comboSupplier;
+	private String contributorURI = "";
 
 	public boolean hasRegexConstraint() {
 
-		return (regularExpression != null && !"".equals(regularExpression));
+		return (!"".equals(regularExpression));
 	}
 
 	public Class<?> getRawType() {
@@ -119,5 +120,15 @@ public class InputValue {
 	public ComboSupplier<?> getComboSupplier() {
 
 		return comboSupplier;
+	}
+
+	public String getContributorURI() {
+
+		return contributorURI;
+	}
+
+	public void setContributorURI(String contributorURI) {
+
+		this.contributorURI = contributorURI;
 	}
 }

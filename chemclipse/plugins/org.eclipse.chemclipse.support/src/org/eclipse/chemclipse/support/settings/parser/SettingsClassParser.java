@@ -88,18 +88,18 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 				JavaType javaType = objectMapper.getSerializationConfig().constructType(clazz);
 				BeanDescription beanDescription = objectMapper.getSerializationConfig().introspect(javaType);
 				List<BeanPropertyDefinition> properties = beanDescription.findProperties();
-				String contributorURI = "platform:/plugin/" + FrameworkUtil.getBundle(clazz).getSymbolicName();
-				TranslationService translationService = TranslationSupport.getTranslationService();
 				//
 				for(BeanPropertyDefinition property : properties) {
 					AnnotatedField annotatedField = property.getField();
 					if(annotatedField != null) {
 						//
 						InputValue inputValue = new InputValue();
+						String contributorURI = "platform:/plugin/" + FrameworkUtil.getBundle(clazz).getSymbolicName();
+						inputValue.setContributorURI(contributorURI);
 						inputValue.setRawType(annotatedField.getRawType());
-						inputValue.setName((property.getName() == null) ? "" : translationService.translate(property.getName(), contributorURI));
+						inputValue.setName((property.getName() == null) ? "" : property.getName());
 						PropertyMetadata propertyMetadata = property.getMetadata();
-						inputValue.setDescription((propertyMetadata.getDescription() == null) ? "" : translationService.translate(propertyMetadata.getDescription(), contributorURI));
+						inputValue.setDescription((propertyMetadata.getDescription() == null) ? "" : propertyMetadata.getDescription());
 						Object defaultValue = propertyMetadata.getDefaultValue();
 						if(defaultValue == null) {
 							if(defaultInstance == null) {
@@ -131,9 +131,10 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Double.class));
 							} else if(annotation instanceof StringSettingsProperty settingsProperty) {
 								String regExp = settingsProperty.regExp();
-								String description = translationService.translate(settingsProperty.description(), contributorURI);
-								String name = translationService.translate(property.getName(), contributorURI);
 								if(regExp != null && !regExp.isEmpty()) {
+									TranslationService translationService = TranslationSupport.getTranslationService();
+									String description = translationService.translate(settingsProperty.description(), contributorURI);
+									String name = translationService.translate(property.getName(), contributorURI);
 									inputValue.addValidator(new RegularExpressionValidator(name, Pattern.compile(regExp), description, settingsProperty.isMultiLine(), settingsProperty.allowEmpty()));
 								}
 								inputValue.setMultiLine(settingsProperty.isMultiLine());
