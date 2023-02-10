@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,8 +38,7 @@ public class RegularExpressionValidator implements IValidator<Object> {
 	@Override
 	public IStatus validate(Object value) {
 
-		if(value instanceof String) {
-			String string = (String)value;
+		if(value instanceof String string) {
 			if(!string.isEmpty() || allowEmpty) {
 				if(multiline) {
 					String[] lines = string.split("[\r\n]+");
