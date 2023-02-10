@@ -16,6 +16,9 @@ pipeline {
 		maven 'apache-maven-latest'
 		jdk   'temurin-jdk17-latest'
 	}
+	environment {
+		MAVEN_OPTS = '-Xmx2048m'
+	}
 	options {
 		disableConcurrentBuilds()
 		buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '1'))
