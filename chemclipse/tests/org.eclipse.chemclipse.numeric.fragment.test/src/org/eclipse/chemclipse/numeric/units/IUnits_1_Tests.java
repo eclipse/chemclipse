@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,31 +29,31 @@ public class IUnits_1_Tests extends TestCase {
 
 	public void test1() {
 
-		assertEquals("g", IUnits.g);
+		assertEquals("g", Units.GRAM);
 	}
 
 	public void test2() {
 
-		assertEquals("kg", IUnits.kg);
+		assertEquals("kg", Units.KILOGRAM);
 	}
 
 	public void test3() {
 
-		assertEquals("ml", IUnits.ml);
+		assertEquals("ml", Units.MILILITER);
 	}
 
 	public void test4() {
 
-		assertEquals("l", IUnits.l);
+		assertEquals("l", Units.LITER);
 	}
 
 	public void test5() {
 
-		assertEquals("mg/kg", IUnits.mg_per_kg);
+		assertEquals("mg/kg", Units.MILIGRAM_PER_KILOGRAM);
 	}
 
 	public void test6() {
 
-		assertEquals("mg/l", IUnits.mg_per_liter);
+		assertEquals("mg/l", Units.MILIGRAM_PER_LITER);
 	}
 }
