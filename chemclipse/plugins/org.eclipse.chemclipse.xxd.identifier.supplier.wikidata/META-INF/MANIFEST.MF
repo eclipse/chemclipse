@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.xxd.identifier.supplier.wikidata
+Eclipse-RegisterBuddy: org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.feature
+Export-Package: org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.preferences,
+ org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.query
+Bundle-ManifestVersion: 2
+Bundle-Name: Wikidata Identifier
+Bundle-SymbolicName: org.eclipse.chemclipse.xxd.identifier.supplier.wikidata;singleton:=true
+Bundle-Version: 0.9.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.Activator
+Bundle-Vendor: ChemClipse
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.chemclipse.support;bundle-version="0.9.0",
+ wrapped.org.apache.jena.jena-base;bundle-version="3.16.0",
+ wrapped.org.apache.jena.jena-core;bundle-version="3.16.0",
+ wrapped.org.apache.jena.jena-iri;bundle-version="3.16.0",
+ wrapped.org.apache.jena.jena-arq;bundle-version="3.16.0",
+ wrapped.org.apache.jena.jena-shaded-guava;bundle-version="3.16.0",
+ org.apache.commons.logging;bundle-version="1.2.0",
+ org.apache.commons.lang3;bundle-version="3.12.0",
+ org.apache.thrift;bundle-version="0.12.0",
+ org.apache.httpcomponents.httpclient;bundle-version="4.5.13",
+ org.apache.httpcomponents.httpcore;bundle-version="4.4.15",
+ org.apache.commons.commons-compress;bundle-version="1.22.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-ActivationPolicy: lazy
