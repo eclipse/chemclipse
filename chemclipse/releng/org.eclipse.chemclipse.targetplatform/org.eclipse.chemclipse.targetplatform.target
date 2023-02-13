@@ -28,6 +28,8 @@
 	<unit id="javax.activation" version="0.0.0"/>
 	<unit id="javax.annotation" version="0.0.0"/>
 	<unit id="org.apache.commons.codec" version="0.0.0"/>
+	<unit id="org.apache.httpcomponents.httpclient" version="0.0.0"/>
+	<unit id="org.apache.httpcomponents.httpcore" version="0.0.0"/>
 	<repository location="https://download.eclipse.org/tools/orbit/downloads/2022-12"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
@@ -144,6 +146,60 @@
 				<groupId>jakarta.xml.bind</groupId>
 				<artifactId>jakarta.xml.bind-api</artifactId>
 				<version>4.0.0</version>
+				<type>jar</type>
+			</dependency>
+		</dependencies>
+	</location>
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" label="org.apache.jena" missingManifest="generate" type="Maven">
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.jena</groupId>
+				<artifactId>jena-arq</artifactId>
+				<version>3.16.0</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.jena</groupId>
+				<artifactId>jena-base</artifactId>
+				<version>3.16.0</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.jena</groupId>
+				<artifactId>jena-core</artifactId>
+				<version>3.16.0</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.jena</groupId>
+				<artifactId>jena-iri</artifactId>
+				<version>3.16.0</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.jena</groupId>
+				<artifactId>jena-shaded-guava</artifactId>
+				<version>3.16.0</version>
+				<type>jar</type>
+			</dependency>
+		</dependencies>
+	</location>
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.thrift</groupId>
+				<artifactId>libthrift</artifactId>
+				<version>0.12.0</version>
+				<type>jar</type>
+			</dependency>
+		</dependencies>
+	</location>
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-compress</artifactId>
+				<version>1.22</version>
 				<type>jar</type>
 			</dependency>
 		</dependencies>
