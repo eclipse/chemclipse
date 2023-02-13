@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.xxd.identifier.supplier.wikidata
+Eclipse-RegisterBuddy: org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.feature
+Export-Package: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.preferences,
+ org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.rest
+Bundle-ManifestVersion: 2
+Bundle-Name: PubChem Identifier
+Bundle-SymbolicName: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem;singleton:=true
+Bundle-Version: 0.9.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.Activator
+Bundle-Vendor: ChemClipse
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.chemclipse.support;bundle-version="0.9.0",
+ org.eclipse.chemclipse.model,
+ com.google.guava;bundle-version="30.1.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-ActivationPolicy: lazy
