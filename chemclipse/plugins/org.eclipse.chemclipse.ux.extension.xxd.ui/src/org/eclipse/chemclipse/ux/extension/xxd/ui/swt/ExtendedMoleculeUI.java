@@ -109,11 +109,10 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	}
 
 	@Override
-	protected void finalize() throws Throwable {
+	public void dispose() {
 
 		if(imageMolecule != null) {
 			imageMolecule.dispose();
-			imageMolecule = null;
 		}
 	}
 
@@ -231,8 +230,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof ImageServiceInput) {
-					ImageServiceInput imageServiceInput = (ImageServiceInput)element;
+				if(element instanceof ImageServiceInput imageServiceInput) {
 					return imageServiceInput.label();
 				}
 				//
@@ -263,7 +261,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Calculate the molecule image.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CALCULATE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CALCULATE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -559,9 +557,6 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private Point calculateImageSize() {
 
 		Point size = canvasMolecule.getSize();
-		/*
-		 * Default 1
-		 */
 		int width = size.x;
 		int height = size.y;
 		//
