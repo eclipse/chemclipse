@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,6 +27,8 @@ public interface IMoleculeImageService {
 	String getDescription();
 
 	String getVersion();
+
+	boolean isOnline();
 
 	Image create(Display display, ILibraryInformation libraryInformation, int width, int height);
 

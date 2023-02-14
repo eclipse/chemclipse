@@ -64,6 +64,12 @@ public class MoleculeImageService implements IMoleculeImageService {
 	}
 
 	@Override
+	public boolean isOnline() {
+
+		return true;
+	}
+
+	@Override
 	public Image create(Display display, ILibraryInformation libraryInformation, int width, int height) {
 
 		String url = PowerUserGateway.getBestCompound(libraryInformation);
