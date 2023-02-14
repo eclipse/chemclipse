@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.MassSpectrumIdentifierRunnable;
@@ -128,7 +129,7 @@ public class ScanIdentifierUI extends Composite {
 	}
 
 	@Override
-	protected void finalize() throws Throwable {
+	public void dispose() {
 
 		if(menuMSD != null) {
 			menuMSD.dispose();
@@ -165,7 +166,7 @@ public class ScanIdentifierUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IDENTIFY_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IDENTIFY_MASS_SPECTRUM, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -355,13 +356,11 @@ public class ScanIdentifierUI extends Composite {
 			List<IScanWSD> scansWSD = new ArrayList<>();
 			//
 			for(IScan scan : scans) {
-				if(scan instanceof IScanMSD && DataType.MSD.equals(dataType)) {
-					IScanMSD scanMSD = (IScanMSD)scan;
+				if(scan instanceof IScanMSD scanMSD && DataType.MSD.equals(dataType)) {
 					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 					IScanMSD massSpectrum = (optimizedMassSpectrum != null) ? optimizedMassSpectrum : scanMSD;
 					scansMSD.add(massSpectrum);
-				} else if(scan instanceof IScanWSD && DataType.WSD.equals(dataType)) {
-					IScanWSD scanWSD = (IScanWSD)scan;
+				} else if(scan instanceof IScanWSD scanWSD && DataType.WSD.equals(dataType)) {
 					scansWSD.add(scanWSD);
 				}
 			}
@@ -390,6 +389,7 @@ public class ScanIdentifierUI extends Composite {
 				} catch(InvocationTargetException e) {
 					logger.warn(e);
 				} catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
 					logger.warn(e);
 				}
 			}
@@ -407,6 +407,7 @@ public class ScanIdentifierUI extends Composite {
 				} catch(InvocationTargetException e) {
 					logger.warn(e);
 				} catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
 					logger.warn(e);
 				}
 			}

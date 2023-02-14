@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,8 +44,8 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	private static final String SAMPLE_WEIGHT_UNIT = "Sample Weight Unit";
 	private static final String DATA_NAME = "Data Name";
 	//
-	private Set<String> protectKeys = new HashSet<String>();
-	private Map<String, String> headerMap = new HashMap<String, String>();
+	private Set<String> protectKeys = new HashSet<>();
+	private Map<String, String> headerMap = new HashMap<>();
 	//
 	private DateFormat dateFormat = ValueFormat.getDateFormatEnglish(ValueFormat.FULL_DATE_PATTERN);
 
@@ -60,7 +60,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 		headerMap.put(SAMPLE_GROUP, "");
 		headerMap.put(BARCODE, "");
 		headerMap.put(BARCODE_TYPE, "");
-		headerMap.put(SAMPLE_WEIGHT, Double.valueOf(0.0d).toString());
+		headerMap.put(SAMPLE_WEIGHT, Double.toString(0.0d));
 		headerMap.put(SAMPLE_WEIGHT_UNIT, "");
 		headerMap.put(DATA_NAME, "");
 		//
@@ -284,6 +284,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 		}
 	}
 
+	@Override
 	public void setSampleWeight(double sampleWeight) {
 
 		if(sampleWeight >= 0) {

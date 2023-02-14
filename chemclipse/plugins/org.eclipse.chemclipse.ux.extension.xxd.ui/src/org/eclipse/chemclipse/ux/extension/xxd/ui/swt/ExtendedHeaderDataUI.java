@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -271,7 +271,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 			 */
 			if(measurementInfo != null) {
 				Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
-				Set<String> keysNotRemoved = new HashSet<String>();
+				Set<String> keysNotRemoved = new HashSet<>();
 				while(iterator.hasNext()) {
 					Object mapObject = iterator.next();
 					if(mapObject instanceof Map.Entry) {
@@ -287,7 +287,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 				/*
 				 * Show a message if certain keys couldn't be removed.
 				 */
-				if(keysNotRemoved.size() > 0) {
+				if(!keysNotRemoved.isEmpty()) {
 					MessageDialog.openWarning(DisplayUtils.getShell(), DataMapSupportUI.HEADER_ENTRY, "The following keys can't be removed: " + keysNotRemoved);
 				}
 				//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -197,8 +197,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 			switch(option) {
 				case PEAK_SHOW:
 					chromatogramSelection.setSelectedPeak(selectedPeak);
-					if(selectedPeak instanceof IPeakMSD) {
-						IPeakMSD peakMSD = (IPeakMSD)selectedPeak;
+					if(selectedPeak instanceof IPeakMSD peakMSD) {
 						extendedScanChartUI.update(peakMSD.getExtractedMassSpectrum());
 					}
 					break;
@@ -231,6 +230,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 			}
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
 			logger.warn(e.getCause());
