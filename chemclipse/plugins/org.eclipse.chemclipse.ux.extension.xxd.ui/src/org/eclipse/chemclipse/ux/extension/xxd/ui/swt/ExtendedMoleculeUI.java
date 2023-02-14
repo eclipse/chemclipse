@@ -320,6 +320,8 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void mouseScrolled(MouseEvent event) {
 
+				if(getMoleculeImageService().isOnline())
+					return;
 				scaleFactor += (event.count > 0) ? SCALE_DELTA : -SCALE_DELTA;
 				canvas.redraw();
 			}
