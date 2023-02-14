@@ -286,4 +286,8 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.feature"
+         version="0.0.0"/>
+
 </feature>
