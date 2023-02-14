@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -25,13 +26,14 @@ public class PreferencePageMolecule extends FieldEditorPreferencePage implements
 		super(FLAT);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setTitle("Molecule");
-		setDescription("");
+		setDescription("Render structural formulars of substances in the Targets view.");
 	}
 
 	public void createFieldEditors() {
 
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_MOLECULE_PATH_EXPORT, "Molecule Path Export", getFieldEditorParent()));
 		addField(new ExtendedIntegerFieldEditor(PreferenceConstants.P_LENGTH_MOLECULE_NAME_EXPORT, "Molecule Name Length", PreferenceConstants.MIN_LENGTH_NAME_EXPORT, PreferenceConstants.MAX_LENGTH_NAME_EXPORT, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_PREFER_OFFLINE_MOLECULE, "Prefer Offline Libraries", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

@@ -140,7 +140,16 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		if(moleculeImageServices != null) {
 			comboViewerServices.setInput(moleculeImageServices);
 			if(moleculeImageServices.length >= 1) {
-				comboViewerServices.getCombo().select(0);
+				int preferredService = 0;
+				if(preferenceStore.getBoolean(PreferenceConstants.P_PREFER_OFFLINE_MOLECULE)) {
+					for(int i = 0; i < moleculeImageServices.length; i++) {
+						IMoleculeImageService service = (IMoleculeImageService)moleculeImageServices[i];
+						if(!service.isOnline()) {
+							preferredService = i;
+						}
+					}
+				}
+				comboViewerServices.getCombo().select(preferredService);
 			}
 		}
 		/*
