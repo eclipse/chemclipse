@@ -32,6 +32,8 @@ public class InputValue {
 	private FileSettingProperty fileSettingProperty;
 	private final List<IValidator<Object>> validators = new ArrayList<>();
 	private ComboSupplier<?> comboSupplier;
+	private String label = "";
+	private String tooltip = "";
 	private String contributorURI = "";
 
 	public boolean hasRegexConstraint() {
@@ -130,5 +132,25 @@ public class InputValue {
 	public void setContributorURI(String contributorURI) {
 
 		this.contributorURI = contributorURI;
+	}
+
+	public String getLabel() {
+
+		return label;
+	}
+
+	public void setLabel(String label) {
+
+		this.label = label;
+	}
+
+	public String getTooltip() {
+
+		return tooltip;
+	}
+
+	public void setTooltip(String tooltip) {
+
+		this.tooltip = tooltip;
 	}
 }

@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.LabelProperty;
 import org.eclipse.chemclipse.support.settings.LongSettingsProperty;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
@@ -119,7 +120,10 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 						 */
 						Iterable<Annotation> annotations = annotatedField.getAllAnnotations().annotations();
 						for(Annotation annotation : annotations) {
-							if(annotation instanceof IntSettingsProperty settingsProperty) {
+							if(annotation instanceof LabelProperty labelProperty) {
+								inputValue.setLabel(labelProperty.value());
+								inputValue.setTooltip(labelProperty.tooltip());
+							} else if(annotation instanceof IntSettingsProperty settingsProperty) {
 								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Integer.class));
 								inputValue.addValidator(new EvenOddValidatorInteger(property.getName(), settingsProperty.validation()));
 							} else if(annotation instanceof LongSettingsProperty settingsProperty) {

@@ -16,20 +16,20 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.Ab
 import org.eclipse.chemclipse.model.core.IMarkedTrace;
 import org.eclipse.chemclipse.model.core.IMarkedTraces;
 import org.eclipse.chemclipse.model.core.MarkedTrace;
+import org.eclipse.chemclipse.support.settings.LabelProperty;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 
 	@JsonIgnore
 	private static final String TIC = "0";
 	//
-	@JsonProperty(value = "%TracesToIntegrate", defaultValue = TIC)
-	@JsonPropertyDescription(value = "%TracesToIntegrateDescription")
+	@JsonProperty(value = "Traces to Integrate", defaultValue = TIC)
+	@LabelProperty(value = "%TracesToIntegrate", tooltip = "%TracesToIntegrateDescription")
 	@StringSettingsProperty(regExp = "(\\d+[;|\\s]?)+", description = "%MustBeSpaceSeparatedDigits", isMultiLine = false, allowEmpty = false)
 	private String tracesToIntegrate = TIC;
 	/*
@@ -62,8 +62,8 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 		this.tracesToIntegrate = tracesToIntegrate;
 	}
 
-	@JsonProperty(value = "%IncludeBackground", defaultValue = "false")
-	@JsonPropertyDescription(value = "%IncludeBackgroundDescription")
+	@JsonProperty(value = "Include Background", defaultValue = "false")
+	@LabelProperty(value = "%IncludeBackground", tooltip = "%IncludeBackgroundDescription")
 	private boolean includeBackground = false;
 
 	public boolean isIncludeBackground() {
@@ -76,8 +76,8 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 		this.includeBackground = includeBackground;
 	}
 
-	@JsonProperty(value = "%AreaConstraint", defaultValue = "true")
-	@JsonPropertyDescription(value = "%AreaConstraintDescription")
+	@JsonProperty(value = "Area Constraint", defaultValue = "true")
+	@LabelProperty(value = "%AreaConstraint", tooltip = "%AreaConstraintDescription")
 	private boolean useAreaConstraint = true;
 
 	public boolean isUseAreaConstraint() {

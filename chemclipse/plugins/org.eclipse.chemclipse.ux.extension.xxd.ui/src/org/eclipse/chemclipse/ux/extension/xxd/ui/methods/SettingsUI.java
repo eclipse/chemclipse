@@ -102,7 +102,7 @@ public class SettingsUI<T> extends Composite {
 		}
 	}
 
-	private final static class SettingsUIControlImplementation<T> implements SettingsUIControl {
+	private static final class SettingsUIControlImplementation<T> implements SettingsUIControl {
 
 		private final List<WidgetItem> widgetItems = new ArrayList<>();
 		private final List<Label> labels = new ArrayList<>();
@@ -148,8 +148,16 @@ public class SettingsUI<T> extends Composite {
 				Label label = new Label(parent, SWT.NONE);
 				String contributorURI = widgetItem.getInputValue().getContributorURI();
 				TranslationService translationService = TranslationSupport.getTranslationService();
-				label.setText(translationService.translate(widgetItem.getInputValue().getName(), contributorURI));
-				label.setToolTipText(translationService.translate(widgetItem.getInputValue().getDescription(), contributorURI));
+				if(widgetItem.getInputValue().getLabel() != null && !widgetItem.getInputValue().getLabel().isEmpty()) {
+					label.setText(translationService.translate(widgetItem.getInputValue().getLabel(), contributorURI));
+				} else {
+					label.setText(widgetItem.getInputValue().getName());
+				}
+				if(widgetItem.getInputValue().getTooltip() != null && !widgetItem.getInputValue().getTooltip().isEmpty()) {
+					label.setToolTipText(translationService.translate(widgetItem.getInputValue().getTooltip(), contributorURI));
+				} else {
+					label.setToolTipText(widgetItem.getInputValue().getDescription());
+				}
 				GridData data = new GridData(SWT.LEFT, SWT.TOP, false, false);
 				data.verticalIndent = 5;
 				data.horizontalIndent = 5;

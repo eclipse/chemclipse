@@ -18,36 +18,39 @@ import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderiv
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
+import org.eclipse.chemclipse.support.settings.LabelProperty;
 import org.eclipse.chemclipse.support.settings.serialization.WindowSizeDeserializer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class PeakDetectorSettingsCSD extends AbstractPeakDetectorCSDSettings {
 
-	@JsonProperty(value = "%Threshold", defaultValue = "MEDIUM")
+	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
+	@LabelProperty(value = "%Threshold")
 	private Threshold threshold = Threshold.MEDIUM;
 	//
-	@JsonProperty(value = "%IncludeBackground", defaultValue = "false")
-	@JsonPropertyDescription("%IncludeBackgroundDescription")
+	@JsonProperty(value = "Include Background", defaultValue = "false")
+	@LabelProperty(value = "%IncludeBackground", tooltip = "%IncludeBackgroundDescription")
 	private boolean includeBackground = false;
 	//
-	@JsonProperty(value = "%MinSignalToNoiseRatio", defaultValue = "0")
+	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
+	@LabelProperty(value = "%MinSignalToNoiseRatio")
 	@FloatSettingsProperty(minValue = 0f, maxValue = Float.MAX_VALUE)
 	private float minimumSignalToNoiseRatio;
 	//
-	@JsonProperty(value = "%WindowSize", defaultValue = "5")
-	@JsonPropertyDescription(value = "%WindowSizeDescription")
+	@JsonProperty(value = "Window Size", defaultValue = "5")
+	@LabelProperty(value = "%WindowSize", tooltip = "%WindowSizeDescription")
 	@JsonDeserialize(using = WindowSizeDeserializer.class)
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WINDOW_SIZE, maxValue = PreferenceSupplier.MAX_WINDOW_SIZE, validation = Validation.ODD_NUMBER_INCLUDING_ZERO)
 	private int windowSize = 5;
 	//
-	@JsonProperty(value = "%UseNoiseSegments", defaultValue = "false")
-	@JsonPropertyDescription(value = "%UseNoiseSegmentsDescription")
+	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
+	@LabelProperty(value = "%UseNoiseSegments", tooltip = "%UseNoiseSegmentsDescription")
 	private boolean useNoiseSegments = false;
 	//
-	@JsonProperty(value = "%OptimizeBaselineVV", defaultValue = "false")
+	@JsonProperty(value = "Optimize Baseline (VV)", defaultValue = "false")
+	@LabelProperty(value = "%OptimizeBaselineVV")
 	private boolean optimizeBaseline = false;
 
 	public PeakDetectorSettingsCSD() {
