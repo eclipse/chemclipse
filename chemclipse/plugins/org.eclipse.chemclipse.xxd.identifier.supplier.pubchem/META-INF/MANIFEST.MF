@@ -1,8 +1,7 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.xxd.identifier.supplier.wikidata
-Eclipse-RegisterBuddy: org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.feature
-Export-Package: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.preferences,
- org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.rest
+Automatic-Module-Name: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem
+Eclipse-RegisterBuddy: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.feature
+Export-Package: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.rest
 Bundle-ManifestVersion: 2
 Bundle-Name: PubChem Identifier
 Bundle-SymbolicName: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem;singleton:=true
@@ -11,7 +10,12 @@ Bundle-Activator: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.Activat
 Bundle-Vendor: ChemClipse
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.support;bundle-version="0.9.0",
- org.eclipse.chemclipse.model,
- com.google.guava;bundle-version="30.1.0"
+ org.eclipse.chemclipse.model;bundle-version="0.9.0",
+ com.google.guava;bundle-version="30.1.0",
+ org.eclipse.chemclipse.msd.model;bundle-version="0.9.0",
+ org.eclipse.chemclipse.processing;bundle-version="0.9.0",
+ org.apache.commons.io;bundle-version="2.8.0",
+ org.eclipse.chemclipse.logging;bundle-version="0.9.0",
+ org.eclipse.chemclipse.chromatogram.xxd.identifier
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy

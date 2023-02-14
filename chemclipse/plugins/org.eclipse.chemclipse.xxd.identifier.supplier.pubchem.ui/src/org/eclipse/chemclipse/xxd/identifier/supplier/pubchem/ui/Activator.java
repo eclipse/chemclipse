@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.ui;
 
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
-import org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.preferences.PreferenceSupplier;
 import org.osgi.framework.BundleContext;
 
 public class Activator extends AbstractActivatorUI {
@@ -31,7 +30,6 @@ public class Activator extends AbstractActivatorUI {
 
 		super.start(context);
 		plugin = this;
-		initializePreferenceStore(PreferenceSupplier.INSTANCE());
 	}
 
 	/*

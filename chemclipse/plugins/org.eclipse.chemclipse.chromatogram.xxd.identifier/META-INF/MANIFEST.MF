@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.msd.identifier
+Eclipse-BuddyPolicy: registered
+Export-Package: org.eclipse.chemclipse.chromatogram.xxd.identifier.target
+Bundle-ManifestVersion: 2
+Bundle-Name: Identifier Plug-in
+Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.identifier;singleton:=true
+Bundle-Version: 0.9.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.identifier.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.chemclipse.model;bundle-version="0.9.0",
+ org.eclipse.chemclipse.logging;bundle-version="0.9.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-Vendor: ChemClipse
+Import-Package: org.osgi.service.component.annotations;version="1.2.0"
