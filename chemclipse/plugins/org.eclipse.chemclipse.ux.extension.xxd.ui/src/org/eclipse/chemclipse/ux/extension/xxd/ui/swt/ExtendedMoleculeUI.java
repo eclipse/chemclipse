@@ -391,7 +391,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				createMoleculeImage(e.display);
+				reset(e.display);
 			}
 		});
 		//
@@ -409,12 +409,19 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				scaleFactor = SCALE_DEFAULT;
-				updateContent();
+				reset(e.display);
 			}
 		});
 		//
 		return button;
+	}
+
+	private void reset(Display display) {
+
+		scaleFactor = SCALE_DEFAULT;
+		renderedLibraryInformation = null;
+		updateContent();
+		createMoleculeImage(display);
 	}
 
 	private Button createButtonExport(Composite parent) {
@@ -482,15 +489,9 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void apply(Display display) {
 
-				applySettings(display);
+				reset(display);
 			}
 		});
-	}
-
-	private void applySettings(Display display) {
-
-		createMoleculeImage(display);
-		updateContent();
 	}
 
 	private boolean isEnterPressed(KeyEvent e) {
