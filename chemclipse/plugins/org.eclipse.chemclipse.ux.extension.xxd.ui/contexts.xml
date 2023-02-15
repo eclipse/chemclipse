@@ -13,4 +13,8 @@
    	 <description>The peak/scan list can be used to manage the peaks or scans shown in the current selection.</description>
   	 <topic label="Controls" href="html/controls/peak_scan_list.html"/>
    </context>
+   <context id="targets" title="Targets">
+   	 <description>Targets are library identifications of peaks sorted by match quality.</description>
+  	 <topic label="Controls" href="html/controls/targets.html"/>
+   </context>
 </contexts>
