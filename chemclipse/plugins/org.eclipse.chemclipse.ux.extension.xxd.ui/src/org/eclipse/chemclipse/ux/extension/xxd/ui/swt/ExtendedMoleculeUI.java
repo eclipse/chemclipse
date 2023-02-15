@@ -109,11 +109,10 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	}
 
 	@Override
-	protected void finalize() throws Throwable {
+	public void dispose() {
 
 		if(imageMolecule != null) {
 			imageMolecule.dispose();
-			imageMolecule = null;
 		}
 	}
 
@@ -140,7 +139,16 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		if(moleculeImageServices != null) {
 			comboViewerServices.setInput(moleculeImageServices);
 			if(moleculeImageServices.length >= 1) {
-				comboViewerServices.getCombo().select(0);
+				int preferredService = 0;
+				if(preferenceStore.getBoolean(PreferenceConstants.P_PREFER_OFFLINE_MOLECULE)) {
+					for(int i = 0; i < moleculeImageServices.length; i++) {
+						IMoleculeImageService service = (IMoleculeImageService)moleculeImageServices[i];
+						if(!service.isOnline()) {
+							preferredService = i;
+						}
+					}
+				}
+				comboViewerServices.getCombo().select(preferredService);
 			}
 		}
 		/*
@@ -222,8 +230,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof ImageServiceInput) {
-					ImageServiceInput imageServiceInput = (ImageServiceInput)element;
+				if(element instanceof ImageServiceInput imageServiceInput) {
 					return imageServiceInput.label();
 				}
 				//
@@ -254,7 +261,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Calculate the molecule image.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CALCULATE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CALCULATE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -311,6 +318,8 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void mouseScrolled(MouseEvent event) {
 
+				if(getMoleculeImageService().isOnline())
+					return;
 				scaleFactor += (event.count > 0) ? SCALE_DELTA : -SCALE_DELTA;
 				canvas.redraw();
 			}
@@ -380,7 +389,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				createMoleculeImage(e.display);
+				reset(e.display);
 			}
 		});
 		//
@@ -398,12 +407,19 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				scaleFactor = SCALE_DEFAULT;
-				updateContent();
+				reset(e.display);
 			}
 		});
 		//
 		return button;
+	}
+
+	private void reset(Display display) {
+
+		scaleFactor = SCALE_DEFAULT;
+		renderedLibraryInformation = null;
+		updateContent();
+		createMoleculeImage(display);
 	}
 
 	private Button createButtonExport(Composite parent) {
@@ -471,15 +487,9 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void apply(Display display) {
 
-				applySettings(display);
+				reset(display);
 			}
 		});
-	}
-
-	private void applySettings(Display display) {
-
-		createMoleculeImage(display);
-		updateContent();
 	}
 
 	private boolean isEnterPressed(KeyEvent e) {
@@ -547,9 +557,6 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private Point calculateImageSize() {
 
 		Point size = canvasMolecule.getSize();
-		/*
-		 * Default 1
-		 */
 		int width = size.x;
 		int height = size.y;
 		//

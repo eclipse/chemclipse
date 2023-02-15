@@ -879,6 +879,8 @@ public class PreferenceConstants {
 	public static final String DEF_MOLECULE_PATH_EXPORT = "";
 	public static final String P_LENGTH_MOLECULE_NAME_EXPORT = "lengthMoleculeNameExport";
 	public static final int DEF_LENGTH_MOLECULE_NAME_EXPORT = 40;
+	public static final String P_PREFER_OFFLINE_MOLECULE = "preferOfflineMolecule";
+	public static final boolean DEF_PREFER_OFFLINE_MOLECULE = true;
 	/*
 	 * Peaks Merge
 	 */
