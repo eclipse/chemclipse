@@ -13,5 +13,20 @@ package org.eclipse.chemclipse.numeric.equations;
 
 public interface IQuadraticEquation extends IEquation {
 
+	/*
+	 * Quadratic Term
+	 */
+	double getA();
+
+	/*
+	 * Linear Term
+	 */
+	double getB();
+
+	/*
+	 * Constant Term
+	 */
+	double getC();
+
 	double getApexValueForX(Apex result);
 }
