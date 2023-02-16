@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -103,7 +103,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	 * Specific chromatogram implementations might define
 	 * specific peak types, which must extend from IPeak.
 	 */
-	private final PeakRTMap<T> peaks = new PeakRTMap<T>();
+	private final PeakRTMap<T> peaks = new PeakRTMap<>();
 	private final Set<IIdentificationTarget> identificationTargets = new HashSet<>();
 	private int modCount;
 
@@ -113,12 +113,12 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	 */
 	public AbstractChromatogram() {
 
-		updateSupport = new ArrayList<IChromatogramUpdateListener>(5);
+		updateSupport = new ArrayList<>(5);
 		editHistory = new EditHistory();
 		baselineModelMap.put(DEFAULT_BASELINE_ID, new BaselineModel(this));
-		referencedChromatograms = new ArrayList<IChromatogram<?>>();
-		chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
-		backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
+		referencedChromatograms = new ArrayList<>();
+		chromatogramIntegrationEntries = new ArrayList<>();
+		backgroundIntegrationEntries = new ArrayList<>();
 		method = new TripleQuadMethod();
 		separationColumnIndices = SeparationColumnFactory.getSeparationColumnIndices(SeparationColumnType.DEFAULT);
 	}
@@ -217,7 +217,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	public float getMinSignal() {
 
 		float minSignal = Float.MAX_VALUE;
-		float actSignal = 0.0f;
 		if(getNumberOfScans() < 1) {
 			return 0;
 		}
@@ -225,7 +224,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		 * Do the for loop if at least one scan exists.
 		 */
 		for(IScan scan : getScans()) {
-			actSignal = scan.getTotalSignal();
+			float actSignal = scan.getTotalSignal();
 			minSignal = (minSignal > actSignal) ? actSignal : minSignal;
 		}
 		return minSignal;
@@ -613,7 +612,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		File file = getFile();
 		if(file != null) {
 			String fileName = file.getName();
-			if(fileName != "" && fileName != null) {
+			if(!"".equals(fileName) && fileName != null) {
 				/*
 				 * Extract the file name.
 				 */
@@ -767,7 +766,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	@Override
 	public List<IScan> getScanCycleScans(int scanCycle) {
 
-		List<IScan> scanCycleScans = new ArrayList<IScan>();
+		List<IScan> scanCycleScans = new ArrayList<>();
 		if(scanCycle > 0) {
 			if(containsScanCycles()) {
 				/*

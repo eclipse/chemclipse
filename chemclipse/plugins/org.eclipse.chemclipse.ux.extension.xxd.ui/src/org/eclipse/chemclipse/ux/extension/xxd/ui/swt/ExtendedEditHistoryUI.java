@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -109,6 +109,6 @@ public class ExtendedEditHistoryUI extends Composite implements IExtendedPartUI 
 	private void updateInput() {
 
 		tableViewer.get().setInput(editHistory);
-		toolbarInfo.get().setText("Edit History Event(s): " + ((editHistory != null) ? editHistory.size() : "--"));
+		toolbarInfo.get().setText("Edit History Events: " + ((editHistory != null) ? editHistory.size() : "--"));
 	}
 }

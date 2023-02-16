@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Christoph Läubrich.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,7 +31,7 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class ContextCLI implements BundleActivator {
 
-	private static List<IChromatogram<?>> CHROMATOGRAMS = new ArrayList<IChromatogram<?>>();
+	private static List<IChromatogram<?>> CHROMATOGRAMS = new ArrayList<>();
 	private static IProcessSupplierContext processSupplierContext;
 	private static ServiceTracker<IProcessSupplierContext, IProcessSupplierContext> serviceTracker;
 
@@ -51,7 +51,7 @@ public class ContextCLI implements BundleActivator {
 		return Collections.unmodifiableList(CHROMATOGRAMS);
 	}
 
-	public synchronized static IProcessSupplierContext getProcessSupplierContext() {
+	public static synchronized IProcessSupplierContext getProcessSupplierContext() {
 
 		if(processSupplierContext != null) {
 			return processSupplierContext;
