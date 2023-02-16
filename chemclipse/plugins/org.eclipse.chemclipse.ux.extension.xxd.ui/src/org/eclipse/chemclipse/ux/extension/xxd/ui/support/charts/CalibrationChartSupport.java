@@ -71,6 +71,7 @@ public class CalibrationChartSupport {
 				}
 				break;
 			case QUADRATIC:
+			case QUADRATIC_CHEMSTATION:
 				/*
 				 * Quadratic
 				 */

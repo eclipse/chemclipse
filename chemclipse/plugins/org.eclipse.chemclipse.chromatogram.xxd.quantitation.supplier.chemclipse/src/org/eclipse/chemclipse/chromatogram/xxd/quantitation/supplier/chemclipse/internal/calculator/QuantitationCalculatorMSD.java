@@ -205,6 +205,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 				}
 				break;
 			case QUADRATIC:
+			case QUADRATIC_CHEMSTATION:
 				/*
 				 * Don't quantify if it's outside min/max response.
 				 */

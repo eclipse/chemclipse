@@ -23,7 +23,8 @@ public enum CalibrationMethod implements ILabel {
 	 * All other are used for external calibration.
 	 */
 	LINEAR("Linear"), //
-	QUADRATIC("Quadratic"), //
+	QUADRATIC("Quadratic (Classic)"), // Keep name for backward compatibility
+	QUADRATIC_CHEMSTATION("Quadratic (ChemStation - experimental)"), //
 	AVERAGE("Average"), //
 	ISTD("Internal Standard");
 
@@ -47,7 +48,7 @@ public enum CalibrationMethod implements ILabel {
 	public static final CalibrationMethod[] getInternalCalibrationOptions() {
 
 		return new CalibrationMethod[]{ //
-				CalibrationMethod.ISTD //
+				ISTD //
 		};
 	}
 
@@ -59,15 +60,21 @@ public enum CalibrationMethod implements ILabel {
 	public static final CalibrationMethod[] getExternalCalibrationOptions() {
 
 		return new CalibrationMethod[]{ //
-				CalibrationMethod.AVERAGE, //
-				CalibrationMethod.LINEAR, //
-				CalibrationMethod.QUADRATIC //
+				AVERAGE, //
+				LINEAR, //
+				QUADRATIC, //
+				QUADRATIC_CHEMSTATION //
 		};
 	}
 
 	public static final String[] getExternalCalibrationOptionsArray() {
 
 		return getOptionsArray(getExternalCalibrationOptions());
+	}
+
+	public static boolean isQuadraticMethod(CalibrationMethod calibrationMethod) {
+
+		return CalibrationMethod.QUADRATIC.equals(calibrationMethod) || CalibrationMethod.QUADRATIC_CHEMSTATION.equals(calibrationMethod);
 	}
 
 	private static final String[] getOptionsArray(CalibrationMethod[] calibrationMethods) {
