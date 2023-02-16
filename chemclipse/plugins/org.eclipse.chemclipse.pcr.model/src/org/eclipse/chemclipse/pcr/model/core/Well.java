@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,9 +20,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.AbstractMeasurement;
 
-public class Well extends AbstractDataModel implements IWell {
+public class Well extends AbstractMeasurement implements IWell {
 
+	private static final long serialVersionUID = -5674593451119855940L;
 	private static final Logger logger = Logger.getLogger(Well.class);
 	//
 	private static final String ALL_SUBSETS_SELECTED = "";
@@ -117,25 +119,25 @@ public class Well extends AbstractDataModel implements IWell {
 	@Override
 	public String getSampleId() {
 
-		return getData(SAMPLE_ID, "").trim();
+		return getHeaderDataOrDefault(SAMPLE_ID, "").trim();
 	}
 
 	@Override
 	public String getSampleSubset() {
 
-		return getData(SAMPLE_SUBSET, "").trim();
+		return getHeaderDataOrDefault(SAMPLE_SUBSET, "").trim();
 	}
 
 	@Override
 	public String getTargetName() {
 
-		return getData(TARGET_NAME, "").trim();
+		return getHeaderDataOrDefault(TARGET_NAME, "").trim();
 	}
 
 	@Override
 	public double getCrossingPoint() {
 
-		String value = getData(CROSSING_POINT, "0");
+		String value = getHeaderDataOrDefault(CROSSING_POINT, "0");
 		double result = 0.0d;
 		try {
 			result = Double.parseDouble(value);
@@ -211,10 +213,10 @@ public class Well extends AbstractDataModel implements IWell {
 		for(Entry<Integer, IChannel> set : channels.entrySet()) {
 			well.getChannels().put(set.getKey(), set.getValue().makeDeepCopy());
 		}
-		well.setData(SAMPLE_ID, getSampleId());
-		well.setData(TARGET_NAME, getTargetName());
-		well.setData(CROSSING_POINT, String.valueOf(getCrossingPoint()));
-		well.setData(SAMPLE_SUBSET, getSampleSubset());
+		well.putHeaderData(SAMPLE_ID, getSampleId());
+		well.putHeaderData(TARGET_NAME, getTargetName());
+		well.putHeaderData(CROSSING_POINT, String.valueOf(getCrossingPoint()));
+		well.putHeaderData(SAMPLE_SUBSET, getSampleSubset());
 		return well;
 	}
 }

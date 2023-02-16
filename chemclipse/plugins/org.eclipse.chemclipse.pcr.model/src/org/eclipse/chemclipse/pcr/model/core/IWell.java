@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.pcr.model.core;
 
 import java.util.Map;
 
-public interface IWell extends Comparable<IWell>, IDataModel {
+import org.eclipse.chemclipse.model.core.IMeasurement;
+
+public interface IWell extends Comparable<IWell>, IMeasurement {
 
 	String SAMPLE_ID = "Sample ID";
 	String TARGET_NAME = "Target Name";

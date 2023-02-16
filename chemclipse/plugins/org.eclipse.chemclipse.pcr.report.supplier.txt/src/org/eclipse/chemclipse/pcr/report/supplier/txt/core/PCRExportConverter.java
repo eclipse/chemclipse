@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -166,9 +166,9 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 			 * Detection Format
 			 */
 			printWriter.println("------");
-			printWriter.println(detectionFormat.getData(IDetectionFormat.NAME, ""));
+			printWriter.println(detectionFormat.getHeaderDataOrDefault(IDetectionFormat.NAME, ""));
 			printWriter.println("------");
-			Map<String, String> dataMapFormat = detectionFormat.getData();
+			Map<String, String> dataMapFormat = detectionFormat.getHeaderDataMap();
 			for(Map.Entry<String, String> entry : dataMapFormat.entrySet()) {
 				printValue(printWriter, entry.getKey(), dataMapFormat);
 			}
@@ -177,10 +177,10 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 			 */
 			for(IChannelSpecification channelSpecification : detectionFormat.getChannelSpecifications()) {
 				printWriter.print("===> ");
-				printWriter.print(channelSpecification.getData(IChannelSpecification.NAME, ""));
+				printWriter.print(channelSpecification.getHeaderDataOrDefault(IChannelSpecification.NAME, ""));
 				printWriter.println("");
 				//
-				Map<String, String> dataMapChannel = channelSpecification.getData();
+				Map<String, String> dataMapChannel = channelSpecification.getHeaderDataMap();
 				for(Map.Entry<String, String> entry : dataMapChannel.entrySet()) {
 					printValue(printWriter, TAB, entry.getKey(), dataMapChannel);
 				}

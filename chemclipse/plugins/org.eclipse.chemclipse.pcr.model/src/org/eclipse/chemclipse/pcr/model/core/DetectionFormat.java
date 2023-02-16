@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,20 +14,24 @@ package org.eclipse.chemclipse.pcr.model.core;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetectionFormat extends AbstractDataModel implements IDetectionFormat {
+import org.eclipse.chemclipse.model.core.AbstractMeasurementInfo;
 
+public class DetectionFormat extends AbstractMeasurementInfo implements IDetectionFormat {
+
+	private static final long serialVersionUID = -5323179455378035575L;
 	private List<IChannelSpecification> channelSpecifications = new ArrayList<>();
 	private List<Integer> emissionWavlengths = new ArrayList<>();
 	private List<Integer> excitationWavlengths = new ArrayList<>();
 
 	public DetectionFormat() {
+
 		addProtectedKey(NAME);
 	}
 
 	@Override
 	public String getName() {
 
-		return getData(NAME, "");
+		return getHeaderDataOrDefault(NAME, "");
 	}
 
 	@Override
@@ -60,18 +64,23 @@ public class DetectionFormat extends AbstractDataModel implements IDetectionForm
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj)
+		if(this == obj) {
 			return true;
-		if(obj == null)
+		}
+		if(obj == null) {
 			return false;
-		if(getClass() != obj.getClass())
+		}
+		if(getClass() != obj.getClass()) {
 			return false;
+		}
 		DetectionFormat other = (DetectionFormat)obj;
 		if(getName() == null) {
-			if(other.getName() != null)
+			if(other.getName() != null) {
 				return false;
-		} else if(!getName().equals(other.getName()))
+			}
+		} else if(!getName().equals(other.getName())) {
 			return false;
+		}
 		return true;
 	}
 

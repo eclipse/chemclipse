@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -59,7 +59,6 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 	private Button buttonTableEdit;
 	private Button buttonDelete;
 	//
-	private TabFolder tabFolder;
 	private AtomicReference<HeaderDataListUI> tableViewer = new AtomicReference<>();
 	private Text textMiscellaneous;
 	//
@@ -170,7 +169,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 
 	private void createTabFolderSection(Composite parent) {
 
-		tabFolder = new TabFolder(parent, SWT.BOTTOM);
+		TabFolder tabFolder = new TabFolder(parent, SWT.BOTTOM);
 		tabFolder.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tabFolder.addSelectionListener(new SelectionAdapter() {
@@ -271,7 +270,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 			 */
 			if(measurementInfo != null) {
 				Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
-				Set<String> keysNotRemoved = new HashSet<String>();
+				Set<String> keysNotRemoved = new HashSet<>();
 				while(iterator.hasNext()) {
 					Object mapObject = iterator.next();
 					if(mapObject instanceof Map.Entry) {
@@ -287,7 +286,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 				/*
 				 * Show a message if certain keys couldn't be removed.
 				 */
-				if(keysNotRemoved.size() > 0) {
+				if(!keysNotRemoved.isEmpty()) {
 					MessageDialog.openWarning(DisplayUtils.getShell(), DataMapSupportUI.HEADER_ENTRY, "The following keys can't be removed: " + keysNotRemoved);
 				}
 				//
@@ -300,7 +299,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 
 		DataMapSupportUI dataMapSupportUI = toolbarEdit.get();
 		if(dataMapSupportUI != null) {
-			dataMapSupportUI.setInput(measurementInfo != null ? measurementInfo.getHeaderDataMap() : null);
+			dataMapSupportUI.setInput(measurementInfo);
 		}
 		updateData();
 	}
@@ -332,8 +331,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 		buttonDelete.setEnabled(false);
 		if(measurementInfo != null) {
 			Object object = tableViewer.get().getStructuredSelection().getFirstElement();
-			if(object instanceof Map.Entry) {
-				Map.Entry entry = (Map.Entry)object;
+			if(object instanceof Map.Entry entry) {
 				boolean enabled = !measurementInfo.isKeyProtected(entry.getKey().toString());
 				buttonDelete.setEnabled(enabled);
 			}

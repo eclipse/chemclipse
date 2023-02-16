@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -457,5 +457,11 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 				return filterConfig;
 			}
 		};
+	}
+
+	@Override
+	public void addProtectedKey(String key) {
+
+		throw new UnsupportedOperationException("Keys are never protected.");
 	}
 }

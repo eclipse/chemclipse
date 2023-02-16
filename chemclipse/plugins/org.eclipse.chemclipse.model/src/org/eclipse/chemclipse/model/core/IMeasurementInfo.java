@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,8 @@ public interface IMeasurementInfo extends Serializable {
 
 	boolean isKeyProtected(String key);
 
+	void addProtectedKey(String key);
+
 	String getHeaderData(String key);
 
 	String getHeaderDataOrDefault(String key, String defaultValue);
@@ -42,7 +44,7 @@ public interface IMeasurementInfo extends Serializable {
 
 	/**
 	 * This map is unmodifiable. Please use the
-	 * setValue method to add values.
+	 * putHeaderData method to add values.
 	 * 
 	 * @return Map<String, String>
 	 */

@@ -98,7 +98,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 
 		Set<String> sampleSubsets = new HashSet<>();
 		for(IWell well : plate.getWells()) {
-			Map<String, String> dataMap = well.getData();
+			Map<String, String> dataMap = well.getHeaderDataMap();
 			String sampleSubset = dataMap.getOrDefault(IWell.SAMPLE_SUBSET, "");
 			if(!"".equals(sampleSubset)) {
 				sampleSubsets.add(sampleSubset);
