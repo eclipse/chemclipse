@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Christoph Läubrich.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,7 +32,6 @@ import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.rcp.app.cli.AbstractCommandLineProcessor;
 import org.eclipse.chemclipse.rcp.app.cli.ICommandLineProcessor;
 import org.eclipse.chemclipse.ui.cli.ContextCLI;
-import org.eclipse.chemclipse.ui.cli.converter.ChromatogramImportProcessor;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.core.runtime.Adapters;
@@ -41,7 +40,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 public class MethodProcessor extends AbstractCommandLineProcessor implements ICommandLineProcessor {
 
 	private static final NullProgressMonitor MONITOR = new NullProgressMonitor();
-	private static final Logger LOG = Logger.getLogger(ChromatogramImportProcessor.class);
+	private static final Logger LOG = Logger.getLogger(MethodProcessor.class);
 
 	@Override
 	public void process(String[] args) {
@@ -64,8 +63,8 @@ public class MethodProcessor extends AbstractCommandLineProcessor implements ICo
 			LOG.info("Applying " + method.getName() + "...");
 			for(IChromatogram<?> chromatogram : ContextCLI.getChromatograms()) {
 				IChromatogramSelection<?, ?> selection;
-				if(chromatogram instanceof IChromatogramMSD) {
-					selection = new ChromatogramSelectionMSD((IChromatogramMSD)chromatogram) {
+				if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
+					selection = new ChromatogramSelectionMSD(chromatogramMSD) {
 
 						@Override
 						public void fireUpdateChange(boolean forceReload) {
@@ -76,8 +75,8 @@ public class MethodProcessor extends AbstractCommandLineProcessor implements ICo
 							super.fireUpdateChange(forceReload);
 						}
 					};
-				} else if(chromatogram instanceof IChromatogramCSD) {
-					selection = new ChromatogramSelectionCSD((IChromatogramCSD)chromatogram) {
+				} else if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
+					selection = new ChromatogramSelectionCSD(chromatogramCSD) {
 
 						@Override
 						public void fireUpdateChange(boolean forceReload) {
@@ -88,8 +87,8 @@ public class MethodProcessor extends AbstractCommandLineProcessor implements ICo
 							super.fireUpdateChange(forceReload);
 						}
 					};
-				} else if(chromatogram instanceof IChromatogramWSD) {
-					selection = new ChromatogramSelectionWSD((IChromatogramWSD)chromatogram) {
+				} else if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
+					selection = new ChromatogramSelectionWSD(chromatogramWSD) {
 
 						@Override
 						public void fireUpdateChange(boolean forceReload) {
@@ -101,7 +100,7 @@ public class MethodProcessor extends AbstractCommandLineProcessor implements ICo
 						}
 					};
 				} else {
-					LOG.error("Unknwon Chromatogram Type " + chromatogram);
+					LOG.error("Unknown Chromatogram Type " + chromatogram);
 					continue;
 				}
 				//

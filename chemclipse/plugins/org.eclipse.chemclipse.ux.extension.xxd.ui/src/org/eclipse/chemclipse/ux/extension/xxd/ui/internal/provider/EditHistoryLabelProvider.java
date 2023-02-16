@@ -22,20 +22,16 @@ import org.eclipse.swt.graphics.Image;
 
 public class EditHistoryLabelProvider extends LabelProvider implements ITableLabelProvider {
 
-	public static final String DATE = SupportMessages.columnDate;
-	public static final String DESCRIPTION = SupportMessages.columnDescription;
-	public static final String EDITOR = SupportMessages.columnEditor;
-	//
 	public static final String[] TITLES = {//
-			DATE, //
-			DESCRIPTION, //
-			EDITOR //
+			SupportMessages.columnDescription, //
+			SupportMessages.columnEditor, //
+			SupportMessages.columnDate, //
 	};
 	//
 	public static final int[] BOUNDS = {//
-			100, //
 			300, //
-			100 //
+			100, //
+			100, //
 	};
 
 	@Override
@@ -52,13 +48,13 @@ public class EditHistoryLabelProvider extends LabelProvider implements ITableLab
 		if(element instanceof IEditInformation editInformation) {
 			switch(columnIndex) {
 				case 0:
-					text = editInformation.getDate().toString();
-					break;
-				case 1:
 					text = editInformation.getDescription();
 					break;
-				case 2:
+				case 1:
 					text = editInformation.getEditor();
+					break;
+				case 2:
+					text = editInformation.getDate().toString();
 					break;
 				default:
 					text = SupportMessages.labelNotAvailable;

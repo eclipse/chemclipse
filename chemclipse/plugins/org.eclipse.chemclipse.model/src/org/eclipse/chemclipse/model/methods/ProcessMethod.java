@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -63,8 +63,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 			setName(other.getName());
 			setSupportResume(other.isSupportResume());
 			setResumeIndex(other.getResumeIndex());
-			if(other instanceof ProcessMethod) {
-				ProcessMethod processMethod = (ProcessMethod)other;
+			if(other instanceof ProcessMethod processMethod) {
 				this.sourceFile = processMethod.getSourceFile();
 			}
 			metadata.putAll(other.getMetaData());
