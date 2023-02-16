@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.support;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,20 @@ import org.eclipse.chemclipse.model.identifier.IFlavorMarker;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
 public class LibraryInformationSupport {
+
+	public static List<ILibraryInformation> filterByRetentionIndexDelta(List<ILibraryInformation> libraryInformations, float retentionIndex, int maxResults) {
+
+		/*
+		 * Filter the best results if too many entries have been extracted.
+		 * The lowest retention index delta shall be preferred.
+		 */
+		if(libraryInformations.size() > maxResults) {
+			Collections.sort(libraryInformations, (l1, l2) -> Float.compare(Math.abs(l1.getRetentionIndex() - retentionIndex), Math.abs(l2.getRetentionIndex() - retentionIndex)));
+			return libraryInformations.subList(0, maxResults);
+		} else {
+			return libraryInformations;
+		}
+	}
 
 	public boolean containsSearchText(ILibraryInformation libraryInformation, String searchText, boolean caseSensitive) {
 
