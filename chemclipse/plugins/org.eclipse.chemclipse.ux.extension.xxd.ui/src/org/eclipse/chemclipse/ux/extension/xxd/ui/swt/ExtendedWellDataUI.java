@@ -246,7 +246,7 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 		if(messageBox.open() == SWT.YES) {
 			if(well != null) {
 				Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
-				Set<String> keysNotRemoved = new HashSet<String>();
+				Set<String> keysNotRemoved = new HashSet<>();
 				while(iterator.hasNext()) {
 					Object mapObject = iterator.next();
 					if(mapObject instanceof Map.Entry) {

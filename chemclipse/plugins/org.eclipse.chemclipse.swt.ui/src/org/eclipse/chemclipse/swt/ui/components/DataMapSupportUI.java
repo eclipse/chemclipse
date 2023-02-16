@@ -145,11 +145,11 @@ public class DataMapSupportUI extends Composite {
 			String key = textKey.getText().trim();
 			String value = textValue.getText().trim();
 			//
-			if("".equals(key)) {
+			if(key.isEmpty()) {
 				MessageDialog.openError(shell, HEADER_ENTRY, "The header key must be not empty.");
 			} else if(dataMap.containsKey(key)) {
 				MessageDialog.openError(shell, HEADER_ENTRY, "The header key already exists.");
-			} else if("".equals(value)) {
+			} else if(value.isEmpty()) {
 				MessageDialog.openError(shell, HEADER_ENTRY, "The header value must be not empty.");
 			} else {
 				dataMap.put(key, value);

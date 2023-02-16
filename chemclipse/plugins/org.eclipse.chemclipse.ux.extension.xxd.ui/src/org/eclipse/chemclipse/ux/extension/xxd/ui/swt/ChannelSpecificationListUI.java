@@ -65,7 +65,7 @@ public class ChannelSpecificationListUI extends ExtendedTableViewer {
 	public void sortTable() {
 
 		int column = 0;
-		int sortOrder = HeaderDataTableComparator.DESCENDING;
+		int sortOrder = IRecordTableComparator.DESCENDING;
 		//
 		tableComparator.setColumn(column);
 		tableComparator.setDirection(sortOrder);
@@ -78,6 +78,6 @@ public class ChannelSpecificationListUI extends ExtendedTableViewer {
 		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
 		setComparator(tableComparator);
-		setFilters(new ViewerFilter[]{listFilter});
+		setFilters(listFilter);
 	}
 }
