@@ -10,7 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - propagate result of methods to the user, add label selection support
- * Matthias Mailänder - display selected wavelengths
+ * Matthias Mailänder - display selected wavelengths, audit trail
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
@@ -68,7 +68,9 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.processors.ProcessorToolbar;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -597,6 +599,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 					DefaultProcessingResult<Object> processingInfo = new DefaultProcessingResult<>();
 					IProcessSupplier.applyProcessor(settings, IChromatogramSelectionProcessSupplier.createConsumer(getChromatogramSelection()), new ProcessExecutionContext(monitor, processingInfo, processSupplierContext));
 					updateResult(processingInfo);
+					updateAuditTrail(processingInfo, processSupplier);
 				}
 			}, shell);
 		} catch(IOException e) {
@@ -632,6 +635,29 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				ProcessingInfoPartSupport.getInstance().update(processingInfo, true);
 			}
 		});
+	}
+
+	private void updateAuditTrail(IMessageProvider processingInfo, IProcessMethod processMethod) {
+
+		if(processingInfo.hasErrorMessages()) {
+			return;
+		}
+		processMethod.forEach(p -> updateAuditTrail(p.getName()));
+	}
+
+	private void updateAuditTrail(IMessageProvider processingInfo, IProcessSupplier<?> processSupplier) {
+
+		if(processingInfo.hasErrorMessages()) {
+			return;
+		}
+		updateAuditTrail(processSupplier.getCategory() + ": " + processSupplier.getName());
+	}
+
+	private void updateAuditTrail(String description) {
+
+		IChromatogram<?> chromatogram = getChromatogramSelection().getChromatogram();
+		EditInformation editInformation = new EditInformation(description, UserManagement.getCurrentUser());
+		chromatogram.getEditHistory().add(editInformation);
 	}
 
 	private boolean isValidSupplier(IProcessSupplier<?> supplier) {
@@ -1134,6 +1160,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processingInfo, processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
 				chromatogramSelection.getChromatogram().setDirty(true); // TODO: check each entry
 				updateResult(processingInfo);
+				updateAuditTrail(processingInfo, processMethod);
 				forceReset(true);
 				UpdateNotifierUI.update(getDisplay(), chromatogramSelection.getSelectedScan());
 			}
