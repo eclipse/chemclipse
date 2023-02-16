@@ -73,6 +73,12 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	}
 
 	@Override
+	public void addProtectedKey(String key) {
+
+		protectKeys.add(key);
+	}
+
+	@Override
 	public String getHeaderData(String key) {
 
 		return headerMap.get(key);

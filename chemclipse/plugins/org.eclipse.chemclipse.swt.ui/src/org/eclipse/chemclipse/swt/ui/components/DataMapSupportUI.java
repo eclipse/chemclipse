@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,8 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.components;
 
-import java.util.Map;
-
+import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -38,7 +37,7 @@ public class DataMapSupportUI extends Composite {
 	private Button buttonAdd;
 	//
 	private IHeaderListener headerListener;
-	private Map<String, String> dataMap;
+	private IMeasurementInfo measurementInfo;
 
 	public DataMapSupportUI(Composite parent, int style) {
 
@@ -58,9 +57,9 @@ public class DataMapSupportUI extends Composite {
 		this.headerListener = headerListener;
 	}
 
-	public void setInput(Map<String, String> dataMap) {
+	public void setInput(IMeasurementInfo measurementInfo) {
 
-		this.dataMap = dataMap;
+		this.measurementInfo = measurementInfo;
 		updateWidget();
 	}
 
@@ -138,7 +137,7 @@ public class DataMapSupportUI extends Composite {
 
 	private void addEntry(Shell shell) {
 
-		if(dataMap != null) {
+		if(measurementInfo != null) {
 			/*
 			 * Get the values.
 			 */
@@ -147,12 +146,12 @@ public class DataMapSupportUI extends Composite {
 			//
 			if(key.isEmpty()) {
 				MessageDialog.openError(shell, HEADER_ENTRY, "The header key must be not empty.");
-			} else if(dataMap.containsKey(key)) {
+			} else if(measurementInfo.headerDataContainsKey(key)) {
 				MessageDialog.openError(shell, HEADER_ENTRY, "The header key already exists.");
 			} else if(value.isEmpty()) {
 				MessageDialog.openError(shell, HEADER_ENTRY, "The header value must be not empty.");
 			} else {
-				dataMap.put(key, value);
+				measurementInfo.putHeaderData(key, value);
 				reset();
 				fireUpdate();
 			}
@@ -161,11 +160,11 @@ public class DataMapSupportUI extends Composite {
 
 	private void updateWidget() {
 
-		textKey.setEnabled(dataMap != null);
-		textValue.setEnabled(dataMap != null);
+		textKey.setEnabled(measurementInfo != null);
+		textValue.setEnabled(measurementInfo != null);
 		//
 		boolean enabled = false;
-		if(dataMap != null) {
+		if(measurementInfo != null) {
 			String key = textKey.getText().trim();
 			if(!key.isEmpty()) {
 				String value = textValue.getText().trim();
@@ -180,7 +179,7 @@ public class DataMapSupportUI extends Composite {
 
 	private void fireUpdate() {
 
-		if(dataMap != null) {
+		if(measurementInfo != null) {
 			if(headerListener != null) {
 				headerListener.update();
 			}

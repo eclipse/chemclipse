@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,13 +16,12 @@ import java.util.List;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.HeaderDataTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.WellDataEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.WellDataLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.WellDataListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.WellDataTableComparator;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
 public class WellDataListUI extends ExtendedTableViewer {
@@ -52,7 +51,7 @@ public class WellDataListUI extends ExtendedTableViewer {
 
 		this.well = well;
 		if(well != null) {
-			super.setInput(well.getData());
+			super.setInput(well.getHeaderDataMap());
 		} else {
 			clear();
 		}
@@ -66,7 +65,7 @@ public class WellDataListUI extends ExtendedTableViewer {
 	public void sortTable() {
 
 		int column = 0;
-		int sortOrder = HeaderDataTableComparator.DESCENDING;
+		int sortOrder = IRecordTableComparator.DESCENDING;
 		//
 		tableComparator.setColumn(column);
 		tableComparator.setDirection(sortOrder);
@@ -84,7 +83,7 @@ public class WellDataListUI extends ExtendedTableViewer {
 		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
 		setComparator(tableComparator);
-		setFilters(new ViewerFilter[]{listFilter});
+		setFilters(listFilter);
 		setEditingSupport();
 	}
 

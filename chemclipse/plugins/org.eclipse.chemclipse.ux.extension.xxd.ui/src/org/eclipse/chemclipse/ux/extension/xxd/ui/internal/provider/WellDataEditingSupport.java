@@ -73,7 +73,7 @@ public class WellDataEditingSupport extends EditingSupport {
 			if(well != null) {
 				Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
 				if(column.equals(WellDataLabelProvider.VALUE)) {
-					well.putData(entry.getKey(), (String)value);
+					well.putHeaderData(entry.getKey(), (String)value);
 				}
 				tableViewer.refresh();
 			}

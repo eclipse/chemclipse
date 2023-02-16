@@ -110,7 +110,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 
 		Set<String> sampleSubsets = new HashSet<>();
 		for(IWell well : plate.getWells()) {
-			Map<String, String> dataMap = well.getData();
+			Map<String, String> dataMap = well.getHeaderDataMap();
 			String sampleSubset = dataMap.getOrDefault(IWell.SAMPLE_SUBSET, "");
 			if(!sampleSubset.isEmpty()) {
 				sampleSubsets.add(sampleSubset);
@@ -162,7 +162,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 				 * Sample Subset
 				 */
 				Position position = well.getPosition();
-				Map<String, String> dataMap = well.getData();
+				Map<String, String> dataMap = well.getHeaderDataMap();
 				String sampleSubset = dataMap.getOrDefault(IWell.SAMPLE_SUBSET, "");
 				if(isSubsetMatch(sampleSubset, targetSubset)) {
 					XSSFRow data = sheet.createRow(sheet.getLastRowNum() + 1);

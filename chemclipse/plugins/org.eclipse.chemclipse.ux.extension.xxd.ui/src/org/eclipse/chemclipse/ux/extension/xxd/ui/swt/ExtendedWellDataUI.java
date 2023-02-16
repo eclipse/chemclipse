@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -253,7 +253,7 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 						Map.Entry<String, String> entry = (Map.Entry<String, String>)mapObject;
 						String key = entry.getKey();
 						try {
-							well.removeData(key);
+							well.removeHeaderData(key);
 						} catch(InvalidHeaderModificationException e) {
 							keysNotRemoved.add(key);
 						}
@@ -277,7 +277,7 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 			toolbarEdit.get().setInput(null);
 			tableViewer.get().setInput(null);
 		} else {
-			toolbarEdit.get().setInput(well.getData());
+			toolbarEdit.get().setInput(well);
 			tableViewer.get().setInput(well);
 			//
 			WellDataListUI wellDataListUI = tableViewer.get();
@@ -295,7 +295,7 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 	private void updateLabel() {
 
 		toolbarInfoTop.get().setText(well != null ? well.getLabel() : "");
-		toolbarInfoBottom.get().setText(well != null ? "Number of Entries: " + well.getData().size() : "");
+		toolbarInfoBottom.get().setText(well != null ? "Number of Entries: " + well.getHeaderDataMap().size() : "");
 	}
 
 	private void updateWidgets() {

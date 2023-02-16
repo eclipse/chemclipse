@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -299,7 +299,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 
 		DataMapSupportUI dataMapSupportUI = toolbarEdit.get();
 		if(dataMapSupportUI != null) {
-			dataMapSupportUI.setInput(measurementInfo != null ? measurementInfo.getHeaderDataMap() : null);
+			dataMapSupportUI.setInput(measurementInfo);
 		}
 		updateData();
 	}
