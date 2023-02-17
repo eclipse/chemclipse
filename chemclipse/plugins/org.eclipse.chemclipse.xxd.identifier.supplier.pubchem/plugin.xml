@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.xxd.identifier.targetIdentifier">
+      <TargetIdentificationSupplier
+            description="Links to the corresponding PubChem CID."
+            id="org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.identifier"
+            identifierName="PubChem"
+            targetURL="org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.identifier.PubChemExternalTargetIdentifier">
+      </TargetIdentificationSupplier>
+   </extension>
+</plugin>

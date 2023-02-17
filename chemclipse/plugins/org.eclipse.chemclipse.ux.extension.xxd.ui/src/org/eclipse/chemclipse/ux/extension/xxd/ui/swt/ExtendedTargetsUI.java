@@ -107,6 +107,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private TargetIdentifierUI targetIdentifierUI; // show database link
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent, int style) {
@@ -204,9 +205,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(6, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
+		targetIdentifierUI = createTargetIdentifierUI(composite);
 		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
 		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
 		buttonDeleteTargets = createButtonDeleteAll(composite);
@@ -234,6 +236,12 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		});
 		//
 		return button;
+	}
+
+	private TargetIdentifierUI createTargetIdentifierUI(Composite parent) {
+
+		TargetIdentifierUI targetIdentifierUI = new TargetIdentifierUI(parent, SWT.NONE);
+		return targetIdentifierUI;
 	}
 
 	private boolean openQuestion(Shell shell, String text) {
@@ -777,6 +785,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 					UpdateNotifierUI.update(display, massSpectrum, identificationTarget);
 				}
 				UpdateNotifierUI.update(display, identificationTarget);
+				/*
+				 * Then update the weblink button.
+				 */
+				targetIdentifierUI.setInput(identificationTarget.getLibraryInformation());
 			}
 		}
 	}

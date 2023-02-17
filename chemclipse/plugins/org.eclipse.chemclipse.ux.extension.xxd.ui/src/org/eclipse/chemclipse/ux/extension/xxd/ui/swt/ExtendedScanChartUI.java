@@ -605,8 +605,8 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 	private IScanMSD getScanMSD() {
 
-		if(scan instanceof IScanMSD) {
-			return (IScanMSD)scan;
+		if(scan instanceof IScanMSD scanMSD) {
+			return scanMSD;
 		}
 		return null;
 	}
@@ -639,7 +639,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		boolean enabled = isMassSpectrum();
 		//
 		scanIdentifierUI.setEnabled(enabled || isWaveSpectrum());
-		buttonCopyTraces.setEnabled(scan instanceof IScanMSD | scan instanceof IScanWSD);
+		buttonCopyTraces.setEnabled(scan instanceof IScanMSD || scan instanceof IScanWSD);
 		buttonSave.setEnabled(enabled);
 		buttonDeleteOptimized.setEnabled(enabled && isOptimizedScan());
 		buttonSubtractOption.setEnabled(enabled);
@@ -725,8 +725,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		Object[] scanIdentifierServices = Activator.getDefault().getScanIdentifierServices();
 		if(scanIdentifierServices != null) {
 			for(Object object : scanIdentifierServices) {
-				if(object instanceof IScanIdentifierService) {
-					IScanIdentifierService scanIdentifierService = (IScanIdentifierService)object;
+				if(object instanceof IScanIdentifierService scanIdentifierService) {
 					DataType dataType = scanIdentifierService.getDataType();
 					if(scanDataType.equals(dataType)) {
 						Class<? extends IWorkbenchPreferencePage> preferencePage = scanIdentifierService.getPreferencePage();
@@ -765,16 +764,15 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					if(scan instanceof IScanMSD) {
-						IScanMSD scanMSD = (IScanMSD)scan;
+					if(scan instanceof IScanMSD scanMSD) {
 						DatabaseFileSupport.saveMassSpectrum(e.display.getActiveShell(), scanMSD, "OriginalScan");
 						IScanMSD optimizedScan = scanMSD.getOptimizedMassSpectrum();
 						if(optimizedScan != null) {
 							DatabaseFileSupport.saveMassSpectrum(e.display.getActiveShell(), optimizedScan, "OptimizedScan");
 						}
 					}
-				} catch(NoConverterAvailableException e1) {
-					logger.warn(e1);
+				} catch(NoConverterAvailableException ex) {
+					logger.warn(ex);
 				}
 			}
 		});
@@ -799,9 +797,8 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 	private void deleteOptimizedScan(Display display) {
 
-		if(scan instanceof IScanMSD) {
+		if(scan instanceof IScanMSD scanMSD) {
 			if(MessageDialog.openQuestion(display.getActiveShell(), "Optimized Scan", "Would you like to delete the optimized scan?")) {
-				IScanMSD scanMSD = (IScanMSD)scan;
 				scanMSD.setOptimizedMassSpectrum(null);
 				updateScan(scan);
 			}
@@ -866,7 +863,6 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 		display.asyncExec(new Runnable() {
 
-			@SuppressWarnings({"unchecked", "rawtypes"})
 			@Override
 			public void run() {
 
@@ -875,8 +871,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 					List<Object> objects = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
 					if(objects != null && !objects.isEmpty()) {
 						Object object = objects.get(0);
-						if(object instanceof IChromatogramSelection) {
-							IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
+						if(object instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
 							if(scan != null) {
 								/*
 								 * We assume that the subtraction takes place in the same
@@ -887,7 +882,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 								 * the best way to prevent unwanted behavior. The scan chart shows
 								 * data from scans and peaks.
 								 */
-								IChromatogram<IPeak> chromatogram = chromatogramSelection.getChromatogram();
+								IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 								int retentionTime = scan.getRetentionTime();
 								int scanNumber = chromatogram.getScanNumber(retentionTime);
 								IScan scanReference = chromatogram.getScan(scanNumber);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.HeaderDataTa
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
 public class HeaderDataListUI extends ExtendedTableViewer {
@@ -87,7 +86,7 @@ public class HeaderDataListUI extends ExtendedTableViewer {
 		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
 		setComparator(tableComparator);
-		setFilters(new ViewerFilter[]{listFilter});
+		setFilters(listFilter);
 		setCellColorProvider();
 		setEditingSupport();
 	}
