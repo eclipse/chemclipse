@@ -28,7 +28,7 @@ public class ColumnIndexSupport {
 		searchColumn = adjustValue(searchColumn, caseSensitive, removeWhiteSpace);
 		//
 		exitloop:
-		for(IColumnIndexMarker columnIndexMarker : columnIndexMarkers) {
+		for(IColumnIndexMarker columnIndexMarker : columnIndexMarkersSorted) {
 			ISeparationColumn separationColumn = columnIndexMarker.getSeparationColumn();
 			String separationColumnType = adjustValue(separationColumn.getSeparationColumnType().label(), caseSensitive, removeWhiteSpace);
 			String name = adjustValue(separationColumn.getName(), caseSensitive, removeWhiteSpace);
