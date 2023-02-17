@@ -21,24 +21,19 @@ import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.processors.Processor;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 public class ProcessorLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String NAME = "Name";
-	public static final String DATA_TYPE = "Data Type";
-	public static final String CATEGORY = "Category";
-	public static final String DESCRIPTION = "Description";
-	public static final String ID = "ID";
-	//
 	public static final String[] TITLES = { //
-			NAME, //
-			DATA_TYPE, //
-			CATEGORY, //
-			DESCRIPTION, //
-			ID //
+			SupportMessages.labelName, //
+			SupportMessages.labelDataType, //
+			SupportMessages.labelCategory, //
+			SupportMessages.labelDescription, //
+			SupportMessages.labelID //
 	};
 	//
 	public static final int[] BOUNDS = { //
@@ -62,7 +57,7 @@ public class ProcessorLabelProvider extends AbstractChemClipseLabelProvider {
 		while(iterator.hasNext()) {
 			builder.append(iterator.next());
 			if(iterator.hasNext()) {
-				builder.append(", ");
+				builder.append(", "); //$NON-NLS-1$
 			}
 		}
 		//
@@ -84,7 +79,7 @@ public class ProcessorLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 
-		String text = "";
+		String text = ""; //$NON-NLS-1$
 		if(element instanceof Processor processor) {
 			IProcessSupplier<?> processSupplier = processor.getProcessSupplier();
 			switch(columnIndex) {
@@ -104,7 +99,7 @@ public class ProcessorLabelProvider extends AbstractChemClipseLabelProvider {
 					text = processSupplier.getId();
 					break;
 				default:
-					text = "n.v.";
+					text = SupportMessages.labellabelNA;
 			}
 		}
 		return text;

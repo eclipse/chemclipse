@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,9 @@ import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -96,6 +98,6 @@ public class RetentionTimeMinutesFieldEditor extends StringFieldEditor {
 
 	private void setAndShowErrorMessage() {
 
-		showErrorMessage("Allowed retention time range: " + decimalFormat.format(minRetentionTimeMinutes) + " - " + decimalFormat.format(maxRetentionTimeMinutes) + " minutes");
+		showErrorMessage(NLS.bind(SupportMessages.allowedRetentionTimeRange, decimalFormat.format(minRetentionTimeMinutes), decimalFormat.format(maxRetentionTimeMinutes)));
 	}
 }

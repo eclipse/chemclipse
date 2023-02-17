@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.fieldeditors;
 
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -21,10 +23,12 @@ public class DoubleFieldEditor extends StringFieldEditor {
 	private double maxValue = Double.MAX_VALUE;
 
 	public DoubleFieldEditor(String name, String labelText, Composite parent) {
+
 		super(name, labelText, parent);
 	}
 
 	public DoubleFieldEditor(String name, String labelText, double minValue, double maxValue, Composite parent) {
+
 		super(name, labelText, parent);
 		this.minValue = minValue;
 		this.maxValue = maxValue;
@@ -87,6 +91,6 @@ public class DoubleFieldEditor extends StringFieldEditor {
 
 	private void setAndShowErrorMessage() {
 
-		showErrorMessage("Allowed range (MIN = " + minValue + ")(MAX = " + maxValue + ")");
+		showErrorMessage(NLS.bind(SupportMessages.allowedRange, minValue, maxValue));
 	}
 }

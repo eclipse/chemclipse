@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -88,8 +89,8 @@ public class ProcessorToolbarSelectionUI extends Composite {
 	private Text createTextSearch(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER | SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
-		text.setText("");
-		text.setToolTipText("Search the available processor items.");
+		text.setText(""); //$NON-NLS-1$
+		text.setToolTipText(SupportMessages.searchAvailableProcessorItems);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		/*
 		 * Listen to search key event.
@@ -111,7 +112,7 @@ public class ProcessorToolbarSelectionUI extends Composite {
 			public void widgetDefaultSelected(SelectionEvent e) {
 
 				if(e.detail == SWT.ICON_CANCEL) {
-					text.setText("");
+					text.setText(""); //$NON-NLS-1$
 					runSearch();
 				} else if(e.detail == SWT.ICON_SEARCH) {
 					runSearch();
@@ -125,7 +126,7 @@ public class ProcessorToolbarSelectionUI extends Composite {
 	private Button createButtonSearch(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
+		button.setText(""); //$NON-NLS-1$
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
 		//
 		button.addSelectionListener(new SelectionAdapter() {

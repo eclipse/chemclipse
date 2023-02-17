@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.support.ui.workbench;
 
 public class EditorSupport {
 
-	public static final String MAP_FILE = "File";
-	public static final String MAP_BATCH = "Batch";
+	public static final String MAP_FILE = "File"; //$NON-NLS-1$
+	public static final String MAP_BATCH = "Batch"; //$NON-NLS-1$
 
 	private EditorSupport() {
 

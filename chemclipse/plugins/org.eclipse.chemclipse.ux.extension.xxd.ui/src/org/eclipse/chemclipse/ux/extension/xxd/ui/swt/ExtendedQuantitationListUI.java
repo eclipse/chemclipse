@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
-import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
@@ -48,6 +47,7 @@ public class ExtendedQuantitationListUI extends Composite implements IExtendedPa
 		createControl();
 	}
 
+	@Override
 	public boolean setFocus() {
 
 		updateObject();
@@ -134,7 +134,7 @@ public class ExtendedQuantitationListUI extends Composite implements IExtendedPa
 			@Override
 			public String getCategory() {
 
-				return ITableMenuCategories.STANDARD_OPERATION;
+				return ""; // Must be empty to be placed on the main menu level.
 			}
 
 			@Override

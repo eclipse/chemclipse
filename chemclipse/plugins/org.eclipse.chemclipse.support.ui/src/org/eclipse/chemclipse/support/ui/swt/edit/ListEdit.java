@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.swt.ControlBuilder;
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider;
 import org.eclipse.jface.action.Action;
@@ -33,6 +35,7 @@ import org.eclipse.swt.widgets.Control;
 public class ListEdit<V> extends EditValue<List<V>> {
 
 	private static final long serialVersionUID = 4293060148111233267L;
+	private static final String LIST_EDIT = "ListEdit"; //$NON-NLS-1$
 	//
 	private final TableViewer tableViewer;
 	private final List<V> initialValues = new ArrayList<>();
@@ -54,7 +57,7 @@ public class ListEdit<V> extends EditValue<List<V>> {
 		tableViewer.setInput(currentValues);
 		ToolBarManager toolbar = new ToolBarManager(SWT.VERTICAL);
 		//
-		addAction = new Action("Add", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16)) {
+		addAction = new Action(SupportMessages.add, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16)) {
 
 			@Override
 			public void run() {
@@ -63,13 +66,13 @@ public class ListEdit<V> extends EditValue<List<V>> {
 				if(newItem != null) {
 					currentValues.add(newItem);
 					tableViewer.refresh();
-					updateChange(this, "ListEdit", currentValues, currentValues);
+					updateChange(this, LIST_EDIT, currentValues, currentValues);
 				}
 				updateButtons(editModel);
 			}
 		};
 		//
-		deleteAction = new Action("Remove", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_REMOVE, IApplicationImage.SIZE_16x16)) {
+		deleteAction = new Action(SupportMessages.remove, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_REMOVE, IApplicationImageProvider.SIZE_16x16)) {
 
 			@SuppressWarnings("unchecked")
 			@Override
@@ -85,13 +88,13 @@ public class ListEdit<V> extends EditValue<List<V>> {
 				}
 				if(changed) {
 					tableViewer.refresh();
-					updateChange(this, "ListEdit", currentValues, currentValues);
+					updateChange(this, LIST_EDIT, currentValues, currentValues);
 				}
 				updateButtons(editModel);
 			}
 		};
 		//
-		editAction = new Action("Remove", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16)) {
+		editAction = new Action(SupportMessages.remove, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_EDIT, IApplicationImageProvider.SIZE_16x16)) {
 
 			@SuppressWarnings("unchecked")
 			@Override
@@ -101,7 +104,7 @@ public class ListEdit<V> extends EditValue<List<V>> {
 				if(element != null && editModel.edit((V)element)) {
 					edited = true;
 					tableViewer.refresh();
-					updateChange(this, "ListEdit", currentValues, currentValues);
+					updateChange(this, LIST_EDIT, currentValues, currentValues);
 				}
 				updateButtons(editModel);
 			}

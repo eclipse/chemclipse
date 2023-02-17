@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.support.ui.preferences.editors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
@@ -25,7 +26,7 @@ public class IonTableEditor extends TableViewerFieldEditor<String> {
 
 	public IonTableEditor(String name, String labelText, Composite parent) {
 
-		super(name, labelText, new String[]{"Ions"}, new int[]{200}, parent);
+		super(name, labelText, new String[]{SupportMessages.ions}, new int[]{200}, parent);
 		settingUtils = new TraceSettingUtil();
 	}
 
@@ -50,7 +51,7 @@ public class IonTableEditor extends TableViewerFieldEditor<String> {
 	@Override
 	protected List<String> getNewInputObject() {
 
-		InputDialog dialog = new InputDialog(getShell(), "Enter a ion.", "Standard values are 18 (water), 28 (nitrogen), 84 (solvent tailing), 207 (column bleed).", "", new IonInputValidator());
+		InputDialog dialog = new InputDialog(getShell(), SupportMessages.enterIon, SupportMessages.standardValuesWaterNitrogenSolventTailingColumnBleed, "", new IonInputValidator()); //$NON-NLS-3$
 		dialog.create();
 		if(Window.OK == dialog.open()) {
 			String ion = dialog.getValue();

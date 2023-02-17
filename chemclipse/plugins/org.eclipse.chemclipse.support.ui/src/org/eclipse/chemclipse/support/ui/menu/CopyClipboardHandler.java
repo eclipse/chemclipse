@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.support.ui.menu;
 
 import org.eclipse.chemclipse.support.ui.internal.provider.CopyToClipboardProvider;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
@@ -23,13 +24,13 @@ public class CopyClipboardHandler extends AbstractTableMenuEntry implements ITab
 	@Override
 	public String getCategory() {
 
-		return ITableMenuCategories.EXPORT_CONVERTER;
+		return ""; // Must be empty to be placed on the main menu level.
 	}
 
 	@Override
 	public String getName() {
 
-		return "Copy to Clipboard";
+		return SupportMessages.copyClipboard;
 	}
 
 	@Override

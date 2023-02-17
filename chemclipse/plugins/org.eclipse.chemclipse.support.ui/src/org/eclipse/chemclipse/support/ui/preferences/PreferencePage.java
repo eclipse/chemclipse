@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.support.ui.preferences;
 
 import org.eclipse.chemclipse.support.preferences.SupportPreferences;
 import org.eclipse.chemclipse.support.ui.Activator;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
@@ -25,14 +26,14 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Support settings");
+		setDescription(SupportMessages.supportSettings);
 	}
 
 	@Override
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(SupportPreferences.P_CLIPBOARD_TABLE_DEFAULT_SORTING, "Clipboard Table Default Sorting", getFieldEditorParent()));
-		addField(new IntegerFieldEditor(SupportPreferences.P_UNDO_LIMIT, "Maximum allowed undo steps", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(SupportPreferences.P_CLIPBOARD_TABLE_DEFAULT_SORTING, SupportMessages.clipboardTableDefaultSorting, getFieldEditorParent()));
+		addField(new IntegerFieldEditor(SupportPreferences.P_UNDO_LIMIT, SupportMessages.maximumAllowedUndoSteps, getFieldEditorParent()));
 	}
 
 	/*

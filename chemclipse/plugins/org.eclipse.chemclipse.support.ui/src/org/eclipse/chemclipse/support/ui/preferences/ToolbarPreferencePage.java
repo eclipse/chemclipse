@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences;
 
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -23,7 +24,7 @@ public class ToolbarPreferencePage extends FieldEditorPreferencePage implements 
 
 	public ToolbarPreferencePage(IPreferenceStore preferenceStore, String keyShowText) {
 		super(GRID);
-		setTitle("Toolbar");
+		setTitle(SupportMessages.toolbar);
 		this.keyShowText = keyShowText;
 		setPreferenceStore(preferenceStore);
 		noDefaultAndApplyButton();
@@ -32,7 +33,7 @@ public class ToolbarPreferencePage extends FieldEditorPreferencePage implements 
 	@Override
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(keyShowText, "Show Labels in Toolbar", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(keyShowText, SupportMessages.showLabelsInToolbar, getFieldEditorParent()));
 	}
 
 	/*

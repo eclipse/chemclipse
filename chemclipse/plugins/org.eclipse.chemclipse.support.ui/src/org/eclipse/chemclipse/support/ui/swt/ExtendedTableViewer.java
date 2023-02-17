@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.menu.TableMenuEntryComparator;
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
@@ -68,8 +69,8 @@ import org.slf4j.LoggerFactory;
 
 public class ExtendedTableViewer extends TableViewer implements IExtendedTableViewer {
 
-	private static final String MENU_TEXT = "Table PopUp Menu";
 	private static final Logger logger = LoggerFactory.getLogger(ExtendedTableViewer.class);
+	private static final String MENU_TEXT = SupportMessages.tablePopUpMenu;
 	//
 	private ITableSettings tableSettings;
 	private final List<TableViewerColumn> tableViewerColumns;

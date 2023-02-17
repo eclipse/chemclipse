@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.support.ui.preferences;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.processors.PreferencesSupport;
 import org.eclipse.chemclipse.support.ui.processors.Processor;
 import org.eclipse.chemclipse.support.ui.processors.ProcessorToolbarSelectionUI;
@@ -34,8 +35,8 @@ public class ProcessorToolbarPreferencePage extends PreferencePage {
 
 	public ProcessorToolbarPreferencePage(PreferencesSupport preferencesSupport) {
 
-		setTitle("Processor Quick-Access");
-		setDescription("Select the processor toolbar items.");
+		setTitle(SupportMessages.processorQuickAccess);
+		setDescription(SupportMessages.selectProcessorToolbarItems);
 		noDefaultAndApplyButton();
 		setSize(new Point(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 		//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.menu;
 
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 public class SelectAllHandler extends AbstractTableMenuEntry implements ITableMenuEntry {
@@ -18,13 +19,13 @@ public class SelectAllHandler extends AbstractTableMenuEntry implements ITableMe
 	@Override
 	public String getCategory() {
 
-		return ITableMenuCategories.STANDARD_OPERATION;
+		return ""; // Must be empty to be placed on the main menu level. //$NON-NLS-1$
 	}
 
 	@Override
 	public String getName() {
 
-		return "Select All";
+		return SupportMessages.selectAll;
 	}
 
 	@Override

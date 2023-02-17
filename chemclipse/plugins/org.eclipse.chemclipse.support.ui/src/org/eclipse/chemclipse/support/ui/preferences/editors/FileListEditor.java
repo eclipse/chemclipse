@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.support.ui.preferences.editors;
 
 import java.util.Arrays;
 
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.ListEditor;
@@ -34,6 +35,7 @@ public class FileListEditor extends ListEditor {
 	private String[] filterNames;
 
 	public FileListEditor(String name, String labelText, Composite parent) {
+
 		super(name, labelText, parent);
 		initialize(parent);
 	}
@@ -56,7 +58,7 @@ public class FileListEditor extends ListEditor {
 
 		List list = getList();
 		FileDialog dialog = new FileDialog(getShell(), SWT.OPEN);
-		dialog.setText("Select File");
+		dialog.setText(SupportMessages.selectFile);
 		if(filterExtensions != null && filterNames != null) {
 			dialog.setFilterExtensions(filterExtensions);
 			dialog.setFilterNames(filterNames);
@@ -72,7 +74,7 @@ public class FileListEditor extends ListEditor {
 
 		Composite composite = getButtonBoxControl(parent);
 		Button button = new Button(composite, SWT.PUSH);
-		button.setText("Clear");
+		button.setText(SupportMessages.clear);
 		button.setFont(parent.getFont());
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		int widthHint = convertHorizontalDLUsToPixels(button, IDialogConstants.BUTTON_WIDTH);
@@ -87,8 +89,8 @@ public class FileListEditor extends ListEditor {
 				if(list != null) {
 					Shell shell = Display.getCurrent().getActiveShell();
 					MessageBox messageBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.CANCEL);
-					messageBox.setText("File(s)");
-					messageBox.setMessage("Remove all files from the list?");
+					messageBox.setText(SupportMessages.files);
+					messageBox.setMessage(SupportMessages.removeAllFilesFromList);
 					int decision = messageBox.open();
 					if(decision == SWT.YES) {
 						list.removeAll();
