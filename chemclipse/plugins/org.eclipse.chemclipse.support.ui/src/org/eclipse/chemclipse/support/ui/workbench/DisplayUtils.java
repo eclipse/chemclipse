@@ -138,24 +138,6 @@ public class DisplayUtils {
 	 */
 	public static <T> T executeBusy(Callable<T> action) throws InterruptedException, ExecutionException {
 
-		return executeBusy(DEFAULT_DISPLAY, action);
-	}
-
-	public static void executeBusy(Runnable action) throws InterruptedException, ExecutionException {
-
-		executeBusy(new Callable<Void>() {
-
-			@Override
-			public Void call() throws Exception {
-
-				action.run();
-				return null;
-			}
-		});
-	}
-
-	public static <T> T executeBusy(UISynchronize ui, Callable<T> action) throws InterruptedException, ExecutionException {
-
 		FutureTask<T> task = new FutureTask<>(action);
 		Display display = Display.findDisplay(Thread.currentThread());
 		if(display == null) {
@@ -178,6 +160,19 @@ public class DisplayUtils {
 			});
 		}
 		return task.get();
+	}
+
+	public static void executeBusy(Runnable action) throws InterruptedException, ExecutionException {
+
+		executeBusy(new Callable<Void>() {
+
+			@Override
+			public Void call() throws Exception {
+
+				action.run();
+				return null;
+			}
+		});
 	}
 
 	public static Display getDisplay() {
@@ -211,8 +206,8 @@ public class DisplayUtils {
 	public static Shell getShell(Widget widget) {
 
 		Shell shell = null;
-		if(widget instanceof Control) {
-			shell = ((Control)widget).getShell();
+		if(widget instanceof Control control) {
+			shell = control.getShell();
 		} else {
 			shell = getShell();
 		}
@@ -245,7 +240,7 @@ public class DisplayUtils {
 						continue;
 					}
 					Object ignoreDialog = s.getData("org.eclipse.e4.ui.ignoreDialog");
-					if(ignoreDialog instanceof Boolean && (Boolean)ignoreDialog) {
+					if(ignoreDialog instanceof Boolean isDialogIgnored && isDialogIgnored) {
 						continue;
 					}
 					return s;
@@ -260,20 +255,20 @@ public class DisplayUtils {
 	public static Shell getShell(Event event) {
 
 		Widget widget = event.widget;
-		if(widget instanceof Control) {
-			return ((Control)widget).getShell();
+		if(widget instanceof Control control) {
+			return control.getShell();
 		}
-		if(widget instanceof ToolItem) {
-			return ((ToolItem)widget).getParent().getShell();
+		if(widget instanceof ToolItem toolItem) {
+			return toolItem.getParent().getShell();
 		}
-		if(widget instanceof MenuItem) {
-			return ((MenuItem)widget).getParent().getShell();
+		if(widget instanceof MenuItem menuItem) {
+			return menuItem.getParent().getShell();
 		}
-		if(widget instanceof TreeItem) {
-			return ((TreeItem)widget).getParent().getShell();
+		if(widget instanceof TreeItem treeItem) {
+			return treeItem.getParent().getShell();
 		}
-		if(widget instanceof TableItem) {
-			return ((TableItem)widget).getParent().getShell();
+		if(widget instanceof TableItem tableItem) {
+			return tableItem.getParent().getShell();
 		}
 		// possibly add more...
 		return null;

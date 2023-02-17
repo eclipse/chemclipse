@@ -80,7 +80,7 @@ public class DoubleFieldEditor extends StringFieldEditor {
 
 		Text textControl = getTextControl();
 		if(textControl != null) {
-			double value = Double.valueOf(textControl.getText());
+			double value = Double.parseDouble(textControl.getText());
 			getPreferenceStore().setValue(getPreferenceName(), value);
 		}
 	}

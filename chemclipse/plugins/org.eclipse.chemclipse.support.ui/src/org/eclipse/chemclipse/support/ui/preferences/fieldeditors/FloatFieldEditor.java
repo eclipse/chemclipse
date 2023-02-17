@@ -108,12 +108,6 @@ public class FloatFieldEditor extends StringFieldEditor {
 	}
 
 	@Override
-	public void setEnabled(boolean enabled, Composite parent) {
-
-		super.setEnabled(enabled, parent);
-	}
-
-	@Override
 	protected void doStore() {
 
 		Text textControl = getTextControl();

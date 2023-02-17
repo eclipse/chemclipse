@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,14 +14,13 @@ package org.eclipse.chemclipse.support.ui.internal.provider;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-
-import org.eclipse.chemclipse.logging.core.Logger;
 
 public class ProjectContentProvider implements ITreeContentProvider {
 
@@ -47,8 +46,7 @@ public class ProjectContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(Object parentElement) {
 
 		Object[] objects = null;
-		if(parentElement instanceof IContainer) {
-			IContainer container = (IContainer)parentElement;
+		if(parentElement instanceof IContainer container) {
 			List<IFolder> folders = getFolders(container);
 			return folders.toArray();
 		}
@@ -58,8 +56,8 @@ public class ProjectContentProvider implements ITreeContentProvider {
 	@Override
 	public Object getParent(Object element) {
 
-		if(element instanceof IContainer) {
-			return ((IContainer)element).getParent();
+		if(element instanceof IContainer container) {
+			return container.getParent();
 		}
 		return null;
 	}
@@ -68,22 +66,21 @@ public class ProjectContentProvider implements ITreeContentProvider {
 	public boolean hasChildren(Object element) {
 
 		boolean hasChildren = false;
-		if(element instanceof IContainer) {
-			IContainer container = (IContainer)element;
+		if(element instanceof IContainer container) {
 			List<IFolder> folders = getFolders(container);
-			hasChildren = folders.size() > 0 ? true : false;
+			hasChildren = !folders.isEmpty();
 		}
 		return hasChildren;
 	}
 
 	private List<IFolder> getFolders(IContainer container) {
 
-		List<IFolder> folders = new ArrayList<IFolder>();
+		List<IFolder> folders = new ArrayList<>();
 		try {
 			IResource[] resources = container.members();
 			for(IResource resource : resources) {
-				if(resource instanceof IFolder) {
-					folders.add((IFolder)resource);
+				if(resource instanceof IFolder folder) {
+					folders.add(folder);
 				}
 			}
 		} catch(CoreException e) {

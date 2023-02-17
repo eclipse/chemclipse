@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,7 +34,7 @@ public class MultiLineTextEdit extends EditValue<List<String>> {
 	private static final long serialVersionUID = -855951035397214724L;
 	//
 	private final Text text;
-	private final List<String> initialValues = new ArrayList<String>();
+	private final List<String> initialValues = new ArrayList<>();
 	private List<String> editedValues = new CopyOnWriteArrayList<>();
 
 	public MultiLineTextEdit(Composite parent, Collection<String> initialText) {

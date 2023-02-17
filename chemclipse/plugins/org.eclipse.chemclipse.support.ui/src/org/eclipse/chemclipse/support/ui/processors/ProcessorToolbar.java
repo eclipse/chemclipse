@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -48,7 +48,7 @@ public class ProcessorToolbar {
 
 		if(preferenceStore != null) {
 			preferencesSupport = new PreferencesSupport(preferenceStore, key, context, isVisible);
-			editorToolBar.addPreferencePages(() -> Collections.singleton(new ProcessorToolbarPreferencePage(preferencesSupport)), () -> fireUpdateEvent()); // Callback
+			editorToolBar.addPreferencePages(() -> Collections.singleton(new ProcessorToolbarPreferencePage(preferencesSupport)), this::fireUpdateEvent); // Callback
 			update(); // Initialize
 		}
 	}

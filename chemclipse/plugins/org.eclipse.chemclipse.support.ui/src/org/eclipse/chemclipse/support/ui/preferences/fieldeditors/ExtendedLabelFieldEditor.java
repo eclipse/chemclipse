@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,15 +22,16 @@ public class ExtendedLabelFieldEditor extends FieldEditor {
 
 	private Label infoLabel;
 	private String errorMessage;
-	private String EXTENDED_LABEL_PREFERENCE_NAME = "extendedLabelFieldEditor";
 	private Color color;
 
 	public ExtendedLabelFieldEditor(String label, String info, Composite parent) {
+
 		this(label, info, null, parent);
 	}
 
 	public ExtendedLabelFieldEditor(String label, String info, Color color, Composite parent) {
-		init(EXTENDED_LABEL_PREFERENCE_NAME, label);
+
+		init("extendedLabelFieldEditor", label);
 		errorMessage = "";
 		this.color = color;
 		createControl(parent);
@@ -38,11 +39,13 @@ public class ExtendedLabelFieldEditor extends FieldEditor {
 	}
 
 	public ExtendedLabelFieldEditor(String label, int info, Color color, Composite parent) {
-		this(label, Integer.valueOf(info).toString(), color, parent);
+
+		this(label, Integer.toString(info), color, parent);
 	}
 
 	public ExtendedLabelFieldEditor(String label, int info, Composite parent) {
-		this(label, Integer.valueOf(info).toString(), null, parent);
+
+		this(label, Integer.toString(info), null, parent);
 	}
 
 	@Override

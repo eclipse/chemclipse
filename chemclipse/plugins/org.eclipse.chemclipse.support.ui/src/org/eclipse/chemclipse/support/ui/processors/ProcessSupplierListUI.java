@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,13 +12,12 @@
 package org.eclipse.chemclipse.support.ui.processors;
 
 import org.eclipse.chemclipse.support.ui.internal.provider.ProcessorLabelProvider;
-import org.eclipse.chemclipse.support.ui.internal.provider.ProcessorTableComparator;
 import org.eclipse.chemclipse.support.ui.internal.provider.ProcessorListFilter;
+import org.eclipse.chemclipse.support.ui.internal.provider.ProcessorTableComparator;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
 public class ProcessSupplierListUI extends ExtendedTableViewer {
@@ -56,6 +55,6 @@ public class ProcessSupplierListUI extends ExtendedTableViewer {
 		createColumns(TITLES, BOUNDS);
 		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
-		setFilters(new ViewerFilter[]{viewerFilter});
+		setFilters(viewerFilter);
 	}
 }

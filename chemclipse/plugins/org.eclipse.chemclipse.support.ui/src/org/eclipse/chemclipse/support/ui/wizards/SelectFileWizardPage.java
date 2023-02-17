@@ -51,7 +51,7 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 		 * Report name.
 		 */
 		String fileName = wizardElements.getFileName();
-		if(fileName == null || fileName.equals("")) {
+		if(fileName == null || fileName.isEmpty()) {
 			return false;
 		}
 		return true;
@@ -134,7 +134,7 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 		String message = null;
 		//
 		String fileName = reportNameText.getText().trim();
-		if(fileName == null || fileName.equals("")) {
+		if(fileName == null || fileName.isEmpty()) {
 			message = SupportMessages.processingSelectFileName;
 		} else {
 			/*

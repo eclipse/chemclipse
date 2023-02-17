@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,8 @@ public class ChromatogramWizardElements extends WizardElements implements IChrom
 	private List<String> selectedChromatograms;
 
 	public ChromatogramWizardElements() {
-		selectedChromatograms = new ArrayList<String>();
+
+		selectedChromatograms = new ArrayList<>();
 	}
 
 	@Override

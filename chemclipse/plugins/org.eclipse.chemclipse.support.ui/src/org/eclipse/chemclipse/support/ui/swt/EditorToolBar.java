@@ -287,9 +287,9 @@ public class EditorToolBar {
 				public void setChecked(boolean checked) {
 
 					if(checked) {
-						setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16));
+						setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SELECTED, IApplicationImageProvider.SIZE_16x16));
 					} else {
-						setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16));
+						setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DESELECTED, IApplicationImageProvider.SIZE_16x16));
 					}
 					if(preferenceStore != null) {
 						preferenceStore.setValue(key, checked);
@@ -375,7 +375,7 @@ public class EditorToolBar {
 		private void addPreferencePageContainer(PreferencePageContainer container) {
 
 			if(configAction == null) {
-				configAction = new Action("Settings", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16)) {
+				configAction = new Action(SupportMessages.settings, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16)) {
 
 					@Override
 					public void runWithEvent(Event event) {

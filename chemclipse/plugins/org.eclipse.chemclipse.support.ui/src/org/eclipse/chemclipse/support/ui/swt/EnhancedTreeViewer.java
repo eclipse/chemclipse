@@ -142,27 +142,27 @@ public class EnhancedTreeViewer extends Composite {
 
 	private void copyToClipboard() {
 
-		String END_OF_LINE = OperatingSystemUtils.getLineDelimiter();
+		String lineDelimiter = OperatingSystemUtils.getLineDelimiter();
 		StringBuilder builder = new StringBuilder();
 		Tree tree = treeViewer.getTree();
 		/*
 		 * Copy the selected items.
 		 */
-		Set<TreeItem> rootItems = new HashSet<TreeItem>();
+		Set<TreeItem> rootItems = new HashSet<>();
 		for(TreeItem treeItem : tree.getSelection()) {
 			rootItems.add(getRootItem(treeItem));
 		}
 		//
 		for(TreeItem treeItem : rootItems) {
 			copyTreeToClipboard(treeItem, builder, "");
-			builder.append(END_OF_LINE);
+			builder.append(lineDelimiter);
 		}
 		/*
 		 * If the builder is empty, give a note that items needs to be selected.
 		 */
 		if(builder.length() == 0) {
 			builder.append(SupportMessages.labelCopyLinesInfo);
-			builder.append(END_OF_LINE);
+			builder.append(lineDelimiter);
 		}
 		/*
 		 * Transfer the selected text (items) to the clipboard.
@@ -184,16 +184,15 @@ public class EnhancedTreeViewer extends Composite {
 
 	private void copyTreeToClipboard(TreeItem treeItem, StringBuilder builder, String intend) {
 
-		String DELIMITER = OperatingSystemUtils.TAB;
-		String END_OF_LINE = OperatingSystemUtils.getLineDelimiter();
+		String endOfLine = OperatingSystemUtils.getLineDelimiter();
 		//
 		if(!treeItem.getText().equals("")) {
 			builder.append(intend + treeItem.getText());
-			builder.append(END_OF_LINE);
+			builder.append(endOfLine);
 		}
 		//
 		for(TreeItem treeSubItem : treeItem.getItems()) {
-			copyTreeToClipboard(treeSubItem, builder, intend + DELIMITER);
+			copyTreeToClipboard(treeSubItem, builder, intend + OperatingSystemUtils.TAB);
 		}
 	}
 }
