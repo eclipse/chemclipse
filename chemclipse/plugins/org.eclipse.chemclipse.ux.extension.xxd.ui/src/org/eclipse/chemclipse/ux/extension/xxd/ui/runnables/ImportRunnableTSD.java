@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -46,7 +46,7 @@ public class ImportRunnableTSD implements IRunnableWithProgress {
 			IProcessingInfo<IChromatogramTSD> processingInfo = ChromatogramConverterTSD.getInstance().convert(file, monitor);
 			chromatogramTSD = processingInfo.getProcessingResult();
 		} catch(Exception e) {
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 		} finally {
 			monitor.done();
 		}

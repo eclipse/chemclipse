@@ -369,7 +369,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 				chromatogramFile = null;
 			}
 		} catch(Exception e) {
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 		}
 		//
 		return chromatogramSelection;

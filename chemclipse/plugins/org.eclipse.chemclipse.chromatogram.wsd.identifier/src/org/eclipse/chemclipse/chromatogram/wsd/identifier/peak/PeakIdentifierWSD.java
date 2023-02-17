@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -94,7 +94,7 @@ public class PeakIdentifierWSD {
 			try {
 				instance = (IPeakIdentifierWSD<T>)element.createExecutableExtension(Identifier.IDENTIFIER);
 			} catch(CoreException e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.error(e);
 			}
 		}
 		return instance;
@@ -125,7 +125,7 @@ public class PeakIdentifierWSD {
 					IPeakIdentifierSettingsWSD instance = (IPeakIdentifierSettingsWSD)element.createExecutableExtension(Identifier.IDENTIFIER_SETTINGS);
 					supplier.setIdentifierSettingsClass(instance.getClass());
 				} catch(CoreException e) {
-					logger.error(e.getLocalizedMessage(), e);
+					logger.error(e);
 					// settings class is optional, set null instead
 					supplier.setIdentifierSettingsClass(null);
 				}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -50,7 +50,7 @@ public class CalculationExecutor implements IRunnableWithProgress {
 				ProcessorPCA processorPCA = new ProcessorPCA();
 				evaluationPCA = processorPCA.process(samples, masterEvaluationPCA, monitor);
 			} catch(Exception e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.error(e);
 			}
 		}
 	}

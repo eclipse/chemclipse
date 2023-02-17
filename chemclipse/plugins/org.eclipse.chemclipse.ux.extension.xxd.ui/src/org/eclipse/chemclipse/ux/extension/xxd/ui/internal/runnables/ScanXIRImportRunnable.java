@@ -47,7 +47,7 @@ public class ScanXIRImportRunnable implements IRunnableWithProgress {
 			IProcessingInfo<?> processingInfo = ScanConverterXIR.convert(file, monitor);
 			scanXIR = (IScanXIR)processingInfo.getProcessingResult();
 		} catch(Exception e) {
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 		} finally {
 			monitor.done();
 		}

@@ -155,7 +155,7 @@ public class ScanEditorXIR implements IScanEditorXIR {
 				scanXIR = loadScan(file, batch);
 			}
 		} catch(Exception e) {
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 		}
 		//
 		return scanXIR;

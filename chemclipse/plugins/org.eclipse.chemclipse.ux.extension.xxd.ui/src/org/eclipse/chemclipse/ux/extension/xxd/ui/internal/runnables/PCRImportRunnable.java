@@ -47,7 +47,7 @@ public class PCRImportRunnable implements IRunnableWithProgress {
 			IProcessingInfo<?> processingInfo = PlateConverterPCR.convert(file, monitor);
 			plate = (IPlate)processingInfo.getProcessingResult();
 		} catch(Exception e) {
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 		} finally {
 			monitor.done();
 		}

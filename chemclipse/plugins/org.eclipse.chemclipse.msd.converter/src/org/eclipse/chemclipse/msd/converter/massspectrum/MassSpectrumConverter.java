@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -210,7 +210,7 @@ public class MassSpectrumConverter {
 			try {
 				instance = (IMassSpectrumImportConverter)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
 			} catch(CoreException e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.error(e);
 			}
 		}
 		return instance;
@@ -233,7 +233,7 @@ public class MassSpectrumConverter {
 			try {
 				instance = (IMassSpectrumExportConverter<T>)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 			} catch(CoreException e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.error(e);
 			}
 		}
 		return instance;

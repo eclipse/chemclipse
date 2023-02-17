@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -65,7 +65,7 @@ public class ChromatogramFilter {
 			try {
 				processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 			} catch(Exception e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.error(e);
 				processingInfo = new ProcessingInfo();
 				processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, e.getLocalizedMessage());
 			}
@@ -95,7 +95,7 @@ public class ChromatogramFilter {
 			try {
 				processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
 			} catch(Exception e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.error(e);
 				processingInfo = new ProcessingInfo();
 				processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, e.getLocalizedMessage());
 			}

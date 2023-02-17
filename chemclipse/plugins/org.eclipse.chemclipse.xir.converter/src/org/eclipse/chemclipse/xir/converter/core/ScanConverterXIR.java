@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -126,7 +126,7 @@ public class ScanConverterXIR {
 			try {
 				instance = (IScanImportConverter<IScanXIR>)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
 			} catch(CoreException e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.error(e);
 			}
 		}
 		return instance;
@@ -142,7 +142,7 @@ public class ScanConverterXIR {
 			try {
 				instance = (IScanExportConverter<IScanXIR>)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 			} catch(CoreException e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.error(e);
 			}
 		}
 		return instance;
