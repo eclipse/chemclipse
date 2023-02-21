@@ -156,7 +156,7 @@ public class ExtensionMessages extends NLS {
 	public static String synonym;
 	public static String visible;
 	public static String libraryField;
-	public static String verifiedManually;
+	public static String verified;
 	public static String matchFactor;
 	public static String reverseMatchFactor;
 	public static String matchFactorDirect;

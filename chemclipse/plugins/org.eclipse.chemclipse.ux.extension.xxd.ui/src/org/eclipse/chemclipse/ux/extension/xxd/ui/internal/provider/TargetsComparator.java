@@ -33,7 +33,7 @@ public class TargetsComparator extends AbstractRecordTableComparator implements 
 			//
 			switch(getPropertyIndex()) {
 				case 0:
-					sortOrder = Boolean.compare(entry2.isManuallyVerified(), entry1.isManuallyVerified());
+					sortOrder = Boolean.compare(entry2.isVerified(), entry1.isVerified());
 					if(sortOrder == 0) {
 						sortOrder = getAdditionalSortOrder(comparisonResult1, comparisonResult2);
 					}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -16,15 +16,12 @@ import org.eclipse.chemclipse.model.targets.AbstractTarget;
 
 public abstract class AbstractIdentificationTarget extends AbstractTarget implements IIdentificationTarget {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = 6432468872857861173L;
+	private static final long serialVersionUID = 8447935680974437678L;
 	//
 	private ILibraryInformation libraryInformation;
 	private IComparisonResult comparisonResult;
 	private String identifier = "";
-	private boolean manuallyVerified = false;
+	private boolean verified = false;
 
 	/**
 	 * Set the libraryInformation and comparisonResult.
@@ -34,6 +31,7 @@ public abstract class AbstractIdentificationTarget extends AbstractTarget implem
 	 * @throws ReferenceMustNotBeNullException
 	 */
 	public AbstractIdentificationTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
+
 		if(libraryInformation == null) {
 			throw new ReferenceMustNotBeNullException("The reference libraryInformation must be not null.");
 		}
@@ -71,15 +69,15 @@ public abstract class AbstractIdentificationTarget extends AbstractTarget implem
 	}
 
 	@Override
-	public boolean isManuallyVerified() {
+	public boolean isVerified() {
 
-		return manuallyVerified;
+		return verified;
 	}
 
 	@Override
-	public void setManuallyVerified(boolean manuallyVerified) {
+	public void setVerified(boolean verified) {
 
-		this.manuallyVerified = manuallyVerified;
+		this.verified = verified;
 	}
 
 	@Override

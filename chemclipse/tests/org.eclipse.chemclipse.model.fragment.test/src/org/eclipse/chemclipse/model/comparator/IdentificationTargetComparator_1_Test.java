@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -244,7 +244,7 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 
 		PreferenceSupplier.setUseRetentionIndexQC(true);
 		IIdentificationTarget identificationTarget = getIdentificationTarget(identificationTargets, "J");
-		identificationTarget.setManuallyVerified(true);
+		identificationTarget.setVerified(true);
 		//
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.DESC, 1315));
 		assertEquals("J", getName(identificationTargets.get(0)));
@@ -258,7 +258,7 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 
 		PreferenceSupplier.setUseRetentionIndexQC(false);
 		IIdentificationTarget identificationTarget = getIdentificationTarget(identificationTargets, "J");
-		identificationTarget.setManuallyVerified(true);
+		identificationTarget.setVerified(true);
 		//
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.DESC, 1315));
 		assertEquals("J", getName(identificationTargets.get(0)));
@@ -273,9 +273,9 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 		PreferenceSupplier.setUseRetentionIndexQC(true);
 		IIdentificationTarget identificationTarget;
 		identificationTarget = getIdentificationTarget(identificationTargets, "J");
-		identificationTarget.setManuallyVerified(true);
+		identificationTarget.setVerified(true);
 		identificationTarget = getIdentificationTarget(identificationTargets, "K");
-		identificationTarget.setManuallyVerified(true);
+		identificationTarget.setVerified(true);
 		//
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.DESC, 1315));
 		assertEquals("K", getName(identificationTargets.get(0)));
@@ -290,9 +290,9 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 		PreferenceSupplier.setUseRetentionIndexQC(false);
 		IIdentificationTarget identificationTarget;
 		identificationTarget = getIdentificationTarget(identificationTargets, "J");
-		identificationTarget.setManuallyVerified(true);
+		identificationTarget.setVerified(true);
 		identificationTarget = getIdentificationTarget(identificationTargets, "K");
-		identificationTarget.setManuallyVerified(true);
+		identificationTarget.setVerified(true);
 		//
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.DESC, 1315));
 		assertEquals("K", getName(identificationTargets.get(0)));
@@ -307,9 +307,9 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 		PreferenceSupplier.setUseRetentionIndexQC(true);
 		IIdentificationTarget identificationTarget;
 		identificationTarget = getIdentificationTarget(identificationTargets, "J");
-		identificationTarget.setManuallyVerified(true);
+		identificationTarget.setVerified(true);
 		identificationTarget = getIdentificationTarget(identificationTargets, "K");
-		identificationTarget.setManuallyVerified(true);
+		identificationTarget.setVerified(true);
 		//
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.ASC, 1315));
 		assertEquals("B", getName(identificationTargets.get(0)));
@@ -324,9 +324,9 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 		PreferenceSupplier.setUseRetentionIndexQC(false);
 		IIdentificationTarget identificationTarget;
 		identificationTarget = getIdentificationTarget(identificationTargets, "J");
-		identificationTarget.setManuallyVerified(true);
+		identificationTarget.setVerified(true);
 		identificationTarget = getIdentificationTarget(identificationTargets, "K");
-		identificationTarget.setManuallyVerified(true);
+		identificationTarget.setVerified(true);
 		//
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.ASC, 1315));
 		assertEquals("I", getName(identificationTargets.get(0)));

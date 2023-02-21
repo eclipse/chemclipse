@@ -114,7 +114,7 @@ public class TargetsListUI extends ExtendedTableViewer {
 		for(int i = 0; i < tableViewerColumns.size(); i++) {
 			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
 			String label = tableViewerColumn.getColumn().getText();
-			if(label.equals(TargetsLabelProvider.VERIFIED_MANUALLY)) {
+			if(label.equals(TargetsLabelProvider.VERIFIED)) {
 				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
 			} else if(label.equals(TargetsLabelProvider.NAME)) {
 				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));

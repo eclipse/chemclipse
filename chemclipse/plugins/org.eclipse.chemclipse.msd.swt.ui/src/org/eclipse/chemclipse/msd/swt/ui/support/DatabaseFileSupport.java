@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -155,7 +155,7 @@ public class DatabaseFileSupport {
 					IComparisonResult comparisonResult = peakTarget.getComparisonResult();
 					IIdentificationTarget massSpectrumTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 					massSpectrumTarget.setIdentifier(peakTarget.getIdentifier());
-					massSpectrumTarget.setManuallyVerified(peakTarget.isManuallyVerified());
+					massSpectrumTarget.setVerified(peakTarget.isVerified());
 					massSpectrum.getTargets().add(massSpectrumTarget);
 				} catch(ReferenceMustNotBeNullException e1) {
 					logger.warn(e1);

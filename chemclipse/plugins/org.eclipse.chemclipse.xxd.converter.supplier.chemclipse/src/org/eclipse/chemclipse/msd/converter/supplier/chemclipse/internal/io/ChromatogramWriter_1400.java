@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -651,7 +651,7 @@ public class ChromatogramWriter_1400 extends AbstractChromatogramWriter implemen
 		IComparisonResult comparisonResult = identificationEntry.getComparisonResult();
 		//
 		writeString(dataOutputStream, identificationEntry.getIdentifier()); // Identifier
-		dataOutputStream.writeBoolean(identificationEntry.isManuallyVerified());
+		dataOutputStream.writeBoolean(identificationEntry.isVerified());
 		/*
 		 * ILibraryInformation
 		 */

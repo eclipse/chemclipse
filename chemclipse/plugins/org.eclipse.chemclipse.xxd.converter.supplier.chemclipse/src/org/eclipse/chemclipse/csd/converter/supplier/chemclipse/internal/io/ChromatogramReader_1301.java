@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -525,7 +525,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			try {
 				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
-				identificationEntry.setManuallyVerified(manuallyVerified);
+				identificationEntry.setVerified(manuallyVerified);
 				chromatogram.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
@@ -706,7 +706,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			try {
 				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
-				identificationEntry.setManuallyVerified(manuallyVerified);
+				identificationEntry.setVerified(manuallyVerified);
 				scanCSD.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
@@ -769,7 +769,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			try {
 				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
-				identificationEntry.setManuallyVerified(manuallyVerified);
+				identificationEntry.setVerified(manuallyVerified);
 				peak.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);

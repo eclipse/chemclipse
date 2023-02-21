@@ -344,7 +344,7 @@ public class PeakReader_1500 extends AbstractZipReader implements IPeakReader {
 			try {
 				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
-				identificationEntry.setManuallyVerified(manuallyVerified);
+				identificationEntry.setVerified(manuallyVerified);
 				massSpectrum.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
@@ -456,7 +456,7 @@ public class PeakReader_1500 extends AbstractZipReader implements IPeakReader {
 			try {
 				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
-				identificationEntry.setManuallyVerified(manuallyVerified);
+				identificationEntry.setVerified(manuallyVerified);
 				peak.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);

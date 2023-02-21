@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -54,18 +54,18 @@ public class IdentificationTarget_1_Test extends TestCase {
 
 	public void test4() {
 
-		assertEquals(false, identificationTarget.isManuallyVerified());
+		assertEquals(false, identificationTarget.isVerified());
 	}
 
 	public void test5() {
 
-		identificationTarget.setManuallyVerified(false);
-		assertEquals(false, identificationTarget.isManuallyVerified());
+		identificationTarget.setVerified(false);
+		assertEquals(false, identificationTarget.isVerified());
 	}
 
 	public void test6() {
 
-		identificationTarget.setManuallyVerified(true);
-		assertEquals(true, identificationTarget.isManuallyVerified());
+		identificationTarget.setVerified(true);
+		assertEquals(true, identificationTarget.isVerified());
 	}
 }

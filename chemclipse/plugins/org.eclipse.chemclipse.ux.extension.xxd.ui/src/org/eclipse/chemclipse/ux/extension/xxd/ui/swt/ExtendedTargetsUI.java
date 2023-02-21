@@ -551,7 +551,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		while(iterator.hasNext()) {
 			Object object = iterator.next();
 			if(object instanceof IIdentificationTarget identificationTarget) {
-				identificationTarget.setManuallyVerified(verified);
+				identificationTarget.setVerified(verified);
 				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Target has been manually verified.");
 			}
 		}

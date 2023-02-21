@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2022 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -107,16 +107,16 @@ public interface IIdentificationTarget extends ITarget {
 	void setIdentifier(String identifier);
 
 	/**
-	 * Returns if this result has been verified manually.
+	 * Returns if this result has been verified.
 	 * 
 	 * @return boolean
 	 */
-	boolean isManuallyVerified();
+	boolean isVerified();
 
 	/**
-	 * Set to verify this result manually.
+	 * Set to verify this result.
 	 * 
-	 * @param manuallyVerified
+	 * @param verified
 	 */
-	void setManuallyVerified(boolean manuallyVerified);
+	void setVerified(boolean verified);
 }

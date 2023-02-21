@@ -30,7 +30,7 @@ public class TargetsEditingSupport extends EditingSupport {
 
 		super(tableViewer);
 		this.column = column;
-		if(column.equals(TargetsLabelProvider.VERIFIED_MANUALLY)) {
+		if(column.equals(TargetsLabelProvider.VERIFIED)) {
 			this.cellEditor = new CheckboxCellEditor(tableViewer.getTable());
 		} else {
 			this.cellEditor = new TextCellEditor(tableViewer.getTable());
@@ -47,7 +47,7 @@ public class TargetsEditingSupport extends EditingSupport {
 	@Override
 	protected boolean canEdit(Object element) {
 
-		if(column == TargetsLabelProvider.VERIFIED_MANUALLY) {
+		if(column == TargetsLabelProvider.VERIFIED) {
 			return true;
 		} else {
 			return tableViewer.isEditEnabled();
@@ -58,8 +58,8 @@ public class TargetsEditingSupport extends EditingSupport {
 	protected Object getValue(Object element) {
 
 		if(element instanceof IIdentificationTarget identificationTarget) {
-			if(column.equals(TargetsLabelProvider.VERIFIED_MANUALLY)) {
-				return identificationTarget.isManuallyVerified();
+			if(column.equals(TargetsLabelProvider.VERIFIED)) {
+				return identificationTarget.isVerified();
 			}
 			if(column.equals(TargetsLabelProvider.NAME)) {
 				return identificationTarget.getLibraryInformation().getName();
@@ -93,8 +93,8 @@ public class TargetsEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 
 		if(element instanceof IIdentificationTarget identificationTarget) {
-			if(column.equals(TargetsLabelProvider.VERIFIED_MANUALLY)) {
-				identificationTarget.setManuallyVerified((boolean)value);
+			if(column.equals(TargetsLabelProvider.VERIFIED)) {
+				identificationTarget.setVerified((boolean)value);
 			}
 			if(column.equals(TargetsLabelProvider.NAME)) {
 				identificationTarget.getLibraryInformation().setName((String)value);

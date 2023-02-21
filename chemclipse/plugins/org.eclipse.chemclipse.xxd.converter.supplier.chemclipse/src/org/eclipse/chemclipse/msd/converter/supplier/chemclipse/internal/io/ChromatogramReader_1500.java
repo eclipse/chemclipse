@@ -586,7 +586,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 			try {
 				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
-				identificationEntry.setManuallyVerified(manuallyVerified);
+				identificationEntry.setVerified(manuallyVerified);
 				peak.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
@@ -657,7 +657,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 			try {
 				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
-				identificationEntry.setManuallyVerified(manuallyVerified);
+				identificationEntry.setVerified(manuallyVerified);
 				massSpectrum.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
@@ -780,7 +780,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 			try {
 				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
-				identificationEntry.setManuallyVerified(manuallyVerified);
+				identificationEntry.setVerified(manuallyVerified);
 				chromatogram.getTargets().add(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);

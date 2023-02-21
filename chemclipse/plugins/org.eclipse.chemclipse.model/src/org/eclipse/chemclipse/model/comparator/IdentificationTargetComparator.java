@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -60,7 +60,7 @@ public class IdentificationTargetComparator implements Comparator<IIdentificatio
 			/*
 			 * Manually verified
 			 */
-			sortIndex = Boolean.compare(identificationTarget1.isManuallyVerified(), identificationTarget2.isManuallyVerified());
+			sortIndex = Boolean.compare(identificationTarget1.isVerified(), identificationTarget2.isVerified());
 			if(sortIndex == 0) {
 				/*
 				 * Delta Retention Index

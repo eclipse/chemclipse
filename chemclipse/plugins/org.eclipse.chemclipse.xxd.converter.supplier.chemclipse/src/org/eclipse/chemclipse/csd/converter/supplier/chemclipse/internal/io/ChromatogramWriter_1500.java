@@ -483,7 +483,7 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		IComparisonResult comparisonResult = identificationEntry.getComparisonResult();
 		//
 		writeString(dataOutputStream, identificationEntry.getIdentifier()); // Identifier
-		dataOutputStream.writeBoolean(identificationEntry.isManuallyVerified());
+		dataOutputStream.writeBoolean(identificationEntry.isVerified());
 		/*
 		 * ILibraryInformation
 		 */

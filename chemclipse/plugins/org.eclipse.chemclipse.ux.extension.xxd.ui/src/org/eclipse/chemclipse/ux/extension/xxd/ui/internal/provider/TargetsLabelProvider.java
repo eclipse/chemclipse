@@ -31,7 +31,7 @@ import org.eclipse.swt.graphics.Image;
 
 public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String VERIFIED_MANUALLY = ExtensionMessages.verifiedManually;
+	public static final String VERIFIED = ExtensionMessages.verified;
 	public static final String NAME = ExtensionMessages.name;
 	public static final String MATCH_FACTOR = ExtensionMessages.matchFactor;
 	public static final String REVERSE_MATCH_FACTOR = ExtensionMessages.reverseMatchFactor;
@@ -65,7 +65,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	private static final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
 	public static final String[] TITLES = { //
-			VERIFIED_MANUALLY, //
+			VERIFIED, //
 			RATING, //
 			NAME, //
 			CAS, //
@@ -175,7 +175,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 			 * CheckBox
 			 */
 			if(element instanceof IIdentificationTarget identificationTarget) {
-				if(identificationTarget.isManuallyVerified()) {
+				if(identificationTarget.isVerified()) {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImageProvider.SIZE_16x16);
 				} else {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImageProvider.SIZE_16x16);
