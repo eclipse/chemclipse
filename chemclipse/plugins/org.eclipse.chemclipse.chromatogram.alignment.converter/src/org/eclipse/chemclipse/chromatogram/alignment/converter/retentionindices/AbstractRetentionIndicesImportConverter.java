@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -34,7 +34,7 @@ public abstract class AbstractRetentionIndicesImportConverter implements IRetent
 	 * @throws IOException
 	 */
 	@Override
-	public void validate(final File retentionIndices) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public void validate(final File retentionIndices) throws FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		if(!retentionIndices.exists()) {
 			throw new FileNotFoundException("The file " + retentionIndices.getAbsoluteFile() + " does not exist.");

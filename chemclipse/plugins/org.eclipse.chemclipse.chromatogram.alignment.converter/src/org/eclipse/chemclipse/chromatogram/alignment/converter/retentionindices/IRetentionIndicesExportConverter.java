@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,7 +30,7 @@ public interface IRetentionIndicesExportConverter {
 	 * @throws FileIsNotWriteableException
 	 * @throws IOException
 	 */
-	File convert(File file, IRetentionIndices retentionIndices) throws FileNotFoundException, FileIsNotWriteableException, IOException;
+	File convert(File file, IRetentionIndices retentionIndices) throws FileIsNotWriteableException, IOException;
 
 	/**
 	 * This class checks the file attributes and throws an exception if
@@ -41,5 +41,5 @@ public interface IRetentionIndicesExportConverter {
 	 * @throws FileIsNotWriteableException
 	 * @throws IOException
 	 */
-	void validate(File file) throws FileNotFoundException, FileIsNotWriteableException, IOException;
+	void validate(File file) throws FileIsNotWriteableException, IOException;
 }

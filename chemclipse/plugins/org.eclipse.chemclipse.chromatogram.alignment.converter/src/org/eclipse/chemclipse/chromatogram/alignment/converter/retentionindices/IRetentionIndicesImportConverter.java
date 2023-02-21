@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,9 +15,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.chemclipse.chromatogram.alignment.model.core.IRetentionIndices;
 import org.eclipse.chemclipse.chromatogram.alignment.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.chromatogram.alignment.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.chromatogram.alignment.model.core.IRetentionIndices;
 
 public interface IRetentionIndicesImportConverter {
 
@@ -37,7 +37,7 @@ public interface IRetentionIndicesImportConverter {
 	 * @throws FileIsEmptyException
 	 * @throws IOException
 	 */
-	IRetentionIndices convert(File retentionIndices) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException;
+	IRetentionIndices convert(File retentionIndices) throws FileIsNotReadableException, FileIsEmptyException, IOException;
 
 	/**
 	 * This method validates the file which contains the retention indices to be
@@ -50,5 +50,5 @@ public interface IRetentionIndicesImportConverter {
 	 * @throws FileIsEmptyException
 	 * @throws IOException
 	 */
-	void validate(File retentionIndices) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException;
+	void validate(File retentionIndices) throws FileIsNotReadableException, FileIsEmptyException, IOException;
 }

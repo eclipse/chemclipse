@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,7 +29,8 @@ public class RetentionIndices implements IRetentionIndices {
 	private RetentionIndexComparator retentionIndexComparator;
 
 	public RetentionIndices() {
-		this.retentionIndices = new ArrayList<IRetentionIndex>(10);
+
+		this.retentionIndices = new ArrayList<>(10);
 		retentionIndexComparator = new RetentionIndexComparator();
 	}
 
@@ -79,9 +80,8 @@ public class RetentionIndices implements IRetentionIndices {
 	 */
 	private void checkRetentionIndexSortOrder(final IRetentionIndex retentionIndex) throws RetentionIndexValueException {
 
-		int previousRetentionTime, nextRetentionTime;
-		previousRetentionTime = calculatePreviousRetentionTime(retentionIndex);
-		nextRetentionTime = calculateNextRetentionTime(retentionIndex);
+		int previousRetentionTime = calculatePreviousRetentionTime(retentionIndex);
+		int nextRetentionTime = calculateNextRetentionTime(retentionIndex);
 		/*
 		 * Check now if the indices and retention times are correct.
 		 */
@@ -253,7 +253,7 @@ public class RetentionIndices implements IRetentionIndices {
 		 * retentionIndice list or the list is still empty, no RetentionIndex
 		 * can be returned.
 		 */
-		if(this.retentionIndices.size() > 0 && entry <= this.retentionIndices.size()) {
+		if(!this.retentionIndices.isEmpty() && entry <= this.retentionIndices.size()) {
 			// Set the new actualRetentionIndex
 			actualRetentionIndex = entry;
 			return this.retentionIndices.get(--position);
