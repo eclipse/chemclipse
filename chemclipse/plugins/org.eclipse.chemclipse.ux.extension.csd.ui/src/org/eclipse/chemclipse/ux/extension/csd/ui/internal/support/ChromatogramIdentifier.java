@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -43,7 +43,7 @@ public class ChromatogramIdentifier {
 		} else {
 			for(ISupplier supplier : suppliers) {
 				supplierExtension = supplier.getFileExtension().toLowerCase();
-				if(supplierExtension != "" && extension.endsWith(supplierExtension)) {
+				if(!"".equals(supplierExtension) && extension.endsWith(supplierExtension)) {
 					if(supplier.isImportable()) {
 						return true;
 					} else {
@@ -77,7 +77,7 @@ public class ChromatogramIdentifier {
 		} else {
 			for(ISupplier supplier : suppliers) {
 				directoryExtension = supplier.getDirectoryExtension().toUpperCase();
-				if(directoryExtension != "" && directory.endsWith(directoryExtension)) {
+				if(!"".equals(directoryExtension) && directory.endsWith(directoryExtension)) {
 					if(supplier.isImportable()) {
 						return true;
 					} else {

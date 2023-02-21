@@ -2,4 +2,5 @@
 <?eclipse version="3.2"?>
 <plugin>
       <extension-point id="org.eclipse.chemclipse.chromatogram.xxd.identifier.targetIdentifier" name="Target Identifier" schema="schema/org.eclipse.chemclipse.chromatogram.xxd.identifier.targetIdentifier.exsd"/>
+      <extension-point id="org.eclipse.chemclipse.chromatogram.xxd.identifier.chromatogramIdentifier" name="Chromatogram Identifier" schema="schema/org.eclipse.chemclipse.chromatogram.xxd.identifier.chromatogramIdentifier.exsd"/>
 </plugin>
