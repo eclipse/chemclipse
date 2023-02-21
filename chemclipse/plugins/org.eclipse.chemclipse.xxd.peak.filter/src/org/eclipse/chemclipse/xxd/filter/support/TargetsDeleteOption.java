@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,9 @@ package org.eclipse.chemclipse.xxd.filter.support;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum TargetsDeleteOption implements ILabel {
+
 	ALL_TARGETS("All Targets"), //
+	UNVERIFIED_TARGETS("Unverified Targets"), //
 	EMPTY_SMILES("Targets without SMILES");
 
 	private String label = "";

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,18 +28,37 @@ public class TargetsFilter {
 				case ALL_TARGETS:
 					targets.clear();
 					break;
+				case UNVERIFIED_TARGETS:
+					removeUnverifiedTargets(targets);
+					break;
 				case EMPTY_SMILES:
-					Set<IIdentificationTarget> delete = new HashSet<>();
-					for(IIdentificationTarget target : targets) {
-						String smiles = target.getLibraryInformation().getSmiles();
-						if("".equals(smiles)) {
-							delete.add(target);
-						}
-					}
-					removeTargets(targets, delete);
+					removeEmptySmilesTargets(targets);
 					break;
 			}
 		}
+	}
+
+	private static void removeUnverifiedTargets(Set<IIdentificationTarget> targets) {
+
+		Set<IIdentificationTarget> delete = new HashSet<>();
+		for(IIdentificationTarget target : targets) {
+			if(!target.isVerified()) {
+				delete.add(target);
+			}
+		}
+		removeTargets(targets, delete);
+	}
+
+	private static void removeEmptySmilesTargets(Set<IIdentificationTarget> targets) {
+
+		Set<IIdentificationTarget> delete = new HashSet<>();
+		for(IIdentificationTarget target : targets) {
+			String smiles = target.getLibraryInformation().getSmiles();
+			if("".equals(smiles)) {
+				delete.add(target);
+			}
+		}
+		removeTargets(targets, delete);
 	}
 
 	private static void removeTargets(Set<IIdentificationTarget> targets, Set<IIdentificationTarget> delete) {
