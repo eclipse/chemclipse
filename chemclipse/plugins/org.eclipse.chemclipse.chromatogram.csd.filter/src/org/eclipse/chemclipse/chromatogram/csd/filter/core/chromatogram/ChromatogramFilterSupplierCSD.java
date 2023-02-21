@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,9 +15,9 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 
 public class ChromatogramFilterSupplierCSD implements IChromatogramFilterSupplierCSD {
 
-	private String id = "";
-	private String description = "";
-	private String filterName = "";
+	private String id = ""; //$NON-NLS-1$
+	private String description = ""; //$NON-NLS-1$
+	private String filterName = ""; //$NON-NLS-1$
 	private Class<? extends IChromatogramFilterSettings> settingsClass;
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.csd.filter.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupplier;
 import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
@@ -35,7 +36,7 @@ public class ChromatogramFilterCSDProcessSupplier implements IProcessTypeSupplie
 	@Override
 	public String getCategory() {
 
-		return "Chromatogram Filter";
+		return Messages.chromatogramFilter;
 	}
 
 	@Override
@@ -60,22 +61,21 @@ public class ChromatogramFilterCSDProcessSupplier implements IProcessTypeSupplie
 		@SuppressWarnings("unchecked")
 		public ChromatogramFilterCSDProcessorSupplier(IChromatogramFilterSupplier supplier, IProcessTypeSupplier parent) {
 
-			super("ChromatogramFilterCSD." + supplier.getId(), supplier.getFilterName(), supplier.getDescription(), (Class<IChromatogramFilterSettings>)supplier.getSettingsClass(), parent, DataType.CSD);
+			super("ChromatogramFilterCSD." + supplier.getId(), supplier.getFilterName(), supplier.getDescription(), (Class<IChromatogramFilterSettings>)supplier.getSettingsClass(), parent, DataType.CSD); //$NON-NLS-1$
 			this.supplier = supplier;
 		}
 
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings processSettings, IMessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-				IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
+			if(chromatogramSelection instanceof IChromatogramSelectionCSD chromatogramSelectionCSD) {
 				if(processSettings instanceof IChromatogramFilterSettings) {
 					messageConsumer.addMessages(ChromatogramFilterCSD.applyFilter(chromatogramSelectionCSD, processSettings, supplier.getId(), monitor));
 				} else {
 					messageConsumer.addMessages(ChromatogramFilterCSD.applyFilter(chromatogramSelectionCSD, supplier.getId(), monitor));
 				}
 			} else {
-				messageConsumer.addWarnMessage(getName(), "Only CSD chromatogram supported, skipp processing");
+				messageConsumer.addWarnMessage(getName(), Messages.onlyCSDchromatogramSupported);
 			}
 			return chromatogramSelection;
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.csd.filter.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -25,18 +26,15 @@ import org.eclipse.core.runtime.Platform;
 public class ChromatogramFilterCSD {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramFilterCSD.class);
-	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.csd.filter.chromatogramFilterSupplier";
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.csd.filter.chromatogramFilterSupplier"; //$NON-NLS-1$
 	/*
 	 * These are the attributes of the extension point elements.
 	 */
-	private static final String ID = "id";
-	private static final String DESCRIPTION = "description";
-	private static final String FILTER_NAME = "filterName";
-	private static final String FILTER = "filter";
-	private static final String FILTER_SETTINGS = "filterSettings";
-	//
-	private static final String PROCESSING_DESCRIPTION = "Chromatogram Filter";
-	private static final String NO_CHROMATOGRAM_FILTER_AVAILABLE = "There is no chromatogram filter available.";
+	private static final String ID = "id"; //$NON-NLS-1$
+	private static final String DESCRIPTION = "description"; //$NON-NLS-1$
+	private static final String FILTER_NAME = "filterName"; //$NON-NLS-1$
+	private static final String FILTER = "filter"; //$NON-NLS-1$
+	private static final String FILTER_SETTINGS = "filterSettings"; //$NON-NLS-1$
 
 	/**
 	 * This class is a singleton. Use only static methods.
@@ -65,7 +63,7 @@ public class ChromatogramFilterCSD {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 		} else {
 			processingInfo = new ProcessingInfo<>();
-			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_FILTER_AVAILABLE);
+			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.noChromatogramFilterAvailable);
 		}
 		return processingInfo;
 	}
@@ -88,7 +86,7 @@ public class ChromatogramFilterCSD {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
 		} else {
 			processingInfo = new ProcessingInfo<>();
-			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_FILTER_AVAILABLE);
+			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.noChromatogramFilterAvailable);
 		}
 		return processingInfo;
 	}
@@ -152,7 +150,7 @@ public class ChromatogramFilterCSD {
 	 */
 	private static IConfigurationElement getConfigurationElement(final String filterId) {
 
-		if("".equals(filterId)) {
+		if(filterId.isEmpty()) {
 			return null;
 		}
 		IExtensionRegistry registry = Platform.getExtensionRegistry();

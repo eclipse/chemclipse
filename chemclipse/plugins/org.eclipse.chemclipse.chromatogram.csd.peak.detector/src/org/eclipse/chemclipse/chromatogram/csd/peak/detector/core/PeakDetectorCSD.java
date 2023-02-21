@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.peak.detector.core;
 
+import org.eclipse.chemclipse.chromatogram.csd.peak.detector.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorSettingsCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -28,19 +29,15 @@ import org.eclipse.core.runtime.Platform;
 public class PeakDetectorCSD {
 
 	private static final Logger logger = Logger.getLogger(PeakDetectorCSD.class);
-	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.csd.peak.detector.peakDetectorSupplier";
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.csd.peak.detector.peakDetectorSupplier"; //$NON-NLS-1$
 	/*
 	 * These are the attributes of the extension point elements.
 	 */
-	private static final String ID = "id";
-	private static final String DESCRIPTION = "description";
-	private static final String PEAK_DETECTOR_NAME = "peakDetectorName";
-	private static final String PEAK_DETECTOR = "peakDetector";
-	private static final String PEAK_DETECTOR_SETTINGS = "peakDetectorSettings";
-	/*
-	 * Processing Info
-	 */
-	private static final String NO_PEAK_DETECTOR_AVAILABLE = "There is no peak detector available.";
+	private static final String ID = "id"; //$NON-NLS-1$
+	private static final String DESCRIPTION = "description"; //$NON-NLS-1$
+	private static final String PEAK_DETECTOR_NAME = "peakDetectorName"; //$NON-NLS-1$
+	private static final String PEAK_DETECTOR = "peakDetector"; //$NON-NLS-1$
+	private static final String PEAK_DETECTOR_SETTINGS = "peakDetectorSettings"; //$NON-NLS-1$
 
 	/**
 	 * This class offers only static methods.
@@ -146,7 +143,7 @@ public class PeakDetectorCSD {
 	 */
 	private static IConfigurationElement getConfigurationElement(final String peakDetectorId) {
 
-		if("".equals(peakDetectorId)) {
+		if(peakDetectorId.isEmpty()) {
 			return null;
 		}
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -162,7 +159,7 @@ public class PeakDetectorCSD {
 	private static IProcessingInfo<?> getNoPeakDetectorAvailableProcessingInfo() {
 
 		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Peak Detector FID", NO_PEAK_DETECTOR_AVAILABLE);
+		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, Messages.peakDetectorCSD, Messages.noPeakDetectorAvailable);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
 	}

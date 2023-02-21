@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.csd.peak.detector.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorSettingsCSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupplier;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupport;
@@ -36,7 +37,7 @@ public class PeakDetectorCSDProcessTypeSupplier implements IProcessTypeSupplier 
 	@Override
 	public String getCategory() {
 
-		return "Peak Detector";
+		return Messages.peakDetector;
 	}
 
 	@Override
@@ -61,22 +62,22 @@ public class PeakDetectorCSDProcessTypeSupplier implements IProcessTypeSupplier 
 
 		@SuppressWarnings("unchecked")
 		public PeakDetectorProcessorSupplier(IPeakDetectorSupplier supplier, IProcessTypeSupplier parent) {
-			super("PeakDetectorCSD." + supplier.getId(), supplier.getPeakDetectorName(), supplier.getDescription(), (Class<IPeakDetectorSettingsCSD>)supplier.getSettingsClass(), parent, DataType.CSD);
+
+			super("PeakDetectorCSD." + supplier.getId(), supplier.getPeakDetectorName(), supplier.getDescription(), (Class<IPeakDetectorSettingsCSD>)supplier.getSettingsClass(), parent, DataType.CSD); //$NON-NLS-1$
 			this.supplier = supplier;
 		}
 
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IPeakDetectorSettingsCSD processSettings, IMessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-				IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
+			if(chromatogramSelection instanceof IChromatogramSelectionCSD chromatogramSelectionCSD) {
 				if(processSettings instanceof IPeakDetectorSettingsCSD) {
 					messageConsumer.addMessages(PeakDetectorCSD.detect(chromatogramSelectionCSD, processSettings, supplier.getId(), monitor));
 				} else {
 					messageConsumer.addMessages(PeakDetectorCSD.detect(chromatogramSelectionCSD, supplier.getId(), monitor));
 				}
 			} else {
-				messageConsumer.addWarnMessage(getDescription(), "Only CSD Chromatogram supported, skipp processing");
+				messageConsumer.addWarnMessage(getDescription(), Messages.onlyCSDchromatogramSupported);
 			}
 			return chromatogramSelection;
 		}

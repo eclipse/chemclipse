@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.chromatogram.csd.filter.core.peak;
 
 public class PeakFilterSupplier implements IPeakFilterSupplier {
 
-	private String id = "";
-	private String description = "";
-	private String filterName = "";
+	private String id = ""; //$NON-NLS-1$
+	private String description = ""; //$NON-NLS-1$
+	private String filterName = ""; //$NON-NLS-1$
 
 	@Override
 	public String getDescription() {

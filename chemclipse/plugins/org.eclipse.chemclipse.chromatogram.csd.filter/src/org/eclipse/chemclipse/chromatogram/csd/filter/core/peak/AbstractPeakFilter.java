@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.csd.filter.core.peak;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.csd.filter.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
@@ -21,7 +22,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
 public abstract class AbstractPeakFilter implements IPeakFilter {
 
-	private static final String DESCRIPTION = "Peak Filter";
+	private static final String DESCRIPTION = Messages.peakFilter;
 
 	@Override
 	public IProcessingInfo<?> validate(IPeakCSD peak, IPeakFilterSettings peakFilterSettings) {
@@ -60,7 +61,7 @@ public abstract class AbstractPeakFilter implements IPeakFilter {
 
 		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(peak == null) {
-			processingInfo.addErrorMessage(DESCRIPTION, "The peak is not valid.");
+			processingInfo.addErrorMessage(DESCRIPTION, Messages.invalidPeak);
 		}
 		return processingInfo;
 	}
@@ -75,7 +76,7 @@ public abstract class AbstractPeakFilter implements IPeakFilter {
 
 		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(peaks == null) {
-			processingInfo.addErrorMessage(DESCRIPTION, "The peak list is not valid.");
+			processingInfo.addErrorMessage(DESCRIPTION, Messages.invalidPeakList);
 		}
 		return processingInfo;
 	}
@@ -90,7 +91,7 @@ public abstract class AbstractPeakFilter implements IPeakFilter {
 
 		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(peakFilterSettings == null) {
-			processingInfo.addErrorMessage(DESCRIPTION, "The filter settings are not valid.");
+			processingInfo.addErrorMessage(DESCRIPTION, Messages.invalidFilterSettings);
 		}
 		return processingInfo;
 	}
@@ -105,10 +106,10 @@ public abstract class AbstractPeakFilter implements IPeakFilter {
 
 		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramSelection == null) {
-			processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram selection is not valid.");
+			processingInfo.addErrorMessage(DESCRIPTION, Messages.invalidChromatogramSelection);
 		} else {
 			if(chromatogramSelection.getChromatogram() == null) {
-				processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram is not valid.");
+				processingInfo.addErrorMessage(DESCRIPTION, Messages.invalidChromatogram);
 			}
 		}
 		return processingInfo;

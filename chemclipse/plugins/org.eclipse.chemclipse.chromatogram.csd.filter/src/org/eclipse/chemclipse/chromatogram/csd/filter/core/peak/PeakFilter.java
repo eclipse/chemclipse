@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.csd.filter.core.peak;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.csd.filter.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
@@ -29,17 +30,17 @@ import org.eclipse.core.runtime.Platform;
 public class PeakFilter {
 
 	private static final Logger logger = Logger.getLogger(PeakFilter.class);
-	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.csd.filter.peakFilterSupplier";
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.csd.filter.peakFilterSupplier"; //$NON-NLS-1$
 	/*
 	 * These are the attributes of the extension point elements.
 	 */
-	private static final String ID = "id";
-	private static final String DESCRIPTION = "description";
-	private static final String FILTER_NAME = "filterName";
-	private static final String FILTER = "filter";
+	private static final String ID = "id"; //$NON-NLS-1$
+	private static final String DESCRIPTION = "description"; //$NON-NLS-1$
+	private static final String FILTER_NAME = "filterName"; //$NON-NLS-1$
+	private static final String FILTER = "filter"; //$NON-NLS-1$
 	//
-	private static final String PROCESSING_DESCRIPTION = "Peak Filter";
-	private static final String NO_PEAK_FILTER_AVAILABLE = "There is no peak filter available.";
+	private static final String PROCESSING_DESCRIPTION = Messages.peakFilter;
+	private static final String NO_PEAK_FILTER_AVAILABLE = Messages.noPeakFilterAvailable;
 
 	/**
 	 * This class is a singleton. Use only static methods.
@@ -241,7 +242,7 @@ public class PeakFilter {
 	 */
 	private static IConfigurationElement getConfigurationElement(final String filterId) {
 
-		if("".equals(filterId)) {
+		if(filterId.isEmpty()) {
 			return null;
 		}
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
