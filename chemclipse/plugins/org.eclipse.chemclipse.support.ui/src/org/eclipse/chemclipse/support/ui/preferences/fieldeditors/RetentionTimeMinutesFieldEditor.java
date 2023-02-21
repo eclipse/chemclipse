@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,8 +13,11 @@ package org.eclipse.chemclipse.support.ui.preferences.fieldeditors;
 
 import java.text.DecimalFormat;
 
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -28,13 +31,13 @@ public class RetentionTimeMinutesFieldEditor extends StringFieldEditor {
 
 	private double minRetentionTimeMinutes = Integer.MIN_VALUE;
 	private double maxRetentionTimeMinutes = Integer.MAX_VALUE;
-	private double MINUTE_CORRELATION_FACTOR = 60000.0d; // 1ms * 1000 = 1s; 1s * 60 = 1min
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
 	public RetentionTimeMinutesFieldEditor(String name, String labelText, int minRetentionTimeMilliseconds, int maxRetentionTimeMilliseconds, Composite parent) {
+
 		super(name, labelText, parent);
-		minRetentionTimeMinutes = minRetentionTimeMilliseconds / MINUTE_CORRELATION_FACTOR;
-		maxRetentionTimeMinutes = maxRetentionTimeMilliseconds / MINUTE_CORRELATION_FACTOR;
+		minRetentionTimeMinutes = minRetentionTimeMilliseconds / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
+		maxRetentionTimeMinutes = maxRetentionTimeMilliseconds / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
 	}
 
 	@Override
@@ -65,7 +68,7 @@ public class RetentionTimeMinutesFieldEditor extends StringFieldEditor {
 
 		Text textControl = getTextControl();
 		if(textControl != null) {
-			Double retentionTimeMinutes = getPreferenceStore().getInt(getPreferenceName()) / MINUTE_CORRELATION_FACTOR;
+			Double retentionTimeMinutes = getPreferenceStore().getInt(getPreferenceName()) / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
 			textControl.setText(retentionTimeMinutes.toString());
 			oldValue = getPreferenceStore().getString(getPreferenceName());
 		}
@@ -76,7 +79,7 @@ public class RetentionTimeMinutesFieldEditor extends StringFieldEditor {
 
 		Text textControl = getTextControl();
 		if(textControl != null) {
-			Double value = getPreferenceStore().getDefaultInt(getPreferenceName()) / MINUTE_CORRELATION_FACTOR;
+			Double value = getPreferenceStore().getDefaultInt(getPreferenceName()) / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
 			textControl.setText(value.toString());
 		}
 		valueChanged();
@@ -87,14 +90,14 @@ public class RetentionTimeMinutesFieldEditor extends StringFieldEditor {
 
 		Text textControl = getTextControl();
 		if(textControl != null) {
-			double value = Double.valueOf(textControl.getText());
-			int retentionTime = (int)(value * MINUTE_CORRELATION_FACTOR);
+			double value = Double.parseDouble(textControl.getText());
+			int retentionTime = (int)(value * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			getPreferenceStore().setValue(getPreferenceName(), retentionTime);
 		}
 	}
 
 	private void setAndShowErrorMessage() {
 
-		showErrorMessage("Allowed retention time range: " + decimalFormat.format(minRetentionTimeMinutes) + " - " + decimalFormat.format(maxRetentionTimeMinutes) + " minutes");
+		showErrorMessage(NLS.bind(SupportMessages.allowedRetentionTimeRange, decimalFormat.format(minRetentionTimeMinutes), decimalFormat.format(maxRetentionTimeMinutes)));
 	}
 }

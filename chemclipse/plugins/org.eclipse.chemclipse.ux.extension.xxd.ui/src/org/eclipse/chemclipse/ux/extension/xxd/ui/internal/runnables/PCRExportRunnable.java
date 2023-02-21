@@ -52,7 +52,7 @@ public class PCRExportRunnable implements IRunnableWithProgress {
 			IProcessingInfo<?> processingInfo = PlateConverterPCR.convert(file, plate, supplier.getId(), monitor);
 			data = (File)processingInfo.getProcessingResult();
 		} catch(Exception e) {
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 		} finally {
 			monitor.done();
 		}

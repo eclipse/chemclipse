@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -182,8 +182,7 @@ public class ControlBuilder {
 	public static <T extends Composite> T spacing(T control, int margins) {
 
 		Layout layout = control.getLayout();
-		if(layout instanceof GridLayout) {
-			GridLayout gridLayout = (GridLayout)layout;
+		if(layout instanceof GridLayout gridLayout) {
 			gridLayout.marginBottom = margins;
 			gridLayout.marginLeft = margins;
 			gridLayout.marginTop = margins;
@@ -337,8 +336,8 @@ public class ControlBuilder {
 	public static GridData gridData(Control control) {
 
 		Object layoutData = control.getLayoutData();
-		if(layoutData instanceof GridData) {
-			return (GridData)layoutData;
+		if(layoutData instanceof GridData gridLayout) {
+			return gridLayout;
 		} else {
 			GridData gridData = new GridData();
 			if(isGridLayouted(control)) {
@@ -458,8 +457,8 @@ public class ControlBuilder {
 			}
 		}
 		Layout layout = viewer.getControl().getParent().getLayout();
-		if(layout instanceof TableColumnLayout) {
-			((TableColumnLayout)layout).setColumnData(tableColumn, new ColumnWeightData(definition.getWidth(), definition.getMinWidth(), resizable));
+		if(layout instanceof TableColumnLayout tableColumnLayout) {
+			tableColumnLayout.setColumnData(tableColumn, new ColumnWeightData(definition.getWidth(), definition.getMinWidth(), resizable));
 		}
 		return tableViewerColumn;
 	}

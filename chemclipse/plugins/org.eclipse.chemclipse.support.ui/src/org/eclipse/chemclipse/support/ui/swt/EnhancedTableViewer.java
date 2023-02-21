@@ -121,7 +121,7 @@ public class EnhancedTableViewer extends Composite {
 
 	private void createControl() {
 
-		tableViewerColumns = new ArrayList<TableViewerColumn>();
+		tableViewerColumns = new ArrayList<>();
 		//
 		clipboard = new Clipboard(Display.getDefault());
 		//
@@ -148,8 +148,7 @@ public class EnhancedTableViewer extends Composite {
 
 	private void copyToClipboard() {
 
-		String DELIMITER = OperatingSystemUtils.TAB;
-		String END_OF_LINE = OperatingSystemUtils.getLineDelimiter();
+		String lineDelimiter = OperatingSystemUtils.getLineDelimiter();
 		StringBuilder builder = new StringBuilder();
 		Table table = tableViewer.getTable();
 		TableColumn[] tableColumns = table.getColumns();
@@ -159,9 +158,9 @@ public class EnhancedTableViewer extends Composite {
 		 */
 		for(TableColumn tableColumn : tableColumns) {
 			builder.append(tableColumn.getText());
-			builder.append(DELIMITER);
+			builder.append(OperatingSystemUtils.TAB);
 		}
-		builder.append(END_OF_LINE);
+		builder.append(lineDelimiter);
 		/*
 		 * Copy the selected items.
 		 */
@@ -175,16 +174,16 @@ public class EnhancedTableViewer extends Composite {
 			 */
 			for(int columnIndex = 0; columnIndex < size; columnIndex++) {
 				builder.append(selection.getText(columnIndex));
-				builder.append(DELIMITER);
+				builder.append(OperatingSystemUtils.TAB);
 			}
-			builder.append(END_OF_LINE);
+			builder.append(lineDelimiter);
 		}
 		/*
 		 * If the builder is empty, give a note that items needs to be selected.
 		 */
 		if(builder.length() == 0) {
 			builder.append(SupportMessages.labelCopyLinesInfo);
-			builder.append(END_OF_LINE);
+			builder.append(lineDelimiter);
 		}
 		/*
 		 * Transfer the selected text (items) to the clipboard.

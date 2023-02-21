@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -403,7 +403,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 				List<File> files = runnable.getSequenceFiles();
 				sequenceFilesUI.setInput(files);
 			} catch(Exception e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.error(e);
 			}
 		} else {
 			sequenceFilesUI.setInput(null);

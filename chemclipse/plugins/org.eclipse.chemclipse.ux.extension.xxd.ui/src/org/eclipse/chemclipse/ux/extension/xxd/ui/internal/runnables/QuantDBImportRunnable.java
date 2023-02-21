@@ -48,7 +48,7 @@ public class QuantDBImportRunnable implements IRunnableWithProgress {
 			IProcessingInfo<IQuantitationDatabase> processingInfo = QuantDBConverter.convert(file, monitor);
 			quantitationDatabase = processingInfo.getProcessingResult();
 		} catch(Exception e) {
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 		} finally {
 			monitor.done();
 		}

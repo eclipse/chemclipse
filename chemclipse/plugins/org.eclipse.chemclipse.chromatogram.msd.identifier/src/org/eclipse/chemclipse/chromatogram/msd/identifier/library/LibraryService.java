@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -134,7 +134,7 @@ public class LibraryService {
 			try {
 				instance = (ILibraryService)element.createExecutableExtension(Identifier.IDENTIFIER);
 			} catch(CoreException e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.error(e);
 			}
 		}
 		return instance;

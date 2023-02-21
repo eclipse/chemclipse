@@ -17,6 +17,8 @@ import java.util.List;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -42,9 +44,9 @@ public class ImageDialog extends Dialog {
 	public static final int DEFAULT_WIDTH = 400;
 	public static final int DEFAULT_HEIGHT = 450;
 	//
-	private static final String FILE_NAME = "FileName";
-	private static final String EXTENSION_GIF = ".gif";
-	private static final String EXTENSION_PNG = ".png";
+	private static final String FILE_NAME = "FileName"; //$NON-NLS-1$
+	private static final String EXTENSION_GIF = ".gif"; //$NON-NLS-1$
+	private static final String EXTENSION_PNG = ".png"; //$NON-NLS-1$
 	//
 	private Text textSearch;
 	private Table tableImages;
@@ -66,7 +68,7 @@ public class ImageDialog extends Dialog {
 	protected void configureShell(Shell shell) {
 
 		super.configureShell(shell);
-		shell.setText("Processor Image");
+		shell.setText(SupportMessages.processorImage);
 	}
 
 	@Override
@@ -91,7 +93,7 @@ public class ImageDialog extends Dialog {
 		tableImages = createTableImages(composite);
 		//
 		initialize();
-		updateTable("");
+		updateTable(""); //$NON-NLS-1$
 		//
 		return composite;
 	}
@@ -117,8 +119,8 @@ public class ImageDialog extends Dialog {
 	private Text createTextSearch(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER | SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
-		text.setText("");
-		text.setToolTipText("Search the available processor items.");
+		text.setText(""); //$NON-NLS-1$
+		text.setToolTipText(SupportMessages.searchAvailableProcessorItems);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		/*
 		 * Listen to search key event.
@@ -140,7 +142,7 @@ public class ImageDialog extends Dialog {
 			public void widgetDefaultSelected(SelectionEvent e) {
 
 				if(e.detail == SWT.ICON_CANCEL) {
-					text.setText("");
+					text.setText(""); //$NON-NLS-1$
 					runSearch();
 				} else if(e.detail == SWT.ICON_SEARCH) {
 					runSearch();
@@ -154,8 +156,8 @@ public class ImageDialog extends Dialog {
 	private Button createButtonSearch(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+		button.setText(""); //$NON-NLS-1$
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImageProvider.SIZE_16x16));
 		//
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -229,8 +231,8 @@ public class ImageDialog extends Dialog {
 				if(imageMatchesSearch(image, searchTerm)) {
 					TableItem tableItem = new TableItem(tableImages, SWT.NONE);
 					tableItem.setData(FILE_NAME, image);
-					tableItem.setText(image.replace(EXTENSION_GIF, "").replace(EXTENSION_PNG, "").toLowerCase());
-					tableItem.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImage.SIZE_16x16));
+					tableItem.setText(image.replace(EXTENSION_GIF, "").replace(EXTENSION_PNG, "").toLowerCase()); //$NON-NLS-1$ //$NON-NLS-2$
+					tableItem.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImageProvider.SIZE_16x16));
 				}
 			}
 		}

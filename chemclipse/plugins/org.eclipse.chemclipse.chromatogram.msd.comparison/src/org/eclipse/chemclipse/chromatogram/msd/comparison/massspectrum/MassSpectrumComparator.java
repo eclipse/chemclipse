@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -143,7 +143,7 @@ public class MassSpectrumComparator {
 			IMassSpectrumPurityResult massSpectrumPurityResult = new MassSpectrumPurityResult(extractedMassSpectrum, genuineMassSpectrum);
 			processingInfo.setProcessingResult(massSpectrumPurityResult);
 		} catch(ComparisonException e) {
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 			processingInfo.addErrorMessage("MassSpectrum Purity", "The mass spectrum purity couldn't be calculated.");
 		}
 		return processingInfo;
@@ -223,7 +223,7 @@ public class MassSpectrumComparator {
 				IMassSpectrumComparisonSupplier massSpectrumComparisonSupplier = getMassSpectrumComparisonSupplier(element);
 				((AbstractMassSpectrumComparator)instance).setMassSpectrumComparisonSupplier(massSpectrumComparisonSupplier);
 			} catch(CoreException e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.error(e);
 			}
 		}
 		return instance;

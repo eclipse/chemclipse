@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,8 +43,8 @@ public class AdapterLabelProvider extends LabelProvider implements IToolTipProvi
 	public String getToolTipText(Object element) {
 
 		ILabelProvider labelProvider = Adapters.adapt(element, ILabelProvider.class);
-		if(labelProvider instanceof IToolTipProvider) {
-			return ((IToolTipProvider)labelProvider).getToolTipText(element);
+		if(labelProvider instanceof IToolTipProvider toolTipProvider) {
+			return toolTipProvider.getToolTipText(element);
 		}
 		IToolTipProvider toolTipProvider = Adapters.adapt(element, IToolTipProvider.class);
 		if(toolTipProvider != null) {

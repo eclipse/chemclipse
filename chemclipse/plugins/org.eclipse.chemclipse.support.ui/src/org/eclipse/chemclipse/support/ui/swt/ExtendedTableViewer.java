@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.menu.TableMenuEntryComparator;
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
@@ -68,8 +69,8 @@ import org.slf4j.LoggerFactory;
 
 public class ExtendedTableViewer extends TableViewer implements IExtendedTableViewer {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ExtendedTableViewer.class);
-	private static final String MENU_TEXT = "Table PopUp Menu";
+	private static final Logger logger = LoggerFactory.getLogger(ExtendedTableViewer.class);
+	private static final String MENU_TEXT = SupportMessages.tablePopUpMenu;
 	//
 	private ITableSettings tableSettings;
 	private final List<TableViewerColumn> tableViewerColumns;
@@ -458,7 +459,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 			 * Create set if not existent.
 			 */
 			if(menuEntries == null) {
-				menuEntries = new HashSet<ITableMenuEntry>();
+				menuEntries = new HashSet<>();
 				categoryMenuEntriesMap.put(category, menuEntries);
 			}
 			/*
@@ -471,7 +472,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 
 	private void createMenuItems(MenuManager menuManager) {
 
-		List<String> categories = new ArrayList<String>(categoryMenuEntriesMap.keySet());
+		List<String> categories = new ArrayList<>(categoryMenuEntriesMap.keySet());
 		Collections.sort(categories);
 		Iterator<String> iterator = categories.iterator();
 		while(iterator.hasNext()) {
@@ -485,7 +486,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 
 	private void createMenuCategory(MenuManager menuManager, String category, Set<ITableMenuEntry> tableMenuEntries) {
 
-		List<ITableMenuEntry> menuEntries = new ArrayList<ITableMenuEntry>(tableMenuEntries);
+		List<ITableMenuEntry> menuEntries = new ArrayList<>(tableMenuEntries);
 		Collections.sort(menuEntries, new TableMenuEntryComparator());
 		//
 		for(ITableMenuEntry menuEntry : menuEntries) {
@@ -494,7 +495,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 				@Override
 				public void menuAboutToShow(IMenuManager manager) {
 
-					if("".equals(category)) {
+					if(category.isEmpty()) {
 						/*
 						 * Top level
 						 */
@@ -597,7 +598,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 										}
 										return comparator.compare(d1, d2);
 									} catch(ClassCastException e) {
-										LOG.warn("Inconsitent data items in respect to column definition: {}, sorting will be inconsistent!", e.toString());
+										logger.warn("Inconsistent data items in respect to column definition: {}, sorting will be inconsistent!", e.toString()); //$NON-NLS-1$
 										return 0;
 									}
 								}

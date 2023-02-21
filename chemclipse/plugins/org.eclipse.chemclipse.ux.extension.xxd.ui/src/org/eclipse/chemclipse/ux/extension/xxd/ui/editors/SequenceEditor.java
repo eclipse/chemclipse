@@ -141,7 +141,7 @@ public class SequenceEditor {
 				sequenceFile = null;
 			}
 		} catch(Exception e) {
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 		}
 		//
 		return sequence;

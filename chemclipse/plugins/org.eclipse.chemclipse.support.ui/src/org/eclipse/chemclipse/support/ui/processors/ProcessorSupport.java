@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
@@ -49,7 +48,7 @@ public class ProcessorSupport {
 				if(values != null && values.length == 3) {
 					String id = values[0];
 					String imageFileName = values[1];
-					boolean isActive = Boolean.valueOf(values[2]);
+					boolean isActive = Boolean.parseBoolean(values[2]);
 					IProcessSupplier<?> processSupplier = context.getSupplier(id);
 					if(processSupplier != null) {
 						Processor activeProcessor = new Processor(processSupplier);
@@ -69,7 +68,7 @@ public class ProcessorSupport {
 		StringBuilder builder = new StringBuilder();
 		//
 		if(processors != null) {
-			List<Processor> activeProcessors = processors.stream().filter(p -> p.isActive()).collect(Collectors.toList());
+			List<Processor> activeProcessors = processors.stream().filter(Processor::isActive).toList();
 			Iterator<Processor> iterator = activeProcessors.iterator();
 			while(iterator.hasNext()) {
 				Processor processor = iterator.next();

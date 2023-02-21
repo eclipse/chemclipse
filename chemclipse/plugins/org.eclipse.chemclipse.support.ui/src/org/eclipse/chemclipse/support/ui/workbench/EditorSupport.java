@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,10 @@ package org.eclipse.chemclipse.support.ui.workbench;
 
 public class EditorSupport {
 
-	public static final String MAP_FILE = "File";
-	public static final String MAP_BATCH = "Batch";
+	public static final String MAP_FILE = "File"; //$NON-NLS-1$
+	public static final String MAP_BATCH = "Batch"; //$NON-NLS-1$
+
+	private EditorSupport() {
+
+	}
 }

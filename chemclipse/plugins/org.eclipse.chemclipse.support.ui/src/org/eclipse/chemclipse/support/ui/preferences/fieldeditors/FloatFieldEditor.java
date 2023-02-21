@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.fieldeditors;
 
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -22,10 +24,12 @@ public class FloatFieldEditor extends StringFieldEditor {
 	private float maxValue = Float.MAX_VALUE;
 
 	public FloatFieldEditor(String name, String labelText, Composite parent) {
+
 		super(name, labelText, parent);
 	}
 
 	public FloatFieldEditor(String name, String labelText, float minValue, float maxValue, Composite parent) {
+
 		super(name, labelText, parent);
 		if(minValue >= maxValue) {
 			throw new IllegalArgumentException("Invalid min/max values: " + minValue + ", " + maxValue);
@@ -108,23 +112,17 @@ public class FloatFieldEditor extends StringFieldEditor {
 	}
 
 	@Override
-	public void setEnabled(boolean enabled, Composite parent) {
-
-		super.setEnabled(enabled, parent);
-	}
-
-	@Override
 	protected void doStore() {
 
 		Text textControl = getTextControl();
 		if(textControl != null && textControl.isEnabled()) {
-			float value = Float.valueOf(textControl.getText());
+			float value = Float.parseFloat(textControl.getText());
 			getPreferenceStore().setValue(getPreferenceName(), value);
 		}
 	}
 
 	private void setAndShowErrorMessage() {
 
-		showErrorMessage("Allowed range (MIN = " + minValue + ")(MAX = " + maxValue + ")");
+		showErrorMessage(NLS.bind(SupportMessages.allowedRange, minValue, maxValue));
 	}
 }

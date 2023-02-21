@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -52,7 +52,7 @@ public class DatabaseImportRunnable implements IRunnableWithProgress {
 			 * FileIsNotReadableException FileIsEmptyException
 			 * ChromatogramIsNullException
 			 */
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 		} finally {
 			monitor.done();
 		}

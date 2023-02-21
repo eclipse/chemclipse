@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.util.stream.IntStream;
 
 import org.eclipse.chemclipse.support.preferences.SupportPreferences;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.dnd.Clipboard;
@@ -26,8 +27,8 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class CopyToClipboardProvider {
 
-	private final String DELIMITER = "\t";
-	private final String LINE_BREAK = "\n";
+	private static final String DELIMITER = "\t"; //$NON-NLS-1$
+	private static final String LINE_BREAK = "\n"; //$NON-NLS-1$
 
 	public void copyToClipboard(Clipboard clipboard, ExtendedTableViewer extendedTableViewer) {
 
@@ -72,13 +73,13 @@ public class CopyToClipboardProvider {
 
 	private String optimizeText(String text) {
 
-		return text.replace(LINE_BREAK, " ");
+		return text.replace(LINE_BREAK, " "); //$NON-NLS-1$
 	}
 
 	private void addNoContentMessageOnDemand(StringBuilder builder) {
 
 		if(builder.length() == 0) {
-			builder.append("Please select one or more entries in the list.");
+			builder.append(SupportMessages.selectEntriesinList);
 			builder.append(OperatingSystemUtils.getLineDelimiter());
 		}
 	}

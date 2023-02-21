@@ -52,7 +52,7 @@ public class SequenceImportRunnable implements IRunnableWithProgress {
 			sequence = processingInfo.getProcessingResult();
 			subMonitor.worked(2);
 		} catch(Exception e) {
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 		} finally {
 			subMonitor.done();
 		}

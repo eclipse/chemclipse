@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,12 +39,13 @@ public class ProjectLabelProvider extends LabelProvider implements ILabelProvide
 	@Override
 	public String getText(Object element) {
 
-		if(element instanceof IContainer) {
-			return ((IContainer)element).getName();
+		if(element instanceof IContainer container) {
+			return container.getName();
 		}
 		return "";
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
 		Image image = null;

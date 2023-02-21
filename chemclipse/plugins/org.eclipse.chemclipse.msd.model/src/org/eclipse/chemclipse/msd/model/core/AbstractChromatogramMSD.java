@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -76,7 +76,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		try {
 			immutableZeroIon = new ImmutableZeroIon();
 		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 		}
 		loadNoiseCalculator();
 	}

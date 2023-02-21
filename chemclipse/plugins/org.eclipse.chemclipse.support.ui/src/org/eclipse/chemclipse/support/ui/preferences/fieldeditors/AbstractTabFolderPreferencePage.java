@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -88,7 +88,7 @@ public abstract class AbstractTabFolderPreferencePage extends PreferencePage imp
 	protected void addField(FieldEditor fieldEditor) {
 
 		if(fieldEditors == null) {
-			fieldEditors = new ArrayList<FieldEditor>();
+			fieldEditors = new ArrayList<>();
 		}
 		fieldEditors.add(fieldEditor);
 	}
@@ -113,7 +113,7 @@ public abstract class AbstractTabFolderPreferencePage extends PreferencePage imp
 		if(fieldEditors != null) {
 			Iterator<FieldEditor> iterator = fieldEditors.iterator();
 			while(iterator.hasNext()) {
-				FieldEditor fieldEditor = (FieldEditor)iterator.next();
+				FieldEditor fieldEditor = iterator.next();
 				fieldEditor.loadDefault();
 			}
 		}
@@ -144,7 +144,7 @@ public abstract class AbstractTabFolderPreferencePage extends PreferencePage imp
 			int size = fieldEditors.size();
 			for(int i = 0; i < size; i++) {
 				FieldEditor fieldEditor = fieldEditors.get(i);
-				valid = valid && fieldEditor.isValid();
+				valid = fieldEditor.isValid();
 				if(!valid) {
 					setErrorMessage(fieldEditor.getLabelText());
 					break;

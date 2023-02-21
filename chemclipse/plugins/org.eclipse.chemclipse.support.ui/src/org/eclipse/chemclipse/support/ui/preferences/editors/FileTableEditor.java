@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.util.FileSettingUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -26,7 +27,8 @@ public class FileTableEditor extends TableViewerFieldEditor<File> {
 	private FileSettingUtil fileSettingUtil;
 
 	public FileTableEditor(String name, String labelText, String[] filterExtensions, Composite parent) {
-		super(name, labelText, new String[]{"File Name", "File Path"}, new int[]{150, 200}, parent);
+
+		super(name, labelText, new String[]{SupportMessages.fileName, SupportMessages.filePath}, new int[]{150, 200}, parent);
 		this.filterExtensions = filterExtensions;
 		this.fileSettingUtil = new FileSettingUtil();
 	}
@@ -57,7 +59,7 @@ public class FileTableEditor extends TableViewerFieldEditor<File> {
 
 		List<File> files = new ArrayList<>();
 		FileDialog dialog = new FileDialog(getShell(), SWT.OPEN | SWT.MULTI);
-		dialog.setText("Select File");
+		dialog.setText(SupportMessages.selectFile);
 		if(filterExtensions != null) {
 			dialog.setFilterExtensions(filterExtensions);
 		}

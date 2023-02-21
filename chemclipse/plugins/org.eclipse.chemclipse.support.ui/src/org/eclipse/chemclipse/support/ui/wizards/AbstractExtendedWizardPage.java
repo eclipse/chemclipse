@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Text;
 public abstract class AbstractExtendedWizardPage extends WizardPage implements IExtendedWizardPage {
 
 	public AbstractExtendedWizardPage(String pageName) {
+
 		super(pageName);
 	}
 
@@ -30,7 +31,7 @@ public abstract class AbstractExtendedWizardPage extends WizardPage implements I
 
 		String message = null;
 		String text = textInput.getText().trim();
-		if(text == null || text.equals("")) {
+		if(text == null || text.isEmpty()) {
 			message = errorMessage;
 		}
 		return message;
@@ -47,7 +48,7 @@ public abstract class AbstractExtendedWizardPage extends WizardPage implements I
 
 		String message = null;
 		String text = textInput.getText().trim();
-		if(text == null || text.equals("")) {
+		if(text == null || text.isEmpty()) {
 			message = errorMessage;
 		} else {
 			try {
@@ -67,7 +68,7 @@ public abstract class AbstractExtendedWizardPage extends WizardPage implements I
 
 		String message = null;
 		String text = comboInput.getText().trim();
-		if(text == null || text.equals("")) {
+		if(text == null || text.isEmpty()) {
 			message = errorMessage;
 		}
 		return message;

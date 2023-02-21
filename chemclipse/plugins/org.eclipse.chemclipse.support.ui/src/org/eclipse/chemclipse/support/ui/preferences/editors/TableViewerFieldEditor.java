@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,7 +39,6 @@ import org.eclipse.swt.widgets.TableColumn;
 public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 
 	private TableViewer tableViewer;
-	private Composite buttonBox;
 	private Button upButton;
 	private Button downButton;
 	private Button newButton;
@@ -52,6 +51,7 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 	//
 
 	protected TableViewerFieldEditor(String name, String labelText, String[] columnNames, int[] columnWidth, Composite parent) {
+
 		this.columnNames = columnNames;
 		this.columnWidth = columnWidth;
 		init(name, labelText);
@@ -98,7 +98,7 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 		gd.grabExcessHorizontalSpace = true;
 		gd.grabExcessVerticalSpace = true;
 		table.setLayoutData(gd);
-		buttonBox = getButtonControl(composite);
+		Composite buttonBox = getButtonControl(composite);
 		gd = new GridData();
 		gd.verticalAlignment = GridData.BEGINNING;
 		buttonBox.setLayoutData(gd);
@@ -106,7 +106,7 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 
 	private SelectionAdapter getSelectionAdapter(final TableColumn column, final int index) {
 
-		SelectionAdapter selectionAdapter = new SelectionAdapter() {
+		return new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -132,7 +132,6 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 				update();
 			}
 		};
-		return selectionAdapter;
 	}
 
 	private void moveUp() {
@@ -272,10 +271,7 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 	@Override
 	protected void doLoadDefault() {
 
-		String preferences = getPreferenceStore().getString(getPreferenceName());
-		List<Value> v = parseSavePreferences(preferences);
-		tableViewer.setInput(v);
-		update();
+		doLoad();
 	}
 
 	private void update() {

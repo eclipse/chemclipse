@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,6 +30,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.preferences.ToolbarPreferencePage;
 import org.eclipse.jface.action.AbstractGroupMarker;
 import org.eclipse.jface.action.Action;
@@ -165,7 +166,7 @@ public class EditorToolBar {
 		if(isShowText()) {
 			contributionItem.setMode(ActionContributionItem.MODE_FORCE_TEXT);
 		}
-		contributionItem.setId("Action." + ID_SEQUENCE.incrementAndGet());
+		contributionItem.setId("Action." + ID_SEQUENCE.incrementAndGet()); //$NON-NLS-1$
 		actionContributions.add(contributionItem);
 		return contributionItem;
 	}
@@ -219,7 +220,7 @@ public class EditorToolBar {
 				return width > 0 ? width : super.computeWidth(control);
 			}
 		};
-		contribution.setId("Combo." + ID_SEQUENCE.incrementAndGet());
+		contribution.setId("Combo." + ID_SEQUENCE.incrementAndGet()); //$NON-NLS-1$
 		addContribution(contribution, false);
 	}
 
@@ -245,12 +246,12 @@ public class EditorToolBar {
 		String baseName;
 		if(group == null) {
 			// This is the master toolbar
-			baseName = "master";
+			baseName = "master"; //$NON-NLS-1$
 		} else {
 			// this is a child
 			baseName = group.getId();
 		}
-		EditorToolBar child = new EditorToolBar(new SubToolBarManager(toolBarManager), this, baseName + "." + ID_SEQUENCE.incrementAndGet());
+		EditorToolBar child = new EditorToolBar(new SubToolBarManager(toolBarManager), this, baseName + "." + ID_SEQUENCE.incrementAndGet()); //$NON-NLS-1$
 		addContribution(child.group, prepend);
 		return child;
 	}
@@ -258,7 +259,7 @@ public class EditorToolBar {
 	public void addSeparator() {
 
 		Separator separator = new Separator();
-		separator.setId("Separator." + ID_SEQUENCE.incrementAndGet());
+		separator.setId("Separator." + ID_SEQUENCE.incrementAndGet()); //$NON-NLS-1$
 		addContribution(separator, false);
 	}
 
@@ -275,7 +276,7 @@ public class EditorToolBar {
 		if(parent != null) {
 			return parent.enableToolbarTextButton(preferenceStore, key);
 		} else {
-			Action action = new Action("Show Text", Action.AS_CHECK_BOX) {
+			Action action = new Action(SupportMessages.showText, IAction.AS_CHECK_BOX) {
 
 				@Override
 				public void run() {
@@ -287,9 +288,9 @@ public class EditorToolBar {
 				public void setChecked(boolean checked) {
 
 					if(checked) {
-						setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16));
+						setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SELECTED, IApplicationImageProvider.SIZE_16x16));
 					} else {
-						setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16));
+						setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DESELECTED, IApplicationImageProvider.SIZE_16x16));
 					}
 					if(preferenceStore != null) {
 						preferenceStore.setValue(key, checked);
@@ -375,7 +376,7 @@ public class EditorToolBar {
 		private void addPreferencePageContainer(PreferencePageContainer container) {
 
 			if(configAction == null) {
-				configAction = new Action("Settings", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16)) {
+				configAction = new Action(SupportMessages.settings, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16)) {
 
 					@Override
 					public void runWithEvent(Event event) {
@@ -391,7 +392,7 @@ public class EditorToolBar {
 						ToolBar parent = widget.getParent();
 						PreferenceDialog preferenceDialog = new PreferenceDialog(parent.getShell(), preferenceManager);
 						preferenceDialog.create();
-						preferenceDialog.getShell().setText("Settings");
+						preferenceDialog.getShell().setText(SupportMessages.settings);
 						if(preferenceDialog.open() == Window.OK) {
 							for(PreferencePageContainer container : preferencePages) {
 								if(container.runnable != null) {

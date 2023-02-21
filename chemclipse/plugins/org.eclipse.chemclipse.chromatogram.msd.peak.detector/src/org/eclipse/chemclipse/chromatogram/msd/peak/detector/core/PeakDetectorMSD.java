@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -132,7 +132,7 @@ public class PeakDetectorMSD {
 					IPeakDetectorSettingsMSD instance = (IPeakDetectorSettingsMSD)element.createExecutableExtension(PEAK_DETECTOR_SETTINGS);
 					supplier.setSettingsClass(instance.getClass());
 				} catch(CoreException e) {
-					logger.error(e.getLocalizedMessage(), e);
+					logger.error(e);
 					// settings class is optional, set null instead
 					supplier.setSettingsClass(null);
 				}
@@ -151,7 +151,7 @@ public class PeakDetectorMSD {
 			try {
 				instance = (IPeakDetectorMSD<?, ?, ?>)element.createExecutableExtension(PEAK_DETECTOR);
 			} catch(CoreException e) {
-				logger.error(e.getLocalizedMessage(), e);
+				logger.error(e);
 			}
 		}
 		return instance;
