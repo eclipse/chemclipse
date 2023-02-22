@@ -24,7 +24,7 @@ public class CopyClipboardHandler extends AbstractTableMenuEntry implements ITab
 	@Override
 	public String getCategory() {
 
-		return ""; // Must be empty to be placed on the main menu level.
+		return SupportMessages.exportTableSelection;
 	}
 
 	@Override
