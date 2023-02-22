@@ -27,6 +27,7 @@ public class SupportMessages extends NLS {
 	public static String errorMessageEven;
 	public static String errorMessageOdd;
 	public static String errorMessageOddIncludingZero;
+	public static String exportTableSelection;
 	public static String fileName;
 	public static String filePath;
 	public static String files;
