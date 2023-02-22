@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.csd.filter.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
@@ -21,8 +22,6 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
  * @author Philip Wenig
  */
 public abstract class AbstractChromatogramFilterCSD implements IChromatogramFilterCSD {
-
-	private static final String DESCRIPTION = "Chromatogram Filter";
 
 	@Override
 	public IProcessingInfo<IChromatogramFilterResult> validate(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings) {
@@ -45,10 +44,10 @@ public abstract class AbstractChromatogramFilterCSD implements IChromatogramFilt
 
 		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramSelection == null) {
-			processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram selection is not valid.");
+			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.invalidChromatogramSelection);
 		} else {
 			if(chromatogramSelection.getChromatogram() == null) {
-				processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram is not valid.");
+				processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.invalidChromatogram);
 			}
 		}
 		return processingInfo;
@@ -64,7 +63,7 @@ public abstract class AbstractChromatogramFilterCSD implements IChromatogramFilt
 
 		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramFilterSettings == null) {
-			processingInfo.addErrorMessage(DESCRIPTION, "The filter settings are not valid.");
+			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.invalidFilterSettings);
 		}
 		return processingInfo;
 	}

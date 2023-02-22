@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.csd.identifier.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.csd.identifier.settings.IPeakIdentifierSettingsCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
@@ -40,8 +41,7 @@ public class PeakIdentifierCSD {
 
 	private static final Logger logger = Logger.getLogger(PeakIdentifierCSD.class);
 	//
-	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.csd.identifier.peakIdentifier";
-	private static final String NO_IDENTIFIER_AVAILABLE = "There is no suitable peak identifier available";
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.csd.identifier.peakIdentifier"; //$NON-NLS-1$
 
 	/**
 	 * This class should have only static methods.
@@ -59,7 +59,7 @@ public class PeakIdentifierCSD {
 	 */
 	private static IConfigurationElement getConfigurationElement(final String filterId) {
 
-		if("".equals(filterId)) {
+		if(filterId.isEmpty()) {
 			return null;
 		}
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -75,7 +75,7 @@ public class PeakIdentifierCSD {
 	private static <T> IProcessingInfo<T> getNoIdentifierAvailableProcessingInfo() {
 
 		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
-		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Peak Identifier", NO_IDENTIFIER_AVAILABLE);
+		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, Messages.peakIdentifier, Messages.noIdentifierAvailable);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,17 +18,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.chemclipse.chromatogram.alignment.model.core.IRetentionIndices;
 import org.eclipse.chemclipse.chromatogram.alignment.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.chromatogram.alignment.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.chromatogram.alignment.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.chromatogram.alignment.converter.exceptions.NoRetentionIndicesConverterAvailableException;
+import org.eclipse.chemclipse.chromatogram.alignment.model.core.IRetentionIndices;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 
 /**
  * This class offers only static methods for file and retention index
@@ -59,6 +58,7 @@ public class RetentionIndicesConverter {
 	private static final String IMPORT_CONVERTER = "importConverter";
 
 	private RetentionIndicesConverter() {
+
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class RetentionIndicesConverter {
 	 * @throws FileIsEmptyException
 	 * @throws IOException
 	 */
-	public static IRetentionIndices convert(final File retentionIndices, final String converterId) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public static IRetentionIndices convert(final File retentionIndices, final String converterId) throws FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		IRetentionIndices instance = null;
 		/*
@@ -102,17 +102,17 @@ public class RetentionIndicesConverter {
 	 * @throws FileIsEmptyException
 	 * @return {@link IChromatogram}
 	 */
-	public static IRetentionIndices convert(final File retentionIndices) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException {
+	public static IRetentionIndices convert(final File file) throws FileIsNotReadableException, FileIsEmptyException {
 
-		Object chromatogramInstance = getRetentionIndices(retentionIndices);
-		if(chromatogramInstance instanceof IRetentionIndices) {
-			return (IRetentionIndices)chromatogramInstance;
+		Object chromatogramInstance = getRetentionIndices(file);
+		if(chromatogramInstance instanceof IRetentionIndices retentionIndices) {
+			return retentionIndices;
 		} else {
 			return null;
 		}
 	}
 
-	private static Object getRetentionIndices(final File chromatogram) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException {
+	private static Object getRetentionIndices(final File chromatogram) throws FileIsNotReadableException, FileIsEmptyException {
 
 		RetentionIndicesConverterSupport converterSupport = getRetentionIndicesConverterSupport();
 		try {
@@ -185,7 +185,7 @@ public class RetentionIndicesConverter {
 	 * @throws FileIsNotWriteableException
 	 * @throws IOException
 	 */
-	public static File convert(final File file, final IRetentionIndices retentionIndices, final String converterId) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public static File convert(final File file, final IRetentionIndices retentionIndices, final String converterId) throws FileIsNotWriteableException, IOException {
 
 		File chromFile = null;
 		/*

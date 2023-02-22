@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,8 +31,7 @@ public class TargetBuilderCSD {
 
 		try {
 			IScan scan = peakCSD.getPeakModel().getPeakMaximum();
-			if(scan instanceof IScanCSD) {
-				IScanCSD unknown = (IScanCSD)scan;
+			if(scan instanceof IScanCSD unknown) {
 				ILibraryInformation libraryInformation = UnknownTargetBuilder.getLibraryInformationUnknown(unknown, targetUnknownSettings, "");
 				IComparisonResult comparisonResult = UnknownTargetBuilder.getComparisonResultUnknown(targetUnknownSettings.getMatchQuality());
 				IIdentificationTarget peakTarget = new IdentificationTarget(libraryInformation, comparisonResult);

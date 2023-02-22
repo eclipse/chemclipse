@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -31,7 +31,8 @@ public class RetentionIndicesConverterSupport implements IRetentionIndicesConver
 	private List<IRetentionIndicesSupplier> suppliers;
 
 	public RetentionIndicesConverterSupport() {
-		suppliers = new ArrayList<IRetentionIndicesSupplier>();
+
+		suppliers = new ArrayList<>();
 	}
 
 	/**
@@ -76,7 +77,7 @@ public class RetentionIndicesConverterSupport implements IRetentionIndicesConver
 		 * Otherwise the fileExtension will be listed.
 		 */
 		String extension;
-		ArrayList<String> extensions = new ArrayList<String>();
+		ArrayList<String> extensions = new ArrayList<>();
 		for(IRetentionIndicesSupplier supplier : suppliers) {
 			extension = supplier.getFileExtension();
 			extensions.add(extension);
@@ -95,7 +96,7 @@ public class RetentionIndicesConverterSupport implements IRetentionIndicesConver
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * converter filter names.<br/>
 		 */
-		ArrayList<String> filterNames = new ArrayList<String>();
+		ArrayList<String> filterNames = new ArrayList<>();
 		for(IRetentionIndicesSupplier supplier : suppliers) {
 			filterNames.add(supplier.getFilterName());
 		}
@@ -109,7 +110,7 @@ public class RetentionIndicesConverterSupport implements IRetentionIndicesConver
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		areConvertersStored();
-		List<String> availableConverters = new ArrayList<String>();
+		List<String> availableConverters = new ArrayList<>();
 		for(IRetentionIndicesSupplier supplier : suppliers) {
 			if(retentionIndices.getName().endsWith(supplier.getFileExtension())) {
 				availableConverters.add(supplier.getId());
@@ -129,7 +130,7 @@ public class RetentionIndicesConverterSupport implements IRetentionIndicesConver
 	 */
 	private void areConvertersStored() throws NoRetentionIndicesConverterAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoRetentionIndicesConverterAvailableException();
 		}
 	}

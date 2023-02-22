@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,8 @@ public class ChromatogramFilterSupportCSD implements IChromatogramFilterSupportC
 	 * Creates a new suppliers list.
 	 */
 	public ChromatogramFilterSupportCSD() {
-		suppliers = new ArrayList<IChromatogramFilterSupplierCSD>();
+
+		suppliers = new ArrayList<>();
 	}
 
 	/**

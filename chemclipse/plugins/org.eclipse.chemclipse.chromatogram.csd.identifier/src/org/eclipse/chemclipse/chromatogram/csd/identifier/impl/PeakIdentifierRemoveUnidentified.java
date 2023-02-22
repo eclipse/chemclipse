@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.csd.identifier.impl;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.csd.identifier.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.csd.identifier.peak.AbstractPeakIdentifierCSD;
 import org.eclipse.chemclipse.chromatogram.csd.identifier.settings.IPeakIdentifierSettingsCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -34,8 +35,7 @@ public class PeakIdentifierRemoveUnidentified<T> extends AbstractPeakIdentifierC
 		 */
 		try {
 			for(IPeakCSD peak : peaks) {
-				if(peak instanceof IChromatogramPeakCSD) {
-					IChromatogramPeakCSD chromatogramPeakCSD = (IChromatogramPeakCSD)peak;
+				if(peak instanceof IChromatogramPeakCSD chromatogramPeakCSD) {
 					IChromatogramCSD chromatogramCSD = chromatogramPeakCSD.getChromatogram();
 					if(chromatogramCSD != null) {
 						if(chromatogramPeakCSD.getTargets().isEmpty()) {
@@ -44,10 +44,9 @@ public class PeakIdentifierRemoveUnidentified<T> extends AbstractPeakIdentifierC
 					}
 				}
 			}
-			processingInfo.addInfoMessage("Identifier", "Done - unidentified peaks have been removed.");
+			processingInfo.addInfoMessage(Messages.identifier, Messages.removedUnidentifiedPeaks);
 		} catch(Exception e) {
-			e.printStackTrace();
-			processingInfo.addErrorMessage("Identifier", "Something has gone wrong.");
+			processingInfo.addErrorMessage(Messages.identifier, Messages.identifierError, e);
 		}
 		return processingInfo;
 	}
