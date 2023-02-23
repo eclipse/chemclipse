@@ -24,5 +24,18 @@
             id="org.eclipse.chemclipse.msd.converter.supplier.amdis.chromatogram.peak.msp">
       </icon>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.ui.importCategory"
+            name="Libraries">
+      </category>
+      <wizard
+            category="org.eclipse.chemclipse.msd.converter.supplier.amdis.ui.importCategory"
+            class="org.eclipse.chemclipse.msd.converter.supplier.amdis.ui.wizards.DatabaseCollectorWizard"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/database.gif"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.ui.wizards.databaseCollectorWizard"
+            name="Database Collector (*.msl)">
+      </wizard>
+   </extension>
 </plugin>

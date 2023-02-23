@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -54,6 +54,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_CHARSET_IMPORT_ELU = "charsetImportELU";
 	public static final String DEF_CHARSET_IMPORT_ELU = CharsetNIO.US_ASCII.name();
 	//
+	public static final String P_PATH_IMPORT = "pathImport";
+	public static final String DEF_PATH_IMPORT = "";
+	public static final String P_PATH_EXPORT = "pathExport";
+	public static final String DEF_PATH_EXPORT = "";
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -94,6 +99,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_CHARSET_IMPORT_MSP, DEF_CHARSET_IMPORT_MSP);
 		defaultValues.put(P_CHARSET_IMPORT_FIN, DEF_CHARSET_IMPORT_FIN);
 		defaultValues.put(P_CHARSET_IMPORT_ELU, DEF_CHARSET_IMPORT_ELU);
+		//
+		defaultValues.put(P_PATH_IMPORT, DEF_PATH_IMPORT);
+		defaultValues.put(P_PATH_EXPORT, DEF_PATH_EXPORT);
 		//
 		return defaultValues;
 	}
@@ -190,6 +198,43 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static void setCharsetImportELU(CharsetNIO charsetNIO) {
 
 		setCharset(P_CHARSET_IMPORT_ELU, charsetNIO);
+	}
+
+	public static String getPathImport() {
+
+		return get(P_PATH_IMPORT, DEF_PATH_IMPORT);
+	}
+
+	public static void setPathImport(String path) {
+
+		set(P_PATH_IMPORT, path);
+	}
+
+	public static String getPathExport() {
+
+		return get(P_PATH_EXPORT, DEF_PATH_EXPORT);
+	}
+
+	public static void setPathExport(String path) {
+
+		set(P_PATH_EXPORT, path);
+	}
+
+	private static String get(String key, String def) {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(key, def);
+	}
+
+	private static void set(String key, String value) {
+
+		try {
+			IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
+			eclipsePreferences.put(key, value);
+			eclipsePreferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
 	}
 
 	private static Charset getCharset(String key, String def) {
