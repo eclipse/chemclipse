@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
+import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -19,7 +20,6 @@ import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.extensions.charts.ChartOptions;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -41,7 +41,7 @@ public class ChromatogramAxisRelativeIntensity extends FieldEditorPreferencePage
 		addField(new StringFieldEditor(PreferenceConstants.P_FORMAT_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.format + ":", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.show, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.position + ":", ChartOptions.POSITIONS, getFieldEditorParent()));
-		if(Display.isSystemDarkTheme()) {
+		if(PreferencesSupport.isDarkTheme()) {
 			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY_DARKTHEME, ExtensionMessages.color + ":", getFieldEditorParent()));
 		} else {
 			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY, ExtensionMessages.color + ":", getFieldEditorParent()));
