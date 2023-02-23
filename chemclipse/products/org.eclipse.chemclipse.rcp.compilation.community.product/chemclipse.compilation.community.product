@@ -83,4 +83,11 @@ Contributors:
       <property name="osgi.requiredJavaVersion" value="17" />
    </configurations>
 
+   <preferencesInfo>
+      <targetfile overwrite="false"/>
+   </preferencesInfo>
+
+   <cssInfo>
+   </cssInfo>
+
 </product>
