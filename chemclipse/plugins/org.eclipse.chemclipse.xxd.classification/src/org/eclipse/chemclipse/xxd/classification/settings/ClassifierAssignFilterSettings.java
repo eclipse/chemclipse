@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,6 +30,9 @@ public class ClassifierAssignFilterSettings {
 	@JsonProperty(value = "Match Partly", defaultValue = "true")
 	@JsonPropertyDescription(value = "If true, the peak name only needs to be matched partly.")
 	private boolean matchPartly = true;
+	@JsonProperty(value = "Use Best Target", defaultValue = "false")
+	@JsonPropertyDescription(value = "If true, only the best target is used to assign the classification.")
+	private boolean useBestTarget = false;
 	@JsonProperty(value = "Matching Rules", defaultValue = "")
 	@JsonPropertyDescription(value = "List the regular expressions for target names to set classifications.")
 	@ValidatorSettingsProperty(validator = ClassificationDictionaryValidator.class)
@@ -63,6 +66,16 @@ public class ClassifierAssignFilterSettings {
 	public void setMatchPartly(boolean matchPartly) {
 
 		this.matchPartly = matchPartly;
+	}
+
+	public boolean isUseBestTarget() {
+
+		return useBestTarget;
+	}
+
+	public void setUseBestTarget(boolean useBestTarget) {
+
+		this.useBestTarget = useBestTarget;
 	}
 
 	public ClassificationDictionary getClassificationDictionary() {

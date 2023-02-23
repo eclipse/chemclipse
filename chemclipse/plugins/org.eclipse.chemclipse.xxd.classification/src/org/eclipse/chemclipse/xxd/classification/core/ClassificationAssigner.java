@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,10 +12,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.classification.core;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.xxd.classification.model.ClassificationRule;
@@ -31,8 +36,30 @@ public class ClassificationAssigner {
 		boolean isCaseSensitive = settings.isCaseSensitive();
 		boolean useRegularExpression = settings.isUseRegularExpression();
 		boolean isMatchPartly = settings.isMatchPartly();
+		boolean useBestTarget = settings.isUseBestTarget();
 		//
-		for(IIdentificationTarget identificationTarget : peak.getTargets()) {
+		Set<IIdentificationTarget> identificationTargets;
+		if(useBestTarget) {
+			/*
+			 * Get the best match.
+			 */
+			identificationTargets = new HashSet<>();
+			IPeakModel peakModel = peak.getPeakModel();
+			IScan scan = peakModel.getPeakMaximum();
+			float retentionIndex = scan.getRetentionIndex();
+			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+			IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(identificationTargets, identificationTargetComparator);
+			if(identificationTarget != null) {
+				identificationTargets.add(identificationTarget);
+			}
+		} else {
+			/*
+			 * Use all matches.
+			 */
+			identificationTargets = peak.getTargets();
+		}
+		//
+		for(IIdentificationTarget identificationTarget : identificationTargets) {
 			for(ClassificationRule classificationRule : settings.getClassificationDictionary()) {
 				String searchExpression = classificationRule.getSearchExpression();
 				if(searchExpression != null && !searchExpression.isEmpty()) {
