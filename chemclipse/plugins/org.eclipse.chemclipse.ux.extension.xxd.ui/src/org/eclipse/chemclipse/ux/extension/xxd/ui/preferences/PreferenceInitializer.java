@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -221,6 +221,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_MSD, PreferenceConstants.DEF_SHOW_DATA_MSD);
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_CSD, PreferenceConstants.DEF_SHOW_DATA_CSD);
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_WSD, PreferenceConstants.DEF_SHOW_DATA_WSD);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_ISD, PreferenceConstants.DEF_SHOW_DATA_ISD);
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_TSD, PreferenceConstants.DEF_SHOW_DATA_TSD);
 		store.setDefault(PreferenceConstants.P_SHOW_LIBRARY_MSD, PreferenceConstants.DEF_SHOW_LIBRARY_MSD);
 		store.setDefault(PreferenceConstants.P_SHOW_SCANS_MSD, PreferenceConstants.DEF_SHOW_SCANS_MSD);

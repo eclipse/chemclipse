@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xir.converter.core.AbstractScanImportConverter;
 import org.eclipse.chemclipse.xir.converter.core.IScanImportConverter;
 import org.eclipse.chemclipse.xir.converter.supplier.jcampdx.io.ScanReader;
-import org.eclipse.chemclipse.xir.converter.supplier.jcampdx.model.IVendorScanXIR;
+import org.eclipse.chemclipse.xir.converter.supplier.jcampdx.model.IVendorSpectrumXIR;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 @SuppressWarnings("rawtypes")
@@ -29,12 +29,12 @@ public class ScanImportConverter extends AbstractScanImportConverter implements 
 	private static final Logger logger = Logger.getLogger(ScanImportConverter.class);
 
 	@Override
-	public IProcessingInfo<IVendorScanXIR> convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IVendorSpectrumXIR> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo<IVendorScanXIR> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IVendorSpectrumXIR> processingInfo = new ProcessingInfo<>();
 		try {
 			ScanReader scanReader = new ScanReader();
-			IVendorScanXIR vendorScan = scanReader.read(file, monitor);
+			IVendorSpectrumXIR vendorScan = scanReader.read(file, monitor);
 			processingInfo.setProcessingResult(vendorScan);
 		} catch(IOException e) {
 			processingInfo.addErrorMessage("JCAMP-DX", "There was a problem to import the FT-IR file.");

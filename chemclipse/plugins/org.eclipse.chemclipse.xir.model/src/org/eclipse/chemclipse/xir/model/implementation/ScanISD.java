@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,22 +7,35 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xir.model.core;
+package org.eclipse.chemclipse.xir.model.implementation;
 
 import java.util.TreeSet;
 
-import org.eclipse.chemclipse.model.core.AbstractMeasurementInfo;
+import org.eclipse.chemclipse.xir.model.core.AbstractScanISD;
+import org.eclipse.chemclipse.xir.model.core.IScanISD;
+import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
 
-public class ScanXIR extends AbstractMeasurementInfo implements IScanXIR {
+public class ScanISD extends AbstractScanISD {
 
-	private static final long serialVersionUID = 7252869040405730020L;
+	private static final long serialVersionUID = 4840397215574246595L;
 	//
 	private TreeSet<ISignalXIR> processedSignals = new TreeSet<ISignalXIR>();
 	private double rotationAngle = 0.0d;
 	private double[] rawSignals = new double[0];
 	private double[] backgroundSignals = new double[0];
+
+	@Override
+	public float getTotalSignal() {
+
+		float totalSignal = 0.0f;
+		for(ISignalXIR signalXIR : processedSignals) {
+			totalSignal += signalXIR.getTransmission();
+		}
+		//
+		return totalSignal;
+	}
 
 	@Override
 	public TreeSet<ISignalXIR> getProcessedSignals() {
@@ -86,8 +99,8 @@ public class ScanXIR extends AbstractMeasurementInfo implements IScanXIR {
 			return false;
 		if(getClass() != obj.getClass())
 			return false;
-		ScanXIR other = (ScanXIR)obj;
-		if(Double.doubleToLongBits(rotationAngle) != Double.doubleToLongBits(other.rotationAngle))
+		IScanISD other = (IScanISD)obj;
+		if(Double.doubleToLongBits(rotationAngle) != Double.doubleToLongBits(other.getRotationAngle()))
 			return false;
 		return true;
 	}
@@ -95,6 +108,6 @@ public class ScanXIR extends AbstractMeasurementInfo implements IScanXIR {
 	@Override
 	public String toString() {
 
-		return "ScanXIR [rotationAngle=" + rotationAngle + "]";
+		return "ScanISD [rotationAngle=" + rotationAngle + "]";
 	}
 }

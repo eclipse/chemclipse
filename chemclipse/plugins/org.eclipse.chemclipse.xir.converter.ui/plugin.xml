@@ -11,6 +11,15 @@
       </page>
    </extension>
    <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.converter.ui.converterPreferencePage"      
+            class="org.eclipse.chemclipse.xir.converter.ui.preferences.PreferencePageISD"
+            id="org.eclipse.chemclipse.xir.converter.ui.preferencePageISD"
+            name="Converter ISD">
+      </page>
+   </extension>   
+   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.eclipse.chemclipse.xir.converter.ui.preferences.PreferenceInitializer">

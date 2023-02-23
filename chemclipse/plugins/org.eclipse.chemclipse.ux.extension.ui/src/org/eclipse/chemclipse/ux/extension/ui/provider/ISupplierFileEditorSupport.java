@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.xir.model.core.IScanXIR;
+import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -99,7 +99,7 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 					part.setLabel(((IChromatogram)object).getName() + type);
 				} else if(object instanceof IMassSpectra) {
 					part.setLabel(((IMassSpectra)object).getName());
-				} else if(object instanceof IScanXIR) {
+				} else if(object instanceof ISpectrumXIR) {
 					part.setLabel("FTIR");
 				} else if(object instanceof IMeasurement) {
 					part.setLabel(((IMeasurement)object).getDataName());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE = "chromatogram/msd/update/rawfile";
 	String TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE = "chromatogram/csd/update/rawfile";
 	String TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE = "chromatogram/wsd/update/rawfile";
+	String TOPIC_CHROMATOGRAM_ISD_UPDATE_RAWFILE = "chromatogram/isd/update/rawfile";
 	String TOPIC_CHROMATOGRAM_TSD_UPDATE_RAWFILE = "chromatogram/tsd/update/rawfile";
 	String TOPIC_SCAN_XIR_UPDATE_RAWFILE = "scan/xir/update/rawfile";
 	String TOPIC_SCAN_NMR_UPDATE_RAWFILE = "scan/nmr/update/rawfile";
@@ -34,6 +35,7 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW = "chromatogram/msd/update/overview";
 	String TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW = "chromatogram/csd/update/overview";
 	String TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW = "chromatogram/wsd/update/overview";
+	String TOPIC_CHROMATOGRAM_ISD_UPDATE_OVERVIEW = "chromatogram/isd/update/overview";
 	String TOPIC_CHROMATOGRAM_TSD_UPDATE_OVERVIEW = "chromatogram/tsd/update/overview";
 	String TOPIC_SCAN_NMR_UPDATE_OVERVIEW = "scan/nmr/update/overview";
 	String TOPIC_SCAN_XIR_UPDATE_OVERVIEW = "scan/xir/update/overview";

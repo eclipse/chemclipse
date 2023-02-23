@@ -16,17 +16,12 @@ package org.eclipse.chemclipse.processing;
 import org.eclipse.chemclipse.support.l10n.TranslationSupport;
 import org.eclipse.chemclipse.support.text.ILabel;
 
-/**
- * Describes very generic and broaden data categories a filter, processor or converter might handle
- * 
- * @author Christoph Läubrich
- *
- */
 public enum DataCategory implements ILabel {
 
 	MSD(TranslationSupport.getTranslationService().translate("%DataCategory.MSD", Activator.getContributorURI())), //
 	CSD(TranslationSupport.getTranslationService().translate("%DataCategory.CSD", Activator.getContributorURI())), //
 	WSD(TranslationSupport.getTranslationService().translate("%DataCategory.WSD", Activator.getContributorURI())), //
+	ISD(TranslationSupport.getTranslationService().translate("%DataCategory.ISD", Activator.getContributorURI())), //
 	TSD(TranslationSupport.getTranslationService().translate("%DataCategory.TSD", Activator.getContributorURI())), //
 	FID(TranslationSupport.getTranslationService().translate("%DataCategory.FID", Activator.getContributorURI())), //
 	NMR(TranslationSupport.getTranslationService().translate("%DataCategory.NMR", Activator.getContributorURI())), //

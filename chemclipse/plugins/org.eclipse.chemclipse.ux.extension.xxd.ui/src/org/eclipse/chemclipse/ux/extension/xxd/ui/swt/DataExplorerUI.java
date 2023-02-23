@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -137,6 +137,12 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI implements IExtended
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_WSD)) {
 			editorSupportList.add(new SupplierEditorSupport(DataType.WSD, () -> context));
+		}
+		/*
+		 * ISD
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_ISD)) {
+			editorSupportList.add(new SupplierEditorSupport(DataType.ISD, () -> context));
 		}
 		/*
 		 * TSD

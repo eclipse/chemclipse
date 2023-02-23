@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,8 +27,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
-import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -52,7 +52,7 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 	//
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 	//
-	private List<IScanXIR> scanSelections = new ArrayList<>();
+	private List<ISpectrumXIR> scanSelections = new ArrayList<>();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private IColorScheme colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY));
 
@@ -142,7 +142,7 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 			int i = 1;
 			Color color = colorSchemeNormal.getColor();
 			//
-			for(IScanXIR scanXIR : scanSelections) {
+			for(ISpectrumXIR scanXIR : scanSelections) {
 				/*
 				 * Get the data.
 				 */
@@ -159,7 +159,7 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	private ILineSeriesData getLineSeriesData(IScanXIR scanXIR, String id) {
+	private ILineSeriesData getLineSeriesData(ISpectrumXIR scanXIR, String id) {
 
 		ILineSeriesData lineSeriesData = new LineSeriesData(getSeriesDataProcessed(scanXIR, id));
 		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
@@ -169,17 +169,17 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 		return lineSeriesData;
 	}
 
-	private ISeriesData getSeriesDataProcessed(IScanXIR scanXIR, String id) {
+	private ISeriesData getSeriesDataProcessed(ISpectrumXIR spectrumXIR, String id) {
 
 		double[] xSeries;
 		double[] ySeries;
 		//
-		if(scanXIR != null) {
-			int size = scanXIR.getProcessedSignals().size();
+		if(spectrumXIR != null) {
+			int size = spectrumXIR.getScanXIR().getProcessedSignals().size();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
-			for(ISignalXIR scanSignal : scanXIR.getProcessedSignals()) {
+			for(ISignalXIR scanSignal : spectrumXIR.getScanXIR().getProcessedSignals()) {
 				xSeries[index] = scanSignal.getWavenumber();
 				ySeries[index] = scanSignal.getAbsorbance(); // TODO
 				index++;

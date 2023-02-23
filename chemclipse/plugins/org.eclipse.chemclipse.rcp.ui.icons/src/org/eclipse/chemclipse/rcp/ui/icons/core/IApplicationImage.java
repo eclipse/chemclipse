@@ -70,6 +70,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHROMATOGRAM_CSD = "chromatogram-csd.gif";
 	String IMAGE_CHROMATOGRAM_WSD = "chromatogram-wsd.gif";
 	String IMAGE_CHROMATOGRAM_TSD = "chromatogram-tsd.gif";
+	String IMAGE_CHROMATOGRAM_ISD = "chromatogram-isd.gif";
 	String IMAGE_SCAN_XIR = "scan-xir.gif"; // FTIR, NIR, ...
 	String IMAGE_SCAN_XIR_RAW = "scan-xir-raw.gif";
 	String IMAGE_SCAN_XIR_INVERTED = "scan-xir-inverted.gif";

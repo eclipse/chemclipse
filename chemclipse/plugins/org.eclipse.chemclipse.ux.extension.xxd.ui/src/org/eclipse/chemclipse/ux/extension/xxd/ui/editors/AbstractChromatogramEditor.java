@@ -71,6 +71,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogr
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
+import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
+import org.eclipse.chemclipse.xir.model.core.selection.ChromatogramSelectionISD;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -365,6 +367,8 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 					chromatogramSelection = new ChromatogramSelectionCSD(chromatogram);
 				} else if(object instanceof IChromatogramWSD chromatogram) {
 					chromatogramSelection = new ChromatogramSelectionWSD(chromatogram);
+				} else if(object instanceof IChromatogramISD chromatogram) {
+					chromatogramSelection = new ChromatogramSelectionISD(chromatogram);
 				}
 				chromatogramFile = null;
 			}

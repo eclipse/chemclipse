@@ -26,7 +26,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.xir.model.core.IScanXIR;
+import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -45,14 +45,14 @@ public class ScanConverterXIR {
 
 	}
 
-	public static IProcessingInfo<IScanXIR> convert(final File file, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo<ISpectrumXIR> convert(final File file, final String converterId, final IProgressMonitor monitor) {
 
-		IProcessingInfo<IScanXIR> processingInfo;
+		IProcessingInfo<ISpectrumXIR> processingInfo;
 		/*
 		 * Do not use a safe runnable here, because an object must
 		 * be returned or null.
 		 */
-		IScanImportConverter<IScanXIR> importConverter = getScanImportConverter(converterId);
+		IScanImportConverter<ISpectrumXIR> importConverter = getScanImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {
@@ -61,7 +61,7 @@ public class ScanConverterXIR {
 		return processingInfo;
 	}
 
-	public static IProcessingInfo<IScanXIR> convert(final File file, final IProgressMonitor monitor) {
+	public static IProcessingInfo<ISpectrumXIR> convert(final File file, final IProgressMonitor monitor) {
 
 		return getScan(file, false, monitor);
 	}
@@ -74,9 +74,9 @@ public class ScanConverterXIR {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	private static IProcessingInfo<IScanXIR> getScan(final File file, boolean overview, IProgressMonitor monitor) {
+	private static IProcessingInfo<ISpectrumXIR> getScan(final File file, boolean overview, IProgressMonitor monitor) {
 
-		IProcessingInfo<IScanXIR> processingInfo;
+		IProcessingInfo<ISpectrumXIR> processingInfo;
 		IScanConverterSupport converterSupport = getScanConverterSupport();
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
@@ -85,7 +85,7 @@ public class ScanConverterXIR {
 				 * Do not use a safe runnable here, because an object must
 				 * be returned or null.
 				 */
-				IScanImportConverter<IScanXIR> importConverter = getScanImportConverter(converterId);
+				IScanImportConverter<ISpectrumXIR> importConverter = getScanImportConverter(converterId);
 				if(importConverter != null) {
 					processingInfo = importConverter.convert(file, monitor);
 					if(!processingInfo.hasErrorMessages()) {
@@ -100,14 +100,14 @@ public class ScanConverterXIR {
 		return getProcessingError(file);
 	}
 
-	public static IProcessingInfo<IScanXIR> convert(final File file, final IScanXIR scan, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo<ISpectrumXIR> convert(final File file, final ISpectrumXIR scan, final String converterId, final IProgressMonitor monitor) {
 
-		IProcessingInfo<IScanXIR> processingInfo;
+		IProcessingInfo<ISpectrumXIR> processingInfo;
 		/*
 		 * Do not use a safe runnable here, because an object must
 		 * be returned or null.
 		 */
-		IScanExportConverter<IScanXIR> exportConverter = getScanExportConverter(converterId);
+		IScanExportConverter<ISpectrumXIR> exportConverter = getScanExportConverter(converterId);
 		if(exportConverter != null) {
 			processingInfo = exportConverter.convert(file, scan, monitor);
 		} else {
@@ -117,14 +117,14 @@ public class ScanConverterXIR {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static IScanImportConverter<IScanXIR> getScanImportConverter(final String converterId) {
+	private static IScanImportConverter<ISpectrumXIR> getScanImportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IScanImportConverter<IScanXIR> instance = null;
+		IScanImportConverter<ISpectrumXIR> instance = null;
 		if(element != null) {
 			try {
-				instance = (IScanImportConverter<IScanXIR>)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
+				instance = (IScanImportConverter<ISpectrumXIR>)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.error(e);
 			}
@@ -133,14 +133,14 @@ public class ScanConverterXIR {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static IScanExportConverter<IScanXIR> getScanExportConverter(final String converterId) {
+	private static IScanExportConverter<ISpectrumXIR> getScanExportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IScanExportConverter<IScanXIR> instance = null;
+		IScanExportConverter<ISpectrumXIR> instance = null;
 		if(element != null) {
 			try {
-				instance = (IScanExportConverter<IScanXIR>)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
+				instance = (IScanExportConverter<ISpectrumXIR>)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.error(e);
 			}

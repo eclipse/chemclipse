@@ -33,7 +33,7 @@ import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ScanXIRImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedXIRScanUI;
-import org.eclipse.chemclipse.xir.model.core.IScanXIR;
+import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -64,7 +64,7 @@ public class ScanEditorXIR implements IScanEditorXIR {
 	private File scanFile;
 	private ExtendedXIRScanUI extendedScanXIREditorUI;
 	//
-	private IScanXIR scanXIR = null;
+	private ISpectrumXIR scanXIR = null;
 	//
 	private final Shell shell;
 
@@ -126,7 +126,7 @@ public class ScanEditorXIR implements IScanEditorXIR {
 	}
 
 	@Override
-	public IScanXIR getScanSelection() {
+	public ISpectrumXIR getScanSelection() {
 
 		return scanXIR;
 	}
@@ -138,9 +138,9 @@ public class ScanEditorXIR implements IScanEditorXIR {
 		extendedScanXIREditorUI.update(scanXIR);
 	}
 
-	private synchronized IScanXIR loadScan() {
+	private synchronized ISpectrumXIR loadScan() {
 
-		IScanXIR scanXIR = null;
+		ISpectrumXIR scanXIR = null;
 		//
 		try {
 			Object object = part.getObject();
@@ -161,7 +161,7 @@ public class ScanEditorXIR implements IScanEditorXIR {
 		return scanXIR;
 	}
 
-	private IScanXIR loadScan(File file, boolean batch) {
+	private ISpectrumXIR loadScan(File file, boolean batch) {
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		ScanXIRImportRunnable runnable = new ScanXIRImportRunnable(file);

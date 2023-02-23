@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,9 +22,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.xir.converter.supplier.jcampdx.model.IVendorScanXIR;
-import org.eclipse.chemclipse.xir.converter.supplier.jcampdx.model.VendorScanXIR;
-import org.eclipse.chemclipse.xir.model.core.SignalXIR;
+import org.eclipse.chemclipse.xir.converter.supplier.jcampdx.model.IVendorSpectrumXIR;
+import org.eclipse.chemclipse.xir.converter.supplier.jcampdx.model.VendorSpectrumXIR;
+import org.eclipse.chemclipse.xir.model.implementation.SignalXIR;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import jakarta.activation.UnsupportedDataTypeException;
@@ -51,9 +51,9 @@ public class ScanReader {
 	//
 	private static final Pattern rawYpattern = Pattern.compile("\\+(\\d*)");
 
-	public IVendorScanXIR read(File file, IProgressMonitor monitor) throws IOException {
+	public IVendorSpectrumXIR read(File file, IProgressMonitor monitor) throws IOException {
 
-		IVendorScanXIR vendorScan = new VendorScanXIR();
+		IVendorSpectrumXIR vendorScan = new VendorSpectrumXIR();
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		String line;
@@ -140,9 +140,9 @@ public class ScanReader {
 						}
 					}
 					if(absorbance) {
-						vendorScan.getProcessedSignals().add(new SignalXIR(x, y, 0));
+						vendorScan.getScanXIR().getProcessedSignals().add(new SignalXIR(x, y, 0));
 					} else if(transmission) {
-						vendorScan.getProcessedSignals().add(new SignalXIR(x, 0, y));
+						vendorScan.getScanXIR().getProcessedSignals().add(new SignalXIR(x, 0, y));
 					}
 					firstValue = false;
 				}

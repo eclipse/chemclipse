@@ -31,6 +31,9 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
+import org.eclipse.chemclipse.xir.converter.chromatogram.ChromatogramConverterISD;
+import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
+import org.eclipse.chemclipse.xir.model.core.selection.ChromatogramSelectionISD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -95,6 +98,11 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 						IProcessingInfo<IChromatogramWSD> processingInfoWSD = ChromatogramConverterWSD.getInstance().convert(file, monitor);
 						IChromatogramWSD chromatogramWSD = processingInfoWSD.getProcessingResult();
 						chromatogramSelections.add(new ChromatogramSelectionWSD(chromatogramWSD, fireUpdate));
+						break;
+					case ISD:
+						IProcessingInfo<IChromatogramISD> processingInfoISD = ChromatogramConverterISD.getInstance().convert(file, monitor);
+						IChromatogramISD chromatogramISD = processingInfoISD.getProcessingResult();
+						chromatogramSelections.add(new ChromatogramSelectionISD(chromatogramISD, fireUpdate));
 						break;
 					default:
 						// No action

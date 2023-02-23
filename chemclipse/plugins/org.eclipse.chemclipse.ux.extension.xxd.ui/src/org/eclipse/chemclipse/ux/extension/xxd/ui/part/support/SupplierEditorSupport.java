@@ -39,6 +39,7 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEdito
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorCSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorISD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PlateEditorPCR;
@@ -50,6 +51,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.services.EditorServicesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.services.IEditorService;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
+import org.eclipse.chemclipse.xir.converter.chromatogram.ChromatogramConverterISD;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
@@ -93,6 +95,9 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case WSD:
 				supplier = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport().getSupplier();
+				break;
+			case ISD:
+				supplier = ChromatogramConverterISD.getInstance().getChromatogramConverterSupport().getSupplier();
 				break;
 			case TSD:
 				supplier = ChromatogramConverterTSD.getInstance().getChromatogramConverterSupport().getSupplier();
@@ -203,6 +208,8 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 		 */
 		if(TYPE_TSD.equals(type)) {
 			refreshEditorReferences(DataType.TSD);
+		} else if(TYPE_ISD.equals(type)) {
+			refreshEditorReferences(DataType.ISD);
 		}
 	}
 
@@ -249,6 +256,15 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				tooltip = ChromatogramEditorWSD.TOOLTIP;
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW;
+				break;
+			case ISD:
+				type = TYPE_ISD;
+				elementId = ChromatogramEditorISD.ID;
+				contributionURI = ChromatogramEditorISD.CONTRIBUTION_URI;
+				iconURI = ChromatogramEditorISD.ICON_URI;
+				tooltip = ChromatogramEditorISD.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_ISD_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_ISD_UPDATE_OVERVIEW;
 				break;
 			case TSD:
 				type = TYPE_TSD;

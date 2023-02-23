@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,7 @@ public enum DataType {
 	MSD, // mass selective data
 	CSD, // current selective data
 	WSD, // wavelength selective data
+	ISD, // infrared selective data (FT-IR, Raman)
 	TSD, // time selective data (IMS)
 	XIR, // Infrared detectors, FTIR, NIR, MIR
 	NMR, // Nuclear magnetic resonance

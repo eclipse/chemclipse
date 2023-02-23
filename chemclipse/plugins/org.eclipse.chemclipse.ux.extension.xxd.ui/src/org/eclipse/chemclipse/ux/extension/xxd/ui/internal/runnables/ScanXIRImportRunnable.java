@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
-import org.eclipse.chemclipse.xir.model.core.IScanXIR;
+import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -27,14 +27,14 @@ public class ScanXIRImportRunnable implements IRunnableWithProgress {
 	private static final Logger logger = Logger.getLogger(ScanXIRImportRunnable.class);
 	//
 	private File file;
-	private IScanXIR scanXIR = null;
+	private ISpectrumXIR scanXIR = null;
 
 	public ScanXIRImportRunnable(File file) {
 
 		this.file = file;
 	}
 
-	public IScanXIR getScanXIR() {
+	public ISpectrumXIR getScanXIR() {
 
 		return scanXIR;
 	}
@@ -45,7 +45,7 @@ public class ScanXIRImportRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask(ExtensionMessages.importScan, IProgressMonitor.UNKNOWN);
 			IProcessingInfo<?> processingInfo = ScanConverterXIR.convert(file, monitor);
-			scanXIR = (IScanXIR)processingInfo.getProcessingResult();
+			scanXIR = (ISpectrumXIR)processingInfo.getProcessingResult();
 		} catch(Exception e) {
 			logger.error(e);
 		} finally {

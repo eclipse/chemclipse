@@ -29,7 +29,7 @@ import org.eclipse.chemclipse.ux.extension.ui.editors.IQuantitationDatabaseEdito
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.xir.model.core.IScanXIR;
+import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
@@ -143,9 +143,9 @@ public class EditorUpdateSupport {
 		return dataSelections;
 	}
 
-	public List<IScanXIR> getScanSelectionsXIR() {
+	public List<ISpectrumXIR> getScanSelectionsXIR() {
 
-		List<IScanXIR> dataNMRSelections = new ArrayList<>();
+		List<ISpectrumXIR> dataNMRSelections = new ArrayList<>();
 		if(partService != null) {
 			/*
 			 * TODO: see message
@@ -158,7 +158,7 @@ public class EditorUpdateSupport {
 						/*
 						 * XIR
 						 */
-						IScanXIR selection = null;
+						ISpectrumXIR selection = null;
 						if(object instanceof IScanEditorXIR editor) {
 							selection = editor.getScanSelection();
 						}

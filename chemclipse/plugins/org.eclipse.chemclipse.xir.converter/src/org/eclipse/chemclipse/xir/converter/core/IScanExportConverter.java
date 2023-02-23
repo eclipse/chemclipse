@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,10 +16,10 @@ import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IExportConverter;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.xir.model.core.IScanXIR;
+import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IScanExportConverter<T> extends IExportConverter {
 
-	IProcessingInfo<T> convert(File file, IScanXIR scan, IProgressMonitor monitor);
+	IProcessingInfo<T> convert(File file, ISpectrumXIR scan, IProgressMonitor monitor);
 }

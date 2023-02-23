@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
- *
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,23 +9,9 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xir.model.core;
+package org.eclipse.chemclipse.xir.converter.supplier.jcampdx.model;
 
-import java.io.Serializable;
+import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 
-import org.eclipse.chemclipse.model.core.ISignal;
-
-public interface ISignalXIR extends ISignal, Serializable {
-
-	double getWavenumber();
-
-	void setWavenumber(double wavenumber);
-
-	double getTransmission();
-
-	void setTransmission(double transmission);
-
-	double getAbsorbance();
-
-	void setAbsorbance(double absorbance);
+public interface IVendorSpectrumXIR extends ISpectrumXIR {
 }

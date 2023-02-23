@@ -786,6 +786,8 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_DATA_CSD = true;
 	public static final String P_SHOW_DATA_WSD = "showDataWSD";
 	public static final boolean DEF_SHOW_DATA_WSD = true;
+	public static final String P_SHOW_DATA_ISD = "showDataISD";
+	public static final boolean DEF_SHOW_DATA_ISD = true;
 	public static final String P_SHOW_DATA_TSD = "showDataTSD";
 	public static final boolean DEF_SHOW_DATA_TSD = true;
 	public static final String P_SHOW_LIBRARY_MSD = "showLibraryMSD";
