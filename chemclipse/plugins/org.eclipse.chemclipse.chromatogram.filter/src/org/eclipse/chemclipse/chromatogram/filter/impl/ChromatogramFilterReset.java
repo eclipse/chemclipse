@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChro
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.impl.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsReset;
+import org.eclipse.chemclipse.chromatogram.filter.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
@@ -33,7 +34,7 @@ public class ChromatogramFilterReset extends AbstractChromatogramFilter implemen
 		if(!processingInfo.hasErrorMessages()) {
 			if(chromatogramFilterSettings instanceof FilterSettingsReset) {
 				chromatogramSelection.reset();
-				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection has been reset."));
+				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, Messages.chromatogramSelectionReset));
 			}
 		}
 		//

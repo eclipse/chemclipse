@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,8 @@ public class ChromatogramFilterSupport implements IChromatogramFilterSupport {
 	 * Creates a new suppliers list.
 	 */
 	public ChromatogramFilterSupport() {
-		suppliers = new ArrayList<IChromatogramFilterSupplier>();
+
+		suppliers = new ArrayList<>();
 	}
 
 	/**
@@ -44,7 +45,7 @@ public class ChromatogramFilterSupport implements IChromatogramFilterSupport {
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		areChromatogramFiltersStored();
-		List<String> availableFilters = new ArrayList<String>();
+		List<String> availableFilters = new ArrayList<>();
 		for(IChromatogramFilterSupplier supplier : suppliers) {
 			availableFilters.add(supplier.getId());
 		}
@@ -79,7 +80,7 @@ public class ChromatogramFilterSupport implements IChromatogramFilterSupport {
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * converter filter names.<br/>
 		 */
-		ArrayList<String> filterNames = new ArrayList<String>();
+		ArrayList<String> filterNames = new ArrayList<>();
 		for(IChromatogramFilterSupplier supplier : suppliers) {
 			filterNames.add(supplier.getFilterName());
 		}
@@ -113,7 +114,7 @@ public class ChromatogramFilterSupport implements IChromatogramFilterSupport {
 
 	private void areChromatogramFiltersStored() throws NoChromatogramFilterSupplierAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoChromatogramFilterSupplierAvailableException();
 		}
 	}

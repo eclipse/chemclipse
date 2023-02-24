@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResul
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.filter.settings.MaxDetectorFilterSettings;
+import org.eclipse.chemclipse.chromatogram.filter.ui.l10n.Messages;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
@@ -37,12 +38,13 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 
 @SuppressWarnings("rawtypes")
 public class ChromatogramFilter extends AbstractChromatogramFilter {
 
-	private static final String IDENTIFIER = "Scan Maxima Detector UI";
+	private static final String IDENTIFIER = Messages.scanMaximaDetectorUI;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -51,11 +53,11 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		//
 		final MaxDetectorFilterSettings filterSettings;
-		if(chromatogramFilterSettings instanceof MaxDetectorFilterSettings) {
-			filterSettings = (MaxDetectorFilterSettings)chromatogramFilterSettings;
+		if(chromatogramFilterSettings instanceof MaxDetectorFilterSettings maxDetectorFilterSettings) {
+			filterSettings = maxDetectorFilterSettings;
 		} else {
 			filterSettings = PreferenceSupplier.getMaxDetectorFilterSettings();
-			processingInfo.addWarnMessage(IDENTIFIER, "The settings are not of type: " + MaxDetectorFilterSettings.class + ". Default settings have been choosen instead.");
+			processingInfo.addWarnMessage(IDENTIFIER, NLS.bind(Messages.settingsNotOfType, MaxDetectorFilterSettings.class));
 		}
 		//
 		if(!processingInfo.hasErrorMessages()) {
@@ -82,7 +84,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 					}
 				});
 			}
-			processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The scan maxima detection was successful."));
+			processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, Messages.scanMaximaDetectionSuccessful));
 		}
 		return processingInfo;
 	}

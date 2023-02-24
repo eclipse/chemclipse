@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,8 +21,8 @@ import org.eclipse.chemclipse.chromatogram.filter.impl.settings.PeakTargetsToRef
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToPeakSettings;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToReferencesSettings;
 import org.eclipse.chemclipse.chromatogram.filter.settings.MaxDetectorFilterSettings;
-import org.eclipse.chemclipse.chromatogram.filter.system.SettingsRetentionIndexQC;
 import org.eclipse.chemclipse.chromatogram.filter.system.SettingsIonRounding;
+import org.eclipse.chemclipse.chromatogram.filter.system.SettingsRetentionIndexQC;
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -97,7 +97,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	@Override
 	public Map<String, String> getDefaultValues() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
+		Map<String, String> defaultValues = new HashMap<>();
 		defaultValues.put(P_START_RETENTION_TIME_MINUTES, Double.toString(DEF_START_RETENTION_TIME_MINUTES));
 		defaultValues.put(P_STOP_RETENTION_TIME_MINUTES, Double.toString(DEF_STOP_RETENTION_TIME_MINUTES));
 		//

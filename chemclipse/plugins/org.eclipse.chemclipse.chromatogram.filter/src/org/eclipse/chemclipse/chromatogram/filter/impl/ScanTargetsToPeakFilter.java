@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.filter.impl.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToPeakSettings;
+import org.eclipse.chemclipse.chromatogram.filter.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
@@ -42,10 +43,9 @@ public class ScanTargetsToPeakFilter extends AbstractTransferFilter {
 
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(chromatogramFilterSettings instanceof ScanTargetsToPeakSettings) {
-				ScanTargetsToPeakSettings settings = (ScanTargetsToPeakSettings)chromatogramFilterSettings;
+			if(chromatogramFilterSettings instanceof ScanTargetsToPeakSettings settings) {
 				transferTargets(chromatogramSelection, settings);
-				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Targets transfered successfully."));
+				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, Messages.targetsTransferredSuccessfully));
 			}
 		}
 		//

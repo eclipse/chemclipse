@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,11 +15,12 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.filter.impl.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.PeakTargetsToReferencesSettings;
+import org.eclipse.chemclipse.chromatogram.filter.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.support.TargetTransferSupport;
@@ -35,10 +36,9 @@ public class PeakTargetsToReferencesFilter extends AbstractTransferFilter {
 
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(chromatogramFilterSettings instanceof PeakTargetsToReferencesSettings) {
-				PeakTargetsToReferencesSettings settings = (PeakTargetsToReferencesSettings)chromatogramFilterSettings;
+			if(chromatogramFilterSettings instanceof PeakTargetsToReferencesSettings settings) {
 				transferTargets(chromatogramSelection, settings);
-				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Targets transfered successfully."));
+				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, Messages.targetsTransferredSuccessfully));
 			}
 		}
 		//
@@ -57,8 +57,8 @@ public class PeakTargetsToReferencesFilter extends AbstractTransferFilter {
 
 		TargetTransferSupport targetTransferSupport = new TargetTransferSupport();
 		List<IChromatogram> referencedChromatograms = chromatogramSelection.getChromatogram().getReferencedChromatograms();
-		if(referencedChromatograms.size() > 0) {
-			int retentionTimeDelta = (int)(settings.getDeltaRetentionTime() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+		if(!referencedChromatograms.isEmpty()) {
+			int retentionTimeDelta = (int)(settings.getDeltaRetentionTime() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			boolean useBestTargetOnly = settings.isUseBestTargetOnly();
 			List<? extends IPeak> peaksSource = extractPeaks(chromatogramSelection);
 			for(IChromatogram referencedChromatogram : referencedChromatograms) {

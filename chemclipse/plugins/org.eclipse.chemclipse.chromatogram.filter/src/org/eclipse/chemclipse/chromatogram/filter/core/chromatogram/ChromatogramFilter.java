@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.core.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.filter.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;
@@ -25,23 +27,21 @@ import org.eclipse.core.runtime.Platform;
 public class ChromatogramFilter {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramFilter.class);
-	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier";
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier"; //$NON-NLS-1$
 	/*
 	 * These are the attributes of the extension point elements.
 	 */
-	private static final String ID = "id";
-	private static final String DESCRIPTION = "description";
-	private static final String FILTER_NAME = "filterName";
-	private static final String FILTER = "filter";
-	private static final String FILTER_SETTINGS = "filterSettings";
-	//
-	private static final String PROCESSING_DESCRIPTION = "Chromatogram Filter";
-	private static final String NO_CHROMATOGRAM_FILTER_AVAILABLE = "There is no chromatogram filter available.";
+	private static final String ID = "id"; //$NON-NLS-1$
+	private static final String DESCRIPTION = "description"; //$NON-NLS-1$
+	private static final String FILTER_NAME = "filterName"; //$NON-NLS-1$
+	private static final String FILTER = "filter"; //$NON-NLS-1$
+	private static final String FILTER_SETTINGS = "filterSettings"; //$NON-NLS-1$
 
 	/**
 	 * This class is a singleton. Use only static methods.
 	 */
 	private ChromatogramFilter() {
+
 	}
 
 	/**
@@ -67,11 +67,11 @@ public class ChromatogramFilter {
 			} catch(Exception e) {
 				logger.error(e);
 				processingInfo = new ProcessingInfo();
-				processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, e.getLocalizedMessage());
+				processingInfo.addErrorMessage(Messages.chromatogramFilter, e.getLocalizedMessage());
 			}
 		} else {
 			processingInfo = new ProcessingInfo();
-			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_FILTER_AVAILABLE);
+			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.noChromatogramFilterAvailable);
 		}
 		return processingInfo;
 	}
@@ -97,11 +97,11 @@ public class ChromatogramFilter {
 			} catch(Exception e) {
 				logger.error(e);
 				processingInfo = new ProcessingInfo();
-				processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, e.getLocalizedMessage());
+				processingInfo.addErrorMessage(Messages.chromatogramFilter, e.getLocalizedMessage());
 			}
 		} else {
 			processingInfo = new ProcessingInfo();
-			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_FILTER_AVAILABLE);
+			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.noChromatogramFilterAvailable);
 		}
 		return processingInfo;
 	}
@@ -165,7 +165,7 @@ public class ChromatogramFilter {
 	 */
 	private static IConfigurationElement getConfigurationElement(final String filterId) {
 
-		if("".equals(filterId)) {
+		if(filterId.isEmpty()) {
 			return null;
 		}
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
