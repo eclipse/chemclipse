@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,18 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.filter.ui.preferences;
 
+import org.eclipse.chemclipse.chromatogram.csd.filter.ui.Activator;
+import org.eclipse.chemclipse.chromatogram.csd.filter.ui.l10n.Messages;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import org.eclipse.chemclipse.chromatogram.csd.filter.ui.Activator;
-
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterPreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Filter FID");
+		setTitle(Messages.filterCSD);
+		setDescription(Messages.filterCSDdescription);
 	}
 
 	/**
@@ -32,6 +34,7 @@ public class FilterPreferencePage extends FieldEditorPreferencePage implements I
 	 */
 	public void createFieldEditors() {
 
+		// Used as a top node for other filters.
 	}
 
 	/*
@@ -41,5 +44,6 @@ public class FilterPreferencePage extends FieldEditorPreferencePage implements I
 	 */
 	public void init(IWorkbench workbench) {
 
+		// no fields
 	}
 }

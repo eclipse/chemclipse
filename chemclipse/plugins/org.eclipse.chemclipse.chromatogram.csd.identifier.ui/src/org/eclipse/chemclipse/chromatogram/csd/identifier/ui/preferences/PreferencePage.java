@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.csd.identifier.ui.preferences;
 
 import org.eclipse.chemclipse.chromatogram.csd.identifier.ui.Activator;
+import org.eclipse.chemclipse.chromatogram.csd.identifier.ui.l10n.Messages;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -19,9 +20,10 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Identifier Preferences");
+		setTitle(Messages.csdIdentifierPreferences);
 	}
 
 	/**
@@ -31,6 +33,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
+		// Used as a top node for other filters.
 	}
 
 	/*
@@ -40,5 +43,6 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void init(IWorkbench workbench) {
 
+		// no fields
 	}
 }

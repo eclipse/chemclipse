@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
+import org.eclipse.chemclipse.chromatogram.filter.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
@@ -33,7 +34,7 @@ public class ChromatogramFilterProcessSupplier implements IProcessTypeSupplier {
 	@Override
 	public String getCategory() {
 
-		return "Chromatogram Filter";
+		return Messages.chromatogramFilter;
 	}
 
 	@Override
@@ -58,6 +59,7 @@ public class ChromatogramFilterProcessSupplier implements IProcessTypeSupplier {
 
 		@SuppressWarnings("unchecked")
 		public ChromatogramFilterProcessorSupplier(IChromatogramFilterSupplier supplier, IProcessTypeSupplier parent) {
+
 			super("ChromatogramFilter." + supplier.getId(), supplier.getFilterName(), supplier.getDescription(), (Class<IChromatogramFilterSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD);
 			this.supplier = supplier;
 		}

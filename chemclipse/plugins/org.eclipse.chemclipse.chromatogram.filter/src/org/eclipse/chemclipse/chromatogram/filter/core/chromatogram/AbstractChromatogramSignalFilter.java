@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.filter.core.chromatogram;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
@@ -70,12 +71,12 @@ public abstract class AbstractChromatogramSignalFilter extends AbstractChromatog
 
 	private IChromatogramFilterResult process(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			return process((IChromatogramSelectionMSD)chromatogramSelection, chromatogramFilterSettings, monitor);
-		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-			return process((IChromatogramSelectionCSD)chromatogramSelection, chromatogramFilterSettings, monitor);
-		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-			return process((IChromatogramSelectionWSD)chromatogramSelection, chromatogramFilterSettings, monitor);
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
+			return process(chromatogramSelectionMSD, chromatogramFilterSettings, monitor);
+		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD chromatogramSelectionCSD) {
+			return process(chromatogramSelectionCSD, chromatogramFilterSettings, monitor);
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD chromatogramSelectionWSD) {
+			return process(chromatogramSelectionWSD, chromatogramFilterSettings, monitor);
 		}
 		throw new UnsupportedOperationException("Class " + chromatogramSelection.getClass().getName() + " is not supported");
 	}
@@ -174,9 +175,12 @@ public abstract class AbstractChromatogramSignalFilter extends AbstractChromatog
 			double wavelength = totalSignals.getWavelength();
 			while(itScan.hasNext()) {
 				int scan = itScan.next();
-				IScanSignalWSD scanSignal = chromatogramWSD.getSupplierScan(scan).getScanSignal(wavelength).get();
-				IExtractedSingleWavelengthSignal totalSignal = totalSignals.getTotalScanSignal(scan);
-				scanSignal.setAbundance(totalSignal.getTotalSignal());
+				Optional<IScanSignalWSD> optionalSignal = chromatogramWSD.getSupplierScan(scan).getScanSignal(wavelength);
+				if(optionalSignal.isPresent()) {
+					IScanSignalWSD scanSignal = optionalSignal.get();
+					IExtractedSingleWavelengthSignal totalSignal = totalSignals.getTotalScanSignal(scan);
+					scanSignal.setAbundance(totalSignal.getTotalSignal());
+				}
 			}
 		}
 		return chromatogramFilterResultFinal;

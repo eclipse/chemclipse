@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,9 +15,9 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 
 public class ChromatogramFilterSupplier implements IChromatogramFilterSupplier {
 
-	private String id = "";
-	private String description = "";
-	private String filterName = "";
+	private String id = ""; //$NON-NLS-1$
+	private String description = ""; //$NON-NLS-1$
+	private String filterName = ""; //$NON-NLS-1$
 	private Class<? extends IChromatogramFilterSettings> settingsClass;
 
 	@Override
@@ -113,13 +113,13 @@ public class ChromatogramFilterSupplier implements IChromatogramFilterSupplier {
 
 		StringBuilder builder = new StringBuilder();
 		builder.append(getClass().getName());
-		builder.append("[");
-		builder.append("id=" + id);
-		builder.append(",");
-		builder.append("description=" + description);
-		builder.append(",");
-		builder.append("filterName=" + filterName);
-		builder.append("]");
+		builder.append("["); //$NON-NLS-1$
+		builder.append("id=" + id); //$NON-NLS-1$
+		builder.append(","); //$NON-NLS-1$
+		builder.append("description=" + description); //$NON-NLS-1$
+		builder.append(","); //$NON-NLS-1$
+		builder.append("filterName=" + filterName); //$NON-NLS-1$
+		builder.append("]"); //$NON-NLS-1$
 		return builder.toString();
 	}
 }

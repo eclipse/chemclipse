@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.filter.ui.core;
 
 import org.eclipse.chemclipse.chromatogram.filter.ui.Activator;
+import org.eclipse.chemclipse.chromatogram.filter.ui.l10n.Messages;
 import org.eclipse.chemclipse.numeric.services.IMaximaDetectorService;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.jface.dialogs.Dialog;
@@ -50,7 +51,7 @@ public class ChromatogramFilterDialog extends Dialog {
 	protected void configureShell(Shell newShell) {
 
 		super.configureShell(newShell);
-		newShell.setText("Scan Maxima Detectors");
+		newShell.setText(Messages.scanMaximaDetectors);
 	}
 
 	@Override
@@ -83,7 +84,7 @@ public class ChromatogramFilterDialog extends Dialog {
 	private Label createLabel(Composite parent) {
 
 		Label label = new Label(parent, SWT.NONE);
-		label.setText("Select a scan maximum detector.");
+		label.setText(Messages.selectScanMaximaDetector);
 		return label;
 	}
 
@@ -97,15 +98,14 @@ public class ChromatogramFilterDialog extends Dialog {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IMaximaDetectorService) {
-					IMaximaDetectorService maximaDetectorService = (IMaximaDetectorService)element;
-					return maximaDetectorService.getName();
+				if(element instanceof IMaximaDetectorService service) {
+					return service.getName();
 				}
 				return null;
 			}
 		});
 		//
-		combo.setToolTipText("Select a scan maxima detetctor.");
+		combo.setToolTipText(Messages.selectScanMaximaDetector);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		combo.setLayoutData(gridData);
@@ -115,8 +115,8 @@ public class ChromatogramFilterDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof IMaximaDetectorService) {
-					maximaDetectorService = (IMaximaDetectorService)object;
+				if(object instanceof IMaximaDetectorService service) {
+					maximaDetectorService = service;
 				}
 			}
 		});
