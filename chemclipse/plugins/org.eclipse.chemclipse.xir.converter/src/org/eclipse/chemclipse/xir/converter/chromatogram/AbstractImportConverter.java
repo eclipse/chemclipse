@@ -31,6 +31,7 @@ public abstract class AbstractImportConverter extends AbstractChromatogramImport
 		IProcessingInfo<IChromatogramISD> processingInfo = new ProcessingInfo<>();
 		try (FileInputStream inputStream = new FileInputStream(file)) {
 			IChromatogramISD chromatogramISD = convert(inputStream, monitor);
+			setFile(file, chromatogramISD);
 			processingInfo.setProcessingResult(chromatogramISD);
 		} catch(Exception e) {
 			processingInfo.addErrorMessage(DESCRIPTION, "Failed to load the file: " + file);
@@ -51,5 +52,12 @@ public abstract class AbstractImportConverter extends AbstractChromatogramImport
 		}
 		//
 		return processingInfo;
+	}
+
+	private void setFile(File file, IChromatogramISD chromatogramISD) {
+
+		if(chromatogramISD != null) {
+			chromatogramISD.setFile(file);
+		}
 	}
 }

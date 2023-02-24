@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,6 +31,7 @@ public abstract class AbstractImportConverter extends AbstractChromatogramImport
 		IProcessingInfo<IChromatogramTSD> processingInfo = new ProcessingInfo<>();
 		try (FileInputStream inputStream = new FileInputStream(file)) {
 			IChromatogramTSD chromatogramTSD = convert(inputStream, monitor);
+			setFile(file, chromatogramTSD);
 			processingInfo.setProcessingResult(chromatogramTSD);
 		} catch(Exception e) {
 			processingInfo.addErrorMessage(DESCRIPTION, "Failed to load the file: " + file);
@@ -51,5 +52,12 @@ public abstract class AbstractImportConverter extends AbstractChromatogramImport
 		}
 		//
 		return processingInfo;
+	}
+
+	private void setFile(File file, IChromatogramTSD chromatogramTSD) {
+
+		if(chromatogramTSD != null) {
+			chromatogramTSD.setFile(file);
+		}
 	}
 }
