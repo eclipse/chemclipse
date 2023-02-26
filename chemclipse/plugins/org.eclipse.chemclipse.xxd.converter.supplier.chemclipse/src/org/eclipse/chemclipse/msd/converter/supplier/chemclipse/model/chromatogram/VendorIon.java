@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,23 +19,25 @@ import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 
 public class VendorIon extends AbstractScanIon implements IVendorIon {
 
-	/**
-	 * Renew the serialVersionUID any time you have changed some fields or
-	 * methods.
-	 */
 	private static final long serialVersionUID = -6328005534960551274L;
-	// A max value for abundance
+	/*
+	 * The max value for abundance
+	 */
 	public static final float MIN_ABUNDANCE = Float.MIN_VALUE;
 	public static final float MAX_ABUNDANCE = Float.MAX_VALUE;
-	// A max value for m/z
+	/*
+	 * The max value for m/z
+	 */
 	public static final double MIN_ION = 1.0d;
 	public static final double MAX_ION = 65535.0d;
 
 	public VendorIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
+
 		super(ion, abundance);
 	}
 
 	public VendorIon(double ion, float abundance, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+
 		super(ion, abundance, ionTransition);
 	}
 

@@ -50,6 +50,7 @@ import org.eclipse.chemclipse.model.targets.ITarget;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramWriterMSD;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IChromatogramMSDZipWriter;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.VendorIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -77,8 +78,6 @@ import org.eclipse.core.runtime.SubMonitor;
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
 public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implements IChromatogramMSDZipWriter {
-
-	private static final Float LIMIT_AREA_ABUNDANCE = 1.0f;
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
@@ -362,11 +361,51 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		List<IChromatogramPeakMSD> peaks = new ArrayList<>();
 		for(IChromatogramPeakMSD peak : chromatogram.getPeaks()) {
 			if(isValidPeak(peak, timeRangeChromatogram)) {
-				peaks.add(peak);
+				if(cleanPeak(peak)) {
+					peaks.add(peak);
+				}
 			}
 		}
 		//
 		return peaks;
+	}
+
+	private boolean cleanPeak(IChromatogramPeakMSD peak) {
+
+		IPeakModelMSD peakModel = peak.getPeakModel();
+		IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
+		/*
+		 * Collect the invalid ions
+		 */
+		List<IIon> ionsToRemove = new ArrayList<>();
+		for(IIon ion : massSpectrum.getIons()) {
+			if(isIonInvalid(ion)) {
+				ionsToRemove.add(ion);
+			}
+		}
+		/*
+		 * Remove the invalid ions
+		 */
+		for(IIon ion : ionsToRemove) {
+			massSpectrum.removeIon(ion);
+		}
+		//
+		return massSpectrum.getNumberOfIons() > 0;
+	}
+
+	private boolean isIonInvalid(IIon ion) {
+
+		if(ion.getAbundance() < VendorIon.MIN_ABUNDANCE) {
+			return true;
+		} else if(ion.getAbundance() > VendorIon.MAX_ABUNDANCE) {
+			return true;
+		} else if(ion.getIon() < VendorIon.MIN_ION) {
+			return true;
+		} else if(ion.getIon() > VendorIon.MAX_ION) {
+			return true;
+		}
+		//
+		return false;
 	}
 
 	/*
@@ -380,15 +419,8 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		 * If scans of a region have been deleted, peaks shall be not saved, otherwise the import fails.
 		 */
 		IPeakModelMSD peakModel = peak.getPeakModel();
-		IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
 		if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
 			return false;
-		} else {
-			for(IIon ion : massSpectrum.getIons()) {
-				if(ion.getAbundance() < LIMIT_AREA_ABUNDANCE) {
-					return false;
-				}
-			}
 		}
 		//
 		return true;
