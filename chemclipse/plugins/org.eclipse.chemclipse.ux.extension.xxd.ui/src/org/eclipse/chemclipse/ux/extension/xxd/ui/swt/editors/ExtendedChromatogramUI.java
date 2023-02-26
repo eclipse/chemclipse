@@ -76,6 +76,7 @@ import org.eclipse.chemclipse.support.ui.processors.ProcessorToolbar;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
@@ -1607,7 +1608,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_SCANS;
 		String patternNode = PreferenceConstants.P_FORMAT_X_AXIS_SCANS;
-		String colorNode = Display.isSystemDarkTheme() ? PreferenceConstants.P_COLOR_X_AXIS_SCANS_DARKTHEME : PreferenceConstants.P_COLOR_X_AXIS_SCANS;
+		String colorNode = PreferencesSupport.isDarkTheme() ? PreferenceConstants.P_COLOR_X_AXIS_SCANS_DARKTHEME : PreferenceConstants.P_COLOR_X_AXIS_SCANS;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SCANS;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SCANS;
 		ChartSupport.setAxisSettingsExtended(axisSettings, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);

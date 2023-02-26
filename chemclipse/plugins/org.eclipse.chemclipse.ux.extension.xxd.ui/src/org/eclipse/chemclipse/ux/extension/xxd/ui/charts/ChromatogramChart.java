@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
 
+import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -19,7 +20,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToMinuteConverter;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToSecondsConverter;
 import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
@@ -84,6 +84,7 @@ public class ChromatogramChart extends LineChart {
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(true);
 		chartSettings.setVerticalSliderVisible(false);
+		//
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		rangeRestriction.setZeroX(true);
 		rangeRestriction.setZeroY(true);
@@ -103,7 +104,7 @@ public class ChromatogramChart extends LineChart {
 		//
 		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS;
 		String patternNode = PreferenceConstants.P_FORMAT_X_AXIS_MILLISECONDS;
-		String colorNode = Display.isSystemDarkTheme() ? PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS_DARKTHEME : PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS;
+		String colorNode = PreferencesSupport.isDarkTheme() ? PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS_DARKTHEME : PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS;
 		//
@@ -125,7 +126,7 @@ public class ChromatogramChart extends LineChart {
 		//
 		String positionNode = PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY;
 		String patternNode = PreferenceConstants.P_FORMAT_Y_AXIS_INTENSITY;
-		String colorNode = Display.isSystemDarkTheme() ? PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY_DARKTHEME : PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY;
+		String colorNode = PreferencesSupport.isDarkTheme() ? PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY_DARKTHEME : PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_INTENSITY;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_INTENSITY;
 		//
@@ -146,7 +147,7 @@ public class ChromatogramChart extends LineChart {
 		//
 		String positionNode = PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY;
 		String patternNode = PreferenceConstants.P_FORMAT_Y_AXIS_RELATIVE_INTENSITY;
-		String colorNode = Display.isSystemDarkTheme() ? PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY_DARKTHEME : PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY;
+		String colorNode = PreferencesSupport.isDarkTheme() ? PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY_DARKTHEME : PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY;
 		boolean isShowAxis = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY);
@@ -193,7 +194,7 @@ public class ChromatogramChart extends LineChart {
 		//
 		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_SECONDS;
 		String patternNode = PreferenceConstants.P_FORMAT_X_AXIS_SECONDS;
-		String colorNode = Display.isSystemDarkTheme() ? PreferenceConstants.P_COLOR_X_AXIS_SECONDS_DARKTHEME : PreferenceConstants.P_COLOR_X_AXIS_SECONDS;
+		String colorNode = PreferencesSupport.isDarkTheme() ? PreferenceConstants.P_COLOR_X_AXIS_SECONDS_DARKTHEME : PreferenceConstants.P_COLOR_X_AXIS_SECONDS;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SECONDS;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SECONDS;
 		boolean isShowAxis = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SECONDS);
@@ -240,7 +241,7 @@ public class ChromatogramChart extends LineChart {
 		//
 		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_MINUTES;
 		String patternNode = PreferenceConstants.P_FORMAT_X_AXIS_MINUTES;
-		String colorNode = Display.isSystemDarkTheme() ? PreferenceConstants.P_COLOR_X_AXIS_MINUTES_DARKTHEME : PreferenceConstants.P_COLOR_X_AXIS_MINUTES;
+		String colorNode = PreferencesSupport.isDarkTheme() ? PreferenceConstants.P_COLOR_X_AXIS_MINUTES_DARKTHEME : PreferenceConstants.P_COLOR_X_AXIS_MINUTES;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES;
 		boolean isShowAxis = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MINUTES);
