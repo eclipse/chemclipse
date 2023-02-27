@@ -59,6 +59,7 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.filter.chromatogram.Inten
  OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeleteIntegrationsFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeletePeaksByQuantitationFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeletePeaksByTargetFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeletePeaksByTraceFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeletePeaksFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeleteQuantitationReferencesFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeleteQuantitationsFilter.xml,
