@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,12 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions;
 
+import org.eclipse.chemclipse.support.text.ILabel;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 
 /*
  * Ensure backward and forward compatibility!
  */
-public enum ChromatogramVersion implements IFormatVersion {
+public enum ChromatogramVersion implements IFormatVersion, ILabel {
 
 	V_0701(IFormat.CHROMATOGRAM_VERSION_0701, "Nernst"), //
 	V_0803(IFormat.CHROMATOGRAM_VERSION_0803, "Dempster"), //
@@ -47,5 +48,16 @@ public enum ChromatogramVersion implements IFormatVersion {
 	public String getRelease() {
 
 		return release;
+	}
+
+	@Override
+	public String label() {
+
+		return IFormatVersion.super.getLabel();
+	}
+
+	public static String[][] getOptions() {
+
+		return IFormatVersion.getOptions(values());
 	}
 }

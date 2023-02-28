@@ -18,10 +18,6 @@ import java.util.Map;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.Activator;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions.ChromatogramVersion;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions.IFormatVersion;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions.MethodVersion;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions.QuantDatabaseVersion;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -113,66 +109,51 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static String getChromatogramVersionSave() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_CHROMATOGRAM_VERSION_SAVE, DEF_CHROMATOGRAM_VERSION_SAVE);
+		return INSTANCE().get(P_CHROMATOGRAM_VERSION_SAVE, DEF_CHROMATOGRAM_VERSION_SAVE);
+	}
+
+	public static void setChromatogramVersionSave(String value) {
+
+		INSTANCE().put(P_CHROMATOGRAM_VERSION_SAVE, value);
 	}
 
 	public static int getChromatogramCompressionLevel() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_CHROMATOGRAM_COMPRESSION_LEVEL, DEF_CHROMATOGRAM_COMPRESSION_LEVEL);
+		return INSTANCE().getInteger(P_CHROMATOGRAM_COMPRESSION_LEVEL, DEF_CHROMATOGRAM_COMPRESSION_LEVEL);
+	}
+
+	public static void setChromatogramCompressionLevel(int value) {
+
+		INSTANCE().putInteger(P_CHROMATOGRAM_COMPRESSION_LEVEL, value);
 	}
 
 	public static String getMethodVersionSave() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_METHOD_VERSION_SAVE, DEF_METHOD_VERSION_SAVE);
+		return INSTANCE().get(P_METHOD_VERSION_SAVE, DEF_METHOD_VERSION_SAVE);
+	}
+
+	public static void setMethodVersionSave(String value) {
+
+		INSTANCE().put(P_METHOD_VERSION_SAVE, value);
 	}
 
 	public static int getMethodCompressionLevel() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_METHOD_COMPRESSION_LEVEL, DEF_METHOD_COMPRESSION_LEVEL);
+		return INSTANCE().getInteger(P_METHOD_COMPRESSION_LEVEL, DEF_METHOD_COMPRESSION_LEVEL);
+	}
+
+	public static void setMethodCompressionLevel(int value) {
+
+		INSTANCE().putInteger(P_METHOD_COMPRESSION_LEVEL, value);
 	}
 
 	public static void setForceLoadAlternateDetector(boolean forceLoadAlternateDetector) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		preferences.putBoolean(P_FORCE_LOAD_ALTERNATE_DETECTOR, forceLoadAlternateDetector);
+		INSTANCE().putBoolean(P_FORCE_LOAD_ALTERNATE_DETECTOR, forceLoadAlternateDetector);
 	}
 
 	public static boolean isForceLoadAlternateDetector() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_FORCE_LOAD_ALTERNATE_DETECTOR, DEF_FORCE_LOAD_ALTERNATE_DETECTOR);
-	}
-
-	public static String[][] getChromatogramVersions() {
-
-		return getFormatVersions(ChromatogramVersion.values());
-	}
-
-	public static String[][] getMethodVersions() {
-
-		return getFormatVersions(MethodVersion.values());
-	}
-
-	public static String[][] getQuantDatabaseVersions() {
-
-		return getFormatVersions(QuantDatabaseVersion.values());
-	}
-
-	public static String[][] getFormatVersions(IFormatVersion[] versions) {
-
-		String[][] elements = new String[versions.length][2];
-		//
-		int counter = 0;
-		for(IFormatVersion version : versions) {
-			elements[counter][0] = version.getLabel();
-			elements[counter][1] = version.getVersion();
-			counter++;
-		}
-		//
-		return elements;
+		return INSTANCE().getBoolean(P_FORCE_LOAD_ALTERNATE_DETECTOR, DEF_FORCE_LOAD_ALTERNATE_DETECTOR);
 	}
 }

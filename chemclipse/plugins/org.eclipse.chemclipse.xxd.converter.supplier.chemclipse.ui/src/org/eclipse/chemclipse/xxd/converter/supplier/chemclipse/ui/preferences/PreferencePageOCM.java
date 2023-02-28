@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.Activator;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions.MethodVersion;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -22,6 +23,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageOCM extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageOCM() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setTitle("Process Method Data (*.ocm)");
@@ -35,7 +37,7 @@ public class PreferencePageOCM extends FieldEditorPreferencePage implements IWor
 	 */
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceSupplier.P_METHOD_VERSION_SAVE, "Save (*.ocm) as version:", PreferenceSupplier.getMethodVersions(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_METHOD_VERSION_SAVE, "Save (*.ocm) as version:", MethodVersion.getOptions(), getFieldEditorParent()));
 		addField(new SpinnerFieldEditor(PreferenceSupplier.P_METHOD_COMPRESSION_LEVEL, "Compression 0 = off, 9 = best", PreferenceSupplier.MIN_COMPRESSION_LEVEL, PreferenceSupplier.MAX_COMPRESSION_LEVEL, getFieldEditorParent()));
 	}
 
