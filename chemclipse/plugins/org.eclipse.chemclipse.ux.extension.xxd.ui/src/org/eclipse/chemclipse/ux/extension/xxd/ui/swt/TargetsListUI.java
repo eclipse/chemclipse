@@ -31,6 +31,11 @@ import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 
 public class TargetsListUI extends ExtendedTableViewer {
@@ -73,6 +78,7 @@ public class TargetsListUI extends ExtendedTableViewer {
 		setComparator(false);
 		setFilters(targetListFilter);
 		setCellColorProvider();
+		createDragAndDropProvider();
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
@@ -250,5 +256,44 @@ public class TargetsListUI extends ExtendedTableViewer {
 				}
 			});
 		}
+	}
+
+	private void createDragAndDropProvider() {
+
+		DragSource dragSource = new DragSource(this.getTable(), DND.DROP_COPY);
+		Transfer[] transfer = new Transfer[]{IdentificationTargetTransfer.getInstance()};
+		dragSource.setTransfer(transfer);
+		//
+		dragSource.addDragListener(new DragSourceListener() {
+
+			@Override
+			public void dragStart(DragSourceEvent event) {
+
+				Object object = getStructuredSelection().getFirstElement();
+				event.doit = (object instanceof IIdentificationTarget);
+			}
+
+			@Override
+			public void dragSetData(DragSourceEvent event) {
+
+				/*
+				 * Identification Target Transfer
+				 */
+				if(IdentificationTargetTransfer.getInstance().isSupportedType(event.dataType)) {
+					Object object = getStructuredSelection().getFirstElement();
+					if(object instanceof IIdentificationTarget identificationTarget) {
+						event.data = identificationTarget;
+					}
+				}
+			}
+
+			@Override
+			public void dragFinished(DragSourceEvent event) {
+
+				/*
+				 * No action required.
+				 */
+			}
+		});
 	}
 }
