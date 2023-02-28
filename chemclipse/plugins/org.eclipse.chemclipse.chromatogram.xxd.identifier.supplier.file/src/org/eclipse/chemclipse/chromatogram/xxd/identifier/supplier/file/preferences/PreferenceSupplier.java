@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.PeakUnknownSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.PeakUnknownSettingsWSD;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.WaveSpectrumUnknownSettings;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.DeltaCalculation;
 import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
 import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
@@ -42,8 +41,6 @@ import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
-	//
 	public static final String POSTFIX_MSD = "MSD";
 	public static final String POSTFIX_CSD = "CSD";
 	public static final String POSTFIX_WSD = "WSD";
@@ -337,7 +334,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static void setFilterPathIdentifierFiles(String filterPath) {
 
-		putSetting(P_FILTER_PATH_IDENTIFIER_FILES, filterPath);
+		INSTANCE().put(P_FILTER_PATH_IDENTIFIER_FILES, filterPath);
 	}
 
 	public static IdentifierSettings getIdentifierSettings() {
@@ -353,12 +350,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static boolean isUseNormalizedScan() {
 
-		return getBoolean(P_USE_NORMALIZED_SCAN, DEF_USE_NORMALIZED_SCAN);
+		return INSTANCE().getBoolean(P_USE_NORMALIZED_SCAN, DEF_USE_NORMALIZED_SCAN);
 	}
 
 	public static boolean isUsePeaksInsteadOfScans() {
 
-		return getBoolean(P_USE_PEAKS_INSTEAD_OF_SCANS, DEF_USE_PEAKS_INSTEAD_OF_SCANS);
+		return INSTANCE().getBoolean(P_USE_PEAKS_INSTEAD_OF_SCANS, DEF_USE_PEAKS_INSTEAD_OF_SCANS);
 	}
 
 	public static CalculationType getCalculationType() {
@@ -392,13 +389,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		 * commit 2022/01 - improvement identifier settings
 		 */
 		if("RT".equals(setting)) {
-			putSetting(P_PENALTY_CALCULATION, PenaltyCalculation.RETENTION_TIME_MS.name());
+			INSTANCE().put(P_PENALTY_CALCULATION, PenaltyCalculation.RETENTION_TIME_MS.name());
 			return PenaltyCalculation.RETENTION_TIME_MS;
 		} else if("RI".equals(setting)) {
-			putSetting(P_PENALTY_CALCULATION, PenaltyCalculation.RETENTION_INDEX.name());
+			INSTANCE().put(P_PENALTY_CALCULATION, PenaltyCalculation.RETENTION_INDEX.name());
 			return PenaltyCalculation.RETENTION_INDEX;
 		} else if("RETENTION_TIME".equals(setting)) {
-			putSetting(P_PENALTY_CALCULATION, PenaltyCalculation.RETENTION_TIME_MS.name());
+			INSTANCE().put(P_PENALTY_CALCULATION, PenaltyCalculation.RETENTION_TIME_MS.name());
 			return PenaltyCalculation.RETENTION_TIME_MS;
 		} else {
 			try {
@@ -407,7 +404,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 				/*
 				 * The option BOTH has been removed as it doesn't make sense.
 				 */
-				putSetting(P_PENALTY_CALCULATION, PenaltyCalculation.NONE.name());
+				INSTANCE().put(P_PENALTY_CALCULATION, PenaltyCalculation.NONE.name());
 				return PenaltyCalculation.NONE;
 			}
 		}
@@ -438,22 +435,5 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
 		return eclipsePreferences.get(key, def);
-	}
-
-	private static void putSetting(String key, String value) {
-
-		try {
-			IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
-			eclipsePreferences.put(key, value);
-			eclipsePreferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
-		}
-	}
-
-	private static boolean getBoolean(String key, boolean def) {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(key, def);
 	}
 }

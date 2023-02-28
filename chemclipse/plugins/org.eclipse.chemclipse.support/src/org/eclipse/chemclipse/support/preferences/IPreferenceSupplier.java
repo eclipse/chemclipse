@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,10 +13,14 @@ package org.eclipse.chemclipse.support.preferences;
 
 import java.util.Map;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.osgi.service.prefs.BackingStoreException;
 
 public interface IPreferenceSupplier {
+
+	static final Logger logger = Logger.getLogger(IPreferenceSupplier.class);
 
 	/**
 	 * Returns the scope context, e.g.:
@@ -58,4 +62,65 @@ public interface IPreferenceSupplier {
 	 * @return {@link IEclipsePreferences}
 	 */
 	IEclipsePreferences getPreferences();
+
+	default boolean getBoolean(String key, boolean value) {
+
+		IEclipsePreferences preferences = this.getPreferences();
+		return preferences.getBoolean(key, value);
+	}
+
+	default void putBoolean(String key, boolean value) {
+
+		put(key, Boolean.toString(value));
+	}
+
+	default int getInteger(String key, int value) {
+
+		IEclipsePreferences preferences = this.getPreferences();
+		return preferences.getInt(key, value);
+	}
+
+	default void putInteger(String key, int value) {
+
+		put(key, Integer.toString(value));
+	}
+
+	default float getFloat(String key, float value) {
+
+		IEclipsePreferences preferences = this.getPreferences();
+		return preferences.getFloat(key, value);
+	}
+
+	default void putFloat(String key, float value) {
+
+		put(key, Float.toString(value));
+	}
+
+	default double getDouble(String key, double value) {
+
+		IEclipsePreferences preferences = this.getPreferences();
+		return preferences.getDouble(key, value);
+	}
+
+	default void putDouble(String key, double value) {
+
+		put(key, Double.toString(value));
+	}
+
+	default String get(String key, String value) {
+
+		IEclipsePreferences preferences = this.getPreferences();
+		return preferences.get(key, value);
+	}
+
+	default void put(String key, String value) {
+
+		try {
+			IEclipsePreferences preferences = this.getPreferences();
+			preferences.put(key, value);
+			preferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
+	}
 }

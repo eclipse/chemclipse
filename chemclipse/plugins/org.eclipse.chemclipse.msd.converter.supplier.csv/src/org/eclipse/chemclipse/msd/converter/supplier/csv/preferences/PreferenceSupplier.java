@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,19 +14,15 @@ package org.eclipse.chemclipse.msd.converter.supplier.csv.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.settings.Delimiter;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.Activator;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
-	//
 	public static final String P_IMPORT_DELIMITER = "importDelimiter";
 	public static final String DEF_IMPORT_DELIMITER = Delimiter.COMMA.name();
 	public static final String P_IMPORT_ZERO_MARKER = "importZeroMarker";
@@ -85,7 +81,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static void setImportDelimiter(Delimiter delimiter) {
 
-		putString(P_IMPORT_DELIMITER, delimiter.name());
+		INSTANCE().put(P_IMPORT_DELIMITER, delimiter.name());
 	}
 
 	public static String getImportZeroMarker() {
@@ -96,7 +92,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static void setImportZeroMarker(String zeroMarker) {
 
-		putString(P_IMPORT_ZERO_MARKER, zeroMarker);
+		INSTANCE().put(P_IMPORT_ZERO_MARKER, zeroMarker);
 	}
 
 	public static boolean isExportUseTic() {
@@ -107,28 +103,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static void setExportUseTic(boolean useTic) {
 
-		putBoolean(P_EXPORT_USE_TIC, useTic);
-	}
-
-	private static void putBoolean(String key, boolean value) {
-
-		try {
-			IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-			preferences.putBoolean(key, value);
-			preferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
-		}
-	}
-
-	private static void putString(String key, String value) {
-
-		try {
-			IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-			preferences.put(key, value);
-			preferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
-		}
+		INSTANCE().putBoolean(P_EXPORT_USE_TIC, useTic);
 	}
 }

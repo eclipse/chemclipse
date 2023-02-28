@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.msd.model.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.Activator;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -31,8 +30,6 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
-	//
 	public static final int MIN_TRACES = 1;
 	public static final int MAX_TRACES = Integer.MAX_VALUE;
 	//
@@ -130,22 +127,22 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static boolean isUseNominalMZ() {
 
-		return getBoolean(P_USE_NOMINAL_MZ, DEF_USE_NOMINAL_MZ);
+		return INSTANCE().getBoolean(P_USE_NOMINAL_MZ, DEF_USE_NOMINAL_MZ);
 	}
 
 	public static void setUseNominalMZ(boolean useNominalMZ) {
 
-		setBoolean(P_USE_NOMINAL_MZ, useNominalMZ);
+		INSTANCE().putBoolean(P_USE_NOMINAL_MZ, useNominalMZ);
 	}
 
 	public static boolean isUseNormalizedScan() {
 
-		return getBoolean(P_USE_NORMALIZED_SCAN, DEF_USE_NORMALIZED_SCAN);
+		return INSTANCE().getBoolean(P_USE_NORMALIZED_SCAN, DEF_USE_NORMALIZED_SCAN);
 	}
 
 	public static void setUseNormalizedScan(boolean useNormalizedScan) {
 
-		setBoolean(P_USE_NORMALIZED_SCAN, useNormalizedScan);
+		INSTANCE().putBoolean(P_USE_NORMALIZED_SCAN, useNormalizedScan);
 	}
 
 	public static String getSessionSubtractMassSpectrumAsString() {
@@ -156,7 +153,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static void setCalculationType(CalculationType calculationType) {
 
-		setString(P_CALCULATION_TYPE, calculationType.name());
+		INSTANCE().put(P_CALCULATION_TYPE, calculationType.name());
 	}
 
 	public static CalculationType getCalculationType() {
@@ -171,12 +168,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static void setUsePeaksInsteadOfScans(boolean usePeaks) {
 
-		setBoolean(P_USE_PEAKS_INSTEAD_OF_SCANS, usePeaks);
+		INSTANCE().putBoolean(P_USE_PEAKS_INSTEAD_OF_SCANS, usePeaks);
 	}
 
 	public static boolean isUsePeaksInsteadOfScans() {
 
-		return getBoolean(P_USE_PEAKS_INSTEAD_OF_SCANS, DEF_USE_PEAKS_INSTEAD_OF_SCANS);
+		return INSTANCE().getBoolean(P_USE_PEAKS_INSTEAD_OF_SCANS, DEF_USE_PEAKS_INSTEAD_OF_SCANS);
 	}
 
 	public static String getMassSpectrum(IScanMSD massSpectrum) {
@@ -223,70 +220,23 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static void setCopyTracesClipboard(int number) {
 
-		setInteger(P_COPY_TRACES_CLIPBOARD, number);
+		INSTANCE().putInteger(P_COPY_TRACES_CLIPBOARD, number);
 	}
 
 	public static int getCopyTracesClipboard() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_COPY_TRACES_CLIPBOARD, DEF_COPY_TRACES_CLIPBOARD);
+		return INSTANCE().getInteger(P_COPY_TRACES_CLIPBOARD, DEF_COPY_TRACES_CLIPBOARD);
 	}
 
 	private static IScanMSD getSubtractMassSpectrum() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		String value = preferences.get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
+		String value = INSTANCE().get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
 		return getMassSpectrum(value);
 	}
 
 	private static void setSubtractMassSpectrum(IScanMSD massSpectrum) {
 
-		try {
-			String value = getMassSpectrum(massSpectrum);
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.put(P_SUBTRACT_MASS_SPECTRUM, value);
-			preferences.flush();
-		} catch(Exception e) {
-			logger.warn(e);
-		}
-	}
-
-	private static boolean getBoolean(String key, boolean def) {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(key, def);
-	}
-
-	private static void setBoolean(String key, boolean value) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.putBoolean(key, value);
-			preferences.flush();
-		} catch(Exception e) {
-			logger.warn(e);
-		}
-	}
-
-	private static void setString(String key, String value) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.put(key, value);
-			preferences.flush();
-		} catch(Exception e) {
-			logger.warn(e);
-		}
-	}
-
-	private static void setInteger(String key, int value) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.putInt(key, value);
-			preferences.flush();
-		} catch(Exception e) {
-			logger.warn(e);
-		}
+		String value = getMassSpectrum(massSpectrum);
+		INSTANCE().put(P_SUBTRACT_MASS_SPECTRUM, value);
 	}
 }

@@ -15,7 +15,6 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.Activator;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.text.CharsetNIO;
@@ -26,8 +25,6 @@ import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
-	//
 	public static final String P_SPLIT_LIBRARY = "splitLibrary";
 	public static final boolean DEF_SPLIT_LIBRARY = false;
 	public static final String P_EXCLUDE_UNCERTAIN_IONS = "excludeUncertainIons";
@@ -202,39 +199,22 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static String getPathImport() {
 
-		return get(P_PATH_IMPORT, DEF_PATH_IMPORT);
+		return INSTANCE().get(P_PATH_IMPORT, DEF_PATH_IMPORT);
 	}
 
 	public static void setPathImport(String path) {
 
-		set(P_PATH_IMPORT, path);
+		INSTANCE().put(P_PATH_IMPORT, path);
 	}
 
 	public static String getPathExport() {
 
-		return get(P_PATH_EXPORT, DEF_PATH_EXPORT);
+		return INSTANCE().get(P_PATH_EXPORT, DEF_PATH_EXPORT);
 	}
 
 	public static void setPathExport(String path) {
 
-		set(P_PATH_EXPORT, path);
-	}
-
-	private static String get(String key, String def) {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(key, def);
-	}
-
-	private static void set(String key, String value) {
-
-		try {
-			IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
-			eclipsePreferences.put(key, value);
-			eclipsePreferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
-		}
+		INSTANCE().put(P_PATH_EXPORT, path);
 	}
 
 	private static Charset getCharset(String key, String def) {

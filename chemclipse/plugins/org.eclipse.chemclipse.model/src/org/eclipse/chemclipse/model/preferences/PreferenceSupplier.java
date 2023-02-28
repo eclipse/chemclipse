@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.model.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.Activator;
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
 import org.eclipse.chemclipse.model.targets.LibraryField;
@@ -25,8 +24,6 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
-	//
 	public static final String P_MISC_SEPARATOR = "miscSeparator";
 	public static final String DEF_MISC_SEPARATOR = "!";
 	public static final String P_MISC_SEPARATED_DELIMITER = "miscSeparatedDelimiter";
@@ -130,47 +127,47 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static boolean condenseCycleNumberScans() {
 
-		return getBoolean(P_CONDENSE_CYCLE_NUMBER_SCANS, DEF_CONDENSE_CYCLE_NUMBER_SCANS);
+		return INSTANCE().getBoolean(P_CONDENSE_CYCLE_NUMBER_SCANS, DEF_CONDENSE_CYCLE_NUMBER_SCANS);
 	}
 
 	public static boolean showRetentionIndexWithoutDecimals() {
 
-		return getBoolean(P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS, DEF_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS);
+		return INSTANCE().getBoolean(P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS, DEF_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS);
 	}
 
 	public static boolean showAreaWithoutDecimals() {
 
-		return getBoolean(P_SHOW_AREA_WITHOUT_DECIMALS, DEF_SHOW_AREA_WITHOUT_DECIMALS);
+		return INSTANCE().getBoolean(P_SHOW_AREA_WITHOUT_DECIMALS, DEF_SHOW_AREA_WITHOUT_DECIMALS);
 	}
 
 	public static boolean isSortCaseSensitive() {
 
-		return getBoolean(P_SORT_CASE_SENSITIVE, DEF_SORT_CASE_SENSITIVE);
+		return INSTANCE().getBoolean(P_SORT_CASE_SENSITIVE, DEF_SORT_CASE_SENSITIVE);
 	}
 
 	public static boolean useAlternateWindowMoveDirection() {
 
-		return getBoolean(P_ALTERNATE_WINDOW_MOVE_DIRECTION, DEF_ALTERNATE_WINDOW_MOVE_DIRECTION);
+		return INSTANCE().getBoolean(P_ALTERNATE_WINDOW_MOVE_DIRECTION, DEF_ALTERNATE_WINDOW_MOVE_DIRECTION);
 	}
 
 	public static boolean isSearchCaseSensitive() {
 
-		return getBoolean(P_SEARCH_CASE_SENSITIVE, DEF_SEARCH_CASE_SENSITIVE);
+		return INSTANCE().getBoolean(P_SEARCH_CASE_SENSITIVE, DEF_SEARCH_CASE_SENSITIVE);
 	}
 
 	public static void setSearchCaseSensitive(boolean searchCaseSensitive) {
 
-		putBoolean(P_SEARCH_CASE_SENSITIVE, searchCaseSensitive);
+		INSTANCE().putBoolean(P_SEARCH_CASE_SENSITIVE, searchCaseSensitive);
 	}
 
 	public static boolean isUseRetentionIndexQC() {
 
-		return getBoolean(P_USE_RETENTION_INDEX_QC, DEF_USE_RETENTION_INDEX_QC);
+		return INSTANCE().getBoolean(P_USE_RETENTION_INDEX_QC, DEF_USE_RETENTION_INDEX_QC);
 	}
 
 	public static void setUseRetentionIndexQC(boolean value) {
 
-		putBoolean(P_USE_RETENTION_INDEX_QC, value);
+		INSTANCE().putBoolean(P_USE_RETENTION_INDEX_QC, value);
 	}
 
 	public static LibraryField getBestTargetLibraryField() {
@@ -226,72 +223,38 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static void setIonRoundMethod(IonRoundMethod ionRoundMethod) {
 
 		ionRoundMethod = (ionRoundMethod == null) ? IonRoundMethod.DEFAULT : ionRoundMethod;
-		putString(P_ION_ROUND_METHOD, ionRoundMethod.name());
+		INSTANCE().put(P_ION_ROUND_METHOD, ionRoundMethod.name());
 		activeIonRoundMethod = ionRoundMethod;
 	}
 
 	public static boolean isSkipPeakWidthCheck() {
 
-		return getBoolean(P_SKIP_PEAK_WIDTH_CHECK, DEF_SKIP_PEAK_WIDTH_CHECK);
+		return INSTANCE().getBoolean(P_SKIP_PEAK_WIDTH_CHECK, DEF_SKIP_PEAK_WIDTH_CHECK);
 	}
 
 	public static String getListPathImport() {
 
-		return getFilterPath(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		return INSTANCE().get(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
 	}
 
 	public static void setListPathImport(String filterPath) {
 
-		putString(P_LIST_PATH_IMPORT, filterPath);
+		INSTANCE().put(P_LIST_PATH_IMPORT, filterPath);
 	}
 
 	public static String getListPathExport() {
 
-		return getFilterPath(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
+		return INSTANCE().get(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 	}
 
 	public static void setListPathExport(String filterPath) {
 
-		putString(P_LIST_PATH_EXPORT, filterPath);
+		INSTANCE().put(P_LIST_PATH_EXPORT, filterPath);
 	}
 
 	public static String getSeparationColumnMappings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.get(P_SEPARATION_COLUMN_MAPPINGS, DEF_SEPARATION_COLUMN_MAPPINGS);
-	}
-
-	private static boolean getBoolean(String key, boolean def) {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(key, def);
-	}
-
-	private static void putBoolean(String key, boolean value) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.putBoolean(key, value);
-			preferences.flush();
-		} catch(Exception e) {
-			logger.warn(e);
-		}
-	}
-
-	private static void putString(String key, String value) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.put(key, value);
-			preferences.flush();
-		} catch(Exception e) {
-			logger.warn(e);
-		}
-	}
-
-	private static String getFilterPath(String key, String def) {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(key, def);
 	}
 }
