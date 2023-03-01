@@ -281,7 +281,8 @@ public class ExtensionMessages extends NLS {
 	public static String gridLineStyle;
 	public static String gridLineColor;
 	public static String showAxisTitle;
-	public static String chromatogramMilisecondsXAxis;
+	public static String chromatogramMillisecondsXAxis;
+	public static String chromatogramRetentionIndexXAxis;
 	public static String chromatogramMinutesXAxis;
 	public static String showAxisLine;
 	public static String showAxisPositionMarker;

@@ -145,6 +145,12 @@
       </page>
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisRetentionIndex"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.chromatogramAxisRetentionIndex"
+            name="Retention Index (X Axis)">
+      </page>      
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisIntensity"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.chromatogramAxisIntensity"
             name="Intensity (Y Axis)">

@@ -30,7 +30,7 @@ public class ChromatogramAxisMilliseconds extends FieldEditorPreferencePage impl
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle(ExtensionMessages.chromatogramMilisecondsXAxis);
+		setTitle(ExtensionMessages.chromatogramMillisecondsXAxis);
 		setDescription("");
 	}
 
@@ -40,7 +40,6 @@ public class ChromatogramAxisMilliseconds extends FieldEditorPreferencePage impl
 		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS, ExtensionMessages.title + ":", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_FORMAT_X_AXIS_MILLISECONDS, ExtensionMessages.format + ":", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS, ExtensionMessages.show, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, ExtensionMessages.position + ":", ChartOptions.POSITIONS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, ExtensionMessages.position + ":", ChartOptions.POSITIONS, getFieldEditorParent()));
 		if(Display.isSystemDarkTheme()) {
 			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS_DARKTHEME, ExtensionMessages.color + ":", getFieldEditorParent()));

@@ -361,6 +361,19 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_MILLISECONDS);
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MILLISECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_TITLE_MILLISECONDS);
 		//
+		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_RETENTION_INDEX, PreferenceConstants.DEF_TITLE_X_AXIS_RETENTION_INDEX);
+		store.setDefault(PreferenceConstants.P_FORMAT_X_AXIS_RETENTION_INDEX, PreferenceConstants.DEF_FORMAT_X_AXIS_RETENTION_INDEX);
+		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_RETENTION_INDEX, PreferenceConstants.DEF_SHOW_X_AXIS_RETENTION_INDEX);
+		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_RETENTION_INDEX, PreferenceConstants.DEF_POSITION_X_AXIS_RETENTION_INDEX);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_RETENTION_INDEX, PreferenceConstants.DEF_COLOR_X_AXIS_RETENTION_INDEX);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_RETENTION_INDEX_DARKTHEME, PreferenceConstants.DEF_COLOR_X_AXIS_RETENTION_INDEX_DARKTHEME);
+		store.setDefault(PreferenceConstants.P_FONT_NAME_X_AXIS_RETENTION_INDEX, PreferenceConstants.DEF_FONT_NAME_X_AXIS_RETENTION_INDEX);
+		store.setDefault(PreferenceConstants.P_FONT_SIZE_X_AXIS_RETENTION_INDEX, PreferenceConstants.DEF_FONT_SIZE);
+		store.setDefault(PreferenceConstants.P_FONT_STYLE_X_AXIS_RETENTION_INDEX, PreferenceConstants.DEF_FONT_STYLE_X_AXIS_RETENTION_INDEX);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_RETENTION_INDEX, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_RETENTION_INDEX);
+		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_RETENTION_INDEX, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_RETENTION_INDEX);
+		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_TITLE_RETENTION_INDEX, PreferenceConstants.DEF_SHOW_X_AXIS_TITLE_RETENTION_INDEX);
+		//
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_SECONDS, PreferenceConstants.DEF_TITLE_X_AXIS_SECONDS);
 		store.setDefault(PreferenceConstants.P_FORMAT_X_AXIS_SECONDS, PreferenceConstants.DEF_FORMAT_X_AXIS_SECONDS);
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_SECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_SECONDS);

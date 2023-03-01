@@ -146,9 +146,14 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, seriesId, dataType, Derivative.NONE, color, signals, true);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedTraces<? extends IMarkedTrace> signals) {
+	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType displayType, Color color, IMarkedTraces<? extends IMarkedTrace> signals) {
 
-		return getLineSeriesData(chromatogram, seriesId, dataType, Derivative.NONE, color, signals, false);
+		return getLineSeriesData(chromatogram, seriesId, displayType, color, signals, false);
+	}
+
+	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType displayType, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean useRetentionIndex) {
+
+		return getLineSeriesData(chromatogram, seriesId, displayType, Derivative.NONE, color, signals, false, useRetentionIndex);
 	}
 
 	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, Color color, boolean timeIntervalSelection) {
@@ -166,14 +171,19 @@ public class ChromatogramChartSupport {
 		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
-		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, signals, baseline);
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, signals, baseline, false);
 	}
 
 	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline) {
 
+		return getLineSeriesData(chromatogram, seriesId, dataType, derivative, color, null, false, false);
+	}
+
+	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline, boolean useRetentionIndex) {
+
 		int startScan = 1;
 		int stopScan = chromatogram.getNumberOfScans();
-		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, signals, baseline);
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, signals, baseline, useRetentionIndex);
 	}
 
 	@Deprecated
@@ -209,7 +219,7 @@ public class ChromatogramChartSupport {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline) {
+	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline, boolean useRetentionIndex) {
 
 		IBaselineModel baselineModel = null;
 		if(baseline) {
@@ -247,11 +257,25 @@ public class ChromatogramChartSupport {
 				 * Get the retention time and intensity.
 				 */
 				int retentionTime = totalScanSignal.getRetentionTime();
-				xSeries[index] = retentionTime;
-				if(baseline) {
-					ySeries[index] = baselineModel.getBackground(retentionTime);
+				float retentionIndex = totalScanSignal.getRetentionIndex();
+				if(useRetentionIndex) {
+					if(retentionIndex > 0) {
+						xSeries[index] = retentionIndex;
+						if(baseline) {
+							ySeries[index] = baselineModel.getBackground(retentionTime);
+						} else {
+							ySeries[index] = totalScanSignal.getTotalSignal();
+						}
+					} else {
+						ySeries[index] = Double.NaN;
+					}
 				} else {
-					ySeries[index] = totalScanSignal.getTotalSignal();
+					xSeries[index] = retentionTime;
+					if(baseline) {
+						ySeries[index] = baselineModel.getBackground(retentionTime);
+					} else {
+						ySeries[index] = totalScanSignal.getTotalSignal();
+					}
 				}
 				index++;
 			}
@@ -270,11 +294,25 @@ public class ChromatogramChartSupport {
 				 */
 				IScan scan = chromatogram.getScan(i);
 				int retentionTime = scan.getRetentionTime();
-				xSeries[index] = retentionTime;
-				if(baseline) {
-					ySeries[index] = baselineModel.getBackground(retentionTime);
+				float retentionIndex = scan.getRetentionIndex();
+				if(useRetentionIndex) {
+					if(retentionIndex > 0) {
+						xSeries[index] = retentionIndex;
+						if(baseline) {
+							ySeries[index] = baselineModel.getBackground(retentionTime);
+						} else {
+							ySeries[index] = getIntensity(scan, dataType, signals);
+						}
+					} else {
+						ySeries[index] = Double.NaN;
+					}
 				} else {
-					ySeries[index] = getIntensity(scan, dataType, signals);
+					xSeries[index] = retentionTime;
+					if(baseline) {
+						ySeries[index] = baselineModel.getBackground(retentionTime);
+					} else {
+						ySeries[index] = getIntensity(scan, dataType, signals);
+					}
 				}
 				index++;
 			}
@@ -411,7 +449,7 @@ public class ChromatogramChartSupport {
 			startScan = 1;
 			stopScan = chromatogram.getNumberOfScans();
 		}
-		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, markedSignals, baseline);
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, markedSignals, baseline, false);
 	}
 
 	private double getIntensity(IScan scan, DisplayType dataType, IMarkedTraces<? extends IMarkedTrace> signals) {

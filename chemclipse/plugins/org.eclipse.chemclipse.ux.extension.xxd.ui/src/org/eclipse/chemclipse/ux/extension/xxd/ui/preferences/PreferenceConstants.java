@@ -601,6 +601,30 @@ public class PreferenceConstants {
 	public static final String P_SHOW_X_AXIS_TITLE_MILLISECONDS = "showXAxisTitleMilliseconds";
 	public static final boolean DEF_SHOW_X_AXIS_TITLE_MILLISECONDS = true;
 	//
+	public static final String P_TITLE_X_AXIS_RETENTION_INDEX = "titleXAxisRetentionIndex";
+	public static final String DEF_TITLE_X_AXIS_RETENTION_INDEX = "Retention Index";
+	public static final String P_FORMAT_X_AXIS_RETENTION_INDEX = "formatXAxisRetentionIndex";
+	public static final String DEF_FORMAT_X_AXIS_RETENTION_INDEX = "0.0";
+	public static final String P_SHOW_X_AXIS_RETENTION_INDEX = "showXAxisRetentionIndex";
+	public static final boolean DEF_SHOW_X_AXIS_RETENTION_INDEX = false;
+	public static final String P_POSITION_X_AXIS_RETENTION_INDEX = "positionXAxisRetentionIndex";
+	public static final String DEF_POSITION_X_AXIS_RETENTION_INDEX = Position.Primary.toString();
+	public static final String P_COLOR_X_AXIS_RETENTION_INDEX = "colorXAxisRetentionIndex";
+	public static final String DEF_COLOR_X_AXIS_RETENTION_INDEX = "0,0,0";
+	public static final String P_COLOR_X_AXIS_RETENTION_INDEX_DARKTHEME = "colorXAxisRetentionIndexDarkTheme";
+	public static final String DEF_COLOR_X_AXIS_RETENTION_INDEX_DARKTHEME = "252,252,247";
+	public static final String P_FONT_NAME_X_AXIS_RETENTION_INDEX = "fontNameXAxisRetentionIndex";
+	public static final String DEF_FONT_NAME_X_AXIS_RETENTION_INDEX = "Tahoma";
+	public static final String P_FONT_SIZE_X_AXIS_RETENTION_INDEX = "fontSizeXAxisRetentionIndex";
+	public static final String P_FONT_STYLE_X_AXIS_RETENTION_INDEX = "fontStyleXAxisRetentionIndex";
+	public static final int DEF_FONT_STYLE_X_AXIS_RETENTION_INDEX = SWT.BOLD;
+	public static final String P_GRIDLINE_STYLE_X_AXIS_RETENTION_INDEX = "gridlineStyleXAxisRetentionIndex";
+	public static final String DEF_GRIDLINE_STYLE_X_AXIS_RETENTION_INDEX = LineStyle.DOT.toString();
+	public static final String P_GRIDLINE_COLOR_X_AXIS_RETENTION_INDEX = "gridlineColorXAxisRetentionIndex";
+	public static final String DEF_GRIDLINE_COLOR_X_AXIS_RETENTION_INDEX = "192,192,192";
+	public static final String P_SHOW_X_AXIS_TITLE_RETENTION_INDEX = "showXAxisTitleRetentionIndex";
+	public static final boolean DEF_SHOW_X_AXIS_TITLE_RETENTION_INDEX = true;
+	//
 	public static final String P_TITLE_X_AXIS_SECONDS = "titleXAxisSeconds";
 	public static final String DEF_TITLE_X_AXIS_SECONDS = "Time [s]";
 	public static final String P_FORMAT_X_AXIS_SECONDS = "formatXAxisSeconds";
