@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.custom.ChromatogramPeakChart;
@@ -39,12 +42,18 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 	private int xStop;
 	private int yStop;
 	//
-	private boolean useTemplateModus = true;
+	private TimeRangeModus timeRangeModus = TimeRangeModus.TEMPLATE;
 	private TimeRanges timeRanges;
 	private TimeRangeLabels timeRangeLabels = new TimeRangeLabels();
 	//
 	private ITimeRangeUpdateListener timeRangeUpdateListener;
 	private ITimeRangePeakListener timeRangePeakListener;
+	private ITimeRangePointsListener timeRangePointsListener;
+	/*
+	 * TimeRangeModus.POINTS
+	 */
+	private boolean pointSelectionActive = false;
+	private List<Point> pointSelection = new ArrayList<>();
 
 	public TimeRangesChart(Composite parent, int style) {
 
@@ -52,14 +61,14 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 		createControl();
 	}
 
-	public boolean isUseTemplateModus() {
+	public TimeRangeModus getTimeRangeModus() {
 
-		return useTemplateModus;
+		return timeRangeModus;
 	}
 
-	public void setUseTemplateModus(boolean useTemplateModus) {
+	public void setTimeRangeModus(TimeRangeModus timeRangeModus) {
 
-		this.useTemplateModus = useTemplateModus;
+		this.timeRangeModus = timeRangeModus;
 	}
 
 	public void setTimeRangeLabels(TimeRangeLabels timeRangeLabels) {
@@ -77,6 +86,11 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 		this.timeRangePeakListener = updateListener;
 	}
 
+	public void setUpdateListener(ITimeRangePointsListener updateListener) {
+
+		this.timeRangePointsListener = updateListener;
+	}
+
 	public void setInput(TimeRanges timeRanges) {
 
 		this.timeRanges = timeRanges;
@@ -88,12 +102,49 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 	}
 
 	@Override
+	public void handleKeyDownEvent(Event event) {
+
+		super.handleKeyDownEvent(event);
+		if(event.keyCode == SWT.MOD1) {
+			if(isPointModus()) {
+				setCursor(SWT.CURSOR_CROSS);
+				pointSelection.clear();
+				pointSelectionActive = true;
+			} else {
+				pointSelectionActive = false;
+			}
+		}
+	}
+
+	@Override
+	public void handleKeyUpEvent(Event event) {
+
+		super.handleKeyUpEvent(event);
+		if(isControlKeyPressed(event)) {
+			if(isPointModus()) {
+				fireUpdatePoints(pointSelection);
+				clearPointModus();
+				setCursorDefault();
+				resetSelectedRange();
+			}
+		} else {
+			if(isPointModus()) {
+				clearPointModus();
+			}
+		}
+	}
+
+	@Override
 	public void handleMouseDownEvent(Event event) {
 
 		super.handleMouseDownEvent(event);
 		if(isControlKeyPressed(event)) {
-			startBaselineSelection(event.x, event.y);
-			setCursor(SWT.CURSOR_CROSS);
+			if(!isPointModus()) {
+				startBaselineSelection(event.x, event.y);
+				setCursor(SWT.CURSOR_CROSS);
+			} else {
+				resetSelectedRange();
+			}
 		}
 	}
 
@@ -102,8 +153,10 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 
 		super.handleMouseMoveEvent(event);
 		if(isControlKeyPressed(event)) {
-			if(xStart > 0 && yStart > 0) {
-				trackBaselineSelection(event.x, event.y);
+			if(!isPointModus()) {
+				if(xStart > 0 && yStart > 0) {
+					trackBaselineSelection(event.x, event.y);
+				}
 			}
 		}
 	}
@@ -113,15 +166,32 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 
 		super.handleMouseUpEvent(event);
 		if(isControlKeyPressed(event)) {
-			stopBaselineSelection(event.x, event.y);
-			if(isUseTemplateModus()) {
-				adjustTimeRange(event);
+			if(isPointModus()) {
+				if(pointSelectionActive) {
+					pointSelection.add(new Point(event.x, event.y));
+				}
 			} else {
-				fireUpdatePeakRange(xStart, yStart, xStop, yStop);
+				stopBaselineSelection(event.x, event.y);
+				if(TimeRangeModus.BASELINE.equals(timeRangeModus)) {
+					fireUpdatePeakRange(xStart, yStart, xStop, yStop);
+				} else {
+					adjustTimeRange(event);
+				}
+				setCursorDefault();
+				resetSelectedRange();
 			}
-			setCursorDefault();
-			resetSelectedRange();
 		}
+	}
+
+	private void clearPointModus() {
+
+		pointSelectionActive = false;
+		pointSelection.clear();
+	}
+
+	private boolean isPointModus() {
+
+		return TimeRangeModus.POINTS.equals(timeRangeModus);
 	}
 
 	private void createControl() {
@@ -287,6 +357,13 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 
 		if(timeRangePeakListener != null) {
 			timeRangePeakListener.update(xStart, yStart, xStop, yStop);
+		}
+	}
+
+	private void fireUpdatePoints(List<Point> points) {
+
+		if(timeRangePointsListener != null) {
+			timeRangePointsListener.update(points);
 		}
 	}
 }

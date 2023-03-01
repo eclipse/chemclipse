@@ -50,14 +50,14 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 		rangesControl.get().setInput(timeRanges);
 	}
 
-	public boolean isUseTemplateModus() {
+	public TimeRangeModus getTimeRangeModus() {
 
-		return chartControl.get().isUseTemplateModus();
+		return chartControl.get().getTimeRangeModus();
 	}
 
-	public void setUseTemplateModus(boolean useTemplateModus) {
+	public void setTimeRangeModus(TimeRangeModus timeRangeModus) {
 
-		chartControl.get().setUseTemplateModus(useTemplateModus);
+		chartControl.get().setTimeRangeModus(timeRangeModus);
 	}
 
 	public void setTimeRangeLabels(TimeRangeLabels timeRangeLabels) {
