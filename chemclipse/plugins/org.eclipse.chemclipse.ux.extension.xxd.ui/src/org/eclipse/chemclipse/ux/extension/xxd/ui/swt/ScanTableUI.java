@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanTableCom
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.xir.model.core.IScanISD;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -126,6 +127,13 @@ public class ScanTableUI extends ExtendedTableViewer {
 			super.setInput(null);
 			setLabelAndContentProviders(DataType.WSD);
 			super.setInput(scanWSD.getScanSignals());
+		} else if(scan instanceof IScanISD scanISD) {
+			/*
+			 * ISD
+			 */
+			super.setInput(null);
+			setLabelAndContentProviders(DataType.ISD);
+			super.setInput(scanISD.getProcessedSignals());
 		} else {
 			getTable().removeAll();
 			super.setInput(null);
@@ -218,6 +226,9 @@ public class ScanTableUI extends ExtendedTableViewer {
 			case WSD:
 				titles = ScanLabelProvider.TITLES_WSD;
 				break;
+			case ISD:
+				titles = ScanLabelProvider.TITLES_ISD;
+				break;
 			default:
 				titles = ScanLabelProvider.TITLES_EMPTY;
 		}
@@ -242,6 +253,9 @@ public class ScanTableUI extends ExtendedTableViewer {
 				break;
 			case WSD:
 				bounds = ScanLabelProvider.BOUNDS_WSD;
+				break;
+			case ISD:
+				bounds = ScanLabelProvider.BOUNDS_ISD;
 				break;
 			default:
 				bounds = ScanLabelProvider.BOUNDS_EMPTY;

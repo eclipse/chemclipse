@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.TreeSet;
 
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IMarkedTraces;
@@ -32,6 +33,8 @@ import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
+import org.eclipse.chemclipse.xir.model.core.IScanISD;
+import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
 import org.eclipse.swtchart.extensions.barcharts.BarSeriesData;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesData;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
@@ -128,11 +131,10 @@ public class ScanChartSupport {
 		/*
 		 * Sort the scan data, otherwise the line chart could be odd.
 		 */
-		if(scan instanceof IScanMSD) {
+		if(scan instanceof IScanMSD scanMSD) {
 			/*
 			 * MSD
 			 */
-			IScanMSD scanMSD = (IScanMSD)scan;
 			List<IIon> ions = new ArrayList<IIon>(scanMSD.getIons());
 			Collections.sort(ions, ionValueComparator);
 			int size = ions.size();
@@ -144,18 +146,16 @@ public class ScanChartSupport {
 				ySeries[index] = (mirrored) ? ion.getAbundance() * -1 : ion.getAbundance();
 				index++;
 			}
-		} else if(scan instanceof IScanCSD) {
+		} else if(scan instanceof IScanCSD scanCSD) {
 			/*
 			 * CSD
 			 */
-			IScanCSD scanCSD = (IScanCSD)scan;
 			xSeries = new double[]{scanCSD.getRetentionTime()};
 			ySeries = new double[]{(mirrored) ? scanCSD.getTotalSignal() * -1 : scanCSD.getTotalSignal()};
-		} else if(scan instanceof IScanWSD) {
+		} else if(scan instanceof IScanWSD scanWSD) {
 			/*
 			 * WSD
 			 */
-			IScanWSD scanWSD = (IScanWSD)scan;
 			List<IScanSignalWSD> scanSignalsWSD = new ArrayList<IScanSignalWSD>(scanWSD.getScanSignals());
 			Collections.sort(scanSignalsWSD, wavelengthValueComparator);
 			int size = scanSignalsWSD.size();
@@ -165,6 +165,20 @@ public class ScanChartSupport {
 			for(IScanSignalWSD scanSignalWSD : scanSignalsWSD) {
 				xSeries[index] = scanSignalWSD.getWavelength();
 				ySeries[index] = (mirrored) ? scanSignalWSD.getAbundance() * -1 : scanSignalWSD.getAbundance();
+				index++;
+			}
+		} else if(scan instanceof IScanISD scanISD) {
+			/*
+			 * ISD
+			 */
+			TreeSet<ISignalXIR> scanSignalsISD = scanISD.getProcessedSignals();
+			int size = scanSignalsISD.size();
+			xSeries = new double[size];
+			ySeries = new double[size];
+			int index = 0;
+			for(ISignalXIR scanSignalISD : scanSignalsISD) {
+				xSeries[index] = scanSignalISD.getWavenumber();
+				ySeries[index] = (mirrored) ? scanSignalISD.getScattering() * -1 : scanSignalISD.getScattering();
 				index++;
 			}
 		} else {

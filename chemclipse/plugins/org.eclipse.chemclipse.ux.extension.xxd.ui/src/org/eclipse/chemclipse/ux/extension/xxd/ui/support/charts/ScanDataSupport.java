@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,11 +38,13 @@ public class ScanDataSupport {
 	public static final String[] DATA_TYPES_MSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.MSD_NOMINAL.toString(), DataType.MSD_TANDEM.toString(), DataType.MSD_HIGHRES.toString()};
 	public static final String[] DATA_TYPES_CSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.CSD.toString()};
 	public static final String[] DATA_TYPES_WSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.WSD.toString()};
+	public static final String[] DATA_TYPES_ISD = new String[]{DataType.AUTO_DETECT.toString(), DataType.ISD.toString()};
 	//
 	public static final String[] SIGNAL_TYPES_DEFAULT = new String[]{SignalType.AUTO_DETECT.toString()};
 	public static final String[] SIGNAL_TYPES_MSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
 	public static final String[] SIGNAL_TYPES_CSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString()};
 	public static final String[] SIGNAL_TYPES_WSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
+	public static final String[] SIGNAL_TYPES_ISD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -192,6 +194,17 @@ public class ScanDataSupport {
 	public void setDataTypeWSD(IChartSettings chartSettings) {
 
 		String titleX = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_WAVELENGTH);
+		String titleY = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
+		String titleY1 = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		//
+		ChartSupport.setPrimaryAxisSet(chartSettings, titleX, true, titleY);
+		ChartSupport.clearSecondaryAxes(chartSettings);
+		ChartSupport.addSecondaryAxisY(chartSettings, titleY1);
+	}
+
+	public void setDataTypeISD(IChartSettings chartSettings) {
+
+		String titleX = "Wavenumber";
 		String titleY = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
 		String titleY1 = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
 		//

@@ -38,6 +38,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.xir.model.core.IScanISD;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
@@ -317,6 +318,8 @@ public class ScanChartUI extends ScrollableChart {
 			forceZeroY = true; // Only 1 signal contained.
 		} else if(scan instanceof IScanWSD scanWSD) {
 			forceZeroY = (scanWSD.getNumberOfScanSignals() == 1);
+		} else if(scan instanceof IScanISD scanISD) {
+			forceZeroY = (scanISD.getProcessedSignals().size() == 1);
 		}
 		return forceZeroY;
 	}
@@ -371,6 +374,8 @@ public class ScanChartUI extends ScrollableChart {
 				usedDataType = DataType.CSD;
 			} else if(scan instanceof IScanWSD) {
 				usedDataType = DataType.WSD;
+			} else if(scan instanceof IScanISD) {
+				usedDataType = DataType.ISD;
 			} else {
 				usedDataType = DataType.MSD_NOMINAL;
 			}
@@ -394,6 +399,12 @@ public class ScanChartUI extends ScrollableChart {
 				}
 			} else if(scan instanceof IScanWSD scanWSD) {
 				if(scanWSD.getNumberOfScanSignals() > 1) {
+					usedSignalType = SignalType.PROFILE;
+				} else {
+					usedSignalType = SignalType.CENTROID;
+				}
+			} else if(scan instanceof IScanISD scanISD) {
+				if(scanISD.getProcessedSignals().size() > 1) {
 					usedSignalType = SignalType.PROFILE;
 				} else {
 					usedSignalType = SignalType.CENTROID;
@@ -422,6 +433,9 @@ public class ScanChartUI extends ScrollableChart {
 				labelOption = LabelOption.NOMIMAL;
 				break;
 			case WSD:
+				labelOption = LabelOption.NOMIMAL;
+				break;
+			case ISD:
 				labelOption = LabelOption.NOMIMAL;
 				break;
 			default:
@@ -512,6 +526,16 @@ public class ScanChartUI extends ScrollableChart {
 				}
 				scanDataSupport.setDataTypeWSD(chartSettings);
 				rangeRestriction.setZeroY(false);
+				break;
+			case ISD:
+				/*
+				 * No display of wavenumbers when Raman is shown.
+				 */
+				if(signalType == SignalType.PROFILE) {
+					labelPaintListener = null;
+				}
+				scanDataSupport.setDataTypeISD(chartSettings);
+				rangeRestriction.setZeroY(true);
 				break;
 			default:
 				scanDataSupport.setDataTypeMSD(chartSettings);

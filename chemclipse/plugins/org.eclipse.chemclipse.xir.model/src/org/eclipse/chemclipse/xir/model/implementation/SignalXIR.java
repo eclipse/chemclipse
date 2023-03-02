@@ -22,6 +22,7 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 	private double wavenumber = 0.0d; // 1/cm
 	private double absorbance = 0.0d;
 	private double transmission = 0.0d;
+	private double scattering = 0.0d;
 
 	public SignalXIR() {
 
@@ -29,9 +30,15 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 
 	public SignalXIR(double wavenumber, double absorbance, double transmission) {
 
+		this(wavenumber, absorbance, transmission, 0.0d);
+	}
+
+	public SignalXIR(double wavenumber, double absorbance, double transmission, double scattering) {
+
 		this.wavenumber = wavenumber;
 		this.absorbance = absorbance;
 		this.transmission = transmission;
+		this.scattering = scattering;
 	}
 
 	@Override
@@ -46,7 +53,11 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 		if(transmission > 0) {
 			return transmission;
 		} else {
-			return absorbance;
+			if(absorbance > 0) {
+				return absorbance;
+			} else {
+				return scattering;
+			}
 		}
 	}
 
@@ -70,9 +81,11 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 		if(transmission > 0) {
 			return transmission;
 		}
+		//
 		if(absorbance > 0) {
 			return 100 / Math.pow(10, absorbance);
 		}
+		//
 		return 100;
 	}
 
@@ -90,6 +103,7 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 		} else if(transmission > 0) {
 			return Math.log(1 / transmission);
 		}
+		//
 		return 0;
 	}
 
@@ -97,6 +111,18 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 	public void setAbsorbance(double absorbance) {
 
 		this.absorbance = absorbance;
+	}
+
+	@Override
+	public double getScattering() {
+
+		return scattering;
+	}
+
+	@Override
+	public void setScattering(double scattering) {
+
+		this.scattering = scattering;
 	}
 
 	@Override
@@ -129,7 +155,7 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 	@Override
 	public String toString() {
 
-		return "SignalXIR [wavenumber=" + wavenumber + ", absorbance=" + absorbance + ", transmission=" + transmission + "]";
+		return "SignalXIR [wavenumber=" + wavenumber + ", absorbance=" + absorbance + ", transmission=" + transmission + ", scattering=" + scattering + "]";
 	}
 
 	@Override

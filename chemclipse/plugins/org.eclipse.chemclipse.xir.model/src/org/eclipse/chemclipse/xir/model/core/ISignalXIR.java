@@ -28,4 +28,8 @@ public interface ISignalXIR extends ISignal, Serializable {
 	double getAbsorbance();
 
 	void setAbsorbance(double absorbance);
+
+	double getScattering();
+
+	void setScattering(double scattering);
 }

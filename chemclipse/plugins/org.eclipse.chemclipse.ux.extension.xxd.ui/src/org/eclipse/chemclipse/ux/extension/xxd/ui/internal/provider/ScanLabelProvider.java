@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
+import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -54,6 +55,8 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	public static final int[] BOUNDS_CSD = {150, 150, 150};
 	public static final String[] TITLES_WSD = {WAVELENGTH, INTENSITY, RELATIVE_INTENSITY};
 	public static final int[] BOUNDS_WSD = {150, 150, 150};
+	public static final String[] TITLES_ISD = {"Wavenumber", "Absorbance", "Transmission", "Scattering"};
+	public static final int[] BOUNDS_ISD = {150, 150, 150, 150};
 	public static final String[] TITLES_EMPTY = {NO_VALUE};
 	public static final int[] BOUNDS_EMPTY = {150};
 	//
@@ -64,6 +67,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	private DecimalFormat decimalFormatHighResMSD;
 	private DecimalFormat decimalFormatCSD;
 	private DecimalFormat decimalFormatWSD;
+	private DecimalFormat decimalFormatISD;
 	//
 	private DecimalFormat decimalFormatIntensity;
 	private DecimalFormat decimalFormatRelativeIntensity;
@@ -79,6 +83,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 		decimalFormatHighResMSD = ValueFormat.getDecimalFormatEnglish("0.000###");
 		decimalFormatCSD = ValueFormat.getDecimalFormatEnglish("0.0000");
 		decimalFormatWSD = ValueFormat.getDecimalFormatEnglish("0.0");
+		decimalFormatISD = ValueFormat.getDecimalFormatEnglish("0.0");
 		decimalFormatIntensity = ValueFormat.getDecimalFormatEnglish("0.0###");
 		decimalFormatRelativeIntensity = ValueFormat.getDecimalFormatEnglish("0.0000");
 	}
@@ -118,6 +123,9 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 				break;
 			case WSD:
 				text = getWSD(element, columnIndex);
+				break;
+			case ISD:
+				text = getISD(element, columnIndex);
 				break;
 			default:
 				text = NO_VALUE;
@@ -249,6 +257,30 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 					} else {
 						text = decimalFormatRelativeIntensity.format(relativeIntensityFactorPositive * signal);
 					}
+					break;
+				default:
+					text = NO_VALUE;
+			}
+		}
+		return text;
+	}
+
+	private String getISD(Object element, int columnIndex) {
+
+		String text = "";
+		if(element instanceof ISignalXIR scanSignal) {
+			switch(columnIndex) {
+				case 0:
+					text = decimalFormatISD.format(scanSignal.getWavenumber());
+					break;
+				case 1:
+					text = decimalFormatIntensity.format(scanSignal.getAbsorbance());
+					break;
+				case 2:
+					text = decimalFormatIntensity.format(scanSignal.getTransmission());
+					break;
+				case 3:
+					text = decimalFormatIntensity.format(scanSignal.getScattering());
 					break;
 				default:
 					text = NO_VALUE;

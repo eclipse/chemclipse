@@ -49,6 +49,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
+import org.eclipse.chemclipse.xir.model.core.IScanISD;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -304,6 +305,9 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		} else if(scan instanceof IScanWSD) {
 			IScanWSD scanWSD = (IScanWSD)scan;
 			signals = Integer.toString(scanWSD.getNumberOfScanSignals());
+		} else if(scan instanceof IScanISD) {
+			IScanISD scanISD = (IScanISD)scan;
+			signals = Integer.toString(scanISD.getProcessedSignals().size());
 		} else {
 			signals = "--";
 		}
@@ -746,28 +750,30 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 	private void deleteSignal(Object signal) {
 
 		IScan scan = getScan();
-		if(scan instanceof IScanCSD) {
+		if(scan instanceof IScanCSD scanCSD) {
 			/*
 			 * CSD
 			 */
-			IScanCSD scanCSD = (IScanCSD)scan;
 			scanCSD.adjustTotalSignal(0.0f);
-		} else if(scan instanceof IScanMSD) {
+		} else if(scan instanceof IScanMSD scanMSD) {
 			/*
 			 * MSD
 			 */
-			IScanMSD scanMSD = (IScanMSD)scan;
 			if(signal instanceof IIon) {
 				scanMSD.removeIon((IIon)signal);
 			}
-		} else if(scan instanceof IScanWSD) {
+		} else if(scan instanceof IScanWSD scanWSD) {
 			/*
 			 * WSD
 			 */
-			IScanWSD scanWSD = (IScanWSD)scan;
 			if(signal instanceof IScanSignalWSD) {
 				scanWSD.removeScanSignal((IScanSignalWSD)signal);
 			}
+		} else if(scan instanceof IScanISD scanISD) {
+			/*
+			 * ISD
+			 */
+			// Not supported yet.
 		}
 	}
 
@@ -805,6 +811,11 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 					 */
 					IScanWSD scanWSD = (IScanWSD)scan;
 					scanWSD.addScanSignal(new ScanSignalWSD(valueX, valueY));
+				} else if(scan instanceof IScanWSD) {
+					/*
+					 * ISD
+					 */
+					// Not supported yet.
 				}
 				//
 				textX.setText("");

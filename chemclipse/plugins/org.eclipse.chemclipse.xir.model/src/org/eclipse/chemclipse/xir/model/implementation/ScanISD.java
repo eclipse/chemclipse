@@ -31,7 +31,7 @@ public class ScanISD extends AbstractScanISD {
 
 		float totalSignal = 0.0f;
 		for(ISignalXIR signalXIR : processedSignals) {
-			totalSignal += signalXIR.getTransmission();
+			totalSignal += signalXIR.getScattering();
 		}
 		//
 		return totalSignal;

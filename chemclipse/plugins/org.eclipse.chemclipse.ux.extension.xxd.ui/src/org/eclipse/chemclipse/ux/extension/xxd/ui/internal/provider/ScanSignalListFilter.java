@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
+import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
@@ -66,6 +67,10 @@ public class ScanSignalListFilter extends ViewerFilter {
 			}
 		} else if(element instanceof IScanSignalWSD scanSignalWSD) {
 			if(Double.toString(scanSignalWSD.getWavelength()).contains(searchText)) {
+				return true;
+			}
+		} else if(element instanceof ISignalXIR scanSignalISD) {
+			if(Double.toString(scanSignalISD.getWavenumber()).contains(searchText)) {
 				return true;
 			}
 		}
