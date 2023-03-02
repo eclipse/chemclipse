@@ -136,6 +136,7 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 			@Override
 			public void update(TimeRange timeRange) {
 
+				chartControl.get().updateTimeRangeMarker(timeRange);
 				updateTimeRangeMarker(timeRange);
 				fireUpdate(timeRange);
 			}

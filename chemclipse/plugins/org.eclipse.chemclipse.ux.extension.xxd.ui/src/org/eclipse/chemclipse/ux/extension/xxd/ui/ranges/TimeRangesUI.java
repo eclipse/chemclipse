@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -153,31 +153,10 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(timeRanges != null) {
-					List<TimeRange> timeRangeList = new ArrayList<>(timeRanges.values());
-					Collections.sort(timeRangeList, (t1, t2) -> Integer.compare(t1.getStart(), t2.getStart()));
-					if(!timeRangeList.isEmpty()) {
-						if(timeRange == null) {
-							/*
-							 * No selection yet
-							 */
-							timeRange = timeRangeList.get(0);
-						} else {
-							/*
-							 * Previous or first
-							 */
-							int index = timeRangeList.indexOf(timeRange) - 1;
-							if(index >= 0 && index < timeRangeList.size()) {
-								timeRange = timeRangeList.get(index);
-							} else {
-								timeRange = timeRangeList.get(0);
-							}
-						}
-						/*
-						 * Update
-						 */
-						updateTimeRange(timeRange, true);
-					}
+				TimeRange timeRangePrevious = TimeRangeSupport.getTimeRangePrevious(timeRanges, timeRange);
+				if(timeRangePrevious != null) {
+					timeRange = timeRangePrevious;
+					updateTimeRange(timeRange, true);
 				}
 			}
 		});
@@ -248,35 +227,10 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(timeRanges != null) {
-					List<TimeRange> timeRangeList = new ArrayList<>(timeRanges.values());
-					Collections.sort(timeRangeList, (t1, t2) -> Integer.compare(t1.getStart(), t2.getStart()));
-					if(!timeRangeList.isEmpty()) {
-						if(timeRange == null) {
-							/*
-							 * No selection yet
-							 */
-							int last = timeRangeList.size() - 1;
-							last = (last < 0) ? 0 : last;
-							timeRange = timeRangeList.get(last);
-						} else {
-							/*
-							 * Previous or first
-							 */
-							int index = timeRangeList.indexOf(timeRange) + 1;
-							if(index >= 0 && index < timeRangeList.size()) {
-								timeRange = timeRangeList.get(index);
-							} else {
-								int last = timeRangeList.size() - 1;
-								last = (last < 0) ? 0 : last;
-								timeRange = timeRangeList.get(last);
-							}
-						}
-						/*
-						 * Update
-						 */
-						updateTimeRange(timeRange, true);
-					}
+				TimeRange timeRangeNext = TimeRangeSupport.getTimeRangeNext(timeRanges, timeRange);
+				if(timeRangeNext != null) {
+					timeRange = timeRangeNext;
+					updateTimeRange(timeRange, true);
 				}
 			}
 		});

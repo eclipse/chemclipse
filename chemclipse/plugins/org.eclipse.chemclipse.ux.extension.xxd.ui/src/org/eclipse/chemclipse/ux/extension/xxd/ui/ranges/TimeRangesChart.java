@@ -43,12 +43,13 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 	private int yStop;
 	//
 	private TimeRangeModus timeRangeModus = TimeRangeModus.TEMPLATE;
-	private TimeRanges timeRanges;
+	private TimeRange timeRange = null;
+	private TimeRanges timeRanges = null;
 	private TimeRangeLabels timeRangeLabels = new TimeRangeLabels();
 	//
-	private ITimeRangeUpdateListener timeRangeUpdateListener;
-	private ITimeRangePeakListener timeRangePeakListener;
-	private ITimeRangePointsListener timeRangePointsListener;
+	private ITimeRangeUpdateListener timeRangeUpdateListener = null;
+	private ITimeRangePeakListener timeRangePeakListener = null;
+	private ITimeRangePointsListener timeRangePointsListener = null;
 	/*
 	 * TimeRangeModus.POINTS
 	 */
@@ -98,6 +99,7 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 
 	public void select(TimeRange timeRange) {
 
+		this.timeRange = timeRange;
 		fireUpdateTimeRange(timeRange);
 	}
 
@@ -128,8 +130,27 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 				resetSelectedRange();
 			}
 		} else {
+			/*
+			 * Clear the point modus status.
+			 */
 			if(isPointModus()) {
 				clearPointModus();
+			}
+			/*
+			 * Select the previous or next time range via key code.
+			 */
+			if(event.keyCode == SWT.ARROW_LEFT) {
+				TimeRange timeRangePrevious = TimeRangeSupport.getTimeRangePrevious(timeRanges, timeRange);
+				if(timeRangePrevious != null) {
+					select(timeRangePrevious);
+					timeRange = timeRangePrevious;
+				}
+			} else if(event.keyCode == SWT.ARROW_RIGHT) {
+				TimeRange timeRangeNext = TimeRangeSupport.getTimeRangeNext(timeRanges, timeRange);
+				if(timeRangeNext != null) {
+					select(timeRangeNext);
+					timeRange = timeRangeNext;
+				}
 			}
 		}
 	}
@@ -181,6 +202,11 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 				resetSelectedRange();
 			}
 		}
+	}
+
+	protected void updateTimeRangeMarker(TimeRange timeRange) {
+
+		this.timeRange = timeRange;
 	}
 
 	private void clearPointModus() {
