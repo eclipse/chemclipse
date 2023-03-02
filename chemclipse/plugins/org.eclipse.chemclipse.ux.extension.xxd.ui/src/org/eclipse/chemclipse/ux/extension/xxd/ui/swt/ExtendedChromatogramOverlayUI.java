@@ -1088,7 +1088,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		availableSeriesIds.add(seriesId);
 		selectionSeries.add(seriesId);
 		if(!baseChart.isSeriesContained(seriesId)) {
-			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, null, false, true);
+			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, null, false);
 			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, true);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setDescription(description);
@@ -1109,7 +1109,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 					selectionSeries.add(referenceSeriesId);
 					if(!baseChart.isSeriesContained(referenceSeriesId)) {
 						color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, displayType);
-						ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, displayType, derivative, color, null, false, true);
+						ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, displayType, derivative, color, null, false);
 						ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 						lineSeriesSettings.setDescription(description);
 						lineSeriesDataList.add(lineSeriesData);
