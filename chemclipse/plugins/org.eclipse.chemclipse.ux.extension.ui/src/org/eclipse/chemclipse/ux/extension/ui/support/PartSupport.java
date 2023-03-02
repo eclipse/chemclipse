@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -63,6 +63,7 @@ public class PartSupport {
 	public static final String PARTDESCRIPTOR_SYNONYMS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.synonymsPartDescriptor";
 	public static final String PARTDESCRIPTOR_COLUMN_INDICES = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.columnIndicesPartDescriptor";
 	public static final String PARTDESCRIPTOR_FLAVOR_MARKER = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.flavorMarkerPartDescriptor";
+	public static final String PARTDESCRIPTOR_LITERATURE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.literaturePartDescriptor";
 	public static final String PARTDESCRIPTOR_CAS_NUMBERS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.casNumbersPartDescriptor";
 	public static final String PARTDESCRIPTOR_MOLECULE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.moleculePartDescriptor";
 	public static final String PARTDESCRIPTOR_TARGETS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.targetsPartDescriptor";

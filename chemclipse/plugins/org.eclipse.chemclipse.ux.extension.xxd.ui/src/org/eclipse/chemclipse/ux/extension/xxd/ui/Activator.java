@@ -168,6 +168,8 @@ public class Activator extends AbstractActivatorUI {
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_RAWFILE, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, IChemClipseEvents.EVENT_BROKER_DATA);
 		//
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_LITERATURE_UPDATE, IChemClipseEvents.EVENT_BROKER_DATA);
+		//
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);

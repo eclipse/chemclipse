@@ -50,6 +50,8 @@ public interface IChemClipseEvents {
 	String TOPIC_SCAN_XIR_UPDATE_SELECTION = "scan/xir/update/selection";
 	String TOPIC_SCAN_NMR_UPDATE_SELECTION = "scan/nmr/update/selection";
 	//
+	String TOPIC_LITERATURE_UPDATE = "literature/update";
+	//
 	String TOPIC_APPLICATION_SELECT_PERSPECTIVE = "application/select/perspective";
 	String TOPIC_APPLICATION_SELECT_VIEW = "application/select/view";
 	String TOPIC_PART_CLOSED = "part/closed";
