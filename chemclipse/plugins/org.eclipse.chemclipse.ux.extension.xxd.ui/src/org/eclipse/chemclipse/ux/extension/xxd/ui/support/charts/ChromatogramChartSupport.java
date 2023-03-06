@@ -176,7 +176,7 @@ public class ChromatogramChartSupport {
 
 	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline) {
 
-		return getLineSeriesData(chromatogram, seriesId, dataType, derivative, color, null, false, false);
+		return getLineSeriesData(chromatogram, seriesId, dataType, derivative, color, signals, false, false);
 	}
 
 	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline, boolean useRetentionIndex) {
