@@ -276,6 +276,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 */
 		store.setDefault(PreferenceConstants.P_MOLECULE_PATH_EXPORT, PreferenceConstants.DEF_MOLECULE_PATH_EXPORT);
 		store.setDefault(PreferenceConstants.P_LENGTH_MOLECULE_NAME_EXPORT, PreferenceConstants.DEF_LENGTH_MOLECULE_NAME_EXPORT);
+		store.setDefault(PreferenceConstants.P_PREFER_OFFLINE_MOLECULE, PreferenceConstants.DEF_PREFER_OFFLINE_MOLECULE);
 		/*
 		 * Merge Peaks
 		 */
