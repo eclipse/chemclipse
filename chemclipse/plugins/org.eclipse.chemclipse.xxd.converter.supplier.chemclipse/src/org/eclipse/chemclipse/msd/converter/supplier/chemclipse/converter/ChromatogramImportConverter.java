@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -23,6 +24,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.SpecificationValidator;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 
 public class ChromatogramImportConverter extends AbstractChromatogramImportConverter<IChromatogramMSD> {
@@ -47,9 +49,16 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 				try {
 					IChromatogramMSD chromatogram = reader.read(file, subMonitor.split(99));
 					processingInfo.setProcessingResult(chromatogram);
-				} catch(Exception e) {
+				} catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
 					logger.warn(e);
-					processingInfo.addErrorMessage(IConstants.DESCRIPTION_IMPORT, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
+					processingInfo.addErrorMessage(IConstants.DESCRIPTION_IMPORT, "Error converting file: " + file.getAbsolutePath());
+				} catch(OperationCanceledException e) {
+					logger.warn(e);
+					processingInfo.addErrorMessage(IConstants.DESCRIPTION_IMPORT, "Canceled converting file: " + file.getAbsolutePath());
+				} catch(IOException e) {
+					logger.warn(e);
+					processingInfo.addErrorMessage(IConstants.DESCRIPTION_IMPORT, "Error converting file: " + file.getAbsolutePath());
 				}
 			}
 			return processingInfo;
@@ -58,11 +67,10 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public IProcessingInfo convertOverview(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramOverview> convertOverview(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = super.validate(file);
+		IProcessingInfo<IChromatogramOverview> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
 			file = SpecificationValidator.validateSpecification(file);
 			IChromatogramMSDReader reader = new ChromatogramReaderMSD();

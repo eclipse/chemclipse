@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.csd.filter.core.peak;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.csd.filter.l10n.Messages;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
@@ -25,27 +26,27 @@ public abstract class AbstractPeakFilter implements IPeakFilter {
 	private static final String DESCRIPTION = Messages.peakFilter;
 
 	@Override
-	public IProcessingInfo<?> validate(IPeakCSD peak, IPeakFilterSettings peakFilterSettings) {
+	public IProcessingInfo<IChromatogramFilterResult> validate(IPeakCSD peak, IPeakFilterSettings peakFilterSettings) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(validatePeak(peak));
 		processingInfo.addMessages(validateFilterSettings(peakFilterSettings));
 		return processingInfo;
 	}
 
 	@Override
-	public IProcessingInfo<?> validate(List<IPeakCSD> peaks, IPeakFilterSettings peakFilterSettings) {
+	public IProcessingInfo<IChromatogramFilterResult> validate(List<IPeakCSD> peaks, IPeakFilterSettings peakFilterSettings) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(validatePeaks(peaks));
 		processingInfo.addMessages(validateFilterSettings(peakFilterSettings));
 		return processingInfo;
 	}
 
 	@Override
-	public IProcessingInfo<?> validate(IChromatogramSelectionCSD chromatogramSelection, IPeakFilterSettings peakFilterSettings) {
+	public IProcessingInfo<IChromatogramFilterResult> validate(IChromatogramSelectionCSD chromatogramSelection, IPeakFilterSettings peakFilterSettings) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(validateChromatogramSelection(chromatogramSelection));
 		processingInfo.addMessages(validateFilterSettings(peakFilterSettings));
 		return processingInfo;

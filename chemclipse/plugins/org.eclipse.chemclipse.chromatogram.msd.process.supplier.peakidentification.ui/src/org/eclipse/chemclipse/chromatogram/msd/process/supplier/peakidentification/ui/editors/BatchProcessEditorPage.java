@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -272,8 +272,6 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		Section section;
 		Composite client;
 		GridLayout layout;
-		@SuppressWarnings("unused")
-		Label label;
 		GridData gridData;
 		GridData gridDataLabel;
 		/*
@@ -309,7 +307,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		/*
 		 * A dirty hack to create space at the bottom.
 		 */
-		label = toolkit.createLabel(client, "");
+		toolkit.createLabel(client, "");
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
@@ -545,6 +543,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 
+			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
 				editorPart.setActivePage(BatchProcessEditor.PEAK_INPUT_FILES_PAGE);
@@ -571,6 +570,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 
+			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
 				editorPart.setActivePage(BatchProcessEditor.PEAK_OUTPUT_FILES_PAGE);
@@ -597,6 +597,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 
+			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
 				editorPart.setActivePage(BatchProcessEditor.PEAK_IDENTIFICATION_RESULTS_PAGE);
@@ -622,6 +623,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 
+			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
 				Display display = Display.getCurrent();

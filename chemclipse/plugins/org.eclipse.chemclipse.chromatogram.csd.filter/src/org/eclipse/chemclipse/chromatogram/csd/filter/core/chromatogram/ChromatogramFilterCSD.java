@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram;
 
 import org.eclipse.chemclipse.chromatogram.csd.filter.l10n.Messages;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -55,9 +56,9 @@ public class ChromatogramFilterCSD {
 	 * @param filterId
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo<?> applyFilter(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo;
+		IProcessingInfo<IChromatogramFilterResult> processingInfo;
 		IChromatogramFilterCSD chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
@@ -78,9 +79,9 @@ public class ChromatogramFilterCSD {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo<?> applyFilter(IChromatogramSelectionCSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionCSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo;
+		IProcessingInfo<IChromatogramFilterResult> processingInfo;
 		IChromatogramFilterCSD chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
