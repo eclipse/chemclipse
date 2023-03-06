@@ -18,10 +18,4 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis;
  * @author eselmeister
  */
 public class TestPathHelper extends PathResolver {
-
-	/*
-	 * IMPORT
-	 */
-	public static final String TESTFILE_IMPORT_OP17760 = "testData/files/import/OP17760.D/DATA.MS";
-	public static final String TESTFILE_IMPORT_OP8777 = "testData/files/import/OP8777.D/DATA.MS";
 }
