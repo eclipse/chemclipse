@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,9 @@ public class RetentionIndexSettings {
 	@JsonProperty(value = "Retention Index Marker", defaultValue = "")
 	@JsonPropertyDescription("The list of retention index markers.")
 	private RetentionIndexMarker retentionIndexMarker = new RetentionIndexMarker();
+	@JsonProperty(value = "Store In Chromatogram", defaultValue = "true")
+	@JsonPropertyDescription("Store the retention index marker in the chromatogram.")
+	private boolean storeInChromatogram = true;
 	@JsonProperty(value = "Reference Chromatograms", defaultValue = "true")
 	@JsonPropertyDescription("Process all referenced chromatograms.")
 	private boolean processReferenceChromatograms = true;
@@ -33,6 +36,16 @@ public class RetentionIndexSettings {
 	public void setRetentionIndexMarker(RetentionIndexMarker retentionIndexMarker) {
 
 		this.retentionIndexMarker = retentionIndexMarker;
+	}
+
+	public boolean isStoreInChromatogram() {
+
+		return storeInChromatogram;
+	}
+
+	public void setStoreInChromatogram(boolean storeInChromatogram) {
+
+		this.storeInChromatogram = storeInChromatogram;
 	}
 
 	public boolean isProcessReferenceChromatograms() {

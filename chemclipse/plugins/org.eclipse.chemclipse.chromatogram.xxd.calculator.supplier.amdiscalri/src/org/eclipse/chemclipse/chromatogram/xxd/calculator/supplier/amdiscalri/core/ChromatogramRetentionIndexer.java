@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,9 @@ import java.util.Collections;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.RetentionIndexMarker;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.RetentionIndexSettings;
+import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
+import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -61,6 +64,19 @@ public class ChromatogramRetentionIndexer implements IProcessTypeSupplier {
 			RetentionIndexMarker retentionIndexMarker = processSettings.getRetentionIndexMarker();
 			boolean processReferenceChromatograms = processSettings.isProcessReferenceChromatograms();
 			RetentionIndexCalculator.calculateIndex(chromatogram, retentionIndexMarker, processReferenceChromatograms);
+			/*
+			 * Store the retention index marker in the chromatogram.
+			 */
+			if(processSettings.isStoreInChromatogram()) {
+				ISeparationColumnIndices separationColumnIndices = chromatogram.getSeparationColumnIndices();
+				separationColumnIndices.clear();
+				for(IRetentionIndexEntry retentionIndexEntry : retentionIndexMarker) {
+					int retentionTime = retentionIndexEntry.getRetentionTime();
+					float retentionIndex = retentionIndexEntry.getRetentionIndex();
+					String name = retentionIndexEntry.getName();
+					separationColumnIndices.put(new RetentionIndexEntry(retentionTime, retentionIndex, name));
+				}
+			}
 			//
 			return chromatogramSelection;
 		}
