@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -123,12 +123,10 @@ public class ResultsPage implements IMultiEditorPage {
 				 * Is the selection a structured selection?
 				 */
 				ISelection selection = event.getSelection();
-				if(selection instanceof IStructuredSelection) {
-					IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+				if(selection instanceof IStructuredSelection structuredSelection) {
 					Object element = structuredSelection.getFirstElement();
 					//
-					if(element instanceof IPeakMSD) {
-						IPeakMSD peakMSD = (IPeakMSD)element;
+					if(element instanceof IPeakMSD peakMSD) {
 						UpdateNotifierUI.update(Display.getDefault(), peakMSD);
 					}
 				}
@@ -143,8 +141,8 @@ public class ResultsPage implements IMultiEditorPage {
 
 		public void setParent(IMultiEditorPage parent) {
 
-			if(parent instanceof ResultsPage) {
-				parentWidget = (ResultsPage)parent;
+			if(parent instanceof ResultsPage resultsPage) {
+				parentWidget = resultsPage;
 			}
 		}
 

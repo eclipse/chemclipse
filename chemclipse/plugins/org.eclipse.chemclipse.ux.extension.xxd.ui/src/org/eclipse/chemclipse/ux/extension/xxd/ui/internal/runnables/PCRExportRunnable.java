@@ -49,8 +49,8 @@ public class PCRExportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask(ExtensionMessages.exportPlate, IProgressMonitor.UNKNOWN);
-			IProcessingInfo<?> processingInfo = PlateConverterPCR.convert(file, plate, supplier.getId(), monitor);
-			data = (File)processingInfo.getProcessingResult();
+			IProcessingInfo<File> processingInfo = PlateConverterPCR.convert(file, plate, supplier.getId(), monitor);
+			data = processingInfo.getProcessingResult();
 		} catch(Exception e) {
 			logger.error(e);
 		} finally {

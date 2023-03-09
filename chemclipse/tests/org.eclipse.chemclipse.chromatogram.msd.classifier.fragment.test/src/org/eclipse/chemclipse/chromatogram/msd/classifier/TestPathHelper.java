@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,9 +18,4 @@ package org.eclipse.chemclipse.chromatogram.msd.classifier;
  * @author eselmeister
  */
 public class TestPathHelper extends PathResolver {
-
-	/*
-	 * IMPORT
-	 */
-	public static final String TESTFILE_IMPORT_OP17760 = "testData/files/import/OP17760.D/DATA.MS";
 }
