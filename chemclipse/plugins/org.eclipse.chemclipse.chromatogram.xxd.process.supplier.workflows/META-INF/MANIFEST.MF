@@ -24,8 +24,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.chromatogram.xxd.integrator;bundle-version="0.8.0",
  org.eclipse.chemclipse.chromatogram.xxd.calculator;bundle-version="0.8.0",
  org.apache.commons.math3;bundle-version="3.5.0",
- org.apache.pdfbox,
- org.apache.commons.commons-csv;bundle-version="1.10.0"
+ org.apache.pdfbox;bundle-version="2.0.26",
+ org.apache.commons.commons-csv;bundle-version="1.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.converter,
