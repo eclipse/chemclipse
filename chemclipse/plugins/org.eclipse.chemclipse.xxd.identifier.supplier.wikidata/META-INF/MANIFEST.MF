@@ -19,8 +19,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.commons.logging;bundle-version="1.2.0",
  org.apache.commons.lang3;bundle-version="3.12.0",
  org.apache.thrift;bundle-version="0.12.0",
- org.apache.httpcomponents.httpclient;bundle-version="4.5.13",
- org.apache.httpcomponents.httpcore;bundle-version="4.4.15",
- org.apache.commons.commons-compress;bundle-version="1.22.0"
+ org.apache.commons.commons-compress;bundle-version="1.22.0",
+ wrapped.org.apache.httpcomponents.httpclient;bundle-version="4.5.14",
+ wrapped.org.apache.httpcomponents.httpcore;bundle-version="4.4.16"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
