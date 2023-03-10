@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,18 +19,16 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public class BaselineDelete extends AbstractBaselineDetector {
 
 	@Override
-	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> setBaseline(IChromatogramSelection<?, ?> chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
+		IProcessingInfo<?> processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
-			if(baselineDetectorSettings instanceof DeleteSettings) {
-				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			if(baselineDetectorSettings instanceof DeleteSettings deleteSettings) {
+				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				IBaselineModel baselineModel = chromatogram.getBaselineModel();
-				DeleteSettings deleteSettings = (DeleteSettings)baselineDetectorSettings;
 				if(deleteSettings.isDeleteCompletely()) {
 					baselineModel.removeBaseline();
 				} else {
@@ -44,7 +42,7 @@ public class BaselineDelete extends AbstractBaselineDetector {
 	}
 
 	@Override
-	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> setBaseline(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		DetectorSettings settings = new DetectorSettings();
 		return setBaseline(chromatogramSelection, settings, monitor);

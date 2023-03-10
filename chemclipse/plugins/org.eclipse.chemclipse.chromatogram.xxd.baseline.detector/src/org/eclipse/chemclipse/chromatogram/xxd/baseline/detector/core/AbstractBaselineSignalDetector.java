@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,11 +40,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDetector {
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> setBaseline(IChromatogramSelection<?, ?> chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, baselineDetectorSettings, monitor);
+		IProcessingInfo<?> processingInfo = validate(chromatogramSelection, baselineDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
 			return process(chromatogramSelection, baselineDetectorSettings, monitor);
 		} else {
@@ -52,11 +51,10 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> setBaseline(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, monitor);
+		IProcessingInfo<?> processingInfo = validate(chromatogramSelection, monitor);
 		if(!processingInfo.hasErrorMessages()) {
 			return process(chromatogramSelection, null, monitor);
 		} else {
@@ -64,15 +62,14 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private IProcessingInfo process(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings settings, IProgressMonitor monitor) {
+	private IProcessingInfo<?> process(IChromatogramSelection<?, ?> chromatogramSelection, IBaselineDetectorSettings settings, IProgressMonitor monitor) {
 
-		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			return process((IChromatogramSelectionMSD)chromatogramSelection, settings, monitor);
-		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-			return process((IChromatogramSelectionCSD)chromatogramSelection, settings, monitor);
-		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-			return process((IChromatogramSelectionWSD)chromatogramSelection, settings, monitor);
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
+			return process(chromatogramSelectionMSD, settings, monitor);
+		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD chromatogramSelectionCSD) {
+			return process(chromatogramSelectionCSD, settings, monitor);
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD chromatogramSelectionWSD) {
+			return process(chromatogramSelectionWSD, settings, monitor);
 		}
 		throw new UnsupportedOperationException("Class " + chromatogramSelection.getClass().getName() + " is not supported");
 	}
@@ -96,7 +93,7 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		 * 3. step - set baseline
 		 */
 		if(!processInfo.hasErrorMessages()) {
-			applyBaseline(totalSignals, chromatogramCSD.getBaselineModel(), monitor);
+			applyBaseline(totalSignals, chromatogramCSD.getBaselineModel());
 		}
 		return processInfo;
 	}
@@ -124,7 +121,7 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 			 * negative values to zero
 			 */
 			totalSignals.setNegativeTotalSignalsToZero();
-			applyBaseline(totalSignals, chromatogramMSD.getBaselineModel(), monitor);
+			applyBaseline(totalSignals, chromatogramMSD.getBaselineModel());
 		}
 		return processInfo;
 	}
@@ -143,7 +140,7 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		/*
 		 * 2. step - process signals - each wavelength separately
 		 */
-		IProcessingInfo<?> processingInfoTotal = new ProcessingInfo<Object>();
+		IProcessingInfo<?> processingInfoTotal = new ProcessingInfo<>();
 		for(IExtractedSingleWavelengthSignals totalSignals : extractedSingleWavelengthSignals) {
 			IProcessingInfo<?> processingInfo = baselineProcess(totalSignals, settings, monitor);
 			processingInfoTotal.addMessages(processingInfo);
@@ -160,7 +157,7 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 				Iterator<IExtractedSingleWavelengthSignals> iterator = signalsOnWavelength.iterator();
 				while(iterator.hasNext()) {
 					IExtractedSingleWavelengthSignals signals = iterator.next();
-					applyBaseline(signals, baselineModel, monitor);
+					applyBaseline(signals, baselineModel);
 				}
 			}
 		}
@@ -169,7 +166,7 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		ITotalScanSignals totalSignals = totalScanSignalExtractor.getTotalScanSignals(chromatogramSelection, false);
 		IProcessingInfo<?> processInfo = baselineProcess(totalSignals, settings, monitor);
 		if(!processInfo.hasErrorMessages()) {
-			applyBaseline(totalSignals, chromatogramWSD.getBaselineModel(), monitor);
+			applyBaseline(totalSignals, chromatogramWSD.getBaselineModel());
 		}
 		return processingInfoTotal;
 	}
@@ -187,7 +184,7 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 
 	protected abstract IProcessingInfo<?> setBaseline(ITotalScanSignals totalScanSignals, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
 
-	private void applyBaseline(ITotalScanSignals totalIonSignals, IBaselineModel baselineModel, IProgressMonitor monitor) {
+	private void applyBaseline(ITotalScanSignals totalIonSignals, IBaselineModel baselineModel) {
 
 		/*
 		 * remove old baseline
@@ -196,8 +193,7 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		ITotalScanSignal lastTotalSignal = totalIonSignals.getLastTotalScanSignal();
 		baselineModel.removeBaseline(firstTotalSignal.getRetentionTime(), lastTotalSignal.getRetentionTime());
 		/*
-		 * Why scan < numberOfScans instead of scan <= numberOfScans? Because of
-		 * .getNextTotalIonSignal();
+		 * Why scan < numberOfScans instead of scan <= numberOfScans? Because of getNextTotalIonSignal()
 		 */
 		for(int scan = totalIonSignals.getStartScan(); scan < totalIonSignals.getStopScan(); scan++) {
 			ITotalScanSignal actualTotalIonSignal = totalIonSignals.getTotalScanSignal(scan);

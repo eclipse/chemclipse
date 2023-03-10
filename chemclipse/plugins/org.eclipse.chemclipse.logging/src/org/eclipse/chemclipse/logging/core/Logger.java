@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,8 +16,8 @@ public class Logger extends Category {
 	/**
 	 * @param clazz
 	 */
-	@SuppressWarnings("rawtypes")
-	protected Logger(Class clazz) {
+	protected Logger(Class<?> clazz) {
+
 		super(clazz);
 	}
 
@@ -27,8 +27,7 @@ public class Logger extends Category {
 	 * @param clazz
 	 * @return Logger
 	 */
-	@SuppressWarnings("rawtypes")
-	public static Logger getLogger(Class clazz) {
+	public static Logger getLogger(Class<?> clazz) {
 
 		return new Logger(clazz);
 	}

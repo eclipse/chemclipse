@@ -14,6 +14,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
@@ -177,21 +179,21 @@ public class ChromatogramReferencesUI {
 
 		if(checked) {
 			action.setToolTipText("Collapse the references items");
-			action.setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_COLLAPSE_ALL, IApplicationImage.SIZE_16x16));
+			action.setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_COLLAPSE_ALL, IApplicationImageProvider.SIZE_16x16));
 		} else {
 			action.setToolTipText("Expand the references items");
-			action.setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_EXPAND_ALL, IApplicationImage.SIZE_16x16));
+			action.setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_EXPAND_ALL, IApplicationImageProvider.SIZE_16x16));
 		}
 	}
 
 	private IChromatogramSelection<?, ?> createChromatogramSelection(IChromatogram<?> referencedChromatogram) {
 
-		if(referencedChromatogram instanceof IChromatogramCSD) {
-			return new ChromatogramSelectionCSD((IChromatogramCSD)referencedChromatogram);
-		} else if(referencedChromatogram instanceof IChromatogramMSD) {
-			return new ChromatogramSelectionMSD((IChromatogramMSD)referencedChromatogram);
-		} else if(referencedChromatogram instanceof IChromatogramWSD) {
-			return new ChromatogramSelectionWSD((IChromatogramWSD)referencedChromatogram);
+		if(referencedChromatogram instanceof IChromatogramCSD chromatogramCSD) {
+			return new ChromatogramSelectionCSD(chromatogramCSD);
+		} else if(referencedChromatogram instanceof IChromatogramMSD chromatogramMSD) {
+			return new ChromatogramSelectionMSD(chromatogramMSD);
+		} else if(referencedChromatogram instanceof IChromatogramWSD chromatogramWSD) {
+			return new ChromatogramSelectionWSD(chromatogramWSD);
 		} else {
 			return null;
 		}
@@ -223,7 +225,7 @@ public class ChromatogramReferencesUI {
 
 	private Action createButtonSelectPreviousChromatogram(EditorToolBar toolBar) {
 
-		Action action = new Action("Previous", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImage.SIZE_16x16)) {
+		Action action = new Action("Previous", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImageProvider.SIZE_16x16)) {
 
 			{
 				setToolTipText("Select previous chromatogram.");
@@ -277,8 +279,7 @@ public class ChromatogramReferencesUI {
 				@Override
 				public String getText(Object element) {
 
-					if(element instanceof IChromatogramSelection<?, ?>) {
-						IChromatogramSelection<?, ?> selection = (IChromatogramSelection<?, ?>)element;
+					if(element instanceof IChromatogramSelection<?, ?> selection) {
 						int index = comboChromatograms.indexOf(selection);
 						if(index > -1) {
 							/*
@@ -297,7 +298,7 @@ public class ChromatogramReferencesUI {
 
 	private Action createButtonSelectNextChromatogram(EditorToolBar toolBar) {
 
-		Action action = new Action("Next", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImage.SIZE_16x16)) {
+		Action action = new Action("Next", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImageProvider.SIZE_16x16)) {
 
 			{
 				setToolTipText("Select next chromatogram.");
@@ -317,7 +318,7 @@ public class ChromatogramReferencesUI {
 
 	private Action createButtonRemoveReference(EditorToolBar toolBar) {
 
-		Action action = new Action("Delete", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16)) {
+		Action action = new Action("Delete", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16)) {
 
 			{
 				setToolTipText("Remove the reference chromatogram.");
@@ -345,7 +346,7 @@ public class ChromatogramReferencesUI {
 
 	private Action createButtonRemoveReferenceAll(EditorToolBar toolBar) {
 
-		Action action = new Action("Delete All", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16)) {
+		Action action = new Action("Delete All", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImageProvider.SIZE_16x16)) {
 
 			{
 				setToolTipText("Remove all reference chromatogram(s).");
@@ -375,7 +376,7 @@ public class ChromatogramReferencesUI {
 
 	private Action createButtonAddReference(EditorToolBar toolBar) {
 
-		Action action = new Action("Add", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16)) {
+		Action action = new Action("Add", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16)) {
 
 			{
 				setToolTipText("Add a reference chromatogram.");
@@ -412,7 +413,7 @@ public class ChromatogramReferencesUI {
 
 	private Action createButtonImportReferences(EditorToolBar toolBar) {
 
-		Action action = new Action("Import", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16)) {
+		Action action = new Action("Import", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_IMPORT, IApplicationImageProvider.SIZE_16x16)) {
 
 			{
 				setToolTipText("Import reference chromatograms.");
@@ -443,8 +444,11 @@ public class ChromatogramReferencesUI {
 								addReferences(masterSelection, references);
 								comboChromatograms.refreshUI();
 								updateButtons();
-							} catch(Exception e) {
+							} catch(InterruptedException e) {
 								logger.error(e);
+								Thread.currentThread().interrupt();
+							} catch(InvocationTargetException e) {
+								logger.error(e.getCause());
 							}
 						}
 					}
@@ -487,7 +491,7 @@ public class ChromatogramReferencesUI {
 
 	private Action createButtonOpenReference(EditorToolBar toolBar) {
 
-		Action action = new Action("Open", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16)) {
+		Action action = new Action("Open", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_EXECUTE, IApplicationImageProvider.SIZE_16x16)) {
 
 			{
 				setToolTipText("Open the chromatogram in a separate editor.");
@@ -614,10 +618,10 @@ public class ChromatogramReferencesUI {
 			this.data = data;
 			ComboViewer viewer = viewerReference.get();
 			if(viewer != null) {
-				viewer.setInput(data != null ? data : Collections.EMPTY_LIST);
+				viewer.setInput(data != null ? data : Collections.emptyList());
 				Control control = viewer.getControl();
 				if(!control.isDisposed()) {
-					control.setEnabled(data.size() > 1);
+					control.setEnabled(data != null && data.size() > 1);
 				}
 			}
 		}

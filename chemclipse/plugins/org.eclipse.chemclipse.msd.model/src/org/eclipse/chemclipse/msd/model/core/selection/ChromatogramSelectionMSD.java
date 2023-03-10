@@ -132,8 +132,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	public void reset(boolean fireUpdate) {
 
 		super.reset(fireUpdate);
-		@SuppressWarnings("rawtypes")
-		IChromatogram chromatogram = getChromatogram();
+		IChromatogram<?> chromatogram = getChromatogram();
 		/*
 		 * Scan
 		 */

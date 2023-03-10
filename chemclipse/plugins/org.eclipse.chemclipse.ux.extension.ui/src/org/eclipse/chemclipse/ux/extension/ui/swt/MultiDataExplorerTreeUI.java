@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -144,7 +144,7 @@ public class MultiDataExplorerTreeUI {
 		return supplierFileIdentifierCache;
 	}
 
-	protected void handleDoubleClick(File file, DataExplorerTreeUI treeUI) {
+	protected void handleDoubleClick(File file) {
 
 		openEditor(file);
 	}
@@ -223,7 +223,7 @@ public class MultiDataExplorerTreeUI {
 			public void doubleClick(DoubleClickEvent event) {
 
 				File file = (File)((IStructuredSelection)event.getSelection()).getFirstElement();
-				handleDoubleClick(file, dataExplorerTreeUI);
+				handleDoubleClick(file);
 			}
 		});
 		//
@@ -339,7 +339,7 @@ public class MultiDataExplorerTreeUI {
 						public String getToolTipText() {
 
 							return activeFileSupplier.getDescription();
-						};
+						}
 					});
 				}
 				//
@@ -389,12 +389,11 @@ public class MultiDataExplorerTreeUI {
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.addSelectionListener(new SelectionAdapter() {
 
-			@SuppressWarnings("rawtypes")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				IStructuredSelection structuredSelection = treeUI.getTreeViewer().getStructuredSelection();
-				Iterator iterator = structuredSelection.iterator();
+				Iterator<?> iterator = structuredSelection.iterator();
 				while(iterator.hasNext()) {
 					Object object = iterator.next();
 					if(object instanceof File file) {

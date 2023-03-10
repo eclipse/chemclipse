@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,8 +33,7 @@ public interface IBaselineDetector {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings("rawtypes")
-	IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
+	IProcessingInfo<?> setBaseline(IChromatogramSelection<?, ?> chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
 
 	/**
 	 * This class does the same as the other setBaseline method but does not require settings.<br/>
@@ -43,8 +42,7 @@ public interface IBaselineDetector {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings("rawtypes")
-	IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo<?> setBaseline(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor);
 
 	/**
 	 * Validates the parameters.
@@ -54,8 +52,7 @@ public interface IBaselineDetector {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings("rawtypes")
-	IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
+	IProcessingInfo<?> validate(IChromatogramSelection<?, ?> chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
 
 	/**
 	 * Validates the parameters.
@@ -73,6 +70,5 @@ public interface IBaselineDetector {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings("rawtypes")
-	IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo<?> validate(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor);
 }

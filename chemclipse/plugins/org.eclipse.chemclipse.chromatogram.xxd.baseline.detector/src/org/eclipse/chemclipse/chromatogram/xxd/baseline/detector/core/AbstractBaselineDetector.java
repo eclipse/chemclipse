@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,10 +25,9 @@ public abstract class AbstractBaselineDetector implements IBaselineDetector {
 	private static final String ERROR_DESCRIPTION = "Baseline Detector";
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> validate(IChromatogramSelection<?, ?> chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<Object>();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramSelection == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The chromatogram selection is invalid.");
 			processingInfo.addMessage(processingMessage);
@@ -49,10 +48,9 @@ public abstract class AbstractBaselineDetector implements IBaselineDetector {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> validate(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<Object>();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramSelection == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The chromatogram selection is invalid.");
 			processingInfo.addMessage(processingMessage);
@@ -68,7 +66,7 @@ public abstract class AbstractBaselineDetector implements IBaselineDetector {
 	@Override
 	public IProcessingInfo<?> validate(IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<Object>();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		/*
 		 * Settings
 		 */

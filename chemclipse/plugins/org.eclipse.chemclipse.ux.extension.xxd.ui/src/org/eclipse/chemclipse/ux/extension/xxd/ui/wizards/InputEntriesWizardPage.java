@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -65,7 +65,7 @@ public class InputEntriesWizardPage extends WizardPage {
 		}
 
 		@Override
-		protected void handleDoubleClick(File file, DataExplorerTreeUI treeUI) {
+		protected void handleDoubleClick(File file) {
 
 			IWizard wizard = page.getWizard();
 			if(wizard.canFinish()) {

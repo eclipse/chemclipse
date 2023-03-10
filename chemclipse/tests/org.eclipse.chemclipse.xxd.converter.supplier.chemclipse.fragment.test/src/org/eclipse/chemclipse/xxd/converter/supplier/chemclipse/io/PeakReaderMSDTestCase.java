@@ -26,8 +26,7 @@ import junit.framework.TestCase;
 @Ignore
 public class PeakReaderMSDTestCase extends TestCase {
 
-	@SuppressWarnings("rawtypes")
-	protected IPeaks peaks;
+	protected IPeaks<?> peaks;
 	protected String pathImport;
 	protected File fileImport;
 	private static final String EXTENSION_POINT_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.peaks";
