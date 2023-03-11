@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,7 +23,8 @@ public abstract class AbstractCombinedLibraryMassSpectrum extends AbstractCombin
 	private static final long serialVersionUID = -3114256142707811855L;
 	private ILibraryInformation libraryInformation;
 
-	public AbstractCombinedLibraryMassSpectrum() {
+	protected AbstractCombinedLibraryMassSpectrum() {
+
 		libraryInformation = new LibraryInformation();
 	}
 

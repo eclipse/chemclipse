@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -45,13 +45,15 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 	 * SupplierMassSpectrometer.MS1
 	 * SupplierMassSpectrumType.CENTROID
 	 */
-	public AbstractRegularMassSpectrum() {
+	protected AbstractRegularMassSpectrum() {
+
 		super();
 		massSpectrometer = 1; // MS1
 		massSpectrumType = 0; // 0 = Centroid, 1 = Profile
 	}
 
-	public AbstractRegularMassSpectrum(Collection<? extends IIon> ions) {
+	protected AbstractRegularMassSpectrum(Collection<? extends IIon> ions) {
+
 		super(ions);
 	}
 
@@ -62,17 +64,18 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 	 * @param templateScan
 	 *            {@link IScan scan} that is used as a template
 	 */
-	public AbstractRegularMassSpectrum(IScanMSD templateScan) {
+	protected AbstractRegularMassSpectrum(IScanMSD templateScan) {
+
 		super(templateScan);
-		if(templateScan instanceof IRegularMassSpectrum) {
-			IRegularMassSpectrum regularMassSpectrum = (IRegularMassSpectrum)templateScan;
+		if(templateScan instanceof IRegularMassSpectrum regularMassSpectrum) {
 			this.massSpectrometer = regularMassSpectrum.getMassSpectrometer();
 			this.massSpectrumType = regularMassSpectrum.getMassSpectrumType();
 			this.precursorIon = regularMassSpectrum.getPrecursorIon();
 		}
 	}
 
-	public AbstractRegularMassSpectrum(short massSpectrometer, short massSpectrumType) {
+	protected AbstractRegularMassSpectrum(short massSpectrometer, short massSpectrumType) {
+
 		this();
 		setMassSpectrometer(massSpectrometer);
 		setMassSpectrumType(massSpectrumType);

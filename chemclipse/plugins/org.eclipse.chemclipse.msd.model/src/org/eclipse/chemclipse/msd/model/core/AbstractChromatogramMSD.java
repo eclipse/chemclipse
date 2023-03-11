@@ -64,7 +64,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 
 	private static final long serialVersionUID = 6481555040060687480L;
 	//
-	public static int DEFAULT_SEGMENT_WIDTH = 10;
+	public static final int DEFAULT_SEGMENT_WIDTH = 10;
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramMSD.class);
 	private final IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
@@ -114,8 +114,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 
 		int amount = 0;
 		for(IScan scan : getScans()) {
-			if(scan instanceof IVendorMassSpectrum) {
-				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
+			if(scan instanceof IVendorMassSpectrum ms) {
 				amount += ms.getNumberOfIons();
 			}
 		}
@@ -126,8 +125,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	public void enforceLoadScanProxies(IProgressMonitor monitor) {
 
 		for(IScan scan : getScans()) {
-			if(scan instanceof IVendorMassSpectrum && isUnloaded() == false) {
-				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
+			if(scan instanceof IVendorMassSpectrum ms && !isUnloaded()) {
 				ms.enforceLoadScanProxy();
 			}
 		}
@@ -140,8 +138,8 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		/*
 		 * Fire an update to inform all listeners.
 		 */
-		if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
-			((ChromatogramSelectionMSD)chromatogramSelection).update(true);
+		if(chromatogramSelection instanceof ChromatogramSelectionMSD chromatogramSelectionMSD) {
+			chromatogramSelectionMSD.update(true);
 		}
 	}
 

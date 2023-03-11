@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,7 +38,7 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 		 * Set all members to default values.<br/> This includes also to set a
 		 * valid scan and if exists a valid peak.
 		 */
-		super(chromatogram, fireUpdate);
+		super(chromatogram);
 		reset(fireUpdate);
 	}
 
@@ -54,8 +54,8 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 	public IChromatogramCSD getChromatogramCSD() {
 
 		IChromatogram chromatogram = getChromatogram();
-		if(chromatogram instanceof IChromatogramCSD) {
-			return (IChromatogramCSD)chromatogram;
+		if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
+			return chromatogramCSD;
 		}
 		return null;
 	}
@@ -72,12 +72,11 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 		reset(true);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void reset(boolean fireUpdate) {
 
 		super.reset(fireUpdate);
-		IChromatogram chromatogram = getChromatogram();
+		IChromatogram<?> chromatogram = getChromatogram();
 		/*
 		 * Scan
 		 */
@@ -85,8 +84,8 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 			/*
 			 * Chromatogram CSD
 			 */
-			if(chromatogram instanceof IChromatogramCSD) {
-				selectedScan = ((IChromatogramCSD)chromatogram).getSupplierScan(1);
+			if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
+				selectedScan = chromatogramCSD.getSupplierScan(1);
 			}
 		} else {
 			selectedScan = null;
@@ -94,8 +93,8 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 		/*
 		 * Peak
 		 */
-		if(chromatogram instanceof IChromatogramCSD) {
-			List<IChromatogramPeakCSD> peaks = ((IChromatogramCSD)chromatogram).getPeaks();
+		if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
+			List<IChromatogramPeakCSD> peaks = chromatogramCSD.getPeaks();
 			if(peaks != null && !peaks.isEmpty()) {
 				setSelectedPeak(peaks.get(0));
 			} else {
@@ -113,16 +112,16 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void setSelectedScan(IScan selectedScan) {
 
-		if(selectedScan instanceof IScanCSD) {
-			setSelectedScan((IScanCSD)selectedScan);
+		if(selectedScan instanceof IScanCSD scanCSD) {
+			setSelectedScan(scanCSD);
 		}
 	}
 
 	@Override
 	public void setSelectedScan(IScan selectedScan, boolean update) {
 
-		if(selectedScan instanceof IScanCSD) {
-			setSelectedScan((IScanCSD)selectedScan, update);
+		if(selectedScan instanceof IScanCSD scanCSD) {
+			setSelectedScan(scanCSD, update);
 		}
 	}
 

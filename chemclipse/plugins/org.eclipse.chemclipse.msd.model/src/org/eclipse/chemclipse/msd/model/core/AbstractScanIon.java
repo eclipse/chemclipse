@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,28 +26,34 @@ public abstract class AbstractScanIon extends AbstractIon implements IScanIon {
 	private boolean ignoreAbundanceLimit = false;
 
 	// ----------------------Constructors
-	public AbstractScanIon(double ion) throws IonLimitExceededException {
+	protected AbstractScanIon(double ion) throws IonLimitExceededException {
+
 		super(ion);
 	}
 
-	public AbstractScanIon(double ion, boolean ignoreAbundanceLimit) throws IonLimitExceededException {
+	protected AbstractScanIon(double ion, boolean ignoreAbundanceLimit) throws IonLimitExceededException {
+
 		super(ion);
 		this.ignoreAbundanceLimit = ignoreAbundanceLimit;
 	}
 
-	public AbstractScanIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
+	protected AbstractScanIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
+
 		super(ion, abundance);
 	}
 
-	public AbstractScanIon(double ion, float abundance, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+	protected AbstractScanIon(double ion, float abundance, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+
 		super(ion, abundance, ionTransition);
 	}
 
-	public AbstractScanIon(IIon ion, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException, IonTransitionIsNullException {
+	protected AbstractScanIon(IIon ion, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException, IonTransitionIsNullException {
+
 		super(ion, ionTransition);
 	}
 
-	public AbstractScanIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException {
+	protected AbstractScanIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException {
+
 		super(ion);
 	}
 
