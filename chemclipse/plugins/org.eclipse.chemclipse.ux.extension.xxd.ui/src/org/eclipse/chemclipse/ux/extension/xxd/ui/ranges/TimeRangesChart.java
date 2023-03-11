@@ -35,7 +35,7 @@ import org.eclipse.swtchart.extensions.core.ICustomSelectionHandler;
 public class TimeRangesChart extends ChromatogramPeakChart {
 
 	private Cursor defaultCursor;
-	private BaselineSelectionPaintListener baselineSelectionPaintListener;
+	private BaselineSelectionPaintListener baselineSelectionPaintListener = new BaselineSelectionPaintListener();
 	//
 	private int xStart;
 	private int yStart;
@@ -55,6 +55,7 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 	 */
 	private boolean pointSelectionActive = false;
 	private List<Point> pointSelection = new ArrayList<>();
+	private TimeRangePointsMarker timeRangePointsMarker = new TimeRangePointsMarker(getBaseChart());
 
 	public TimeRangesChart(Composite parent, int style) {
 
@@ -111,6 +112,7 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 			if(isPointModus()) {
 				setCursor(SWT.CURSOR_CROSS);
 				pointSelection.clear();
+				timeRangePointsMarker.setPointSelection(pointSelection);
 				pointSelectionActive = true;
 			} else {
 				pointSelectionActive = false;
@@ -190,6 +192,7 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 			if(isPointModus()) {
 				if(pointSelectionActive) {
 					pointSelection.add(new Point(event.x, event.y));
+					timeRangePointsMarker.setPointSelection(pointSelection);
 				}
 			} else {
 				stopBaselineSelection(event.x, event.y);
@@ -213,6 +216,7 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 
 		pointSelectionActive = false;
 		pointSelection.clear();
+		timeRangePointsMarker.setPointSelection(pointSelection);
 	}
 
 	private boolean isPointModus() {
@@ -227,8 +231,8 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 		 * Add the paint listeners to draw the selected peak range.
 		 */
 		IPlotArea plotArea = getBaseChart().getPlotArea();
-		baselineSelectionPaintListener = new BaselineSelectionPaintListener();
 		plotArea.addCustomPaintListener(baselineSelectionPaintListener);
+		plotArea.addCustomPaintListener(timeRangePointsMarker);
 		//
 		getBaseChart().addCustomRangeSelectionHandler(new ICustomSelectionHandler() {
 
