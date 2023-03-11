@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,22 +34,20 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class BaselineDetector extends AbstractBaselineDetector {
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> setBaseline(IChromatogramSelection<?, ?> chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
+		IProcessingInfo<?> processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
-			if(baselineDetectorSettings instanceof BaselineDetectorSettings) {
-				calculateBaseline(chromatogramSelection, (BaselineDetectorSettings)baselineDetectorSettings, monitor);
+			if(baselineDetectorSettings instanceof BaselineDetectorSettings settings) {
+				calculateBaseline(chromatogramSelection, settings, monitor);
 			}
 		}
 		return processingInfo;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> setBaseline(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		BaselineDetectorSettings baselineDetectorSettings = PreferenceSupplier.getBaselineDetectorSettings();
 		return setBaseline(chromatogramSelection, baselineDetectorSettings, monitor);

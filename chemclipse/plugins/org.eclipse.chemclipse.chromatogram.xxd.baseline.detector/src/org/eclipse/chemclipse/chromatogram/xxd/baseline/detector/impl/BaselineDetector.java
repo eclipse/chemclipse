@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,18 +20,17 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public class BaselineDetector extends AbstractBaselineDetector {
 
 	@Override
-	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> setBaseline(IChromatogramSelection<?, ?> chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
+		IProcessingInfo<?> processingInfo = super.validate(chromatogramSelection, baselineDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
 			if(baselineDetectorSettings instanceof DetectorSettings) {
 				float intensity = extractLowestIntensity(chromatogramSelection);
 				if(intensity != 0) {
-					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+					IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 					IBaselineModel baselineModel = chromatogram.getBaselineModel();
 					int startRetentionTime = chromatogramSelection.getStartRetentionTime();
 					int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
@@ -45,15 +44,15 @@ public class BaselineDetector extends AbstractBaselineDetector {
 	}
 
 	@Override
-	public IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> setBaseline(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		DetectorSettings settings = new DetectorSettings();
 		return setBaseline(chromatogramSelection, settings, monitor);
 	}
 
-	private float extractLowestIntensity(IChromatogramSelection chromatogramSelection) {
+	private float extractLowestIntensity(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		int scanStart = chromatogramSelection.getStartScan();
 		int scanStop = chromatogramSelection.getStopScan();
 		//

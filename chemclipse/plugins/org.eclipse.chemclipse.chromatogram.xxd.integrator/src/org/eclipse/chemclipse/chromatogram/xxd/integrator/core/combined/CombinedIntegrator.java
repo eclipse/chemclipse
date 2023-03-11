@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ICombinedIntegrationResult;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -47,10 +48,9 @@ public class CombinedIntegrator {
 
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings, String integratorId, IProgressMonitor monitor) {
+	public static IProcessingInfo<ICombinedIntegrationResult> integrate(IChromatogramSelection<?, ?> chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings, String integratorId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<ICombinedIntegrationResult> processingInfo;
 		ICombinedIntegrator integrator = getCombinedIntegrator(integratorId);
 		if(integrator != null) {
 			processingInfo = integrator.integrate(chromatogramSelection, combinedIntegrationSettings, monitor);
@@ -60,16 +60,14 @@ public class CombinedIntegrator {
 		return processingInfo;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, String integratorId, IProgressMonitor monitor) {
+	public static IProcessingInfo<ICombinedIntegrationResult> integrate(IChromatogramSelection<?, ?> chromatogramSelection, String integratorId, IProgressMonitor monitor) {
 
 		return integrate(chromatogramSelection, getCombinedIntegrator(integratorId), monitor);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrator integrator, IProgressMonitor monitor) {
+	public static IProcessingInfo<ICombinedIntegrationResult> integrate(IChromatogramSelection<?, ?> chromatogramSelection, ICombinedIntegrator integrator, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<ICombinedIntegrationResult> processingInfo;
 		if(integrator != null) {
 			processingInfo = integrator.integrate(chromatogramSelection, monitor);
 		} else {
@@ -144,9 +142,9 @@ public class CombinedIntegrator {
 		return null;
 	}
 
-	private static IProcessingInfo<?> getNoIntegratorAvailableProcessingInfo() {
+	private static IProcessingInfo<ICombinedIntegrationResult> getNoIntegratorAvailableProcessingInfo() {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<ICombinedIntegrationResult> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Combined Integrator", NO_INTEGRATOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

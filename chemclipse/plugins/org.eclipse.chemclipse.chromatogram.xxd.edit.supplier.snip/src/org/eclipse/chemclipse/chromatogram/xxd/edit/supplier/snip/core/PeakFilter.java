@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,13 +39,13 @@ public class PeakFilter extends AbstractPeakFilter {
 	public IProcessingInfo<IPeakFilterResult> applyFilter(List<IPeakMSD> peaks, IPeakFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		PeakFilterSettings peakFilterSettings;
-		if(filterSettings instanceof PeakFilterSettings) {
-			peakFilterSettings = (PeakFilterSettings)filterSettings;
+		if(filterSettings instanceof PeakFilterSettings settings) {
+			peakFilterSettings = settings;
 		} else {
 			peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
 		}
 		FilterSupplier filterSupplier = new FilterSupplier();
-		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
+		List<IScanMSD> massSpectra = new ArrayList<>();
 		for(IPeakMSD peakMSD : peaks) {
 			massSpectra.add(peakMSD.getPeakModel().getPeakMassSpectrum());
 		}

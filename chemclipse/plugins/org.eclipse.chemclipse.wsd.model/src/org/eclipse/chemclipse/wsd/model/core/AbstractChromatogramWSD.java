@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -87,8 +87,8 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 		int position = scan;
 		if(position > 0 && position <= getScans().size()) {
 			IScan storedScan = getScans().get(--position);
-			if(storedScan instanceof IScanWSD) {
-				return (IScanWSD)storedScan;
+			if(storedScan instanceof IScanWSD scanWSD) {
+				return scanWSD;
 			}
 		}
 		return null;
@@ -101,8 +101,8 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 		/*
 		 * Fire an update to inform all listeners.
 		 */
-		if(chromatogramSelection instanceof ChromatogramSelectionWSD) {
-			((ChromatogramSelectionWSD)chromatogramSelection).update(true);
+		if(chromatogramSelection instanceof ChromatogramSelectionWSD chromatogramSelectionWSD) {
+			chromatogramSelectionWSD.update(true);
 		}
 	}
 

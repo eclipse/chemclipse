@@ -140,15 +140,14 @@ public class ChromatogramFilter {
 	 * Returns a {@link IChromatogramFilter} instance given by the filterId or
 	 * null, if none is available.
 	 */
-	@SuppressWarnings("rawtypes")
-	private static IChromatogramFilter getChromatogramFilter(final String filterId) {
+	private static IChromatogramFilter<?, ?, ?> getChromatogramFilter(final String filterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(filterId);
-		IChromatogramFilter instance = null;
+		IChromatogramFilter<?, ?, ?> instance = null;
 		if(element != null) {
 			try {
-				instance = (IChromatogramFilter)element.createExecutableExtension(FILTER);
+				instance = (IChromatogramFilter<?, ?, ?>)element.createExecutableExtension(FILTER);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}

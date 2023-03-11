@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core.selection;
 
+import java.util.Optional;
+
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -25,7 +27,6 @@ import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 
-@SuppressWarnings("rawtypes")
 public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChromatogramPeakWSD, IChromatogramWSD> implements IChromatogramSelectionWSD {
 
 	private IScanWSD selectedScan;
@@ -51,10 +52,12 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void populateWavelengths(IChromatogramWSD chromatogram) {
 
-		IScanWSD scan = (IScanWSD)chromatogram.getScans().stream().findFirst().get();
-		selectedWavelengths = new MarkedWavelengths();
-		for(IScanSignalWSD signal : scan.getScanSignals()) {
-			selectedWavelengths.add(signal.getWavelength());
+		Optional<IScan> scan = chromatogram.getScans().stream().findFirst();
+		if(!scan.isEmpty() && scan.get() instanceof IScanWSD scanWSD) {
+			selectedWavelengths = new MarkedWavelengths();
+			for(IScanSignalWSD signal : scanWSD.getScanSignals()) {
+				selectedWavelengths.add(signal.getWavelength());
+			}
 		}
 	}
 
@@ -66,11 +69,12 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	}
 
 	@Override
+	@Deprecated
 	public IChromatogramWSD getChromatogramWSD() {
 
-		IChromatogram chromatogram = getChromatogram();
-		if(chromatogram instanceof IChromatogramWSD) {
-			return (IChromatogramWSD)chromatogram;
+		IChromatogram<?> chromatogram = getChromatogram();
+		if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
+			return chromatogramWSD;
 		}
 		return null;
 	}
@@ -91,7 +95,7 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	public void reset(boolean fireUpdate) {
 
 		super.reset(fireUpdate);
-		IChromatogram chromatogram = getChromatogram();
+		IChromatogram<?> chromatogram = getChromatogram();
 		/*
 		 * Scan
 		 */
@@ -99,8 +103,8 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 			/*
 			 * Chromatogram WSD
 			 */
-			if(chromatogram instanceof IChromatogramWSD) {
-				selectedScan = ((IChromatogramWSD)chromatogram).getSupplierScan(1);
+			if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
+				selectedScan = chromatogramWSD.getSupplierScan(1);
 			}
 		} else {
 			selectedScan = null;
@@ -116,16 +120,16 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void setSelectedScan(IScan selectedScan) {
 
-		if(selectedScan instanceof IScanWSD) {
-			setSelectedScan((IScanWSD)selectedScan);
+		if(selectedScan instanceof IScanWSD scanWSD) {
+			setSelectedScan(scanWSD);
 		}
 	}
 
 	@Override
 	public void setSelectedScan(IScan selectedScan, boolean update) {
 
-		if(selectedScan instanceof IScanWSD) {
-			setSelectedScan((IScanWSD)selectedScan, update);
+		if(selectedScan instanceof IScanWSD scanWSD) {
+			setSelectedScan(scanWSD, update);
 		}
 	}
 

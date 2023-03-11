@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,8 +18,7 @@ public class Category {
 
 	private final ILog logger;
 
-	@SuppressWarnings("rawtypes")
-	public Category(final Class clazz) {
+	public Category(final Class<?> clazz) {
 
 		logger = Platform.getLog(clazz);
 	}
