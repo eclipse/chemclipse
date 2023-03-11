@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,15 +24,18 @@ public abstract class AbstractPeakIon extends AbstractIon implements IPeakIon {
 	private float uncertaintyFactor = 1.0f;
 	private PeakIonType peakIonType = PeakIonType.NO_TYPE;
 
-	public AbstractPeakIon(double ion) throws IonLimitExceededException {
+	protected AbstractPeakIon(double ion) throws IonLimitExceededException {
+
 		super(ion);
 	}
 
-	public AbstractPeakIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
+	protected AbstractPeakIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
+
 		super(ion, abundance);
 	}
 
-	public AbstractPeakIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException {
+	protected AbstractPeakIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException {
+
 		super(ion.getIon(), ion.getAbundance());
 	}
 
@@ -48,7 +51,8 @@ public abstract class AbstractPeakIon extends AbstractIon implements IPeakIon {
 	 * @throws AbundanceLimitExceededException
 	 * @throws IonLimitExceededException
 	 */
-	public AbstractPeakIon(double ion, float abundance, float uncertaintyFactor) throws AbundanceLimitExceededException, IonLimitExceededException {
+	protected AbstractPeakIon(double ion, float abundance, float uncertaintyFactor) throws AbundanceLimitExceededException, IonLimitExceededException {
+
 		super(ion, abundance);
 		/*
 		 * Set the uncertainty factor.

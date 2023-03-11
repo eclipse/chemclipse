@@ -212,7 +212,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		}
 	}
 
-	// TODO optimieren - verbraucht zu viel Prozessorzeit
+	// TODO optimize
 	@Override
 	public float getMinSignal() {
 
@@ -236,7 +236,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		return getMaxSignal(containsScanCycles());
 	}
 
-	// TODO optimieren - verbraucht zu viel Prozessorzeit
+	// TODO optimize
 	@Override
 	public float getMaxSignal(boolean condenseCycleNumberScans) {
 
@@ -644,16 +644,14 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		return referencedChromatograms;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public void addReferencedChromatogram(IChromatogram chromatogram) {
+	public void addReferencedChromatogram(IChromatogram<?> chromatogram) {
 
 		referencedChromatograms.add(chromatogram);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public void removeReferencedChromatogram(IChromatogram chromatogram) {
+	public void removeReferencedChromatogram(IChromatogram<?> chromatogram) {
 
 		referencedChromatograms.remove(chromatogram);
 	}
@@ -921,7 +919,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object otherObject) {
 
@@ -934,7 +931,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		if(getClass() != otherObject.getClass()) {
 			return false;
 		}
-		IChromatogram other = (IChromatogram)otherObject;
+		IChromatogram<?> other = (IChromatogram<?>)otherObject;
 		return getNumberOfScans() == other.getNumberOfScans() && getTotalSignal() == other.getTotalSignal() && getMinSignal() == other.getMinSignal() && getMaxSignal() == other.getMaxSignal() && getStartRetentionTime() == other.getStartRetentionTime() && getStopRetentionTime() == other.getStopRetentionTime();
 	}
 

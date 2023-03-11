@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,11 +40,6 @@ public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak,
 	private Point offset;
 
 	public AbstractChromatogramSelection(C chromatogram) throws ChromatogramIsNullException {
-
-		this(chromatogram, true);
-	}
-
-	public AbstractChromatogramSelection(C chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
 
 		/*
 		 * Check
@@ -247,7 +242,7 @@ public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak,
 	@Override
 	public T getSelectedPeak() {
 
-		if(selectedPeaks.size() > 0) {
+		if(!selectedPeaks.isEmpty()) {
 			return validatePeak(selectedPeaks.get(0));
 		}
 		//
@@ -283,7 +278,7 @@ public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak,
 	@Override
 	public IScan getSelectedIdentifiedScan() {
 
-		if(selectedIdentifiedScans.size() > 0) {
+		if(!selectedIdentifiedScans.isEmpty()) {
 			return selectedIdentifiedScans.get(0);
 		}
 		//
@@ -361,8 +356,7 @@ public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak,
 		if(getClass() != otherObject.getClass()) {
 			return false;
 		}
-		@SuppressWarnings("rawtypes")
-		AbstractChromatogramSelection other = (AbstractChromatogramSelection)otherObject;
+		AbstractChromatogramSelection<?, ?> other = (AbstractChromatogramSelection<?, ?>)otherObject;
 		return getChromatogram() == other.getChromatogram() && getStartRetentionTime() == other.getStartRetentionTime() && getStopRetentionTime() == other.getStopRetentionTime();
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakListTableComparat
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -58,8 +59,7 @@ public class PeakListUI {
 
 	private static final Logger logger = Logger.getLogger(PeakListUI.class);
 	//
-	@SuppressWarnings("rawtypes")
-	private IChromatogramSelection chromatogramSelection;
+	private IChromatogramSelection<?, ?> chromatogramSelection;
 	//
 	private final DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	//
@@ -67,18 +67,16 @@ public class PeakListUI {
 	private Label labelSelectedPeak;
 	private Label labelPeaks;
 	//
-	private PeakListTableComparator peakListTableComparator;
 	private static final String PEAK_IS_ACTIVE_FOR_ANALYSIS = "Active for Analysis";
 	private final String[] titles = {PEAK_IS_ACTIVE_FOR_ANALYSIS, "RT (min)", "RI", "Area", "Start RT", "Stop RT", "Width", "Scan# at Peak Maximum", "S/N", "Leading", "Tailing", "Model Description", "Suggested Components", "Name"};
-	private final int bounds[] = {30, 100, 60, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+	private final int[] bounds = {30, 100, 60, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
-	public PeakListUI(Composite parent, int style) {
+	public PeakListUI(Composite parent) {
 
 		initialize(parent);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public void setChromatogramSelection(IChromatogramSelection chromatogramSelection) {
+	public void setChromatogramSelection(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;
 	}
@@ -88,7 +86,7 @@ public class PeakListUI {
 		tableViewer.getControl().setFocus();
 	}
 
-	public void update(IPeaks<?> peaks, boolean forceReload) {
+	public void update(IPeaks<?> peaks) {
 
 		if(peaks != null) {
 			if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
@@ -140,10 +138,10 @@ public class PeakListUI {
 			Table table = tableViewer.getTable();
 			int[] indices = table.getSelectionIndices();
 			List<IPeakMSD> peaksToDelete = getPeakList(table, indices);
-			List<IChromatogramPeakMSD> chromatogramPeaksToDelete = new ArrayList<IChromatogramPeakMSD>();
+			List<IChromatogramPeakMSD> chromatogramPeaksToDelete = new ArrayList<>();
 			for(IPeakMSD peakMSD : peaksToDelete) {
-				if(peakMSD instanceof IChromatogramPeakMSD) {
-					chromatogramPeaksToDelete.add((IChromatogramPeakMSD)peakMSD);
+				if(peakMSD instanceof IChromatogramPeakMSD chromatogramPeakMSD) {
+					chromatogramPeaksToDelete.add(chromatogramPeakMSD);
 				}
 			}
 			/*
@@ -159,13 +157,12 @@ public class PeakListUI {
 			 * Is the chromatogram updatable? IChromatogramSelection
 			 * at itself isn't.
 			 */
-			if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
-				ChromatogramSelectionMSD chromSelection = (ChromatogramSelectionMSD)chromatogramSelection;
+			if(chromatogramSelection instanceof ChromatogramSelectionMSD chromatogramSelectionMSD) {
 				List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
-				if(peaks.size() > 0) {
-					chromSelection.setSelectedPeak(peaks.get(0));
+				if(!peaks.isEmpty()) {
+					chromatogramSelectionMSD.setSelectedPeak(peaks.get(0));
 				}
-				chromSelection.update(true); // true: forces the editor to update
+				chromatogramSelectionMSD.update(true); // true: forces the editor to update
 			}
 		}
 	}
@@ -226,7 +223,7 @@ public class PeakListUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Uncheck the selected peaks.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_UNCHECK_ALL, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_UNCHECK_ALL, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -241,7 +238,7 @@ public class PeakListUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Check the selected peaks.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHECK_ALL, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHECK_ALL, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -256,7 +253,7 @@ public class PeakListUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Save the peaks");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -283,7 +280,7 @@ public class PeakListUI {
 		/*
 		 * Sorting the table.
 		 */
-		peakListTableComparator = new PeakListTableComparator();
+		PeakListTableComparator peakListTableComparator = new PeakListTableComparator();
 		tableViewer.setComparator(peakListTableComparator);
 		setEditingSupport();
 	}
@@ -311,12 +308,11 @@ public class PeakListUI {
 
 	private List<IPeakMSD> getPeakList() {
 
-		List<IPeakMSD> peakList = new ArrayList<IPeakMSD>();
+		List<IPeakMSD> peakList = new ArrayList<>();
 		Table table = tableViewer.getTable();
 		for(TableItem tableItem : table.getItems()) {
 			Object object = tableItem.getData();
-			if(object instanceof IPeakMSD) {
-				IPeakMSD peak = (IPeakMSD)object;
+			if(object instanceof IPeakMSD peak) {
 				peakList.add(peak);
 			}
 		}
@@ -325,15 +321,14 @@ public class PeakListUI {
 
 	private List<IPeakMSD> getPeakList(Table table, int[] indices) {
 
-		List<IPeakMSD> peakList = new ArrayList<IPeakMSD>();
+		List<IPeakMSD> peakList = new ArrayList<>();
 		for(int index : indices) {
 			/*
 			 * Get the selected item.
 			 */
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
-			if(object instanceof IPeakMSD) {
-				IPeakMSD peak = (IPeakMSD)object;
+			if(object instanceof IPeakMSD peak) {
 				peakList.add(peak);
 			}
 		}

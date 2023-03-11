@@ -32,7 +32,7 @@ public class ChromatogramSelectionISD extends AbstractChromatogramSelection<IChr
 
 	public ChromatogramSelectionISD(IChromatogramISD chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
 
-		super(chromatogram, fireUpdate);
+		super(chromatogram);
 		reset(fireUpdate);
 	}
 

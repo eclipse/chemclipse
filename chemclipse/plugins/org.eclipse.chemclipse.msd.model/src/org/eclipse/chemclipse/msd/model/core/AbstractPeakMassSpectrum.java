@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -31,7 +31,8 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 	private static final long serialVersionUID = -7779014133066855210L;
 	private static final Logger logger = Logger.getLogger(AbstractPeakMassSpectrum.class);
 
-	public AbstractPeakMassSpectrum() {
+	protected AbstractPeakMassSpectrum() {
+
 	}
 
 	/**
@@ -43,7 +44,8 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 	 * @param peakMassSpectrum
 	 * @param intensity
 	 */
-	public AbstractPeakMassSpectrum(IPeakMassSpectrum peakMassSpectrum, float intensity) throws IllegalArgumentException {
+	protected AbstractPeakMassSpectrum(IPeakMassSpectrum peakMassSpectrum, float intensity) throws IllegalArgumentException {
+
 		if(peakMassSpectrum == null) {
 			throw new IllegalArgumentException("The peakMassSpectrum must not be null");
 		}
@@ -96,7 +98,8 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 	 * @param massSpectrum
 	 * @param actualPercentageIntensity
 	 */
-	public AbstractPeakMassSpectrum(IScanMSD massSpectrum, float actualPercentageIntensity) throws IllegalArgumentException {
+	protected AbstractPeakMassSpectrum(IScanMSD massSpectrum, float actualPercentageIntensity) throws IllegalArgumentException {
+
 		if(massSpectrum == null) {
 			throw new IllegalArgumentException("The massSpectrum must not be null");
 		}
@@ -122,7 +125,8 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 		}
 	}
 
-	public AbstractPeakMassSpectrum(IScanMSD massSpectrum) throws IllegalArgumentException {
+	protected AbstractPeakMassSpectrum(IScanMSD massSpectrum) throws IllegalArgumentException {
+
 		if(massSpectrum == null) {
 			throw new IllegalArgumentException("The massSpectrum must not be null");
 		}

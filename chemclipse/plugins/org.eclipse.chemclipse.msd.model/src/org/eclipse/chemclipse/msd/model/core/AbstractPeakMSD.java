@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,12 +18,14 @@ public abstract class AbstractPeakMSD extends AbstractPeak implements IPeakMSD {
 
 	private final IPeakModelMSD peakModel;
 
-	public AbstractPeakMSD(IPeakModelMSD peakModel) throws IllegalArgumentException {
+	protected AbstractPeakMSD(IPeakModelMSD peakModel) throws IllegalArgumentException {
+
 		validatePeakModel(peakModel);
 		this.peakModel = peakModel;
 	}
 
-	public AbstractPeakMSD(IPeakModelMSD peakModel, String modelDescription) throws IllegalArgumentException {
+	protected AbstractPeakMSD(IPeakModelMSD peakModel, String modelDescription) throws IllegalArgumentException {
+
 		this(peakModel);
 		setModelDescription(modelDescription);
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -36,18 +36,22 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	 * @param templateScan
 	 *            {@link IScan scan} that is used as a template
 	 */
-	public AbstractRegularLibraryMassSpectrum(IScanMSD templateScan) {
+	protected AbstractRegularLibraryMassSpectrum(IScanMSD templateScan) {
+
 		super(templateScan);
 	}
 
-	public AbstractRegularLibraryMassSpectrum(short massSpectrometer, short massSpectrumType) {
+	protected AbstractRegularLibraryMassSpectrum(short massSpectrometer, short massSpectrumType) {
+
 		super(massSpectrometer, massSpectrumType);
 	}
 
-	public AbstractRegularLibraryMassSpectrum() {
+	protected AbstractRegularLibraryMassSpectrum() {
+
 	}
 
-	public AbstractRegularLibraryMassSpectrum(Collection<? extends IIon> ions) {
+	protected AbstractRegularLibraryMassSpectrum(Collection<? extends IIon> ions) {
+
 		super(ions);
 	}
 

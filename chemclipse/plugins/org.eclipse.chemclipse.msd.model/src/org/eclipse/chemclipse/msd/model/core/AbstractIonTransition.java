@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,27 +49,27 @@ public abstract class AbstractIonTransition implements IIonTransition {
 	 * @param filter3Resolution
 	 * @param transitionGroup
 	 */
-	public AbstractIonTransition(double filter1FirstIon, double filter1LastIon, double filter3FirstIon, double filter3LastIon, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup) {
+	protected AbstractIonTransition(double filter1FirstIon, double filter1LastIon, double filter3FirstIon, double filter3LastIon, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup) {
 
 		this(filter1FirstIon, filter1LastIon, filter3FirstIon, filter3LastIon, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup, "");
 	}
 
-	public AbstractIonTransition(double filter1Ion, double filter3Ion, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup) {
+	protected AbstractIonTransition(double filter1Ion, double filter3Ion, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup) {
 
 		this(filter1Ion, filter1Ion, filter3Ion, filter3Ion, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup, "");
 	}
 
-	public AbstractIonTransition(double filter1Ion, double filter3Ion, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup, String compoundName) {
+	protected AbstractIonTransition(double filter1Ion, double filter3Ion, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup, String compoundName) {
 
 		this(filter1Ion, filter1Ion, filter3Ion, filter3Ion, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup, compoundName);
 	}
 
-	public AbstractIonTransition(IIonTransition ionTransition, String compoundName) {
+	protected AbstractIonTransition(IIonTransition ionTransition, String compoundName) {
 
 		this(ionTransition.getQ1StartIon(), ionTransition.getQ1StopIon(), ionTransition.getQ3StartIon(), ionTransition.getQ3StopIon(), ionTransition.getCollisionEnergy(), ionTransition.getQ1Resolution(), ionTransition.getQ3Resolution(), ionTransition.getTransitionGroup(), compoundName);
 	}
 
-	public AbstractIonTransition(double filter1FirstIon, double filter1LastIon, double filter3FirstIon, double filter3LastIon, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup, String compoundName) {
+	protected AbstractIonTransition(double filter1FirstIon, double filter1LastIon, double filter3FirstIon, double filter3LastIon, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup, String compoundName) {
 
 		this.compoundName = compoundName;
 		this.q1StartIon = filter1FirstIon;

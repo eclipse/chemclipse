@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,12 +41,12 @@ public abstract class AbstractIon implements IIon {
 	private float abundance = 0.0f;
 	private IIonTransition ionTransition;
 
-	public AbstractIon(double ion) throws IonLimitExceededException {
+	protected AbstractIon(double ion) throws IonLimitExceededException {
 
 		setIon(ion);
 	}
 
-	public AbstractIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
+	protected AbstractIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
 
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
@@ -62,7 +62,7 @@ public abstract class AbstractIon implements IIon {
 		setAbundance(abundance);
 	}
 
-	public AbstractIon(double ion, float abundance, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+	protected AbstractIon(double ion, float abundance, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
 
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
@@ -83,7 +83,7 @@ public abstract class AbstractIon implements IIon {
 		}
 	}
 
-	public AbstractIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException {
+	protected AbstractIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException {
 
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
@@ -103,7 +103,7 @@ public abstract class AbstractIon implements IIon {
 		}
 	}
 
-	public AbstractIon(IIon ion, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException, IonTransitionIsNullException {
+	protected AbstractIon(IIon ion, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException, IonTransitionIsNullException {
 
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The

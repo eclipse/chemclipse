@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2021 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -129,7 +129,7 @@ public abstract class AbstractMarkedIons implements IMarkedIons {
 	@Override
 	public Set<Integer> getIonsNominal() {
 
-		Set<Integer> nominalIons = new HashSet<Integer>();
+		Set<Integer> nominalIons = new HashSet<>();
 		for(IMarkedIon markedIon : markedIons) {
 			nominalIons.add(markedIon.castTrace());
 		}

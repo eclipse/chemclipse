@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -75,13 +75,13 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private ImmutableZeroIon immutableZeroIon;
 	private IScanMSD optimizedMassSpectrum;
 
-	public AbstractScanMSD() {
+	protected AbstractScanMSD() {
 
 		super();
 		init();
 	}
 
-	public AbstractScanMSD(final Collection<? extends IIon> ions) {
+	protected AbstractScanMSD(final Collection<? extends IIon> ions) {
 
 		super();
 		init();
@@ -95,7 +95,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	 * @param templateScan
 	 *            {@link IScanMSD scan} that is used as a template
 	 */
-	public AbstractScanMSD(IScanMSD templateScan) {
+	protected AbstractScanMSD(IScanMSD templateScan) {
 
 		super(templateScan);
 		init();
@@ -103,8 +103,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		this.isNormalized = templateScan.isNormalized();
 		this.normalizationBase = templateScan.getNormalizationBase();
 		this.optimizedMassSpectrum = templateScan.getOptimizedMassSpectrum();
-		if(templateScan instanceof AbstractScanMSD) {
-			AbstractScanMSD templateScanAbstract = (AbstractScanMSD)templateScan;
+		if(templateScan instanceof AbstractScanMSD templateScanAbstract) {
 			this.immutableZeroIon = templateScanAbstract.immutableZeroIon;
 		}
 	}
@@ -505,7 +504,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		}
 	}
 
-	// TODO JUnit und optimieren
+	// TODO JUnit and optimize
 	@Override
 	public IIon getIon(double ion) throws AbundanceLimitExceededException, IonLimitExceededException {
 
@@ -802,7 +801,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 				}
 			}
 			//
-			return counterHighRes > counterNominal ? true : false;
+			return counterHighRes > counterNominal;
 		}
 	}
 

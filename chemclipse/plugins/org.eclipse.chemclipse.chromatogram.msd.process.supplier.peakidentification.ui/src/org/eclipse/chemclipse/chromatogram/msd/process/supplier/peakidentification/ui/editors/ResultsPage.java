@@ -50,7 +50,7 @@ public class ResultsPage implements IMultiEditorPage {
 
 		IPeaks<?> peaks = selectionUpdateListener.getPeaks();
 		if(peaks != null) {
-			update(peaks, true);
+			update(peaks);
 		}
 	}
 
@@ -76,10 +76,10 @@ public class ResultsPage implements IMultiEditorPage {
 		}
 	}
 
-	public void update(IPeaks<?> peaks, boolean forceReload) {
+	public void update(IPeaks<?> peaks) {
 
 		if(editorPart.getActivePage() == getPageIndex() && peaks != null) {
-			peakListUI.update(peaks, forceReload);
+			peakListUI.update(peaks);
 		}
 	}
 
@@ -109,7 +109,7 @@ public class ResultsPage implements IMultiEditorPage {
 
 	private void createPeakListView(Composite parent) {
 
-		peakListUI = new PeakListUI(parent, SWT.NONE);
+		peakListUI = new PeakListUI(parent);
 		final ExtendedTableViewer tableViewer = peakListUI.getTableViewer();
 		/*
 		 * Add a selection listener, to update peaks on click.
@@ -146,11 +146,11 @@ public class ResultsPage implements IMultiEditorPage {
 			}
 		}
 
-		public void update(IPeaks<?> peaks, boolean forceReload) {
+		public void update(IPeaks<?> peaks) {
 
 			evaluatedPeaks = peaks;
 			if(parentWidget != null) {
-				parentWidget.update(peaks, forceReload);
+				parentWidget.update(peaks);
 			}
 		}
 

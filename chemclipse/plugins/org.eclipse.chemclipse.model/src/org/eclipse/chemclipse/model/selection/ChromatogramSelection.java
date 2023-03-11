@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,7 +33,7 @@ public class ChromatogramSelection<T extends IChromatogramPeak, C extends IChrom
 
 	public ChromatogramSelection(C chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
 
-		super(chromatogram, fireUpdate);
+		super(chromatogram);
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
 		 * valid scan and if exists a valid peak.

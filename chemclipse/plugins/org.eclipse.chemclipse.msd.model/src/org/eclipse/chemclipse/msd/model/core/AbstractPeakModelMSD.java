@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,8 @@ public abstract class AbstractPeakModelMSD extends AbstractPeakModel implements 
 	 */
 	private static final long serialVersionUID = -673699436662069257L;
 
-	public AbstractPeakModelMSD(IPeakMassSpectrum peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
+	protected AbstractPeakModelMSD(IPeakMassSpectrum peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
+
 		super(peakMaximum, peakIntensityValues, startBackgroundAbundance, stopBackgroundAbundance);
 	}
 
@@ -32,8 +33,8 @@ public abstract class AbstractPeakModelMSD extends AbstractPeakModel implements 
 	public IPeakMassSpectrum getPeakMassSpectrum() {
 
 		IScan peakMaximum = getPeakMaximum();
-		if(peakMaximum instanceof IPeakMassSpectrum) {
-			return (IPeakMassSpectrum)peakMaximum;
+		if(peakMaximum instanceof IPeakMassSpectrum peakMassSpectrum) {
+			return peakMassSpectrum;
 		}
 		return null;
 	}
@@ -49,8 +50,7 @@ public abstract class AbstractPeakModelMSD extends AbstractPeakModel implements 
 			if(retentionTime >= getStartRetentionTime() && retentionTime <= getStopRetentionTime()) {
 				float intensity = getIntensity(retentionTime);
 				if(intensity >= 0) {
-					IPeakMassSpectrum ms = new PeakMassSpectrum(peakMaximum, intensity);
-					return ms;
+					return new PeakMassSpectrum(peakMaximum, intensity);
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,8 +23,9 @@ public abstract class AbstractIonTransitionSettings implements IIonTransitionSet
 
 	private List<IIonTransitionGroup> ionTransitionGroups;
 
-	public AbstractIonTransitionSettings() {
-		ionTransitionGroups = new ArrayList<IIonTransitionGroup>();
+	protected AbstractIonTransitionSettings() {
+
+		ionTransitionGroups = new ArrayList<>();
 	}
 
 	@Override
@@ -112,7 +113,7 @@ public abstract class AbstractIonTransitionSettings implements IIonTransitionSet
 	@Override
 	public Set<IIonTransition> getIonTransitions() {
 
-		Set<IIonTransition> ionTransitions = new HashSet<IIonTransition>();
+		Set<IIonTransition> ionTransitions = new HashSet<>();
 		for(IIonTransitionGroup ionTransitionGroup : ionTransitionGroups) {
 			ionTransitions.addAll(ionTransitionGroup.getIonTransitions());
 		}

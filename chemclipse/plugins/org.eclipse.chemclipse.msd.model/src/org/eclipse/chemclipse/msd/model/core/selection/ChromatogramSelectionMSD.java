@@ -52,7 +52,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 
 	public ChromatogramSelectionMSD(IChromatogramMSD chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
 
-		super(chromatogram, fireUpdate);
+		super(chromatogram);
 		/*
 		 * Create instances of selected and excluded ions.
 		 */

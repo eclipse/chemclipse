@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -73,7 +73,7 @@ public class BatchRunnable implements IRunnableWithProgress {
 			 * Update the peak results page
 			 */
 			SelectionUpdateListener selectionUpdateListener = new ResultsPage.SelectionUpdateListener();
-			selectionUpdateListener.update(report.getPeaks(), true);
+			selectionUpdateListener.update(report.getPeaks());
 		} catch(TypeCastException e) {
 			logger.warn(e);
 		}

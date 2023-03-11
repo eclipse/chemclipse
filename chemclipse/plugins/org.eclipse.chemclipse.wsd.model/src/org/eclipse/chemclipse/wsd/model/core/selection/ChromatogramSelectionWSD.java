@@ -43,7 +43,7 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 		 * Set all members to default values.<br/> This includes also to set a
 		 * valid scan and if exists a valid peak.
 		 */
-		super(chromatogram, fireUpdate);
+		super(chromatogram);
 		//
 		populateWavelengths(chromatogram);
 		reset(fireUpdate);

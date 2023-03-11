@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
  */
 public abstract class AbstractChromatogramPeakMSD extends AbstractPeakMSD implements IChromatogramPeakMSD {
 
-	private transient IChromatogramMSD chromatogram;
+	private IChromatogramMSD chromatogram;
 	private static final float INITIAL_SN_VALUE = -1.0f;
 	private float signalToNoiseRatio = INITIAL_SN_VALUE;
 
@@ -36,7 +36,8 @@ public abstract class AbstractChromatogramPeakMSD extends AbstractPeakMSD implem
 	 * @throws IllegalArgumentException
 	 * @throws PeakException
 	 */
-	public AbstractChromatogramPeakMSD(IPeakModelMSD peakModel, IChromatogramMSD chromatogram) throws IllegalArgumentException, PeakException {
+	protected AbstractChromatogramPeakMSD(IPeakModelMSD peakModel, IChromatogramMSD chromatogram) throws IllegalArgumentException, PeakException {
+
 		super(peakModel);
 		validateChromatogram(chromatogram);
 		validateRetentionTimes(chromatogram, peakModel);
@@ -47,7 +48,8 @@ public abstract class AbstractChromatogramPeakMSD extends AbstractPeakMSD implem
 		this.chromatogram = chromatogram;
 	}
 
-	public AbstractChromatogramPeakMSD(IPeakModelMSD peakModel, IChromatogramMSD chromatogram, String modelDescription) throws IllegalArgumentException, PeakException {
+	protected AbstractChromatogramPeakMSD(IPeakModelMSD peakModel, IChromatogramMSD chromatogram, String modelDescription) throws IllegalArgumentException, PeakException {
+
 		this(peakModel, chromatogram);
 		setModelDescription(modelDescription);
 	}
