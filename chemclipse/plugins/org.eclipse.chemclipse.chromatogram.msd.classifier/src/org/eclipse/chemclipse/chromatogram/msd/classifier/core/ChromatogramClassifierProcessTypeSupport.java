@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.NoChromatogramClassifierSupplierAvailableException;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
@@ -32,7 +33,7 @@ public class ChromatogramClassifierProcessTypeSupport implements IProcessTypeSup
 	@Override
 	public String getCategory() {
 
-		return "Chromatogram Classifier";
+		return Messages.chromatogramClassifier;
 	}
 
 	@Override

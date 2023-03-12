@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -22,6 +22,7 @@ import org.eclipse.ui.IWorkbench;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.preferences.WncIonsListComposite;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.l10n.Messages;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -30,7 +31,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Set the WNC classifier settings.");
+		setDescription(Messages.wncClassifierSettings);
 		wncIonsListComposite = new WncIonsListComposite();
 	}
 

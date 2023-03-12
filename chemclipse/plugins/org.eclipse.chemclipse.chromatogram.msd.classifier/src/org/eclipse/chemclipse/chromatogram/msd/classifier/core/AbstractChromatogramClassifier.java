@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 
+import org.eclipse.chemclipse.chromatogram.msd.classifier.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramClassifierResult;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -22,15 +23,17 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
 public abstract class AbstractChromatogramClassifier implements IChromatogramClassifier {
 
-	private static final String CLASSIFIER = "Classifier";
+	private static final String CLASSIFIER = Messages.classifier;
 	private final DataType[] dataTypes;
 
 	@Deprecated
 	public AbstractChromatogramClassifier() {
+
 		this(DataType.MSD);
 	}
 
 	protected AbstractChromatogramClassifier(DataType... dataTypes) {
+
 		this.dataTypes = dataTypes;
 	}
 
@@ -44,10 +47,9 @@ public abstract class AbstractChromatogramClassifier implements IChromatogramCla
 	private void validateChromatogramSelection(IChromatogramSelection<?, ?> chromatogramSelection, IProcessingInfo<?> processingInfo) {
 
 		if(chromatogramSelection == null) {
-			processingInfo.addErrorMessage(CLASSIFIER, "The chromatogram selection must not be null.");
-		}
-		if(chromatogramSelection.getChromatogram() == null) {
-			processingInfo.addErrorMessage(CLASSIFIER, "The chromatogram must not be null.");
+			processingInfo.addErrorMessage(CLASSIFIER, Messages.chromatogramSelectionNull);
+		} else if(chromatogramSelection.getChromatogram() == null) {
+			processingInfo.addErrorMessage(CLASSIFIER, Messages.chromatogramNull);
 		}
 	}
 

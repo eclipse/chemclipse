@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,8 @@ public class ChromatogramClassifierSupport implements IChromatogramClassifierSup
 	 * Creates a new suppliers list.
 	 */
 	public ChromatogramClassifierSupport() {
-		suppliers = new ArrayList<IChromatogramClassifierSupplier>();
+
+		suppliers = new ArrayList<>();
 	}
 
 	/**
@@ -44,7 +45,7 @@ public class ChromatogramClassifierSupport implements IChromatogramClassifierSup
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		areChromatogramClassifiersStored();
-		List<String> availableClassifiers = new ArrayList<String>();
+		List<String> availableClassifiers = new ArrayList<>();
 		for(IChromatogramClassifierSupplier supplier : suppliers) {
 			availableClassifiers.add(supplier.getId());
 		}
@@ -79,7 +80,7 @@ public class ChromatogramClassifierSupport implements IChromatogramClassifierSup
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * converter classifier names.<br/>
 		 */
-		ArrayList<String> classifierNames = new ArrayList<String>();
+		ArrayList<String> classifierNames = new ArrayList<>();
 		for(IChromatogramClassifierSupplier supplier : suppliers) {
 			classifierNames.add(supplier.getClassifierName());
 		}
@@ -106,15 +107,14 @@ public class ChromatogramClassifierSupport implements IChromatogramClassifierSup
 		}
 		if(classifierSupplier == null) {
 			throw new NoChromatogramClassifierSupplierAvailableException("There is no chromatogram classifier supplier available with the following id: " + classifierId + ".");
-		} else {
-			return classifierSupplier;
 		}
+		return classifierSupplier;
 	}
 
 	// -------------------------------------private methods
 	private void areChromatogramClassifiersStored() throws NoChromatogramClassifierSupplierAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoChromatogramClassifierSupplierAvailableException();
 		}
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,15 +39,14 @@ public class Calculator {
 		Map<Integer, Double> ionAbundanceValues = extractIonValues(chromatogram, range);
 		double factorMax = calculateFactorMax(ionAbundanceValues);
 		double factorSum = calculateFactorSum(ionAbundanceValues);
-		IWncIons wncIonsEdited = calculateAndSetIntensityValues(ionAbundanceValues, wncIons, factorMax, factorSum);
-		return wncIonsEdited;
+		return calculateAndSetIntensityValues(ionAbundanceValues, wncIons, factorMax, factorSum);
 	}
 
 	private static Map<Integer, Double> extractIonValues(IChromatogramMSD chromatogram, IRetentionTimeRange range) {
 
 		int startScan = chromatogram.getScanNumber(range.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(range.getStopRetentionTime());
-		Map<Integer, Double> ionAbundanceValues = new HashMap<Integer, Double>();
+		Map<Integer, Double> ionAbundanceValues = new HashMap<>();
 		double signal;
 		/*
 		 * Extract the ion abundance values.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 
+import org.eclipse.chemclipse.chromatogram.msd.classifier.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramClassifierResult;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -30,19 +31,19 @@ import org.eclipse.core.runtime.Platform;
 public class ChromatogramClassifier {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramClassifier.class);
-	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.msd.classifier.chromatogramClassifierSupplier";
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.msd.classifier.chromatogramClassifierSupplier"; //$NON-NLS-1$
 	/*
 	 * These are the attributes of the extension point elements.
 	 */
-	private static final String ID = "id";
-	private static final String DESCRIPTION = "description";
-	private static final String CLASSIFIER_NAME = "classifierName";
-	private static final String CLASSIFIER = "classifier";
-	private static final String CLASSIFIER_SETTINGS = "classifierSettings";
+	private static final String ID = "id"; //$NON-NLS-1$
+	private static final String DESCRIPTION = "description"; //$NON-NLS-1$
+	private static final String CLASSIFIER_NAME = "classifierName"; //$NON-NLS-1$
+	private static final String CLASSIFIER = "classifier"; //$NON-NLS-1$
+	private static final String CLASSIFIER_SETTINGS = "classifierSettings"; //$NON-NLS-1$
 	/*
 	 * Processing Info
 	 */
-	private static final String NO_CHROMATOGRAM_CLASSIFIER_AVAILABLE = "There is no chromatogram classifier available.";
+	private static final String NO_CHROMATOGRAM_CLASSIFIER_AVAILABLE = Messages.noChromatogramClassifierAvailable;
 
 	/**
 	 * This class is a singleton. Use only static methods.
@@ -56,9 +57,8 @@ public class ChromatogramClassifier {
 		IChromatogramClassifier chromatogramClassifier = getChromatogramClassifier(classifierId);
 		if(chromatogramClassifier != null) {
 			return chromatogramClassifier.applyClassifier(chromatogramSelection, chromatogramClassifierSettings, monitor);
-		} else {
-			return getNoClassifierAvailableProcessingInfo();
 		}
+		return getNoClassifierAvailableProcessingInfo();
 	}
 
 	public static IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, String classifierId, IProgressMonitor monitor) {
@@ -125,7 +125,7 @@ public class ChromatogramClassifier {
 	 */
 	private static IConfigurationElement getConfigurationElement(final String classifierId) {
 
-		if("".equals(classifierId)) {
+		if(classifierId.isEmpty()) {
 			return null;
 		}
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -142,7 +142,7 @@ public class ChromatogramClassifier {
 	private static IProcessingInfo<IChromatogramClassifierResult> getNoClassifierAvailableProcessingInfo() {
 
 		IProcessingInfo<IChromatogramClassifierResult> processingInfo = new ProcessingInfo<>();
-		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Chromatogram Classifier", NO_CHROMATOGRAM_CLASSIFIER_AVAILABLE);
+		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, Messages.chromatogramClassifier, NO_CHROMATOGRAM_CLASSIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
 	}
