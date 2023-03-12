@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -39,8 +39,7 @@ public class Ion_6_Test extends TestCase {
 	public void testException_1() {
 
 		try {
-			@SuppressWarnings("unused")
-			Ion ion = new Ion(IIon.TIC_ION, -1.0f);
+			new Ion(IIon.TIC_ION, -1.0f);
 		} catch(AbundanceLimitExceededException e) {
 			assertTrue(true);
 		} catch(IonLimitExceededException e) {
@@ -63,8 +62,7 @@ public class Ion_6_Test extends TestCase {
 	public void testException_3() {
 
 		try {
-			@SuppressWarnings("unused")
-			Ion ion = new Ion(-1.0f, 1.0f);
+			new Ion(-1.0f, 1.0f);
 		} catch(AbundanceLimitExceededException e) {
 			assertTrue(false);
 		} catch(IonLimitExceededException e) {
