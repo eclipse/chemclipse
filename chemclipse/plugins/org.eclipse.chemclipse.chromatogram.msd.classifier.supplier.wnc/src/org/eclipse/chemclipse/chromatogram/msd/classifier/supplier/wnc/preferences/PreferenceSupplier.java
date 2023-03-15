@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.Activator;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIon;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.WncIon;
@@ -31,10 +32,10 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String P_WNC_IONS = "wncIons";
-	public static final String DEF_WNC_IONS = "water:18;nitrogen:28;carbon dioxide:44;solvent tailing:84;column bleed:207";
-	public static final String ENTRY_DELIMITER = ";";
-	public static final String VALUE_DELIMITER = ":";
+	public static final String P_WNC_IONS = "wncIons"; //$NON-NLS-1$
+	public static final String DEF_WNC_IONS = Messages.wncIons;
+	public static final String ENTRY_DELIMITER = ";"; //$NON-NLS-1$
+	public static final String VALUE_DELIMITER = ":"; //$NON-NLS-1$
 	//
 	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
 	private static IPreferenceSupplier preferenceSupplier;
@@ -94,7 +95,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		 */
 		IWncIons ions = new WncIons();
 		String preferenceEntry = preferences.get(P_WNC_IONS, DEF_WNC_IONS);
-		if(!"".equals(preferenceEntry)) {
+		if(preferenceEntry.isEmpty()) {
 			String[] items = parseString(preferenceEntry);
 			if(items.length > 0) {
 				String name;
@@ -149,7 +150,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static void storeWNCIons(IWncIons wncIons) {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		String values = "";
+		String values = ""; //$NON-NLS-1$
 		if(wncIons != null) {
 			StringBuilder builder = new StringBuilder();
 			List<Integer> keys = new ArrayList<>(wncIons.getKeys());

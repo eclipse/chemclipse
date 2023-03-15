@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,25 +11,25 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.preferences;
 
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIon;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.WncIon;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.l10n.Messages;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
-
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIon;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.WncIon;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.swt.widgets.Text;
 
 public class WncIonDialog extends TitleAreaDialog {
 
@@ -41,13 +41,15 @@ public class WncIonDialog extends TitleAreaDialog {
 	private IWncIon wncIon;
 
 	public WncIonDialog(Shell shell) {
+
 		this(shell, null);
 	}
 
 	public WncIonDialog(Shell shell, IWncIon wncIon) {
+
 		super(shell);
-		this.title = "WNC Ion";
-		this.message = "Add a ion that shall be analyzed.";
+		this.title = Messages.wncIon;
+		this.message = Messages.addIonToAnalyze;
 		this.wncIon = wncIon;
 	}
 
@@ -73,6 +75,7 @@ public class WncIonDialog extends TitleAreaDialog {
 	/*
 	 * (non-Javadoc) Method declared on Dialog.
 	 */
+	@Override
 	protected void buttonPressed(int buttonId) {
 
 		/*
@@ -96,6 +99,7 @@ public class WncIonDialog extends TitleAreaDialog {
 	/*
 	 * (non-Javadoc) Method declared on Dialog.
 	 */
+	@Override
 	protected Control createDialogArea(Composite parent) {
 
 		Composite composite = (Composite)super.createDialogArea(parent);
@@ -113,7 +117,7 @@ public class WncIonDialog extends TitleAreaDialog {
 		 */
 		Label labelName = new Label(elementComposite, SWT.NONE);
 		labelName.setLayoutData(gridData);
-		labelName.setText("Name (not allowed characters are \"" + PreferenceSupplier.VALUE_DELIMITER + "\" and \"" + PreferenceSupplier.ENTRY_DELIMITER + "\"):");
+		labelName.setText(NLS.bind(Messages.nameWithoutDisallowedCharacters, PreferenceSupplier.VALUE_DELIMITER, PreferenceSupplier.ENTRY_DELIMITER));
 		/*
 		 * Name Input
 		 */
@@ -137,13 +141,13 @@ public class WncIonDialog extends TitleAreaDialog {
 		 * ion
 		 */
 		Label labelIon = new Label(elementComposite, SWT.NONE);
-		labelIon.setText("ion:");
+		labelIon.setText(Messages.ion);
 		/*
 		 * ion Input
 		 */
 		textIon = new Text(elementComposite, SWT.BORDER);
 		if(wncIon != null) {
-			textIon.setText(Integer.valueOf(wncIon.getIon()).toString());
+			textIon.setText(Integer.toString(wncIon.getIon()));
 		}
 		textIon.addKeyListener(new KeyAdapter() {
 
@@ -156,13 +160,6 @@ public class WncIonDialog extends TitleAreaDialog {
 		return composite;
 	}
 
-	@Override
-	protected Control createButtonBar(Composite parent) {
-
-		Control control = super.createButtonBar(parent);
-		return control;
-	}
-
 	private void validate() {
 
 		setErrorMessage(null);
@@ -171,8 +168,8 @@ public class WncIonDialog extends TitleAreaDialog {
 		 * Name
 		 */
 		String name = getName();
-		if(name.equals("")) {
-			setErrorMessage("A name must be specified.");
+		if(name.isEmpty()) {
+			setErrorMessage(Messages.nameMustBeSpecified);
 			getButton(OK).setEnabled(false);
 		}
 		/*
@@ -181,15 +178,14 @@ public class WncIonDialog extends TitleAreaDialog {
 		try {
 			getIon();
 		} catch(NumberFormatException e) {
-			setErrorMessage("The ion value must be an integer, e.g. 18 or 28.");
+			setErrorMessage(Messages.ionValueMustBeInteger);
 			getButton(OK).setEnabled(false);
 		}
 	}
 
 	private int getIon() throws NumberFormatException {
 
-		int ion = Integer.valueOf(textIon.getText());
-		return ion;
+		return Integer.valueOf(textIon.getText());
 	}
 
 	private String getName() {

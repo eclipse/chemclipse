@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -61,8 +61,7 @@ public class MassSpectrumConverterSupport_2_Test extends TestCase {
 	public void testGetConverterId_1() {
 
 		try {
-			@SuppressWarnings("unused")
-			String id = support.getConverterId(-1);
+			support.getConverterId(-1);
 		} catch(NoConverterAvailableException e) {
 			assertTrue(true);
 		}
@@ -71,8 +70,7 @@ public class MassSpectrumConverterSupport_2_Test extends TestCase {
 	public void testGetConverterId_2() {
 
 		try {
-			@SuppressWarnings("unused")
-			String id = support.getConverterId(3);
+			support.getConverterId(3);
 		} catch(NoConverterAvailableException e) {
 			assertTrue(true);
 		}

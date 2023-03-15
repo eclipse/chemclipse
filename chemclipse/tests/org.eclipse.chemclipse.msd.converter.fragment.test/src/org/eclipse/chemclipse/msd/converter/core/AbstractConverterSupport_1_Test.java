@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -90,8 +90,7 @@ public class AbstractConverterSupport_1_Test extends AbstractConverterTestCase {
 
 		String converterName = "org.eclipse.chemclipse.msd.converter";
 		try {
-			@SuppressWarnings("unused")
-			String converterId = converterSupport.getConverterId(converterName, false);
+			converterSupport.getConverterId(converterName, false);
 		} catch(NoConverterAvailableException e) {
 			assertTrue(true);
 		}
@@ -101,8 +100,7 @@ public class AbstractConverterSupport_1_Test extends AbstractConverterTestCase {
 
 		String converterName = "";
 		try {
-			@SuppressWarnings("unused")
-			String converterId = converterSupport.getConverterId(converterName, false);
+			converterSupport.getConverterId(converterName, false);
 		} catch(NoConverterAvailableException e) {
 			assertTrue(true);
 		}

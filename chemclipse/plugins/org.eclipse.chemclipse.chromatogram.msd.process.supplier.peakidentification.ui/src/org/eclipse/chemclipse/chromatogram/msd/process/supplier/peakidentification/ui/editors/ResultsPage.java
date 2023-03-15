@@ -31,8 +31,6 @@ public class ResultsPage implements IMultiEditorPage {
 
 	private FormToolkit toolkit;
 	private int pageIndex;
-	@SuppressWarnings("unused")
-	private IPeakIdentificationBatchJob peakIdentificationBatchJob;
 	private PeakListUI peakListUI;
 	private SelectionUpdateListener selectionUpdateListener;
 	private BatchProcessEditor editorPart;
@@ -65,14 +63,6 @@ public class ResultsPage implements IMultiEditorPage {
 
 		if(toolkit != null) {
 			toolkit.dispose();
-		}
-	}
-
-	@Override
-	public void setPeakIdentificationBatchJob(IPeakIdentificationBatchJob peakIdentificationBatchJob) {
-
-		if(peakIdentificationBatchJob != null) {
-			this.peakIdentificationBatchJob = peakIdentificationBatchJob;
 		}
 	}
 
@@ -165,5 +155,10 @@ public class ResultsPage implements IMultiEditorPage {
 
 			return evaluatedPeaks;
 		}
+	}
+
+	@Override
+	public void setPeakIdentificationBatchJob(IPeakIdentificationBatchJob peakIdentificationBatchJob) {
+
 	}
 }

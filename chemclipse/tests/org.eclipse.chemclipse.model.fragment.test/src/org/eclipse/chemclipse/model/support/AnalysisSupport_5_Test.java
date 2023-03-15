@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,26 +20,10 @@ import junit.framework.TestCase;
  */
 public class AnalysisSupport_5_Test extends TestCase {
 
-	@SuppressWarnings("unused")
-	private IAnalysisSupport support;
-
-	@Override
-	protected void setUp() throws Exception {
-
-		super.setUp();
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-
-		super.tearDown();
-		support = null;
-	}
-
 	public void testConstruct_1() {
 
 		try {
-			support = new AnalysisSupport(null, 10);
+			AnalysisSupport support = new AnalysisSupport(null, 10);
 		} catch(AnalysisSupportException e) {
 			assertTrue("AnalysisSupportException", true);
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+
+import junit.framework.TestCase;
 
 /**
  * Constructor test.
@@ -38,8 +38,7 @@ public class SupplierIon_1_Test extends TestCase {
 	public void testConstructor_1() {
 
 		try {
-			@SuppressWarnings("unused")
-			ScanIon ion = new ScanIon(0.5f);
+			new ScanIon(0.5f);
 		} catch(IonLimitExceededException e) {
 			assertTrue(false);
 		}
@@ -48,8 +47,7 @@ public class SupplierIon_1_Test extends TestCase {
 	public void testConstructor_2() {
 
 		try {
-			@SuppressWarnings("unused")
-			ScanIon ion = new ScanIon(0.4f);
+			new ScanIon(0.4f);
 		} catch(IonLimitExceededException e) {
 			assertTrue(true);
 		}
@@ -58,8 +56,7 @@ public class SupplierIon_1_Test extends TestCase {
 	public void testConstructor_3() {
 
 		try {
-			@SuppressWarnings("unused")
-			ScanIon ion = new ScanIon(65535.0f);
+			new ScanIon(65535.0f);
 		} catch(IonLimitExceededException e) {
 			assertTrue(false);
 		}
@@ -68,8 +65,7 @@ public class SupplierIon_1_Test extends TestCase {
 	public void testConstructor_4() {
 
 		try {
-			@SuppressWarnings("unused")
-			ScanIon ion = new ScanIon(65535.1f);
+			new ScanIon(65535.1f);
 		} catch(IonLimitExceededException e) {
 			assertTrue(true);
 		}
@@ -108,8 +104,7 @@ public class SupplierIon_1_Test extends TestCase {
 	public void testConstructor_8() {
 
 		try {
-			@SuppressWarnings("unused")
-			ScanIon ion = new ScanIon(0.5f, 0.0f);
+			new ScanIon(0.5f, 0.0f);
 		} catch(AbundanceLimitExceededException e) {
 			assertTrue(true);
 		} catch(IonLimitExceededException e) {
@@ -120,8 +115,7 @@ public class SupplierIon_1_Test extends TestCase {
 	public void testConstructor_9() {
 
 		try {
-			@SuppressWarnings("unused")
-			ScanIon ion = new ScanIon(65535.0f, 0.0f);
+			new ScanIon(65535.0f, 0.0f);
 		} catch(AbundanceLimitExceededException e) {
 			assertTrue(true);
 		} catch(IonLimitExceededException e) {
@@ -132,8 +126,7 @@ public class SupplierIon_1_Test extends TestCase {
 	public void testConstructor_10() {
 
 		try {
-			@SuppressWarnings("unused")
-			ScanIon ion = new ScanIon(65535.1f, 0.0f);
+			new ScanIon(65535.1f, 0.0f);
 		} catch(AbundanceLimitExceededException e) {
 			assertTrue(false);
 		} catch(IonLimitExceededException e) {
@@ -144,8 +137,7 @@ public class SupplierIon_1_Test extends TestCase {
 	public void testConstructor_11() {
 
 		try {
-			@SuppressWarnings("unused")
-			ScanIon ion = new ScanIon(0.4f, 0.0f);
+			new ScanIon(0.4f, 0.0f);
 		} catch(AbundanceLimitExceededException e) {
 			assertTrue(false);
 		} catch(IonLimitExceededException e) {
@@ -156,8 +148,7 @@ public class SupplierIon_1_Test extends TestCase {
 	public void testConstructor_12() {
 
 		try {
-			@SuppressWarnings("unused")
-			ScanIon ion = new ScanIon(0.5f, -0.1f);
+			new ScanIon(0.5f, -0.1f);
 		} catch(AbundanceLimitExceededException e) {
 			assertTrue(true);
 		} catch(IonLimitExceededException e) {

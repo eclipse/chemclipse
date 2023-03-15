@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,9 +19,9 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.exceptions.ClassifierException;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.internal.core.support.Calculator;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.result.IChromatogramResultWNC;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.result.IWncClassifierResult;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.result.WncClassifierResult;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.ClassifierSettings;
@@ -39,6 +39,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class Classifier extends AbstractChromatogramClassifier {
 
+	public static final String IDENTIFIER = "org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc";
+
 	public Classifier() {
 
 		super(DataType.MSD);
@@ -48,8 +50,8 @@ public class Classifier extends AbstractChromatogramClassifier {
 	public IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
 
 		ClassifierSettings classifierSettings;
-		if(chromatogramClassifierSettings instanceof ClassifierSettings) {
-			classifierSettings = (ClassifierSettings)chromatogramClassifierSettings;
+		if(chromatogramClassifierSettings instanceof ClassifierSettings settings) {
+			classifierSettings = settings;
 		} else {
 			classifierSettings = PreferenceSupplier.getClassifierSettings();
 		}
@@ -57,19 +59,19 @@ public class Classifier extends AbstractChromatogramClassifier {
 		if(!processingInfo.hasErrorMessages()) {
 			try {
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-				if(chromatogram instanceof IChromatogramMSD) {
-					IWncIons resultWncIons = Calculator.calculateIonPercentages((IChromatogramMSD)chromatogram, chromatogramSelection, classifierSettings);
-					IWncClassifierResult chromatogramClassifierResult = new WncClassifierResult(ResultStatus.OK, "The chromatogram has been classified.", resultWncIons);
+				if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
+					IWncIons resultWncIons = Calculator.calculateIonPercentages(chromatogramMSD, chromatogramSelection, classifierSettings);
+					IWncClassifierResult chromatogramClassifierResult = new WncClassifierResult(ResultStatus.OK, Messages.chromatogramClassified, resultWncIons);
 					//
-					IMeasurementResult<?> measurementResult = new MeasurementResult(IChromatogramResultWNC.NAME, IChromatogramResultWNC.IDENTIFIER, "This is percentage area list of selected ions.", chromatogramClassifierResult);
+					IMeasurementResult<?> measurementResult = new MeasurementResult(Messages.wncClassifier, IDENTIFIER, Messages.percentageAreaOfSelectedIons, chromatogramClassifierResult);
 					chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
 					//
 					processingInfo.setProcessingResult(chromatogramClassifierResult);
 				} else {
-					processingInfo.addWarnMessage(IChromatogramResultWNC.NAME, "Can only process MSD-Chromatograms - skipping");
+					processingInfo.addWarnMessage(Messages.wncClassifier, Messages.msdChromatogramsOnly);
 				}
 			} catch(ClassifierException e) {
-				IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, IChromatogramResultWNC.NAME, "The chromatogram couldn't be classified.");
+				IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, Messages.wncClassifier, Messages.chromatogramNotClassified);
 				processingInfo.addMessage(processingMessage);
 			}
 		}

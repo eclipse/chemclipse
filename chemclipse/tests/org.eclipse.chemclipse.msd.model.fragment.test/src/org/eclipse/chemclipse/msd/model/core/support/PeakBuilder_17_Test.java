@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.model.support.IBackgroundAbundanceRange;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
@@ -34,8 +33,6 @@ import junit.framework.TestCase;
  */
 public class PeakBuilder_17_Test extends TestCase {
 
-	@SuppressWarnings("unused")
-	private IChromatogramPeakMSD peak;
 	private IScanRange scanRange;
 	private IMarkedIons excludedIons;
 	private IBackgroundAbundanceRange backgroundAbundanceRange;
@@ -58,7 +55,6 @@ public class PeakBuilder_17_Test extends TestCase {
 	@Override
 	protected void tearDown() throws Exception {
 
-		peak = null;
 		scanRange = null;
 		excludedIons = null;
 		backgroundAbundanceRange = null;
@@ -71,7 +67,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_2() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(chromatogram, null, true);
+			PeakBuilderMSD.createPeak(chromatogram, null, true);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -80,7 +76,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_3() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(null, scanRange, backgroundAbundanceRange, true);
+			PeakBuilderMSD.createPeak(null, scanRange, backgroundAbundanceRange, true);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -89,7 +85,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_4() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(chromatogram, null, backgroundAbundanceRange, true);
+			PeakBuilderMSD.createPeak(chromatogram, null, backgroundAbundanceRange, true);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -98,7 +94,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_5() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(null, scanRange, excludedIons);
+			PeakBuilderMSD.createPeak(null, scanRange, excludedIons);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -107,7 +103,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_6() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(chromatogram, null, excludedIons);
+			PeakBuilderMSD.createPeak(chromatogram, null, excludedIons);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -116,7 +112,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_7() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(null, totalIonSignals, peakMassSpectrum);
+			PeakBuilderMSD.createPeak(null, totalIonSignals, peakMassSpectrum);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -125,7 +121,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_8() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(chromatogram, null, peakMassSpectrum);
+			PeakBuilderMSD.createPeak(chromatogram, null, peakMassSpectrum);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -134,7 +130,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_9() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(chromatogram, totalIonSignals, null);
+			PeakBuilderMSD.createPeak(chromatogram, totalIonSignals, null);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -143,7 +139,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_10() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(null, scanRange, backgroundAbundanceRange, excludedIons);
+			PeakBuilderMSD.createPeak(null, scanRange, backgroundAbundanceRange, excludedIons);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -152,7 +148,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_11() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(chromatogram, null, backgroundAbundanceRange, excludedIons);
+			PeakBuilderMSD.createPeak(chromatogram, null, backgroundAbundanceRange, excludedIons);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -161,7 +157,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_12() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, null, excludedIons);
+			PeakBuilderMSD.createPeak(chromatogram, scanRange, null, excludedIons);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -170,7 +166,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_13() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, backgroundAbundanceRange, null);
+			PeakBuilderMSD.createPeak(chromatogram, scanRange, backgroundAbundanceRange, null);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -179,7 +175,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_14() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(null, totalIonSignals, peakMassSpectrum, backgroundAbundanceRange);
+			PeakBuilderMSD.createPeak(null, totalIonSignals, peakMassSpectrum, backgroundAbundanceRange);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -188,7 +184,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_15() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(chromatogram, null, peakMassSpectrum, backgroundAbundanceRange);
+			PeakBuilderMSD.createPeak(chromatogram, null, peakMassSpectrum, backgroundAbundanceRange);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -197,7 +193,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_16() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(chromatogram, totalIonSignals, null, backgroundAbundanceRange);
+			PeakBuilderMSD.createPeak(chromatogram, totalIonSignals, null, backgroundAbundanceRange);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}
@@ -206,7 +202,7 @@ public class PeakBuilder_17_Test extends TestCase {
 	public void testCreatePeak_17() {
 
 		try {
-			peak = PeakBuilderMSD.createPeak(chromatogram, totalIonSignals, peakMassSpectrum, null);
+			PeakBuilderMSD.createPeak(chromatogram, totalIonSignals, peakMassSpectrum, null);
 		} catch(PeakException e) {
 			assertTrue("PeakException", true);
 		}

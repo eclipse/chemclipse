@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,28 +13,16 @@ package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.inter
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.Viewer;
 
 public class WncIonContentProvider implements IStructuredContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if(inputElement instanceof IWncIons) {
-			IWncIons wncIons = (IWncIons)inputElement;
+		if(inputElement instanceof IWncIons wncIons) {
 			return wncIons.toArray();
 		}
 		//
-		return null;
-	}
-
-	@Override
-	public void dispose() {
-
-	}
-
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-
+		return new Object[0];
 	}
 }

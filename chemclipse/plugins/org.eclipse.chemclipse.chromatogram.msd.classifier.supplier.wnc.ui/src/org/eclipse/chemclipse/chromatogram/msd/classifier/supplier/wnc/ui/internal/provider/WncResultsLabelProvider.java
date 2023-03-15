@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,10 +14,11 @@ package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.inter
 import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIon;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.l10n.Messages;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-
 import org.eclipse.swt.graphics.Image;
 
 public class WncResultsLabelProvider extends AbstractChemClipseLabelProvider {
@@ -27,18 +28,16 @@ public class WncResultsLabelProvider extends AbstractChemClipseLabelProvider {
 
 		if(columnIndex == 0) {
 			return getImage(element);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 
 		DecimalFormat decimalFormat = getDecimalFormat();
-		String text = "";
-		if(element instanceof IWncIon) {
-			IWncIon wncIon = (IWncIon)element;
+		String text = ""; //$NON-NLS-1$
+		if(element instanceof IWncIon wncIon) {
 			switch(columnIndex) {
 				case 0: // Name
 					text = wncIon.getName();
@@ -53,14 +52,15 @@ public class WncResultsLabelProvider extends AbstractChemClipseLabelProvider {
 					text = decimalFormat.format(wncIon.getPercentageMaxIntensity());
 					break;
 				default:
-					text = "n.v.";
+					text = Messages.nv;
 			}
 		}
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ION, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ION, IApplicationImageProvider.SIZE_16x16);
 	}
 }

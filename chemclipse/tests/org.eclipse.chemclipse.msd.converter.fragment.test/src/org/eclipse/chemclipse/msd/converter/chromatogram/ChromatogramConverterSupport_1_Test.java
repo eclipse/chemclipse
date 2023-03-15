@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -45,8 +45,7 @@ public class ChromatogramConverterSupport_1_Test extends TestCase {
 	public void testGetConverterId_1() {
 
 		try {
-			@SuppressWarnings("unused")
-			String id = support.getConverterId(1);
+			support.getConverterId(1);
 		} catch(NoConverterAvailableException e) {
 			assertTrue(true);
 		}
@@ -55,8 +54,7 @@ public class ChromatogramConverterSupport_1_Test extends TestCase {
 	public void testGetFilterExtensions_1() {
 
 		try {
-			@SuppressWarnings("unused")
-			String[] ids = support.getFilterExtensions();
+			support.getFilterExtensions();
 		} catch(NoConverterAvailableException e) {
 			assertTrue(true);
 		}
@@ -65,8 +63,7 @@ public class ChromatogramConverterSupport_1_Test extends TestCase {
 	public void testGetFilterNames_1() {
 
 		try {
-			@SuppressWarnings("unused")
-			String[] names = support.getFilterNames();
+			support.getFilterNames();
 		} catch(NoConverterAvailableException e) {
 			assertTrue(true);
 		}

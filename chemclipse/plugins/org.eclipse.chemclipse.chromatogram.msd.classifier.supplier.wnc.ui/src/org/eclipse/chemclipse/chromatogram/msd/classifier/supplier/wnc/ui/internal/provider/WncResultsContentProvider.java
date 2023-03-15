@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,7 +15,6 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWn
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.result.IWncClassifierResult;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.Viewer;
 
 public class WncResultsContentProvider implements IStructuredContentProvider {
 
@@ -25,25 +24,14 @@ public class WncResultsContentProvider implements IStructuredContentProvider {
 		if(inputElement instanceof IMeasurementResult) {
 			IMeasurementResult<?> measurementResult = (IMeasurementResult<?>)inputElement;
 			Object object = measurementResult.getResult();
-			if(object instanceof IWncClassifierResult) {
-				IWncIons wncIons = ((IWncClassifierResult)object).getWNCIons();
+			if(object instanceof IWncClassifierResult result) {
+				IWncIons wncIons = result.getWNCIons();
 				return wncIons.toArray();
 			}
-		} else if(inputElement instanceof IWncIons) {
-			IWncIons wncIons = (IWncIons)inputElement;
+		} else if(inputElement instanceof IWncIons wncIons) {
 			return wncIons.toArray();
 		}
 		//
-		return null;
-	}
-
-	@Override
-	public void dispose() {
-
-	}
-
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-
+		return new Object[0];
 	}
 }

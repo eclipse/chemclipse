@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,12 @@ package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.inter
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIon;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncIonContentProvider;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncIonLabelProvider;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -30,32 +36,22 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.swt.widgets.Label;
-
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIon;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncIonContentProvider;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncIonLabelProvider;;
+import org.eclipse.swt.widgets.TableColumn;;
 
 public class WncIonsListComposite {
 
 	private IWncIons wncIons;
-	private Button addButton;
-	private Button editButton;
-	private Button removeButton;
-	private Label label;
 	private TableViewer tableViewer;
 	private String[] titles = {"Name", "ion"};
-	private int bounds[] = {100, 100};
+	private int[] bounds = {100, 100};
 	private FontMetrics fontMetrics;
 	private static final int WIDTH_HINT = 400;
 
 	public WncIonsListComposite() {
+
 		wncIons = PreferenceSupplier.getWNCIons();
 	}
 
@@ -74,7 +70,7 @@ public class WncIonsListComposite {
 		/*
 		 * WNC ion info.
 		 */
-		label = new Label(composite, SWT.LEFT);
+		Label label = new Label(composite, SWT.LEFT);
 		label.setText("Add and remove ions");
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
@@ -144,10 +140,11 @@ public class WncIonsListComposite {
 		/*
 		 * Add
 		 */
-		addButton = new Button(buttonComposite, SWT.PUSH);
+		Button addButton = new Button(buttonComposite, SWT.PUSH);
 		addButton.setText("Add");
 		addButton.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				Shell shell = Display.getCurrent().getActiveShell();
@@ -165,16 +162,16 @@ public class WncIonsListComposite {
 		/*
 		 * Edit
 		 */
-		editButton = new Button(buttonComposite, SWT.PUSH);
+		Button editButton = new Button(buttonComposite, SWT.PUSH);
 		editButton.setText("Edit");
 		editButton.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)tableViewer.getSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof IWncIon) {
-					IWncIon wncIon = (IWncIon)object;
+				if(object instanceof IWncIon wncIon) {
 					Shell shell = Display.getCurrent().getActiveShell();
 					WncIonDialog dialog = new WncIonDialog(shell, wncIon);
 					if(IDialogConstants.OK_ID == dialog.open()) {
@@ -191,17 +188,17 @@ public class WncIonsListComposite {
 		/*
 		 * Remove
 		 */
-		removeButton = new Button(buttonComposite, SWT.PUSH);
+		Button removeButton = new Button(buttonComposite, SWT.PUSH);
 		removeButton.setText("Remove");
 		removeButton.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				List<Integer> removeIons = new ArrayList<Integer>();
+				List<Integer> removeIons = new ArrayList<>();
 				IStructuredSelection structuredSelection = (IStructuredSelection)tableViewer.getSelection();
 				for(Object object : structuredSelection.toArray()) {
-					if(object instanceof IWncIon) {
-						IWncIon wncIon = (IWncIon)object;
+					if(object instanceof IWncIon wncIon) {
 						removeIons.add(wncIon.getIon());
 					}
 				}

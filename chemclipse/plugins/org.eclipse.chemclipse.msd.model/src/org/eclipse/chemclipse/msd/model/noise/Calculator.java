@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -36,6 +36,7 @@ public class Calculator {
 	private final CalculatorSupport calculatorSupport;
 
 	public Calculator() {
+
 		/*
 		 * Why do we instantiate a class CalculatorSupport instance? If e.g. the
 		 * getNoiseMassSpectrum(...) method is called 1000 times, as much
@@ -143,31 +144,30 @@ public class Calculator {
 
 		IExtractedIonSignal signal;
 		int size = analysisSegment.getWidth();
-		if(size > 0) {
-			double[] values = new double[size];
-			int counter = 0;
-			for(int scan = analysisSegment.getStartScan(); scan <= analysisSegment.getStopScan(); scan++) {
-				try {
-					signal = extractedIonSignals.getExtractedIonSignal(scan);
-					values[counter] = signal.getTotalSignal();
-				} catch(Exception e) {
-					logger.warn(e);
-				} finally {
-					/*
-					 * Increment counters position.
-					 */
-					counter++;
-				}
-			}
-			/*
-			 * Check if the segment is accepted.<br/> If yes, than calculate its
-			 * median.<br/> If no, than throw an exception.
-			 */
-			double mean = Calculations.getMean(values);
-			return calculatorSupport.acceptSegment(values, mean);
-		} else {
+		if(size <= 0) {
 			return false;
 		}
+		double[] values = new double[size];
+		int counter = 0;
+		for(int scan = analysisSegment.getStartScan(); scan <= analysisSegment.getStopScan(); scan++) {
+			try {
+				signal = extractedIonSignals.getExtractedIonSignal(scan);
+				values[counter] = signal.getTotalSignal();
+			} catch(Exception e) {
+				logger.warn(e);
+			} finally {
+				/*
+				 * Increment counters position.
+				 */
+				counter++;
+			}
+		}
+		/*
+		 * Check if the segment is accepted.<br/> If yes, than calculate its
+		 * median.<br/> If no, than throw an exception.
+		 */
+		double mean = Calculations.getMean(values);
+		return calculatorSupport.acceptSegment(values, mean);
 	}
 	// --------------------------------------------private Methods
 }

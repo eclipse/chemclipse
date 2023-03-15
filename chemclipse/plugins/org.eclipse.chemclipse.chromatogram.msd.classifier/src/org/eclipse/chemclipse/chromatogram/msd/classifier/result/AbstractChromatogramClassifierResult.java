@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,7 +28,8 @@ public abstract class AbstractChromatogramClassifierResult implements IChromatog
 	 * @param resultStatus
 	 * @param description
 	 */
-	public AbstractChromatogramClassifierResult(ResultStatus resultStatus, String description) {
+	protected AbstractChromatogramClassifierResult(ResultStatus resultStatus, String description) {
+
 		if(resultStatus != null) {
 			this.resultStatus = resultStatus;
 		}
