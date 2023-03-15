@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactorings
  *******************************************************************************/
 package org.eclipse.chemclipse.model.supplier;
 
@@ -67,6 +68,7 @@ public class IMeasurementFilterProcessTypeSupplier implements IProcessTypeSuppli
 		private final IMeasurementFilter<SettingsClass> filter;
 
 		public MeasurementFilterProcessSupplier(IMeasurementFilter<SettingsClass> filter, IProcessTypeSupplier parent) {
+
 			super(getID(filter), filter.getName(), filter.getDescription(), filter.getConfigClass(), parent, filter.getDataCategories());
 			this.filter = filter;
 		}
@@ -96,7 +98,7 @@ public class IMeasurementFilterProcessTypeSupplier implements IProcessTypeSuppli
 					}
 				}
 				if(unprocessed > 0) {
-					context.addWarnMessage(getName(), unprocessed + " measurement(s) are skipped because they are incompatible with this filter");
+					context.addWarnMessage(getName(), unprocessed + " measurements are skipped because they are incompatible with this filter");
 				}
 				return resultList;
 			}

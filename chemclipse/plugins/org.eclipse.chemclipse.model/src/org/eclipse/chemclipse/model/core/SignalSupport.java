@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * 
@@ -30,7 +30,7 @@ public class SignalSupport {
 		} else if(signals.size() == 1 && signals.get(0) == ISignal.TOTAL_INTENSITY) {
 			return ISignal.TOTAL_INTENSITY_DESCRIPTION;
 		} else {
-			return signals.stream().sorted().map(s -> decimalFormat.format(s)).collect(Collectors.joining(", "));
+			return signals.stream().sorted().map(value -> decimalFormat.format(value)).collect(Collectors.joining(", "));
 		}
 	}
 

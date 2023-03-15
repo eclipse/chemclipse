@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,7 +40,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AlkaneIdentifier {
 
-	public static final String IDENTIFIER = "Alkane(s) Identifier";
+	public static final String IDENTIFIER = "Alkanes Identifier";
 	//
 	private final String massSpectraFiles; // Initialized in constructor.
 	private final DatabasesCache databasesCache; // Initialized in constructor.

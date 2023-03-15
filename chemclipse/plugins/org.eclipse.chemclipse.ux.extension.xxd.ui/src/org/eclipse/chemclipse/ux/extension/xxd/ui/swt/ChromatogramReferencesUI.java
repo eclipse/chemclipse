@@ -349,7 +349,7 @@ public class ChromatogramReferencesUI {
 		Action action = new Action("Delete All", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImageProvider.SIZE_16x16)) {
 
 			{
-				setToolTipText("Remove all reference chromatogram(s).");
+				setToolTipText("Remove all reference chromatograms.");
 			}
 
 			@Override
@@ -358,7 +358,7 @@ public class ChromatogramReferencesUI {
 				ToolItem item = (ToolItem)event.widget;
 				int index = comboChromatograms.currentIndex();
 				if(index == 0 && comboChromatograms.master != null) {
-					if(MessageDialog.openQuestion(item.getParent().getShell(), "Delete Reference(s)", "Do you want to delete all chromatogram reference(s)?")) {
+					if(MessageDialog.openQuestion(item.getParent().getShell(), "Delete References", "Do you want to delete all chromatogram references?")) {
 						IChromatogram<?> chromatogram = comboChromatograms.master.getChromatogram();
 						while(comboChromatograms.data.size() > 1) {
 							comboChromatograms.data.remove(1);

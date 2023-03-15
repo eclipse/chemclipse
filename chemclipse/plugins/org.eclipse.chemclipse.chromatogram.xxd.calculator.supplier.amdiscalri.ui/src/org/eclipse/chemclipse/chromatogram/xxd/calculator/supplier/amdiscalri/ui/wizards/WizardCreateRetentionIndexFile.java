@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -72,11 +72,11 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 		 * Pages must implement IExtendedWizardPage / extend AbstractExtendedWizardPage
 		 */
 		InputWizardSettings inputWizardSettingsMSD = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_MODELS_MSD, DataType.MSD);
-		inputWizardSettingsMSD.setTitle("Open Chromatogram (MSD) File(s)");
+		inputWizardSettingsMSD.setTitle("Open Chromatogram (MSD) Files");
 		inputWizardSettingsMSD.setDescription("Select a chromatogram/chromatograms file to open.");
 		//
 		InputWizardSettings inputWizardSettingsCSD = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_MODELS_CSD, DataType.CSD);
-		inputWizardSettingsCSD.setTitle("Open Chromatogram (CSD) File(s)");
+		inputWizardSettingsCSD.setTitle("Open Chromatogram (CSD) Files");
 		inputWizardSettingsCSD.setDescription("Select a chromatogram/chromatograms file to open.");
 		//
 		pageCalibrationSettings = new PageCalibrationSettings(wizardElements);

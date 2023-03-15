@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -360,13 +360,13 @@ public class ProcessMethodToolbar extends ToolBar {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
 		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Remove the selected process method(s).");
+		item.setToolTipText("Remove the selected process methods.");
 		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(toolBar.getShell(), "Delete Process Method(s)", "Would you like to delete the selected processor(s)?")) {
+				if(MessageDialog.openQuestion(toolBar.getShell(), "Delete Process Methods", "Would you like to delete the selected processors?")) {
 					for(Object object : structuredViewer.getStructuredSelection().toArray()) {
 						ListProcessEntryContainer container = MethodSupport.getContainer(object);
 						if(container != null) {
@@ -386,13 +386,13 @@ public class ProcessMethodToolbar extends ToolBar {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
 		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Remove all process method(s).");
+		item.setToolTipText("Remove all process methods.");
 		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(toolBar.getShell(), "Delete Process Method(s)", "Would you like to delete all processor(s)?")) {
+				if(MessageDialog.openQuestion(toolBar.getShell(), "Delete Process Methods", "Would you like to delete all processors?")) {
 					processMethod.removeAllProcessEntries();
 					fireUpdate();
 					select(Collections.emptyList());
@@ -438,7 +438,7 @@ public class ProcessMethodToolbar extends ToolBar {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
 		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Move the process method(s) up.");
+		item.setToolTipText("Move the process methods up.");
 		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -470,7 +470,7 @@ public class ProcessMethodToolbar extends ToolBar {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
 		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Move the process method(s) down.");
+		item.setToolTipText("Move the process methods down.");
 		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override

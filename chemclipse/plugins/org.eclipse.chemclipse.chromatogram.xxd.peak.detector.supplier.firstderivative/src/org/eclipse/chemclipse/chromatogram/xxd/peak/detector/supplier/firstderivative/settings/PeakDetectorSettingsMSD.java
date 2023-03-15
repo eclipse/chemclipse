@@ -179,9 +179,9 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 		}
 		List<Number> ionNumbers = new ArrayList<>();
 		String[] split = filterIonsString.trim().split("[\\s.,;]+");
-		for(String s : split) {
+		for(String value : split) {
 			try {
-				ionNumbers.add(new BigDecimal(s));
+				ionNumbers.add(new BigDecimal(value));
 			} catch(NumberFormatException e) {
 				// invalid or empty string
 			}

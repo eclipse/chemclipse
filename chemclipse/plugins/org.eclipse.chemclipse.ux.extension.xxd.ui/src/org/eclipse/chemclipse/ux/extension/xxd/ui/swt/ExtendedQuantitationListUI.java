@@ -128,7 +128,7 @@ public class ExtendedQuantitationListUI extends Composite implements IExtendedPa
 			@Override
 			public String getName() {
 
-				return "Delete Quantitation Entrie(s)";
+				return "Delete Quantitation Entries";
 			}
 
 			@Override
@@ -166,8 +166,8 @@ public class ExtendedQuantitationListUI extends Composite implements IExtendedPa
 	private void deleteQuantitationEntries(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Delete Quantitation Entrie(s)");
-		messageBox.setMessage("Would you like to delete the selected quantitation entrie(s)?");
+		messageBox.setText("Delete Quantitation Entries");
+		messageBox.setMessage("Would you like to delete the selected quantitation entries?");
 		if(messageBox.open() == SWT.YES) {
 			/*
 			 * Delete Quantitation Entry

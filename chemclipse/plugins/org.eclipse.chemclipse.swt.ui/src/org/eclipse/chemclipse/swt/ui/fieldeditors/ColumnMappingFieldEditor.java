@@ -47,7 +47,7 @@ public class ColumnMappingFieldEditor extends FieldEditor {
 	private static final String ADD = "Add";
 	private static final String ADD_TOOLTIP = "Add a new keyword";
 	private static final String REMOVE = "Remove";
-	private static final String REMOVE_TOOLTIP = "Remove the selected keyword(s)";
+	private static final String REMOVE_TOOLTIP = "Remove the selected keywords";
 	private static final String REMOVE_ALL = "Remove All";
 	private static final String REMOVE_ALL_TOOLTIP = "Remove All Keywords";
 	private static final String IMPORT = "Import";
@@ -55,10 +55,10 @@ public class ColumnMappingFieldEditor extends FieldEditor {
 	//
 	private static final String IMPORT_TITLE = "Import Keywords";
 	private static final String EXPORT_TITLE = "Export Keywords";
-	private static final String DIALOG_TITLE = "Keywords(s)";
+	private static final String DIALOG_TITLE = "Keywords";
 	private static final String MESSAGE_ADD = "You can create a new keyword here.";
-	private static final String MESSAGE_REMOVE = "Do you want to delete the selected keyword(s)?";
-	private static final String MESSAGE_REMOVE_ALL = "Do you want to delete all keyword(s)?";
+	private static final String MESSAGE_REMOVE = "Do you want to delete the selected keywords?";
+	private static final String MESSAGE_REMOVE_ALL = "Do you want to delete all keywords?";
 	private static final String MESSAGE_EXPORT_SUCCESSFUL = "Keywords have been exported successfully.";
 	private static final String MESSAGE_EXPORT_FAILED = "Failed to export the keywords.";
 	//

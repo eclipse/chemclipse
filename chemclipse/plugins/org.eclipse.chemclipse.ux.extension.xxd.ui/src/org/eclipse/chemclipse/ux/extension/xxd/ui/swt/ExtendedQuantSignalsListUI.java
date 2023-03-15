@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -210,7 +210,7 @@ public class ExtendedQuantSignalsListUI extends Composite implements IExtendedPa
 	private Button createButtonDelete(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Delete the selected signal(s).");
+		button.setToolTipText("Delete the selected signals.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -248,7 +248,7 @@ public class ExtendedQuantSignalsListUI extends Composite implements IExtendedPa
 			@Override
 			public String getName() {
 
-				return "Delete Signal(s)";
+				return "Delete Signals";
 			}
 
 			@Override
@@ -283,8 +283,8 @@ public class ExtendedQuantSignalsListUI extends Composite implements IExtendedPa
 	private void deleteSignals(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Delete Signal(s)");
-		messageBox.setMessage("Would you like to delete the selected signal(s)?");
+		messageBox.setText("Delete Signals");
+		messageBox.setMessage("Would you like to delete the selected signals?");
 		if(messageBox.open() == SWT.YES) {
 			/*
 			 * Delete

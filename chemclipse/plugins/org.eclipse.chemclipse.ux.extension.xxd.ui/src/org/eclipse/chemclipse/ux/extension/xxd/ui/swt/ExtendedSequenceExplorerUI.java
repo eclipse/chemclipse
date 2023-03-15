@@ -313,7 +313,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 	private Button createBatchOpenButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Open Sequence(s)");
+		button.setText("Open Sequences");
 		button.setToolTipText("Open the selected sequences.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);

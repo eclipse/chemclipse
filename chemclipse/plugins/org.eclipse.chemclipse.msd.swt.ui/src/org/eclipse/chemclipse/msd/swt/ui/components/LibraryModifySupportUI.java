@@ -284,8 +284,8 @@ public class LibraryModifySupportUI extends Composite {
 					int index = table.getSelectionIndex();
 					if(index >= 0) {
 						MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
-						messageBox.setText("Delete library entrie(s)?");
-						messageBox.setMessage("Would you like to delete the library entrie(s)?");
+						messageBox.setText("Delete library entries?");
+						messageBox.setMessage("Would you like to delete the library entries?");
 						if(messageBox.open() == SWT.OK) {
 							//
 							enableButtonFields(ACTION_DELETE);

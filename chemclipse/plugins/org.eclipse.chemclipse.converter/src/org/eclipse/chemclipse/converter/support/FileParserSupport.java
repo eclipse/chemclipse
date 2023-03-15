@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -53,7 +53,7 @@ public class FileParserSupport {
 	}
 
 	/**
-	 * A list of file(s) is returned that matches the prefix and extension pattern.
+	 * A list of files is returned that matches the prefix and extension pattern.
 	 * 
 	 * @param directory
 	 * @param filePrefix

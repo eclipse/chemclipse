@@ -272,7 +272,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_PCR_SAVE_AS_FOLDER, PreferenceConstants.DEF_PCR_SAVE_AS_FOLDER);
 		store.setDefault(PreferenceConstants.P_PCR_REFERENCE_LABEL, PreferenceConstants.DEF_PCR_REFERENCE_LABEL);
 		/*
-		 * Molecule(s)
+		 * Molecules
 		 */
 		store.setDefault(PreferenceConstants.P_MOLECULE_PATH_EXPORT, PreferenceConstants.DEF_MOLECULE_PATH_EXPORT);
 		store.setDefault(PreferenceConstants.P_LENGTH_MOLECULE_NAME_EXPORT, PreferenceConstants.DEF_LENGTH_MOLECULE_NAME_EXPORT);

@@ -77,7 +77,7 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 			/*
 			 * Don't fire an update.
 			 */
-			monitor.beginTask("Import Chromatogram(s)", IProgressMonitor.UNKNOWN);
+			monitor.beginTask("Import Chromatograms", IProgressMonitor.UNKNOWN);
 			for(File file : files) {
 				boolean fireUpdate = false;
 				switch(dataType) {

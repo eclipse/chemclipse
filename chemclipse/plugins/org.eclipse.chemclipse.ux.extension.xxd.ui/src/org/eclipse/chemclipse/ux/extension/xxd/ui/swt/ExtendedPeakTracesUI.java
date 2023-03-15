@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -75,7 +75,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 	//
 	private static final String TRACE_LABEL_NONE = "--";
 	private static final String TRACE_LABEL_PREFIX = "Trace";
-	private static final String CATEGORY = "Peak Trace(s)";
+	private static final String CATEGORY = "Peak Traces";
 	//
 	private Button buttonToolbarInfo;
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
@@ -347,7 +347,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getName() {
 
-				return "Delete Hidden Serie(s)";
+				return "Delete Hidden Series";
 			}
 
 			@Override

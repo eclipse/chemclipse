@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -33,7 +33,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	protected void createFieldEditors() {
 
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_EXPORT_FOLDER, "Chromatogram Export Folder", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, "Method(s) Folder", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, "Methods Folder", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceSupplier.P_SELECTED_METHOD_NAME, "Method Name", getFieldEditorParent()));
 	}
 

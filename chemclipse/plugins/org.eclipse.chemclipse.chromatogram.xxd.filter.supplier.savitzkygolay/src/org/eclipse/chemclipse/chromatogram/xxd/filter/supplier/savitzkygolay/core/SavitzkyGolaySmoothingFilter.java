@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactorings
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core;
 
@@ -70,7 +71,7 @@ public class SavitzkyGolaySmoothingFilter implements IScanFilter<MassSpectrumFil
 		IProcessingResult<Integer> golayFilter = new FilterSupplier().applySavitzkyGolayFilter(massSpectra, derivative, order, width, monitor);
 		result.setProcessingResult(golayFilter.getProcessingResult() > 0);
 		result.addMessages(golayFilter);
-		result.addInfoMessage(getName(), filterItems.size() + " scan(s) were smoothed with derivative=" + derivative + ", order=" + order + ", width=" + width);
+		result.addInfoMessage(getName(), filterItems.size() + " scans were smoothed with derivative=" + derivative + ", order=" + order + ", width=" + width);
 		return result;
 	}
 

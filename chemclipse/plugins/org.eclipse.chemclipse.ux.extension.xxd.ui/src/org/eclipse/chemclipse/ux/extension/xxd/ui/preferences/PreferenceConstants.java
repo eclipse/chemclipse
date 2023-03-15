@@ -901,7 +901,7 @@ public class PreferenceConstants {
 	public static final String P_PROCESSOR_SELECTION_DATA_CATEGORY = "processorSelectionDataCategory";
 	public static final boolean DEF_PROCESSOR_SELECTION_DATA_CATEGORY = true;
 	/*
-	 * Molecule(s)
+	 * Molecules
 	 */
 	public static final String P_MOLECULE_PATH_EXPORT = "moleculePathExport";
 	public static final String DEF_MOLECULE_PATH_EXPORT = "";

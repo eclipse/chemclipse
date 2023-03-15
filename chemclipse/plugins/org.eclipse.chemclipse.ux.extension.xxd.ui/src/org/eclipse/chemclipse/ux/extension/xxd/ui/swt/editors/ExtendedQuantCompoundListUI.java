@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -223,7 +223,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 
 		//
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Create Response Table(s)");
+		button.setToolTipText("Create Response Tables");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CALCULATE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -405,7 +405,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 	private Button createButtonDelete(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Delete the selected compound(s).");
+		button.setToolTipText("Delete the selected compounds.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -528,8 +528,8 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 	private void deleteCompounds(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Delete Compound(s)");
-		messageBox.setMessage("Would you like to delete the selected compound(s)?");
+		messageBox.setText("Delete Compounds");
+		messageBox.setMessage("Would you like to delete the selected compounds?");
 		if(messageBox.open() == SWT.YES) {
 			/*
 			 * Delete
@@ -617,7 +617,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 			@Override
 			public String getName() {
 
-				return "Delete Compound(s)";
+				return "Delete Compounds";
 			}
 
 			@Override

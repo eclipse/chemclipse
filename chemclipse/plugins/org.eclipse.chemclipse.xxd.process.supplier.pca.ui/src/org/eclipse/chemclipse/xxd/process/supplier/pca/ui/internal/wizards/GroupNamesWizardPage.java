@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -64,7 +64,7 @@ public class GroupNamesWizardPage extends WizardPage {
 		 */
 		createLabel(composite, "Group Name");
 		textGroupName = createText(composite);
-		createLabel(composite, "String or regular expression to match the group name(s)");
+		createLabel(composite, "String or regular expression to match the group names");
 		textSelectNames = createText(composite);
 		createOptionGroup(composite);
 		createToolbar(composite);
@@ -137,8 +137,8 @@ public class GroupNamesWizardPage extends WizardPage {
 	private Button createButtonProcess(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Set the group name(s)");
-		button.setText("Set the group name(s)");
+		button.setToolTipText("Set the group names");
+		button.setText("Set the group names");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -180,7 +180,7 @@ public class GroupNamesWizardPage extends WizardPage {
 	private Button createButtonReset(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Reset the group name(s)");
+		button.setToolTipText("Reset the group names");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -197,8 +197,8 @@ public class GroupNamesWizardPage extends WizardPage {
 
 	private void updateGroupNames() {
 
-		String s = textSelectNames.getText().trim();
-		if(s.isEmpty()) {
+		String value = textSelectNames.getText().trim();
+		if(value.isEmpty()) {
 			return;
 		}
 		//
@@ -208,27 +208,27 @@ public class GroupNamesWizardPage extends WizardPage {
 		switch(selectNames) {
 			case CONTAINS_STRING:
 				if(!caseSensitive.getSelection()) {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().toLowerCase().contains(s.toLowerCase())).forEach(filterInput::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().toLowerCase().contains(value.toLowerCase())).forEach(filterInput::add);
 				} else {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().contains(s)).forEach(filterInput::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().contains(value)).forEach(filterInput::add);
 				}
 				break;
 			case STARTS_WITH_STRING:
 				if(!caseSensitive.getSelection()) {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().toLowerCase().startsWith(s.toLowerCase())).forEach(filterInput::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().toLowerCase().startsWith(value.toLowerCase())).forEach(filterInput::add);
 				} else {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().startsWith(s)).forEach(filterInput::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().startsWith(value)).forEach(filterInput::add);
 				}
 				break;
 			case ENDS_WITH_STRING:
 				if(!caseSensitive.getSelection()) {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().toLowerCase().endsWith(s.toLowerCase())).forEach(filterInput::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().toLowerCase().endsWith(value.toLowerCase())).forEach(filterInput::add);
 				} else {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().endsWith(s)).forEach(filterInput::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().endsWith(value)).forEach(filterInput::add);
 				}
 				break;
 			case REGEXP:
-				Pattern p = Pattern.compile(s);
+				Pattern p = Pattern.compile(value);
 				inputWizard.getDataInputEntries().stream().filter(i -> p.matcher(i.getSampleName()).find()).forEach(filterInput::add);
 				break;
 			default:

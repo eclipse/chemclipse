@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,7 +49,7 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 			processingInfo.addMessages(alkaneIdentifier.runIdentification(massSpectraList, alkaneSettings, monitor));
 		} catch(Exception e) {
 			logger.warn(e);
-			processingInfo.addErrorMessage("Alkane(s) Identifier", "Some has gone wrong.");
+			processingInfo.addErrorMessage("Alkanes Identifier", "Some has gone wrong.");
 		}
 		//
 		return processingInfo;

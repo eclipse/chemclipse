@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -62,8 +62,8 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 
 	private enum Type {
 
-		EXTERNAL("Editor(s)"), //
-		INTERNAL("Reference(s)"), //
+		EXTERNAL("Editors"), //
+		INTERNAL("References"), //
 		BOTH("Both"); //
 
 		private String label = "";
@@ -148,7 +148,7 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 		});
 		//
 		Combo combo = comboViewer.getCombo();
-		combo.setToolTipText("Select the source of referenced scan(s).");
+		combo.setToolTipText("Select the source of referenced scans.");
 		GridData gridData = new GridData();
 		gridData.widthHint = 150;
 		combo.setLayoutData(gridData);
@@ -205,7 +205,7 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 		});
 		//
 		Combo combo = comboViewer.getCombo();
-		combo.setToolTipText("Editor Reference(s) Scan");
+		combo.setToolTipText("Editor References Scan");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
 
@@ -340,7 +340,7 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 			chromatogramSelections.add(chromatogramSelection);
 		}
 		/*
-		 * Add the reference(s)
+		 * Add the references
 		 */
 		switch(type) {
 			case INTERNAL:
@@ -355,7 +355,7 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 				break;
 		}
 		/*
-		 * Set and select the reference(s)
+		 * Set and select the references
 		 */
 		Combo combo = comboViewerSource.getCombo();
 		comboViewerSource.setInput(chromatogramSelections);

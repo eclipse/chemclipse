@@ -157,9 +157,9 @@ public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 		//
 		List<Number> waveLengths = new ArrayList<>();
 		String[] split = input.trim().split("[\\s.,;]+");
-		for(String s : split) {
+		for(String value : split) {
 			try {
-				waveLengths.add(new BigDecimal(s));
+				waveLengths.add(new BigDecimal(value));
 			} catch(NumberFormatException e) {
 				// invalid or empty string
 			}

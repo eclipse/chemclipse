@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,6 +49,7 @@ public class SynonymsEditUI extends Composite {
 	private ILibraryInformation libraryInformation;
 
 	public SynonymsEditUI(Composite parent, int style) {
+
 		super(parent, style);
 		initialize();
 	}
@@ -146,8 +147,8 @@ public class SynonymsEditUI extends Composite {
 				int index = table.getSelectionIndex();
 				if(index >= 0) {
 					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
-					messageBox.setText("Delete synonym(s)?");
-					messageBox.setMessage("Would you like to delete the synonym(s)?");
+					messageBox.setText("Delete synonyms?");
+					messageBox.setMessage("Would you like to delete the synonyms?");
 					if(messageBox.open() == SWT.OK) {
 						//
 						enableButtonFields(ACTION_DELETE);

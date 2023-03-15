@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Christoph Läubrich.
+ * Copyright (c) 2020, 2023 Christoph Läubrich.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,7 +44,7 @@ public class InstallAssetsHandler {
 		SinglePageWizard wizard = new SinglePageWizard("Install / Manage Assets", true, assetInstallPage);
 		if(wizard.open(shell, 800, 600)) {
 			/*
-			 * Handle deleted item(s).
+			 * Handle deleted items.
 			 */
 			List<AssetItem> deletedItems = assetInstallPage.getDeletedItems();
 			for(AssetItem delete : deletedItems) {
@@ -54,7 +54,7 @@ public class InstallAssetsHandler {
 				deleteFile.renameTo(backupFile);
 			}
 			/*
-			 * Handle new item(s).
+			 * Handle new items.
 			 */
 			List<AssetItem> newItems = assetInstallPage.getNewItems();
 			for(AssetItem create : newItems) {

@@ -288,7 +288,7 @@ public class AssetInstallPage extends WizardPage {
 									builder.append(message);
 									builder.append(OperatingSystemUtils.getLineDelimiter());
 								}
-								MessageDialog.openError(getShell(), "Add Asset(s)", builder.toString());
+								MessageDialog.openError(getShell(), "Add Assets", builder.toString());
 							}
 						} catch(ZipException e) {
 							logger.warn(e);
@@ -441,12 +441,12 @@ public class AssetInstallPage extends WizardPage {
 
 	private Action createActionDeleteAsset() {
 
-		Action action = new Action("Delete Selected Asset(s)", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16)) {
+		Action action = new Action("Delete Selected Assets", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16)) {
 
 			@Override
 			public void run() {
 
-				if(MessageDialog.openQuestion(getShell(), "Delete Selected Asset(s)", "Would you like to delete the selected asset(s)?")) {
+				if(MessageDialog.openQuestion(getShell(), "Delete Selected Assets", "Would you like to delete the selected assets?")) {
 					/*
 					 * Delete
 					 */
@@ -471,12 +471,12 @@ public class AssetInstallPage extends WizardPage {
 
 	private Action createActionDeleteAssets() {
 
-		Action action = new Action("Delete All Asset(s)", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16)) {
+		Action action = new Action("Delete All Assets", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16)) {
 
 			@Override
 			public void run() {
 
-				if(MessageDialog.openQuestion(getShell(), "Delete Asset(s)", "Would you really like to delete all asset(s)?")) {
+				if(MessageDialog.openQuestion(getShell(), "Delete Assets", "Would you really like to delete all assets?")) {
 					/*
 					 * Delete
 					 */

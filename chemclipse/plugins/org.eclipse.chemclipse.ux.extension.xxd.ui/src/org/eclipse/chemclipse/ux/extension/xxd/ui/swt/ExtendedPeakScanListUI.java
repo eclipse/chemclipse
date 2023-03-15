@@ -670,7 +670,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				chromatogramSelection.setSelectedPeaks(selectedPeaks);
 				chromatogramSelection.setSelectedIdentifiedScans(selectedIdentifiedScans);
 				chromatogramSelection.getChromatogram().setDirty(true);
-				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peaks/Scan(s) selection via the list.");
+				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peaks/Scans selection via the list.");
 			} else {
 				/*
 				 * Only one object.

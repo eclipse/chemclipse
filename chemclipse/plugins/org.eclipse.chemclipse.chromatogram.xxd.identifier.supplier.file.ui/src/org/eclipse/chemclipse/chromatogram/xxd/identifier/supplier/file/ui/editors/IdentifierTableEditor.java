@@ -186,8 +186,8 @@ public class IdentifierTableEditor extends FieldEditor {
 
 		buttonAddFile = createButtonAddFile(composite, "Add DB (File)", "Add a new database."); //$NON-NLS-1$
 		buttonAddDirectory = createButtonAddDirectory(composite, "Add DB (Directory)", "Add a new database."); //$NON-NLS-1$
-		buttonRemove = createButtonRemove(composite, "Remove", "Remove the selected database(s)."); //$NON-NLS-1$
-		buttonRemoveAll = createButtonRemoveAll(composite, "Remove All", "Remove all database(s)."); //$NON-NLS-1$
+		buttonRemove = createButtonRemove(composite, "Remove", "Remove the selected databases."); //$NON-NLS-1$
+		buttonRemoveAll = createButtonRemoveAll(composite, "Remove All", "Remove all databases."); //$NON-NLS-1$
 	}
 
 	private Button createButtonAddFile(Composite parent, String text, String tooltip) {

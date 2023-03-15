@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -218,7 +218,7 @@ public class ExtendedPeakQuantReferencesUI extends Composite implements IExtende
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete the selected quantitation reference(s).");
+		button.setToolTipText("Delete the selected quantitation references.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -279,7 +279,7 @@ public class ExtendedPeakQuantReferencesUI extends Composite implements IExtende
 	private void deleteReferences(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Delete Quantitation Reference(s)");
+		messageBox.setText("Delete Quantitation References");
 		messageBox.setMessage("Would you like to delete the selected quantitations?");
 		if(messageBox.open() == SWT.YES) {
 			//

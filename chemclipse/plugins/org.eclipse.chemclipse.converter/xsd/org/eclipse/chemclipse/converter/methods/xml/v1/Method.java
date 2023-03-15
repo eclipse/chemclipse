@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,13 +18,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAnyAttribute;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
-import javax.xml.namespace.QName;
 
 /**
  * <p>
@@ -98,7 +99,7 @@ public class Method {
 	 * 
 	 * 
 	 * <p>
-	 * Objects of the following type(s) are allowed in the list
+	 * Objects of the following types are allowed in the list
 	 * {@link MetaData }
 	 * 
 	 * 
@@ -128,7 +129,7 @@ public class Method {
 	 * 
 	 * 
 	 * <p>
-	 * Objects of the following type(s) are allowed in the list
+	 * Objects of the following types are allowed in the list
 	 * {@link Entry }
 	 * 
 	 * 
@@ -145,7 +146,7 @@ public class Method {
 	 * Gets the value of the uuid property.
 	 * 
 	 * @return
-	 * 		possible object is
+	 *         possible object is
 	 *         {@link String }
 	 * 
 	 */
@@ -184,7 +185,7 @@ public class Method {
 	 * 
 	 * 
 	 * <p>
-	 * Objects of the following type(s) are allowed in the list
+	 * Objects of the following types are allowed in the list
 	 * {@link String }
 	 * 
 	 * 
@@ -201,7 +202,7 @@ public class Method {
 	 * Gets the value of the name property.
 	 * 
 	 * @return
-	 * 		possible object is
+	 *         possible object is
 	 *         {@link String }
 	 * 
 	 */
@@ -227,7 +228,7 @@ public class Method {
 	 * Gets the value of the category property.
 	 * 
 	 * @return
-	 * 		possible object is
+	 *         possible object is
 	 *         {@link String }
 	 * 
 	 */
@@ -253,7 +254,7 @@ public class Method {
 	 * Gets the value of the operator property.
 	 * 
 	 * @return
-	 * 		possible object is
+	 *         possible object is
 	 *         {@link String }
 	 * 
 	 */
@@ -279,7 +280,7 @@ public class Method {
 	 * Gets the value of the description property.
 	 * 
 	 * @return
-	 * 		possible object is
+	 *         possible object is
 	 *         {@link String }
 	 * 
 	 */
@@ -305,7 +306,7 @@ public class Method {
 	 * Gets the value of the finalized property.
 	 * 
 	 * @return
-	 * 		possible object is
+	 *         possible object is
 	 *         {@link Boolean }
 	 * 
 	 */
@@ -343,7 +344,7 @@ public class Method {
 	 * 
 	 * 
 	 * @return
-	 * 		always non-null
+	 *         always non-null
 	 */
 	public Map<QName, String> getOtherAttributes() {
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,7 +34,7 @@ public class PageDataType extends AbstractExtendedWizardPage {
 
 		super(PageDataType.class.getName());
 		setTitle("Chromatogram Batch Process");
-		setDescription("Select the data type(s) to analyze.");
+		setDescription("Select the data types to analyze.");
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class PageDataType extends AbstractExtendedWizardPage {
 			}
 		});
 		//
-		combo.setToolTipText("Select the data type(s) that shall be batch processed.");
+		combo.setToolTipText("Select the data types that shall be batch processed.");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
 

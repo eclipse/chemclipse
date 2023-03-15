@@ -154,7 +154,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 
 	private Button createButtonDelete(Composite parent) {
 
-		Button button = createButton(parent, "", "Delete the selected header entrie(s).", IApplicationImage.IMAGE_DELETE);
+		Button button = createButton(parent, "", "Delete the selected header entries.", IApplicationImage.IMAGE_DELETE);
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -241,7 +241,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getName() {
 
-				return "Delete Header Entrie(s)";
+				return "Delete Header Entries";
 			}
 
 			@Override
@@ -262,8 +262,8 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 	private void deleteEntries(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Header Entrie(s)");
-		messageBox.setMessage("Would you like to delete the selected header entrie(s)?");
+		messageBox.setText("Header Entries");
+		messageBox.setMessage("Would you like to delete the selected header entries?");
 		if(messageBox.open() == SWT.YES) {
 			/*
 			 * Delete

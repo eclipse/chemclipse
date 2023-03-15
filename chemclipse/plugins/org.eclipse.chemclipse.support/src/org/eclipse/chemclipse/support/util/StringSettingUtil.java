@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,7 @@ public class StringSettingUtil implements IStringSerialization<String[]> {
 	private ObjectMapper objectMapper;
 
 	public StringSettingUtil() {
+
 		objectMapper = new ObjectMapper();
 	}
 
@@ -44,7 +45,7 @@ public class StringSettingUtil implements IStringSerialization<String[]> {
 		List<String[]> deserialize = new ArrayList<>();
 		if(data != null && !data.isEmpty()) {
 			try {
-				Arrays.stream(objectMapper.readValue(data, String[][].class)).forEach(s -> deserialize.add(s));
+				Arrays.stream(objectMapper.readValue(data, String[][].class)).forEach(value -> deserialize.add(value));
 			} catch(IOException e) {
 			}
 		}

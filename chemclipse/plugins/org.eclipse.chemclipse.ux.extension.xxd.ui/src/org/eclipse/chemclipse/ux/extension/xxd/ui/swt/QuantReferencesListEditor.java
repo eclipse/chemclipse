@@ -78,8 +78,8 @@ public class QuantReferencesListEditor extends ListEditor {
 				if(list != null) {
 					Shell shell = Display.getCurrent().getActiveShell();
 					MessageBox messageBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.CANCEL);
-					messageBox.setText("Delete Quantitation Reference(s)");
-					messageBox.setMessage("Would you like to delete the selected reference(s) from the list?");
+					messageBox.setText("Delete Quantitation References");
+					messageBox.setMessage("Would you like to delete the selected references from the list?");
 					int decision = messageBox.open();
 					if(decision == SWT.YES) {
 						list.removeAll();

@@ -120,7 +120,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		@Override
 		public String getName() {
 
-			return "Delete Trace(s)";
+			return "Delete Traces";
 		}
 
 		@Override
@@ -675,7 +675,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete the scan signal(s).");
+		button.setToolTipText("Delete the scan signals.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -730,8 +730,8 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 	private void deleteTraces(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Delete Signal(s)");
-		messageBox.setMessage("Would you like to delete the selected signal(s)?");
+		messageBox.setText("Delete Signals");
+		messageBox.setMessage("Would you like to delete the selected signals?");
 		if(messageBox.open() == SWT.YES) {
 			/*
 			 * Delete the signal

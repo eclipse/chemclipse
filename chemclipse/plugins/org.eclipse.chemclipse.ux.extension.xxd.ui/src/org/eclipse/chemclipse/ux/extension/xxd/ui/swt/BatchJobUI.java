@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -170,7 +170,7 @@ public class BatchJobUI {
 	private String getDataCategories() {
 
 		StringBuilder builder = new StringBuilder();
-		builder.append("Data Type(s): ");
+		builder.append("Data Types: ");
 		int size = dataCategories.length;
 		for(int i = 0; i < size; i++) {
 			DataCategory dataCategory = dataCategories[i];

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -120,7 +120,7 @@ public class NamedTracesEditor extends Composite {
 			}
 		});
 		/*
-		 * Delete item(s)
+		 * Delete items
 		 */
 		table.addKeyListener(new KeyAdapter() {
 
@@ -130,8 +130,8 @@ public class NamedTracesEditor extends Composite {
 				if(namedTraces != null) {
 					if(e.keyCode == SWT.DEL) {
 						MessageBox messageBox = new MessageBox(e.display.getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-						messageBox.setText("Delete trace compound(s)");
-						messageBox.setMessage("Would you like to delete the selected trace compound(s)?");
+						messageBox.setText("Delete trace compounds");
+						messageBox.setMessage("Would you like to delete the selected trace compounds?");
 						if(messageBox.open() == SWT.YES) {
 							/*
 							 * Collect

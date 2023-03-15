@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -103,7 +103,7 @@ public class FilterCleaner extends AbstractChromatogramFilter {
 		/*
 		 * Use a remove counter, because each time a scan will be removed, the chromatogram contains one scan less.
 		 */
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Remove empty scan(s) from chromatogram.", 100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Remove empty scans from chromatogram.", 100);
 		try {
 			int removeCounter = 0;
 			for(Integer scan : scansToRemove) {

@@ -299,7 +299,7 @@ public class TimeRangesEditor extends Composite {
 			}
 		});
 		/*
-		 * Delete item(s)
+		 * Delete items
 		 */
 		table.addKeyListener(new KeyAdapter() {
 

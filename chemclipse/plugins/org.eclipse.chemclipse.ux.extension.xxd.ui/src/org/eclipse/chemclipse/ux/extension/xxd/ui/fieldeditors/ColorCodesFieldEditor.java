@@ -158,12 +158,12 @@ public class ColorCodesFieldEditor extends FieldEditor {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Remove");
-		button.setToolTipText("Remove the selected color code(s).");
+		button.setToolTipText("Remove the selected color codes.");
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Color Code(s)", "Do you want to delete the selected color code(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Color Codes", "Do you want to delete the selected color codes?")) {
 					List<String> removeKeys = new ArrayList<>();
 					IStructuredSelection structuredSelection = (IStructuredSelection)colorCodeTableUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {

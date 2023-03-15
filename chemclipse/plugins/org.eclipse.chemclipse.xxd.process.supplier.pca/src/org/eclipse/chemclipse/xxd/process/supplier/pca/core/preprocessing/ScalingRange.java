@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,13 +41,13 @@ public class ScalingRange extends AbstractScaling {
 	private <S extends ISample> double getMax(List<S> samples, int index) {
 
 		boolean onlySelected = isOnlySelected();
-		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).mapToDouble(s -> getData(s)).summaryStatistics().getMax();
+		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).mapToDouble(value -> getData(value)).summaryStatistics().getMax();
 	}
 
 	private <S extends ISample> double getMin(List<S> samples, int index) {
 
 		boolean onlySelected = isOnlySelected();
-		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).mapToDouble(s -> getData(s)).summaryStatistics().getMin();
+		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).mapToDouble(value -> getData(value)).summaryStatistics().getMin();
 	}
 
 	@SuppressWarnings("rawtypes")

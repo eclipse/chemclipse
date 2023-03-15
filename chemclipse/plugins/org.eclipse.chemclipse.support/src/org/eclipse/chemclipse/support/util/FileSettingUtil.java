@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ public class FileSettingUtil implements IStringSerialization<File> {
 	private ObjectMapper objectMapper;
 
 	public FileSettingUtil() {
+
 		objectMapper = new ObjectMapper();
 	}
 
@@ -45,7 +46,7 @@ public class FileSettingUtil implements IStringSerialization<File> {
 
 		if(data != null && !data.isEmpty()) {
 			try {
-				return Arrays.stream(objectMapper.readValue(data, String[].class)).map(s -> new File(s)).collect(Collectors.toList());
+				return Arrays.stream(objectMapper.readValue(data, String[].class)).map(value -> new File(value)).collect(Collectors.toList());
 			} catch(IOException e) {
 			}
 		}

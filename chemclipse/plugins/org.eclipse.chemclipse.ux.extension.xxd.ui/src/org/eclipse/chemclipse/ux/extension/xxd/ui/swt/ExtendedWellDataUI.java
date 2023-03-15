@@ -176,7 +176,7 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete the selected entrie(s).");
+		button.setToolTipText("Delete the selected entries.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -220,7 +220,7 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getName() {
 
-				return "Delete Data Entrie(s)";
+				return "Delete Data Entries";
 			}
 
 			@Override
@@ -241,8 +241,8 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 	private void deleteHeaderEntries(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Data Entrie(s)");
-		messageBox.setMessage("Would you like to delete the selected data entrie(s)?");
+		messageBox.setText("Data Entries");
+		messageBox.setMessage("Would you like to delete the selected data entries?");
 		if(messageBox.open() == SWT.YES) {
 			if(well != null) {
 				Iterator iterator = tableViewer.get().getStructuredSelection().iterator();

@@ -296,8 +296,8 @@ public class MultiDataExplorerTreeUI {
 					if(object instanceof File file) {
 						Map<ISupplierFileIdentifier, Collection<ISupplier>> map = getIdentifierSupplier().apply(file);
 						converterSupplier.put(file, map);
-						for(Collection<ISupplier> s : map.values()) {
-							supplierSet.addAll(s);
+						for(Collection<ISupplier> value : map.values()) {
+							supplierSet.addAll(value);
 						}
 					}
 				}

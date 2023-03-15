@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -52,7 +52,7 @@ public class WizardSampleQuant extends AbstractFileWizard {
 		 * Pages must implement IExtendedWizardPage / extend AbstractExtendedWizardPage
 		 */
 		InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM, DataType.MSD);
-		inputWizardSettings.setTitle("Open Chromatogram (MSD) File(s)");
+		inputWizardSettings.setTitle("Open Chromatogram (MSD) Files");
 		inputWizardSettings.setDescription("Select a chromatogram/chromatograms file to open.");
 		pageInputEntries = new InputEntriesWizardPage(inputWizardSettings);
 		pageReportDataSelection = new PageReportDataSelection(wizardElements);

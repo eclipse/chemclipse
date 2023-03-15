@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -72,7 +72,7 @@ public class Entry {
 	 * Gets the value of the settings property.
 	 * 
 	 * @return
-	 * 		possible object is
+	 *         possible object is
 	 *         {@link String }
 	 * 
 	 */
@@ -111,7 +111,7 @@ public class Entry {
 	 * 
 	 * 
 	 * <p>
-	 * Objects of the following type(s) are allowed in the list
+	 * Objects of the following types are allowed in the list
 	 * {@link Entry }
 	 * 
 	 * 
@@ -128,7 +128,7 @@ public class Entry {
 	 * Gets the value of the processor property.
 	 * 
 	 * @return
-	 * 		possible object is
+	 *         possible object is
 	 *         {@link String }
 	 * 
 	 */
@@ -167,7 +167,7 @@ public class Entry {
 	 * 
 	 * 
 	 * <p>
-	 * Objects of the following type(s) are allowed in the list
+	 * Objects of the following types are allowed in the list
 	 * {@link String }
 	 * 
 	 * 
@@ -184,7 +184,7 @@ public class Entry {
 	 * Gets the value of the name property.
 	 * 
 	 * @return
-	 * 		possible object is
+	 *         possible object is
 	 *         {@link String }
 	 * 
 	 */
@@ -210,7 +210,7 @@ public class Entry {
 	 * Gets the value of the description property.
 	 * 
 	 * @return
-	 * 		possible object is
+	 *         possible object is
 	 *         {@link String }
 	 * 
 	 */
@@ -236,7 +236,7 @@ public class Entry {
 	 * Gets the value of the readonly property.
 	 * 
 	 * @return
-	 * 		possible object is
+	 *         possible object is
 	 *         {@link Boolean }
 	 * 
 	 */

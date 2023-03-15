@@ -276,13 +276,13 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Remove the selected named trace(s).");
+		button.setToolTipText("Remove the selected named traces.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Named Trace(s)", "Do you want to delete the selected named trace(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Named Traces", "Do you want to delete the selected named traces?")) {
 					IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {
 						if(object instanceof NamedTrace) {
@@ -301,13 +301,13 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Remove all named trace(s).");
+		button.setToolTipText("Remove all named traces.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Named Trace(s)", "Do you want to delete all named trace(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Named Traces", "Do you want to delete all named traces?")) {
 					settings.clear();
 					setTableViewerInput();
 				}

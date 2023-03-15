@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -60,6 +60,7 @@ public class PageUtil {
 	private boolean landscape;
 
 	public PageUtil(PDDocument document, PageSettings pageSettings) throws IOException {
+
 		this.document = document;
 		page = new PDPage(pageSettings.getPDRectangle());
 		this.document.addPage(page);
@@ -425,7 +426,7 @@ public class PageUtil {
 			cell.setY(_y + tableElement.getTextOffsetY());
 			printText(cell);
 			/*
-			 * Border(s)
+			 * Borders
 			 */
 			if(cell.isBorderSet()) {
 				//

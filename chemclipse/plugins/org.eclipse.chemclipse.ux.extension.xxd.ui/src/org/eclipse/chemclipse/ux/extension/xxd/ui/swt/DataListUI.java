@@ -182,7 +182,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		int style = optionsAvailable ? SWT.DROP_DOWN : SWT.PUSH;
 		final ToolItem item = new ToolItem(toolBar, style);
 		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Add item(s) to the list.");
+		item.setToolTipText("Add items to the list.");
 		//
 		if(optionsAvailable) {
 			addFileSelectionMenu(toolBar, item);
@@ -407,7 +407,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
 		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Move the item(s) up.");
+		item.setToolTipText("Move the items up.");
 		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -430,7 +430,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
 		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Move the item(s) down.");
+		item.setToolTipText("Move the items down.");
 		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override

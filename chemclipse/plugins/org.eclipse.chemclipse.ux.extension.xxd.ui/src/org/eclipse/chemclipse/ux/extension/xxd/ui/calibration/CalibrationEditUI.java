@@ -240,7 +240,7 @@ public class CalibrationEditUI extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete the selected calibration entrie(s).");
+		button.setToolTipText("Delete the selected calibration entries.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
