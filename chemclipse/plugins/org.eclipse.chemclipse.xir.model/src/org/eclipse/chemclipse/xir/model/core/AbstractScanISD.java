@@ -20,5 +20,25 @@ public abstract class AbstractScanISD extends AbstractScan implements IScanISD {
 	@Override
 	public void adjustTotalSignal(float totalSignal) {
 
+		if(totalSignal < 0.0f || Float.isNaN(totalSignal) || Float.isInfinite(totalSignal)) {
+			return;
+		}
+		/*
+		 * Avoid a division by zero exception :-).
+		 */
+		if(getTotalSignal() == 0.0f) {
+			return;
+		}
+		//
+		double base = 100.0d;
+		double correctionFactor = ((base / getTotalSignal()) * totalSignal) / base;
+		/*
+		 * TODO - also adjust absorbance, transmittance?
+		 */
+		for(ISignalXIR scanSignal : getProcessedSignals()) {
+			double scattering = scanSignal.getScattering();
+			scattering *= correctionFactor;
+			scanSignal.setScattering(scattering);
+		}
 	}
 }
