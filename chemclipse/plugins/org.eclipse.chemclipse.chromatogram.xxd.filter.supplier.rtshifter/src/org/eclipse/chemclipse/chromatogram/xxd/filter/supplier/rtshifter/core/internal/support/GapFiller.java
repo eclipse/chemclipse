@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,8 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanWSD;
+import org.eclipse.chemclipse.xir.model.core.IScanISD;
+import org.eclipse.chemclipse.xir.model.implementation.ScanISD;
 
 public class GapFiller {
 
@@ -124,12 +126,16 @@ public class GapFiller {
 		IScan scan = null;
 		//
 		if(scanReference instanceof IScanCSD) {
-			scan = new ScanCSD(retentionTime, 0);
+			scan = new ScanCSD(0);
 		} else if(scanReference instanceof IScanMSD) {
 			scan = new VendorMassSpectrum();
-			scan.setRetentionTime(retentionTime);
 		} else if(scanReference instanceof IScanWSD) {
 			scan = new ScanWSD();
+		} else if(scanReference instanceof IScanISD) {
+			scan = new ScanISD();
+		}
+		//
+		if(scan != null) {
 			scan.setRetentionTime(retentionTime);
 		}
 		//
