@@ -15,15 +15,12 @@ import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 
 import junit.framework.TestCase;
 
-/**
- * @author eselmeister
- */
 public class AnalysisSupport_5_Test extends TestCase {
 
 	public void testConstruct_1() {
 
 		try {
-			AnalysisSupport support = new AnalysisSupport(null, 10);
+			new AnalysisSupport(null, 10);
 		} catch(AnalysisSupportException e) {
 			assertTrue("AnalysisSupportException", true);
 		}
