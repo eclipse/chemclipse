@@ -45,6 +45,8 @@ public enum DataType {
 				return DataType.WSD;
 			case CSD:
 				return DataType.CSD;
+			case ISD:
+				return DataType.ISD;
 			case FID:
 			case NMR:
 				return DataType.NMR;
@@ -66,6 +68,8 @@ public enum DataType {
 				return DataCategory.WSD;
 			case CSD:
 				return DataCategory.CSD;
+			case ISD:
+				return DataCategory.ISD;
 			case NMR:
 				return DataCategory.NMR;
 			case MALDI:

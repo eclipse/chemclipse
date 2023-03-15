@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.Fil
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDuplicator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRemover;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRetentionIndexSelector;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsScanMerger;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsScanSelector;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -105,6 +106,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setMergeScans(preferences.getBoolean(P_MERGE_SCANS, DEF_MERGE_SCANS));
 		//
 		return settings;
+	}
+
+	public static FilterSettingsScanMerger getScanMergerFilterSettings() {
+
+		return new FilterSettingsScanMerger();
 	}
 
 	public static FilterSettingsDeleteIdentifier getDeleteIdentifierFilterSettings() {

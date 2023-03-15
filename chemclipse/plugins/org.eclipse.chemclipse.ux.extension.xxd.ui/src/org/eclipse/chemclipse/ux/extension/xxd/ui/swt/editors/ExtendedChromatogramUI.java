@@ -125,6 +125,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarConfig;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
+import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xxd.process.comparators.CategoryNameComparator;
 import org.eclipse.core.commands.Category;
 import org.eclipse.core.commands.Command;
@@ -183,11 +184,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
 	//
 	private ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
-	//
-	protected static final String TYPE_GENERIC = "TYPE_GENERIC";
-	protected static final String TYPE_MSD = "TYPE_MSD";
-	protected static final String TYPE_CSD = "TYPE_CSD";
-	protected static final String TYPE_WSD = "TYPE_WSD";
 	//
 	private static final String IMAGE_RETENTION_INDEX = IApplicationImage.IMAGE_RETENION_INDEX;
 	private static final String TOOLTIP_RETENTION_INDEX = "retention index list.";
@@ -394,10 +390,12 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 					dataCategory = DataCategory.WSD;
 				} else if(chromatogram instanceof IChromatogramCSD) {
 					dataCategory = DataCategory.CSD;
+				} else if(chromatogram instanceof IChromatogramISD) {
+					dataCategory = DataCategory.ISD;
 				}
 			}
 			/*
-			 * Adjust
+			 * Adjust Menu
 			 */
 			dataCategoryPredicate = IProcessSupplierContext.createDataCategoryPredicate(dataCategory);
 			targetDisplaySettings = null;

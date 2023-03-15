@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,10 +26,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public abstract class ChromatogramSelectionProcessorSupplier<SettingsClass> extends AbstractProcessSupplier<SettingsClass> implements IChromatogramSelectionProcessSupplier<SettingsClass> {
 
 	public ChromatogramSelectionProcessorSupplier(String id, String name, String description, Class<SettingsClass> settingsClass, IProcessTypeSupplier parent, DataType... dataTypes) {
+
 		super(id, name, description, settingsClass, parent, convert(dataTypes));
 	}
 
-	public ChromatogramSelectionProcessorSupplier(String id, String name, String description, Class<SettingsClass> settingsClass, IProcessTypeSupplier parent, DataCategory... dataTypes) {
+	public ChromatogramSelectionProcessorSupplier(String id, String name, String description, Class<SettingsClass> settingsClass, IProcessTypeSupplier parent, int b, DataCategory... dataTypes) {
+
 		super(id, name, description, settingsClass, parent, dataTypes);
 	}
 

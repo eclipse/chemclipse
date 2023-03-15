@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,6 +29,7 @@ public abstract class AbstractProcessSupplier<SettingsClass> implements IProcess
 	private final Class<SettingsClass> settingsClass;
 	private final Set<DataCategory> dataTypes;
 	private final IProcessTypeSupplier parent;
+	//
 	private SettingsClassParser<SettingsClass> classParser;
 	private String category;
 
@@ -39,6 +40,7 @@ public abstract class AbstractProcessSupplier<SettingsClass> implements IProcess
 		this.description = description;
 		this.settingsClass = settingsClass;
 		this.parent = parent;
+		//
 		if(dataTypes.length == 0) {
 			this.dataTypes = EnumSet.of(DataCategory.AUTO_DETECT);
 		} else {

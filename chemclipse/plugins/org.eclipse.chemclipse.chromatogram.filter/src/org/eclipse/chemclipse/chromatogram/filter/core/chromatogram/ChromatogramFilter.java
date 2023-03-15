@@ -176,5 +176,4 @@ public class ChromatogramFilter {
 		}
 		return null;
 	}
-	// --------------------------------------------private methods
 }

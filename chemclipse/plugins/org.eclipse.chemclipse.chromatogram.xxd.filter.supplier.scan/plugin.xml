@@ -39,6 +39,13 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanduplicator">
       </ChromatogramFilterSupplier>
       <ChromatogramFilterSupplier
+            description="This filter merges a series of scans."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core.FilterScanMerger"
+            filterName="Scan Merger (experimental)"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsScanMerger"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanmerger">
+      </ChromatogramFilterSupplier>      
+      <ChromatogramFilterSupplier
             description="This filters selects the retention index given by a specific column."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core.FilterRetentionIndexSelector"
             filterName="Retention Index Selector"
