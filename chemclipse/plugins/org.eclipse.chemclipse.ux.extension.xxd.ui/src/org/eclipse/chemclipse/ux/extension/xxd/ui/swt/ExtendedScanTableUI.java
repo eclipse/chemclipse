@@ -243,6 +243,17 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		scanTableUI.setInput(getScan());
 		updateEditFields();
 		updateButtonStatus();
+		//
+		if(toolbarSearch.get().isVisible()) {
+			applySearch();
+		}
+	}
+
+	private void applySearch() {
+
+		String searchText = toolbarSearch.get().getSearchText();
+		boolean caseSensitive = toolbarSearch.get().isSearchCaseSensitive();
+		scanTableUI.setSearchText(searchText, caseSensitive);
 	}
 
 	private void updateEditFields() {
@@ -611,7 +622,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void performSearch(String searchText, boolean caseSensitive) {
 
-				scanTableUI.setSearchText(searchText, caseSensitive);
+				applySearch();
 			}
 		});
 		//
