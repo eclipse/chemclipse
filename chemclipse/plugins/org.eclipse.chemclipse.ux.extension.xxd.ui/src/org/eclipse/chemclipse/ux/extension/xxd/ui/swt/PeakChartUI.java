@@ -124,6 +124,7 @@ public class PeakChartUI extends ScrollableChart {
 	private void initialize() {
 
 		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setTitleVisible(false);
 		chartSettings.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 		chartSettings.setBackgroundChart(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 		chartSettings.setBackgroundPlotArea(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
