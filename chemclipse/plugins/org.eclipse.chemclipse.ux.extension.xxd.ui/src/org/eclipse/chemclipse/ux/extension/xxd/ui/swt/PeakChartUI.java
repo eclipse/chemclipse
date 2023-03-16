@@ -28,6 +28,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.ILineSeries;
 import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.core.ChartType;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
@@ -53,12 +54,14 @@ public class PeakChartUI extends ScrollableChart {
 
 		super();
 		modifyChart();
+		setChartType(ChartType.LINE);
 	}
 
 	public PeakChartUI(Composite parent, int style) {
 
 		super(parent, style);
 		modifyChart();
+		setChartType(ChartType.LINE);
 	}
 
 	public void setInput(IPeak peak) {

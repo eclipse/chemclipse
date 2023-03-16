@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.ILineSeries;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.core.ChartType;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
@@ -77,12 +78,14 @@ public class PeakTracesUI extends ScrollableChart {
 
 		super();
 		modifyChart();
+		setChartType(ChartType.LINE);
 	}
 
 	public PeakTracesUI(Composite parent, int style) {
 
 		super(parent, style);
 		modifyChart();
+		setChartType(ChartType.LINE);
 	}
 
 	public List<Integer> getTraces() {
