@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,18 +21,14 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.se
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.MassSpectrumIdentifierAlkaneSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.PeakIdentifierAlkaneSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ResetterSettings;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
-	//
 	public static final String[][] CALCULATOR_OPTIONS = new String[][]{ //
 			{CalculatorStrategy.AUTO.label(), CalculatorStrategy.AUTO.name()}, //
 			{CalculatorStrategy.CHROMATOGRAM.label(), CalculatorStrategy.CHROMATOGRAM.name()}, //
@@ -165,144 +161,103 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static List<String> getRetentionIndexFiles() {
 
 		FileListUtil fileListUtil = new FileListUtil();
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		return fileListUtil.getFiles(preferences.get(P_RETENTION_INDEX_FILES, DEF_RETENTION_INDEX_FILES));
+		return fileListUtil.getFiles(INSTANCE().get(P_RETENTION_INDEX_FILES, DEF_RETENTION_INDEX_FILES));
 	}
 
 	public static void setRetentionIndexFiles(List<String> retentionIndexFiles) {
 
-		try {
-			FileListUtil fileListUtil = new FileListUtil();
-			IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-			String items[] = retentionIndexFiles.toArray(new String[retentionIndexFiles.size()]);
-			preferences.put(P_RETENTION_INDEX_FILES, fileListUtil.createList(items));
-			preferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
-		}
+		FileListUtil fileListUtil = new FileListUtil();
+		String items[] = retentionIndexFiles.toArray(new String[retentionIndexFiles.size()]);
+		INSTANCE().put(P_RETENTION_INDEX_FILES, fileListUtil.createList(items));
 	}
 
 	public static String getFilterPathIndexFiles() {
 
-		return getFilterPath(P_FILTER_PATH_INDEX_FILES, DEF_FILTER_PATH_INDEX_FILES);
+		return INSTANCE().get(P_FILTER_PATH_INDEX_FILES, DEF_FILTER_PATH_INDEX_FILES);
 	}
 
 	public static void setFilterPathIndexFiles(String filterPath) {
 
-		setFilterPath(P_FILTER_PATH_INDEX_FILES, filterPath);
+		INSTANCE().put(P_FILTER_PATH_INDEX_FILES, filterPath);
 	}
 
 	public static String getFilterPathModelsMSD() {
 
-		return getFilterPath(P_FILTER_PATH_MODELS_MSD, DEF_FILTER_PATH_MODELS_MSD);
+		return INSTANCE().get(P_FILTER_PATH_MODELS_MSD, DEF_FILTER_PATH_MODELS_MSD);
 	}
 
 	public static void setFilterPathModelsMSD(String filterPath) {
 
-		setFilterPath(P_FILTER_PATH_MODELS_MSD, filterPath);
+		INSTANCE().put(P_FILTER_PATH_MODELS_MSD, filterPath);
 	}
 
 	public static String getFilterPathModelsCSD() {
 
-		return getFilterPath(P_FILTER_PATH_MODELS_CSD, DEF_FILTER_PATH_MODELS_CSD);
+		return INSTANCE().get(P_FILTER_PATH_MODELS_CSD, DEF_FILTER_PATH_MODELS_CSD);
 	}
 
 	public static void setFilterPathModelsCSD(String filterPath) {
 
-		setFilterPath(P_FILTER_PATH_MODELS_CSD, filterPath);
+		INSTANCE().put(P_FILTER_PATH_MODELS_CSD, filterPath);
 	}
 
 	public static int getNumberOfTargets() {
 
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		return preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS);
+		return INSTANCE().getInteger(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS);
 	}
 
 	public static float getMinMatchFactor() {
 
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		return preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR);
+		return INSTANCE().getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR);
 	}
 
 	public static float getMinReverseMatchFactor() {
 
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		return preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR);
+		return INSTANCE().getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR);
 	}
 
 	public static String getListPathImportFile() {
 
-		return getFilterPath(P_LIST_PATH_IMPORT_FILE, DEF_LIST_PATH_IMPORT_FILE);
+		return INSTANCE().get(P_LIST_PATH_IMPORT_FILE, DEF_LIST_PATH_IMPORT_FILE);
 	}
 
 	public static void setListPathImportFile(String filterPath) {
 
-		putString(P_LIST_PATH_IMPORT_FILE, filterPath);
+		INSTANCE().put(P_LIST_PATH_IMPORT_FILE, filterPath);
 	}
 
 	public static String getListPathImportTemplate() {
 
-		return getFilterPath(P_LIST_PATH_IMPORT_TEMPLATE, DEF_LIST_PATH_IMPORT_TEMPLATE);
+		return INSTANCE().get(P_LIST_PATH_IMPORT_TEMPLATE, DEF_LIST_PATH_IMPORT_TEMPLATE);
 	}
 
 	public static void setListPathImportTemplate(String filterPath) {
 
-		putString(P_LIST_PATH_IMPORT_TEMPLATE, filterPath);
+		INSTANCE().put(P_LIST_PATH_IMPORT_TEMPLATE, filterPath);
 	}
 
 	public static String getListPathExportTemplate() {
 
-		return getFilterPath(P_LIST_PATH_EXPORT_TEMPLATE, DEF_LIST_PATH_EXPORT_TEMPLATE);
+		return INSTANCE().get(P_LIST_PATH_EXPORT_TEMPLATE, DEF_LIST_PATH_EXPORT_TEMPLATE);
 	}
 
 	public static void setListPathExportTemplate(String filterPath) {
 
-		putString(P_LIST_PATH_EXPORT_TEMPLATE, filterPath);
+		INSTANCE().put(P_LIST_PATH_EXPORT_TEMPLATE, filterPath);
 	}
 
 	private static CalculatorStrategy getCalculatorStrategy() {
 
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		return CalculatorStrategy.valueOf(preferences.get(P_CALCULATOR_STRATEGY, DEF_CALCULATOR_STRATEGY));
+		return CalculatorStrategy.valueOf(INSTANCE().get(P_CALCULATOR_STRATEGY, DEF_CALCULATOR_STRATEGY));
 	}
 
 	private static boolean isUseDefaultColumn() {
 
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_DEFAULT_COLUMN, DEF_USE_DEFAULT_COLUMN);
+		return INSTANCE().getBoolean(P_USE_DEFAULT_COLUMN, DEF_USE_DEFAULT_COLUMN);
 	}
 
 	private static boolean isProcessReferencedChromatograms() {
 
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		return preferences.getBoolean(P_PROCESS_REFERENCED_CHROMATOGRAMS, DEF_PROCESS_REFERENCED_CHROMATOGRAMS);
-	}
-
-	private static String getFilterPath(String key, String def) {
-
-		IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
-		return eclipsePreferences.get(key, def);
-	}
-
-	private static void setFilterPath(String key, String filterPath) {
-
-		try {
-			IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
-			eclipsePreferences.put(key, filterPath);
-			eclipsePreferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
-		}
-	}
-
-	private static void putString(String key, String value) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.put(key, value);
-			preferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
-		}
+		return INSTANCE().getBoolean(P_PROCESS_REFERENCED_CHROMATOGRAMS, DEF_PROCESS_REFERENCED_CHROMATOGRAMS);
 	}
 }

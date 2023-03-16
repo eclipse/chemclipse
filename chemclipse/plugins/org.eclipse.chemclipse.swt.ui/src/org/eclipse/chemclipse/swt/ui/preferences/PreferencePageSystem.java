@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.swt.ui.Activator;
 import org.eclipse.chemclipse.swt.ui.fieldeditors.ColumnMappingFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -64,8 +63,6 @@ public class PreferencePageSystem extends FieldEditorPreferencePage implements I
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SKIP_PEAK_WIDTH_CHECK, "Skip Peak Width Check (Only enable this in edge cases!)", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_IMPORT, "Mappings Import Folder", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_EXPORT, "Mappings Export Folder", getFieldEditorParent()));
 		addField(new ColumnMappingFieldEditor(PreferenceSupplier.P_SEPARATION_COLUMN_MAPPINGS, "Separation Column Mappings", getFieldEditorParent()));
 		//
 		preferenceStore.addPropertyChangeListener(new IPropertyChangeListener() {
@@ -74,7 +71,6 @@ public class PreferencePageSystem extends FieldEditorPreferencePage implements I
 			public void propertyChange(PropertyChangeEvent event) {
 
 				if(event.getProperty().equals(PreferenceSupplier.P_ION_ROUND_METHOD)) {
-					System.out.println("CLEAR");
 					PreferenceSupplier.clearCacheActiveIonRoundMethod();
 				}
 			}

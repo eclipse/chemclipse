@@ -49,12 +49,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_SKIP_PEAK_WIDTH_CHECK = "skipPeakWidthCheck";
 	public static final boolean DEF_SKIP_PEAK_WIDTH_CHECK = false;
 	//
+	public static final String P_SEPARATION_COLUMN_MAPPINGS = "separationColumnMappings";
+	public static final String DEF_SEPARATION_COLUMN_MAPPINGS = "";
+	/*
+	 * Don't show in the preference page
+	 */
 	public static final String P_LIST_PATH_IMPORT = "listPathImport";
 	public static final String DEF_LIST_PATH_IMPORT = "";
 	public static final String P_LIST_PATH_EXPORT = "listPathExport";
 	public static final String DEF_LIST_PATH_EXPORT = "";
-	public static final String P_SEPARATION_COLUMN_MAPPINGS = "separationColumnMappings";
-	public static final String DEF_SEPARATION_COLUMN_MAPPINGS = "";
 	/*
 	 * Used to cache the round method.
 	 * Call clearCacheActiveIonRoundMethod to force a reload.
@@ -100,9 +103,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_BEST_TARGET_LIBRARY_FIELD, DEF_BEST_TARGET_LIBRARY_FIELD);
 		defaultValues.put(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD);
 		defaultValues.put(P_SKIP_PEAK_WIDTH_CHECK, Boolean.toString(DEF_SKIP_PEAK_WIDTH_CHECK));
+		defaultValues.put(P_SEPARATION_COLUMN_MAPPINGS, DEF_SEPARATION_COLUMN_MAPPINGS);
 		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
 		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
-		defaultValues.put(P_SEPARATION_COLUMN_MAPPINGS, DEF_SEPARATION_COLUMN_MAPPINGS);
 		//
 		return defaultValues;
 	}

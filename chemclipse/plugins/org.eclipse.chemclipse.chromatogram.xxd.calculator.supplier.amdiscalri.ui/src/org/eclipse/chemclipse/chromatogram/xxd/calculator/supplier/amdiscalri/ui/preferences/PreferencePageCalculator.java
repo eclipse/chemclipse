@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.ui.IWorkbench;
@@ -50,18 +49,6 @@ public class PreferencePageCalculator extends FieldEditorPreferencePage implemen
 		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_CALCULATOR_STRATEGY, "Calculator Strategy", 1, PreferenceSupplier.CALCULATOR_OPTIONS, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_DEFAULT_COLUMN, "Use Default Column (in case of no match)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_PROCESS_REFERENCED_CHROMATOGRAMS, "Process Referenced Chromatograms", getFieldEditorParent()));
-		//
-		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Used locations for *.cal files", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_INDEX_FILES, "Path Index Files:", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_MODELS_MSD, "Path MSD Index Files:", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_MODELS_CSD, "Path CSD Index Files:", getFieldEditorParent()));
-		//
-		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Retention Index Marker", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_IMPORT_FILE, "Import File", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_IMPORT_TEMPLATE, "Import Template", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_EXPORT_TEMPLATE, "Export Template", getFieldEditorParent()));
 	}
 
 	/*

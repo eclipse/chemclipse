@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.Activator;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Algorithm;
@@ -24,12 +23,9 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.model.LabelOptionPCA;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
-	//
 	public static final String N_INPUT_FILE = "INPUT_FILE";
 	//
 	public static final String P_ALGORITHM = "algorithm";
@@ -129,47 +125,43 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static int getNumberOfPrincipalComponents() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_NUMBER_OF_COMPONENTS, DEF_NUMBER_OF_COMPONENTS);
+		return INSTANCE().getInteger(P_NUMBER_OF_COMPONENTS, DEF_NUMBER_OF_COMPONENTS);
 	}
 
 	public static String getColorScheme() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_COLOR_SCHEME, DEF_COLOR_SCHEME);
+		return INSTANCE().get(P_COLOR_SCHEME, DEF_COLOR_SCHEME);
 	}
 
 	public static String getPathImportFile() {
 
-		return getFilterPath(P_PATH_IMPORT_FILE, DEF_PATH_IMPORT_FILE);
+		return INSTANCE().get(P_PATH_IMPORT_FILE, DEF_PATH_IMPORT_FILE);
 	}
 
 	public static void setPathImportFile(String filterPath) {
 
-		putString(P_PATH_IMPORT_FILE, filterPath);
+		INSTANCE().put(P_PATH_IMPORT_FILE, filterPath);
 	}
 
 	public static String getPathExportFile() {
 
-		return getFilterPath(P_PATH_EXPORT_FILE, DEF_PATH_EXPORT_FILE);
+		return INSTANCE().get(P_PATH_EXPORT_FILE, DEF_PATH_EXPORT_FILE);
 	}
 
 	public static void setPathExportFile(String filterPath) {
 
-		putString(P_PATH_EXPORT_FILE, filterPath);
+		INSTANCE().put(P_PATH_EXPORT_FILE, filterPath);
 	}
 
 	public static boolean isRemoveUselessVariables() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_REMOVE_USELESS_VARIABLES, DEF_REMOVE_USELESS_VARIABLES);
+		return INSTANCE().getBoolean(P_REMOVE_USELESS_VARIABLES, DEF_REMOVE_USELESS_VARIABLES);
 	}
 
 	public static Algorithm getAlgorithm() {
 
 		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			return Algorithm.valueOf(preferences.get(P_ALGORITHM, DEF_ALGORITHM));
+			return Algorithm.valueOf(INSTANCE().get(P_ALGORITHM, DEF_ALGORITHM));
 		} catch(Exception e) {
 			return Algorithm.NIPALS;
 		}
@@ -178,27 +170,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static LabelOptionPCA getLabelOptionPCA() {
 
 		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			return LabelOptionPCA.valueOf(preferences.get(P_LABEL_OPTION_PCA, DEF_LABEL_OPTION_PCA));
+			return LabelOptionPCA.valueOf(INSTANCE().get(P_LABEL_OPTION_PCA, DEF_LABEL_OPTION_PCA));
 		} catch(Exception e) {
 			return LabelOptionPCA.SAMPLE_NAME;
-		}
-	}
-
-	private static String getFilterPath(String key, String def) {
-
-		IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
-		return eclipsePreferences.get(key, def);
-	}
-
-	private static void putString(String key, String value) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.put(key, value);
-			preferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
 		}
 	}
 }
