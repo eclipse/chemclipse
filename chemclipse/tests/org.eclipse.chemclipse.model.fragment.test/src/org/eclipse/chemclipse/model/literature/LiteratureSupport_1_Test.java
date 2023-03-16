@@ -160,6 +160,51 @@ public class LiteratureSupport_1_Test extends TestCase {
 		assertEquals("", LiteratureSupport.getFormattedRIS(null, true));
 	}
 
+	public void test8a() {
+
+		assertEquals("OpenChrom: a cross-platform open source software", LiteratureSupport.getTitle("TI  - OpenChrom: a cross-platform open source software\n"));
+	}
+
+	public void test8b() {
+
+		assertEquals("OpenChrom: a cross-platform open source software", LiteratureSupport.getTitle("TI  - OpenChrom: a cross-platform open source software JO  - BMC"));
+	}
+
+	public void test8c() {
+
+		assertEquals("OpenChrom: a cross-platform open source software", LiteratureSupport.getTitle("TI  - OpenChrom: a cross-platform open source software"));
+	}
+
+	public void test9a() {
+
+		assertEquals("OpenChrom: a cross-platform open source software", LiteratureSupport.getTitle("T1  - OpenChrom: a cross-platform open source software\n"));
+	}
+
+	public void test9b() {
+
+		assertEquals("OpenChrom: a cross-platform open source software", LiteratureSupport.getTitle("T1  - OpenChrom: a cross-platform open source software JO  - BMC"));
+	}
+
+	public void test9c() {
+
+		assertEquals("OpenChrom: a cross-platform open source software", LiteratureSupport.getTitle("T1  - OpenChrom: a cross-platform open source software"));
+	}
+
+	public void test10a() {
+
+		assertEquals("OpenChrom: a cross-platform open source software", LiteratureSupport.getTitle("Title: OpenChrom: a cross-platform open source software\n"));
+	}
+
+	public void test10b() {
+
+		assertEquals("OpenChrom: a cross-platform open source software", LiteratureSupport.getTitle("Title: OpenChrom: a cross-platform open source software JO  - BMC"));
+	}
+
+	public void test10c() {
+
+		assertEquals("OpenChrom: a cross-platform open source software", LiteratureSupport.getTitle("Title: OpenChrom: a cross-platform open source software"));
+	}
+
 	private String getNewlineRIS() {
 
 		return "TY  - JOUR\n" + "AU  - Wenig, Philip\n" + "AU  - Odermatt, Juergen\n" + "PY  - 2010\n" + "DA  - 2010/07/30\n" + "TI  - OpenChrom: a cross-platform open source software for the mass spectrometric analysis of chromatographic data\n" + "JO  - BMC Bioinformatics\n" + "SP  - 405\n" + "VL  - 11\n" + "IS  - 1\n" + "AB  - Today, data evaluation has become a bottleneck in chromatographic science. Analytical instruments equipped with automated samplers yield large amounts of measurement data, which needs to be verified and analyzed. Since nearly every GC/MS instrument vendor offers its own data format and software tools, the consequences are problems with data exchange and a lack of comparability between the analytical results. To challenge this situation a number of either commercial or non-profit software applications have been developed. These applications provide functionalities to import and analyze several data formats but have shortcomings in terms of the transparency of the implemented analytical algorithms and/or are restricted to a specific computer platform.\n" + "SN  - 1471-2105\n" + "UR  - https://doi.org/10.1186/1471-2105-11-405\n" + "DO  - 10.1186/1471-2105-11-405\n" + "ID  - Wenig2010\n" + "ER  - ";

@@ -109,7 +109,7 @@ public class LiteratureSupport {
 		RIS_IDENTIFIER_MAP.put("ER", "End of Reference");
 	}
 	//
-	private static final Pattern PATTERN_TITLE = Pattern.compile("(TI\\s+-\\s+|Title: )(.*?)(\n|[A-Z][A-Z])");
+	private static final Pattern PATTERN_TITLE = Pattern.compile("(TI\\s+-\\s+|T1\\s+-\\s+|Title: )(.*?)(\n|[A-Z][A-Z]|$)");
 	private static final Pattern PATTERN_DOI = Pattern.compile("(https://doi.org/)(.*?)(\\s+)");
 	private static final String PATTERN_KEY_RIS = "([A-Z])([A-Z]|[0-9])(  -)";
 

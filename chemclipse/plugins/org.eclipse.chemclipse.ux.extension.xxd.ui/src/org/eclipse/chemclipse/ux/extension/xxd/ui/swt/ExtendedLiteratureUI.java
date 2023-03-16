@@ -11,16 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.chemclipse.model.literature.LiteratureSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.model.LiteratureReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -28,20 +34,23 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 public class ExtendedLiteratureUI extends Composite implements IExtendedPartUI {
 
+	private static final String DATA_URL = "DATA_URL";
+	//
 	private AtomicReference<Button> buttonToolbarInfo = new AtomicReference<>();
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private AtomicReference<Button> buttonToolbarSearch = new AtomicReference<>();
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
+	private AtomicReference<ComboViewer> comboViewerLiteratureControl = new AtomicReference<>();
 	private AtomicReference<Button> buttonDOI = new AtomicReference<>();
 	private AtomicReference<LiteratureUI> literatureControl = new AtomicReference<>();
 	//
-	private String content = "";
-	private String url = "";
+	private List<LiteratureReference> literatureReferences = new ArrayList<>();
 
 	public ExtendedLiteratureUI(Composite parent, int style) {
 
@@ -49,9 +58,15 @@ public class ExtendedLiteratureUI extends Composite implements IExtendedPartUI {
 		createControl();
 	}
 
-	public void setInput(String content) {
+	public void setInput(List<?> contentList) {
 
-		this.content = content != null ? content : "";
+		literatureReferences.clear();
+		if(contentList != null && !contentList.isEmpty()) {
+			for(Object content : contentList) {
+				literatureReferences.add(new LiteratureReference(content.toString()));
+			}
+		}
+		//
 		updateInput();
 	}
 
@@ -84,10 +99,11 @@ public class ExtendedLiteratureUI extends Composite implements IExtendedPartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
 		createButtonToolbarInfo(composite);
 		createButtonToolbarSearch(composite);
+		createComboViewerLiterature(composite);
 		createButtonDOI(composite);
 		createButtonSettings(composite);
 	}
@@ -136,6 +152,43 @@ public class ExtendedLiteratureUI extends Composite implements IExtendedPartUI {
 		buttonToolbarSearch.set(createButtonToggleToolbar(parent, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH));
 	}
 
+	private void createComboViewerLiterature(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ListContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof LiteratureReference literatureReference) {
+					String title = literatureReference.getTitle();
+					if(title.isEmpty()) {
+						return "Literature Reference";
+					} else {
+						return title;
+					}
+				}
+				return null;
+			}
+		});
+		combo.setToolTipText("Select a literature reference.");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 150;
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				updateLiteratureSelection();
+			}
+		});
+		//
+		comboViewerLiteratureControl.set(comboViewer);
+	}
+
 	private void createButtonDOI(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -147,8 +200,11 @@ public class ExtendedLiteratureUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(!url.isEmpty()) {
-					Program.launch(url);
+				Object data = button.getData(DATA_URL);
+				if(data instanceof String url) {
+					if(!url.isEmpty()) {
+						Program.launch(url);
+					}
 				}
 			}
 		});
@@ -175,9 +231,43 @@ public class ExtendedLiteratureUI extends Composite implements IExtendedPartUI {
 
 	private void updateInput() {
 
+		/*
+		 * Update the combo viewer.
+		 */
+		comboViewerLiteratureControl.get().setInput(literatureReferences);
+		if(!literatureReferences.isEmpty()) {
+			comboViewerLiteratureControl.get().setSelection(new StructuredSelection(literatureReferences.get(0)));
+		}
+		//
+		updateLiteratureSelection();
+	}
+
+	private void updateLiteratureSelection() {
+
+		LiteratureReference literatureReference = null;
+		Object object = comboViewerLiteratureControl.get().getStructuredSelection().getFirstElement();
+		if(object instanceof LiteratureReference) {
+			literatureReference = (LiteratureReference)object;
+		}
+		//
+		updateWidgets(literatureReference);
+	}
+
+	private void updateWidgets(LiteratureReference literatureReference) {
+
+		String content = "";
+		String title = "";
+		String url = "";
+		//
+		if(literatureReference != null) {
+			content = literatureReference.getContent();
+			title = literatureReference.getTitle();
+			url = literatureReference.getUrl();
+		}
+		//
 		literatureControl.get().setText(content);
-		url = LiteratureSupport.getContainedDOI(content);
-		toolbarInfo.get().setText("Title: " + LiteratureSupport.getTitle(content));
+		toolbarInfo.get().setText("Title: " + title);
+		buttonDOI.get().setData(DATA_URL, url);
 		buttonDOI.get().setEnabled(!url.isEmpty());
 		buttonDOI.get().setToolTipText(!url.isEmpty() ? url : "It wasn't possible to extract and open a DOI.");
 	}

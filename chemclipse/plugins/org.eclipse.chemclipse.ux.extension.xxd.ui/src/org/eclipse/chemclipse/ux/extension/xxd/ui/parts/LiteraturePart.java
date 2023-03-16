@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -42,7 +43,10 @@ public class LiteraturePart extends AbstractPart<ExtendedLiteratureUI> {
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
 			if(object instanceof String content) {
-				getControl().setInput(content);
+				getControl().setInput(Arrays.asList(content));
+				return true;
+			} else if(object instanceof List<?> list) {
+				getControl().setInput(list);
 				return true;
 			}
 		}
