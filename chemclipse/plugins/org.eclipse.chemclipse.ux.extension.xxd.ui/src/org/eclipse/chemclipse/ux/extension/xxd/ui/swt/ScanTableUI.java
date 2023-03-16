@@ -12,9 +12,8 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -40,7 +39,6 @@ import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -48,9 +46,9 @@ public class ScanTableUI extends ExtendedTableViewer {
 
 	private static final Logger logger = Logger.getLogger(ScanTableUI.class);
 	//
-	private Map<DataType, ITableLabelProvider> labelProviderMap;
-	private Map<DataType, ViewerComparator> viewerComparatorMap;
-	private Map<DataType, IContentProvider> contentProviderMap;
+	private EnumMap<DataType, ITableLabelProvider> labelProviderMap;
+	private EnumMap<DataType, ViewerComparator> viewerComparatorMap;
+	private EnumMap<DataType, IContentProvider> contentProviderMap;
 	//
 	private ScanSignalListFilter scanSignalListFilter;
 	private IScan scan = null;
@@ -60,9 +58,9 @@ public class ScanTableUI extends ExtendedTableViewer {
 	public ScanTableUI(Composite parent, int style) {
 
 		super(parent, style);
-		labelProviderMap = new HashMap<DataType, ITableLabelProvider>();
-		viewerComparatorMap = new HashMap<DataType, ViewerComparator>();
-		contentProviderMap = new HashMap<DataType, IContentProvider>();
+		labelProviderMap = new EnumMap<>(DataType.class);
+		viewerComparatorMap = new EnumMap<>(DataType.class);
+		contentProviderMap = new EnumMap<>(DataType.class);
 		setLabelAndContentProviders(DataType.MSD_NOMINAL);
 	}
 
@@ -203,7 +201,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 		}
 		//
 		scanSignalListFilter = new ScanSignalListFilter();
-		setFilters(new ViewerFilter[]{scanSignalListFilter});
+		setFilters(scanSignalListFilter);
 		setEditingSupport();
 	}
 

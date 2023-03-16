@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 @SuppressWarnings("rawtypes")
 public class ChromatogramFilterReset extends AbstractChromatogramFilter implements IChromatogramFilter {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 

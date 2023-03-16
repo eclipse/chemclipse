@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -48,7 +49,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.IBarSeries;
 import org.eclipse.swtchart.IBarSeries.BarWidthStyle;
 import org.eclipse.swtchart.ICustomPaintListener;
-import org.eclipse.swtchart.ILineSeries;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.ISeries;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesData;
@@ -89,7 +89,7 @@ public class ScanChartUI extends ScrollableChart {
 	private DecimalFormat decimalFormatNormalIntensity = ValueFormat.getDecimalFormatEnglish("0");
 	private DecimalFormat decimalFormatLowIntensity = ValueFormat.getDecimalFormatEnglish("0.0000");
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
-	private Font font = DisplayUtils.getDisplay().getSystemFont();
+	private Font systemFont = DisplayUtils.getDisplay().getSystemFont();
 	//
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 
@@ -130,11 +130,9 @@ public class ScanChartUI extends ScrollableChart {
 					BarSeriesValue barSeriesValue = barSeriesValues.get(i);
 					printLabel(barSeriesValue, useX, e);
 				} else {
-					if(addModuloLabels) {
-						if(i % modulo == 0) {
-							BarSeriesValue barSeriesValue = barSeriesValues.get(i);
-							printLabel(barSeriesValue, useX, e);
-						}
+					if(addModuloLabels && i % modulo == 0) {
+						BarSeriesValue barSeriesValue = barSeriesValues.get(i);
+						printLabel(barSeriesValue, useX, e);
 					}
 				}
 			}
@@ -277,7 +275,7 @@ public class ScanChartUI extends ScrollableChart {
 	@Override
 	public void dispose() {
 
-		font.dispose();
+		systemFont.dispose();
 		super.dispose();
 	}
 
@@ -351,6 +349,10 @@ public class ScanChartUI extends ScrollableChart {
 		dataType = DataType.AUTO_DETECT;
 		signalType = SignalType.AUTO_DETECT;
 		modifyChart(DataType.MSD_NOMINAL, signalType);
+		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+		chartSettings.setBackgroundChart(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+		chartSettings.setBackgroundPlotArea(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 	}
 
 	private DataType determineDataType(IScan scan) {
@@ -472,7 +474,7 @@ public class ScanChartUI extends ScrollableChart {
 		String name = preferenceStore.getString(PreferenceConstants.P_SCAN_LABEL_FONT_NAME);
 		int height = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_FONT_SIZE);
 		int style = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_FONT_STYLE);
-		font = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
+		systemFont = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
 		//
 		labelHighestIntensities = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_HIGHEST_INTENSITIES);
 		addModuloLabels = preferenceStore.getBoolean(PreferenceConstants.P_SCAN_LABEL_MODULO_INTENSITIES);
@@ -585,7 +587,6 @@ public class ScanChartUI extends ScrollableChart {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void addLineSeriesData(List<ILineSeriesData> lineSeriesDataList) {
 
 		/*
@@ -603,7 +604,7 @@ public class ScanChartUI extends ScrollableChart {
 					ISeriesData optimizedSeriesData = calculateSeries(seriesData, COMPRESS_TO_LENGTH);
 					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 					lineSeriesSettings.getSeriesSettingsHighlight(); // Initialize
-					ILineSeries lineSeries = (ILineSeries)createSeries(optimizedSeriesData, lineSeriesSettings);
+					ISeries<?> lineSeries = createSeries(optimizedSeriesData, lineSeriesSettings);
 					baseChart.applySeriesSettings(lineSeries, lineSeriesSettings);
 				} catch(SeriesException e) {
 					//
@@ -634,7 +635,7 @@ public class ScanChartUI extends ScrollableChart {
 	private void printLabel(BarSeriesValue barSeriesValue, boolean useX, PaintEvent e) {
 
 		Font currentFont = e.gc.getFont();
-		e.gc.setFont(font);
+		e.gc.setFont(systemFont);
 		//
 		Point point = barSeriesValue.getPoint();
 		String label = (useX) ? getLabel(barSeriesValue.getX()) : getLabel(barSeriesValue.getY());
@@ -677,14 +678,13 @@ public class ScanChartUI extends ScrollableChart {
 		return label;
 	}
 
-	@SuppressWarnings({"rawtypes"})
 	private List<BarSeriesValue> getBarSeriesValuesList() {
 
 		List<BarSeriesValue> barSeriesIons = new ArrayList<>();
 		//
 		int widthPlotArea = getBaseChart().getPlotArea().getSize().x;
-		ISeries[] series = getBaseChart().getSeriesSet().getSeries();
-		for(ISeries barSeries : series) {
+		ISeries<?>[] series = getBaseChart().getSeriesSet().getSeries();
+		for(ISeries<?> barSeries : series) {
 			if(barSeries != null) {
 				//
 				double[] xSeries = barSeries.getXSeries();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
@@ -98,8 +97,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 		fileName = fileName.substring(0, fileName.length() - 4);
 		setPartName(fileName);
 		//
-		if(batchProcessJob == null && input instanceof IFileEditorInput) {
-			IFileEditorInput fileEditorInput = (IFileEditorInput)input;
+		if(batchProcessJob == null && input instanceof IFileEditorInput fileEditorInput) {
 			file = fileEditorInput.getFile().getLocation().toFile();
 			//
 			ImportRunnable runnable = new ImportRunnable(file);
@@ -110,7 +108,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 			} catch(InvocationTargetException e) {
 				throw new PartInitException("The file could't be loaded.", e.getTargetException());
 			} catch(InterruptedException e) {
-				return;
+				Thread.currentThread().interrupt();
 			}
 		} else {
 			throw new PartInitException("The file could't be loaded.");
@@ -148,11 +146,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 		batchJobUI = new BatchJobUI(parent, supplierContext, Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_IMPORT_RECORDS, dataTypes, this);
 		batchJobUI.setModificationHandler(this::updateDirtyStatus);
 		//
-		if(batchProcessJob != null) {
-			batchJobUI.doLoad(getBatchJobFiles(), new ProcessMethod(batchProcessJob.getProcessMethod()));
-		} else {
-			batchJobUI.doLoad(Collections.emptyList(), new ProcessMethod(ProcessMethod.CHROMATOGRAPHY));
-		}
+		batchJobUI.doLoad(getBatchJobFiles(), new ProcessMethod(batchProcessJob.getProcessMethod()));
 	}
 
 	@Override

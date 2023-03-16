@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -92,6 +93,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		createControl();
 	}
 
+	@Override
 	public boolean setFocus() {
 
 		updateScan();
@@ -109,8 +111,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			chromatogramSelection = null;
 			combinedMassSpectrum = null;
 			//
-			if(object instanceof IChromatogramSelectionMSD) {
-				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)object;
+			if(object instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 				this.chromatogramSelection = chromatogramSelectionMSD;
 				boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
 				CalculationType calculationType = PreferenceSupplier.getCalculationType();
@@ -176,7 +177,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		composite.setLayout(new GridLayout(1, true));
 		//
 		tabFolder = new TabFolder(composite, SWT.BOTTOM);
-		tabFolder.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		tabFolder.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tabFolder.addSelectionListener(new SelectionAdapter() {
 
@@ -249,11 +250,10 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			if(index >= 0) {
 				TableItem tableItem = table.getItem(index);
 				Object object = tableItem.getData();
-				if(object instanceof IIdentificationTarget) {
+				if(object instanceof IIdentificationTarget identificationTarget) {
 					/*
 					 * First update the mass spectrum.
 					 */
-					IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
 					if(combinedMassSpectrum != null) {
 						UpdateNotifierUI.update(display, combinedMassSpectrum, identificationTarget);
 					}
@@ -292,7 +292,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Lock the combined scan.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -308,7 +308,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 	private void updateStatus() {
 
 		buttonLocked.setToolTipText(locked ? "Edit modus: on" : "Edit modus: off");
-		buttonLocked.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16, locked));
+		buttonLocked.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImageProvider.SIZE_16x16, locked));
 		updateLabel(labelEdit, locked ? "Edit On" : "");
 		updateButtons();
 	}
@@ -451,8 +451,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		Object[] scanIdentifierServices = Activator.getDefault().getScanIdentifierServices();
 		if(scanIdentifierServices != null) {
 			for(Object object : scanIdentifierServices) {
-				if(object instanceof IScanIdentifierService) {
-					IScanIdentifierService scanIdentifierService = (IScanIdentifierService)object;
+				if(object instanceof IScanIdentifierService scanIdentifierService) {
 					DataType dataType = scanIdentifierService.getDataType();
 					if(DataType.MSD.equals(dataType)) {
 						Class<? extends IWorkbenchPreferencePage> preferencePage = scanIdentifierService.getPreferencePage();
@@ -499,8 +498,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 	private String getCombinedRangeInfo(Object object) {
 
 		StringBuilder builder = new StringBuilder();
-		if(object instanceof IChromatogramSelectionMSD) {
-			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)object;
+		if(object instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 			int startRetentionTime = chromatogramSelectionMSD.getStartRetentionTime();
 			int stopRetentionTime = chromatogramSelectionMSD.getStopRetentionTime();
 			IChromatogram<?> chromatogram = chromatogramSelectionMSD.getChromatogram();
@@ -509,9 +507,9 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			builder.append("–");
 			builder.append(chromatogram.getScanNumber(stopRetentionTime));
 			builder.append(" | RT range: ");
-			builder.append(decimalFormat.format((double)startRetentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR));
+			builder.append(decimalFormat.format(startRetentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 			builder.append("–");
-			builder.append(decimalFormat.format((double)stopRetentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR));
+			builder.append(decimalFormat.format(stopRetentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 			builder.append(" | Calculation Type: ");
 			builder.append(PreferenceSupplier.getCalculationType().toString());
 		} else {

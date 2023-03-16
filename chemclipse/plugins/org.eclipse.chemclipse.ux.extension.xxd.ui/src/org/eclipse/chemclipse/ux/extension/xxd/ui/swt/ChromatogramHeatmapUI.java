@@ -415,7 +415,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 		Canvas canvas = new Canvas(parent, SWT.FILL | SWT.BORDER);
 		canvas.setLayoutData(new GridData(GridData.FILL_BOTH));
-		canvas.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		canvas.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 		//
 		lightweightSystem = createLightweightSystem(canvas);
 		//
@@ -425,7 +425,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 	private LightweightSystem createLightweightSystem(Canvas canvas) {
 
 		LightweightSystem lightweightSystem = new LightweightSystem(canvas);
-		lightweightSystem.getRootFigure().setBackgroundColor(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lightweightSystem.getRootFigure().setBackgroundColor(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 		//
 		return lightweightSystem;
 	}

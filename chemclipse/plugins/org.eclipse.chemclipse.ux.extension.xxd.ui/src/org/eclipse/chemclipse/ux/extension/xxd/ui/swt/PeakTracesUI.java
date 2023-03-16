@@ -47,6 +47,7 @@ import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.ILineSeries;
 import org.eclipse.swtchart.IPlotArea;
@@ -79,6 +80,7 @@ public class PeakTracesUI extends ScrollableChart {
 		super();
 		modifyChart();
 		setChartType(ChartType.LINE);
+		initialize();
 	}
 
 	public PeakTracesUI(Composite parent, int style) {
@@ -86,6 +88,7 @@ public class PeakTracesUI extends ScrollableChart {
 		super(parent, style);
 		modifyChart();
 		setChartType(ChartType.LINE);
+		initialize();
 	}
 
 	public List<Integer> getTraces() {
@@ -126,6 +129,15 @@ public class PeakTracesUI extends ScrollableChart {
 		}
 		//
 		addLineSeriesData(lineSeriesDataList);
+	}
+
+	private void initialize() {
+
+		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setTitleVisible(false);
+		chartSettings.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+		chartSettings.setBackgroundChart(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+		chartSettings.setBackgroundPlotArea(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 	}
 
 	private List<ILineSeriesData> extractSIC(IChromatogramPeakMSD chromatogramPeak) {

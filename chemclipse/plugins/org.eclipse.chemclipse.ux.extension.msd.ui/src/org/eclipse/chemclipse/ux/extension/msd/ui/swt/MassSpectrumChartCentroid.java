@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -89,7 +89,7 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 
 		deleteSeries();
 		if(massSpectrum != null) {
-			List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+			List<IBarSeriesData> barSeriesDataList = new ArrayList<>();
 			ISeriesData seriesData = getMassSpectrum(massSpectrum);
 			IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
 			barSeriesDataList.add(barSeriesData);
@@ -102,13 +102,17 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 		numberOfHighestIntensitiesToLabel = 5;
 		barSeriesIonComparator = new BarSeriesIonComparator();
 		labelOption = LabelOption.EXACT;
-		customLabels = new HashMap<Double, String>();
+		customLabels = new HashMap<>();
 		//
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(true);
 		chartSettings.setVerticalSliderVisible(true);
 		chartSettings.setCreateMenu(true);
+		//
+		chartSettings.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+		chartSettings.setBackgroundChart(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+		chartSettings.setBackgroundPlotArea(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 		//
 		chartSettings.addMenuEntry(new UpdateMenuEntry());
 		//
