@@ -89,7 +89,7 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 
 		deleteSeries();
 		if(massSpectrum != null) {
-			List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+			List<IBarSeriesData> barSeriesDataList = new ArrayList<>();
 			ISeriesData seriesData = getMassSpectrum(massSpectrum);
 			IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
 			barSeriesDataList.add(barSeriesData);
@@ -102,7 +102,7 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 		numberOfHighestIntensitiesToLabel = 5;
 		barSeriesIonComparator = new BarSeriesIonComparator();
 		labelOption = LabelOption.EXACT;
-		customLabels = new HashMap<Double, String>();
+		customLabels = new HashMap<>();
 		//
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.setOrientation(SWT.HORIZONTAL);
