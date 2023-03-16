@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.MarkedTraceModus;
+import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
@@ -30,17 +31,12 @@ import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 
-/**
- * TODO
- * Move template methods to ChemClipse and merge with the template peak detector.
- *
- */
 public class PeakDetectorSupport {
 
 	private static final Logger logger = Logger.getLogger(PeakDetectorSupport.class);
 	private static final String DETECTOR_DESCRIPTION = "Peak Detector (UX)";
 
-	public static IPeak extractPeak(IChromatogram<?> chromatogram, SelectionCoordinates selectionCoordinates, boolean detectorModusManual) {
+	public static IPeak extractPeak(IChromatogram<?> chromatogram, SelectionCoordinates selectionCoordinates, PeakType peakType) {
 
 		/*
 		 * Calculate the rectangle factors.
@@ -52,7 +48,7 @@ public class PeakDetectorSupport {
 			int stopRetentionTime = selectionCoordinates.getStopRetentionTime();
 			if(stopRetentionTime > startRetentionTime) {
 				Set<Integer> traces = new HashSet<>();
-				if(detectorModusManual) {
+				if(PeakType.MM.equals(peakType)) {
 					/*
 					 * MM
 					 */
@@ -61,9 +57,9 @@ public class PeakDetectorSupport {
 					peak = extractPeakByRetentionTime(chromatogram, startRetentionTime, stopRetentionTime, startIntensity, stopIntensity, traces);
 				} else {
 					/*
-					 * VV
+					 * VV or (BV | VB)
 					 */
-					boolean includeBackground = true;
+					boolean includeBackground = PeakType.VV.equals(peakType);
 					boolean optimizeRange = true;
 					peak = PeakDetectorSupport.extractPeakByRetentionTime(chromatogram, startRetentionTime, stopRetentionTime, includeBackground, optimizeRange, traces);
 				}
