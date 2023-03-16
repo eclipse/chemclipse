@@ -55,6 +55,7 @@ public class Classifier extends AbstractChromatogramClassifier {
 		} else {
 			classifierSettings = PreferenceSupplier.getClassifierSettings();
 		}
+		//
 		IProcessingInfo<IChromatogramClassifierResult> processingInfo = validate(chromatogramSelection, chromatogramClassifierSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			try {

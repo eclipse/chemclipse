@@ -89,13 +89,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static IWncIons getWNCIons() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		/*
 		 * E.g. "water:18;nitrogen:28;carbon dioxide:44"
 		 */
 		IWncIons ions = new WncIons();
-		String preferenceEntry = preferences.get(P_WNC_IONS, DEF_WNC_IONS);
-		if(preferenceEntry.isEmpty()) {
+		String preferenceEntry = INSTANCE().get(P_WNC_IONS, DEF_WNC_IONS);
+		if(!preferenceEntry.isEmpty()) {
 			String[] items = parseString(preferenceEntry);
 			if(items.length > 0) {
 				String name;
@@ -115,6 +114,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 				}
 			}
 		}
+		//
 		return ions;
 	}
 
@@ -149,7 +149,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static void storeWNCIons(IWncIons wncIons) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		String values = ""; //$NON-NLS-1$
 		if(wncIons != null) {
 			StringBuilder builder = new StringBuilder();
@@ -169,6 +168,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 			}
 			values = builder.toString();
 		}
-		preferences.put(P_WNC_IONS, values);
+		//
+		INSTANCE().put(P_WNC_IONS, values);
 	}
 }
