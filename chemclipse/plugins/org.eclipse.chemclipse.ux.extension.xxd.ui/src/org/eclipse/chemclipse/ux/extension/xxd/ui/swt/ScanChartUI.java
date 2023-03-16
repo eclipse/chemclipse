@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -348,6 +349,10 @@ public class ScanChartUI extends ScrollableChart {
 		dataType = DataType.AUTO_DETECT;
 		signalType = SignalType.AUTO_DETECT;
 		modifyChart(DataType.MSD_NOMINAL, signalType);
+		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+		chartSettings.setBackgroundChart(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+		chartSettings.setBackgroundPlotArea(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 	}
 
 	private DataType determineDataType(IScan scan) {

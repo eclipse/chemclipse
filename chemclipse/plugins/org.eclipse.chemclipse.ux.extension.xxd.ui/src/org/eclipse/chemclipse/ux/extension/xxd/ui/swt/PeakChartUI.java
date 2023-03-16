@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.ILineSeries;
@@ -55,6 +56,7 @@ public class PeakChartUI extends ScrollableChart {
 		super();
 		modifyChart();
 		setChartType(ChartType.LINE);
+		initialize();
 	}
 
 	public PeakChartUI(Composite parent, int style) {
@@ -62,6 +64,7 @@ public class PeakChartUI extends ScrollableChart {
 		super(parent, style);
 		modifyChart();
 		setChartType(ChartType.LINE);
+		initialize();
 	}
 
 	public void setInput(IPeak peak) {
@@ -81,7 +84,7 @@ public class PeakChartUI extends ScrollableChart {
 		if(peak1 != null) {
 			//
 			modifyChart(peak1);
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			lineSeriesDataList.addAll(getPeakSeriesData(peak1, false, "Peak1"));
 			lineSeriesDataList.addAll(getPeakSeriesData(peak2, false, "Peak2"));
 			addLineSeriesData(lineSeriesDataList);
@@ -93,7 +96,7 @@ public class PeakChartUI extends ScrollableChart {
 		prepareChart();
 		if(peaks != null && !peaks.isEmpty()) {
 			modifyChart(peaks.get(0));
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			for(int i = 0; i < peaks.size(); i++) {
 				IPeak peak = peaks.get(i);
 				if(peak != null) {
@@ -118,9 +121,17 @@ public class PeakChartUI extends ScrollableChart {
 		ChartSupport.addSecondaryAxisY(chartSettings, titleY1);
 	}
 
+	private void initialize() {
+
+		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+		chartSettings.setBackgroundChart(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+		chartSettings.setBackgroundPlotArea(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+	}
+
 	private List<ILineSeriesData> getPeakSeriesData(IPeak peak, boolean mirrored, String postfix) {
 
-		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		boolean includeBackground = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK_BACKGROUND);
 		/*
@@ -221,7 +232,7 @@ public class PeakChartUI extends ScrollableChart {
 		/*
 		 * Suspend the update when adding new data to improve the performance.
 		 */
-		if(lineSeriesDataList != null && lineSeriesDataList.size() > 0) {
+		if(lineSeriesDataList != null && !lineSeriesDataList.isEmpty()) {
 			BaseChart baseChart = getBaseChart();
 			baseChart.suspendUpdate(true);
 			for(ILineSeriesData lineSeriesData : lineSeriesDataList) {
