@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
@@ -78,7 +79,12 @@ public class TargetsListUI extends ExtendedTableViewer {
 		setComparator(false);
 		setFilters(targetListFilter);
 		setCellColorProvider();
-		createDragAndDropProvider();
+		/*
+		 * https://github.com/eclipse/chemclipse/issues/1354
+		 */
+		if(!OperatingSystemUtils.isWindows()) {
+			createDragAndDropProvider();
+		}
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
