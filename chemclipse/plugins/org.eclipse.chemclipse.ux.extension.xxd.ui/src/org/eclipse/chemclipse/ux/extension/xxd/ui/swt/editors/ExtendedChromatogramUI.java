@@ -66,6 +66,7 @@ import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.history.EditInformation;
@@ -179,8 +180,6 @@ import org.eclipse.ui.commands.ICommandService;
 @SuppressWarnings("rawtypes")
 public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, IExtendedPartUI {
 
-	public static final String PREFERENCE_SHOW_TOOLBAR_TEXT = "ChromatogramUI.showToolbarText";
-	//
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
 	//
 	private ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
@@ -291,7 +290,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	public void updateToolbar() {
 
-		toolbarMain.setShowText(preferenceStore.getBoolean(PREFERENCE_SHOW_TOOLBAR_TEXT));
+		toolbarMain.setShowText(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_SHOW_TOOLBAR_TEXT));
 		toolbarMain.update();
 		processorToolbar.update();
 	}
@@ -1095,7 +1094,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		editorToolBar.addAction(createToggleToolbarAction("Alignment", "the chromatogram alignment toolbar.", IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, TOOLBAR_CHROMATOGRAM_ALIGNMENT));
 		editorToolBar.addAction(createToggleToolbarAction("Methods", "the method toolbar.", IApplicationImage.IMAGE_METHOD, TOOLBAR_METHOD, PreferenceConstants.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR));
 		createResetButton(editorToolBar);
-		editorToolBar.enableToolbarTextPage(preferenceStore, PREFERENCE_SHOW_TOOLBAR_TEXT);
+		editorToolBar.enableToolbarTextPage(preferenceStore, PreferenceConstants.P_CHROMATOGRAM_SHOW_TOOLBAR_TEXT);
 		processorToolbar.enablePreferencePage(preferenceStore, PreferenceConstants.P_CHROMATOGRAM_PROCESSOR_TOOLBAR);
 		editorToolBar.addAction(createGridLineAction());
 		createHelpButton(editorToolBar);
@@ -1371,7 +1370,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		return new Action(name, IAction.AS_CHECK_BOX) {
 
 			{
-				setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(image, IApplicationImage.SIZE_16x16));
+				setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(image, IApplicationImageProvider.SIZE_16x16));
 				setToolTipText(tooltip);
 				updateText();
 			}
@@ -1420,7 +1419,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the chart series legend.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -1435,7 +1434,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the chart legend marker.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_LEGEND_MARKER, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_LEGEND_MARKER, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -1451,7 +1450,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the chart range selector.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_RANGE_SELECTOR, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_RANGE_SELECTOR, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -1464,7 +1463,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void createResetButton(EditorToolBar editorToolBar) {
 
-		editorToolBar.addAction(new Action("Reset", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16)) {
+		editorToolBar.addAction(new Action("Reset", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16)) {
 
 			{
 				setToolTipText("Reset the chromatogram");
@@ -1480,7 +1479,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void createHelpButton(EditorToolBar editorToolBar) {
 
-		editorToolBar.addAction(new Action("Help", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_QUESTION, IApplicationImage.SIZE_16x16)) {
+		editorToolBar.addAction(new Action("Help", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_QUESTION, IApplicationImageProvider.SIZE_16x16)) {
 
 			{
 				setToolTipText("Show context sensitive help.");
@@ -1646,10 +1645,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	 */
 	public static void initializeChartDefaults(IPreferenceStore preferenceStore) {
 
-		// we delegate here to PreferenceInitializer
 		PreferenceInitializer.initializeChromatogramDefaults(preferenceStore);
-		// and set our private preference also
-		preferenceStore.setDefault(PREFERENCE_SHOW_TOOLBAR_TEXT, true);
 	}
 
 	private void updateMappedRetentionIndices() {
