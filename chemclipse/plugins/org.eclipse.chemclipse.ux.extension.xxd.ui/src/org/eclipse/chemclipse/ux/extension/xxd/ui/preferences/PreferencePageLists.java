@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,12 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -26,7 +23,7 @@ public class PreferencePageLists extends FieldEditorPreferencePage implements IW
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("Lists Column Order (do not edit)");
+		setTitle("Peak/Scan List");
 		setDescription("");
 	}
 
@@ -36,19 +33,6 @@ public class PreferencePageLists extends FieldEditorPreferencePage implements IW
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE, "Show peaks in selected range", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_SCANS_IN_LIST, "Show scans in list", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE, "Show scans in selected range", getFieldEditorParent()));
-		//
-		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Do not edit the following fields if not explicit neccessary.", getFieldEditorParent()));
-		//
-		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Peak/Scan List", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_ORDER_PEAK_SCAN_LIST, "Column Order", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_WIDTH_PEAK_SCAN_LIST, "Column Width", getFieldEditorParent()));
-		//
-		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Targets", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST, "Column Order", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_WIDTH_TARGET_LIST, "Column Width", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

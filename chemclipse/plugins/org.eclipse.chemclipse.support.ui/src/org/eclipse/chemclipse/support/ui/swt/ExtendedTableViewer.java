@@ -39,7 +39,6 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -55,7 +54,6 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
@@ -101,37 +99,20 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		handleColumnSettings();
 	}
 
-	public void setColumnMoveWidthSupport(IPreferenceStore preferenceStore, String preferenceColumnOrder, String preferenceColumnWidth) {
+	public void resetColumnOrder() {
 
-		Table table = getTable();
-		if(preferenceColumnOrder != null) {
-			TableSupport.setColumnOrder(table, preferenceStore.getString(preferenceColumnOrder));
-		}
-		//
-		if(preferenceColumnWidth != null) {
-			TableSupport.setColumnWidth(table, preferenceStore.getString(preferenceColumnWidth));
-		}
-		//
-		setControlListener(new ControlAdapter() {
+		String pColumnOrder = getPreferenceName(SupportPreferences.P_COLUMN_ORDER);
+		String columnOrder = SupportPreferences.DEF_COLUMN_ORDER;
+		TableSupport.setColumnOrder(getTable(), columnOrder);
+		SupportPreferences.setColumnOrder(pColumnOrder, columnOrder);
+	}
 
-			@Override
-			public void controlMoved(ControlEvent e) {
+	public void resetColumnWidth() {
 
-				if(preferenceColumnOrder != null) {
-					String columnOrder = TableSupport.getColumnOrder(table);
-					preferenceStore.setValue(preferenceColumnOrder, columnOrder);
-				}
-			}
-
-			@Override
-			public void controlResized(ControlEvent e) {
-
-				if(preferenceColumnWidth != null) {
-					String columnWidth = TableSupport.getColumnWidth(table);
-					preferenceStore.setValue(preferenceColumnWidth, columnWidth);
-				}
-			}
-		});
+		String pColumnWidth = getPreferenceName(SupportPreferences.P_COLUMN_WIDTH);
+		String columnWidth = SupportPreferences.DEF_COLUMN_WIDTH;
+		TableSupport.setColumnWidth(getTable(), columnWidth);
+		SupportPreferences.setColumnWidth(pColumnWidth, columnWidth);
 	}
 
 	public void setControlListener(ControlListener controlListener) {
@@ -237,6 +218,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		 */
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		updateColumnOrderAndWith();
 	}
 
 	@Override
@@ -388,11 +370,12 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 				fireColumnMoved();
 			}
 		});
+		//
 		tableViewerColumns.add(tableViewerColumn);
 		Comparator<C> comparator = definition.getComparator();
 		if(comparator != null) {
 			TableColumn tableColumn = tableViewerColumn.getColumn();
-			tableColumn.addSelectionListener(new SelectionListener() {
+			tableColumn.addSelectionListener(new SelectionAdapter() {
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -444,15 +427,13 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 					table.setSortColumn(tableColumn);
 					refresh();
 				}
-
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
 			});
 		}
+		//
 		getTable().setHeaderVisible(true);
 		getTable().setLinesVisible(true);
+		updateColumnOrderAndWith();
+		//
 		return tableViewerColumn;
 	}
 
@@ -660,6 +641,40 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		//
 		String pClipboardCopyColumns = getPreferenceName(SupportPreferences.P_CLIPBOARD_COPY_COLUMNS);
 		copyColumnsToClipboard = SupportPreferences.getClipboardCopyColumns(pClipboardCopyColumns);
+		/*
+		 * Move/Width Support for Columns
+		 */
+		Table table = getTable();
+		String pColumnOrder = getPreferenceName(SupportPreferences.P_COLUMN_ORDER);
+		String pColumnWidth = getPreferenceName(SupportPreferences.P_COLUMN_WIDTH);
+		//
+		setControlListener(new ControlAdapter() {
+
+			@Override
+			public void controlMoved(ControlEvent e) {
+
+				String columnOrder = TableSupport.getColumnOrder(table);
+				SupportPreferences.setColumnOrder(pColumnOrder, columnOrder);
+			}
+
+			@Override
+			public void controlResized(ControlEvent e) {
+
+				String columnWidth = TableSupport.getColumnWidth(table);
+				SupportPreferences.setColumnWidth(pColumnWidth, columnWidth);
+			}
+		});
+	}
+
+	private void updateColumnOrderAndWith() {
+
+		Table table = getTable();
+		//
+		String pColumnOrder = getPreferenceName(SupportPreferences.P_COLUMN_ORDER);
+		TableSupport.setColumnOrder(table, SupportPreferences.getColumnOrder(pColumnOrder));
+		//
+		String pColumnWidth = getPreferenceName(SupportPreferences.P_COLUMN_WIDTH);
+		TableSupport.setColumnWidth(table, SupportPreferences.getColumnWidth(pColumnWidth));
 	}
 
 	private TableViewerColumn createTableColumn(String title, int width) {

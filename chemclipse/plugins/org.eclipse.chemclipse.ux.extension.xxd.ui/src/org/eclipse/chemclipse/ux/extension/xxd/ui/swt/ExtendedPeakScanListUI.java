@@ -334,13 +334,6 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			}
 		});
 		/*
-		 * Set/Save the column order.
-		 */
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		String preferenceColumnOrder = PreferenceConstants.P_COLUMN_ORDER_PEAK_SCAN_LIST;
-		String preferenceColumnWidth = PreferenceConstants.P_COLUMN_WIDTH_PEAK_SCAN_LIST;
-		peakScanListUI.setColumnMoveWidthSupport(preferenceStore, preferenceColumnOrder, preferenceColumnWidth);
-		/*
 		 * Add the delete targets support.
 		 */
 		Display display = peakScanListUI.getTable().getDisplay();

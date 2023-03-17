@@ -21,6 +21,8 @@ import org.eclipse.chemclipse.support.ui.menu.ClipboardSettingsHandler;
 import org.eclipse.chemclipse.support.ui.menu.CopyClipboardHandler;
 import org.eclipse.chemclipse.support.ui.menu.DeselectAllHandler;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
+import org.eclipse.chemclipse.support.ui.menu.ResetColumnOrderHandler;
+import org.eclipse.chemclipse.support.ui.menu.ResetColumnWidthHandler;
 import org.eclipse.chemclipse.support.ui.menu.SelectAllHandler;
 
 public class TableSettings implements ITableSettings {
@@ -36,6 +38,8 @@ public class TableSettings implements ITableSettings {
 		 */
 		menuEntries.add(new SelectAllHandler());
 		menuEntries.add(new DeselectAllHandler());
+		menuEntries.add(new ResetColumnOrderHandler());
+		menuEntries.add(new ResetColumnWidthHandler());
 		menuEntries.add(new ClipboardSettingsHandler());
 		menuEntries.add(new CopyClipboardHandler());
 		/*

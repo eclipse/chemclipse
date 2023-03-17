@@ -65,6 +65,9 @@ public class SupportMessages extends NLS {
 	public static String tablePopUpMenu;
 	public static String ticMustNotBeAdded;
 	public static String toolbar;
+	public static String columns;
+	public static String resetColumnOrder;
+	public static String resetColumnWidth;
 	//
 	static {
 		NLS.initializeMessages("org.eclipse.chemclipse.support.ui.l10n.messages", SupportMessages.class); //$NON-NLS-1$

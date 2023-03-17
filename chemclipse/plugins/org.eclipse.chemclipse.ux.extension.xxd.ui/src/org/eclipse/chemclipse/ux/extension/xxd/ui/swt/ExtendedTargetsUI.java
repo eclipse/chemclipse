@@ -419,13 +419,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			}
 		});
 		/*
-		 * Set/Save the column order.
+		 * Sort the table?
 		 */
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		String preferenceColumnOrder = PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST;
-		String preferenceColumnWidth = PreferenceConstants.P_COLUMN_WIDTH_TARGET_LIST;
-		targetListUI.setColumnMoveWidthSupport(preferenceStore, preferenceColumnOrder, preferenceColumnWidth);
-		//
 		targetListUI.setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SORTABLE));
 		/*
 		 * Add the delete targets support.

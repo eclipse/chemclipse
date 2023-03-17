@@ -240,10 +240,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE, PreferenceConstants.DEF_SHOW_PEAKS_IN_SELECTED_RANGE);
 		store.setDefault(PreferenceConstants.P_SHOW_SCANS_IN_LIST, PreferenceConstants.DEF_SHOW_SCANS_IN_LIST);
 		store.setDefault(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE, PreferenceConstants.DEF_SHOW_SCANS_IN_SELECTED_RANGE);
-		store.setDefault(PreferenceConstants.P_COLUMN_ORDER_PEAK_SCAN_LIST, PreferenceConstants.DEF_COLUMN_ORDER_PEAK_SCAN_LIST);
-		store.setDefault(PreferenceConstants.P_COLUMN_WIDTH_PEAK_SCAN_LIST, PreferenceConstants.DEF_COLUMN_WIDTH_PEAK_SCAN_LIST);
-		store.setDefault(PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST, PreferenceConstants.DEF_COLUMN_ORDER_TARGET_LIST);
-		store.setDefault(PreferenceConstants.P_COLUMN_WIDTH_TARGET_LIST, PreferenceConstants.DEF_COLUMN_WIDTH_TARGET_LIST);
 		/*
 		 * Baseline
 		 */

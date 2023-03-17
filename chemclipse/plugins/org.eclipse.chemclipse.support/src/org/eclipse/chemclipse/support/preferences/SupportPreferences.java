@@ -34,6 +34,10 @@ public class SupportPreferences implements IPreferenceSupplier {
 	public static final boolean DEF_CLIPBOARD_COPY_HEADER = true;
 	public static final String P_CLIPBOARD_COPY_COLUMNS = "clipboardCopyColumns_";
 	public static final String DEF_CLIPBOARD_COPY_COLUMNS = "";
+	public static final String P_COLUMN_ORDER = "columnOrder_";
+	public static final String DEF_COLUMN_ORDER = "";
+	public static final String P_COLUMN_WIDTH = "columnWidth_";
+	public static final String DEF_COLUMN_WIDTH = "";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -88,6 +92,26 @@ public class SupportPreferences implements IPreferenceSupplier {
 	}
 
 	public static void setClipboardCopyColumns(String key, String value) {
+
+		INSTANCE().put(key, value);
+	}
+
+	public static String getColumnOrder(String key) {
+
+		return INSTANCE().get(key, DEF_COLUMN_ORDER);
+	}
+
+	public static void setColumnOrder(String key, String value) {
+
+		INSTANCE().put(key, value);
+	}
+
+	public static String getColumnWidth(String key) {
+
+		return INSTANCE().get(key, DEF_COLUMN_WIDTH);
+	}
+
+	public static void setColumnWidth(String key, String value) {
 
 		INSTANCE().put(key, value);
 	}

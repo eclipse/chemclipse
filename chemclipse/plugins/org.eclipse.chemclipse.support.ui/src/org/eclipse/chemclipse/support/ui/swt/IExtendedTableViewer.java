@@ -40,6 +40,10 @@ public interface IExtendedTableViewer {
 
 	void setCopyColumnsToClipboard(String copyColumnsToClipboard);
 
+	void resetColumnOrder();
+
+	void resetColumnWidth();
+
 	void clearColumns();
 
 	<D, C> TableViewerColumn addColumn(ColumnDefinition<D, C> definition);
