@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -52,6 +52,17 @@ public class CasSupport {
 		}
 		//
 		return checksumValue;
+	}
+
+	/**
+	 * Returns if the given CAS# is valid.
+	 * 
+	 * @param cas
+	 * @return {@link Boolean}
+	 */
+	public static boolean isValid(String cas) {
+
+		return verifyChecksum(cas);
 	}
 
 	public static boolean verifyChecksum(String cas) {
