@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,19 +7,17 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.menu;
 
-import org.eclipse.chemclipse.support.ui.internal.provider.CopyToClipboardProvider;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.ClipboardSettingsDialog;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
 
-public class CopyClipboardHandler extends AbstractTableMenuEntry implements ITableMenuEntry {
-
-	private CopyToClipboardProvider copyToClipboardProvider = new CopyToClipboardProvider();
+public class ClipboardSettingsHandler extends AbstractTableMenuEntry implements ITableMenuEntry {
 
 	@Override
 	public String getCategory() {
@@ -30,13 +28,17 @@ public class CopyClipboardHandler extends AbstractTableMenuEntry implements ITab
 	@Override
 	public String getName() {
 
-		return SupportMessages.copyClipboard;
+		return SupportMessages.clipboardSettings;
 	}
 
 	@Override
 	public void execute(ExtendedTableViewer extendedTableViewer) {
 
-		Clipboard clipboard = new Clipboard(Display.getDefault());
-		copyToClipboardProvider.copyToClipboard(clipboard, extendedTableViewer);
+		ClipboardSettingsDialog clipboardSettingsDialog = new ClipboardSettingsDialog(Display.getDefault().getActiveShell());
+		clipboardSettingsDialog.setExtendedTableViewer(extendedTableViewer);
+		if(clipboardSettingsDialog.open() == Dialog.OK) {
+			extendedTableViewer.setCopyHeaderToClipboard(clipboardSettingsDialog.isCopyHeaderToClipboard());
+			extendedTableViewer.setCopyColumnsToClipboard(clipboardSettingsDialog.getCopyColumnsToClipboard());
+		}
 	}
 }

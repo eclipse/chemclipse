@@ -11,12 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.internal.provider;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import org.eclipse.chemclipse.support.preferences.SupportPreferences;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
+import org.eclipse.chemclipse.support.ui.support.CopyColumnsSupport;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.dnd.Clipboard;
@@ -34,21 +37,30 @@ public class CopyToClipboardProvider {
 
 		StringBuilder builder = new StringBuilder();
 		int[] columns = getColumns(extendedTableViewer);
-		addHeader(extendedTableViewer, builder, columns);
+		/*
+		 * Header
+		 */
+		if(extendedTableViewer.isCopyHeaderToClipboard()) {
+			addHeader(extendedTableViewer, builder, columns);
+		}
 		addContent(extendedTableViewer, builder, columns);
 		addNoContentMessageOnDemand(builder);
+		//
 		transferToClipboard(clipboard, builder.toString());
 	}
 
 	private int[] addHeader(ExtendedTableViewer extendedTableViewer, StringBuilder builder, int[] columns) {
 
 		String[] titles = getTitles(extendedTableViewer);
+		int size = titles.length;
 		//
+		List<String> elements = new ArrayList<>();
 		for(int column : columns) {
-			builder.append(optimizeText(titles[column]));
-			builder.append(DELIMITER);
+			if(column >= 0 && column < size) {
+				elements.add(optimizeText(titles[column]));
+			}
 		}
-		builder.append(OperatingSystemUtils.getLineDelimiter());
+		print(builder, elements, true);
 		//
 		return columns;
 	}
@@ -56,18 +68,23 @@ public class CopyToClipboardProvider {
 	private void addContent(ExtendedTableViewer extendedTableViewer, StringBuilder builder, int[] columns) {
 
 		Table table = extendedTableViewer.getTable();
+		int size = table.getColumnCount();
+		int[] indices = table.getSelectionIndices();
+		boolean addLineDelimiter = indices.length > 1;
 		//
 		TableItem selection;
 		for(int index : table.getSelectionIndices()) {
 			/*
 			 * Dump all elements of the item.
 			 */
+			List<String> elements = new ArrayList<>();
 			selection = table.getItem(index);
 			for(int column : columns) {
-				builder.append(optimizeText(selection.getText(column)));
-				builder.append(DELIMITER);
+				if(column >= 0 && column < size) {
+					elements.add(optimizeText(selection.getText(column)));
+				}
 			}
-			builder.append(OperatingSystemUtils.getLineDelimiter());
+			print(builder, elements, addLineDelimiter);
 		}
 	}
 
@@ -80,7 +97,6 @@ public class CopyToClipboardProvider {
 
 		if(builder.length() == 0) {
 			builder.append(SupportMessages.selectEntriesinList);
-			builder.append(OperatingSystemUtils.getLineDelimiter());
 		}
 	}
 
@@ -99,13 +115,17 @@ public class CopyToClipboardProvider {
 
 		Table table = extendedTableViewer.getTable();
 		//
-		boolean useDefaultSorting = SupportPreferences.isClipboardDefaultSorting();
 		int[] columns;
-		if(useDefaultSorting) {
-			int size = extendedTableViewer.getTableViewerColumns().size();
-			columns = IntStream.range(0, size).toArray();
+		String copyColumnsToClipBoard = extendedTableViewer.getCopyColumnsToClipboard();
+		if(copyColumnsToClipBoard.isEmpty()) {
+			if(SupportPreferences.isClipboardDefaultSorting()) {
+				int size = extendedTableViewer.getTableViewerColumns().size();
+				columns = IntStream.range(0, size).toArray();
+			} else {
+				columns = table.getColumnOrder();
+			}
 		} else {
-			columns = table.getColumnOrder();
+			columns = CopyColumnsSupport.getColumns(copyColumnsToClipBoard);
 		}
 		//
 		return columns;
@@ -119,6 +139,22 @@ public class CopyToClipboardProvider {
 		for(TableViewerColumn tableViewerColumn : tableViewerColumns) {
 			titles[i++] = tableViewerColumn.getColumn().getText();
 		}
+		//
 		return titles;
+	}
+
+	private void print(StringBuilder builder, List<String> elements, boolean addLineDelimiter) {
+
+		Iterator<String> iterator = elements.iterator();
+		while(iterator.hasNext()) {
+			builder.append(iterator.next());
+			if(iterator.hasNext()) {
+				builder.append(DELIMITER);
+			}
+		}
+		//
+		if(addLineDelimiter) {
+			builder.append(OperatingSystemUtils.getLineDelimiter());
+		}
 	}
 }

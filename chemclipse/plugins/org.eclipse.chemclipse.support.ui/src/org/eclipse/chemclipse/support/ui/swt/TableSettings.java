@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.support.ui.events.CopyToClipboardEvent;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
+import org.eclipse.chemclipse.support.ui.menu.ClipboardSettingsHandler;
 import org.eclipse.chemclipse.support.ui.menu.CopyClipboardHandler;
 import org.eclipse.chemclipse.support.ui.menu.DeselectAllHandler;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
@@ -24,22 +25,22 @@ import org.eclipse.chemclipse.support.ui.menu.SelectAllHandler;
 
 public class TableSettings implements ITableSettings {
 
-	private boolean createMenu;
-	private Set<ITableMenuEntry> menuEntries;
-	private Set<IKeyEventProcessor> keyEventProcessors;
+	private boolean createMenu = true;
+	private Set<ITableMenuEntry> menuEntries = new HashSet<>();
+	private Set<IKeyEventProcessor> keyEventProcessors = new HashSet<>();
 
 	public TableSettings() {
 
 		/*
-		 * Default menu entries.
+		 * Default menu entries
 		 */
-		createMenu = true;
-		menuEntries = new HashSet<>();
 		menuEntries.add(new SelectAllHandler());
 		menuEntries.add(new DeselectAllHandler());
+		menuEntries.add(new ClipboardSettingsHandler());
 		menuEntries.add(new CopyClipboardHandler());
-		//
-		keyEventProcessors = new HashSet<>();
+		/*
+		 * Default key processors
+		 */
 		keyEventProcessors.add(new CopyToClipboardEvent());
 	}
 

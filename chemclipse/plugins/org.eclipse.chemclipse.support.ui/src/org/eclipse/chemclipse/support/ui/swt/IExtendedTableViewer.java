@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,12 +24,6 @@ public interface IExtendedTableViewer {
 
 	void applySettings(ITableSettings chartSettings);
 
-	/**
-	 * @deprecated use {@link #addColumns(ColumnDefinitionProvider)} or {@link #addColumn(ColumnDefinition)} instead
-	 * @param titles
-	 * @param bounds
-	 */
-	@Deprecated
 	void createColumns(String[] titles, int[] bounds);
 
 	List<TableViewerColumn> getTableViewerColumns();
@@ -37,6 +31,14 @@ public interface IExtendedTableViewer {
 	boolean isEditEnabled();
 
 	void setEditEnabled(boolean editEnabled);
+
+	boolean isCopyHeaderToClipboard();
+
+	void setCopyHeaderToClipboard(boolean copyHeaderToClipboard);
+
+	String getCopyColumnsToClipboard();
+
+	void setCopyColumnsToClipboard(String copyColumnsToClipboard);
 
 	void clearColumns();
 
@@ -47,6 +49,7 @@ public interface IExtendedTableViewer {
 		if(provider == null) {
 			return;
 		}
+		//
 		for(ColumnDefinition<?, ?> definition : provider.getColumnDefinitions()) {
 			addColumn(definition);
 		}

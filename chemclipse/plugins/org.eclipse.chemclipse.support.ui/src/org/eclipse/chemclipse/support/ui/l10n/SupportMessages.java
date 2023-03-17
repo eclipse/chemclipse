@@ -22,6 +22,11 @@ public class SupportMessages extends NLS {
 	public static String clear;
 	public static String clipboardTableDefaultSorting;
 	public static String copyClipboard;
+	public static String clipboardSettings;
+	public static String copyHeaderToClipboard;
+	public static String copyHeaderToolTip;
+	public static String noClipboardSettingsAvailable;
+	public static String tableColumns;
 	public static String deselectAll;
 	public static String enterIon;
 	public static String errorMessageEven;

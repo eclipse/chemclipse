@@ -25,6 +25,15 @@ public class SupportPreferences implements IPreferenceSupplier {
 	public static final boolean DEF_CLIPBOARD_TABLE_DEFAULT_SORTING = false;
 	public static final String P_UNDO_LIMIT = "undoLimit";
 	public static final int DEF_UNDO_LIMIT = 5;
+	/*
+	 * The prefix to store the clipboard settings.
+	 * They are not initialized here as they will be stored
+	 * dynamically by the table name.
+	 */
+	public static final String P_CLIPBOARD_COPY_HEADER = "clipboardCopyHeader_";
+	public static final boolean DEF_CLIPBOARD_COPY_HEADER = true;
+	public static final String P_CLIPBOARD_COPY_COLUMNS = "clipboardCopyColumns_";
+	public static final String DEF_CLIPBOARD_COPY_COLUMNS = "";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -63,15 +72,33 @@ public class SupportPreferences implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
+	public static boolean isClipboardCopyHeader(String key) {
+
+		return INSTANCE().getBoolean(key, DEF_CLIPBOARD_COPY_HEADER);
+	}
+
+	public static void setClipboardCopyHeader(String key, boolean value) {
+
+		INSTANCE().putBoolean(key, value);
+	}
+
+	public static String getClipboardCopyColumns(String key) {
+
+		return INSTANCE().get(key, DEF_CLIPBOARD_COPY_COLUMNS);
+	}
+
+	public static void setClipboardCopyColumns(String key, String value) {
+
+		INSTANCE().put(key, value);
+	}
+
 	public static boolean isClipboardDefaultSorting() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_CLIPBOARD_TABLE_DEFAULT_SORTING, DEF_CLIPBOARD_TABLE_DEFAULT_SORTING);
+		return INSTANCE().getBoolean(P_CLIPBOARD_TABLE_DEFAULT_SORTING, DEF_CLIPBOARD_TABLE_DEFAULT_SORTING);
 	}
 
 	public static int getUndoLimit() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_UNDO_LIMIT, DEF_UNDO_LIMIT);
+		return INSTANCE().getInteger(P_UNDO_LIMIT, DEF_UNDO_LIMIT);
 	}
 }

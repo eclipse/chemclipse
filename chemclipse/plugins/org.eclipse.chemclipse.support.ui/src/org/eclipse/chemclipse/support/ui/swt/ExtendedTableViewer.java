@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.chemclipse.support.preferences.SupportPreferences;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
@@ -72,14 +73,16 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	private static final Logger logger = LoggerFactory.getLogger(ExtendedTableViewer.class);
 	private static final String MENU_TEXT = SupportMessages.tablePopUpMenu;
 	//
-	private ITableSettings tableSettings;
-	private final List<TableViewerColumn> tableViewerColumns;
-	private final Map<String, Set<ITableMenuEntry>> categoryMenuEntriesMap;
-	private final Map<String, ITableMenuEntry> menuEntryMap;
-	private final Map<String, MenuManager> menuManagerMap;
-	private final Set<KeyListener> userDefinedKeyListeners;
-	private final List<IColumnMoveListener> columnMoveListeners;
-	private boolean editEnabled;
+	private ITableSettings tableSettings = new TableSettings();
+	private final List<TableViewerColumn> tableViewerColumns = new ArrayList<>();
+	private final Map<String, Set<ITableMenuEntry>> categoryMenuEntriesMap = new HashMap<>();
+	private final Map<String, ITableMenuEntry> menuEntryMap = new HashMap<>();
+	private final Map<String, MenuManager> menuManagerMap = new HashMap<>();
+	private final Set<KeyListener> userDefinedKeyListeners = new HashSet<>();
+	private final List<IColumnMoveListener> columnMoveListeners = new ArrayList<>();
+	private boolean editEnabled = true;
+	private boolean copyHeaderToClipboard = SupportPreferences.DEF_CLIPBOARD_COPY_HEADER;
+	private String copyColumnsToClipboard = SupportPreferences.DEF_CLIPBOARD_COPY_COLUMNS;
 	//
 	private ControlListener controlListener = null;
 
@@ -91,17 +94,11 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	public ExtendedTableViewer(Composite parent, int style) {
 
 		super(parent, style);
-		tableSettings = new TableSettings();
-		tableViewerColumns = new ArrayList<>();
-		categoryMenuEntriesMap = new HashMap<>();
-		menuEntryMap = new HashMap<>();
-		menuManagerMap = new HashMap<>();
-		userDefinedKeyListeners = new HashSet<>();
-		columnMoveListeners = new ArrayList<>();
+		//
 		applySettings(tableSettings);
-		editEnabled = true;
 		registerMenuListener();
 		setContentProvider(ArrayContentProvider.getInstance());
+		handleColumnSettings();
 	}
 
 	public void setColumnMoveWidthSupport(IPreferenceStore preferenceStore, String preferenceColumnOrder, String preferenceColumnWidth) {
@@ -173,29 +170,6 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		columnMoveListeners.remove(columnMoveListener);
 	}
 
-	private void registerMenuListener() {
-
-		getTable().addListener(SWT.MenuDetect, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-
-				/*
-				 * Create the menu if requested.
-				 */
-				if(tableSettings.isCreateMenu()) {
-					createPopupMenu();
-				} else {
-					Menu menu = getTable().getMenu();
-					if(menu != null) {
-						getTable().setMenu(null);
-						menu.dispose();
-					}
-				}
-			}
-		});
-	}
-
 	@Override
 	public void createColumns(String[] titles, int[] bounds) {
 
@@ -265,37 +239,6 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		table.setLinesVisible(true);
 	}
 
-	protected void sortColumn(Table table, final int index, final TableColumn tableColumn) {
-
-		ViewerComparator viewerComparator = getComparator();
-		IRecordTableComparator recordTableComparator = Adapters.adapt(viewerComparator, IRecordTableComparator.class);
-		if(recordTableComparator != null) {
-			/*
-			 * Only sort if a record table sorter has been set.
-			 */
-			recordTableComparator.setColumn(index);
-			int direction = table.getSortDirection();
-			if(table.getSortColumn() == tableColumn) {
-				/*
-				 * Toggle the sort direction
-				 */
-				direction = (direction == SWT.UP) ? SWT.DOWN : SWT.UP;
-			} else {
-				direction = SWT.UP;
-			}
-			table.setSortDirection(direction);
-			table.setSortColumn(tableColumn);
-			refresh();
-		}
-	}
-
-	private void fireColumnMoved() {
-
-		for(IColumnMoveListener columnMoveListener : columnMoveListeners) {
-			columnMoveListener.handle();
-		}
-	}
-
 	@Override
 	public List<TableViewerColumn> getTableViewerColumns() {
 
@@ -329,6 +272,34 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	public void setEditEnabled(boolean editEnabled) {
 
 		this.editEnabled = editEnabled;
+	}
+
+	@Override
+	public boolean isCopyHeaderToClipboard() {
+
+		return copyHeaderToClipboard;
+	}
+
+	@Override
+	public void setCopyHeaderToClipboard(boolean copyHeaderToClipboard) {
+
+		this.copyHeaderToClipboard = copyHeaderToClipboard;
+		String pClipboardCopyHeader = getPreferenceName(SupportPreferences.P_CLIPBOARD_COPY_HEADER);
+		SupportPreferences.setClipboardCopyHeader(pClipboardCopyHeader, copyHeaderToClipboard);
+	}
+
+	@Override
+	public String getCopyColumnsToClipboard() {
+
+		return copyColumnsToClipboard;
+	}
+
+	@Override
+	public void setCopyColumnsToClipboard(String copyColumnsToClipboard) {
+
+		this.copyColumnsToClipboard = copyColumnsToClipboard;
+		String pClipboardCopyColumns = getPreferenceName(SupportPreferences.P_CLIPBOARD_COPY_COLUMNS);
+		SupportPreferences.setClipboardCopyColumns(pClipboardCopyColumns, copyColumnsToClipboard);
 	}
 
 	/**
@@ -390,6 +361,130 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		}
 		//
 		return false;
+	}
+
+	@Override
+	public void clearColumns() {
+
+		tableViewerColumns.clear();
+		Table table = getTable();
+		for(TableColumn column : table.getColumns()) {
+			column.dispose();
+		}
+		table.setHeaderVisible(false);
+		table.setLinesVisible(false);
+	}
+
+	@Override
+	public <D, C> TableViewerColumn addColumn(ColumnDefinition<D, C> definition) {
+
+		TableViewerColumn tableViewerColumn = createColumn(this, definition, editEnabled);
+		tableViewerColumn.getColumn().setMoveable(true);
+		tableViewerColumn.getColumn().addListener(SWT.Move, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				fireColumnMoved();
+			}
+		});
+		tableViewerColumns.add(tableViewerColumn);
+		Comparator<C> comparator = definition.getComparator();
+		if(comparator != null) {
+			TableColumn tableColumn = tableViewerColumn.getColumn();
+			tableColumn.addSelectionListener(new SelectionListener() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+
+					Table table = getTable();
+					final int direction;
+					if(table.getSortColumn() == tableColumn) {
+						direction = (table.getSortDirection() == SWT.UP) ? SWT.DOWN : SWT.UP;
+					} else {
+						direction = SWT.UP;
+					}
+					setComparator(new ViewerComparator() {
+
+						@Override
+						public void sort(Viewer viewer, Object[] elements) {
+
+							Comparator<Object> comparer = new Comparator<Object>() {
+
+								@SuppressWarnings("unchecked")
+								@Override
+								public int compare(Object o1, Object o2) {
+
+									try {
+										C d1 = definition.apply((D)o1);
+										C d2 = definition.apply((D)o2);
+										if(d1 == null) {
+											if(d2 == null) {
+												return 0;
+											} else {
+												return 1;
+											}
+										} else if(d2 == null) {
+											return -1;
+										}
+										return comparator.compare(d1, d2);
+									} catch(ClassCastException e) {
+										logger.warn("Inconsistent data items in respect to column definition: {}, sorting will be inconsistent!", e.toString()); //$NON-NLS-1$
+										return 0;
+									}
+								}
+							};
+							if(direction == SWT.DOWN) {
+								comparer = Collections.reverseOrder(comparer);
+							}
+							Arrays.sort(elements, comparer);
+						}
+					});
+					table.setSortDirection(direction);
+					table.setSortColumn(tableColumn);
+					refresh();
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+
+				}
+			});
+		}
+		getTable().setHeaderVisible(true);
+		getTable().setLinesVisible(true);
+		return tableViewerColumn;
+	}
+
+	protected void sortColumn(Table table, final int index, final TableColumn tableColumn) {
+
+		ViewerComparator viewerComparator = getComparator();
+		IRecordTableComparator recordTableComparator = Adapters.adapt(viewerComparator, IRecordTableComparator.class);
+		if(recordTableComparator != null) {
+			/*
+			 * Only sort if a record table sorter has been set.
+			 */
+			recordTableComparator.setColumn(index);
+			int direction = table.getSortDirection();
+			if(table.getSortColumn() == tableColumn) {
+				/*
+				 * Toggle the sort direction
+				 */
+				direction = (direction == SWT.UP) ? SWT.DOWN : SWT.UP;
+			} else {
+				direction = SWT.UP;
+			}
+			table.setSortDirection(direction);
+			table.setSortColumn(tableColumn);
+			refresh();
+		}
+	}
+
+	private void fireColumnMoved() {
+
+		for(IColumnMoveListener columnMoveListener : columnMoveListeners) {
+			columnMoveListener.handle();
+		}
 	}
 
 	private void createKeyListener() {
@@ -532,97 +627,39 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		return action;
 	}
 
-	@Override
-	public void clearColumns() {
+	private void registerMenuListener() {
 
-		tableViewerColumns.clear();
-		Table table = getTable();
-		for(TableColumn column : table.getColumns()) {
-			column.dispose();
-		}
-		table.setHeaderVisible(false);
-		table.setLinesVisible(false);
-	}
-
-	@Override
-	public <D, C> TableViewerColumn addColumn(ColumnDefinition<D, C> definition) {
-
-		TableViewerColumn tableViewerColumn = createColumn(this, definition, editEnabled);
-		tableViewerColumn.getColumn().setMoveable(true);
-		tableViewerColumn.getColumn().addListener(SWT.Move, new Listener() {
+		getTable().addListener(SWT.MenuDetect, new Listener() {
 
 			@Override
 			public void handleEvent(Event event) {
 
-				fireColumnMoved();
+				/*
+				 * Create the menu if requested.
+				 */
+				if(tableSettings.isCreateMenu()) {
+					createPopupMenu();
+				} else {
+					Menu menu = getTable().getMenu();
+					if(menu != null) {
+						getTable().setMenu(null);
+						menu.dispose();
+					}
+				}
 			}
 		});
-		tableViewerColumns.add(tableViewerColumn);
-		Comparator<C> comparator = definition.getComparator();
-		if(comparator != null) {
-			TableColumn tableColumn = tableViewerColumn.getColumn();
-			tableColumn.addSelectionListener(new SelectionListener() {
+	}
 
-				@Override
-				public void widgetSelected(SelectionEvent e) {
+	private void handleColumnSettings() {
 
-					Table table = getTable();
-					final int direction;
-					if(table.getSortColumn() == tableColumn) {
-						direction = (table.getSortDirection() == SWT.UP) ? SWT.DOWN : SWT.UP;
-					} else {
-						direction = SWT.UP;
-					}
-					setComparator(new ViewerComparator() {
-
-						@Override
-						public void sort(Viewer viewer, Object[] elements) {
-
-							Comparator<Object> comparer = new Comparator<Object>() {
-
-								@SuppressWarnings("unchecked")
-								@Override
-								public int compare(Object o1, Object o2) {
-
-									try {
-										C d1 = definition.apply((D)o1);
-										C d2 = definition.apply((D)o2);
-										if(d1 == null) {
-											if(d2 == null) {
-												return 0;
-											} else {
-												return 1;
-											}
-										} else if(d2 == null) {
-											return -1;
-										}
-										return comparator.compare(d1, d2);
-									} catch(ClassCastException e) {
-										logger.warn("Inconsistent data items in respect to column definition: {}, sorting will be inconsistent!", e.toString()); //$NON-NLS-1$
-										return 0;
-									}
-								}
-							};
-							if(direction == SWT.DOWN) {
-								comparer = Collections.reverseOrder(comparer);
-							}
-							Arrays.sort(elements, comparer);
-						}
-					});
-					table.setSortDirection(direction);
-					table.setSortColumn(tableColumn);
-					refresh();
-				}
-
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
-			});
-		}
-		getTable().setHeaderVisible(true);
-		getTable().setLinesVisible(true);
-		return tableViewerColumn;
+		/*
+		 * Handle the copy to clipboard settings
+		 */
+		String pClipboardCopyHeader = getPreferenceName(SupportPreferences.P_CLIPBOARD_COPY_HEADER);
+		copyHeaderToClipboard = SupportPreferences.isClipboardCopyHeader(pClipboardCopyHeader);
+		//
+		String pClipboardCopyColumns = getPreferenceName(SupportPreferences.P_CLIPBOARD_COPY_COLUMNS);
+		copyColumnsToClipboard = SupportPreferences.getClipboardCopyColumns(pClipboardCopyColumns);
 	}
 
 	private TableViewerColumn createTableColumn(String title, int width) {
@@ -643,5 +680,11 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 			}
 		});
 		return tableViewerColumn;
+	}
+
+	private String getPreferenceName(String prefix) {
+
+		String postfix = getClass().getName();
+		return prefix + postfix;
 	}
 }
