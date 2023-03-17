@@ -179,8 +179,6 @@ import org.eclipse.ui.commands.ICommandService;
 @SuppressWarnings("rawtypes")
 public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, IExtendedPartUI {
 
-	public static final String PREFERENCE_SHOW_TOOLBAR_TEXT = "ChromatogramUI.showToolbarText";
-	//
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
 	//
 	private ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
@@ -291,7 +289,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	public void updateToolbar() {
 
-		toolbarMain.setShowText(preferenceStore.getBoolean(PREFERENCE_SHOW_TOOLBAR_TEXT));
+		toolbarMain.setShowText(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_SHOW_TOOLBAR_TEXT));
 		toolbarMain.update();
 		processorToolbar.update();
 	}
@@ -1095,7 +1093,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		editorToolBar.addAction(createToggleToolbarAction("Alignment", "the chromatogram alignment toolbar.", IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, TOOLBAR_CHROMATOGRAM_ALIGNMENT));
 		editorToolBar.addAction(createToggleToolbarAction("Methods", "the method toolbar.", IApplicationImage.IMAGE_METHOD, TOOLBAR_METHOD, PreferenceConstants.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR));
 		createResetButton(editorToolBar);
-		editorToolBar.enableToolbarTextPage(preferenceStore, PREFERENCE_SHOW_TOOLBAR_TEXT);
+		editorToolBar.enableToolbarTextPage(preferenceStore, PreferenceConstants.P_CHROMATOGRAM_SHOW_TOOLBAR_TEXT);
 		processorToolbar.enablePreferencePage(preferenceStore, PreferenceConstants.P_CHROMATOGRAM_PROCESSOR_TOOLBAR);
 		editorToolBar.addAction(createGridLineAction());
 		createHelpButton(editorToolBar);
@@ -1646,10 +1644,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	 */
 	public static void initializeChartDefaults(IPreferenceStore preferenceStore) {
 
-		// we delegate here to PreferenceInitializer
 		PreferenceInitializer.initializeChromatogramDefaults(preferenceStore);
-		// and set our private preference also
-		preferenceStore.setDefault(PREFERENCE_SHOW_TOOLBAR_TEXT, true);
 	}
 
 	private void updateMappedRetentionIndices() {

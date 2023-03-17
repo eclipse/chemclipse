@@ -349,6 +349,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_PROCESSOR_TOOLBAR, PreferenceConstants.DEF_CHROMATOGRAM_PROCESSOR_TOOLBAR);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR, PreferenceConstants.DEF_CHROMATOGRAM_SHOW_METHODS_TOOLBAR);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SHOW_REFERENCES_COMBO, PreferenceConstants.DEF_CHROMATOGRAM_SHOW_REFERENCES_COMBO);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SHOW_TOOLBAR_TEXT, PreferenceConstants.DEF_CHROMATOGRAM_SHOW_TOOLBAR_TEXT);
 		//
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_TITLE_X_AXIS_MILLISECONDS);
 		store.setDefault(PreferenceConstants.P_FORMAT_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_FORMAT_X_AXIS_MILLISECONDS);

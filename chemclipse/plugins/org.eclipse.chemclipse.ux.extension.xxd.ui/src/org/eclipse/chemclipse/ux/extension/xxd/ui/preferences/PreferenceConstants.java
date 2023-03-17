@@ -578,6 +578,8 @@ public class PreferenceConstants {
 	public static final boolean DEF_CHROMATOGRAM_SHOW_METHODS_TOOLBAR = false;
 	public static final String P_CHROMATOGRAM_SHOW_REFERENCES_COMBO = "chromatogramShowReferencesCombo";
 	public static final boolean DEF_CHROMATOGRAM_SHOW_REFERENCES_COMBO = false;
+	public static final String P_CHROMATOGRAM_SHOW_TOOLBAR_TEXT = "ChromatogramUI.showToolbarText";
+	public static final boolean DEF_CHROMATOGRAM_SHOW_TOOLBAR_TEXT = true;
 	//
 	public static final String P_TITLE_X_AXIS_MILLISECONDS = "titleXAxisMilliseconds";
 	public static final String DEF_TITLE_X_AXIS_MILLISECONDS = "Time [ms]";
