@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.SupportPreferences;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
@@ -63,12 +64,10 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ExtendedTableViewer extends TableViewer implements IExtendedTableViewer {
 
-	private static final Logger logger = LoggerFactory.getLogger(ExtendedTableViewer.class);
+	private static final Logger logger = Logger.getLogger(ExtendedTableViewer.class);
 	private static final String MENU_TEXT = SupportMessages.tablePopUpMenu;
 	//
 	private ITableSettings tableSettings = new TableSettings();
@@ -412,7 +411,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 										}
 										return comparator.compare(d1, d2);
 									} catch(ClassCastException e) {
-										logger.warn("Inconsistent data items in respect to column definition: {}, sorting will be inconsistent!", e.toString()); //$NON-NLS-1$
+										logger.warn("Inconsistent data items in respect to column definition. Sorting will be inconsistent!", e); //$NON-NLS-1$
 										return 0;
 									}
 								}
