@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,13 +13,12 @@ package org.eclipse.chemclipse.support.settings;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.logging.support.Settings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ApplicationSettings {
 
-	private static final Logger logger = LoggerFactory.getLogger(ApplicationSettings.class);
+	private static final Logger logger = Logger.getLogger(ApplicationSettings.class);
 
 	public static File getSystemTmpDirectory() {
 

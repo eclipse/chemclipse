@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,12 +13,11 @@ package org.eclipse.chemclipse.support.files;
 
 import java.io.File;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.chemclipse.logging.core.Logger;
 
 public class FileSpecificationValidator {
 
-	private static final Logger logger = LoggerFactory.getLogger(FileSpecificationValidator.class);
+	private static final Logger logger = Logger.getLogger(FileSpecificationValidator.class);
 
 	public File validate(File file, String directoryExtension) {
 

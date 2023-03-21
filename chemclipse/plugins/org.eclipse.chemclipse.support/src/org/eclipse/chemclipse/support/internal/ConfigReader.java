@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,12 +15,14 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Set;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.logging.support.Settings;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.Configuration;
@@ -28,8 +30,6 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This component reads static configuration files from the config folder
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 @Component(service = {Runnable.class}, property = "action=ConfigReader", immediate = true)
 public class ConfigReader implements Runnable {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ConfigReader.class);
+	private static final Logger LOG = Logger.getLogger(ConfigReader.class);
 	private static final String FILE_PROPERTY = ".configreader.file";
 	private static final String CFG_EXTENSION = ".cfg";
 	private static final FileFilter CFG_FILE_FILTER = file -> file.isDirectory() || (file.isFile() && file.getName().endsWith(CFG_EXTENSION));
@@ -49,7 +49,7 @@ public class ConfigReader implements Runnable {
 
 		File directory = Settings.getSystemConfigDirectory();
 		if(directory.isDirectory()) {
-			LOG.info("Reading static config files from {}", directory.getAbsolutePath());
+			LOG.info(MessageFormat.format("Reading static config files from {0}", directory.getAbsolutePath()));
 			Set<String> pids = new HashSet<>();
 			for(File file : directory.listFiles(CFG_FILE_FILTER)) {
 				if(file.isFile()) {
@@ -74,7 +74,7 @@ public class ConfigReader implements Runnable {
 						Dictionary<String, Object> properties = configuration.getProperties();
 						String pid = configuration.getPid();
 						if(properties != null && properties.get(FILE_PROPERTY) != null && !pids.contains(pid)) {
-							LOG.info("remove vanished configuration for pid {}", pid);
+							LOG.info(MessageFormat.format("remove vanished configuration for pid {0}", pid));
 							configuration.delete();
 						}
 					}
@@ -83,7 +83,7 @@ public class ConfigReader implements Runnable {
 				LOG.error("Delete obsolete configurations failed!", e);
 			}
 		} else {
-			LOG.debug("Directory {} does not exits, no static configuration is read", directory);
+			LOG.info(MessageFormat.format("Directory {0} does not exits, no static configuration is read", directory));
 		}
 	}
 
