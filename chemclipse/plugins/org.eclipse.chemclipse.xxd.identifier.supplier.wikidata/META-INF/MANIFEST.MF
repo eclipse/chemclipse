@@ -22,6 +22,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.commons.commons-compress;bundle-version="1.22.0",
  wrapped.org.apache.httpcomponents.httpclient;bundle-version="4.5.14",
  wrapped.org.apache.httpcomponents.httpcore;bundle-version="4.4.16",
- org.slf4j.api;bundle-version="1.7.30"
+ slf4j.api;bundle-version="1.7.36",
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
