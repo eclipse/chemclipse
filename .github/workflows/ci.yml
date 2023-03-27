@@ -34,4 +34,4 @@ jobs:
       with:
         maven-version: 3.8.5
     - name: Build with Maven
-      run: mvn -f chemclipse/releng/org.eclipse.chemclipse.aggregator/pom.xml -T 1C verify --batch-mode --no-transfer-progress
+      run: mvn -f chemclipse/releng/org.eclipse.chemclipse.aggregator/pom.xml -Dtycho.build.smartbuilder=true -T 1C verify --batch-mode --no-transfer-progress
