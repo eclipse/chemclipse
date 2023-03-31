@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.tsd.model.core.IChromatogramTSD;
@@ -227,7 +228,11 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 	private LightweightSystem createLightweightSystem(Canvas canvas) {
 
 		LightweightSystem lightweightSystem = new LightweightSystem(canvas);
-		lightweightSystem.getRootFigure().setBackgroundColor(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		if(PreferencesSupport.isDarkTheme()) {
+			lightweightSystem.getRootFigure().setBackgroundColor(getDisplay().getSystemColor(SWT.COLOR_BLACK));
+		} else {
+			lightweightSystem.getRootFigure().setBackgroundColor(getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		}
 		//
 		return lightweightSystem;
 	}
@@ -235,7 +240,11 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 	private IntensityGraphFigure createIntensityGraphFigure() {
 
 		IntensityGraphFigure intensityGraphFigure = new IntensityGraphFigure();
-		intensityGraphFigure.setForegroundColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
+		if(PreferencesSupport.isDarkTheme()) {
+			intensityGraphFigure.setForegroundColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		} else {
+			intensityGraphFigure.setForegroundColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+		}
 		intensityGraphFigure.getXAxis().setTitle(LABEL_AXIS_X);
 		intensityGraphFigure.getYAxis().setTitle(LABEL_AXIS_Y);
 		//
