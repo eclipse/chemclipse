@@ -706,7 +706,7 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_X_AXIS_TITLE_SCANS = true;
 	//
 	public static final String P_TITLE_Y_AXIS_INTENSITY = "titleYAxisIntensity";
-	public static final String DEF_TITLE_Y_AXIS_INTENSITY = "Intensity [counts]";
+	public static final String DEF_TITLE_Y_AXIS_INTENSITY = "Intensity";
 	public static final String P_FORMAT_Y_AXIS_INTENSITY = "formatYAxisIntensity";
 	public static final String DEF_FORMAT_Y_AXIS_INTENSITY = "0.0#E0";
 	public static final String P_SHOW_Y_AXIS_INTENSITY = "showYAxisIntensity";
