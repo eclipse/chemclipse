@@ -76,6 +76,7 @@ public class ChartPCR extends LineChart {
 
 		modify();
 		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setTitleVisible(false);
 	}
 
 	private void modify() {
