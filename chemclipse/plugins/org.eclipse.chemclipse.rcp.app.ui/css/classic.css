@@ -11,14 +11,14 @@
  *     Christoph Läubrich - swt-tab-height is too low
  *******************************************************************************/
 
-.MTrimmedWindow {  
+.MTrimmedWindow {
 	margin-top:2px;
 	margin-bottom:2px;
 	margin-left:2px;
 	margin-right:2px;
 }
 
-.MTrimmedWindow.topLevel { 
+.MTrimmedWindow.topLevel {
 	margin-top:8px;
 	margin-bottom:2px;
 	margin-left:12px;
@@ -35,7 +35,6 @@ Composite#org-eclipse-chemclipse-ux-extension-ui-views-welcomeview-background {
 	text-transform:none;
 	visibility:visible;
 }
-
 
 #SearchField {
 	visibility:visible; /* hidden */
