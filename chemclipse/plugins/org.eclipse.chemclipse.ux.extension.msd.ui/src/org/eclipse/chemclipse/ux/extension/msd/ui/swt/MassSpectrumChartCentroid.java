@@ -110,10 +110,6 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 		chartSettings.setVerticalSliderVisible(true);
 		chartSettings.setCreateMenu(true);
 		//
-		chartSettings.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		chartSettings.setBackgroundChart(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		chartSettings.setBackgroundPlotArea(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		//
 		chartSettings.addMenuEntry(new UpdateMenuEntry());
 		//
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();

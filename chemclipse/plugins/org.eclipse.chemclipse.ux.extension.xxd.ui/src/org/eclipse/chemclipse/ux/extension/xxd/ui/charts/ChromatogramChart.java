@@ -93,10 +93,6 @@ public class ChromatogramChart extends LineChart {
 		rangeRestriction.setRestrictZoomX(false);
 		rangeRestriction.setRestrictZoomY(true);
 		//
-		chartSettings.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		chartSettings.setBackgroundChart(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		chartSettings.setBackgroundPlotArea(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		//
 		modifyAxes(true);
 	}
 
