@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,6 +30,8 @@ import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.model.targets.TargetReference;
 import org.eclipse.chemclipse.model.targets.TargetReferenceType;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -135,9 +137,9 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		float[] identityMatrix = new float[6];
 		oldTransform.getElements(identityMatrix);
 		try {
-			Color activeColor = gc.getDevice().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND);
-			Color inactiveColor = gc.getDevice().getSystemColor(SWT.COLOR_WIDGET_DISABLED_FOREGROUND);
-			Color idColor = gc.getDevice().getSystemColor(SWT.COLOR_LIST_FOREGROUND);
+			Color activeColor = getActiveColor(preferenceStore);
+			Color inactiveColor = getInactiveColor(preferenceStore);
+			Color idColor = getIdColor(preferenceStore);
 			Rectangle clipping = gc.getClipping();
 			TargetLabel lastReference = null;
 			if(DEBUG) {
@@ -362,5 +364,29 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE);
 		//
 		return new FontData(name, height, style);
+	}
+
+	public static Color getActiveColor(IPreferenceStore preferenceStore) {
+
+		if(!PreferencesSupport.isDarkTheme())
+			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_ACTIVE_TARGET_LABEL_FONT_COLOR));
+		else
+			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_ACTIVE_TARGET_LABEL_FONT_DARK_COLOR));
+	}
+
+	public static Color getInactiveColor(IPreferenceStore preferenceStore) {
+
+		if(!PreferencesSupport.isDarkTheme())
+			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_INACTIVE_TARGET_LABEL_FONT_COLOR));
+		else
+			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_INACTIVE_TARGET_LABEL_FONT_DARK_COLOR));
+	}
+
+	public static Color getIdColor(IPreferenceStore preferenceStore) {
+
+		if(!PreferencesSupport.isDarkTheme())
+			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_ID_TARGET_LABEL_FONT_COLOR));
+		else
+			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_ID_TARGET_LABEL_FONT_DARK_COLOR));
 	}
 }
