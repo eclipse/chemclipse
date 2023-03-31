@@ -76,9 +76,7 @@ public class ChartPCR extends LineChart {
 
 		modify();
 		IChartSettings chartSettings = getChartSettings();
-		chartSettings.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		chartSettings.setBackgroundChart(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		chartSettings.setBackgroundPlotArea(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+		chartSettings.setTitleVisible(false);
 	}
 
 	private void modify() {

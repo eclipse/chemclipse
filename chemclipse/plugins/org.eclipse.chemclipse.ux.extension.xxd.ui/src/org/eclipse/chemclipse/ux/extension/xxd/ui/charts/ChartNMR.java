@@ -150,10 +150,6 @@ public class ChartNMR extends LineChart {
 	private void initialize() {
 
 		modifyProcessed();
-		IChartSettings chartSettings = getChartSettings();
-		chartSettings.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		chartSettings.setBackgroundChart(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		chartSettings.setBackgroundPlotArea(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 	}
 
 	private void modifyRaw() {

@@ -51,10 +51,6 @@ public class ChartXIR extends LineChart {
 
 	private void initialize(boolean isAbsorbance) {
 
-		IChartSettings chartSettings = getChartSettings();
-		chartSettings.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		chartSettings.setBackgroundChart(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		chartSettings.setBackgroundPlotArea(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 		modifyProcessed(isAbsorbance);
 	}
 

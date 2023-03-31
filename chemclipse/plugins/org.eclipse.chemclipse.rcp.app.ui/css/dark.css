@@ -36,6 +36,10 @@ Composite#org-eclipse-chemclipse-ux-extension-ui-views-welcomeview-background {
 	visibility:visible;
 }
 
+ToolItem {
+  color: #FFFFFF;
+}
+
 #SearchField {
 	visibility:visible; /* hidden */
 }
