@@ -520,6 +520,21 @@ public class PreferenceConstants {
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE = "chromatogramScanLabelFontSize";
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = "chromatogramScanLabelFontStyle";
 	public static final int DEF_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = SWT.NORMAL;
+	//
+	public static final String P_CHROMATOGRAM_ACTIVE_TARGET_LABEL_FONT_COLOR = "chromatogramActiveTargetLabelFontColor";
+	public static final String DEF_CHROMATOGRAM_ACTIVE_TARGET_LABEL_FONT_COLOR = "0, 0, 0";
+	public static final String P_CHROMATOGRAM_INACTIVE_TARGET_LABEL_FONT_COLOR = "chromatogramActiveTargetLabelFontColor";
+	public static final String DEF_CHROMATOGRAM_INACTIVE_TARGET_LABEL_FONT_COLOR = "109, 109, 109";
+	public static final String P_CHROMATOGRAM_ID_TARGET_LABEL_FONT_COLOR = "chromatogramActiveTargetLabelFontColor";
+	public static final String DEF_CHROMATOGRAM_ID_TARGET_LABEL_FONT_COLOR = "0, 0, 0";
+	//
+	public static final String P_CHROMATOGRAM_ACTIVE_TARGET_LABEL_FONT_DARK_COLOR = "chromatogramActiveTargetLabelFontDarkColor";
+	public static final String DEF_CHROMATOGRAM_ACTIVE_TARGET_LABEL_FONT_DARK_COLOR = "255, 255, 255";
+	public static final String P_CHROMATOGRAM_INACTIVE_TARGET_LABEL_FONT_DARK_COLOR = "chromatogramActiveTargetLabelFontDarkColor";
+	public static final String DEF_CHROMATOGRAM_INACTIVE_TARGET_LABEL_FONT_DARK_COLOR = "109, 109, 109";
+	public static final String P_CHROMATOGRAM_ID_TARGET_LABEL_FONT_DARK_COLOR = "chromatogramActiveTargetLabelFontDarkColor";
+	public static final String DEF_CHROMATOGRAM_ID_TARGET_LABEL_FONT_DARK_COLOR = "255, 255, 255";
+	//
 	public static final String P_COLOR_CHROMATOGRAM_IDENTIFIED_SCAN = "colorChromatogramIdentifiedScan";
 	public static final String DEF_COLOR_CHROMATOGRAM_IDENTIFIED_SCAN = "128,0,0";
 	public static final String P_CHROMATOGRAM_SCAN_MARKER_TYPE = "chromatogramScanMarkerType";
@@ -706,7 +721,7 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_X_AXIS_TITLE_SCANS = true;
 	//
 	public static final String P_TITLE_Y_AXIS_INTENSITY = "titleYAxisIntensity";
-	public static final String DEF_TITLE_Y_AXIS_INTENSITY = "Intensity [counts]";
+	public static final String DEF_TITLE_Y_AXIS_INTENSITY = "Intensity";
 	public static final String P_FORMAT_Y_AXIS_INTENSITY = "formatYAxisIntensity";
 	public static final String DEF_FORMAT_Y_AXIS_INTENSITY = "0.0#E0";
 	public static final String P_SHOW_Y_AXIS_INTENSITY = "showYAxisIntensity";

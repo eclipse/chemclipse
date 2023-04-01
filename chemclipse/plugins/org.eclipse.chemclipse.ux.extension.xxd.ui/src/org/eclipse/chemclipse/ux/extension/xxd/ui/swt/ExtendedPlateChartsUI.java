@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
@@ -213,6 +214,9 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		gridData.horizontalSpan = 3;
 		chart.setLayoutData(gridData);
 		chart.toggleSeriesLegendVisibility();
+		IChartSettings chartSettings = chart.getChartSettings();
+		chartSettings.setTitleVisible(false);
+		chart.applySettings(chartSettings);
 		//
 		chartControl.set(chart);
 	}
