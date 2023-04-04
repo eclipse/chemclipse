@@ -48,7 +48,11 @@ CLabel {
   background-color: #FFFFFF;
 }
 
-CTabFolder:selected {
+CTabFolder {
+	background-color: #FFFFFF;
+}
+
+CTabItem {
 	background-color: #FFFFFF;
 }
 
