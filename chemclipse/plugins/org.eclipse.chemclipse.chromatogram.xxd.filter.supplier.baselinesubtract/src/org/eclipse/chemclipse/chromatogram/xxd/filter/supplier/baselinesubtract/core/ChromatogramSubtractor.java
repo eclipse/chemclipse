@@ -117,10 +117,10 @@ public class ChromatogramSubtractor {
 								ion.setAbundance(abundance);
 							}
 						}
-					} catch(AbundanceLimitExceededException e1) {
-						System.out.println(e1);
-					} catch(IonLimitExceededException e1) {
-						System.out.println(e1);
+					} catch(AbundanceLimitExceededException e) {
+						logger.warn(e);
+					} catch(IonLimitExceededException e) {
+						logger.warn(e);
 					}
 				}
 				zeroAbundanceIons.stream().forEach(scanMasterMSD::removeIon);
