@@ -11,6 +11,12 @@
       </application>
    </extension>
    <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.eclipse.chemclipse.rcp.app.ui.PluginStartup">
+      </startup>
+   </extension>
+   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             class="org.eclipse.chemclipse.rcp.app.ui.preferences.PreferencePage"
