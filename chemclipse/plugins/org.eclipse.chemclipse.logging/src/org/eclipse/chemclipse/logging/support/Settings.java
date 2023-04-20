@@ -242,17 +242,6 @@ public class Settings {
 			fileWorkspaceFolder = new File(applicationWorkspaceFolder);
 			fileSettingsFolder = new File(applicationSettingsFolder);
 		}
-		/*
-		 * Print in the console.
-		 */
-		System.out.println("----------------------------------------------------------------------------------");
-		System.out.println("Product Initializiation:   " + Settings.class.getName());
-		System.out.println("Workspace Path:            " + getWorkspaceDirectory());
-		System.out.println("System Path:               " + getSystemDirectory());
-		System.out.println("System Method Path:        " + getSystemMethodDirectory());
-		System.out.println("System Configuration Path: " + getSystemConfigDirectory());
-		System.out.println("System Plugins Path:       " + getSystemPluginDirectory());
-		System.out.println("----------------------------------------------------------------------------------");
 	}
 
 	/**

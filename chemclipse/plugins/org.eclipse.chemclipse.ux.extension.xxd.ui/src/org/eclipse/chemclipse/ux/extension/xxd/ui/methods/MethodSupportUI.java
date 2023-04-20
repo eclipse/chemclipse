@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
+import org.eclipse.chemclipse.rcp.app.ui.console.MessageConsoleAppender;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -214,7 +215,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
 				File file = getProcessMethodFile(object);
 				if(file != null) {
-					logger.info(ExtensionMessages.editMethod + ": " + file.getAbsolutePath());
+					MessageConsoleAppender.printLine(ExtensionMessages.editMethod + ": " + file.getAbsolutePath());
 					openProcessMethodEditor(file);
 				}
 			}
@@ -280,7 +281,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 												 * Open the editor
 												 */
 												computeMethodComboItems();
-												logger.info("Copied Method: " + fileSink.getAbsolutePath());
+												MessageConsoleAppender.printLine("Copied Method: " + fileSink.getAbsolutePath());
 												openProcessMethodEditor(fileSink);
 											}
 										}
@@ -424,7 +425,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 				PreferenceSupplier.setSelectedMethodName(file.getName());
 				if(openEditor) {
 					computeMethodComboItems();
-					logger.info("New Method: " + file.getAbsolutePath());
+					MessageConsoleAppender.printLine("New Method: " + file.getAbsolutePath());
 					openProcessMethodEditor(file);
 				}
 			} else {
