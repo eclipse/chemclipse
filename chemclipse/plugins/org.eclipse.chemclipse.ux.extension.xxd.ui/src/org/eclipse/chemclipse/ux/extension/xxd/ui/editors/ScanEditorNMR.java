@@ -56,6 +56,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
+import org.eclipse.chemclipse.rcp.app.ui.console.MessageConsoleAppender;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -371,6 +372,7 @@ public class ScanEditorNMR implements IScanEditorNMR {
 									for(IProcessingMessage message : result.getMessages()) {
 										if(message.getMessageType() == MessageType.ERROR) {
 											StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, message.getMessage());
+											MessageConsoleAppender.printError(message.getMessage());
 										}
 									}
 								}

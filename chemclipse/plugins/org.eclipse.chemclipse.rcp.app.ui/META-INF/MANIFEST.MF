@@ -6,6 +6,7 @@ Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.rcp.app.ui.Activator
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.rcp.app.ui.addons,
+ org.eclipse.chemclipse.rcp.app.ui.console,
  org.eclipse.chemclipse.rcp.app.ui.dialogs,
  org.eclipse.chemclipse.rcp.app.ui.handlers,
  org.eclipse.chemclipse.rcp.app.ui.preferences,
@@ -45,7 +46,10 @@ Require-Bundle: javax.inject;bundle-version="1.0.0",
  org.apache.commons.cli;bundle-version="1.2.0",
  org.eclipse.chemclipse.rcp.app;bundle-version="0.8.0",
  org.eclipse.chemclipse.support.ui;bundle-version="0.8.0",
- org.eclipse.ui.cheatsheets;bundle-version="3.7.300"
+ org.eclipse.ui.cheatsheets;bundle-version="3.7.300",
+ org.eclipse.ui.console;bundle-version="3.11.400",
+ org.apache.commons.commons-io;bundle-version="2.11.0",
+ org.eclipse.chemclipse.swt.ui;bundle-version="0.9.0"
 Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
  javax.inject;version="1.0.0",
  org.osgi.framework;version="[1.0.0,2.0.0)",

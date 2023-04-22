@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.Properties;
 
 import org.eclipse.chemclipse.logging.Activator;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.osgi.framework.Version;
 
 public class Settings {
@@ -37,6 +38,8 @@ public class Settings {
 	//
 	private static File fileSettingsFolder = null; // will be initialized
 	private static File fileWorkspaceFolder = null; // will be initialized
+	//
+	private static final Logger logger = Logger.getLogger(Settings.class);
 
 	/**
 	 * Use only static methods.
@@ -128,7 +131,7 @@ public class Settings {
 				builder.append("x"); // version.getMicro()
 				applicationVersion = builder.toString();
 			} catch(Exception e) {
-				System.out.println(e);
+				logger.warn(e);
 			}
 		}
 		return applicationVersion;
@@ -239,17 +242,6 @@ public class Settings {
 			fileWorkspaceFolder = new File(applicationWorkspaceFolder);
 			fileSettingsFolder = new File(applicationSettingsFolder);
 		}
-		/*
-		 * Print in the console.
-		 */
-		System.out.println("----------------------------------------------------------------------------------");
-		System.out.println("Product Initializiation:   " + Settings.class.getName());
-		System.out.println("Workspace Path:            " + getWorkspaceDirectory());
-		System.out.println("System Path:               " + getSystemDirectory());
-		System.out.println("System Method Path:        " + getSystemMethodDirectory());
-		System.out.println("System Configuration Path: " + getSystemConfigDirectory());
-		System.out.println("System Plugins Path:       " + getSystemPluginDirectory());
-		System.out.println("----------------------------------------------------------------------------------");
 	}
 
 	/**

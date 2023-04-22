@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,6 +36,7 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 	private float retentionIndex;
 
 	public ExtractedWavelengthSignal(double startWavelength, double stopWavelength) {
+
 		int start = AbstractScanSignalWSD.getWavelength(startWavelength);
 		int stop = AbstractScanSignalWSD.getWavelength(stopWavelength);
 		/*
@@ -62,6 +63,7 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 	}
 
 	public ExtractedWavelengthSignal(List<IScanSignalWSD> wavelengths) {
+
 		wavelengths = new ArrayList<>(wavelengths);
 		if(wavelengths != null && wavelengths.size() > 0) {
 			Collections.sort(wavelengths, new WavelengthValueComparator());
@@ -211,7 +213,6 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 	@Override
 	public float getMeanIntensity() {
 
-		System.out.println("JUNIT");
 		return Calculations.getMean(abundanceValues);
 	}
 

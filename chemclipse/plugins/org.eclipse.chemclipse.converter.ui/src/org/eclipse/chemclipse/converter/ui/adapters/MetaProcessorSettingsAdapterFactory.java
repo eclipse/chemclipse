@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * 
@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
+import org.eclipse.chemclipse.rcp.app.ui.console.MessageConsoleAppender;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -229,7 +230,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 							MethodConverter.store(byteArrayOutputStream, "", processMethod, new ProcessingInfo<>(), new NullProgressMonitor());
 							fileOutputStream.write(byteArrayOutputStream.toByteArray());
 							fileOutputStream.flush();
-							logger.info("Method saved (UUID): " + processMethod.getUUID() + " => " + file.getAbsolutePath());
+							MessageConsoleAppender.printDone("Method saved (UUID): " + processMethod.getUUID() + " => " + file.getAbsolutePath());
 						}
 					} catch(FileNotFoundException e) {
 						logger.warn(e);

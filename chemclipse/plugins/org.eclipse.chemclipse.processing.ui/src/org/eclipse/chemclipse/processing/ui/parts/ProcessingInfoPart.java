@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoUpdateNotifier
 import org.eclipse.chemclipse.processing.ui.swt.ProcessingInfoUI;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
+import org.eclipse.chemclipse.rcp.app.ui.console.MessageConsoleAppender;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
@@ -129,8 +130,10 @@ public class ProcessingInfoPart {
 			for(IProcessingMessage message : data.getMessages()) {
 				if(message.getMessageType() == MessageType.ERROR) {
 					StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, message.getMessage());
+					MessageConsoleAppender.printError(message.getMessage());
 				} else {
 					StatusLineLogger.setInfo(InfoType.MESSAGE, message.getMessage());
+					MessageConsoleAppender.printDone(message.getMessage());
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.ux.extension.ui;
 import java.net.URL;
 import java.util.MissingResourceException;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
 import org.eclipse.core.runtime.FileLocator;
@@ -36,6 +37,7 @@ public class Activator extends AbstractActivatorUI {
 	public static final String PATH_PERSPECTIVES_INFO = "files/images/perspectives.png";
 	// The shared instance
 	private static Activator plugin;
+	private static final Logger logger = Logger.getLogger(Activator.class);
 	private ServiceTracker<TileDefinition, TileDefinition> tileServiceTracker;
 
 	/**
@@ -101,9 +103,9 @@ public class Activator extends AbstractActivatorUI {
 				getImageRegistry().put(INFO_PERSPECTIVES, imageDescriptor);
 			}
 		} catch(MissingResourceException e) {
-			System.out.println(e);
+			logger.warn(e);
 		} catch(IllegalArgumentException e) {
-			System.out.println(e);
+			logger.warn(e);
 		}
 	}
 

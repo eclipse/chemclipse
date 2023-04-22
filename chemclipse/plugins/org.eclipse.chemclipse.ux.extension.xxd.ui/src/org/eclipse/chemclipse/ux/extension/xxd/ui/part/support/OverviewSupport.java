@@ -53,7 +53,6 @@ public class OverviewSupport {
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(!objects.isEmpty()) {
-			System.out.println(topic);
 			Object object = objects.get(0);
 			if(object instanceof IChromatogramOverview chromatogramOverview) {
 				return fireUpdate(chromatogramOverview);

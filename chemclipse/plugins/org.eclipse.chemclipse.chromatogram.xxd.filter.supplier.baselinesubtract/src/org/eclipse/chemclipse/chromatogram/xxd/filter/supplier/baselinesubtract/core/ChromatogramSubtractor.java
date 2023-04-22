@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
@@ -26,7 +27,8 @@ import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 
 public class ChromatogramSubtractor {
 
-	private final static boolean CHANNEL_WISE_SUBTRACTION = true;
+	private static final Logger logger = Logger.getLogger(ChromatogramSubtractor.class);
+	private static final boolean CHANNEL_WISE_SUBTRACTION = true;
 
 	public void perform(IChromatogram<?> chromatogramMaster, IChromatogram<?> chromatogramSubtract) {
 
@@ -45,11 +47,9 @@ public class ChromatogramSubtractor {
 			//
 			for(int i = startScan; i <= stopScan; i++) {
 				IScan scanMaster = chromatogramMaster.getScan(i);
-				if(scanMaster instanceof IScanMSD && CHANNEL_WISE_SUBTRACTION) {
-					IScanMSD scanMasterMSD = (IScanMSD)scanMaster;
+				if(scanMaster instanceof IScanMSD scanMasterMSD && CHANNEL_WISE_SUBTRACTION) {
 					subtractMSD(scanMasterMSD, chromatogramSubtract);
-				} else if(scanMaster instanceof IScanWSD && CHANNEL_WISE_SUBTRACTION) {
-					IScanWSD scanMasterWSD = (IScanWSD)scanMaster;
+				} else if(scanMaster instanceof IScanWSD scanMasterWSD && CHANNEL_WISE_SUBTRACTION) {
 					subtractWSD(scanMasterWSD, chromatogramSubtract);
 				} else if(scanMaster != null) {
 					int scanNumberSubtract = chromatogramSubtract.getScanNumber(scanMaster.getRetentionTime());
@@ -62,11 +62,10 @@ public class ChromatogramSubtractor {
 						float totalSignalSubstract = scanSubtract.getTotalSignal();
 						float totalSignal = totalSignalMaster - totalSignalSubstract;
 						//
-						if(scanMaster instanceof IScanMSD) {
+						if(scanMaster instanceof IScanMSD scanMSD) {
 							if(totalSignal > 0) {
 								scanMaster.adjustTotalSignal(totalSignal);
 							} else {
-								IScanMSD scanMSD = (IScanMSD)scanMaster;
 								scanMSD.removeAllIons();
 							}
 						} else {
@@ -118,13 +117,13 @@ public class ChromatogramSubtractor {
 								ion.setAbundance(abundance);
 							}
 						}
-					} catch(AbundanceLimitExceededException e1) {
-						System.out.println(e1);
-					} catch(IonLimitExceededException e1) {
-						System.out.println(e1);
+					} catch(AbundanceLimitExceededException e) {
+						logger.warn(e);
+					} catch(IonLimitExceededException e) {
+						logger.warn(e);
 					}
 				}
-				zeroAbundanceIons.stream().forEach(x -> scanMasterMSD.removeIon(x));
+				zeroAbundanceIons.stream().forEach(scanMasterMSD::removeIon);
 			}
 		}
 	}
