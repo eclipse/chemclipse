@@ -101,6 +101,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private static final Logger logger = Logger.getLogger(ExtendedPeakScanListUI.class);
 	//
 	private static final String MENU_CATEGORY = "Peaks/Scans";
+	private static final String DESCRIPTION_PEAKS = "Number Peaks:";
+	private static final String DESCRIPTION_SCANS = "Scans:";
 	//
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
@@ -135,17 +137,6 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		createControl();
 	}
 
-	private void updateFromPreferences() {
-
-		if(preferenceStore != null) {
-			showPeaks = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_LIST);
-			showPeaksInRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
-			showScans = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_LIST);
-			showScansInRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE);
-			moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
-		}
-	}
-
 	@Override
 	public boolean setFocus() {
 
@@ -157,6 +148,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				updateChromatogramSelection(chromatogramSelection);
 			}
 		}
+		//
+		updateLabel();
 		return true;
 	}
 
@@ -165,21 +158,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		if(hasChanged(chromatogramSelection)) {
 			this.chromatogramSelection = chromatogramSelection;
 			updateChromatogramSelection();
+			updateLabel();
 		}
-	}
-
-	private boolean hasChanged(IChromatogramSelection chromatogramSelection) {
-
-		boolean referenceChanged = this.chromatogramSelection != chromatogramSelection;
-		if(!referenceChanged && chromatogramSelection != null) {
-			if(chromatogramSelection.getChromatogram().getModCount() != currentModCount) {
-				return true;
-			}
-			if(lastRange != null && !lastRange.contentEquals(chromatogramSelection)) {
-				return true;
-			}
-		}
-		return referenceChanged;
 	}
 
 	public void updateChromatogramSelection() {
@@ -314,6 +294,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			public void performSearch(String searchText, boolean caseSensitive) {
 
 				tableViewer.get().setSearchText(searchText, caseSensitive);
+				updateLabel();
 			}
 		});
 		//
@@ -952,13 +933,38 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			toolbarInfoTop.get().setText(ChromatogramDataSupport.getChromatogramLabel(null));
 			toolbarInfoBottom.get().setText("");
 		} else {
+			/*
+			 * Display the selected and total amount of peaks/scans
+			 */
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			String chromatogramLabel = ChromatogramDataSupport.getChromatogramLabel(chromatogram);
-			int identifiedPeaks = chromatogram.getNumberOfPeaks();
-			int identifiedScans = ChromatogramDataSupport.getIdentifiedScans(chromatogram).size();
+			//
+			int peaks = 0;
+			int scans = 0;
+			for(TableItem tableItem : tableViewer.get().getTable().getItems()) {
+				Object object = tableItem.getData();
+				if(object instanceof IPeak) {
+					peaks++;
+				} else if(object instanceof IScan) {
+					scans++;
+				}
+			}
+			//
+			StringBuilder builder = new StringBuilder();
+			builder.append(DESCRIPTION_PEAKS);
+			builder.append(" ");
+			builder.append(peaks);
+			builder.append(" / ");
+			builder.append(chromatogram.getNumberOfPeaks());
+			builder.append(" | ");
+			builder.append(DESCRIPTION_SCANS);
+			builder.append(" ");
+			builder.append(scans);
+			builder.append(" / ");
+			builder.append(ChromatogramDataSupport.getIdentifiedScans(chromatogram).size());
 			//
 			toolbarInfoTop.get().setText(chromatogramLabel);
-			toolbarInfoBottom.get().setText("Number of Peaks: " + identifiedPeaks + " | Scans: " + identifiedScans);
+			toolbarInfoBottom.get().setText(builder.toString());
 		}
 	}
 
@@ -1041,6 +1047,33 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			}
 		}
 		return scanList;
+	}
+
+	private boolean hasChanged(IChromatogramSelection chromatogramSelection) {
+
+		boolean referenceChanged = this.chromatogramSelection != chromatogramSelection;
+		if(!referenceChanged && chromatogramSelection != null) {
+			if(chromatogramSelection.getChromatogram().getModCount() != currentModCount) {
+				return true;
+			}
+			//
+			if(lastRange != null && !lastRange.contentEquals(chromatogramSelection)) {
+				return true;
+			}
+		}
+		//
+		return referenceChanged;
+	}
+
+	private void updateFromPreferences() {
+
+		if(preferenceStore != null) {
+			showPeaks = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_LIST);
+			showPeaksInRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
+			showScans = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_LIST);
+			showScansInRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE);
+			moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
+		}
 	}
 
 	@Override
