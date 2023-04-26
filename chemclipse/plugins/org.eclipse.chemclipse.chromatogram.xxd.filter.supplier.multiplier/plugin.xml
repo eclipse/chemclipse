@@ -12,7 +12,7 @@
       </ChromatogramFilterSupplier>
       <ChromatogramFilterSupplier
             description="This filter divides all signals of a chromatogram."
-            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.core.MultiplierChromatogramFilter"
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.core.DivisorChromatogramFilter"
             filterName="Divisor Filter"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.DivisorSettings"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.divisor">
