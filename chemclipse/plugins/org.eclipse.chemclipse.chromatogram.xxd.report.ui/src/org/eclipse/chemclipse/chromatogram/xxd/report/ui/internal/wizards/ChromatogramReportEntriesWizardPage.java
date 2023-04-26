@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSu
 import org.eclipse.chemclipse.chromatogram.xxd.report.exceptions.NoReportSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.xxd.report.model.ChromatogramReportSupplierEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -52,6 +54,7 @@ public class ChromatogramReportEntriesWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	protected ChromatogramReportEntriesWizardPage(String pageName) {
+
 		super(pageName);
 		setTitle("Chromatogram Report Supplier");
 		setDescription("This wizard lets you select several chromatogram report supplier.");
@@ -123,7 +126,7 @@ public class ChromatogramReportEntriesWizardPage extends WizardPage {
 			 * Output converter combo box.
 			 */
 			String[] filterNames = reportSupport.getFilterNames();
-			chromatogramReportSupplierComboBox = new Combo(composite, SWT.NONE);
+			chromatogramReportSupplierComboBox = EnhancedCombo.create(composite, SWT.NONE);
 			chromatogramReportSupplierComboBox.setItems(filterNames);
 			gridData = new GridData(GridData.FILL_HORIZONTAL);
 			gridData.horizontalSpan = 2;

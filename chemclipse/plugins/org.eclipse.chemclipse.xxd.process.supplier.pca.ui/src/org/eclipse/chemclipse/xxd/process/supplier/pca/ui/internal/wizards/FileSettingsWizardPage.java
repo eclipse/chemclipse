@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PcaExtractionFileBinary;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PcaExtractionFileText;
@@ -132,7 +133,7 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 
 	private ComboViewer createComboViewerAlgorithm(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setInput(algorithms);
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {

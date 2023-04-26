@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs;
 
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -99,7 +100,7 @@ public class DataTypeDialog extends Dialog {
 
 	private ComboViewer createComboViewer(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(new ArrayContentProvider());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {

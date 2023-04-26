@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.CalibrationNameValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionIndexValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionTimeValidator;
@@ -158,7 +159,7 @@ public class CalibrationEditUI extends Composite {
 
 	private Combo createComboReferences(Composite parent) {
 
-		Combo combo = new Combo(parent, SWT.BORDER);
+		Combo combo = EnhancedCombo.create(parent, SWT.BORDER);
 		combo.setText("");
 		combo.setItems(getAvailableStandards());
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

@@ -1,7 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
- * All rights reserved.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
@@ -21,6 +24,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.swt
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
 import org.eclipse.chemclipse.model.identifier.core.ISupplier;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.swt.SWT;
@@ -53,6 +57,7 @@ public class PageDataVerification extends AbstractExtendedWizardPage {
 	private IMassSpectrumIdentifierSupport massSpectrumIdentifierSupport = MassSpectrumIdentifier.getMassSpectrumIdentifierSupport();
 
 	public PageDataVerification(ISampleQuantWizardElements wizardElements) {
+
 		//
 		super(PageDataVerification.class.getName());
 		setTitle("Quantitation Entries");
@@ -171,7 +176,7 @@ public class PageDataVerification extends AbstractExtendedWizardPage {
 		Label label = new Label(parent, SWT.NONE);
 		label.setText("Scan Identifier:");
 		//
-		comboScanIdentifier = new Combo(parent, SWT.READ_ONLY);
+		comboScanIdentifier = EnhancedCombo.create(parent, SWT.READ_ONLY);
 		String[] items;
 		try {
 			items = MassSpectrumIdentifier.getMassSpectrumIdentifierSupport().getIdentifierNames();

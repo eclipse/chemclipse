@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.jface.dialogs.Dialog;
@@ -111,7 +112,7 @@ public class ChromatogramEditorDialog extends Dialog {
 
 	private void createComboViewer(Composite parent) {
 
-		comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(new ListContentProvider());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {

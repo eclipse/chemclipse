@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,8 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionTimeValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
@@ -159,7 +161,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 
 	private ComboViewer createComboViewerSink(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(new ListContentProvider());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
@@ -219,7 +221,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 
 	private Combo createTypeCombo(Composite parent) {
 
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		Combo combo = EnhancedCombo.create(parent, SWT.READ_ONLY);
 		combo.setItems(TYPE_ITEMS);
 		combo.select(0);
 		combo.setToolTipText("Select a type (Peaks or Scans) to be transfered.");

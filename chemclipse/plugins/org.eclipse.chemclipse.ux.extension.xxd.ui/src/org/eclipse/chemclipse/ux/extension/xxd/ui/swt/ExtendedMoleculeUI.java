@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
@@ -222,7 +223,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private ComboViewer createComboViewerInput(Composite composite) {
 
-		ComboViewer comboViewer = new ComboViewer(composite, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(composite, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
@@ -360,7 +361,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private ComboViewer createComboViewerServices(Composite composite) {
 
-		ComboViewer comboViewer = new ComboViewer(composite, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(composite, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {

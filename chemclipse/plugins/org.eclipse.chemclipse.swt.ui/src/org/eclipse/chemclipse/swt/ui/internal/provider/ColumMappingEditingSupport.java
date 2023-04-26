@@ -52,7 +52,6 @@ public class ColumMappingEditingSupport extends EditingSupport {
 		return tableViewer.isEditEnabled();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected Object getValue(Object element) {
 
@@ -70,7 +69,7 @@ public class ColumMappingEditingSupport extends EditingSupport {
 		return false;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void setValue(Object element, Object value) {
 

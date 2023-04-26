@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.wizards;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.ExtractionOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.DescriptionOption;
@@ -105,7 +106,7 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 
 	private ComboViewer createComboViewerDescriptionOption(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
@@ -142,7 +143,7 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 
 	private ComboViewer createComboViewerExtractionOption(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
@@ -241,7 +242,7 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 
 	private ComboViewer createComboViewerAlgorithm(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 

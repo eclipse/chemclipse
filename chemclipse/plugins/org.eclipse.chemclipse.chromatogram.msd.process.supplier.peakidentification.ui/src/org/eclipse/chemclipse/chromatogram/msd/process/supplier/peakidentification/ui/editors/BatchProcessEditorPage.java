@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificati
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -320,7 +321,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		Label label = toolkit.createLabel(client, "Select an integrator:");
 		label.setLayoutData(gridDataLabel);
 		//
-		integratorComboBox = new Combo(client, SWT.READ_ONLY);
+		integratorComboBox = EnhancedCombo.create(client, SWT.READ_ONLY);
 		integratorComboBox.setLayoutData(gridData);
 		integratorComboBox.addSelectionListener(new SelectionAdapter() {
 
@@ -385,7 +386,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		Label label = toolkit.createLabel(client, "Select an identifier:");
 		label.setLayoutData(gridDataLabel);
 		//
-		identifierComboBox = new Combo(client, SWT.READ_ONLY);
+		identifierComboBox = EnhancedCombo.create(client, SWT.READ_ONLY);
 		identifierComboBox.setLayoutData(gridData);
 		identifierComboBox.addSelectionListener(new SelectionAdapter() {
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTableRetentionIndexViewerUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTargetsViewerUI;
@@ -185,7 +186,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 	private Combo createComboStartIndex(Composite parent) {
 
-		Combo combo = new Combo(parent, SWT.NONE);
+		Combo combo = EnhancedCombo.create(parent, SWT.NONE);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.setItems(availableStandards);
 		combo.setToolTipText("Start Index");
@@ -210,7 +211,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 	private Combo createComboStopIndex(Composite parent) {
 
-		Combo combo = new Combo(parent, SWT.NONE);
+		Combo combo = EnhancedCombo.create(parent, SWT.NONE);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.setItems(availableStandards);
 		combo.setToolTipText("Stop Index");

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.msd.converter.peak.IPeakConverterSupport;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -111,7 +112,7 @@ public class PeakOutputFilesWizardPage extends WizardPage {
 			/*
 			 * Output converter combo box.
 			 */
-			peakConverterComboBox = new Combo(composite, SWT.NONE);
+			peakConverterComboBox = EnhancedCombo.create(composite, SWT.NONE);
 			peakConverterComboBox.setItems(filterNames);
 			peakConverterComboBox.setLayoutData(gridData);
 			/*

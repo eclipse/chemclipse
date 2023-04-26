@@ -325,7 +325,6 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void enableButtonDelete() {
 
 		buttonDelete.setEnabled(false);

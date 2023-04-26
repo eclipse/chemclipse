@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.support.validators.TraceValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -153,7 +154,7 @@ public class NamedTracesUI extends Composite {
 
 	private ComboViewer createComboViewer(Composite composite) {
 
-		ComboViewer comboViewer = new ComboViewer(composite, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(composite, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {

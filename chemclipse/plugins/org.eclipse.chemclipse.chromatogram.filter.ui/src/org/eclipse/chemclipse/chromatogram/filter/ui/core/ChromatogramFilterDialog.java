@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.chromatogram.filter.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.filter.ui.l10n.Messages;
 import org.eclipse.chemclipse.numeric.services.IMaximaDetectorService;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -90,7 +91,7 @@ public class ChromatogramFilterDialog extends Dialog {
 
 	private ComboViewer createComboViewer(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(new ArrayContentProvider());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {

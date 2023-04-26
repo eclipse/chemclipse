@@ -42,6 +42,8 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.validators.TraceValidator;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -322,7 +324,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private Combo createOverlayTypeCombo(Composite parent) {
 
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		Combo combo = EnhancedCombo.create(parent, SWT.READ_ONLY);
 		combo.setToolTipText("Select the overlay type");
 		GridData gridData = new GridData();
 		gridData.minimumWidth = 150;
@@ -347,7 +349,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private ComboViewer createDerivativeComboViewer(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 

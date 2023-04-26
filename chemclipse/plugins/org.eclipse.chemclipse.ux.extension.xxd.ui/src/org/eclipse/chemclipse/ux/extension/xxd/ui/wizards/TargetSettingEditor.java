@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -137,7 +138,7 @@ public class TargetSettingEditor {
 
 	private ComboViewer createComboViewerDisplayOption(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
@@ -184,7 +185,9 @@ public class TargetSettingEditor {
 
 	private ComboViewer createComboViewerLibraryField(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
@@ -210,21 +213,13 @@ public class TargetSettingEditor {
 				fireUpdate();
 			}
 		});
-		/*
-		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
-		 */
-		Combo combo = comboViewer.getCombo();
-		if(OperatingSystemUtils.isLinux()) {
-			combo.setBackground(combo.getBackground());
-		}
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return comboViewer;
 	}
 
 	private ComboViewer createComboViewerCollision(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setInput(new Object[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
 		comboViewer.setSelection(new StructuredSelection(targetDisplaySettings.getCollisionDetectionDepth()));
@@ -237,13 +232,6 @@ public class TargetSettingEditor {
 				fireUpdate();
 			}
 		});
-		/*
-		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
-		 */
-		Combo combo = comboViewer.getCombo();
-		if(OperatingSystemUtils.isLinux()) {
-			combo.setBackground(combo.getBackground());
-		}
 		//
 		return comboViewer;
 	}

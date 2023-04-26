@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -158,7 +159,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 
 	private ComboViewer createComboViewerTraces(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
@@ -295,7 +296,6 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 		BaseChart baseChart = peakTracesUI.getBaseChart();
 		baseChart.addSeriesStatusListener(new SeriesStatusAdapter() {
 
-			@SuppressWarnings("rawtypes")
 			@Override
 			public void handleSeriesSelectionEvent(String seriesId) {
 

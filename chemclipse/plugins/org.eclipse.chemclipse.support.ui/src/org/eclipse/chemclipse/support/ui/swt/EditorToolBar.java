@@ -206,7 +206,7 @@ public class EditorToolBar {
 			protected Control createControl(Composite parent) {
 
 				Composite composite = createContainer(parent);
-				ComboViewer viewer = new ComboViewer(composite, readOnly ? SWT.READ_ONLY : SWT.NONE);
+				ComboViewer viewer = new EnhancedComboViewer(composite, readOnly ? SWT.READ_ONLY : SWT.NONE);
 				viewer.setContentProvider(ArrayContentProvider.getInstance());
 				GridData data = gridData(maximize(viewer.getControl()));
 				data.verticalAlignment = SWT.CENTER;

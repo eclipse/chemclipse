@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -113,7 +114,7 @@ public class QuantitationDocumentPageESTD extends WizardPage {
 
 	private Combo createComboCompoundNames(Composite parent) {
 
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		Combo combo = EnhancedCombo.create(parent, SWT.READ_ONLY);
 		//
 		if(quantitationDatabase != null) {
 			List<String> quantitationCompoundNames = quantitationDatabase.getCompoundNames();
@@ -144,7 +145,7 @@ public class QuantitationDocumentPageESTD extends WizardPage {
 
 	private Combo createComboTargetNames(Composite parent) {
 
-		Combo combo = new Combo(parent, SWT.NONE);
+		Combo combo = EnhancedCombo.create(parent, SWT.NONE);
 		if(peakTargetNames.size() > 0) {
 			combo.setItems(peakTargetNames.toArray(new String[peakTargetNames.size()]));
 		}

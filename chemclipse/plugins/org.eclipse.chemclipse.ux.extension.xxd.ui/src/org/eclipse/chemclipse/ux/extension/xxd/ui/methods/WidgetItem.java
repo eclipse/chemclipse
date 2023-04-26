@@ -18,12 +18,12 @@ import java.io.File;
 import org.eclipse.chemclipse.support.settings.ComboSettingsProperty.ComboSupplier;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.support.settings.validation.InputValidator;
 import org.eclipse.chemclipse.support.text.ILabel;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.AdapterLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
@@ -276,15 +276,8 @@ public class WidgetItem {
 
 	private ComboViewer createGenericCombo(Composite parent, ComboSupplier<?> comboSupplier) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
-		/*
-		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
-		 */
-		if(OperatingSystemUtils.isLinux()) {
-			combo.setBackground(combo.getBackground());
-		}
-		//
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AdapterLabelProvider());
 		combo.setToolTipText(inputValue.getDescription());
@@ -421,15 +414,8 @@ public class WidgetItem {
 
 	private ComboViewer createLabeledEnumComboViewerWidget(Composite parent, Enum<?>[] input) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
-		/*
-		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
-		 */
-		if(OperatingSystemUtils.isLinux()) {
-			combo.setBackground(combo.getBackground());
-		}
-		//
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 

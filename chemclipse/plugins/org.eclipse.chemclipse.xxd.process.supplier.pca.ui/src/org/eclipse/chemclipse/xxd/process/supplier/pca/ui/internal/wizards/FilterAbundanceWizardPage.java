@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.wizards;
 
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.filters.AbstractFilter;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.filters.AbundanceFilter;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.filters.IFilter.DataTypeProcessing;
@@ -88,7 +89,7 @@ public class FilterAbundanceWizardPage extends WizardPage implements IFilterWiza
 		GridDataFactory.swtDefaults().grab(true, false).align(SWT.FILL, SWT.CENTER).applyTo(compareComposite);
 		compareComposite.setLayout(new GridLayout(3, false));
 		label = new Label(compareComposite, SWT.None);
-		Combo combo = new Combo(compareComposite, SWT.READ_ONLY);
+		Combo combo = EnhancedCombo.create(compareComposite, SWT.READ_ONLY);
 		combo.add("greater than");
 		combo.add("less than");
 		combo.select(0);

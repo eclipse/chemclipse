@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.rcp.app.ui.preferences;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.rcp.app.profiles.Profiles;
+import org.eclipse.chemclipse.rcp.app.ui.Activator;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferencePageContainer;
@@ -34,11 +39,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.rcp.app.profiles.Profiles;
-import org.eclipse.chemclipse.rcp.app.ui.Activator;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
-
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	private static final Logger logger = Logger.getLogger(PreferencePage.class);
@@ -47,6 +47,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	private Text newProfileNameText;
 
 	public PreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("");
@@ -117,7 +118,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		/*
 		 * Load Profile
 		 */
-		availableProfilesCombo = new Combo(composite, SWT.NONE);
+		availableProfilesCombo = EnhancedCombo.create(composite, SWT.NONE);
 		availableProfilesCombo.setItems(getProfileNames());
 		availableProfilesCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//

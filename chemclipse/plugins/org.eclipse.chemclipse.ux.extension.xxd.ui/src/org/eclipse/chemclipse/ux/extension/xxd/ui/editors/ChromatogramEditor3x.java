@@ -146,7 +146,6 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private DataType getDataType() {
 
 		DataType dataType = null;

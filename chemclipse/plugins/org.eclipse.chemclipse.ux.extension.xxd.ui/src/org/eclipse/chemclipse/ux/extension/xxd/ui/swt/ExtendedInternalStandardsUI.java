@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.support.validators.ConcentrationValidator;
@@ -290,7 +291,7 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 
 	private void createTextName(Composite parent) {
 
-		comboName = new ComboViewer(parent, SWT.BORDER);
+		comboName = new EnhancedComboViewer(parent, SWT.BORDER);
 		Combo combo = comboName.getCombo();
 		comboName.setContentProvider(ArrayContentProvider.getInstance());
 		comboName.setLabelProvider(new AbstractLabelProvider() {

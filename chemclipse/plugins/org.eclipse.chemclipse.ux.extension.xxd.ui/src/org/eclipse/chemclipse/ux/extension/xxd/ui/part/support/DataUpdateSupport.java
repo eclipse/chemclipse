@@ -220,7 +220,6 @@ public class DataUpdateSupport {
 		fireUpdate(topic, objects);
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void handleCloseEvent(Event event, String[] properties) {
 
 		/*

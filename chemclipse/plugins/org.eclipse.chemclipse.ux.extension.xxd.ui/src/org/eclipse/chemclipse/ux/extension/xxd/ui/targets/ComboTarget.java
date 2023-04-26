@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.targets.TargetListUtil;
 import org.eclipse.chemclipse.model.targets.TargetValidator;
 import org.eclipse.chemclipse.model.updates.ITargetUpdateListener;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.core.runtime.IStatus;
@@ -107,7 +108,7 @@ public class ComboTarget extends Composite {
 
 	private Combo createCombo(Composite parent) {
 
-		Combo combo = new Combo(parent, SWT.NONE);
+		Combo combo = EnhancedCombo.create(parent, SWT.NONE);
 		combo.setText("");
 		combo.setToolTipText("Select a target or type in a new substance name.");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.csd.converter.ui.wizards;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
@@ -41,6 +42,7 @@ public class ImportDirectoryWizardPage extends WizardPage {
 	private Text textDirectory;
 
 	public ImportDirectoryWizardPage(String pageName, String title, ImageDescriptor titleImage) {
+
 		super(pageName, title, titleImage);
 		converterIds = new HashMap<String, String>();
 		converterIds.put(CONVERTER_LABEL_XY, CONVERTER_ID_XY);
@@ -70,7 +72,7 @@ public class ImportDirectoryWizardPage extends WizardPage {
 		GridData gridDataCombo = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataCombo.grabExcessHorizontalSpace = true;
 		gridDataCombo.horizontalSpan = 2;
-		comboConverter = new Combo(container, SWT.NONE);
+		comboConverter = EnhancedCombo.create(container, SWT.NONE);
 		comboConverter.select(1);
 		comboConverter.setItems(new String[]{CONVERTER_LABEL_XY, CONVERTER_LABEL_OCB});
 		comboConverter.setLayoutData(gridDataCombo);

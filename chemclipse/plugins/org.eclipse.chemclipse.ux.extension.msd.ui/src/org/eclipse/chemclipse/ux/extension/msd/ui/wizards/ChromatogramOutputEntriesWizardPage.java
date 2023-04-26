@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 import org.eclipse.chemclipse.converter.model.ChromatogramOutputEntry;
 import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -108,7 +109,7 @@ public class ChromatogramOutputEntriesWizardPage extends WizardPage {
 		 * Output converter combo box.
 		 */
 		String[] filterNames = converterSupport.getFilterNames(IConverterSupport.EXPORT_SUPPLIER);
-		chromatogramConverterComboBox = new Combo(composite, SWT.NONE);
+		chromatogramConverterComboBox = EnhancedCombo.create(composite, SWT.NONE);
 		chromatogramConverterComboBox.setItems(filterNames);
 		chromatogramConverterComboBox.setLayoutData(gridData);
 		/*

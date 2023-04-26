@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.chemclipse.support.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.internal.provider.ProjectContentProvider;
 import org.eclipse.chemclipse.support.ui.internal.provider.ProjectLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -110,7 +111,7 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 		 * Existing projects
 		 */
 		String[] items = getProjectItems();
-		comboExistingProjects = new Combo(composite, SWT.READ_ONLY);
+		comboExistingProjects = EnhancedCombo.create(composite, SWT.READ_ONLY);
 		comboExistingProjects.setItems(items);
 		comboExistingProjects.setLayoutData(gridData);
 		comboExistingProjects.addSelectionListener(new SelectionAdapter() {

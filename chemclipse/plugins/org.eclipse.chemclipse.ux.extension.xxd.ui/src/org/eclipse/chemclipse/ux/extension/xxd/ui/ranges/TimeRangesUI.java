@@ -21,8 +21,8 @@ import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TimeRangeInputValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTimeRanges;
@@ -166,15 +166,8 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 
 	private ComboViewer createComboViewer(Composite composite) {
 
-		ComboViewer comboViewer = new ComboViewer(composite, SWT.READ_ONLY);
-		/*
-		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
-		 */
+		ComboViewer comboViewer = new EnhancedComboViewer(composite, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
-		if(OperatingSystemUtils.isLinux()) {
-			combo.setBackground(combo.getBackground());
-		}
-		//
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 

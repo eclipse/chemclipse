@@ -793,7 +793,6 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		return isChromatogramActive() ? targetListChromatogram : targetListOther;
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void updateOnFocus() {
 
 		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
