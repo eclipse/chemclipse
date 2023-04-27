@@ -13,16 +13,15 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.converter;
 
 import java.io.File;
+import java.io.FileInputStream;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.SpecificationValidator;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 public class ChromatogramMagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
 
@@ -38,21 +37,26 @@ public class ChromatogramMagicNumberMatcher extends AbstractMagicNumberMatcher i
 			if(!checkFileExtension(file, ".mzML")) {
 				return isValidFormat;
 			}
-			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			Document document = documentBuilder.parse(file);
-			NodeList root = document.getElementsByTagName("mzML");
-			if(root.getLength() != 1) {
-				return isValidFormat;
-			}
-			NodeList chromatogramList = document.getElementsByTagName("chromatogramList");
-			if(chromatogramList.getLength() > 0) {
-				Element element = (Element)chromatogramList.item(0);
-				int chromatogramCount = Integer.parseInt(element.getAttribute("count"));
-				if(chromatogramCount > 0) {
-					isValidFormat = true;
+			XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+			XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(new FileInputStream(file));
+			boolean hasChromatogramList = false;
+			boolean hasRootElement = false;
+			while(xmlStreamReader.hasNext()) {
+				int eventType = xmlStreamReader.next();
+				if(eventType == XMLStreamConstants.START_ELEMENT) {
+					String elementName = xmlStreamReader.getLocalName();
+					if(elementName.equals("mzML")) {
+						hasRootElement = true;
+					} else if(elementName.equals("chromatogramList")) {
+						hasChromatogramList = true;
+					}
+					if(hasRootElement && hasChromatogramList) {
+						isValidFormat = true;
+						break;
+					}
 				}
 			}
+			xmlStreamReader.close();
 		} catch(Exception e) {
 			// fail silently
 		}
