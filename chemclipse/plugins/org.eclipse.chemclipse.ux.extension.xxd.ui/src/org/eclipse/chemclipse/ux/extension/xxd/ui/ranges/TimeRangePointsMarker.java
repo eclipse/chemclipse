@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip Wenig - initial API and implementation
+ * Lorenz Gerber - add draw line for y selection
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
@@ -55,6 +56,7 @@ public class TimeRangePointsMarker extends AbstractBaseChartPaintListener implem
 					 */
 					Point point = pointSelection.get(i);
 					int x = point.x;
+					int y = point.y;
 					if(x > 0) {
 						GC gc = e.gc;
 						Color colorBackground = gc.getBackground();
@@ -63,6 +65,7 @@ public class TimeRangePointsMarker extends AbstractBaseChartPaintListener implem
 						gc.setForeground(Colors.DARK_GRAY);
 						gc.setLineStyle(SWT.LINE_DASHDOT);
 						gc.drawLine(x, 0, x, e.height);
+						gc.drawLine(0, y, e.width, y);
 						//
 						String label = getLabel(i, last);
 						Point labelSize = gc.textExtent(label);
