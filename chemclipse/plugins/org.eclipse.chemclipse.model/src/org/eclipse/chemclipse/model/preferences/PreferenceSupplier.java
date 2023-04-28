@@ -15,7 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.model.Activator;
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
+import org.eclipse.chemclipse.model.support.HeaderUtil;
 import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -48,7 +50,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_ION_ROUND_METHOD = IonRoundMethod.DEFAULT.name();
 	public static final String P_SKIP_PEAK_WIDTH_CHECK = "skipPeakWidthCheck";
 	public static final boolean DEF_SKIP_PEAK_WIDTH_CHECK = false;
-	//
+	/*
+	 * Separation Columns
+	 */
+	public static final String P_PARSE_SEPARATION_COLUMN_FROM_HEADER = "parseSeparationColumnFromHeader";
+	public static final boolean DEF_PARSE_SEPARATION_COLUMN_FROM_HEADER = true;
+	public static final String P_SEPARATION_COLUMN_HEADER_FIELD = "separationColumnHeaderField";
+	public static final String DEF_SEPARATION_COLUMN_HEADER_FIELD = HeaderField.MISC_INFO.name();
 	public static final String P_SEPARATION_COLUMN_MAPPINGS = "separationColumnMappings";
 	public static final String DEF_SEPARATION_COLUMN_MAPPINGS = "";
 	/*
@@ -103,6 +111,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_BEST_TARGET_LIBRARY_FIELD, DEF_BEST_TARGET_LIBRARY_FIELD);
 		defaultValues.put(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD);
 		defaultValues.put(P_SKIP_PEAK_WIDTH_CHECK, Boolean.toString(DEF_SKIP_PEAK_WIDTH_CHECK));
+		defaultValues.put(P_PARSE_SEPARATION_COLUMN_FROM_HEADER, Boolean.toString(DEF_PARSE_SEPARATION_COLUMN_FROM_HEADER));
+		defaultValues.put(P_SEPARATION_COLUMN_HEADER_FIELD, DEF_SEPARATION_COLUMN_HEADER_FIELD);
 		defaultValues.put(P_SEPARATION_COLUMN_MAPPINGS, DEF_SEPARATION_COLUMN_MAPPINGS);
 		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
 		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
@@ -255,9 +265,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		INSTANCE().put(P_LIST_PATH_EXPORT, filterPath);
 	}
 
+	public static boolean isParseSeparationColumnFromHeader() {
+
+		return INSTANCE().getBoolean(P_PARSE_SEPARATION_COLUMN_FROM_HEADER, DEF_PARSE_SEPARATION_COLUMN_FROM_HEADER);
+	}
+
+	public static HeaderField getSeparationColumnHeaderField() {
+
+		return HeaderUtil.getHeaderField(INSTANCE().get(P_SEPARATION_COLUMN_HEADER_FIELD, DEF_SEPARATION_COLUMN_HEADER_FIELD));
+	}
+
 	public static String getSeparationColumnMappings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_SEPARATION_COLUMN_MAPPINGS, DEF_SEPARATION_COLUMN_MAPPINGS);
+		return INSTANCE().get(P_SEPARATION_COLUMN_MAPPINGS, DEF_SEPARATION_COLUMN_MAPPINGS);
 	}
 }

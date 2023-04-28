@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,13 +24,20 @@ import java.util.Map;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 
-public class SeparationColumnMapping extends HashMap<String, String> {
+public class SeparationColumnMapping extends HashMap<String, SeparationColumnType> {
 
-	private static final long serialVersionUID = -7471629528422149178L;
 	private static final Logger logger = Logger.getLogger(SeparationColumnMapping.class);
+	private static final long serialVersionUID = 5357306927108529230L;
+	//
+	public static final String DESCRIPTION = "Separation Column Mapping";
+	public static final String FILE_EXTENSION = ".scm";
+	public static final String FILE_NAME = DESCRIPTION.replaceAll("\\s", "") + FILE_EXTENSION;
+	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
+	public static final String FILTER_NAME = DESCRIPTION + " (*" + FILE_EXTENSION + ")";
 	//
 	public static final String SEPARATOR_TOKEN = ";";
 	public static final String SEPARATOR_ENTRY = "|";
+	public static final String LINE_DELIMITER = "\n";
 
 	public void load(String items) {
 
@@ -47,15 +54,15 @@ public class SeparationColumnMapping extends HashMap<String, String> {
 		return extractSettings(this);
 	}
 
-	public String extractSettings(Map<String, String> settings) {
+	public String extractSettings(Map<String, SeparationColumnType> settings) {
 
 		StringBuilder builder = new StringBuilder();
-		Iterator<Map.Entry<String, String>> iterator = settings.entrySet().iterator();
+		Iterator<Map.Entry<String, SeparationColumnType>> iterator = settings.entrySet().iterator();
 		while(iterator.hasNext()) {
-			Map.Entry<String, String> setting = iterator.next();
+			Map.Entry<String, SeparationColumnType> setting = iterator.next();
 			builder.append(setting.getKey());
 			builder.append(SEPARATOR_ENTRY);
-			builder.append(setting.getValue());
+			builder.append(setting.getValue().name());
 			if(iterator.hasNext()) {
 				builder.append(SEPARATOR_TOKEN);
 			}
@@ -84,11 +91,10 @@ public class SeparationColumnMapping extends HashMap<String, String> {
 
 	public boolean exportItems(File file) {
 
-		try {
-			PrintWriter printWriter = new PrintWriter(file);
-			printWriter.println(extractSettings(this));
+		try (PrintWriter printWriter = new PrintWriter(file)) {
+			String settings = extractSettings(this);
+			printWriter.println(settings.replace(SEPARATOR_TOKEN, OperatingSystemUtils.getLineDelimiter()));
 			printWriter.flush();
-			printWriter.close();
 			return true;
 		} catch(FileNotFoundException e) {
 			logger.warn(e);
@@ -112,14 +118,19 @@ public class SeparationColumnMapping extends HashMap<String, String> {
 
 		String[] values = item.split("\\" + SEPARATOR_ENTRY);
 		if(values.length == 2) {
-			put(values[0].trim(), values[1].trim());
+			try {
+				SeparationColumnType separationColumnType = SeparationColumnType.valueOf(values[1].trim());
+				put(values[0].trim(), separationColumnType);
+			} catch(Exception e) {
+				logger.warn(e);
+			}
 		}
 	}
 
 	private String[] parseString(String stringList) {
 
 		String lineDelimiterSpecific = OperatingSystemUtils.getLineDelimiter();
-		String lineDelimiterGeneric = "\n";
+		String lineDelimiterGeneric = LINE_DELIMITER;
 		//
 		String[] decodedArray;
 		if(stringList.contains(SEPARATOR_TOKEN)) {
@@ -132,6 +143,7 @@ public class SeparationColumnMapping extends HashMap<String, String> {
 			decodedArray = new String[1];
 			decodedArray[0] = stringList;
 		}
+		//
 		return decodedArray;
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramConvert
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverter;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
+import org.eclipse.chemclipse.model.support.ChromatogramColumnSupport;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,6 +27,7 @@ public class ChromatogramConverterCSD extends AbstractChromatogramConverter<IChr
 	private static IChromatogramConverter<IChromatogramPeakCSD, IChromatogramCSD> instance = null;
 
 	public ChromatogramConverterCSD() {
+
 		super("org.eclipse.chemclipse.csd.converter.chromatogramSupplier", IChromatogramCSD.class, DataCategory.CSD);
 	}
 
@@ -41,5 +43,8 @@ public class ChromatogramConverterCSD extends AbstractChromatogramConverter<IChr
 	@Override
 	public void postProcessChromatogram(IProcessingInfo<IChromatogramCSD> processingInfo, IProgressMonitor monitor) {
 
+		if(processingInfo != null && processingInfo.getProcessingResult() instanceof IChromatogramCSD chromatogramCSD) {
+			ChromatogramColumnSupport.parseSeparationColumn(chromatogramCSD);
+		}
 	}
 }

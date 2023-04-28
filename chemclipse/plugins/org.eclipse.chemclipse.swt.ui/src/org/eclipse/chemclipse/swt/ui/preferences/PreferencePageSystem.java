@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.preferences;
 
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.targets.LibraryField;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.swt.ui.Activator;
 import org.eclipse.chemclipse.swt.ui.fieldeditors.ColumnMappingFieldEditor;
@@ -63,8 +65,13 @@ public class PreferencePageSystem extends FieldEditorPreferencePage implements I
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SKIP_PEAK_WIDTH_CHECK, "Skip Peak Width Check (Only enable this in edge cases!)", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new ColumnMappingFieldEditor(PreferenceSupplier.P_SEPARATION_COLUMN_MAPPINGS, "Separation Column Mappings", getFieldEditorParent()));
-		//
+		addField(new LabelFieldEditor("Assignment Separation Columns (Chromatogram Import)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_PARSE_SEPARATION_COLUMN_FROM_HEADER, "Parse Separarion Column", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_SEPARATION_COLUMN_HEADER_FIELD, "Header Field", HeaderField.getOptions(), getFieldEditorParent()));
+		addField(new ColumnMappingFieldEditor(PreferenceSupplier.P_SEPARATION_COLUMN_MAPPINGS, "Mappings", getFieldEditorParent()));
+		/*
+		 * Clear the Ion Round Method Cache on change.
+		 */
 		preferenceStore.addPropertyChangeListener(new IPropertyChangeListener() {
 
 			@Override

@@ -332,28 +332,19 @@ public class ChromatogramDataSupport {
 		//
 		switch(headerField) {
 			case NAME:
-				String name = chromatogram.getName();
-				if(name != null && !name.isEmpty()) {
-					description = name;
-				}
+				description = chromatogram.getName();
 				break;
 			case DATA_NAME:
-				String dataName = chromatogram.getDataName();
-				if(dataName != null && !dataName.isEmpty()) {
-					description = dataName;
-				}
+				description = chromatogram.getDataName();
 				break;
 			case SHORT_INFO:
-				String shortInfo = chromatogram.getShortInfo();
-				if(shortInfo != null && !shortInfo.isEmpty()) {
-					description = shortInfo;
-				}
+				description = chromatogram.getShortInfo();
 				break;
 			case SAMPLE_GROUP:
-				String sampleGroup = chromatogram.getSampleGroup();
-				if(sampleGroup != null && !sampleGroup.isEmpty()) {
-					description = sampleGroup;
-				}
+				description = chromatogram.getSampleGroup();
+				break;
+			case MISC_INFO:
+				description = chromatogram.getMiscInfo();
 				break;
 			default:
 				// Do nothing, see check default.
@@ -362,6 +353,10 @@ public class ChromatogramDataSupport {
 		/*
 		 * Check default
 		 */
+		if(description != null && description.isBlank()) {
+			description = null;
+		}
+		//
 		if(description == null) {
 			if(index == -1) {
 				description = "Chromatogram";

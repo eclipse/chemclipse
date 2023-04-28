@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.swt.ui.internal.provider;
 
 import java.util.Map;
 
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -41,19 +42,22 @@ public class ColumMappingLabelProvider extends AbstractChemClipseLabelProvider {
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof Map.Entry) {
-			Map.Entry setting = (Map.Entry)element;
+		if(element instanceof Map.Entry setting) {
 			switch(columnIndex) {
 				case 0:
 					text = setting.getKey().toString();
 					break;
 				case 1:
-					text = setting.getValue().toString();
+					Object object = setting.getValue();
+					if(object instanceof SeparationColumnType separationColumnType) {
+						text = separationColumnType.label();
+					} else {
+						text = object.toString();
+					}
 					break;
 				default:
 					text = "n.v.";

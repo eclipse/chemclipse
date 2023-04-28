@@ -1,8 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
- * All rights reserved.
- * This program and the accompanying materials are made available under the
+ * All rights reserved. This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
@@ -20,11 +19,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.io.AMDISConverter;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.io.MassLibConverter;
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverter;
-import org.eclipse.chemclipse.converter.model.SeparationColumnMapping;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
-import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -32,6 +28,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
+import org.eclipse.chemclipse.model.support.ChromatogramColumnSupport;
 import org.eclipse.chemclipse.model.support.LibraryInformationSupport;
 import org.eclipse.chemclipse.msd.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -64,18 +61,21 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 	@Override
 	public void postProcessChromatogram(IProcessingInfo<IChromatogramMSD> processingInfo, IProgressMonitor monitor) {
 
-		/*
-		 * TODO: Create an extension point for the post processing supplier!
-		 */
-		if(processingInfo != null && processingInfo.getProcessingResult() instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = processingInfo.getProcessingResult();
+		if(processingInfo != null && processingInfo.getProcessingResult() instanceof IChromatogramMSD chromatogramMSD) {
+			ChromatogramColumnSupport.parseSeparationColumn(chromatogramMSD);
+			parseAdditionalData(chromatogramMSD);
+		}
+	}
+
+	private void parseAdditionalData(IChromatogramMSD chromatogramMSD) {
+
+		if(chromatogramMSD != null) {
 			File file = chromatogramMSD.getFile();
 			File directory = getDirectory(file);
 			if(directory != null && directory.exists()) {
 				parseCalibrationMassLib(chromatogramMSD, directory);
 				parseTargetMassLib(chromatogramMSD, directory);
 				parseCalibrationAMDIS(chromatogramMSD, directory);
-				parseSeparationColumn(chromatogramMSD);
 			}
 		}
 	}
@@ -178,27 +178,6 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 					chromatogramMSD.getSeparationColumnIndices().putAll(separationColumnIndices);
 				} catch(TypeCastException e) {
 					logger.warn(e);
-				}
-			}
-		}
-	}
-
-	private void parseSeparationColumn(IChromatogramMSD chromatogramMSD) {
-
-		if(PreferenceSupplier.isParseSeparationColumnFromHeader()) {
-			/*
-			 * The mappings are stored system wide.
-			 */
-			SeparationColumnMapping separationColumnMapping = new SeparationColumnMapping();
-			separationColumnMapping.load(org.eclipse.chemclipse.model.preferences.PreferenceSupplier.getSeparationColumnMappings());
-			//
-			String miscInfo = chromatogramMSD.getMiscInfo();
-			exitloop:
-			for(Map.Entry<String, String> column : separationColumnMapping.entrySet()) {
-				if(miscInfo.contains(column.getKey())) {
-					ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(column.getValue());
-					chromatogramMSD.getSeparationColumnIndices().setSeparationColumn(separationColumn);
-					break exitloop;
 				}
 			}
 		}

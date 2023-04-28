@@ -58,12 +58,7 @@ public class ColumMappingEditingSupport extends EditingSupport {
 		if(element instanceof Map.Entry setting) {
 			switch(column) {
 				case ColumMappingLabelProvider.SEPRATION_COLUMN:
-					for(int i = 0; i < columnTypes.length; i++) {
-						if(columnTypes[i].equals(setting.getValue())) {
-							return i;
-						}
-					}
-					return 0;
+					return getIndexColumnType(setting.getValue().toString());
 			}
 		}
 		return false;
@@ -76,10 +71,25 @@ public class ColumMappingEditingSupport extends EditingSupport {
 		if(element instanceof Map.Entry setting) {
 			switch(column) {
 				case ColumMappingLabelProvider.SEPRATION_COLUMN:
-					setting.setValue(columnTypes[(int)value]);
+					try {
+						setting.setValue(SeparationColumnType.valueOf(columnTypes[(int)value]));
+					} catch(Exception e) {
+						setting.setValue(SeparationColumnType.DEFAULT);
+					}
 					break;
 			}
 			tableViewer.refresh();
 		}
+	}
+
+	private int getIndexColumnType(String value) {
+
+		for(int i = 0; i < columnTypes.length; i++) {
+			if(columnTypes[i].equals(value)) {
+				return i;
+			}
+		}
+		//
+		return 0; // Default
 	}
 }

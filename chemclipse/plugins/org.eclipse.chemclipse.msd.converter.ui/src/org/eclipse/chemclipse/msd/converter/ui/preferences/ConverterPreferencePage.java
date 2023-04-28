@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2022 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,10 +49,6 @@ public class ConverterPreferencePage extends FieldEditorPreferencePage implement
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_AMDIS_CHROMATOGRAM_NAME, "Use Chromatogram Name", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceSupplier.P_AMDIS_DEFAULT_NAME, "Default Name", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_PARSE_AMDIS_RETENTION_INDEX_DATA, "Parse Retention Index Data", getFieldEditorParent()));
-		//
-		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Extract Separation Column (Header - Misc Info)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_PARSE_SEPARATION_COLUMN_FROM_HEADER, "Parse Separation Column from Header", getFieldEditorParent()));
 	}
 
 	@Override
