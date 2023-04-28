@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,13 +14,10 @@ package org.eclipse.chemclipse.model.columns;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 
 public class SeparationColumnFactory {
 
-	private static final Logger logger = Logger.getLogger(SeparationColumnType.class);
-	//
 	private static List<ISeparationColumn> separationColumns;
 	private static SeparationColumnMapping separationColumnMapping;
 
@@ -101,14 +98,7 @@ public class SeparationColumnFactory {
 		 */
 		SeparationColumnType separationColumnType = SeparationColumnType.DEFAULT;
 		if(name != null) {
-			String value = separationColumnMapping.get(name);
-			if(value != null) {
-				try {
-					separationColumnType = SeparationColumnType.valueOf(value);
-				} catch(Exception e) {
-					logger.warn(e);
-				}
-			}
+			separationColumnType = separationColumnMapping.getOrDefault(name, SeparationColumnType.DEFAULT);
 		}
 		//
 		return separationColumnType;
@@ -141,7 +131,7 @@ public class SeparationColumnFactory {
 	private static void addColumnMapping(SeparationColumnMapping separationColumnMapping, String name, SeparationColumnType separationColumnType) {
 
 		if(!separationColumnMapping.containsKey(name)) {
-			separationColumnMapping.put(name, separationColumnType.name());
+			separationColumnMapping.put(name, separationColumnType);
 		}
 	}
 }

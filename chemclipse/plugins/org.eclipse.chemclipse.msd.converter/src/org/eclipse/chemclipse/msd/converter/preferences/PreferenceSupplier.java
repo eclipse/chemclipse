@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,10 +27,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_REFERENCE_IDENTIFIER_PREFIX = "referenceIdentifierPrefix";
 	public static final String DEF_REFERENCE_IDENTIFIER_PREFIX = "";
 	/*
-	 * TODO: Create an extension point for the post processing supplier!
-	 * See ChromatogramConverterMSD
-	 */
-	/*
 	 * MassLib
 	 */
 	public static final String P_USE_MASSLIB_CHROMATOGRAM_NAME = "useMassLibChromatogramName";
@@ -50,11 +46,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_AMDIS_DEFAULT_NAME = "calibration";
 	public static final String P_PARSE_AMDIS_RETENTION_INDEX_DATA = "parseAMDISRetentionIndexData";
 	public static final boolean DEF_PARSE_AMDIS_RETENTION_INDEX_DATA = true;
-	/*
-	 * Separation Column
-	 */
-	public static final String P_PARSE_SEPARATION_COLUMN_FROM_HEADER = "parseSeparationColumnFromHeader";
-	public static final boolean DEF_PARSE_SEPARATION_COLUMN_FROM_HEADER = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -93,8 +84,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_USE_AMDIS_CHROMATOGRAM_NAME, Boolean.toString(DEF_USE_AMDIS_CHROMATOGRAM_NAME));
 		defaultValues.put(P_AMDIS_DEFAULT_NAME, DEF_AMDIS_DEFAULT_NAME);
 		defaultValues.put(P_PARSE_AMDIS_RETENTION_INDEX_DATA, Boolean.toString(DEF_PARSE_AMDIS_RETENTION_INDEX_DATA));
-		//
-		defaultValues.put(P_PARSE_SEPARATION_COLUMN_FROM_HEADER, Boolean.toString(DEF_PARSE_SEPARATION_COLUMN_FROM_HEADER));
 		//
 		return defaultValues;
 	}
@@ -157,11 +146,5 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_PARSE_AMDIS_RETENTION_INDEX_DATA, DEF_PARSE_AMDIS_RETENTION_INDEX_DATA);
-	}
-
-	public static boolean isParseSeparationColumnFromHeader() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_PARSE_SEPARATION_COLUMN_FROM_HEADER, DEF_PARSE_SEPARATION_COLUMN_FROM_HEADER);
 	}
 }
