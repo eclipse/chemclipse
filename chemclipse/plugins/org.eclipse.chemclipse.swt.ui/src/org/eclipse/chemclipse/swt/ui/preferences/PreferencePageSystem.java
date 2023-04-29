@@ -66,7 +66,7 @@ public class PreferencePageSystem extends FieldEditorPreferencePage implements I
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Assignment Separation Columns (Chromatogram Import)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_PARSE_SEPARATION_COLUMN_FROM_HEADER, "Parse Separarion Column", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_PARSE_SEPARATION_COLUMN_FROM_HEADER, "Parse Separation Column", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_SEPARATION_COLUMN_HEADER_FIELD, "Header Field", HeaderField.getOptions(), getFieldEditorParent()));
 		addField(new ColumnMappingFieldEditor(PreferenceSupplier.P_SEPARATION_COLUMN_MAPPINGS, "Mappings", getFieldEditorParent()));
 		/*
