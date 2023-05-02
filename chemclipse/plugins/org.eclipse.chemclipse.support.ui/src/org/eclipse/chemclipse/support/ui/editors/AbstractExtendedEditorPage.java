@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -48,12 +47,12 @@ public abstract class AbstractExtendedEditorPage implements IExtendedEditorPage 
 	 * @param fillBody
 	 */
 	public AbstractExtendedEditorPage(String pageName, Composite container, boolean fillBody) {
+
 		/*
 		 * Create the parent composite.
 		 */
 		control = new Composite(container, SWT.NONE);
 		control.setLayout(new FillLayout());
-		control.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		/*
 		 * Forms API
 		 */
