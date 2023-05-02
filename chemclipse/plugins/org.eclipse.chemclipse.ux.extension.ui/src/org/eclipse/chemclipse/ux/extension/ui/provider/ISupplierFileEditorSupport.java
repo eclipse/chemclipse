@@ -75,6 +75,7 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 			 */
 			boolean openEditor = true;
 			if(file != null) {
+				boolean sourceIsDirectory = file.isDirectory();
 				if(!PreferenceSupplier.isOpenEditorMultipleTimes()) {
 					List<MPart> parts = modelService.findElements(application, null, MPart.class, null);
 					if(parts != null) {
@@ -83,9 +84,22 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 							Object editor = part.getObject();
 							if(editor instanceof IChromatogramEditor chromatogramEditor) {
 								File fileEditor = chromatogramEditor.getChromatogramSelection().getChromatogram().getFile();
-								if(file.equals(fileEditor)) {
-									openEditor = false;
-									break exitloop;
+								if(sourceIsDirectory) {
+									/*
+									 * Some chromatograms are stored in directories.
+									 */
+									if(fileEditor.getAbsolutePath().startsWith(file.getAbsolutePath())) {
+										openEditor = false;
+										break exitloop;
+									}
+								} else {
+									/*
+									 * Compare File
+									 */
+									if(fileEditor.equals(file)) {
+										openEditor = false;
+										break exitloop;
+									}
 								}
 							}
 						}
