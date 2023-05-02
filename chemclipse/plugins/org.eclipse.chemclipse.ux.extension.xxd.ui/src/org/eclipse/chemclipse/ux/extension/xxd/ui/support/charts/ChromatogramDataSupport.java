@@ -38,6 +38,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
+import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class ChromatogramDataSupport {
@@ -72,6 +73,8 @@ public class ChromatogramDataSupport {
 			return "[CSD]";
 		} else if(chromatogram instanceof IChromatogramWSD) {
 			return "[WSD]";
+		} else if(chromatogram instanceof IChromatogramISD) {
+			return "[ISD]";
 		}
 		return "";
 	}
@@ -309,6 +312,7 @@ public class ChromatogramDataSupport {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		HeaderField referencesLabel = HeaderUtil.getHeaderField(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL));
+		//
 		return getReferenceLabel(chromatogram, referencesLabel, index, addTypeInfo);
 	}
 

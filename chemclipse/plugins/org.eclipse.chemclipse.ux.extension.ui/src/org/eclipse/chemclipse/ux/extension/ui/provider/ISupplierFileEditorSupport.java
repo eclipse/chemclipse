@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -26,7 +27,10 @@ import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
+import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
@@ -64,69 +68,101 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 		EModelService modelService = Activator.getDefault().getModelService();
 		MApplication application = Activator.getDefault().getApplication();
 		EPartService partService = Activator.getDefault().getPartService();
-		/*
-		 * Fix for: "Application does not have an active window"
-		 * in org.eclipse.e4.ui.internal.workbench.ApplicationPartServiceImpl
-		 */
-		MWindow window = application.getChildren().get(0);
-		application.getContext().set("activeChildContext", window.getContext()); // EclipseContext.ACTIVE_CHILD
-		/*
-		 * Get the editor part stack.
-		 */
-		MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
-		/*
-		 * Create the input part and prepare it.
-		 */
-		MPart part = MBasicFactory.INSTANCE.createPart();
-		part.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
-		part.setElementId(elementId);
-		part.setContributionURI(contributionURI);
-		/*
-		 * File or chromatogram/mass spectra are maybe null.
-		 */
-		if(file == null) {
-			if(object != null) {
-				part.setObject(object);
-				if(object instanceof IChromatogram) {
-					String type = "";
-					if(object instanceof IChromatogramMSD) {
-						type = " [MSD]";
-					} else if(object instanceof IChromatogramCSD) {
-						type = " [CSD]";
-					} else if(object instanceof IChromatogramWSD) {
-						type = " [WSD]";
-					}
-					part.setLabel(((IChromatogram)object).getName() + type);
-				} else if(object instanceof IMassSpectra) {
-					part.setLabel(((IMassSpectra)object).getName());
-				} else if(object instanceof ISpectrumXIR) {
-					part.setLabel("FTIR");
-				} else if(object instanceof IMeasurement) {
-					part.setLabel(((IMeasurement)object).getDataName());
-				}
-			} else {
-				part.setObject(null);
-				part.setLabel("No valid chromatogram/mass spectra data");
-			}
-		} else {
-			/*
-			 * Get the file to load via the map.
-			 */
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put(EditorSupport.MAP_FILE, file.getAbsolutePath());
-			map.put(EditorSupport.MAP_BATCH, batch);
-			part.setObject(map);
-			part.setLabel(file.getName());
-		}
 		//
-		part.setIconURI(iconURI);
-		part.setTooltip(tooltip);
-		part.setCloseable(true);
-		/*
-		 * Add it to the stack and show it.
-		 */
-		partStack.getChildren().add(part);
-		partService.showPart(part, PartState.ACTIVATE);
-		((Shell)window.getWidget()).forceFocus();
+		if(modelService != null && application != null && partService != null) {
+			/*
+			 * Check if editor is already open?
+			 */
+			boolean openEditor = true;
+			if(file != null) {
+				if(!PreferenceSupplier.isOpenEditorMultipleTimes()) {
+					List<MPart> parts = modelService.findElements(application, null, MPart.class, null);
+					if(parts != null) {
+						exitloop:
+						for(MPart part : parts) {
+							Object editor = part.getObject();
+							if(editor instanceof IChromatogramEditor chromatogramEditor) {
+								File fileEditor = chromatogramEditor.getChromatogramSelection().getChromatogram().getFile();
+								if(file.equals(fileEditor)) {
+									openEditor = false;
+									break exitloop;
+								}
+							}
+						}
+					}
+				}
+			}
+			/*
+			 * Try to open the editor.
+			 */
+			if(openEditor) {
+				/*
+				 * Fix for: "Application does not have an active window"
+				 * in org.eclipse.e4.ui.internal.workbench.ApplicationPartServiceImpl
+				 */
+				MWindow window = application.getChildren().get(0);
+				application.getContext().set("activeChildContext", window.getContext()); // EclipseContext.ACTIVE_CHILD
+				/*
+				 * Get the editor part stack.
+				 */
+				MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
+				/*
+				 * Create the input part and prepare it.
+				 */
+				MPart part = MBasicFactory.INSTANCE.createPart();
+				part.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
+				part.setElementId(elementId);
+				part.setContributionURI(contributionURI);
+				/*
+				 * File or chromatogram/mass spectra are maybe null.
+				 */
+				if(file == null) {
+					if(object != null) {
+						part.setObject(object);
+						if(object instanceof IChromatogram) {
+							String type = "";
+							if(object instanceof IChromatogramMSD chromatogramMSD) {
+								type = " [MSD]";
+							} else if(object instanceof IChromatogramCSD chromatogramCSD) {
+								type = " [CSD]";
+							} else if(object instanceof IChromatogramWSD chromatogramWSD) {
+								type = " [WSD]";
+							} else if(object instanceof IChromatogramISD chromatogramISD) {
+								type = " [ISD]";
+							}
+							part.setLabel(((IChromatogram)object).getName() + type);
+						} else if(object instanceof IMassSpectra) {
+							part.setLabel(((IMassSpectra)object).getName());
+						} else if(object instanceof ISpectrumXIR) {
+							part.setLabel("FTIR");
+						} else if(object instanceof IMeasurement) {
+							part.setLabel(((IMeasurement)object).getDataName());
+						}
+					} else {
+						part.setObject(null);
+						part.setLabel("No valid chromatogram/mass spectra data");
+					}
+				} else {
+					/*
+					 * Get the file to load via the map.
+					 */
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put(EditorSupport.MAP_FILE, file.getAbsolutePath());
+					map.put(EditorSupport.MAP_BATCH, batch);
+					part.setObject(map);
+					part.setLabel(file.getName());
+				}
+				//
+				part.setIconURI(iconURI);
+				part.setTooltip(tooltip);
+				part.setCloseable(true);
+				/*
+				 * Add it to the stack and show it.
+				 */
+				partStack.getChildren().add(part);
+				partService.showPart(part, PartState.ACTIVATE);
+				((Shell)window.getWidget()).forceFocus();
+			}
+		}
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -44,6 +44,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH, "Selected User Location Path", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_USER_LOCATION_PATH, "User Location", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_OPEN_FIRST_DATA_MATCH_ONLY, "Open First Data Match Only", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_OPEN_EDITOR_MULTIPLE_TIMES, "Open Editor Multiple Times", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Microsoft Windows", getFieldEditorParent()));

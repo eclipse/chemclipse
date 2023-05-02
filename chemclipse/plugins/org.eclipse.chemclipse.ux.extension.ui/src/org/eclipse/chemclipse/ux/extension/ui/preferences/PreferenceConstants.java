@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -34,4 +34,6 @@ public class PreferenceConstants {
 	//
 	public static final String P_OPEN_FIRST_DATA_MATCH_ONLY = "openFirstDataMatchOnly";
 	public static final boolean DEF_OPEN_FIRST_DATA_MATCH_ONLY = true;
+	public static final String P_OPEN_EDITOR_MULTIPLE_TIMES = "openEditorMultipleTimes";
+	public static final boolean DEF_OPEN_EDITOR_MULTIPLE_TIMES = true;
 }

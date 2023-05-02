@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -87,6 +87,12 @@ public class PreferenceSupplier {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		return store.getBoolean(PreferenceConstants.P_OPEN_FIRST_DATA_MATCH_ONLY);
+	}
+
+	public static boolean isOpenEditorMultipleTimes() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getBoolean(PreferenceConstants.P_OPEN_EDITOR_MULTIPLE_TIMES);
 	}
 
 	public static boolean showNetworkShares() {
