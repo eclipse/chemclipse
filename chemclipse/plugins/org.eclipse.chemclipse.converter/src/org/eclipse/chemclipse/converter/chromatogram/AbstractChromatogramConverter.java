@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -119,8 +119,8 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 
 		IProcessingInfo<IChromatogramOverview> processingInfo;
 		Object converter = getChromatogramConverter(converterId, Converter.IMPORT_CONVERTER);
-		if(converter instanceof IChromatogramImportConverter) {
-			processingInfo = ((IChromatogramImportConverter<?>)converter).convertOverview(file, monitor);
+		if(converter instanceof IChromatogramImportConverter<?> chromatogramImportConverter) {
+			processingInfo = chromatogramImportConverter.convertOverview(file, monitor);
 		} else {
 			processingInfo = getNoOverviewImportConverterAvailableProcessingInfo(file);
 		}
@@ -153,8 +153,8 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 
 		IProcessingInfo processingInfo;
 		Object converter = getChromatogramConverter(converterId, Converter.IMPORT_CONVERTER);
-		if(converter instanceof IChromatogramImportConverter) {
-			processingInfo = ((IChromatogramImportConverter<?>)converter).convert(file, monitor);
+		if(converter instanceof IChromatogramImportConverter chromatogramImportConverter) {
+			processingInfo = chromatogramImportConverter.convert(file, monitor);
 		} else {
 			processingInfo = getNoImportConverterAvailableProcessingInfo(file);
 		}
@@ -186,7 +186,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 				 * object must be returned or null.
 				 */
 				Object converter = getChromatogramConverter(converterId, Converter.IMPORT_CONVERTER);
-				if(converter instanceof IChromatogramImportConverter) {
+				if(converter instanceof IChromatogramImportConverter<?> importConverter) {
 					/*
 					 * Why should the method not declare the exceptions that
 					 * could be thrown? Here is the explanation.<br/><br/> Think
@@ -208,7 +208,6 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 					 * approaches have failed null will be returned.<br/><br/> I
 					 * hope it's a little bit more clear now.<br/> eselmeister
 					 */
-					IChromatogramImportConverter<?> importConverter = (IChromatogramImportConverter<?>)converter;
 					if(overview) {
 						/*
 						 * OVERVIEW
@@ -281,8 +280,8 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 
 		IProcessingInfo<File> processingInfo;
 		Object converter = getChromatogramConverter(converterId, Converter.EXPORT_CONVERTER);
-		if(converter instanceof IChromatogramExportConverter chromatogramConverter) {
-			processingInfo = (chromatogramConverter).convert(file, chromatogram, monitor);
+		if(converter instanceof IChromatogramExportConverter chromatogramExportConverter) {
+			processingInfo = chromatogramExportConverter.convert(file, chromatogram, monitor);
 		} else {
 			processingInfo = getNoExportConverterAvailableProcessingInfo(file);
 		}
@@ -317,10 +316,13 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 
 		Object instance = null;
 		if(element != null) {
-			try {
-				instance = element.createExecutableExtension(attribute);
-			} catch(CoreException e) {
-				logger.warn("can't load ChromatogramConverter with id = " + element.getAttribute(Converter.ID) + ", attribute = " + attribute + ": " + e);
+			String value = element.getAttribute(attribute);
+			if(value != null) {
+				try {
+					instance = element.createExecutableExtension(attribute);
+				} catch(CoreException e) {
+					logger.warn("The ChromatogramConverter with the id = '" + element.getAttribute(Converter.ID) + "' and attribute = '" + attribute + "' can't be created -> " + e);
+				}
 			}
 		}
 		return instance;
