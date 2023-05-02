@@ -88,7 +88,8 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	/*
 	 * Some vendors store several chromatograms in one file.
 	 */
-	private final List<IChromatogram<?>> referencedChromatograms;
+	private IChromatogram<?> masterChromatogram = null;
+	private final List<IChromatogram<?>> referencedChromatograms = new ArrayList<>();
 	/*
 	 * Integration entries.
 	 */
@@ -116,7 +117,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		updateSupport = new ArrayList<>(5);
 		editHistory = new EditHistory();
 		baselineModelMap.put(DEFAULT_BASELINE_ID, new BaselineModel(this));
-		referencedChromatograms = new ArrayList<>();
 		chromatogramIntegrationEntries = new ArrayList<>();
 		backgroundIntegrationEntries = new ArrayList<>();
 		method = new TripleQuadMethod();
@@ -639,6 +639,26 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	}
 
 	@Override
+	public IChromatogram<?> getMasterChromatogram() {
+
+		return masterChromatogram;
+	}
+
+	/**
+	 * Sets the master chromatogram. If null is provided, the link
+	 * to the master chromatogram is removed. This method is
+	 * primarily used when adding or removing reference chromatograms.
+	 * 
+	 * @param masterChromatogram
+	 */
+	private void setMasterChromatogram(IChromatogram<?> chromatogram, IChromatogram<?> masterChromatogram) {
+
+		if(chromatogram instanceof AbstractChromatogram<?> abstractChromatogram) {
+			abstractChromatogram.masterChromatogram = masterChromatogram;
+		}
+	}
+
+	@Override
 	public List<IChromatogram<?>> getReferencedChromatograms() {
 
 		return referencedChromatograms;
@@ -647,18 +667,23 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	@Override
 	public void addReferencedChromatogram(IChromatogram<?> chromatogram) {
 
+		setMasterChromatogram(chromatogram, this);
 		referencedChromatograms.add(chromatogram);
 	}
 
 	@Override
 	public void removeReferencedChromatogram(IChromatogram<?> chromatogram) {
 
+		setMasterChromatogram(chromatogram, null);
 		referencedChromatograms.remove(chromatogram);
 	}
 
 	@Override
 	public void removeAllReferencedChromatograms() {
 
+		for(IChromatogram<?> chromatogram : referencedChromatograms) {
+			setMasterChromatogram(chromatogram, null);
+		}
 		referencedChromatograms.clear();
 	}
 

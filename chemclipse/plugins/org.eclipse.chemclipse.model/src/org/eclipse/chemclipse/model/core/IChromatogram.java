@@ -155,6 +155,14 @@ public interface IChromatogram<T extends IPeak> extends SegmentedMeasurement, IM
 	String extractNameFromFile(String nameDefault);
 
 	/**
+	 * Returns the master chromatogram if it is set.
+	 * This method may return null.
+	 * 
+	 * @return {@link IChromatogram}
+	 */
+	IChromatogram<?> getMasterChromatogram();
+
+	/**
 	 * Stores a list of referenced chromatograms.
 	 * Some vendors store more than one chromatogram in one file.
 	 * This should be part of further improvements how to handle this issue.
