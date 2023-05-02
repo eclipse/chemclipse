@@ -45,6 +45,7 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS, "Show Referenced Chromatograms", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_ADD_TYPE_INFO, "Overlay Add Type Info [MSD, ...]", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_SHOW_AREA, "Overlay Show Area", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS, "Overlay Autofocus Profile Settings", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS, "Overlay Autofocus Shift Settings", getFieldEditorParent()));

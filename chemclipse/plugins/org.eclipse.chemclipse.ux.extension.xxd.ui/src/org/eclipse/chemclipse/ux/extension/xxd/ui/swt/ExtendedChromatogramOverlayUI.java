@@ -978,6 +978,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
 		Color color = chromatogramChartSupport.getSeriesColor(chromatogramName, displayType);
 		String displayTypeInfo = " (" + displayType.getShortcut() + ")";
+		boolean addTypeInfo = preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_ADD_TYPE_INFO);
 		/*
 		 * BPC, XIC, TSC
 		 */
@@ -988,7 +989,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		}
 		//
 		if(chromatogram instanceof IChromatogramMSD) {
-			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, true);
+			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, addTypeInfo);
 			description += displayTypeInfo;
 			availableSeriesIds.add(seriesId);
 			selectionSeries.add(seriesId);
@@ -1007,7 +1008,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
 				if(referencedChromatogram instanceof IChromatogramMSD) {
-					String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, true);
+					String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, addTypeInfo);
 					description += displayTypeInfo;
 					String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
 					String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
@@ -1084,6 +1085,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		Derivative derivative = getSelectedDerivative();
 		String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
 		Color color = chromatogramChartSupport.getSeriesColor(chromatogramName, displayType);
+		boolean addTypeInfo = preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_ADD_TYPE_INFO);
 		/*
 		 * TIC
 		 */
@@ -1091,7 +1093,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		selectionSeries.add(seriesId);
 		if(!baseChart.isSeriesContained(seriesId)) {
 			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, null, false);
-			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, true);
+			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, addTypeInfo);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setDescription(description);
 			lineSeriesDataList.add(lineSeriesData);
@@ -1104,7 +1106,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
 				if(referencedChromatogram != null) {
-					String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, true);
+					String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, addTypeInfo);
 					String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
 					String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
 					availableSeriesIds.add(referenceSeriesId);
