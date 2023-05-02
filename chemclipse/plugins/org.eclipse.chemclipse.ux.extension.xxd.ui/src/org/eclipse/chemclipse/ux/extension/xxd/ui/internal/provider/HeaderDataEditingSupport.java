@@ -71,12 +71,20 @@ public class HeaderDataEditingSupport extends EditingSupport {
 		if(element instanceof Map.Entry) {
 			IMeasurementInfo measurementInfo = tableViewer.getMeasurementInfo();
 			if(measurementInfo != null) {
+				/*
+				 * Modify the value.
+				 */
 				Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
 				if(column.equals(HeaderDataLabelProvider.VALUE)) {
 					measurementInfo.putHeaderData(entry.getKey(), (String)value);
-					return;
 				}
-				tableViewer.refresh();
+				/*
+				 * Note:
+				 * tableViewer.refresh(element);
+				 * doesn't work here as the header data is a map,
+				 * which must be reloaded on change.
+				 */
+				tableViewer.updateContent();
 			}
 		}
 	}

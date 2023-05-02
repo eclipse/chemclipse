@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -130,6 +131,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 			public void performSearch(String searchText, boolean caseSensitive) {
 
 				tableViewer.get().setSearchText(searchText, caseSensitive);
+				updateInfoToolbar();
 			}
 		});
 		//
@@ -199,6 +201,17 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				enableButtonDelete();
+			}
+		});
+		/*
+		 * Update Content
+		 */
+		headerDataListUI.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update() {
+
+				updateInput();
 			}
 		});
 		/*
@@ -297,11 +310,18 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 
 	private void updateInput() {
 
+		/*
+		 * Refresh the edit toolbar.
+		 */
 		DataMapSupportUI dataMapSupportUI = toolbarEdit.get();
 		if(dataMapSupportUI != null) {
 			dataMapSupportUI.setInput(measurementInfo);
 		}
+		/*
+		 * Refresh the data.
+		 */
 		updateData();
+		updateInfoToolbar();
 	}
 
 	private void updateData() {
@@ -309,19 +329,38 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 		enableButtonDelete();
 		//
 		if(measurementInfo != null) {
-			toolbarInfo.get().setText("Number of Entries: " + measurementInfo.getHeaderDataMap().size());
+			/*
+			 * Key Value Table
+			 */
+			int sizeEntries = measurementInfo.getHeaderDataMap().size();
+			int selectionIndex = tableViewer.get().getTable().getSelectionIndex();
 			tableViewer.get().setInput(measurementInfo);
+			tableViewer.get().sortTable();
+			if(selectionIndex >= 0 && selectionIndex < sizeEntries) {
+				tableViewer.get().getTable().select(selectionIndex);
+			}
+			/*
+			 * Miscellaneous Section
+			 */
 			textMiscellaneous.setText(measurementInfo.getMiscInfo());
 		} else {
-			toolbarInfo.get().setText("--");
 			tableViewer.get().setInput(null);
 			textMiscellaneous.setText("");
 		}
-		//
-		tableViewer.get().sortTable();
-		Table table = tableViewer.get().getTable();
-		if(table.getItemCount() > 0) {
-			table.setSelection(0);
+	}
+
+	private void updateInfoToolbar() {
+
+		if(measurementInfo != null) {
+			StringBuilder builder = new StringBuilder();
+			builder.append("Number Entries:");
+			builder.append(" ");
+			builder.append(tableViewer.get().getTable().getItems().length);
+			builder.append(" / ");
+			builder.append(measurementInfo.getHeaderDataMap().size());
+			toolbarInfo.get().setText(builder.toString());
+		} else {
+			toolbarInfo.get().setText("--");
 		}
 	}
 

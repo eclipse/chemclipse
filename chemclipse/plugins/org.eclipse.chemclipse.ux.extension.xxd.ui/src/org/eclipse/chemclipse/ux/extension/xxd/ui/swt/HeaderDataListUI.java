@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -37,11 +38,27 @@ public class HeaderDataListUI extends ExtendedTableViewer {
 	private HeaderDataListFilter listFilter = new HeaderDataListFilter();
 	//
 	private IMeasurementInfo measurementInfo;
+	private IUpdateListener updateListener = null;
 
 	public HeaderDataListUI(Composite parent, int style) {
 
 		super(parent, style);
 		createColumns();
+	}
+
+	public void setUpdateListener(IUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
+	}
+
+	/**
+	 * Fires and update if the listener is != null.
+	 */
+	public void updateContent() {
+
+		if(updateListener != null) {
+			updateListener.update();
+		}
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
