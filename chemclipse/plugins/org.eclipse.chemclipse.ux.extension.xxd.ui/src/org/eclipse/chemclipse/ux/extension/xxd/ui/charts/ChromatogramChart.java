@@ -84,6 +84,10 @@ public class ChromatogramChart extends LineChart {
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(true);
 		chartSettings.setVerticalSliderVisible(false);
+		// Use background from StyleSheet.
+		chartSettings.setBackground(null);
+		chartSettings.setBackgroundChart(null);
+		chartSettings.setBackgroundPlotArea(null);
 		//
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		rangeRestriction.setZeroX(true);

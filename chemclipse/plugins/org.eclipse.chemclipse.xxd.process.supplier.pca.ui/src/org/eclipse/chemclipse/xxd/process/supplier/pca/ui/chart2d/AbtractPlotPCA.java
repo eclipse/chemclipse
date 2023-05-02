@@ -109,6 +109,9 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 		} else {
 			chartSettings.setTitleColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		}
+		chartSettings.setBackground(null);
+		chartSettings.setBackgroundChart(null);
+		chartSettings.setBackgroundPlotArea(null);
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(false);
 		chartSettings.setVerticalSliderVisible(false);

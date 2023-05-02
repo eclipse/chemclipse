@@ -154,12 +154,10 @@ public class ScanChartUI extends ScrollableChart {
 						printLabel(barSeriesValue, useX, e);
 					}
 				} else {
-					if(addModuloLabels) {
-						if(i % modulo == 0) {
-							BarSeriesValue barSeriesValue = barSeriesValues.get(i);
-							if(barSeriesValue.getY() < 0) {
-								printLabel(barSeriesValue, useX, e);
-							}
+					if(addModuloLabels && i % modulo == 0) {
+						BarSeriesValue barSeriesValue = barSeriesValues.get(i);
+						if(barSeriesValue.getY() < 0) {
+							printLabel(barSeriesValue, useX, e);
 						}
 					}
 				}
@@ -177,12 +175,14 @@ public class ScanChartUI extends ScrollableChart {
 
 		super();
 		setDefaultDataAndSignalType();
+		useBackgroundFromStyleSheet();
 	}
 
 	public ScanChartUI(Composite parent, int style) {
 
 		super(parent, style);
 		setDefaultDataAndSignalType();
+		useBackgroundFromStyleSheet();
 	}
 
 	public void setInput(IScan scan) {
@@ -351,6 +351,14 @@ public class ScanChartUI extends ScrollableChart {
 		dataType = DataType.AUTO_DETECT;
 		signalType = SignalType.AUTO_DETECT;
 		modifyChart(DataType.MSD_NOMINAL, signalType);
+	}
+
+	private void useBackgroundFromStyleSheet() {
+
+		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setBackground(null);
+		chartSettings.setBackgroundChart(null);
+		chartSettings.setBackgroundPlotArea(null);
 	}
 
 	private DataType determineDataType(IScan scan) {
