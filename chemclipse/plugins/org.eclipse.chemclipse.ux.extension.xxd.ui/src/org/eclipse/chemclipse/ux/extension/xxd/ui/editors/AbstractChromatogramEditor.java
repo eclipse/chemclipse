@@ -269,6 +269,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		//
 		if(chromatogramSelection != null) {
 			part.setLabel(ChromatogramDataSupport.getChromatogramEditorLabel(chromatogramSelection));
+			part.setTooltip(ChromatogramDataSupport.getReferenceLabel(chromatogramSelection.getChromatogram(), 0, false));
 			chromatogramSelection.update(true);
 		}
 	}
@@ -384,6 +385,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		IChromatogramSelection chromatogramSelection = null;
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(file, dataType);
+		//
 		try {
 			/*
 			 * No fork, otherwise it might crash when loading a chromatogram takes too long.
