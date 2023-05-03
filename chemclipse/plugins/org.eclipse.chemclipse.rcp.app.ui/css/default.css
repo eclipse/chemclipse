@@ -25,6 +25,10 @@
 	margin-right:12px;
 }
 
+.MPart {
+  background-color: #FFFFFF;
+}
+
 .MPartStack {
 	padding:0px 5px 7px;
 }
@@ -39,6 +43,10 @@
 
 #SearchField {
 	visibility:visible; /* hidden */
+}
+
+TabFolder {
+	background-color: #FFFFFF
 }
 
 Table {
