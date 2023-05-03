@@ -35,7 +35,7 @@ public class ColumMappingFilter extends ViewerFilter {
 			return true;
 		}
 		//
-		if(element instanceof Map.Entry setting) {
+		if(element instanceof Map.Entry<?, ?> setting) {
 			//
 			if(!caseSensitive) {
 				searchText = searchText.toLowerCase();

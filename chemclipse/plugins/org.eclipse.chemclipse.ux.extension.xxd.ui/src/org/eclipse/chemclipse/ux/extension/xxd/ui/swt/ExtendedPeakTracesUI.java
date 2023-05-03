@@ -301,7 +301,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 
 				if(!"".equals(seriesId)) {
 					Object input = comboViewerTraces.getInput();
-					if(input instanceof List list) {
+					if(input instanceof List<?> list) {
 						exitloop:
 						for(int i = 0; i < list.size(); i++) {
 							if(list.get(i).toString().equals(seriesId)) {

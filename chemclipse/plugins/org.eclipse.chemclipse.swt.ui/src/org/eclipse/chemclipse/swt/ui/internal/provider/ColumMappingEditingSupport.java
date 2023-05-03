@@ -55,7 +55,7 @@ public class ColumMappingEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof Map.Entry setting) {
+		if(element instanceof Map.Entry<?, ?> setting) {
 			switch(column) {
 				case ColumMappingLabelProvider.SEPRATION_COLUMN:
 					return getIndexColumnType(setting.getValue().toString());

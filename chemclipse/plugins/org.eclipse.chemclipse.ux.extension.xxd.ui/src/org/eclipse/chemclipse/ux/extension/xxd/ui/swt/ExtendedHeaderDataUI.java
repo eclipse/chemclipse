@@ -369,7 +369,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 		buttonDelete.setEnabled(false);
 		if(measurementInfo != null) {
 			Object object = tableViewer.get().getStructuredSelection().getFirstElement();
-			if(object instanceof Map.Entry entry) {
+			if(object instanceof Map.Entry<?, ?> entry) {
 				boolean enabled = !measurementInfo.isKeyProtected(entry.getKey().toString());
 				buttonDelete.setEnabled(enabled);
 			}

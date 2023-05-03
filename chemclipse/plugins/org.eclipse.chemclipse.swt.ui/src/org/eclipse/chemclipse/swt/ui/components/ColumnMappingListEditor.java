@@ -89,6 +89,7 @@ public class ColumnMappingListEditor extends Composite {
 		updateInput();
 	}
 
+	@Override
 	public void setEnabled(boolean enabled) {
 
 		for(Button button : buttons) {
@@ -381,7 +382,7 @@ public class ColumnMappingListEditor extends Composite {
 		if(MessageDialog.openQuestion(shell, SeparationColumnMapping.DESCRIPTION, MESSAGE_REMOVE)) {
 			IStructuredSelection structuredSelection = listControl.get().getStructuredSelection();
 			for(Object object : structuredSelection.toArray()) {
-				if(object instanceof Map.Entry setting) {
+				if(object instanceof Map.Entry<?, ?> setting) {
 					separationColumnMapping.remove(setting.getKey());
 				}
 			}

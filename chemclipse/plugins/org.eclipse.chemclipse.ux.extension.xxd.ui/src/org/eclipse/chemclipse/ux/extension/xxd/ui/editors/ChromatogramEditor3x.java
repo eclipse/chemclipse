@@ -151,7 +151,7 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		DataType dataType = null;
 		//
 		Object object = part.getObject();
-		if(object instanceof Map map) {
+		if(object instanceof Map<?, ?> map) {
 			String path = (String)map.get(EditorSupport.MAP_FILE);
 			File file = new File(path);
 			//
