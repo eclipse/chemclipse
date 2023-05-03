@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
@@ -313,11 +314,9 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 			IScanMSD scanMSD = getScanMSD();
 			IScanMSD optimizedScanMSD = getOptimizedScanMSD();
 			signals = Integer.toString(optimizedScanMSD != null ? optimizedScanMSD.getNumberOfIons() : scanMSD.getNumberOfIons());
-		} else if(scan instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)scan;
+		} else if(scan instanceof IScanWSD scanWSD) {
 			signals = Integer.toString(scanWSD.getNumberOfScanSignals());
-		} else if(scan instanceof IScanISD) {
-			IScanISD scanISD = (IScanISD)scan;
+		} else if(scan instanceof IScanISD scanISD) {
 			signals = Integer.toString(scanISD.getProcessedSignals().size());
 		} else {
 			signals = "--";
@@ -410,9 +409,8 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 	private void deleteOptimizedScan(Display display) {
 
 		IScan scan = getScan();
-		if(scan instanceof IScanMSD) {
+		if(scan instanceof IScanMSD scanMSD) {
 			if(MessageDialog.openQuestion(display.getActiveShell(), "Optimized Scan", "Would you like to delete the optimized scan?")) {
-				IScanMSD scanMSD = (IScanMSD)scan;
 				scanMSD.setOptimizedMassSpectrum(null);
 				updateObject();
 			}
@@ -422,9 +420,9 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 	private void updateButtonStatus() {
 
 		IScan scan = getScan();
-		buttonCopyTraces.setEnabled(scan instanceof IScanMSD | scan instanceof IScanWSD);
+		buttonCopyTraces.setEnabled(scan instanceof IScanMSD || scan instanceof IScanWSD);
 		buttonSaveScan.setEnabled(isSaveEnabled());
-		buttonDeleteOptimized.setEnabled(isOptimizedScan() ? true : false);
+		buttonDeleteOptimized.setEnabled(isOptimizedScan());
 		updateLabel(labelOptimized, isOptimizedScan() ? "Optimized" : "");
 	}
 
@@ -445,21 +443,20 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 
 	private IScan getScan() {
 
-		IScan scan = null;
-		if(object instanceof IScan) {
-			scan = (IScan)object;
-		} else if(object instanceof IPeak) {
-			IPeak peak = (IPeak)object;
-			scan = peak.getPeakModel().getPeakMaximum();
+		IScan currentScan = null;
+		if(object instanceof IScan scan) {
+			currentScan = scan;
+		} else if(object instanceof IPeak peak) {
+			currentScan = peak.getPeakModel().getPeakMaximum();
 		}
-		return scan;
+		return currentScan;
 	}
 
 	private IScanMSD getScanMSD() {
 
 		IScan scan = getScan();
-		if(scan instanceof IScanMSD) {
-			return (IScanMSD)scan;
+		if(scan instanceof IScanMSD scanMSD) {
+			return scanMSD;
 		}
 		return null;
 	}
@@ -481,7 +478,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Copy the traces to clipboard.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY_CLIPBOARD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY_CLIPBOARD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -499,7 +496,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Reset the scan chart.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -514,15 +511,14 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Save the scan.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					if(object instanceof IScanMSD) {
-						IScanMSD scanMSD = (IScanMSD)object;
+					if(object instanceof IScanMSD scanMSD) {
 						IScanMSD optimizedScanMSD = scanMSD.getOptimizedMassSpectrum();
 						//
 						if(optimizedScanMSD != null) {
@@ -530,8 +526,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 						} else {
 							DatabaseFileSupport.saveMassSpectrum(e.display.getActiveShell(), scanMSD, "Scan");
 						}
-					} else if(object instanceof IPeakMSD) {
-						IPeakMSD peakMSD = (IPeakMSD)object;
+					} else if(object instanceof IPeakMSD peakMSD) {
 						IPeakModelMSD peakModelMSD = peakMSD.getPeakModel();
 						IScanMSD scanMSD = peakModelMSD.getPeakMassSpectrum();
 						IScanMSD optimizedScanMSD = scanMSD.getOptimizedMassSpectrum();
@@ -554,7 +549,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Delete the optimized scan.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -603,10 +598,10 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(6, false));
 		//
-		labelX = createLabelX(composite);
-		textX = createTextX(composite);
-		labelY = createLabelY(composite);
-		textY = createTextY(composite);
+		labelX = createLabel(composite);
+		textX = createText(composite);
+		labelY = createLabel(composite);
+		textY = createText(composite);
 		createButtonAdd(composite);
 		createButtonDelete(composite);
 		//
@@ -629,14 +624,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		toolbarSearch.set(searchSupportUI);
 	}
 
-	private Label createLabelX(Composite parent) {
-
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("");
-		return label;
-	}
-
-	private Text createTextX(Composite parent) {
+	private Text createText(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
@@ -644,19 +632,11 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		return text;
 	}
 
-	private Label createLabelY(Composite parent) {
+	private Label createLabel(Composite parent) {
 
 		Label label = new Label(parent, SWT.NONE);
 		label.setText("");
 		return label;
-	}
-
-	private Text createTextY(Composite parent) {
-
-		Text text = new Text(parent, SWT.BORDER);
-		text.setText("");
-		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		return text;
 	}
 
 	private void createButtonAdd(Composite parent) {
@@ -664,7 +644,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Add the scan signal.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -687,7 +667,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Delete the scan signals.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -770,17 +750,17 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 			/*
 			 * MSD
 			 */
-			if(signal instanceof IIon) {
-				scanMSD.removeIon((IIon)signal);
+			if(signal instanceof IIon ion) {
+				scanMSD.removeIon(ion);
 			}
 		} else if(scan instanceof IScanWSD scanWSD) {
 			/*
 			 * WSD
 			 */
-			if(signal instanceof IScanSignalWSD) {
-				scanWSD.removeScanSignal((IScanSignalWSD)signal);
+			if(signal instanceof IScanSignalWSD signalWSD) {
+				scanWSD.removeScanSignal(signalWSD);
 			}
-		} else if(scan instanceof IScanISD scanISD) {
+		} else if(scan instanceof IScanISD) {
 			/*
 			 * ISD
 			 */
@@ -804,25 +784,22 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 				float valueY = Float.parseFloat(y);
 				//
 				IScan scan = getScan();
-				if(scan instanceof IScanCSD) {
+				if(scan instanceof IScanCSD scanCSD) {
 					/*
 					 * CSD
 					 */
-					IScanCSD scanCSD = (IScanCSD)scan;
 					scanCSD.adjustTotalSignal(valueY);
-				} else if(scan instanceof IScanMSD) {
+				} else if(scan instanceof IScanMSD scanMSD) {
 					/*
 					 * MSD
 					 */
-					IScanMSD scanMSD = (IScanMSD)scan;
 					scanMSD.addIon(new Ion(valueX, valueY));
-				} else if(scan instanceof IScanWSD) {
+				} else if(scan instanceof IScanWSD scanWSD) {
 					/*
 					 * WSD
 					 */
-					IScanWSD scanWSD = (IScanWSD)scan;
 					scanWSD.addScanSignal(new ScanSignalWSD(valueX, valueY));
-				} else if(scan instanceof IScanWSD) {
+				} else if(scan instanceof IScanISD) {
 					/*
 					 * ISD
 					 */
@@ -846,10 +823,10 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		 * Fire an update.
 		 */
 		if(fireUpdate) {
-			if(object instanceof IScan) {
-				UpdateNotifierUI.update(getDisplay(), (IScan)object);
-			} else if(object instanceof IPeak) {
-				UpdateNotifierUI.update(getDisplay(), (IPeak)object);
+			if(object instanceof IScan scan) {
+				UpdateNotifierUI.update(getDisplay(), scan);
+			} else if(object instanceof IPeak peak) {
+				UpdateNotifierUI.update(getDisplay(), peak);
 			}
 		}
 	}
