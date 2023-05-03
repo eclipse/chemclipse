@@ -23,7 +23,7 @@ public class ColumMappingComparator extends AbstractRecordTableComparator implem
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof Map.Entry setting1 && e2 instanceof Map.Entry setting2) {
+		if(e1 instanceof Map.Entry<?, ?> setting1 && e2 instanceof Map.Entry<?, ?> setting2) {
 			switch(getPropertyIndex()) {
 				case 0:
 					sortOrder = setting2.getKey().toString().compareTo(setting1.getKey().toString());

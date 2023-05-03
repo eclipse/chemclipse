@@ -46,7 +46,7 @@ public class ColumMappingLabelProvider extends AbstractChemClipseLabelProvider {
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof Map.Entry setting) {
+		if(element instanceof Map.Entry<?, ?> setting) {
 			switch(columnIndex) {
 				case 0:
 					text = setting.getKey().toString();

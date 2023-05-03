@@ -233,7 +233,7 @@ public class DataUpdateSupport {
 			 */
 			if(properties != null) {
 				Object object = event.getProperty(IChemClipseEvents.EVENT_BROKER_DATA);
-				if(object instanceof List elements) {
+				if(object instanceof List<?> elements) {
 					for(Object element : elements) {
 						if(element instanceof String topicToBeCleared) {
 							logger.info("Clear mapped objects of topic: " + topicToBeCleared);

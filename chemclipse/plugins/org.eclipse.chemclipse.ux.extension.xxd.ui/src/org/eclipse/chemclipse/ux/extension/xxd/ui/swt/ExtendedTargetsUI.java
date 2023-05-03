@@ -800,7 +800,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		//
 		if(!objects.isEmpty()) {
 			Object object = objects.get(0);
-			if(object instanceof IChromatogramSelection chromatogramSelection) {
+			if(object instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
 				updateChromatogram(chromatogramSelection);
 			} else {
 				updateOther(object);
