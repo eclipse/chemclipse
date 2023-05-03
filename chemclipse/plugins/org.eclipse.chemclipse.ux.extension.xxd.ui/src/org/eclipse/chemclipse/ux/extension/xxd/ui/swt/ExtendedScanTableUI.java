@@ -113,8 +113,6 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 	//
 	private final ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private EditListener editListener = null;
-	//
-	private Color backgroundDefault;
 
 	private class DeleteMenuEntry implements ITableMenuEntry {
 
@@ -333,7 +331,6 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 	private void createControl() {
 
 		setLayout(new FillLayout());
-		backgroundDefault = getBackground();
 		//
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setBackgroundMode(SWT.INHERIT_FORCE);
@@ -430,7 +427,8 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 
 		label.setText(message);
 		if("".equals(message)) {
-			label.setBackground(backgroundDefault);
+			Color color = null;
+			label.setBackground(color);
 		} else {
 			label.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
 		}

@@ -119,7 +119,6 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	//
 	private boolean editModus = false;
 	private boolean subtractModus = false;
-	private Color backgroundDefault;
 
 	public ExtendedScanChartUI(Composite parent, int style) {
 
@@ -280,7 +279,6 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		composite.setBackgroundMode(SWT.INHERIT_FORCE);
 		GridLayout layout = new GridLayout(1, true);
 		composite.setLayout(layout);
-		backgroundDefault = composite.getBackground();
 		//
 		createToolbarMain(composite);
 		createToolbarInfo(composite);
@@ -616,7 +614,8 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 		label.setText(message);
 		if("".equals(message)) {
-			label.setBackground(backgroundDefault);
+			Color color = null;
+			label.setBackground(color);
 		} else {
 			label.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
 		}
