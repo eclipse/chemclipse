@@ -41,6 +41,14 @@
 	background-color: #FFFFFF;
 }
 
+ChromatogramPeakChart {
+	background-color: #FFFFFF;
+}
+
+ScanChartUI {
+	background-color: #FFFFFF;
+}
+
 #SearchField {
 	visibility:visible; /* hidden */
 }
