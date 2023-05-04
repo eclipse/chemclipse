@@ -99,6 +99,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		setData("org.eclipse.e4.ui.css.CssClassName", "ExtendedTableViewer");
 	}
 
+	@Override
 	public void resetColumnOrder() {
 
 		String pColumnOrder = getPreferenceName(SupportPreferences.P_COLUMN_ORDER);
@@ -107,6 +108,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		SupportPreferences.setColumnOrder(pColumnOrder, columnOrder);
 	}
 
+	@Override
 	public void resetColumnWidth() {
 
 		String pColumnWidth = getPreferenceName(SupportPreferences.P_COLUMN_WIDTH);
