@@ -122,6 +122,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 	public void createControl(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		composite.setLayout(new GridLayout(1, false));
 		//
 		createChromatogramField(composite);
