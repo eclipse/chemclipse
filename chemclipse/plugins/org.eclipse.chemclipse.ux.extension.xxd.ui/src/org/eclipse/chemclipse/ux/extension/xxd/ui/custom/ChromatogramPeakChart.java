@@ -292,6 +292,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		chartSettings.getRangeRestriction().setRestrictFrame(true);
 		rangeRestriction.setExtendMaxY(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_EXTEND_Y));
 		applySettings(chartSettings);
+		setData("org.eclipse.e4.ui.css.CssClassName", "ChromatogramPeakChart");
 	}
 
 	private void addLineSeriesData(List<ILineSeriesData> lineSeriesDataList) {

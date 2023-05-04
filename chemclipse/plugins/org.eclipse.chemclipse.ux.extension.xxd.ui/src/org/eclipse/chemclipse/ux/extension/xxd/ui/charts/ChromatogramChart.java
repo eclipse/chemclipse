@@ -98,6 +98,8 @@ public class ChromatogramChart extends LineChart {
 		rangeRestriction.setRestrictZoomY(true);
 		//
 		modifyAxes(true);
+		//
+		setData("org.eclipse.e4.ui.css.CssClassName", "ChromatogramChart");
 	}
 
 	private void adjustAxisMilliseconds() {
