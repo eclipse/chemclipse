@@ -96,6 +96,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		registerMenuListener();
 		setContentProvider(ArrayContentProvider.getInstance());
 		handleColumnSettings();
+		setData("org.eclipse.e4.ui.css.CssClassName", "ExtendedTableViewer");
 	}
 
 	public void resetColumnOrder() {
