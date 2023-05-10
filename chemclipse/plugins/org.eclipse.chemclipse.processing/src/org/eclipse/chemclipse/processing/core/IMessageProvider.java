@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactorings
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.core;
 
@@ -15,17 +16,10 @@ import java.util.Collection;
 
 /**
  * A {@link IMessageProvider} can provide Messages, this is the counterpart for {@link IMessageConsumer}
- * 
- * @author Christoph Läubrich
  *
  */
 public interface IMessageProvider {
 
-	/**
-	 * Returns the list of messages.
-	 *
-	 * @return the list of messages
-	 */
 	Collection<? extends IProcessingMessage> getMessages();
 
 	/**

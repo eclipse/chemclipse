@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.model.support.PeakClassifierSupport;
 import org.eclipse.chemclipse.model.targets.TargetSupport;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
@@ -157,8 +158,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 				sortOrder = Integer.compare(getInternalStandards(object2), getInternalStandards(object1));
 				break;
 			case 20:
-				String classifier1 = PeakScanListSupport.getClassifier(object1);
-				String classifier2 = PeakScanListSupport.getClassifier(object2);
+				String classifier1 = PeakClassifierSupport.getClassifier(object1);
+				String classifier2 = PeakClassifierSupport.getClassifier(object2);
 				sortOrder = PreferenceSupplier.isSortCaseSensitive() ? classifier2.compareTo(classifier1) : classifier2.compareToIgnoreCase(classifier1);
 				break;
 		}

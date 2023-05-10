@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.e4.core.services;bundle-version="2.1.100",
  org.eclipse.e4.core.contexts;bundle-version="1.7.0",
  org.apache.commons.commons-io;bundle-version="2.11.0",
- com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.7.1"
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.7.1",
+ org.apache.commons.lang3;bundle-version="3.12.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.model.baseline,

@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.model.support.PeakClassifierSupport;
 import org.eclipse.chemclipse.model.targets.TargetSupport;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -286,7 +287,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = (!peak.getInternalStandards().isEmpty()) ? ISTD : BLANK;
 				break;
 			case 20: {
-				text = PeakScanListSupport.getClassifier(peak);
+				text = PeakClassifierSupport.getClassifier(peak);
 			}
 		}
 		//

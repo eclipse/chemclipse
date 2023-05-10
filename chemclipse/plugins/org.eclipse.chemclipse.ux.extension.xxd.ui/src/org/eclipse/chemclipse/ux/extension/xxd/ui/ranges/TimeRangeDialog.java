@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.jface.dialogs.Dialog;
@@ -92,10 +91,6 @@ public class TimeRangeDialog extends Dialog {
 		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
 		 */
 		Combo combo = EnhancedCombo.create(parent, SWT.BORDER);
-		if(OperatingSystemUtils.isLinux()) {
-			combo.setBackground(combo.getBackground());
-		}
-		//
 		combo.setToolTipText("Select or type in a new name.");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//

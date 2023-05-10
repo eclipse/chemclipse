@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,12 +19,11 @@ import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 
 public abstract class AbstractProcessingInfo<T> implements IProcessingInfo<T> {
 
-	private List<IProcessingMessage> processingMessages;
+	private List<IProcessingMessage> processingMessages = new ArrayList<>();
 	private T processingResult;
 
 	protected AbstractProcessingInfo() {
 
-		processingMessages = new ArrayList<>();
 	}
 
 	protected AbstractProcessingInfo(IProcessingInfo<T> processingInfo) {
@@ -145,5 +144,17 @@ public abstract class AbstractProcessingInfo<T> implements IProcessingInfo<T> {
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, description, message);
 		addMessage(processingMessage);
 		return new TypeCastException(message);
+	}
+
+	@Override
+	public boolean isEmpty() {
+
+		return processingMessages.isEmpty();
+	}
+
+	@Override
+	public void clear() {
+
+		processingMessages.clear();
 	}
 }
