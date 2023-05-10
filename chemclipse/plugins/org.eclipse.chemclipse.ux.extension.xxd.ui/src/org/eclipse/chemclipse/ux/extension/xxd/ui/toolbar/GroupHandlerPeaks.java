@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -60,6 +60,11 @@ public class GroupHandlerPeaks extends AbstractGroupHandler {
 		partHandler.add(new PartHandler("Quantitation", PartSupport.PARTDESCRIPTOR_QUANTITATION, PreferenceConstants.P_STACK_POSITION_QUANTITATION));
 		partHandler.add(new PartHandler("Integration", PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA));
 		partHandler.add(new PartHandler("Penalty Calculation", PartSupport.PARTDESCRIPTOR_PENALTY_CALCULATION, PreferenceConstants.P_STACK_POSITION_PENALTY_CALCULATION));
+		partHandler.add(new PartHandler("Synonyms", PartSupport.PARTDESCRIPTOR_SYNONYMS, PreferenceConstants.P_STACK_POSITION_SYNONYMS));
+		partHandler.add(new PartHandler("Column Indices", PartSupport.PARTDESCRIPTOR_COLUMN_INDICES, PreferenceConstants.P_STACK_POSITION_COLUMN_INDICES));
+		partHandler.add(new PartHandler("Flavor Marker", PartSupport.PARTDESCRIPTOR_FLAVOR_MARKER, PreferenceConstants.P_STACK_POSITION_FLAVOR_MARKER));
+		partHandler.add(new PartHandler("Literature", PartSupport.PARTDESCRIPTOR_LITERATURE, PreferenceConstants.P_STACK_POSITION_LITERATURE));
+		partHandler.add(new PartHandler("CAS Numbers", PartSupport.PARTDESCRIPTOR_CAS_NUMBERS, PreferenceConstants.P_STACK_POSITION_CAS_NUMBERS));
 		//
 		return partHandler;
 	}
