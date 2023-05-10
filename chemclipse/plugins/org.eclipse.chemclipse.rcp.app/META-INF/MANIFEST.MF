@@ -12,7 +12,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.commands;bundle-version="3.9.100"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.chemclipse.rcp.app.cli,
- org.eclipse.chemclipse.rcp.app.profiles,
+Export-Package: org.eclipse.chemclipse.rcp.app.profiles,
  org.eclipse.chemclipse.rcp.app.undo
 Bundle-Vendor: ChemClipse

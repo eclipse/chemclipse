@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,6 +17,7 @@ import org.eclipse.ui.application.IActionBarConfigurer;
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
+
 		super(configurer);
 	}
 }
