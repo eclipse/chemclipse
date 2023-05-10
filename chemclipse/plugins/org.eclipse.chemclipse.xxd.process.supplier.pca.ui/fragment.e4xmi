@@ -32,8 +32,6 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_mkXCYOclEem5MISSB9DEbQ" featurename="snippets" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
-    <elements xsi:type="basic:Part" xmi:id="_XRsCMOcoEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.part.pcaeditor" contributionURI="bundleclass://org.eclipse.chemclipse.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.xxd.process.supplier.pca.ui.editors.PCAEditor" label="PCA Editor" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pcaeditor.png">
-      <toolbar xmi:id="_efQcIOcoEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.toolbar.4"/>
-    </elements>
+    <elements xsi:type="basic:Part" xmi:id="_XRsCMOcoEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.part.pcaeditor" contributionURI="bundleclass://org.eclipse.chemclipse.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.xxd.process.supplier.pca.ui.editors.PCAEditor" label="PCA Editor" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pcaeditor.png"/>
   </fragments>
 </fragment:ModelFragments>
