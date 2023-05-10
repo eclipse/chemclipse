@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
@@ -42,15 +44,27 @@ public abstract class AbstractLibraryInformationPart<T extends LibraryInformatio
 			if(isLibraryInformationTopic(topic)) {
 				Object object = objects.get(0);
 				ILibraryInformation libraryInformation = null;
+				boolean update = true;
 				//
 				if(object instanceof ILibraryMassSpectrum libraryMassSpectrum) {
 					libraryInformation = libraryMassSpectrum.getLibraryInformation();
 				} else if(object instanceof IIdentificationTarget identificationTarget) {
 					libraryInformation = identificationTarget.getLibraryInformation();
+				} else {
+					/*
+					 * Prevent that the part is cleaned.
+					 * A scan could be a ILibraryMassSpectrum, hence perform
+					 * a check if it's not of type library spectrum.
+					 */
+					if(object instanceof IScan || object instanceof IPeak) {
+						update = false;
+					}
 				}
 				//
-				getControl().setInput(libraryInformation);
-				return true;
+				if(update) {
+					getControl().setInput(libraryInformation);
+					return true;
+				}
 			}
 		}
 		//
