@@ -147,8 +147,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static String getSessionSubtractMassSpectrumAsString() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
+		return INSTANCE().get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
 	}
 
 	public static void setCalculationType(CalculationType calculationType) {
@@ -159,8 +158,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static CalculationType getCalculationType() {
 
 		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			return CalculationType.valueOf(preferences.get(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE));
+			return CalculationType.valueOf(INSTANCE().get(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE));
 		} catch(Exception e) {
 			return CalculationType.SUM;
 		}
@@ -230,13 +228,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static IScanMSD getSubtractMassSpectrum() {
 
-		String value = INSTANCE().get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
-		return getMassSpectrum(value);
+		return getMassSpectrum(INSTANCE().get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM));
 	}
 
 	private static void setSubtractMassSpectrum(IScanMSD massSpectrum) {
 
-		String value = getMassSpectrum(massSpectrum);
-		INSTANCE().put(P_SUBTRACT_MASS_SPECTRUM, value);
+		INSTANCE().put(P_SUBTRACT_MASS_SPECTRUM, getMassSpectrum(massSpectrum));
 	}
 }
