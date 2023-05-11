@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -44,7 +44,8 @@ public enum PeakType implements ILabel {
 	PB("PB (Perpendicular Drop, Baseline"), //
 	VP("VP (Valley, Perpendicular Drop"), //
 	BP("BP (Baseline, Perpendicular Drop"), //
-	DD("DD (Deconvolution)");
+	DD("DD (Deconvolution)"), //
+	TS("TS (Tangent Skim"); //
 
 	private String label = "";
 
