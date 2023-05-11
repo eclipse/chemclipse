@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.targets.DisplayOption;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
@@ -69,6 +71,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	private int detectionDepth;
 	//
 	private DecimalFormat decimalFormatRetentionIndex = ValueFormat.getDecimalFormatEnglish("0.00");
+	private DecimalFormat decimalFormatAreaPercent = ValueFormat.getDecimalFormatEnglish("0.000");
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public TargetReferenceLabelMarker(boolean showReferenceId, int offset) {
@@ -316,6 +319,9 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 						case RETENTION_INDEX:
 							label = decimalFormatRetentionIndex.format(targetReference.getRetentionIndex());
 							break;
+						case AREA_PERCENT:
+							label = getAreaPercent(targetReference);
+							break;
 						default:
 							label = targetReference.getTargetLabel(libraryField);
 							if(label == null || label.isEmpty()) {
@@ -346,6 +352,23 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		//
 		Collections.sort(targetLabels, (o1, o2) -> Double.compare(o1.getX(), o2.getX()));
 		return visibilityFilter;
+	}
+
+	private String getAreaPercent(ITargetReference targetReference) {
+
+		ISignal signal = targetReference.getSignal();
+		if(signal instanceof IChromatogramPeak chromatogramPeak) {
+			IChromatogram<?> chromatogram = chromatogramPeak.getChromatogram();
+			if(chromatogram != null) {
+				double chromatogramPeakArea = chromatogram.getPeakIntegratedArea();
+				if(chromatogramPeakArea > 0) {
+					double peakAreaPercent = (100.0d / chromatogramPeakArea) * chromatogramPeak.getIntegratedArea();
+					return decimalFormatAreaPercent.format(peakAreaPercent);
+				}
+			}
+		}
+		//
+		return "";
 	}
 
 	public static FontData getPeakFontData(IPreferenceStore preferenceStore) {

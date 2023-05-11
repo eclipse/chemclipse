@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,8 @@ public enum DisplayOption implements ILabel {
 	STANDARD("Standard"), //
 	NUMBERS("Numbers"), //
 	RETENTION_TIME("Retention Time"), //
-	RETENTION_INDEX("Retention Index"); //
+	RETENTION_INDEX("Retention Index"), //
+	AREA_PERCENT("Area [%]"); //
 
 	private String label = "";
 
