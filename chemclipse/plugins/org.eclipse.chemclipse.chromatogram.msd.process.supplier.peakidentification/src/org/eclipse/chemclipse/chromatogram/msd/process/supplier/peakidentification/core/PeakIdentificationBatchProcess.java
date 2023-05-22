@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,7 +49,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 	@Override
 	public IProcessingInfo<IPeakIdentificationBatchProcessReport> execute(IPeakIdentificationBatchJob peakIdentificationBatchJob, IProgressMonitor monitor) {
 
-		IProcessingInfo<IPeakIdentificationBatchProcessReport> processingInfo = new ProcessingInfo<IPeakIdentificationBatchProcessReport>();
+		IProcessingInfo<IPeakIdentificationBatchProcessReport> processingInfo = new ProcessingInfo<>();
 		IProcessingInfo<?> peakIdentificationProcessingInfo;
 		IProcessingMessage processingMessage;
 		File peakInputFile;
@@ -73,8 +73,8 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 				try {
 					peakImports = processingPeakImportConverterInfo.getProcessingResult();
 					for(IPeak peak : peakImports.getPeaks()) {
-						if(peak instanceof IPeakMSD) {
-							peaks.add((IPeakMSD)peak);
+						if(peak instanceof IPeakMSD peakMSD) {
+							peaks.add(peakMSD);
 						}
 					}
 				} catch(Exception e) {
@@ -99,7 +99,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		/*
 		 * Report the results.
 		 */
-		reportTheResults(peakIdentificationBatchJob, batchProcessReport, monitor);
+		reportTheResults(peakIdentificationBatchJob, batchProcessReport);
 		processingInfo.setProcessingResult(batchProcessReport);
 		return processingInfo;
 	}
@@ -167,7 +167,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		return peaks;
 	}
 
-	private void reportTheResults(IPeakIdentificationBatchJob peakIdentificationBatchJob, IPeakIdentificationBatchProcessReport batchProcessReport, IProgressMonitor monitor) {
+	private void reportTheResults(IPeakIdentificationBatchJob peakIdentificationBatchJob, IPeakIdentificationBatchProcessReport batchProcessReport) {
 
 		String folder = peakIdentificationBatchJob.getReportFolder();
 		if(!folder.endsWith(File.separator)) {
@@ -200,7 +200,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 			/*
 			 * Integrator Report
 			 */
-			IPeaks<?> peaks = batchProcessReport.getPeaks();
+			IPeaks<IPeak> peaks = batchProcessReport.getPeaks();
 			String integrator = peakIdentificationBatchJob.getPeakIntegrationEntry().getProcessorId();
 			String identifier = peakIdentificationBatchJob.getPeakIdentificationEntry().getProcessorId();
 			PeakReport.writeResults(peaks, printWriter, integrator, identifier);

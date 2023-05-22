@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.support.ChromatogramSegment;
 
 public class ChromatogramSegmentation extends AnalysisSegmentMeasurementResult<ChromatogramSegment> {
 
+	private static final long serialVersionUID = 7162215390880261702L;
 	private final List<ChromatogramSegment> segments;
 	private final int width;
 

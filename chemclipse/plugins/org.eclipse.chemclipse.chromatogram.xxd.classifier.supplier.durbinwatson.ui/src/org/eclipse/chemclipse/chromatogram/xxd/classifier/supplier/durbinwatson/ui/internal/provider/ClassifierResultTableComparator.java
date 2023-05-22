@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,9 +22,7 @@ public class ClassifierResultTableComparator extends AbstractRecordTableComparat
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof ISavitzkyGolayFilterRating && e2 instanceof ISavitzkyGolayFilterRating) {
-			ISavitzkyGolayFilterRating result1 = (ISavitzkyGolayFilterRating)e1;
-			ISavitzkyGolayFilterRating result2 = (ISavitzkyGolayFilterRating)e2;
+		if(e1 instanceof ISavitzkyGolayFilterRating result1 && e2 instanceof ISavitzkyGolayFilterRating result2) {
 			switch(getPropertyIndex()) {
 				case 0: // Rating
 					sortOrder = Double.compare(result2.getRating(), result1.getRating());

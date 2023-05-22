@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.ISavitzkyGolayFilterRating;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
@@ -36,8 +37,7 @@ public class ClassifierResultLabelProvider extends AbstractChemClipseLabelProvid
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof ISavitzkyGolayFilterRating) {
-			ISavitzkyGolayFilterRating result = (ISavitzkyGolayFilterRating)element;
+		if(element instanceof ISavitzkyGolayFilterRating result) {
 			switch(columnIndex) {
 				case 0: // Rating
 					text = decimalFormat.format(result.getRating());
@@ -58,8 +58,9 @@ public class ClassifierResultLabelProvider extends AbstractChemClipseLabelProvid
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CLASSIFIER_DW, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CLASSIFIER_DW, IApplicationImageProvider.SIZE_16x16);
 	}
 }

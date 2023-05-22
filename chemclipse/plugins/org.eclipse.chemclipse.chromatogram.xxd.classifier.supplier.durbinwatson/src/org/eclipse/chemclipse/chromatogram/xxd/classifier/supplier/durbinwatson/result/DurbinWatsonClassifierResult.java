@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,9 +19,10 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
 
 public class DurbinWatsonClassifierResult extends AbstractChromatogramClassifierResult implements IDurbinWatsonClassifierResult {
 
-	private List<ISavitzkyGolayFilterRating> savitzkyGolayFilterRatings = new ArrayList<ISavitzkyGolayFilterRating>();
+	private List<ISavitzkyGolayFilterRating> savitzkyGolayFilterRatings = new ArrayList<>();
 
 	public DurbinWatsonClassifierResult(ResultStatus resultStatus, String description) {
+
 		super(resultStatus, description);
 	}
 

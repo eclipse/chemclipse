@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -196,10 +196,12 @@ public class NoiseCalculator implements IonNoiseCalculator {
 
 	private static class SteinNoiseSegment implements NoiseSegment {
 
+		private static final long serialVersionUID = 6666299719479935503L;
 		private final IAnalysisSegment baseSegment;
 		private final double noiseFactor;
 
 		public SteinNoiseSegment(IAnalysisSegment baseSegment, double noiseFactor) {
+
 			this.baseSegment = baseSegment;
 			this.noiseFactor = noiseFactor;
 		}
@@ -243,10 +245,12 @@ public class NoiseCalculator implements IonNoiseCalculator {
 
 	private static class SteinIonNoiseSegment extends SteinNoiseSegment implements IonNoiseSegment, IAdaptable {
 
+		private static final long serialVersionUID = 1277953700111903075L;
 		private final double ion;
 		private final IScan combinedMassSpectrum;
 
 		public SteinIonNoiseSegment(IAnalysisSegment baseSegment, double noiseFactor, double ion, IScan combinedMassSpectrum) {
+
 			super(baseSegment, noiseFactor);
 			this.ion = ion;
 			this.combinedMassSpectrum = combinedMassSpectrum;
