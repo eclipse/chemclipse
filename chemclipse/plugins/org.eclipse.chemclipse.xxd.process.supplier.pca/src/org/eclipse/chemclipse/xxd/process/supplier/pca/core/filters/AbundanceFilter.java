@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,7 @@ public class AbundanceFilter extends AbstractFilter implements IFilter {
 	public static final int LIMIT_GREATER_THAN = 0;
 	public static final int LIMIT_LESS_THAN = 1;
 	//
-	private final String name = "Abundance filter";
+	private static final String NAME = "Abundance filter";
 	//
 	private Function<Double, Boolean> comparator;
 	private int filterType;
@@ -103,7 +103,7 @@ public class AbundanceFilter extends AbstractFilter implements IFilter {
 	@Override
 	public String getName() {
 
-		return name;
+		return NAME;
 	}
 
 	@Override

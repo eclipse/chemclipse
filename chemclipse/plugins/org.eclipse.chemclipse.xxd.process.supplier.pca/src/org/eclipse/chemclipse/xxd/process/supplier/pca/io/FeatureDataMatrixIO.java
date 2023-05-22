@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,6 +33,11 @@ public class FeatureDataMatrixIO {
 	public static final String FILTER_NAME = DESCRIPTION + " (*" + FILE_EXTENSION + ")";
 	//
 	private static final String VALUE_DELIMITER = "\t";
+
+	private FeatureDataMatrixIO() {
+
+		// static only
+	}
 
 	public static void write(File file, FeatureDataMatrix featureDataMatrix) throws FileNotFoundException {
 

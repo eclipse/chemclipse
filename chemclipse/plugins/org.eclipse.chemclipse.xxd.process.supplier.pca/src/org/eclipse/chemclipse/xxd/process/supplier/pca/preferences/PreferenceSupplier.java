@@ -90,7 +90,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	@Override
 	public Map<String, String> getDefaultValues() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
+		Map<String, String> defaultValues = new HashMap<>();
 		defaultValues.put(P_ALGORITHM, DEF_ALGORITHM);
 		defaultValues.put(P_REMOVE_USELESS_VARIABLES, Boolean.toString(DEF_REMOVE_USELESS_VARIABLES));
 		defaultValues.put(P_LABEL_OPTION_PCA, DEF_LABEL_OPTION_PCA);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,7 +24,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 
 	private DMatrixRMaj loadings;
 	private DMatrixRMaj scores;
-	private double mean[];
+	private double[] mean;
 	private int numComps;
 	private DMatrixRMaj sampleData;
 	private ArrayList<ISample> sampleKeys = new ArrayList<>();
@@ -144,17 +144,17 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	 * Convenience accessor to extract the loading
 	 * vector of a specific component.
 	 * 
-	 * @param var
+	 * @param component
 	 *            component to extract the loading from
 	 */
 	@Override
-	public double[] getLoadingVector(int var) {
+	public double[] getLoadingVector(int component) {
 
-		if(var < 0 || var >= numComps) {
+		if(component < 0 || component >= numComps) {
 			throw new IllegalArgumentException("Invalid component");
 		}
 		DMatrixRMaj loadingVector = new DMatrixRMaj(1, sampleData.numCols);
-		CommonOps_DDRM.extract(loadings, var, var + 1, 0, sampleData.numCols, loadingVector, 0, 0);
+		CommonOps_DDRM.extract(loadings, component, component + 1, 0, sampleData.numCols, loadingVector, 0, 0);
 		return loadingVector.data;
 	}
 
@@ -180,8 +180,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		CommonOps_DDRM.sumCols(varTemp, colSums);
 		CommonOps_DDRM.divide(colSums, (sampleData.numRows - 1));
 		// sum all row variances
-		double summedVariance = CommonOps_DDRM.elementSum(colSums);
-		return summedVariance;
+		return CommonOps_DDRM.elementSum(colSums);
 	}
 
 	@Override
@@ -195,8 +194,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 			component.set(i, 0, Math.pow(component.get(i), 2));
 		}
 		CommonOps_DDRM.divide(component, (sampleData.numRows - 1));
-		double explainedVariance = CommonOps_DDRM.elementSum(component) / 100;
-		return explainedVariance;
+		return CommonOps_DDRM.elementSum(component) / 100;
 	}
 
 	protected double[] getMean() {
