@@ -93,7 +93,10 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 
 	public void updateInput() {
 
-		setViewerInput();
+		tableViewer.get().setInput(retentionIndexMarker);
+		for(Listener listener : listeners) {
+			listener.handleEvent(new Event());
+		}
 	}
 
 	public RetentionIndexMarker getRetentionIndexMarker() {
@@ -104,12 +107,13 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 	public void setRetentionIndexMarker(RetentionIndexMarker retentionIndexMarker) {
 
 		this.retentionIndexMarker = retentionIndexMarker;
+		updateInput();
 	}
 
 	public void load(String entries) {
 
 		retentionIndexMarker.load(entries);
-		setViewerInput();
+		updateInput();
 	}
 
 	public String save() {
@@ -166,7 +170,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 	private void initialize() {
 
 		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH, false);
-		setViewerInput();
+		updateInput();
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -218,7 +222,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 			@Override
 			public void update(Display display) {
 
-				setViewerInput();
+				updateInput();
 			}
 		});
 		//
@@ -248,7 +252,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 					IRetentionIndexEntry setting = retentionIndexMarker.extractSettingInstance(item);
 					if(setting != null) {
 						retentionIndexMarker.add(setting);
-						setViewerInput();
+						updateInput();
 					}
 				}
 			}
@@ -282,7 +286,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 					File file = new File(path);
 					CalibrationFile calibrationFile = new CalibrationFile(file);
 					retentionIndexMarker.addAll(calibrationFile.getSeparationColumnIndices().values());
-					setViewerInput();
+					updateInput();
 				}
 			}
 		});
@@ -312,7 +316,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 						String item = dialog.getValue();
 						IRetentionIndexEntry settingEdited = retentionIndexMarker.extractSettingInstance(item);
 						setting.copyFrom(settingEdited);
-						setViewerInput();
+						updateInput();
 					}
 				}
 			}
@@ -352,7 +356,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), DIALOG_TITLE, MESSAGE_REMOVE_ALL)) {
 					retentionIndexMarker.clear();
-					setViewerInput();
+					updateInput();
 				}
 			}
 		});
@@ -384,7 +388,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 					PreferenceSupplier.setListPathImportTemplate(fileDialog.getFilterPath());
 					File file = new File(path);
 					retentionIndexMarker.importItems(file);
-					setViewerInput();
+					updateInput();
 				}
 			}
 		});
@@ -427,14 +431,6 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 		});
 		//
 		return button;
-	}
-
-	private void setViewerInput() {
-
-		tableViewer.get().setInput(retentionIndexMarker);
-		for(Listener listener : listeners) {
-			listener.handleEvent(new Event());
-		}
 	}
 
 	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
@@ -484,7 +480,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 					retentionIndexMarker.remove(retentionIndexEntry);
 				}
 			}
-			setViewerInput();
+			updateInput();
 		}
 	}
 }
