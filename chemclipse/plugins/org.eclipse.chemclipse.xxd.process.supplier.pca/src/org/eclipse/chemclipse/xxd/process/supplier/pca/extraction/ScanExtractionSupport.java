@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -68,7 +68,7 @@ public class ScanExtractionSupport {
 		/*
 		 * Extract data
 		 */
-		Map<String, NavigableMap<Integer, Float>> extractScans = extractScans(dataInput, monitor);
+		Map<String, NavigableMap<Integer, Float>> extractScans = extractScans(dataInput);
 		//
 		boolean similarChromatogram = true;
 		if(useDefaultProperties) {
@@ -85,7 +85,7 @@ public class ScanExtractionSupport {
 						similarChromatogram = false;
 						break;
 					}
-					long dataSiza = data.keySet().stream().filter(time -> retentionTimes.contains(time)).count();
+					long dataSiza = data.keySet().stream().filter(retentionTimes::contains).count();
 					if(dataSiza != retentionTimeSize) {
 						similarChromatogram = false;
 						break;
@@ -113,7 +113,7 @@ public class ScanExtractionSupport {
 		return samples;
 	}
 
-	private Map<String, NavigableMap<Integer, Float>> extractScans(Map<IDataInputEntry, Collection<IScan>> inputs, IProgressMonitor monitor) {
+	private Map<String, NavigableMap<Integer, Float>> extractScans(Map<IDataInputEntry, Collection<IScan>> inputs) {
 
 		beginRetentionTimeMax = 0;
 		endRetentionTimeMin = Integer.MAX_VALUE;

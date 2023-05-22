@@ -18,11 +18,10 @@ import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.DescriptionOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Samples;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakExtractionSupport {
 
-	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, ExtractionSettings extractionSettings, IProgressMonitor monitor) {
+	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, ExtractionSettings extractionSettings) {
 
 		Samples samples;
 		DescriptionOption descriptionOption = extractionSettings.getDescriptionOption();

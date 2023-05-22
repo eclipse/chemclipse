@@ -42,9 +42,7 @@ public class PeakRetentionIndexExtractor extends AbstractClassifierDescriptionEx
 		Samples samples = new Samples(samplesList);
 		//
 		Map<String, IPeaks<?>> peakMap = new LinkedHashMap<>();
-		peaks.forEach((dataInputEntry, peaksInput) -> {
-			peakMap.put(dataInputEntry.getSampleName(), peaksInput);
-		});
+		peaks.forEach((dataInputEntry, peaksInput) -> peakMap.put(dataInputEntry.getSampleName(), peaksInput));
 		//
 		Map<String, SortedMap<Integer, IPeak>> extractPeaks = exctractPcaPeakMap(peakMap, retentionIndexWindow);
 		List<Integer> extractedRetentionIndices = calculateCondensedRetentionIndices(extractPeaks);
@@ -96,10 +94,8 @@ public class PeakRetentionIndexExtractor extends AbstractClassifierDescriptionEx
 				Collection<Integer> retentionIndicesMax = entry.getValue();
 				for(Integer retentionIndexMax : retentionIndicesMax) {
 					Integer closestCondenseRetentionIndex = getClosestCondensedRetentionIndex(condenseRetentionIndices, retentionIndexMax);
-					if(closestCondenseRetentionIndex != null) {
-						if(Math.abs(closestCondenseRetentionIndex - retentionIndexMax) < (retentionIndexWindow)) {
-							continue;
-						}
+					if(closestCondenseRetentionIndex != null && Math.abs(closestCondenseRetentionIndex - retentionIndexMax) < (retentionIndexWindow)) {
+						continue;
 					}
 					condenseRetentionIndices.add(retentionIndexMax);
 					for(Map.Entry<String, TreeMap<Integer, IPeak>> pcaPeakRetetntionIndex : pcaPeakRetentionIndex.entrySet()) {

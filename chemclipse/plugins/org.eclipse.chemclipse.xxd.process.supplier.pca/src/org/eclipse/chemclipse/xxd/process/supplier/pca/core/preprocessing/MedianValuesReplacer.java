@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -54,7 +54,7 @@ public class MedianValuesReplacer extends AbstractDataModificator implements IRe
 				}
 			}
 			int lenght = collectedValues.size();
-			collectedValues.sort((d1, d2) -> Double.compare(d1, d2));
+			collectedValues.sort(Double::compare);
 			double median = 0;
 			if(lenght != 0) {
 				median = lenght % 2 == 0 ? (collectedValues.get(lenght / 2 - 1) + collectedValues.get(lenght / 2)) / 2.0 // even

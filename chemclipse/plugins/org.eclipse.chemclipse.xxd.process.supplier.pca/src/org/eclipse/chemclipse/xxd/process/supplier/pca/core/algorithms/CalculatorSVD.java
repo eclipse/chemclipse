@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,7 +49,7 @@ public class CalculatorSVD extends AbstractMultivariateCalculator {
 
 	private void computeScores() {
 
-		double concatMeans[] = new double[getSampleData().getNumRows() * getSampleData().getNumCols()];
+		double[] concatMeans = new double[getSampleData().getNumRows() * getSampleData().getNumCols()];
 		for(int i = 0; i < getSampleData().getNumRows(); i++) {
 			System.arraycopy(getMean(), 0, concatMeans, i * getSampleData().getNumCols(), getSampleData().getNumCols());
 		}

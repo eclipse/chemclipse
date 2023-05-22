@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,8 +40,7 @@ public class CalculatorOPLS extends AbstractMultivariateCalculator {
 			vector[yIterator] = uniqueGroupNames.indexOf(myString);
 			yIterator++;
 		}
-		DMatrixRMaj yVector = new DMatrixRMaj(groupNames.size(), 1, true, vector);
-		return yVector;
+		return new DMatrixRMaj(groupNames.size(), 1, true, vector);
 	}
 
 	@Override
@@ -137,12 +136,12 @@ public class CalculatorOPLS extends AbstractMultivariateCalculator {
 			}
 		}
 		CommonOps_DDRM.mult(w, ce, b);
-		double combinedScores[] = new double[numberOfSamples * getNumComps()];
+		double[] combinedScores = new double[numberOfSamples * getNumComps()];
 		System.arraycopy(te.getData(), 0, combinedScores, 0, numberOfSamples);
 		System.arraycopy(T_ortho.getData(), 0, combinedScores, numberOfSamples, numberOfSamples * (getNumComps() - 1));
 		DMatrixRMaj scores = new DMatrixRMaj(numberOfSamples, getNumComps(), false, combinedScores);
 		setScores(scores);
-		double combinedLoadings[] = new double[getNumComps() * numberOfVariables];
+		double[] combinedLoadings = new double[getNumComps() * numberOfVariables];
 		System.arraycopy(p.getData(), 0, combinedLoadings, 0, numberOfVariables);
 		System.arraycopy(P_ortho.getData(), 0, combinedLoadings, numberOfVariables, (getNumComps() - 1) * numberOfVariables);
 		DMatrixRMaj loadings = new DMatrixRMaj(getNumComps(), numberOfVariables, true, combinedLoadings);

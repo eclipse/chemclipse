@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 
 public abstract class AbstractCentering extends AbstractDataModificator implements ICentering {
 
-	public AbstractCentering() {
+	protected AbstractCentering() {
 
 		super();
 	}
@@ -34,17 +34,16 @@ public abstract class AbstractCentering extends AbstractDataModificator implemen
 			case MEAN:
 				return selectedData.summaryStatistics().getAverage();
 			case MEDIAN:
-				List<Double> data = selectedData.sorted().boxed().collect(Collectors.toList());
+				List<Double> data = selectedData.sorted().boxed().toList();
 				int lenght = data.size();
 				if(lenght == 0) {
 					return 0;
 				} else {
-					double median = lenght % 2 == 0 ? (data.get(lenght / 2 - 1) + data.get(lenght / 2)) / 2.0 // even
+					return lenght % 2 == 0 ? (data.get(lenght / 2 - 1) + data.get(lenght / 2)) / 2.0 // even
 							: data.get(lenght / 2); //
-					return median;
 				}
 			default:
-				throw new RuntimeException("undefine centering");
+				throw new UnsupportedOperationException("undefined centering");
 		}
 	}
 
@@ -53,11 +52,10 @@ public abstract class AbstractCentering extends AbstractDataModificator implemen
 		return Math.sqrt(Math.abs(getVariance(samples, position, type)));
 	}
 
-	@SuppressWarnings("rawtypes")
 	protected <S extends ISample> double getVariance(List<S> samples, int position, int type) {
 
 		boolean onlySelected = isOnlySelected();
-		List<ISampleData> sampleData = samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).collect(Collectors.toList());
+		List<ISampleData<?>> sampleData = samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).collect(Collectors.toList());
 		int count = sampleData.size();
 		if(count > 1) {
 			final double mean = getCenteringValue(samples, position, type);

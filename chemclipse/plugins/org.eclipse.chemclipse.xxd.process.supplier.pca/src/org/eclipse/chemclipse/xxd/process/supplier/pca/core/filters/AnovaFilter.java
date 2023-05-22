@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PcaUtils;
 
 public class AnovaFilter extends AbstractFilter implements IFilter {
 
-	private final String name = "Anova filter";
+	private static final String NAME = "Anova filter";
 	//
 	private double alpha;
 	private String selectionResult = "";
@@ -85,7 +85,7 @@ public class AnovaFilter extends AbstractFilter implements IFilter {
 	@Override
 	public String getName() {
 
-		return name;
+		return NAME;
 	}
 
 	@Override
