@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 20189 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,13 +14,12 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificat
 
 import java.io.PrintWriter;
 
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 
 public class PeakReport {
 
@@ -28,9 +27,10 @@ public class PeakReport {
 	 * This class has only static methods.
 	 */
 	private PeakReport() {
+
 	}
 
-	public static void writeResults(IPeaks<?> peaks, PrintWriter printWriter, String integrator, String identifier) {
+	public static void writeResults(IPeaks<IPeak> peaks, PrintWriter printWriter, String integrator, String identifier) {
 
 		if(peaks == null || printWriter == null) {
 			return;
@@ -46,14 +46,11 @@ public class PeakReport {
 		 * Results
 		 */
 		for(IPeak peak : peaks.getPeaks()) {
-			if(peak instanceof IPeakMSD) {
-				writeResult((IPeakMSD)peak, printWriter);
-			}
+			writeResult(peak, printWriter);
 		}
-		printWriter.println("");
 	}
 
-	private static void writeResult(IPeakMSD peak, PrintWriter printWriter) {
+	private static void writeResult(IPeak peak, PrintWriter printWriter) {
 
 		printWriter.println("----------------------------------------------");
 		printWriter.println("Model Description: " + peak.getModelDescription());
@@ -73,16 +70,16 @@ public class PeakReport {
 		printWriter.println("");
 	}
 
-	private static void printIntegrationResults(IPeakMSD peak, PrintWriter printWriter) {
+	private static void printIntegrationResults(IPeak peak, PrintWriter printWriter) {
 
-		printWriter.println("Start RT (Minutes): " + (peak.getPeakModel().getStartRetentionTime() / IChromatogramMSD.MINUTE_CORRELATION_FACTOR));
-		printWriter.println("Stop RT (Minutes): " + (peak.getPeakModel().getStopRetentionTime() / IChromatogramMSD.MINUTE_CORRELATION_FACTOR));
+		printWriter.println("Start RT (Minutes): " + (peak.getPeakModel().getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+		printWriter.println("Stop RT (Minutes): " + (peak.getPeakModel().getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 		printWriter.println("Tailing: " + peak.getPeakModel().getTailing());
-		printWriter.println("Width (Minutes): " + (peak.getPeakModel().getWidthByInflectionPoints(0.5f) / IChromatogramMSD.MINUTE_CORRELATION_FACTOR));
+		printWriter.println("Width (Minutes): " + (peak.getPeakModel().getWidthByInflectionPoints(0.5f) / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 		printWriter.println("Integrated Area: " + peak.getIntegratedArea());
 	}
 
-	private static void printIdentificationResults(IPeakMSD peak, PrintWriter printWriter) {
+	private static void printIdentificationResults(IPeak peak, PrintWriter printWriter) {
 
 		printWriter.print("Name");
 		printWriter.print("\t");
