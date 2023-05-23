@@ -310,6 +310,8 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		IPeakModelCSD peakModel = peak.getPeakModel();
 		if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
 			return false;
+		} else if(peak.getPeakModel().getWidthByInflectionPoints() <= 0) {
+			return false; // P_SKIP_PEAK_WIDTH_CHECK
 		}
 		//
 		return true;

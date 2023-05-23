@@ -325,9 +325,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 			try {
 				IChromatogramPeakCSD peak = readPeak(dataInputStream, chromatogram);
 				chromatogram.addPeak(peak);
-			} catch(IllegalArgumentException e) {
-				logger.warn(e);
-			} catch(PeakException e) {
+			} catch(Exception e) {
 				logger.warn(e);
 			}
 		}
