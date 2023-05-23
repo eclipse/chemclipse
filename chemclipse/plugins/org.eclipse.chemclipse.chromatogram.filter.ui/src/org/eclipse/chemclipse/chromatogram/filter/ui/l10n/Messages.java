@@ -38,6 +38,7 @@ public class Messages extends NLS {
 	public static String targetName;
 	public static String transferClosestScan;
 	public static String useBestTargetOnly;
+	public static String transformMZ;
 	//
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

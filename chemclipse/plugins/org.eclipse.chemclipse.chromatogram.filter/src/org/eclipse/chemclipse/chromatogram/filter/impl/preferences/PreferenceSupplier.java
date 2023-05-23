@@ -17,6 +17,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.filter.Activator;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsReset;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsSelection;
+import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsTransform;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.PeakTargetsToReferencesSettings;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToPeakSettings;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToReferencesSettings;
@@ -37,6 +38,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final float MAX_FACTOR = 100.0f;
 	public static final int MIN_COUNT_MARKER = 0;
 	public static final int MAX_COUNT_MARKER = Integer.MAX_VALUE;
+	public static final int MIN_MZ = 18;
+	public static final int MAX_MZ = 1000;
 	//
 	public static final String P_START_RETENTION_TIME_MINUTES = "startRetentionTimeMinutes";
 	public static final double DEF_START_RETENTION_TIME_MINUTES = 1;
@@ -71,6 +74,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_MAX_DETECTOR_MINIMA = false;
 	public static final String P_MAX_DETECTOR_COUNT = "maxDetectorCount";
 	public static final int DEF_MAX_DETECTOR_COUNT = 0;
+	/*
+	 * Transform
+	 */
+	public static final String P_TRANSFORM_MZ = "transformMZ";
+	public static final int DEF_TRANSFORM_MZ = 28;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -117,6 +125,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_MAX_DETECTOR_MINIMA, Boolean.toString(DEF_MAX_DETECTOR_MINIMA));
 		defaultValues.put(P_MAX_DETECTOR_COUNT, Integer.toString(DEF_MAX_DETECTOR_COUNT));
 		//
+		defaultValues.put(P_TRANSFORM_MZ, Integer.toString(DEF_TRANSFORM_MZ));
+		//
 		return defaultValues;
 	}
 
@@ -138,6 +148,14 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static FilterSettingsReset getFilterSettingsReset() {
 
 		return new FilterSettingsReset();
+	}
+
+	public static FilterSettingsTransform getFilterSettingsTransform() {
+
+		FilterSettingsTransform filterSettings = new FilterSettingsTransform();
+		filterSettings.setMz(INSTANCE().getInteger(P_TRANSFORM_MZ, DEF_TRANSFORM_MZ));
+		//
+		return filterSettings;
 	}
 
 	public static SettingsIonRounding getFilterSettingsIonRounding() {
@@ -189,7 +207,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static MaxDetectorFilterSettings getMaxDetectorFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		//
 		MaxDetectorFilterSettings settings = new MaxDetectorFilterSettings();
 		settings.setTargetName(preferences.get(P_MAX_DETECTOR_TARGET_NAME, DEF_MAX_DETECTOR_TARGET_NAME));
 		settings.setMatchFactor(preferences.getFloat(P_MAX_DETECTOR_MATCH_FACTOR, DEF_MAX_DETECTOR_MATCH_FACTOR));

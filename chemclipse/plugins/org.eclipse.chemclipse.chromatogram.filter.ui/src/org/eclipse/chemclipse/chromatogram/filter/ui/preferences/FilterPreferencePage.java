@@ -16,8 +16,8 @@ import org.eclipse.chemclipse.chromatogram.filter.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.filter.ui.l10n.Messages;
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -73,6 +73,9 @@ public class FilterPreferencePage extends FieldEditorPreferencePage implements I
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MAX_DETECTOR_MATCH_FACTOR, Messages.matchFactor, PreferenceSupplier.MIN_FACTOR, PreferenceSupplier.MAX_FACTOR, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_MAX_DETECTOR_MINIMA, Messages.detectMinima, getFieldEditorParent()));
 		addField(new ExtendedIntegerFieldEditor(PreferenceSupplier.P_MAX_DETECTOR_COUNT, Messages.countIncludingZero, PreferenceSupplier.MIN_COUNT_MARKER, PreferenceSupplier.MAX_COUNT_MARKER, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new ExtendedIntegerFieldEditor(PreferenceSupplier.P_TRANSFORM_MZ, Messages.transformMZ, PreferenceSupplier.MIN_MZ, PreferenceSupplier.MAX_MZ, getFieldEditorParent()));
 	}
 
 	/*

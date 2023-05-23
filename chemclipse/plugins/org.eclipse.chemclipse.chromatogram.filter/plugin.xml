@@ -38,7 +38,14 @@
             filterName="Scan Targets to References Transfer"
             filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToReferencesSettings"
             id="org.eclipse.chemclipse.chromatogram.filter.scanTargetsToReferencesTransfer">
-      </ChromatogramFilterSupplier>     
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filter transforms the chromatogram."
+            filter="org.eclipse.chemclipse.chromatogram.filter.impl.ChromatogramFilterTransform"
+            filterName="Chromatogram Transform"
+            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsTransform"
+            id="org.eclipse.chemclipse.chromatogram.filter.transformChromatogramSelection">
+      </ChromatogramFilterSupplier>              
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
