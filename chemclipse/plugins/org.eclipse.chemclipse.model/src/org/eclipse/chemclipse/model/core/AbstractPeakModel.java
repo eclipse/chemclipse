@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -79,7 +79,8 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	 * @param startBackgroundAbundance
 	 * @param stopBackgroundAbundance
 	 */
-	public AbstractPeakModel(IScan peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
+	protected AbstractPeakModel(IScan peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
+
 		/*
 		 * Checks all conditions for the peak model to be valid.
 		 */
@@ -92,7 +93,7 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		/*
 		 * Temp info
 		 */
-		temporarilyInfo = new HashMap<String, Object>();
+		temporarilyInfo = new HashMap<>();
 	}
 
 	@Override
@@ -301,8 +302,8 @@ public abstract class AbstractPeakModel implements IPeakModel {
 			IPoint p1 = Equations.calculateIntersection(increasingInflectionPointEquation, percentageHeightBaseline);
 			IPoint p2 = Equations.calculateIntersection(decreasingInflectionPointEquation, percentageHeightBaseline);
 			int retentionTimeMax = getRetentionTimeAtPeakMaximumByInflectionPoints();
-			float leftWidth = retentionTimeMax - (int)p1.getX();
-			float rightWidth = (int)p2.getX() - retentionTimeMax;
+			float leftWidth = retentionTimeMax - (float)p1.getX();
+			float rightWidth = (float)p2.getX() - retentionTimeMax;
 			tailing = rightWidth / leftWidth;
 		} catch(SolverException e) {
 		}
@@ -348,8 +349,7 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		 * separated. So it is not necessary to shift the baseline for the given
 		 * percentage abundance.
 		 */
-		LinearEquation percentageHeightBaseline = new LinearEquation(0, percentageHeight);
-		return percentageHeightBaseline;
+		return new LinearEquation(0, percentageHeight);
 	}
 
 	@Override
@@ -365,8 +365,7 @@ public abstract class AbstractPeakModel implements IPeakModel {
 			Map.Entry<Integer, Float> entry = peakIntensityValues.getIntensityValue(retentionTime);
 			if(entry != null) {
 				float intensity = entry.getValue();
-				IScan scan = new Scan(intensity);
-				return scan;
+				return new Scan(intensity);
 			}
 		}
 		return null;
@@ -443,7 +442,6 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	 */
 	private double calculateGradientAngle() {
 
-		double a = 0.0d;
 		int b = getWidthBaselineTotal();
 		float start = getBackgroundAbundance(peakIntensityValues.getStartRetentionTime());
 		float stop = getBackgroundAbundance(peakIntensityValues.getStopRetentionTime());
@@ -458,7 +456,7 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		 * If a is negative, the baseline raises. If a is positive, the baseline
 		 * decreases.
 		 */
-		a = stop - start;
+		double a = stop - start;
 		/*
 		 * Use the arcus tangens to determine alpha.
 		 */

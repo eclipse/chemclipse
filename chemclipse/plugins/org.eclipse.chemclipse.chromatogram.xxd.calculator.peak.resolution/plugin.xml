@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.xxd.calculator.chromatogramCalculatorSupplier">
+      <ChromatogramCalculatorSupplier
+            calculator="org.eclipse.chemclipse.chromatogram.xxd.calculator.peak.resolution.core.ChromatogramCalculator"
+            calculatorName="%PeakResolution"
+            calculatorSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.peak.resolution.settings.CalculatorSettings"
+            description="%PeakResolutionDescription"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.peak.resolutions">
+      </ChromatogramCalculatorSupplier>
+   </extension>
+</plugin>

@@ -75,36 +75,36 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 		for(T measurement : detectorInputItems) {
 			IFirstDerivativeDetectorSlopes slopes;
 			FirstDerivativePeakDetectorSettings configuration;
-			if(measurement instanceof IChromatogramMSD) {
+			if(measurement instanceof IChromatogramMSD chromatogramWSD) {
 				if(globalConfiguration == null) {
 					configuration = new FirstDerivativePeakDetectorSettings(DataType.MSD);
 				} else {
 					configuration = globalConfiguration;
 				}
 				Collection<IMarkedIons> markedIons = globalConfiguration.getFilterIons();
-				slopes = PeakDetectorMSD.getFirstDerivativeSlopes(new ChromatogramSelectionMSD((IChromatogramMSD)measurement), configuration.getMovingAverageWindowSize(), markedIons.iterator().next());
-			} else if(measurement instanceof IChromatogramCSD) {
+				slopes = PeakDetectorMSD.getFirstDerivativeSlopes(new ChromatogramSelectionMSD(chromatogramWSD), configuration.getMovingAverageWindowSize(), markedIons.iterator().next());
+			} else if(measurement instanceof IChromatogramCSD chromatogramCSD) {
 				if(globalConfiguration == null) {
 					configuration = new FirstDerivativePeakDetectorSettings(DataType.CSD);
 				} else {
 					configuration = globalConfiguration;
 				}
-				slopes = PeakDetectorCSD.getFirstDerivativeSlopes(new ChromatogramSelectionCSD((IChromatogramCSD)measurement), configuration.getMovingAverageWindowSize());
-			} else if(measurement instanceof IChromatogramWSD) {
+				slopes = PeakDetectorCSD.getFirstDerivativeSlopes(new ChromatogramSelectionCSD(chromatogramCSD), configuration.getMovingAverageWindowSize());
+			} else if(measurement instanceof IChromatogramWSD chromatogramWSD) {
 				if(globalConfiguration == null) {
 					configuration = new FirstDerivativePeakDetectorSettings(DataType.WSD);
 				} else {
 					configuration = globalConfiguration;
 				}
 				// TODO: filter wavelengths
-				slopes = PeakDetectorWSD.getFirstDerivativeSlopes(new ChromatogramSelectionWSD((IChromatogramWSD)measurement), configuration.getMovingAverageWindowSize(), null);
-			} else if(measurement instanceof SpectrumMeasurement) {
+				slopes = PeakDetectorWSD.getFirstDerivativeSlopes(new ChromatogramSelectionWSD(chromatogramWSD), configuration.getMovingAverageWindowSize(), null);
+			} else if(measurement instanceof SpectrumMeasurement spectrumMeasurement) {
 				if(globalConfiguration == null) {
 					configuration = new FirstDerivativePeakDetectorSettings(DataType.NMR);
 				} else {
 					configuration = globalConfiguration;
 				}
-				slopes = getSignalSlopes(((SpectrumMeasurement)measurement).getSignals(), configuration.getMovingAverageWindowSize());
+				slopes = getSignalSlopes((spectrumMeasurement).getSignals(), configuration.getMovingAverageWindowSize());
 			} else {
 				throw new IllegalArgumentException();
 			}

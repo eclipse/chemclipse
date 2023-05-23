@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.support.NoiseSegment;
 
 public class NoiseSegmentMeasurementResult extends AnalysisSegmentMeasurementResult<NoiseSegment> {
 
+	private static final long serialVersionUID = -5989247294723381518L;
 	private final ChromatogramSegmentation segmentation;
 	private final String noiseCalculatorId;
 	private final List<NoiseSegment> segments;

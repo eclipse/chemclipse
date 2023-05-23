@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,12 +19,14 @@ package org.eclipse.chemclipse.model.core;
  */
 public class PeakList implements IMeasurementResult<Iterable<PeakPosition>> {
 
+	private static final long serialVersionUID = -7220296068044561221L;
 	private Iterable<PeakPosition> peakPositions;
 	private String name;
 	private String identfier;
 	private String description;
 
 	public PeakList(Iterable<PeakPosition> peakPositions, String identfier, String name, String description) {
+
 		this.peakPositions = peakPositions;
 		this.name = name;
 		this.identfier = identfier;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,14 +23,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramCalculator extends AbstractChromatogramCalculator {
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> applyCalculator(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		//
-		if(chromatogramCalculatorSettings instanceof CalculatorSettings) {
-			CalculatorSettings calculatorSettings = (CalculatorSettings)chromatogramCalculatorSettings;
+		if(chromatogramCalculatorSettings instanceof CalculatorSettings calculatorSettings) {
 			RetentionIndexCalculator calculator = new RetentionIndexCalculator();
 			IProcessingInfo<?> calculatorInfo = calculator.calculateIndices(chromatogramSelection, calculatorSettings);
 			chromatogramSelection.getChromatogram().setDirty(true);
@@ -40,9 +38,8 @@ public class ChromatogramCalculator extends AbstractChromatogramCalculator {
 		return processingInfo;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> applyCalculator(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		CalculatorSettings calculatorSettings = PreferenceSupplier.getChromatogramCalculatorSettings();
 		return applyCalculator(chromatogramSelection, calculatorSettings, monitor);

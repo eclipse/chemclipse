@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -37,8 +37,7 @@ public interface IChromatogramCalculator {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings("rawtypes")
-	IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, IProgressMonitor monitor);
+	IProcessingInfo<?> applyCalculator(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, IProgressMonitor monitor);
 
 	/**
 	 * Apply the calculator in the given chromatogram selection.
@@ -49,8 +48,7 @@ public interface IChromatogramCalculator {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings("rawtypes")
-	IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo<?> applyCalculator(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor);
 
 	/**
 	 * Validates the selection and settings and returns a process info instance.
@@ -59,6 +57,5 @@ public interface IChromatogramCalculator {
 	 * @param chromatogramCalculatorSettings
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings("rawtypes")
-	IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings);
+	IProcessingInfo<?> validate(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings);
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,12 +13,14 @@ package org.eclipse.chemclipse.model.core;
 
 public abstract class AbstractMeasurementResult<T> implements IMeasurementResult<T> {
 
+	private static final long serialVersionUID = 6203262781404791751L;
 	private String name = "";
 	private String identifier = "";
 	private String description = "";
 	private final T result;
 
 	public AbstractMeasurementResult(String name, String identifier, String description, T result) {
+
 		this.name = name;
 		this.identifier = identifier;
 		this.description = description;

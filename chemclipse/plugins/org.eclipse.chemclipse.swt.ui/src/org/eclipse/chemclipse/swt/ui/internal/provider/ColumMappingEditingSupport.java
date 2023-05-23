@@ -68,7 +68,8 @@ public class ColumMappingEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof Map.Entry setting) {
+		if(element instanceof Map.Entry<?, ?>) {
+			Map.Entry<String, SeparationColumnType> setting = (Map.Entry<String, SeparationColumnType>)element;
 			switch(column) {
 				case ColumMappingLabelProvider.SEPRATION_COLUMN:
 					try {

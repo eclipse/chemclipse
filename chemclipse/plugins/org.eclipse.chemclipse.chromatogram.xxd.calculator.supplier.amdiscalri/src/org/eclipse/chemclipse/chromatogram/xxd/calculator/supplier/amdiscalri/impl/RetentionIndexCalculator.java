@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,7 +41,6 @@ import org.eclipse.chemclipse.model.support.RetentionIndexMath;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 public class RetentionIndexCalculator {
 
@@ -169,7 +168,7 @@ public class RetentionIndexCalculator {
 		return standards.toArray(new String[standards.size()]);
 	}
 
-	public static LinkedHashMap<String, String> getAlkanesByCAS() {
+	public static Map<String, String> getAlkanesByCAS() {
 
 		LinkedHashMap<String, String> alkanesByCAS = new LinkedHashMap<>();
 		alkanesByCAS.put("74-82-8", "Methane");
@@ -237,7 +236,7 @@ public class RetentionIndexCalculator {
 	public static int getAlkaneNumber(ILibraryInformation libraryInformation) {
 
 		int alkaneNumber = ALKANE_MISSING;
-		LinkedHashMap<String, String> alkanesByCAS = getAlkanesByCAS();
+		Map<String, String> alkanesByCAS = getAlkanesByCAS();
 		String cas = libraryInformation.getCasNumber().trim();
 		String name = libraryInformation.getName().trim();
 		if(getAlkanesByCAS().containsKey(cas)) {
@@ -253,10 +252,9 @@ public class RetentionIndexCalculator {
 		return alkaneNumber;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public IProcessingInfo calculateIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings) {
+	public IProcessingInfo<?> calculateIndices(IChromatogramSelection<?, ?> chromatogramSelection, CalculatorSettings calculatorSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramSelection != null) {
 			ISeparationColumnIndices separationColumnIndices = getSeparationColumnIndices(chromatogramSelection, calculatorSettings);
 			if(separationColumnIndices != null) {
@@ -268,10 +266,10 @@ public class RetentionIndexCalculator {
 					/*
 					 * References
 					 */
-					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+					IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 					for(Object object : chromatogram.getReferencedChromatograms()) {
-						if(object instanceof IChromatogram) {
-							calculateIndex((IChromatogram)object, separationColumnIndices);
+						if(object instanceof IChromatogram<?> referencedChromatogram) {
+							calculateIndex(referencedChromatogram, separationColumnIndices);
 						}
 					}
 				}
@@ -286,10 +284,9 @@ public class RetentionIndexCalculator {
 		return processingInfo;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public IProcessingInfo resetIndices(IChromatogramSelection chromatogramSelection, ResetterSettings resetterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> resetIndices(IChromatogramSelection<?, ?> chromatogramSelection, ResetterSettings resetterSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		/*
 		 * Master
 		 */
@@ -299,10 +296,10 @@ public class RetentionIndexCalculator {
 				/*
 				 * References
 				 */
-				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				for(Object object : chromatogram.getReferencedChromatograms()) {
-					if(object instanceof IChromatogram) {
-						resetIndex((IChromatogram)object);
+					if(object instanceof IChromatogram<?> referencedChromatograms) {
+						resetIndex(referencedChromatograms);
 					}
 				}
 			}
@@ -333,8 +330,7 @@ public class RetentionIndexCalculator {
 				/*
 				 * Calculate RI also for the optimized MS.
 				 */
-				if(scan instanceof IScanMSD) {
-					IScanMSD scanMSD = (IScanMSD)scan;
+				if(scan instanceof IScanMSD scanMSD) {
 					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 					if(optimizedMassSpectrum != null) {
 						optimizedMassSpectrum.setRetentionIndex(retentionIndex);
@@ -353,8 +349,7 @@ public class RetentionIndexCalculator {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private ISeparationColumnIndices getSeparationColumnIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings) {
+	private ISeparationColumnIndices getSeparationColumnIndices(IChromatogramSelection<?, ?> chromatogramSelection, CalculatorSettings calculatorSettings) {
 
 		ISeparationColumnIndices separationColumnIndices;
 		switch(calculatorSettings.getCalculatorStrategy()) {
@@ -374,8 +369,7 @@ public class RetentionIndexCalculator {
 		return separationColumnIndices;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private ISeparationColumnIndices getAutoIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings) {
+	private ISeparationColumnIndices getAutoIndices(IChromatogramSelection<?, ?> chromatogramSelection, CalculatorSettings calculatorSettings) {
 
 		ISeparationColumnIndices separationColumnIndices = getChromatogramIndices(chromatogramSelection);
 		if(separationColumnIndices == null) {
@@ -389,8 +383,7 @@ public class RetentionIndexCalculator {
 		return separationColumnIndices;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private ISeparationColumnIndices getChromatogramIndices(IChromatogramSelection chromatogramSelection) {
+	private ISeparationColumnIndices getChromatogramIndices(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(chromatogramSelection != null) {
 			return chromatogramSelection.getChromatogram().getSeparationColumnIndices();
@@ -399,8 +392,7 @@ public class RetentionIndexCalculator {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private ISeparationColumnIndices getFileIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings) {
+	private ISeparationColumnIndices getFileIndices(IChromatogramSelection<?, ?> chromatogramSelection, CalculatorSettings calculatorSettings) {
 
 		/*
 		 * Prepare the index map.
@@ -452,8 +444,7 @@ public class RetentionIndexCalculator {
 			/*
 			 * Calculate RI also for the optimized MS.
 			 */
-			if(scan instanceof IScanMSD) {
-				IScanMSD scanMSD = (IScanMSD)scan;
+			if(scan instanceof IScanMSD scanMSD) {
 				IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 				if(optimizedMassSpectrum != null) {
 					optimizedMassSpectrum.setRetentionIndex(retentionIndex);

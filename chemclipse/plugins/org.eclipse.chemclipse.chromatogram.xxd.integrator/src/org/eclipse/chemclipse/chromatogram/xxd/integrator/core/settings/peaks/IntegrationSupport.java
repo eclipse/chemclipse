@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,6 +29,7 @@ public class IntegrationSupport implements IIntegrationSupport {
 	private List<IRetentionTimeRange> ranges;
 
 	public IntegrationSupport() {
+
 		ranges = new ArrayList<IRetentionTimeRange>();
 	}
 
@@ -108,8 +109,7 @@ public class IntegrationSupport implements IIntegrationSupport {
 		/*
 		 * Peak Model / Peak Width
 		 */
-		if(peak instanceof IPeakMSD) {
-			IPeakMSD peakMSD = (IPeakMSD)peak;
+		if(peak instanceof IPeakMSD peakMSD) {
 			if(peakMSD.getPeakModel() == null) {
 				return false;
 			}
@@ -119,8 +119,7 @@ public class IntegrationSupport implements IIntegrationSupport {
 			if(isIntegratorOff(peakMSD.getPeakModel().getStartRetentionTime())) {
 				return false;
 			}
-		} else if(peak instanceof IPeakCSD) {
-			IPeakCSD peakFID = (IPeakCSD)peak;
+		} else if(peak instanceof IPeakCSD peakFID) {
 			if(peakFID.getPeakModel() == null) {
 				return false;
 			}
@@ -134,15 +133,13 @@ public class IntegrationSupport implements IIntegrationSupport {
 		/*
 		 * S/N
 		 */
-		if(peak instanceof IChromatogramPeakMSD) {
+		if(peak instanceof IChromatogramPeakMSD chromatogramPeak) {
 			// TODO JUnit
-			IChromatogramPeakMSD chromatogramPeak = (IChromatogramPeakMSD)peak;
 			if(chromatogramPeak.getSignalToNoiseRatio() < minimumSignalToNoiseRatio) {
 				return false;
 			}
-		} else if(peak instanceof IChromatogramPeakCSD) {
+		} else if(peak instanceof IChromatogramPeakCSD chromatogramPeak) {
 			// TODO JUnit
-			IChromatogramPeakCSD chromatogramPeak = (IChromatogramPeakCSD)peak;
 			if(chromatogramPeak.getSignalToNoiseRatio() < minimumSignalToNoiseRatio) {
 				return false;
 			}
