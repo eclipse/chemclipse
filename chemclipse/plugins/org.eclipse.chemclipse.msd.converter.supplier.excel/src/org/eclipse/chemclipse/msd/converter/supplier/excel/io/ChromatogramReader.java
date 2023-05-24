@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,39 +12,34 @@
 package org.eclipse.chemclipse.msd.converter.supplier.excel.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.apache.poi.ss.formula.eval.NotImplementedException;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
- * This class is responsible to read a Agilent Chromatogram from its binary
+ * This class is responsible to read a Excel Chromatogram from its binary
  * file.
- * 
- * @author eselmeister
  */
 public class ChromatogramReader extends AbstractChromatogramMSDReader implements IChromatogramMSDReader {
 
-	public static final String VALID_FILE_FORMAT_CHECK = "GCMS DATA FILE";
-
 	public ChromatogramReader() {
+
+		throw new NotImplementedException("Only write support for the moment.");
 	}
 
 	@Override
-	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		return null;
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		return null;
 	}
