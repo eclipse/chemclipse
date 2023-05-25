@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.xxd.report.chromatogramReportSupplier">
+      <ChromatogramReportSupplier
+            description="Reports a whole chromatogram as raster image"
+            fileExtension=".png"
+            fileName="Chromatogram"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui"
+            reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.core.ImageReport"
+            reportName="Chromatogram Image"
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.settings.ImageReportSettings">
+      </ChromatogramReportSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui">
+      </icon>
+   </extension>
+</plugin>

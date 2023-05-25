@@ -298,4 +298,8 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.chemclipse.chromatogram.xxd.calculator.peak.resolution.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.feature"
+         version="0.0.0"/>
+
 </feature>

@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.feature"
-      label="Text Report Support"
+      id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.feature"
+      label="Report Support Image"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse"
-      plugin="org.eclipse.chemclipse.feature.branding">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.chemclipse.net">
-      This is a report supplier.
+      This is a raster graphics report supplier.
    </description>
 
    <copyright url="http://www.chemclipse.net">
-      Copyright (c) 2012, 2022 Lablicate GmbH.
+      Copyright (c) 2023 Lablicate GmbH.
    </copyright>
 
    <license url="http://www.eclipse.org/legal/epl-v10.html">
-      Copyright (c) 2012, 2022 Lablicate GmbH.
+      Copyright (c) 2023 Lablicate GmbH.
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the Eclipse Public License
 v1.0 which accompanies this distribution, and is available at
@@ -23,14 +22,7 @@ http://www.eclipse.org/legal/epl-v10.html
    </license>
 
    <plugin
-         id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.ui"
+         id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
