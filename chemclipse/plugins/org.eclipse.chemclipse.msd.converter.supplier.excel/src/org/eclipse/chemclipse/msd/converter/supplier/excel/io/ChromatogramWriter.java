@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,13 +13,13 @@ package org.eclipse.chemclipse.msd.converter.supplier.excel.io;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +35,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.excel.internal.io.SpreadsheetWriter;
@@ -55,12 +56,8 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 	private static final String XML_ENCODING = "UTF-8";
 	private static final String ABUNDANCE_STYLE = "abundance";
 
-	public ChromatogramWriter() {
-
-	}
-
 	@Override
-	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		XSSFWorkbook excelWorkbook = new XSSFWorkbook();
 		XSSFSheet excelSheet = excelWorkbook.createSheet(chromatogram.getName());
@@ -70,14 +67,14 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 		 * Excel Template
 		 */
 		File excelTemplate = new File(PathHelper.getStoragePath() + File.separator + "exceltemplace.xlsx");
-		FileOutputStream outputStream = new FileOutputStream(excelTemplate);
-		excelWorkbook.write(outputStream);
-		outputStream.close();
+		try (FileOutputStream outputStream = new FileOutputStream(excelTemplate)) {
+			excelWorkbook.write(outputStream);
+		}
 		/*
 		 * Temporary XML file
 		 */
 		File xmlDataFile = new File(PathHelper.getStoragePath() + File.separator + "datafile.xml");
-		Writer writer = new OutputStreamWriter(new FileOutputStream(xmlDataFile), XML_ENCODING);
+		Writer writer = new OutputStreamWriter(new FileOutputStream(xmlDataFile), StandardCharsets.UTF_8);
 		try {
 			writeChromatogram(writer, styles, chromatogram, monitor);
 		} catch(Exception e) {
@@ -99,7 +96,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 
 	private Map<String, XSSFCellStyle> createStyles(XSSFWorkbook excelWorkbook) {
 
-		Map<String, XSSFCellStyle> styles = new HashMap<String, XSSFCellStyle>();
+		Map<String, XSSFCellStyle> styles = new HashMap<>();
 		XSSFDataFormat dataFormat = excelWorkbook.createDataFormat();
 		/*
 		 * Abundance values
@@ -172,7 +169,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 			spreadsheetWriter.insertRow(rowNumber++);
 			int milliseconds = extractedIonSignal.getRetentionTime();
 			spreadsheetWriter.createCell(columnNumber++, milliseconds);
-			spreadsheetWriter.createCell(columnNumber++, milliseconds / IChromatogramMSD.MINUTE_CORRELATION_FACTOR);
+			spreadsheetWriter.createCell(columnNumber++, milliseconds / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			spreadsheetWriter.createCell(columnNumber++, extractedIonSignal.getRetentionIndex());
 			/*
 			 * ion data
@@ -187,31 +184,32 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 	private void mergeTemplateAndData(File excelTemplate, File xmlDataFile, String excelSheetReferenceName, OutputStream outputStream) throws IOException {
 
 		InputStream inputStream;
-		ZipFile zipFile = new ZipFile(excelTemplate);
-		ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
-		@SuppressWarnings("unchecked")
-		Enumeration<ZipEntry> zipEntries = (Enumeration<ZipEntry>)zipFile.entries();
-		/*
-		 * Copy all non data file elements to the output stream.
-		 */
-		while(zipEntries.hasMoreElements()) {
-			ZipEntry zipEntry = zipEntries.nextElement();
-			if(!zipEntry.getName().equals(excelSheetReferenceName)) {
-				zipOutputStream.putNextEntry(new ZipEntry(zipEntry.getName()));
-				inputStream = zipFile.getInputStream(zipEntry);
-				copyDataStream(inputStream, zipOutputStream);
-				inputStream.close();
+		try (ZipFile zipFile = new ZipFile(excelTemplate)) {
+			ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
+			Enumeration<?> zipEntries = zipFile.entries();
+			/*
+			 * Copy all non data file elements to the output stream.
+			 */
+			while(zipEntries.hasMoreElements()) {
+				Object object = zipEntries.nextElement();
+				if(object instanceof ZipEntry zipEntry) {
+					if(!zipEntry.getName().equals(excelSheetReferenceName)) {
+						zipOutputStream.putNextEntry(new ZipEntry(zipEntry.getName()));
+						inputStream = zipFile.getInputStream(zipEntry);
+						copyDataStream(inputStream, zipOutputStream);
+						inputStream.close();
+					}
+				}
 			}
+			/*
+			 * Copy the data file to the output stream.
+			 */
+			zipOutputStream.putNextEntry(new ZipEntry(excelSheetReferenceName));
+			inputStream = new FileInputStream(xmlDataFile);
+			copyDataStream(inputStream, zipOutputStream);
+			inputStream.close();
+			zipOutputStream.close();
 		}
-		/*
-		 * Copy the data file to the output stream.
-		 */
-		zipOutputStream.putNextEntry(new ZipEntry(excelSheetReferenceName));
-		inputStream = new FileInputStream(xmlDataFile);
-		copyDataStream(inputStream, zipOutputStream);
-		inputStream.close();
-		zipOutputStream.close();
-		zipFile.close();
 	}
 
 	private void copyDataStream(InputStream inputStream, OutputStream outputStream) throws IOException {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -47,7 +47,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	@Override
 	public Map<String, String> getDefaultValues() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
+		Map<String, String> defaultValues = new HashMap<>();
 		return defaultValues;
 	}
 

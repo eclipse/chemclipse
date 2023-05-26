@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.msd.converter.supplier.excel.io;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.msd.converter.supplier.excel.PathResolver;
 import org.eclipse.chemclipse.msd.converter.supplier.excel.TestPathHelper;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -23,7 +24,7 @@ public class ChromatogramExport_1_ITest extends ChromatogramReaderTestCase {
 	@Override
 	protected void setUp() throws Exception {
 
-		pathImport = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1);
+		pathImport = PathResolver.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1);
 		chromatogramWriter = new ChromatogramWriter();
 		super.setUp();
 	}
@@ -32,7 +33,7 @@ public class ChromatogramExport_1_ITest extends ChromatogramReaderTestCase {
 
 		try {
 			new File(TestPathHelper.DIRECTORY_EXPORT_TEST).mkdirs();
-			File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.DIRECTORY_EXPORT_TEST) + File.separator + "Test.xlsx");
+			File file = new File(PathResolver.getAbsolutePath(TestPathHelper.DIRECTORY_EXPORT_TEST) + File.separator + "Test.xlsx");
 			chromatogramWriter.writeChromatogram(file, chromatogram, new NullProgressMonitor());
 			assertTrue(file.length() > 0);
 			file.delete();
