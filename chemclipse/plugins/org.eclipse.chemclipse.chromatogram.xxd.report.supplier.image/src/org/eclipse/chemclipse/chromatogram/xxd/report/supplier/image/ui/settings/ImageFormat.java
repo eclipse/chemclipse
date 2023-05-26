@@ -35,6 +35,11 @@ public enum ImageFormat implements ILabel {
 		return format;
 	}
 
+	public String getExtension() {
+
+		return label.replace("*", "");
+	}
+
 	@Override
 	public String label() {
 

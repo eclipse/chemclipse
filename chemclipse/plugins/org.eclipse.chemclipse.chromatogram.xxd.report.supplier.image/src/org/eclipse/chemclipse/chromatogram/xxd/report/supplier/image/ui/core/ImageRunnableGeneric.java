@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.core;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +31,12 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramCha
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSupport;
+import org.eclipse.swt.SWTException;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.ImageLoader;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.LineStyle;
@@ -90,12 +97,58 @@ public class ImageRunnableGeneric implements Runnable {
 				addScans(baseChart, lineSeriesDataList);
 			}
 			chromatogramChart.addSeriesData(lineSeriesDataList);
-			imageFactory.saveImage(file.getAbsolutePath(), settings.getFormat().getConstant());
+			if(!settings.isAppend()) {
+				imageFactory.saveImage(file.getAbsolutePath(), settings.getFormat().getConstant());
+			} else {
+				appendImage(chromatogramChart.getDisplay(), imageFactory, file);
+			}
 			imageFactory.closeShell();
 		} catch(InstantiationException e) {
 			logger.warn(e);
 		} catch(IllegalAccessException e) {
 			logger.warn(e);
+		}
+	}
+
+	private void appendImage(Display display, ImageFactory<ChromatogramChart> imageFactory, File file) {
+
+		GC gc = null;
+		Image temp = null;
+		Image target = null;
+		Image combinedImage = null;
+		try {
+			File tempFile = File.createTempFile(file.getName(), settings.getFormat().getExtension());
+			imageFactory.saveImage(tempFile.getAbsolutePath(), settings.getFormat().getConstant());
+			temp = new Image(display, tempFile.getAbsolutePath());
+			target = new Image(display, file.getAbsolutePath());
+			int combinedWidth = temp.getBounds().width + target.getBounds().width;
+			int combinedHeight = Math.max(temp.getBounds().height, target.getBounds().height);
+			combinedImage = new Image(display, combinedWidth, combinedHeight);
+			gc = new GC(combinedImage);
+			gc.drawImage(temp, 0, 0);
+			gc.drawImage(target, temp.getBounds().width, 0);
+			ImageLoader imageLoader = new ImageLoader();
+			imageLoader.data = new ImageData[]{combinedImage.getImageData()};
+			imageLoader.save(file.getAbsolutePath(), settings.getFormat().getConstant());
+		} catch(SWTException e) {
+			if(e.getMessage().equals("Unsupported or unrecognized format")) {
+				imageFactory.saveImage(file.getAbsolutePath(), settings.getFormat().getConstant());
+			}
+		} catch(IOException e) {
+			logger.warn(e);
+		} finally {
+			if(gc != null) {
+				gc.dispose();
+			}
+			if(temp != null) {
+				temp.dispose();
+			}
+			if(target != null) {
+				target.dispose();
+			}
+			if(combinedImage != null) {
+				combinedImage.dispose();
+			}
 		}
 	}
 
