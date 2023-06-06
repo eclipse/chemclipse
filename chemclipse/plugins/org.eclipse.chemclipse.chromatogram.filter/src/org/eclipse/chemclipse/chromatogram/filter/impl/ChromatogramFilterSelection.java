@@ -71,7 +71,15 @@ public class ChromatogramFilterSelection extends AbstractChromatogramFilter impl
 					processingInfo.addMessage(new ProcessingMessage(MessageType.WARN, Messages.selectRange, Messages.stopRetentionTimeOutsideRange));
 				}
 				//
-				chromatogramSelection.setRangeRetentionTime((int)startRetentionTime, (int)stopRetentionTime);
+				float startAbundance = filterSettings.getStartAbundance();
+				if(filterSettings.isStartAbundanceRelative()) {
+					startAbundance = chromatogramSelection.getChromatogram().getMaxSignal() * filterSettings.getStartAbundance() / 100;
+				}
+				float stopAbundance = filterSettings.getStopAbundance();
+				if(filterSettings.isStopAbundanceRelative()) {
+					stopAbundance = chromatogramSelection.getChromatogram().getMaxSignal() * filterSettings.getStopAbundance() / 100;
+				}
+				chromatogramSelection.setRanges((int)startRetentionTime, (int)stopRetentionTime, startAbundance, stopAbundance);
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, Messages.chromatogramSelectionApplied));
 			}
 		}

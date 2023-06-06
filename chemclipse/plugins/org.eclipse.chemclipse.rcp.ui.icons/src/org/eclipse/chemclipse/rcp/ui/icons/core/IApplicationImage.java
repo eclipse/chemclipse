@@ -466,4 +466,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SORT_ALPHA_DESC = "sort_alpha_desc.png";
 	//
 	String IMAGE_EXTERNAL_BROWSER = "external_browser.png";
+	//
+	String IMAGE_UNZOOM = "unzoomChromatogram.gif";
 }

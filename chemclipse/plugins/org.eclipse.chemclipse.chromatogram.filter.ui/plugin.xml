@@ -19,5 +19,19 @@
             filterSettings="org.eclipse.chemclipse.chromatogram.filter.settings.MaxDetectorFilterSettings"
             id="org.eclipse.chemclipse.chromatogram.filter.ui.scanMaximaDetector">
       </ChromatogramFilterSupplier>
-   </extension>   
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.filter.ui.icon.ResetSelectionMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.filter.resetChromatogramSelection">
+      </icon>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.filter.ui.icon.SetSelectionMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.filter.setChromatogramSelection">
+      </icon>
+   </extension>
 </plugin>
