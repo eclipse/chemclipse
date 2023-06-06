@@ -17,9 +17,13 @@ public enum DisplayOption implements ILabel {
 
 	STANDARD("Standard"), //
 	NUMBERS("Numbers"), //
+	NUMBERS_STANDARD("Numbers [Display Field]"), //
 	RETENTION_TIME("Retention Time"), //
+	RETENTION_TIME_STANDARD("Retention Time [Display Field]"), //
 	RETENTION_INDEX("Retention Index"), //
-	AREA_PERCENT("Area [%]"); //
+	RETENTION_INDEX_STANDARD("Retention Index [Display Field]"), //
+	AREA_PERCENT("Area%"), //
+	AREA_PERCENT_STANDARD("Area% [Display Field]"); //
 
 	private String label = "";
 

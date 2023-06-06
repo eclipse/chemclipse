@@ -308,23 +308,37 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 					/*
 					 * Get the label.
 					 */
-					String label = null;
+					String labelDisplay = null;
+					String labelStandard = targetReference.getTargetLabel(libraryField);
+					//
 					switch(displayOption) {
 						case NUMBERS:
-							label = String.valueOf(number++);
+							labelDisplay = String.valueOf(number++);
+							break;
+						case NUMBERS_STANDARD:
+							labelDisplay = getConcatenatedLabel(String.valueOf(number++), labelStandard);
 							break;
 						case RETENTION_TIME:
-							label = targetReference.getRetentionTimeMinutes();
+							labelDisplay = targetReference.getRetentionTimeMinutes();
+							break;
+						case RETENTION_TIME_STANDARD:
+							labelDisplay = getConcatenatedLabel(targetReference.getRetentionTimeMinutes(), labelStandard);
 							break;
 						case RETENTION_INDEX:
-							label = decimalFormatRetentionIndex.format(targetReference.getRetentionIndex());
+							labelDisplay = decimalFormatRetentionIndex.format(targetReference.getRetentionIndex());
+							break;
+						case RETENTION_INDEX_STANDARD:
+							labelDisplay = getConcatenatedLabel(decimalFormatRetentionIndex.format(targetReference.getRetentionIndex()), labelStandard);
 							break;
 						case AREA_PERCENT:
-							label = getAreaPercent(targetReference);
+							labelDisplay = getAreaPercent(targetReference);
+							break;
+						case AREA_PERCENT_STANDARD:
+							labelDisplay = getConcatenatedLabel(getAreaPercent(targetReference), labelStandard);
 							break;
 						default:
-							label = targetReference.getTargetLabel(libraryField);
-							if(label == null || label.isEmpty()) {
+							labelDisplay = labelStandard;
+							if(labelDisplay == null || labelDisplay.isEmpty()) {
 								continue;
 							}
 							break;
@@ -344,7 +358,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 						fontData = null;
 					}
 					//
-					TargetLabel targetLabel = new TargetLabel(label, showReferenceId ? targetReference.getRetentionTimeMinutes() : null, fontData, isActive, scan.getX(), scan.getY());
+					TargetLabel targetLabel = new TargetLabel(labelDisplay, showReferenceId ? targetReference.getRetentionTimeMinutes() : null, fontData, isActive, scan.getX(), scan.getY());
 					targetLabels.add(targetLabel);
 				}
 			}
@@ -352,6 +366,15 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		//
 		Collections.sort(targetLabels, (o1, o2) -> Double.compare(o1.getX(), o2.getX()));
 		return visibilityFilter;
+	}
+
+	private String getConcatenatedLabel(String displayLabel, String targetLabel) {
+
+		if(targetLabel == null || targetLabel.isEmpty()) {
+			return displayLabel;
+		} else {
+			return displayLabel + " [" + targetLabel + "]";
+		}
 	}
 
 	private String getAreaPercent(ITargetReference targetReference) {

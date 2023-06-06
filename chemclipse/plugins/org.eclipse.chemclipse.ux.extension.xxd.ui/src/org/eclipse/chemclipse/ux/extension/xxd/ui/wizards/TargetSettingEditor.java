@@ -78,16 +78,16 @@ public class TargetSettingEditor {
 		createComboViewerDisplayOption(composite);
 		createCheckBoxPeaks(composite);
 		createCheckBoxScans(composite);
+		//
 		new Label(composite, SWT.SEPARATOR | SWT.VERTICAL);
+		//
 		createLabel(composite, "Display Field: ");
 		createComboViewerLibraryField(composite);
 		createLabel(composite, "Collision Detection Depth: ");
 		createComboViewerCollision(composite);
 		//
 		createSectionRotation(composite);
-		//
 		createSectionTableEdit(composite);
-		//
 		createSectionListUI(composite);
 		/*
 		 * Input
