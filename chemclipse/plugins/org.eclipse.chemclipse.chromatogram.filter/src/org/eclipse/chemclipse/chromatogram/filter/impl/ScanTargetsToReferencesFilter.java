@@ -27,12 +27,10 @@ import org.eclipse.chemclipse.model.support.TargetTransferSupport;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public class ScanTargetsToReferencesFilter extends AbstractTransferFilter {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
@@ -46,21 +44,20 @@ public class ScanTargetsToReferencesFilter extends AbstractTransferFilter {
 	}
 
 	@Override
-	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		ScanTargetsToReferencesSettings settings = PreferenceSupplier.getScansToReferencesTransferSettings();
 		return applyFilter(chromatogramSelection, settings, monitor);
 	}
 
-	@SuppressWarnings("unchecked")
-	private void transferTargets(IChromatogramSelection chromatogramSelection, ScanTargetsToReferencesSettings settings) {
+	private void transferTargets(IChromatogramSelection<?, ?> chromatogramSelection, ScanTargetsToReferencesSettings settings) {
 
 		TargetTransferSupport targetTransferSupport = new TargetTransferSupport();
-		List<IChromatogram> referencedChromatograms = chromatogramSelection.getChromatogram().getReferencedChromatograms();
+		List<IChromatogram<?>> referencedChromatograms = chromatogramSelection.getChromatogram().getReferencedChromatograms();
 		if(!referencedChromatograms.isEmpty()) {
 			boolean useBestTargetOnly = settings.isUseBestTargetOnly();
 			List<IScan> scansSource = extractIdentifiedScans(chromatogramSelection);
-			for(IChromatogram referencedChromatogram : referencedChromatograms) {
+			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
 				targetTransferSupport.transferScanTargets(scansSource, referencedChromatogram, useBestTargetOnly);
 			}
 		}

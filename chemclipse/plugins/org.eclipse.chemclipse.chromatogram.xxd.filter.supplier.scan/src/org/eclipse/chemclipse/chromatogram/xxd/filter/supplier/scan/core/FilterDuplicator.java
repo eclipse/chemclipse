@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,9 +19,9 @@ import java.util.TreeMap;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDuplicator;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
@@ -45,34 +45,29 @@ import org.eclipse.core.runtime.IProgressMonitor;
 @SuppressWarnings("rawtypes")
 public class FilterDuplicator extends AbstractChromatogramFilter {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			try {
-				if(chromatogramFilterSettings instanceof FilterSettingsDuplicator settings) {
-					applyScanDuplicatorFilter(chromatogramSelection, settings, monitor);
-					processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Scan Duplicator", "Scans have been duplicated successfully."));
-					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Scans have been duplicated successfully."));
-					chromatogramSelection.getChromatogram().setDirty(true);
-				}
-			} catch(FilterException e) {
-				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
+			if(chromatogramFilterSettings instanceof FilterSettingsDuplicator settings) {
+				applyScanDuplicatorFilter(chromatogramSelection, settings);
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Scan Duplicator", "Scans have been duplicated successfully."));
+				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Scans have been duplicated successfully."));
+				chromatogramSelection.getChromatogram().setDirty(true);
 			}
 		}
 		return processingInfo;
 	}
 
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsDuplicator filterSettings = PreferenceSupplier.getDuplicatorFilterSettings();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void applyScanDuplicatorFilter(IChromatogramSelection chromatogramSelection, FilterSettingsDuplicator settings, IProgressMonitor monitor) throws FilterException {
+	private void applyScanDuplicatorFilter(IChromatogramSelection chromatogramSelection, FilterSettingsDuplicator settings) {
 
 		if(chromatogramSelection != null) {
 			/*
@@ -106,7 +101,7 @@ public class FilterDuplicator extends AbstractChromatogramFilter {
 					int retentionTimeCenter = (int)((scanNext.getRetentionTime() + scan.getRetentionTime()) / 2.0d);
 					float intensityCenter = (scanNext.getTotalSignal() + scan.getTotalSignal()) / 2.0f;
 					//
-					if(scan instanceof IScanCSD currentScan) {
+					if(scan instanceof IScanCSD) {
 						/*
 						 * CSD
 						 */

@@ -15,7 +15,6 @@ import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogra
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.settings.FilterSettings;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-@SuppressWarnings({"rawtypes"})
 public class NormalizerFilter_1_Test extends ChromatogramImporterTestCase {
 
 	private IChromatogramFilter chromatogramFilter;
@@ -38,7 +37,6 @@ public class NormalizerFilter_1_Test extends ChromatogramImporterTestCase {
 		super.tearDown();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void testApplyFilter_1() {
 
 		float totalSignal;

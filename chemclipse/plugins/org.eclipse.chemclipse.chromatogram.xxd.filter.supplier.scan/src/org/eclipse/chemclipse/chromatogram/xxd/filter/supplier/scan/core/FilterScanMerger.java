@@ -19,9 +19,9 @@ import java.util.TreeMap;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsScanMerger;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
@@ -42,39 +42,33 @@ import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
 import org.eclipse.chemclipse.xir.model.implementation.ScanISD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public class FilterScanMerger extends AbstractChromatogramFilter {
 
 	private static final String MESSAGE = "The scans have been merged.";
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			try {
-				if(chromatogramFilterSettings instanceof FilterSettingsScanMerger settings) {
-					applyScanMergerFilter(chromatogramSelection, settings, monitor);
-					processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Scan Merger", MESSAGE));
-					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, MESSAGE));
-					chromatogramSelection.getChromatogram().setDirty(true);
-				}
-			} catch(FilterException e) {
-				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
+			if(chromatogramFilterSettings instanceof FilterSettingsScanMerger settings) {
+				applyScanMergerFilter(chromatogramSelection, settings, monitor);
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Scan Merger", MESSAGE));
+				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, MESSAGE));
+				chromatogramSelection.getChromatogram().setDirty(true);
 			}
 		}
 		return processingInfo;
 	}
 
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsScanMerger filterSettings = PreferenceSupplier.getScanMergerFilterSettings();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void applyScanMergerFilter(IChromatogramSelection chromatogramSelection, FilterSettingsScanMerger settings, IProgressMonitor monitor) throws FilterException {
+	private void applyScanMergerFilter(IChromatogramSelection<?, ?> chromatogramSelection, FilterSettingsScanMerger settings, IProgressMonitor monitor) {
 
 		if(chromatogramSelection != null) {
 			/*
@@ -103,11 +97,11 @@ public class FilterScanMerger extends AbstractChromatogramFilter {
 						int retentionTimeCenter = (int)((scanNext.getRetentionTime() + scan.getRetentionTime()) / 2.0d);
 						float totalSignalMerged = (float)((scan.getTotalSignal() + scanNext.getTotalSignal()) / 2.0d);
 						//
-						if(scan instanceof IScanCSD currentScan) {
+						if(scan instanceof IScanCSD) {
 							/*
 							 * CSD
 							 */
-							if(scanNext instanceof IScanCSD nextScan) {
+							if(scanNext instanceof IScanCSD) {
 								IScanCSD scanMerged = new ScanCSD(totalSignalMerged);
 								scanMerged.setRetentionTime(retentionTimeCenter);
 								scansMerged.add(scanMerged);

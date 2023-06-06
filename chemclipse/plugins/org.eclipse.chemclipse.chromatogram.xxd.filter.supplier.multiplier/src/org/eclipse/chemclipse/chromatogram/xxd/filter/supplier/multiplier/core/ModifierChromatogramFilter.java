@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
 
-@SuppressWarnings("rawtypes")
 public abstract class ModifierChromatogramFilter extends AbstractChromatogramFilter {
 
 	protected void applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, float factor, boolean multiply) throws FilterException {

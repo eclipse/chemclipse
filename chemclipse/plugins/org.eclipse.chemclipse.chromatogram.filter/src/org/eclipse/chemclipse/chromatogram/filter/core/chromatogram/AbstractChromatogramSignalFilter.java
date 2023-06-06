@@ -37,18 +37,16 @@ import org.eclipse.chemclipse.wsd.model.xwc.IExtractedSingleWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedSingleWavelengthSignals;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public abstract class AbstractChromatogramSignalFilter extends AbstractChromatogramFilter implements IChromatogramFilter {
 
 	protected abstract IChromatogramFilterResult applyFilter(ITotalScanSignals totalSignals, IChromatogramFilterSettings filterSettings, IProgressMonitor monitor);
 
 	protected abstract IChromatogramFilterResult applyFilter(ITotalScanSignals totalSignals, IProgressMonitor monitor);
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			IChromatogramFilterResult chromatogramFilterResult = process(chromatogramSelection, chromatogramFilterSettings, monitor);
 			chromatogramSelection.getChromatogram().setDirty(true);
@@ -57,11 +55,10 @@ public abstract class AbstractChromatogramSignalFilter extends AbstractChromatog
 		return processingInfo;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validateChromatogramSelection(chromatogramSelection);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = validateChromatogramSelection(chromatogramSelection);
 		if(!processingInfo.hasErrorMessages()) {
 			IChromatogramFilterResult chromatogramFilterResult = process(chromatogramSelection, null, monitor);
 			processingInfo.setProcessingResult(chromatogramFilterResult);
@@ -69,7 +66,7 @@ public abstract class AbstractChromatogramSignalFilter extends AbstractChromatog
 		return processingInfo;
 	}
 
-	private IChromatogramFilterResult process(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	private IChromatogramFilterResult process(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 			return process(chromatogramSelectionMSD, chromatogramFilterSettings, monitor);

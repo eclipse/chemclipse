@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class MultiplierFilter_1_Test extends ChromatogramImporterTestCase {
 
-	private IChromatogramFilter<?, ?, ?> chromatogramFilter;
+	private IChromatogramFilter chromatogramFilter;
 	private MultiplierSettings multiplierFilterSettings;
 
 	@Override
@@ -37,7 +37,6 @@ public class MultiplierFilter_1_Test extends ChromatogramImporterTestCase {
 		super.tearDown();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void testApplyFilter_1() {
 
 		float totalSignal;

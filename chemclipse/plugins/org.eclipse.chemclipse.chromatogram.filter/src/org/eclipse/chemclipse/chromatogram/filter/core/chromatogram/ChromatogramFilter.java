@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.filter.core.chromatogram;
 
 import org.eclipse.chemclipse.chromatogram.filter.l10n.Messages;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -56,21 +57,20 @@ public class ChromatogramFilter {
 	 * @param filterId
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public static IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<IChromatogramFilterResult> processingInfo;
 		IChromatogramFilter chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			try {
 				processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 			} catch(Exception e) {
 				logger.error(e);
-				processingInfo = new ProcessingInfo();
+				processingInfo = new ProcessingInfo<>();
 				processingInfo.addErrorMessage(Messages.chromatogramFilter, e.getLocalizedMessage());
 			}
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.noChromatogramFilterAvailable);
 		}
 		return processingInfo;
@@ -86,21 +86,20 @@ public class ChromatogramFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public static IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<IChromatogramFilterResult> processingInfo;
 		IChromatogramFilter chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			try {
 				processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
 			} catch(Exception e) {
 				logger.error(e);
-				processingInfo = new ProcessingInfo();
+				processingInfo = new ProcessingInfo<>();
 				processingInfo.addErrorMessage(Messages.chromatogramFilter, e.getLocalizedMessage());
 			}
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.noChromatogramFilterAvailable);
 		}
 		return processingInfo;
@@ -140,14 +139,14 @@ public class ChromatogramFilter {
 	 * Returns a {@link IChromatogramFilter} instance given by the filterId or
 	 * null, if none is available.
 	 */
-	private static IChromatogramFilter<?, ?, ?> getChromatogramFilter(final String filterId) {
+	private static IChromatogramFilter getChromatogramFilter(final String filterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(filterId);
-		IChromatogramFilter<?, ?, ?> instance = null;
+		IChromatogramFilter instance = null;
 		if(element != null) {
 			try {
-				instance = (IChromatogramFilter<?, ?, ?>)element.createExecutableExtension(FILTER);
+				instance = (IChromatogramFilter)element.createExecutableExtension(FILTER);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}

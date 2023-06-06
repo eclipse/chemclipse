@@ -47,7 +47,6 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 
 	private static final String IDENTIFIER = Messages.scanMaximaDetectorUI;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
