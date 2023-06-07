@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,7 +33,6 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public class MassSpectrumExportConverter_DB_5_ITest extends MassSpectrumExportConverterTestCase {
 
 	@Override
@@ -61,7 +60,7 @@ public class MassSpectrumExportConverter_DB_5_ITest extends MassSpectrumExportCo
 		//
 		exportConverter.convert(exportFile, ms, false, new NullProgressMonitor());
 		//
-		IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		try {
 			massSpectra = (IMassSpectra)processingInfo.getProcessingResult();
 		} catch(TypeCastException e) {

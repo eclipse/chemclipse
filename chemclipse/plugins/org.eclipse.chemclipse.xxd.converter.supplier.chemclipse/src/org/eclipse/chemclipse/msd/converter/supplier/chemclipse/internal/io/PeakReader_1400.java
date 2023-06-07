@@ -88,7 +88,7 @@ public class PeakReader_1400 extends AbstractZipReader implements IPeakReader {
 		ZipFile zipFile = new ZipFile(file);
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		try {
-			IPeaks peaks = readPeaksFromZipFile(zipFile, monitor);
+			IPeaks<?> peaks = readPeaksFromZipFile(zipFile, monitor);
 			processingInfo.setProcessingResult(peaks);
 		} finally {
 			zipFile.close();
@@ -96,10 +96,9 @@ public class PeakReader_1400 extends AbstractZipReader implements IPeakReader {
 		return processingInfo;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private IPeaks readPeaksFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
+	private IPeaks<?> readPeaksFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
 
-		IPeaks peaks = new Peaks();
+		IPeaks<?> peaks = new Peaks();
 		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_PEAKS_MSD);
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Peaks", numberOfPeaks);

@@ -95,7 +95,6 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 import org.eclipse.ui.PlatformUI;
 
-@SuppressWarnings("rawtypes")
 public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI, ConfigurableUI<PeakScanListUIConfig> {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakScanListUI.class);
@@ -120,6 +119,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private Button buttonTableEdit;
 	private AtomicReference<PeakScanListUI> tableViewer = new AtomicReference<>();
 	//
+	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 	//
 	private boolean showScans;
@@ -144,7 +144,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		List<Object> objects = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
 		if(!objects.isEmpty()) {
 			Object last = objects.get(0);
-			if(last instanceof IChromatogramSelection chromatogramSelection) {
+			if(last instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
 				updateChromatogramSelection(chromatogramSelection);
 			}
 		}
@@ -153,7 +153,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		return true;
 	}
 
-	public void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
+	public void updateChromatogramSelection(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(hasChanged(chromatogramSelection)) {
 			this.chromatogramSelection = chromatogramSelection;
@@ -175,7 +175,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			currentModCount = chromatogramSelection.getChromatogram().getModCount();
 			lastRange = new RetentionTimeRange(chromatogramSelection);
 			tableViewer.get().setInput(chromatogramSelection, showPeaks, showPeaksInRange, showScans, showScansInRange);
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
 				buttonSave.setEnabled(true);
 			}
@@ -483,7 +483,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			/*
 			 * Selected Items.
 			 */
-			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+			Iterator<?> iterator = tableViewer.get().getStructuredSelection().iterator();
 			List<IScan> scanTargetsToClear = new ArrayList<>();
 			List<IPeak> peaksToDelete = new ArrayList<>();
 			/*
@@ -528,11 +528,10 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private void setPeaksActiveForAnalysis(boolean activeForAnalysis) {
 
-		Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+		Iterator<?> iterator = tableViewer.get().getStructuredSelection().iterator();
 		while(iterator.hasNext()) {
 			Object object = iterator.next();
-			if(object instanceof IPeak) {
-				IPeak peak = (IPeak)object;
+			if(object instanceof IPeak peak) {
 				peak.setActiveForAnalysis(activeForAnalysis);
 			}
 		}
@@ -545,12 +544,11 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		messageBox.setText("Internal Standard (ISTD)");
 		messageBox.setMessage("Would you like to modify the internal standards?");
 		if(messageBox.open() == SWT.YES) {
-			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+			Iterator<?> iterator = tableViewer.get().getStructuredSelection().iterator();
 			exitloop:
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
-				if(object instanceof IPeak) {
-					IPeak peak = (IPeak)object;
+				if(object instanceof IPeak peak) {
 					if(peak.getIntegratedArea() > 0) {
 						InternalStandardDialog dialog = new InternalStandardDialog(display.getActiveShell(), peak);
 						if(dialog.open() == Window.OK) {
@@ -572,12 +570,11 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		messageBox.setText("Classifier");
 		messageBox.setMessage("Would you like to modify the classifier?");
 		if(messageBox.open() == SWT.YES) {
-			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+			Iterator<?> iterator = tableViewer.get().getStructuredSelection().iterator();
 			exitloop:
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
-				if(object instanceof IPeak) {
-					IPeak peak = (IPeak)object;
+				if(object instanceof IPeak peak) {
 					ClassifierDialog dialog = new ClassifierDialog(display.getActiveShell(), peak);
 					if(dialog.open() == Window.OK) {
 						peak.removeClassifier();
@@ -613,7 +610,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		//
 		if(!selection.isEmpty()) {
 			buttonDelete.setEnabled(true);
-			List list = selection.toList();
+			List<?> list = selection.toList();
 			if(list.size() > 1) {
 				/*
 				 * Add in the future to select/display more than one peak.
@@ -628,12 +625,10 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				List<IScan> scansIdentify = new ArrayList<>();
 				//
 				for(Object item : list) {
-					if(item instanceof IPeak) {
-						IPeak peak = (IPeak)item;
+					if(item instanceof IPeak peak) {
 						selectedPeaks.add(peak);
 						scansIdentify.add(peak.getPeakModel().getPeakMaximum());
-					} else if(item instanceof IScan) {
-						IScan scan = (IScan)item;
+					} else if(item instanceof IScan scan) {
 						selectedIdentifiedScans.add(scan);
 						scansIdentify.add(scan);
 					}
@@ -713,7 +708,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 				IStructuredSelection selection = tableViewer.get().getStructuredSelection();
 				if(!selection.isEmpty()) {
-					List list = selection.toList();
+					List<?> list = selection.toList();
 					if(list.size() == 2) {
 						IScanMSD massSpectrum1 = getScanMSD(list.get(0));
 						IScanMSD massSpectrum2 = getScanMSD(list.get(1));
@@ -868,7 +863,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						/*
 						 * Peaks
 						 */
-						IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+						IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 						Table table = tableViewer.get().getTable();
 						int[] indices = table.getSelectionIndices();
 						List<IPeak> peaks;
@@ -936,7 +931,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			/*
 			 * Display the selected and total amount of peaks/scans
 			 */
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			String chromatogramLabel = ChromatogramDataSupport.getChromatogramLabel(chromatogram);
 			//
 			int peaks = 0;
@@ -1049,7 +1044,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		return scanList;
 	}
 
-	private boolean hasChanged(IChromatogramSelection chromatogramSelection) {
+	private boolean hasChanged(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		boolean referenceChanged = this.chromatogramSelection != chromatogramSelection;
 		if(!referenceChanged && chromatogramSelection != null) {

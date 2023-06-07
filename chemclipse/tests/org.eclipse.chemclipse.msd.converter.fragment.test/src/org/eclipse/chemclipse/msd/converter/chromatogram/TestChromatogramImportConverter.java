@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,6 +15,8 @@ import java.io.File;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -23,23 +25,22 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * THIS CLASS IS NOT SUITED FOR PRODUCTIVE USE!<br/>
  * IT IS AN TESTCLASS!
  */
-@SuppressWarnings("rawtypes")
-public class TestChromatogramImportConverter extends AbstractChromatogramImportConverter implements IChromatogramImportConverter {
+public class TestChromatogramImportConverter extends AbstractChromatogramImportConverter<IChromatogram<?>> implements IChromatogramImportConverter<IChromatogram<?>> {
 
 	@Override
-	public IProcessingInfo<?> convert(File chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogram<?>> convert(File chromatogram, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo = super.validate(chromatogram);
-		IProcessingInfo<?> processingInfoImport = new ProcessingInfo<Object>();
+		IProcessingInfo<IChromatogram<?>> processingInfo = super.validate(chromatogram);
+		IProcessingInfo<IChromatogram<?>> processingInfoImport = new ProcessingInfo<>();
 		processingInfoImport.addMessages(processingInfo);
 		return processingInfoImport;
 	}
 
 	@Override
-	public IProcessingInfo<?> convertOverview(File chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramOverview> convertOverview(File chromatogram, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo = super.validate(chromatogram);
-		IProcessingInfo<?> processingInfoImport = new ProcessingInfo<Object>();
+		IProcessingInfo<IChromatogramOverview> processingInfo = super.validate(chromatogram);
+		IProcessingInfo<IChromatogramOverview> processingInfoImport = new ProcessingInfo<>();
 		processingInfoImport.addMessages(processingInfo);
 		return processingInfoImport;
 	}

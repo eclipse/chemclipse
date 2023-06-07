@@ -177,7 +177,7 @@ import org.eclipse.swtchart.extensions.preferences.PreferencePage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 
-@SuppressWarnings("rawtypes")
+
 public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
@@ -315,7 +315,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	public boolean fireUpdateChromatogram(Display display) {
 
-		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
+		IChromatogramSelection<?, ?>chromatogramSelection = getChromatogramSelection();
 		if(chromatogramSelection != null && eventBroker != null) {
 			UpdateNotifierUI.update(display, chromatogramSelection);
 		}
@@ -325,7 +325,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	public boolean fireUpdatePeak(Display display) {
 
 		boolean update = false;
-		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
+		IChromatogramSelection<?, ?>chromatogramSelection = getChromatogramSelection();
 		if(chromatogramSelection != null && eventBroker != null) {
 			final IPeak peak = chromatogramSelection.getSelectedPeak();
 			if(peak != null) {
@@ -339,7 +339,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	public boolean fireUpdateScan(Display display) {
 
 		boolean update = false;
-		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
+		IChromatogramSelection<?, ?>chromatogramSelection = getChromatogramSelection();
 		if(chromatogramSelection != null && eventBroker != null) {
 			final IScan scan = chromatogramSelection.getSelectedScan();
 			if(scan != null) {
@@ -355,7 +355,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		return chromatogramChart;
 	}
 
-	public synchronized void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
+	public synchronized void updateChromatogramSelection(IChromatogramSelection<?, ?>chromatogramSelection) {
 
 		setChromatogramSelectionInternal(chromatogramSelection);
 		chromatogramBaselinesUI.update(chromatogramSelection.getChromatogram());
@@ -377,7 +377,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		}
 	}
 
-	private void setChromatogramSelectionInternal(IChromatogramSelection chromatogramSelection) {
+	private void setChromatogramSelectionInternal(IChromatogramSelection<?, ?>chromatogramSelection) {
 
 		if(this.chromatogramSelection != chromatogramSelection) {
 			DataCategory dataCategory = DataCategory.AUTO_DETECT;
@@ -478,12 +478,12 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		}
 	}
 
-	public IChromatogramSelection getChromatogramSelection() {
+	public IChromatogramSelection<?, ?>getChromatogramSelection() {
 
 		return chromatogramSelection;
 	}
 
-	public boolean isActiveChromatogramSelection(IChromatogramSelection chromatogramSelection) {
+	public boolean isActiveChromatogramSelection(IChromatogramSelection<?, ?>chromatogramSelection) {
 
 		return (this.chromatogramSelection == chromatogramSelection);
 	}
@@ -774,7 +774,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 		if(targetDisplaySettings == null) {
 			if(chromatogramSelection != null) {
-				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				targetDisplaySettings = chromatogram;
 			}
 		}
@@ -1156,7 +1156,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			public void execute(IProcessMethod processMethod, IProgressMonitor monitor) {
 
 				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-				IChromatogramSelection chromatogramSelection = getChromatogramSelection();
+				IChromatogramSelection<?, ?>chromatogramSelection = getChromatogramSelection();
 				ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processingInfo, processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
 				chromatogramSelection.getChromatogram().setDirty(true); // TODO: check each entry
 				updateResult(processingInfo);
@@ -1218,7 +1218,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 					 * Transfer to references?
 					 */
 					if(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES)) {
-						for(IChromatogram chromatogramReference : chromatogram.getReferencedChromatograms()) {
+						for(IChromatogram<?> chromatogramReference : chromatogram.getReferencedChromatograms()) {
 							chromatogramReference.getSeparationColumnIndices().setSeparationColumn(separationColumn);
 						}
 					}
@@ -1568,7 +1568,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		 * Scan Axis
 		 */
 		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram != null) {
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
 				ISecondaryAxisSettings axisSettings = ChartSupport.getSecondaryAxisSettingsX(titleScans, chartSettings);
@@ -1619,7 +1619,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		axisSettings.setTitleFont(titleFont);
 	}
 
-	private void updateToolbar(Composite composite, IChromatogramSelection chromatogramSelection) {
+	private void updateToolbar(Composite composite, IChromatogramSelection<?, ?>chromatogramSelection) {
 
 		if(composite instanceof IChromatogramSelectionUpdateListener listener) {
 			listener.update(chromatogramSelection);

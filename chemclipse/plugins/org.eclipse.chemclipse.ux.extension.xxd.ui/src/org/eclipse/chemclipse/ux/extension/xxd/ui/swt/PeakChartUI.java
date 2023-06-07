@@ -223,7 +223,6 @@ public class PeakChartUI extends ScrollableChart {
 		applySettings(chartSettings);
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void addLineSeriesData(List<ILineSeriesData> lineSeriesDataList) {
 
 		/*
@@ -241,7 +240,7 @@ public class PeakChartUI extends ScrollableChart {
 					ISeriesData optimizedSeriesData = calculateSeries(seriesData);
 					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 					lineSeriesSettings.getSeriesSettingsHighlight(); // Initialize
-					ILineSeries lineSeries = (ILineSeries)createSeries(optimizedSeriesData, lineSeriesSettings);
+					ILineSeries<?> lineSeries = (ILineSeries<?>)createSeries(optimizedSeriesData, lineSeriesSettings);
 					baseChart.applySeriesSettings(lineSeries, lineSeriesSettings);
 				} catch(SeriesException e) {
 					//

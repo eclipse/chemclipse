@@ -162,7 +162,6 @@ public class ExtendedQuantitationListUI extends Composite implements IExtendedPa
 		});
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void deleteQuantitationEntries(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
@@ -172,7 +171,7 @@ public class ExtendedQuantitationListUI extends Composite implements IExtendedPa
 			/*
 			 * Delete Quantitation Entry
 			 */
-			Iterator iterator = quantitationListUI.getStructuredSelection().iterator();
+			Iterator<?> iterator = quantitationListUI.getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof IQuantitationEntry) {

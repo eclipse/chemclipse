@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -69,10 +69,9 @@ public class PeakProcessorSupport {
 		String modelPeakMarker = "MP" + modelPeakOption.value();
 		//
 		for(IPeak peak : peaks) {
-			if(peak instanceof IPeakMSD) {
+			if(peak instanceof IPeakMSD peakMSD) {
 				String header = peak.getTemporaryData();
 				try {
-					IPeakMSD peakMSD = (IPeakMSD)peak;
 					IPeakModelMSD peakModelMSD = peakMSD.getPeakModel();
 					//
 					int startScan = peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN) instanceof Integer ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN) : 0;

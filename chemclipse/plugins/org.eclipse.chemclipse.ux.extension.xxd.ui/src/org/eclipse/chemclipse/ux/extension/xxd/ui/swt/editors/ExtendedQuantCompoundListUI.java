@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -159,14 +160,14 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the info toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
-				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16, visible));
+				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImageProvider.SIZE_16x16, visible));
 			}
 		});
 		//
@@ -178,7 +179,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the header toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -186,9 +187,9 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarHeader);
 				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImageProvider.SIZE_16x16));
 				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImageProvider.SIZE_16x16));
 				}
 			}
 		});
@@ -201,7 +202,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle modify toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -209,9 +210,9 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarModify);
 				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ACTIVE, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ACTIVE, IApplicationImageProvider.SIZE_16x16));
 				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImageProvider.SIZE_16x16));
 				}
 			}
 		});
@@ -225,7 +226,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Create Response Tables");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CALCULATE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CALCULATE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -235,13 +236,11 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 					IStructuredSelection structuredSelection = quantCompoundListUI.getStructuredSelection();
 					if(!structuredSelection.isEmpty()) {
 						if(MessageDialog.openQuestion(e.display.getActiveShell(), DESCRIPTION, "Would you like to create new concentration response and signal tables for the selected entries?")) {
-							@SuppressWarnings("rawtypes")
-							Iterator iterator = structuredSelection.iterator();
+							Iterator<?> iterator = structuredSelection.iterator();
 							while(iterator.hasNext()) {
 								Object object = iterator.next();
-								if(object instanceof IQuantitationCompound) {
-									IQuantitationCompound quantitationCompound = (IQuantitationCompound)object;
-									if(quantitationCompound.getQuantitationPeaks().size() > 0) {
+								if(object instanceof IQuantitationCompound quantitationCompound) {
+									if(!quantitationCompound.getQuantitationPeaks().isEmpty()) {
 										quantitationCompound.calculateSignalTablesFromPeaks();
 									} else {
 										logger.warn("There are no quantitation peaks stored: " + quantitationCompound);
@@ -389,7 +388,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Add a new compound.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -407,7 +406,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Delete the selected compounds.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -441,7 +440,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Enable/disable to edit the table.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -449,7 +448,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 
 				boolean editEnabled = !quantCompoundListUI.isEditEnabled();
 				quantCompoundListUI.setEditEnabled(editEnabled);
-				button.setImage(ApplicationImageFactory.getInstance().getImage((editEnabled) ? IApplicationImage.IMAGE_EDIT_ENTRY_ACTIVE : IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
+				button.setImage(ApplicationImageFactory.getInstance().getImage((editEnabled) ? IApplicationImage.IMAGE_EDIT_ENTRY_ACTIVE : IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImageProvider.SIZE_16x16));
 				updateInput();
 			}
 		});
@@ -462,14 +461,14 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle search toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSearch);
-				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16, visible));
+				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImageProvider.SIZE_16x16, visible));
 			}
 		});
 		//
@@ -481,7 +480,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Save");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -501,7 +500,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Reset");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -524,7 +523,6 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 		});
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void deleteCompounds(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
@@ -534,7 +532,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 			/*
 			 * Delete
 			 */
-			Iterator iterator = quantCompoundListUI.getStructuredSelection().iterator();
+			Iterator<?> iterator = quantCompoundListUI.getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof IQuantitationCompound) {
@@ -592,8 +590,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 			public void selectionChanged(SelectionChangedEvent event) {
 
 				Object object = listUI.getStructuredSelection().getFirstElement();
-				if(object instanceof IQuantitationCompound) {
-					IQuantitationCompound quantitationCompound = (IQuantitationCompound)object;
+				if(object instanceof IQuantitationCompound quantitationCompound) {
 					UpdateNotifierUI.update(getDisplay(), quantitationCompound);
 				}
 			}
@@ -694,8 +691,8 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 
 	private void updateWidgets() {
 
-		buttonSave.setEnabled((saveHandler == null) ? false : true);
-		boolean enabled = (quantitationDatabase == null) ? false : true;
+		buttonSave.setEnabled(saveHandler != null);
+		boolean enabled = quantitationDatabase != null;
 		textSignal.setEnabled(enabled);
 		buttonAdd.setEnabled(enabled);
 		buttonDelete.setEnabled(enabled);

@@ -52,8 +52,7 @@ public class PeakIntegratorSupport {
 		return peakIntegrationResults;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public IPeakIntegrationResults calculatePeakIntegrationResults(IChromatogramSelection chromatogramSelection, PeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
+	public IPeakIntegrationResults calculatePeakIntegrationResults(IChromatogramSelection<?, ?> chromatogramSelection, PeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
 		/*
 		 * Get the chromatogram.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -73,8 +73,8 @@ public class TargetTransferSupport {
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public String transferScanTargets(List<IScan> scansSource, IChromatogram chromatogramSink, boolean useBestTargetOnly) {
+	
+	public String transferScanTargets(List<IScan> scansSource, IChromatogram<?> chromatogramSink, boolean useBestTargetOnly) {
 
 		if(scansSource.size() > 0) {
 			for(IScan scanSource : scansSource) {

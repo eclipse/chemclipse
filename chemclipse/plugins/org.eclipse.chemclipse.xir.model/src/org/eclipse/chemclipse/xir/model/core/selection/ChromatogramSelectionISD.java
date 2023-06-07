@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xir.model.core.IChromatogramPeakISD;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
 
-@SuppressWarnings("rawtypes")
 public class ChromatogramSelectionISD extends AbstractChromatogramSelection<IChromatogramPeakISD, IChromatogramISD> implements IChromatogramSelectionISD {
 
 	private IScanISD selectedScan;
@@ -59,7 +58,7 @@ public class ChromatogramSelectionISD extends AbstractChromatogramSelection<IChr
 	public void reset(boolean fireUpdate) {
 
 		super.reset(fireUpdate);
-		IChromatogram chromatogram = getChromatogram();
+		IChromatogram<?> chromatogram = getChromatogram();
 		/*
 		 * Scan
 		 */

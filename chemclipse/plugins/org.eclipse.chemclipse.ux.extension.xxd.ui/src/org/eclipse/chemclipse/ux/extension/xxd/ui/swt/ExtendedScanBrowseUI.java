@@ -44,7 +44,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-@SuppressWarnings("rawtypes")
 public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 
 	private Composite toolbarInfo;
@@ -141,8 +140,8 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof Type) {
-					return ((Type)element).getLabel();
+				if(element instanceof Type type) {
+					return type.getLabel();
 				}
 				return null;
 			}
@@ -196,9 +195,8 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 			public String getText(Object element) {
 
 				String label = "";
-				if(element instanceof IChromatogramSelection) {
-					IChromatogramSelection chromatogramSelection = (IChromatogramSelection)element;
-					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				if(element instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
+					IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 					label = ChromatogramDataSupport.getReferenceLabel(chromatogram, -1, false);
 				}
 				return label;
@@ -300,9 +298,8 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 		IScan referenceScan = null;
 		IStructuredSelection structuredSelection = comboViewerSource.getStructuredSelection();
 		Object object = structuredSelection.getFirstElement();
-		if(object instanceof IChromatogramSelection) {
-			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		if(object instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			int scanNumber = chromatogram.getScanNumber(masterRetentionTime);
 			referenceScan = chromatogram.getScan(scanNumber);
 		}
@@ -315,7 +312,7 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 
 		updateLabel(scan);
 		updateChart(scan);
-		updateComboViewer(scan);
+		updateComboViewer();
 		updatePreviousAndNextButton();
 	}
 
@@ -330,7 +327,8 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 		scanChartUI.getBaseChart().redraw();
 	}
 
-	private void updateComboViewer(IScan scan) {
+	@SuppressWarnings("rawtypes")
+	private void updateComboViewer() {
 
 		Type type = getSelectedType();
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
@@ -375,22 +373,21 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 	private Type getSelectedType() {
 
 		Object object = comboViewerType.getStructuredSelection().getFirstElement();
-		if(object instanceof Type) {
-			return (Type)object;
+		if(object instanceof Type type) {
+			return type;
 		}
 		return Type.BOTH;
 	}
 
-	@SuppressWarnings({"unchecked"})
-	private List<IChromatogramSelection> extractInternal() {
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private List<IChromatogramSelection<?, ?>> extractInternal() {
 
-		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
+		List<IChromatogramSelection<?, ?>> chromatogramSelections = new ArrayList<>();
 		if(chromatogramSelection != null) {
 			Object object = chromatogramSelection.getChromatogram();
-			if(object instanceof IChromatogram) {
-				IChromatogram chromatogram = (IChromatogram)object;
-				List<IChromatogram> chromatograms = chromatogram.getReferencedChromatograms();
-				for(IChromatogram chromatogramReference : chromatograms) {
+			if(object instanceof IChromatogram<?> chromatogram) {
+				List<IChromatogram<?>> chromatograms = chromatogram.getReferencedChromatograms();
+				for(IChromatogram<?> chromatogramReference : chromatograms) {
 					chromatogramSelections.add(new ChromatogramSelection(chromatogramReference));
 				}
 			}
@@ -398,13 +395,14 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 		return chromatogramSelections;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private List<IChromatogramSelection> extractExternal() {
 
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
 		EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			for(IChromatogramSelection chromatogramSelectionEditor : editorUpdateSupport.getChromatogramSelections()) {
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+			for(IChromatogramSelection<?, ?> chromatogramSelectionEditor : editorUpdateSupport.getChromatogramSelections()) {
 				if(chromatogram != chromatogramSelectionEditor.getChromatogram()) {
 					chromatogramSelections.add(chromatogramSelectionEditor);
 				}

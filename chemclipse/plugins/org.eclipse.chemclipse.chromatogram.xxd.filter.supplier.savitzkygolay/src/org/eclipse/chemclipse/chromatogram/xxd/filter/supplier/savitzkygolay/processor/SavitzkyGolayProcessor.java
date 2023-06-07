@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,15 +25,13 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public class SavitzkyGolayProcessor {
 
-	@SuppressWarnings("unchecked")
-	public static IChromatogramFilterResult smooth(IChromatogramSelection chromatogramSelection, boolean validatePositive, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
+	public static IChromatogramFilterResult smooth(IChromatogramSelection<?, ?> chromatogramSelection, boolean validatePositive, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		IChromatogramFilterResult chromatogramFilterResult;
 		try {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			TotalScanSignalExtractor signalExtractor = new TotalScanSignalExtractor(chromatogram);
 			ITotalScanSignals totalScanSignals = signalExtractor.getTotalScanSignals(chromatogramSelection, validatePositive);
 			//

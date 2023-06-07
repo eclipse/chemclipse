@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.runt
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IOnsiteSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsAMDIS;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.support.PeakProcessorSupport;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -36,7 +37,7 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class AmdisIdentifier {
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({"unchecked"})
 	public IProcessingResult<Void> calulateAndSetDeconvolutedPeaks(IChromatogramSelectionMSD chromatogramSelection, SettingsAMDIS settingsAMDIS, IProgressMonitor monitor) throws InterruptedException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
@@ -81,7 +82,7 @@ public class AmdisIdentifier {
 				return result;
 			}
 			//
-			IPeaks peaks = amdisPeaks.getProcessingResult();
+			IPeaks<IPeak> peaks = (IPeaks<IPeak>)amdisPeaks.getProcessingResult();
 			if(peaks == null) {
 				result.addErrorMessage(PreferenceSupplier.IDENTIFIER, "Parsing peaks does not return a result");
 				return result;

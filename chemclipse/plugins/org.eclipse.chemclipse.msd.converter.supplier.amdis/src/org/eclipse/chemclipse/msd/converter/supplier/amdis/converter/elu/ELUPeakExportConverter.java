@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,14 +24,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ELUPeakExportConverter extends AbstractPeakExportConverter {
 
 	@Override
-	public IProcessingInfo<IPeaks<?>> convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<IPeaks> convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {
 
 		return getNoSupportMessage();
 	}
 
-	private IProcessingInfo<IPeaks<?>> getNoSupportMessage() {
+	private IProcessingInfo<IPeaks> getNoSupportMessage() {
 
-		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<IPeaks<?>>();
+		IProcessingInfo<IPeaks> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("ELU Peak Export", "There are no capabilities to export peaks in ELU format.");
 		return processingInfo;
 	}

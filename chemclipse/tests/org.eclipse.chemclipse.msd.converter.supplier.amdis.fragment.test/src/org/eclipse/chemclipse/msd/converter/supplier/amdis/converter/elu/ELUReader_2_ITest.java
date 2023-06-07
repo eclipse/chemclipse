@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,12 +24,11 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
-@SuppressWarnings("rawtypes")
 public class ELUReader_2_ITest extends TestCase {
 
 	private ELUReader reader;
 	private File file;
-	private IProcessingInfo processingInfo;
+	private IProcessingInfo<?> processingInfo;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -51,7 +50,7 @@ public class ELUReader_2_ITest extends TestCase {
 	public void testRead_1() {
 
 		try {
-			IPeaks peaks = (IPeaks)processingInfo.getProcessingResult();
+			IPeaks<?> peaks = (IPeaks<?>)processingInfo.getProcessingResult();
 			assertEquals(1132, peaks.getPeaks().size());
 		} catch(TypeCastException e) {
 			assertTrue(false);

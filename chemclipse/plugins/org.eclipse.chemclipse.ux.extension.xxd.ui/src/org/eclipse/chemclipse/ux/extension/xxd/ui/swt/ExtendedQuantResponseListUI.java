@@ -279,7 +279,6 @@ public class ExtendedQuantResponseListUI extends Composite implements IExtendedP
 		});
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void deleteSignals(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
@@ -289,11 +288,11 @@ public class ExtendedQuantResponseListUI extends Composite implements IExtendedP
 			/*
 			 * Delete
 			 */
-			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+			Iterator<?> iterator = tableViewer.get().getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof IResponseSignal) {
-					quantitationCompound.getResponseSignals().remove((IResponseSignal)object);
+					quantitationCompound.getResponseSignals().remove(object);
 				}
 			}
 			updateInput();

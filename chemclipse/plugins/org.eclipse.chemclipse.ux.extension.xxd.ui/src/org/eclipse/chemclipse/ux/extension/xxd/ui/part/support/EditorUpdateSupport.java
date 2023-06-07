@@ -43,8 +43,7 @@ public class EditorUpdateSupport {
 	private static final Logger logger = Logger.getLogger(EditorUpdateSupport.class);
 	private EPartService partService = Activator.getDefault().getPartService();
 
-	@SuppressWarnings("rawtypes")
-	public IChromatogramSelection getActiveEditorSelection() {
+	public IChromatogramSelection<?, ?> getActiveEditorSelection() {
 
 		if(partService != null) {
 			try {
@@ -66,10 +65,9 @@ public class EditorUpdateSupport {
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public List<IChromatogramSelection> getChromatogramSelections() {
+	public List<IChromatogramSelection<?, ?>> getChromatogramSelections() {
 
-		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
+		List<IChromatogramSelection<?, ?>> chromatogramSelections = new ArrayList<>();
 		if(partService != null) {
 			try {
 				Collection<MPart> parts = partService.getParts();
@@ -221,26 +219,23 @@ public class EditorUpdateSupport {
 		return quantitationDatabases;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void addChromatogramSelection(List<IChromatogramSelection> chromatogramSelections, IChromatogramSelection selection) {
+	private void addChromatogramSelection(List<IChromatogramSelection<?, ?>> chromatogramSelections, IChromatogramSelection<?, ?> selection) {
 
 		if(selection != null) {
 			chromatogramSelections.add(selection);
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void addChromatogramSelections(List<IChromatogramSelection> chromatogramSelections, List<IChromatogramSelection> selections) {
+	private void addChromatogramSelections(List<IChromatogramSelection<?, ?>> chromatogramSelections, List<IChromatogramSelection<?, ?>> selections) {
 
 		if(selections != null && !selections.isEmpty()) {
 			chromatogramSelections.addAll(selections);
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private List<IChromatogramSelection> extractChromatogramSelections(Object object) {
+	private List<IChromatogramSelection<?, ?>> extractChromatogramSelections(Object object) {
 
-		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
+		List<IChromatogramSelection<?, ?>> chromatogramSelections = new ArrayList<>();
 		//
 		if(object != null) {
 			/*

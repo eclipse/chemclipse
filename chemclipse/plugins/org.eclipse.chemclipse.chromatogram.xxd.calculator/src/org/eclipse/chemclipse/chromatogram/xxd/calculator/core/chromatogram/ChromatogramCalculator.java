@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -57,16 +57,15 @@ public class ChromatogramCalculator {
 	 * @param filterId
 	 * @return {@link IChromatogramCalculatorProcessingInfo}
 	 */
-	@SuppressWarnings("rawtypes")
-	public static IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> applyCalculator(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IChromatogramCalculator chromatogramCalculator = getChromatogramCalculator(filterId);
 		if(chromatogramCalculator != null) {
 			processingInfo = chromatogramCalculator.applyCalculator(chromatogramSelection, chromatogramCalculatorSettings, monitor);
 			chromatogramSelection.getChromatogram().setDirty(true);
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_CALCULATOR_AVAILABLE);
 		}
 		return processingInfo;
@@ -75,22 +74,21 @@ public class ChromatogramCalculator {
 	// TODO JUnit
 	/**
 	 * Applies the specified filter, but retrieves the IChromatogramFilterSettings dynamically.<br/>
-	 * See also method: applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor)
+	 * See also method: applyFilter(IChromatogramSelection<?, ?>chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor)
 	 * 
 	 * @param chromatogramSelection
 	 * @param calculatorId
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings("rawtypes")
-	public static IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, String calculatorId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> applyCalculator(IChromatogramSelection<?, ?> chromatogramSelection, String calculatorId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IChromatogramCalculator chromatogramCalculator = getChromatogramCalculator(calculatorId);
 		if(chromatogramCalculator != null) {
 			processingInfo = chromatogramCalculator.applyCalculator(chromatogramSelection, monitor);
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_CALCULATOR_AVAILABLE);
 		}
 		return processingInfo;

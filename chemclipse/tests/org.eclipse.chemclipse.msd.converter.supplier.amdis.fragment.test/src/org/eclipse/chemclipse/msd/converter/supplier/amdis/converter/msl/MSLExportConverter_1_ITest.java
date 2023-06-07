@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
-@SuppressWarnings("rawtypes")
 public class MSLExportConverter_1_ITest extends TestCase {
 
 	private IDatabaseExportConverter exportConverter;
@@ -60,7 +59,7 @@ public class MSLExportConverter_1_ITest extends TestCase {
 
 	public void testExport_1() {
 
-		IProcessingInfo processingInfo = exportConverter.convert(null, massSpectrum, false, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = exportConverter.convert(null, massSpectrum, false, new NullProgressMonitor());
 		try {
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(TypeCastException e) {
@@ -71,7 +70,7 @@ public class MSLExportConverter_1_ITest extends TestCase {
 	public void testExport_2() {
 
 		massSpectrum = null;
-		IProcessingInfo processingInfo = exportConverter.convert(exportFile, massSpectrum, false, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = exportConverter.convert(exportFile, massSpectrum, false, new NullProgressMonitor());
 		try {
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(TypeCastException e) {
@@ -82,7 +81,7 @@ public class MSLExportConverter_1_ITest extends TestCase {
 	public void testExport_3() {
 
 		massSpectra = null;
-		IProcessingInfo processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
 		try {
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(TypeCastException e) {
@@ -94,7 +93,7 @@ public class MSLExportConverter_1_ITest extends TestCase {
 
 		try {
 			exportFile.setWritable(false);
-			IProcessingInfo processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
+			IProcessingInfo<?> processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
 			try {
 				assertTrue(processingInfo.hasErrorMessages());
 			} catch(TypeCastException e) {

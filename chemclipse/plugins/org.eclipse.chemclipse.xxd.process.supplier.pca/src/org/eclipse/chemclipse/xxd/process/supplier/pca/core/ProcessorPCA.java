@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -84,7 +84,6 @@ public class ProcessorPCA {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	public <V extends IVariable, S extends ISample> EvaluationPCA process(ISamplesPCA<V, S> samples, EvaluationPCA masterEvaluationPCA, IProgressMonitor monitor) throws MathIllegalArgumentException {
 
 		EvaluationPCA evaluationPCA = null;
@@ -181,7 +180,7 @@ public class ProcessorPCA {
 					 * sampleData.getData2() // e.g. PeakMSD
 					 */
 					ISample sample = sampleList.get(i);
-					List<? extends ISampleData> sampleDataList = sample.getSampleData();
+					List<? extends ISampleData<?>> sampleDataList = sample.getSampleData();
 					for(int j = 0; j < sampleDataList.size(); j++) {
 						ISampleData<?> sampleData = sampleDataList.get(j);
 						features.get(j).getSampleData().add(sampleData);
@@ -199,7 +198,6 @@ public class ProcessorPCA {
 		return evaluationPCA;
 	}
 
-	@SuppressWarnings("rawtypes")
 	private <V extends IVariable, S extends ISample> Map<ISample, double[]> extractData(ISamples<V, S> samples, Algorithm algorithm, IAnalysisSettings settings, boolean[] isSelectedVariable) {
 
 		Map<ISample, double[]> selectedSamples = new HashMap<>();
@@ -231,7 +229,7 @@ public class ProcessorPCA {
 		for(ISample sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
 			if(sample.isSelected()) {
-				List<? extends ISampleData> data = sample.getSampleData();
+				List<? extends ISampleData<?>> data = sample.getSampleData();
 				selectedSampleData = new double[numSelected];
 				int j = 0;
 				for(int i = 0; i < data.size(); i++) {

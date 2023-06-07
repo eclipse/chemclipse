@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -53,7 +53,6 @@ public class PcaUtils {
 	 * @param samples
 	 * @return map where is key name of sample and value are sample data
 	 */
-	@SuppressWarnings("rawtypes")
 	public static <V extends IVariable, S extends ISample> Map<String, double[]> extractData(ISamples<V, S> samples) {
 
 		Map<String, double[]> selectedSamples = new HashMap<>();
@@ -62,7 +61,7 @@ public class PcaUtils {
 		for(S sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
 			if(sample.isSelected()) {
-				List<? extends ISampleData> data = sample.getSampleData();
+				List<? extends ISampleData<?>> data = sample.getSampleData();
 				selectedSampleData = new double[numSelected];
 				int j = 0;
 				for(int i = 0; i < data.size(); i++) {

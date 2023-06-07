@@ -715,7 +715,6 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		updateObject();
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void deleteTraces(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
@@ -725,7 +724,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 			/*
 			 * Delete the signal
 			 */
-			Iterator iterator = scanTableUI.getStructuredSelection().iterator();
+			Iterator<?> iterator = scanTableUI.getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				deleteSignal(object);

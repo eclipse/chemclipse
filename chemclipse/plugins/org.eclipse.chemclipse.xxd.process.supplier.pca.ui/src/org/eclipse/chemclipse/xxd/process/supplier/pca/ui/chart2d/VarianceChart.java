@@ -114,13 +114,12 @@ public class VarianceChart extends BarChart {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void updateChart() {
 
 		deleteSeries();
 		if(evaluationPCA != null) {
 			//
-			IResultsPCA resultsPCA = evaluationPCA.getResults();
+			IResultsPCA<?, ?> resultsPCA = evaluationPCA.getResults();
 			//
 			IChartSettings chartSettings = getChartSettings();
 			IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
@@ -141,8 +140,7 @@ public class VarianceChart extends BarChart {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private String[] getCategories(IResultsPCA pcaResults) {
+	private String[] getCategories(IResultsPCA<?, ?> pcaResults) {
 
 		int size = pcaResults.getCumulativeExplainedVariances().length;
 		String[] categories = new String[size];
@@ -154,8 +152,7 @@ public class VarianceChart extends BarChart {
 		return categories;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private ISeriesData getSeries(IResultsPCA pcaResults) {
+	private ISeriesData getSeries(IResultsPCA<?, ?> pcaResults) {
 
 		double[] ySeries;
 		String label;

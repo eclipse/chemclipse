@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -67,7 +67,7 @@ public class MSPPeakExportConverter extends AbstractPeakExportConverter {
 		return processingInfo;
 	}
 
-	private IProcessingInfo validate(File file, IPeaks peaks) {
+	private IProcessingInfo validate(File file, IPeaks<?> peaks) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(super.validate(file));

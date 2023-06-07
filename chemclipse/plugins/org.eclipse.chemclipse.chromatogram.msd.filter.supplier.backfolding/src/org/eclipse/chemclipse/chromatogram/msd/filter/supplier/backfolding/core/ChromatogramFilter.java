@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.core;
 
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilterMSD;
@@ -32,15 +33,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
 	@Override
-	public IProcessingInfo<?> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<Object> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
 		//
 		if(!processingInfo.hasErrorMessages()) {
-			if(chromatogramFilterSettings instanceof ChromatogramFilterSettings) {
+			if(chromatogramFilterSettings instanceof ChromatogramFilterSettings filterSettings) {
 				try {
-					ChromatogramFilterSettings filterSettings = (ChromatogramFilterSettings)chromatogramFilterSettings;
 					applyBackfoldingFilter(chromatogramSelection, filterSettings, monitor);
 					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection has been successfully backfolded."));
 				} catch(FilterException e) {
@@ -54,7 +54,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
 	// TODO Junit
 	@Override
-	public IProcessingInfo<?> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		ChromatogramFilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);

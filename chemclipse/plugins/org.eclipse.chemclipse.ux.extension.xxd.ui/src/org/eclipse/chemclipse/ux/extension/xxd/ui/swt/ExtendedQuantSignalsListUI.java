@@ -279,7 +279,6 @@ public class ExtendedQuantSignalsListUI extends Composite implements IExtendedPa
 		});
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void deleteSignals(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
@@ -289,11 +288,11 @@ public class ExtendedQuantSignalsListUI extends Composite implements IExtendedPa
 			/*
 			 * Delete
 			 */
-			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+			Iterator<?> iterator = tableViewer.get().getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof IQuantitationSignal) {
-					quantitationCompound.getQuantitationSignals().remove((IQuantitationSignal)object);
+					quantitationCompound.getQuantitationSignals().remove(object);
 				}
 			}
 			updateInput();

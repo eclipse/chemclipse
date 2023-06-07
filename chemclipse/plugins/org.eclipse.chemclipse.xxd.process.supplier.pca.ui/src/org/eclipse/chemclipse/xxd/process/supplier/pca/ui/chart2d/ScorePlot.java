@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,12 +30,11 @@ public class ScorePlot extends AbtractPlotPCA {
 		super(parent, style, "Score Plot");
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void setInput(EvaluationPCA evaluationPCA, int pcX, int pcY) {
 
 		deleteSeries();
 		if(evaluationPCA != null) {
-			IResultsPCA resultsPCA = evaluationPCA.getResults();
+			IResultsPCA<?, ?> resultsPCA = evaluationPCA.getResults();
 			addSeriesData(SeriesConverter.sampleToSeries(resultsPCA, pcX, pcY, extractedResults));
 			update(pcX, pcY, resultsPCA.getExplainedVariances());
 		}

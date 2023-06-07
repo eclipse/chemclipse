@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,7 +42,6 @@ public class SubtractCalculator {
 	 * @param chromatogramSelection
 	 * @param filterSettings
 	 */
-	@SuppressWarnings("rawtypes")
 	public void subtractPeakMassSpectraFromChromatogramSelection(IChromatogramSelectionMSD chromatogramSelection, ChromatogramFilterSettings filterSettings) {
 
 		/*
@@ -69,17 +68,16 @@ public class SubtractCalculator {
 		/*
 		 * Subtract the mass spectrum from each scan.
 		 */
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
 		//
 		for(int scanNumber = startScan; scanNumber <= stopScan; scanNumber++) {
 			IScan scan = chromatogram.getScan(scanNumber);
-			if(scan instanceof IVendorMassSpectrum) {
+			if(scan instanceof IVendorMassSpectrum targetMassSpectrum) {
 				/*
 				 * Try to subtract the mass spectrum.
 				 */
-				IScanMSD targetMassSpectrum = (IVendorMassSpectrum)scan;
 				adjustIntensityValues(targetMassSpectrum, subtractMassSpectrumMap, useNominalMasses, useNormalize);
 			}
 		}
@@ -101,7 +99,7 @@ public class SubtractCalculator {
 		/*
 		 * Test if null.
 		 */
-		if(peaks == null || peaks.size() == 0 || peakFilterSettings == null) {
+		if(peaks == null || peaks.isEmpty() || peakFilterSettings == null) {
 			return;
 		}
 		/*
@@ -167,7 +165,7 @@ public class SubtractCalculator {
 	 */
 	public Map<Double, Float> getMassSpectrumMap(IScanMSD massSpectrum, boolean useNominalMasses, boolean normalize) {
 
-		Map<Double, Float> massSpectrumMap = new HashMap<Double, Float>();
+		Map<Double, Float> massSpectrumMap = new HashMap<>();
 		if(massSpectrum != null) {
 			try {
 				/*
@@ -223,7 +221,7 @@ public class SubtractCalculator {
 			return;
 		}
 		//
-		List<IIon> ionsToRemove = new ArrayList<IIon>();
+		List<IIon> ionsToRemove = new ArrayList<>();
 		for(IIon ion : targetMassSpectrum.getIons()) {
 			/*
 			 * Get the nominal mass if needed.

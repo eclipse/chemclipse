@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,7 +33,6 @@ public class MeanValuesReplacer extends AbstractDataModificator implements IRepl
 		return "Mean Value Setter";
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
@@ -57,7 +56,7 @@ public class MeanValuesReplacer extends AbstractDataModificator implements IRepl
 			double mean = count != 0 ? sum / count : 0;
 			for(S sample : sampleList) {
 				if(sample.isSelected() || !isOnlySelected()) {
-					ISampleData sampleData = sample.getSampleData().get(i);
+					ISampleData<?> sampleData = sample.getSampleData().get(i);
 					if(Double.isNaN(getData(sampleData))) {
 						sampleData.setModifiedData(mean);
 					}

@@ -203,7 +203,6 @@ public class WidgetItem {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private Control createControl(Composite parent) {
 
 		Class<?> rawType = inputValue.getRawType();
@@ -237,6 +236,7 @@ public class WidgetItem {
 				/*
 				 * Combo
 				 */
+				@SuppressWarnings("rawtypes")
 				Enum[] enums = (Enum[])rawType.getEnumConstants();
 				ComboViewer viewer = createLabeledEnumComboViewerWidget(parent, enums);
 				return viewer.getControl();

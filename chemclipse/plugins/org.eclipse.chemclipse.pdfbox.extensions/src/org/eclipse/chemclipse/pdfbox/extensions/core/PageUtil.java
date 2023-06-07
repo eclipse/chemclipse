@@ -465,8 +465,7 @@ public class PageUtil {
 	 * @return float
 	 * @throws IOException
 	 */
-	@SuppressWarnings("rawtypes")
-	private float calculateX(IReferenceElement referenceElement, float elementWidth, float maxWidth) throws IOException {
+	private float calculateX(IReferenceElement<?> referenceElement, float elementWidth, float maxWidth) throws IOException {
 
 		float x;
 		ReferenceX referenceX = referenceElement.getReferenceX();
@@ -493,8 +492,7 @@ public class PageUtil {
 	 * @param elementHeight
 	 * @return float
 	 */
-	@SuppressWarnings("rawtypes")
-	private float calculateY(IReferenceElement referenceElement, float elementHeight) {
+	private float calculateY(IReferenceElement<?> referenceElement, float elementHeight) {
 
 		float y;
 		ReferenceY referenceY = referenceElement.getReferenceY();

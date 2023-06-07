@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -54,7 +54,7 @@ import org.eclipse.swtchart.extensions.core.IMouseSupport;
 import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
 import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 
-@SuppressWarnings("rawtypes")
+
 public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakChartUI.class);
@@ -338,7 +338,7 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 		return button;
 	}
 
-	private void addPeaks(IChromatogram chromatogram, IPeak peakOriginal, IPeak peak1, IPeak peak2) {
+	private void addPeaks(IChromatogram<?> chromatogram, IPeak peakOriginal, IPeak peak1, IPeak peak2) {
 
 		if(peak1 != null || peak2 != null) {
 			removePeakFromChromatogram(chromatogram, peakOriginal);
@@ -347,7 +347,7 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	private void removePeakFromChromatogram(IChromatogram chromatogram, IPeak peak) {
+	private void removePeakFromChromatogram(IChromatogram<?> chromatogram, IPeak peak) {
 
 		if(peak != null) {
 			if(chromatogram instanceof IChromatogramMSD && peak instanceof IChromatogramPeakMSD) {
@@ -360,7 +360,7 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	private void addPeakToChromatogram(IChromatogram chromatogram, IPeak peak) {
+	private void addPeakToChromatogram(IChromatogram<?> chromatogram, IPeak peak) {
 
 		if(peak != null) {
 			if(chromatogram instanceof IChromatogramMSD) {

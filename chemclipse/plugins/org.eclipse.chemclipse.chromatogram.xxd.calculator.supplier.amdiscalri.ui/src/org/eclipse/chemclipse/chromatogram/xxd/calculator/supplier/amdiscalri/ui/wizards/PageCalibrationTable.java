@@ -64,15 +64,14 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void setVisible(boolean visible) {
 
 		super.setVisible(visible);
 		if(visible) {
-			IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
+			IChromatogramSelection<?, ?> chromatogramSelection = wizardElements.getChromatogramSelection();
 			if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
-				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				updateChromatogramChart(chromatogramSelection);
 				RetentionIndexExtractor retentionIndexExtractor = new RetentionIndexExtractor();
 				ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogram);
@@ -144,7 +143,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 					int retentionTime = retentionIndexEntry.getRetentionTime();
 					IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
 					if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
-						IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+						IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 						IPeak selectedPeak = getSelectedPeak(chromatogram, retentionTime);
 						if(selectedPeak != null) {
 							chromatogramSelection.setSelectedPeak(selectedPeak);
@@ -187,8 +186,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 		updateStatus(message);
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void updateChromatogramChart(IChromatogramSelection chromatogramSelection) {
+	private void updateChromatogramChart(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		chromatogramPeakChart.updateChromatogram(chromatogramSelection);
 	}

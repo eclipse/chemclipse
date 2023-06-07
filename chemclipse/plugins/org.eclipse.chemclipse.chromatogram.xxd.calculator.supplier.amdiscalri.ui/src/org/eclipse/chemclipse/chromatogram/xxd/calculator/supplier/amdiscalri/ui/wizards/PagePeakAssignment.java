@@ -106,13 +106,12 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void setVisible(boolean visible) {
 
 		super.setVisible(visible);
 		if(visible) {
-			IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
+			IChromatogramSelection<?, ?> chromatogramSelection = wizardElements.getChromatogramSelection();
 			if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
 				/*
 				 * Set the start index.
@@ -126,7 +125,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 				/*
 				 * Set the first selection.
 				 */
-				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				List<? extends IPeak> peaks = chromatogram.getPeaks();
 				peakTableViewerUI.setInput(peaks);
 				peakTableViewerUI.getTable().setSelection(0);
@@ -258,7 +257,6 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		button.setLayoutData(gridData);
 		button.addSelectionListener(new SelectionAdapter() {
 
-			@SuppressWarnings({"rawtypes", "unchecked"})
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
@@ -266,9 +264,9 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 				messageBox.setText("Auto assign standards");
 				messageBox.setMessage("Would you like to set all standards automatically?");
 				if(messageBox.open() == SWT.YES) {
-					IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
+					IChromatogramSelection<?, ?> chromatogramSelection = wizardElements.getChromatogramSelection();
 					if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
-						IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+						IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 						List<? extends IPeak> chromatogramPeaks = chromatogram.getPeaks();
 						List<String> selectedIndices = wizardElements.getSelectedIndices();
 						//

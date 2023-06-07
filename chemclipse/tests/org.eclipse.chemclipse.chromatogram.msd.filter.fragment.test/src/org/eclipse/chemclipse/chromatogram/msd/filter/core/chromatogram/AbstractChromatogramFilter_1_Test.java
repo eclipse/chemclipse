@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -44,7 +44,6 @@ public class AbstractChromatogramFilter_1_Test extends TestCase {
 		super.tearDown();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void testConstructor_1() {
 
 		chromatogramSelection = null;
@@ -53,7 +52,6 @@ public class AbstractChromatogramFilter_1_Test extends TestCase {
 		filter.applyFilter(chromatogramSelection, chromatogramFilterSettings, new NullProgressMonitor());
 	}
 
-	@SuppressWarnings("unchecked")
 	public void testConstructor_2() {
 
 		chromatogram = new ChromatogramMSD();

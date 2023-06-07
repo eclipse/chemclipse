@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.HeaderDataEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.HeaderDataLabelProvider;
@@ -85,7 +86,7 @@ public class HeaderDataListUI extends ExtendedTableViewer {
 	public void sortTable() {
 
 		int column = 0;
-		int sortOrder = HeaderDataTableComparator.DESCENDING;
+		int sortOrder = IRecordTableComparator.DESCENDING;
 		//
 		tableComparator.setColumn(column);
 		tableComparator.setDirection(sortOrder);
@@ -115,14 +116,12 @@ public class HeaderDataListUI extends ExtendedTableViewer {
 		if(tableViewerColumn != null) {
 			tableViewerColumn.setLabelProvider(new StyledCellLabelProvider() {
 
-				@SuppressWarnings("rawtypes")
 				@Override
 				public void update(ViewerCell cell) {
 
 					if(cell != null && measurementInfo != null) {
 						Object object = cell.getElement();
-						if(object instanceof Map.Entry) {
-							Map.Entry entry = (Map.Entry)object;
+						if(object instanceof Map.Entry<?, ?> entry) {
 							String key = entry.getKey().toString();
 							if(measurementInfo.isKeyProtected(key)) {
 								cell.setForeground(Colors.DARK_GRAY);

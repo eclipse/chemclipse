@@ -41,7 +41,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
-@SuppressWarnings("rawtypes")
 public class ChromatogramFileSupport {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramFileSupport.class);
@@ -50,12 +49,12 @@ public class ChromatogramFileSupport {
 
 	}
 
-	public static boolean saveChromatogram(Shell shell, IChromatogram chromatogram, DataType dataType) throws NoConverterAvailableException {
+	public static boolean saveChromatogram(Shell shell, IChromatogram<?> chromatogram, DataType dataType) throws NoConverterAvailableException {
 
 		return saveChromatogram(shell, chromatogram, dataType, UserManagement.getUserHome());
 	}
 
-	public static boolean saveChromatogram(Shell shell, IChromatogram chromatogram, DataType dataType, String filterPath) throws NoConverterAvailableException {
+	public static boolean saveChromatogram(Shell shell, IChromatogram<?> chromatogram, DataType dataType, String filterPath) throws NoConverterAvailableException {
 
 		if(chromatogram == null || shell == null) {
 			return false;
@@ -92,8 +91,9 @@ public class ChromatogramFileSupport {
 				} else {
 					String extension = FilenameUtils.getExtension(fileDialog.getFileName());
 					Optional<ISupplier> guessedSupplier = chromatogramConverterSupport.getSupplier().stream().filter(s -> s.getFileExtension().contains(extension)).findFirst();
-					if(guessedSupplier.isEmpty())
+					if(guessedSupplier.isEmpty()) {
 						return false;
+					}
 					validateAndExportFile(shell, chromatogram, dataType, filePath, overwrite, guessedSupplier.get());
 					return true;
 				}
@@ -210,7 +210,7 @@ public class ChromatogramFileSupport {
 		return converterSupport;
 	}
 
-	public static void writeFile(Shell shell, File file, IChromatogram chromatogram, ISupplier supplier, DataType dataType) {
+	public static void writeFile(Shell shell, File file, IChromatogram<?> chromatogram, ISupplier supplier, DataType dataType) {
 
 		if(file == null || chromatogram == null || supplier == null) {
 			return;
@@ -233,7 +233,7 @@ public class ChromatogramFileSupport {
 		}
 	}
 
-	private static void validateAndExportFile(Shell shell, IChromatogram chromatogram, DataType dataType, String filePath, boolean overwrite, ISupplier selectedSupplier) {
+	private static void validateAndExportFile(Shell shell, IChromatogram<?> chromatogram, DataType dataType, String filePath, boolean overwrite, ISupplier selectedSupplier) {
 
 		File chromatogramFolder = null;
 		boolean folderExists = false;

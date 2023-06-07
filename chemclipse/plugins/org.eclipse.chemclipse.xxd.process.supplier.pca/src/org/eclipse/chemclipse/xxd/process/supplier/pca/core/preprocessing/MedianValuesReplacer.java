@@ -34,7 +34,6 @@ public class MedianValuesReplacer extends AbstractDataModificator implements IRe
 		return "Median Value Setter";
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
@@ -62,7 +61,7 @@ public class MedianValuesReplacer extends AbstractDataModificator implements IRe
 			}
 			for(S sample : sampleList) {
 				if(sample.isSelected() || !isOnlySelected()) {
-					ISampleData sampleData = sample.getSampleData().get(i);
+					ISampleData<?> sampleData = sample.getSampleData().get(i);
 					if(Double.isNaN(getData(sampleData))) {
 						sampleData.setModifiedData(median);
 					}

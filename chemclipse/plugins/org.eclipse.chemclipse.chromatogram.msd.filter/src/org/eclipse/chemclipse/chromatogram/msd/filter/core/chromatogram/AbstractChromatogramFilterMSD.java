@@ -17,8 +17,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
-@SuppressWarnings("rawtypes")
-public abstract class AbstractChromatogramFilterMSD implements IChromatogramFilterMSD {
+public abstract class AbstractChromatogramFilterMSD implements IChromatogramFilterMSD<IChromatogramFilterResult> {
 
 	private static final String DESCRIPTION = "Chromatogram Filter";
 

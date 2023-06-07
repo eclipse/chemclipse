@@ -25,7 +25,7 @@ public interface IPeaks<T extends IPeak> {
 
 	/**
 	 * 
-	 * @return the name of this IPeaks list or <code>null</code> if none is available
+	 * @return the name of this IPeaks<?> list or <code>null</code> if none is available
 	 */
 	default String getName() {
 

@@ -197,16 +197,15 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 			 */
 			String path = calibrationFile.getAbsolutePath();
 			File chromatogramFile = new File(path.substring(0, path.length() - CALIBRATION_FILE_EXTENSION.length()) + CHROMATOGRAM_FILE_EXTENSION);
-			@SuppressWarnings("rawtypes")
-			IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
+			IChromatogramSelection<?, ?> chromatogramSelection = wizardElements.getChromatogramSelection();
 			if(wizardElements.isUseMassSpectrometryData()) {
-				if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-					IChromatogramMSD chromatogramMSD = ((IChromatogramSelectionMSD)chromatogramSelection).getChromatogram();
+				if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
+					IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogram();
 					ChromatogramConverterMSD.getInstance().convert(chromatogramFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
 				}
 			} else {
-				if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-					IChromatogramCSD chromatogramCSD = ((IChromatogramSelectionCSD)chromatogramSelection).getChromatogram();
+				if(chromatogramSelection instanceof IChromatogramSelectionCSD chromatogramSelectionCSD) {
+					IChromatogramCSD chromatogramCSD = chromatogramSelectionCSD.getChromatogram();
 					ChromatogramConverterCSD.getInstance().convert(chromatogramFile, chromatogramCSD, CHROMATOGRAM_CONVERTER_ID, monitor);
 				}
 			}

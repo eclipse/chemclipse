@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,8 +28,7 @@ public class TotalScanSignals implements ITotalScanSignals {
 	private List<ITotalScanSignal> signals;
 	private int startScan;
 	private int stopScan;
-	@SuppressWarnings("rawtypes")
-	private IChromatogram chromatogram = null;
+	private IChromatogram<?> chromatogram = null;
 
 	/**
 	 * Creates a TotalIonSignals instance with the given scan length.
@@ -46,14 +45,13 @@ public class TotalScanSignals implements ITotalScanSignals {
 			startScan = 1;
 			stopScan = numberOfScans;
 		}
-		signals = new ArrayList<ITotalScanSignal>(numberOfScans);
+		signals = new ArrayList<>(numberOfScans);
 	}
 
 	/**
 	 * Sets additionally the parent chromatogram to the signals instance.
 	 */
-	@SuppressWarnings("rawtypes")
-	public TotalScanSignals(int numberOfScans, IChromatogram chromatogram) {
+	public TotalScanSignals(int numberOfScans, IChromatogram<?> chromatogram) {
 
 		this(numberOfScans);
 		this.chromatogram = chromatogram;
@@ -81,7 +79,7 @@ public class TotalScanSignals implements ITotalScanSignals {
 		} else {
 			numberOfScans = stop - start + 1;
 		}
-		signals = new ArrayList<ITotalScanSignal>(numberOfScans);
+		signals = new ArrayList<>(numberOfScans);
 		this.startScan = start;
 		this.stopScan = stop;
 	}
@@ -93,8 +91,7 @@ public class TotalScanSignals implements ITotalScanSignals {
 	 * @param stopScan
 	 * @param chromatogram
 	 */
-	@SuppressWarnings("rawtypes")
-	public TotalScanSignals(int startScan, int stopScan, IChromatogram chromatogram) {
+	public TotalScanSignals(int startScan, int stopScan, IChromatogram<?> chromatogram) {
 
 		this(startScan, stopScan);
 		this.chromatogram = chromatogram;
@@ -106,15 +103,14 @@ public class TotalScanSignals implements ITotalScanSignals {
 
 		this(new ChromatogramSelection(chromatogram));
 	}
-
 	// TODO JUnit
-	@SuppressWarnings("rawtypes")
-	public TotalScanSignals(IChromatogramSelection chromatogramSelection) {
+
+	public TotalScanSignals(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		chromatogram = chromatogramSelection.getChromatogram();
 		startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
-		signals = new ArrayList<ITotalScanSignal>();
+		signals = new ArrayList<>();
 		//
 		for(int scan = startScan; scan <= stopScan; scan++) {
 			/*
@@ -128,9 +124,8 @@ public class TotalScanSignals implements ITotalScanSignals {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IChromatogram getChromatogram() {
+	public IChromatogram<?> getChromatogram() {
 
 		return chromatogram;
 	}

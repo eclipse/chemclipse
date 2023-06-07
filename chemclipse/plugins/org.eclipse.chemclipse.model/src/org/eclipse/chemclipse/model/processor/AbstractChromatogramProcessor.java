@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,17 +15,17 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public abstract class AbstractChromatogramProcessor implements IChromatogramProcessor {
 
-	@SuppressWarnings("rawtypes")
-	private IChromatogramSelection chromatogramSelection;
+	
+	private IChromatogramSelection<?, ?>chromatogramSelection;
 
-	@SuppressWarnings("rawtypes")
-	public AbstractChromatogramProcessor(IChromatogramSelection chromatogramSelection) {
+	
+	public AbstractChromatogramProcessor(IChromatogramSelection<?, ?>chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
-	@SuppressWarnings("rawtypes")
+	
 	@Override
-	public IChromatogramSelection getChromatogramSelection() {
+	public IChromatogramSelection<?, ?>getChromatogramSelection() {
 
 		return chromatogramSelection;
 	}

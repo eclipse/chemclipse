@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -80,7 +80,7 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
-@SuppressWarnings("rawtypes")
+
 public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakDetectorUI.class);
@@ -132,7 +132,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 	private Button buttonAddPeak;
 	private AtomicReference<ChromatogramChart> chartControl = new AtomicReference<>();
 	//
-	private IChromatogramSelection chromatogramSelection;
+	private IChromatogramSelection<?, ?>chromatogramSelection;
 	private IPeak peak;
 	//
 	private BaselineSelectionPaintListener baselineSelectionPaintListener;
@@ -310,10 +310,10 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		return true;
 	}
 
-	public void update(IChromatogramSelection chromatogramSelection) {
+	public void update(IChromatogramSelection<?, ?>chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;
-		IChromatogram chromatogram = null;
+		IChromatogram<?> chromatogram = null;
 		if(chromatogramSelection != null) {
 			chromatogram = chromatogramSelection.getChromatogram();
 		}
@@ -468,7 +468,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 			public void widgetSelected(SelectionEvent e) {
 
 				if(peak != null) {
-					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+					IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 					if(chromatogram instanceof IChromatogramMSD) {
 						if(peak instanceof IChromatogramPeakMSD) {
 							IChromatogramPeakMSD peakMSD = (IChromatogramPeakMSD)peak;

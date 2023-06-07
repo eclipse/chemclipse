@@ -144,8 +144,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	//
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
-	@SuppressWarnings("rawtypes")
-	private final Map<IChromatogramSelection, List<String>> chromatogramSelections = new LinkedHashMap<>();
+	private final Map<IChromatogramSelection<?, ?>, List<String>> chromatogramSelections = new LinkedHashMap<>();
 
 	public ExtendedChromatogramOverlayUI(Composite parent, int style) {
 
@@ -171,8 +170,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	public void update(List<IChromatogramSelection> chromatogramSelections) {
+	public void update(List<IChromatogramSelection<?, ?>> chromatogramSelections) {
 
 		this.chromatogramSelections.clear();
 		for(IChromatogramSelection<?, ?> selection : chromatogramSelections) {
@@ -569,7 +567,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		chartControl.set(chromatogramRulerChart);
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void refreshUpdateOverlayChart() {
 
 		ChromatogramChart chromatogramChart = chartControl.get();
@@ -595,7 +592,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			LinkedHashSet<String> usefulTypes = new LinkedHashSet<>();
 			//
 			int i = 0;
-			for(Entry<IChromatogramSelection, List<String>> entry : chromatogramSelections.entrySet()) {
+			for(Entry<IChromatogramSelection<?, ?>, List<String>> entry : chromatogramSelections.entrySet()) {
 				IChromatogramSelection<?, ?> chromatogramSelection = entry.getKey();
 				if(previousChromatograms != chromatogramSelections.size()) {
 					if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
@@ -660,7 +657,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			/*
 			 * Delete non-available series.
 			 */
-			for(ISeries series : baseChart.getSeriesSet().getSeries()) {
+			for(ISeries<?> series : baseChart.getSeriesSet().getSeries()) {
 				String seriesId = series.getId();
 				if(!availableSeriesIds.contains(seriesId)) {
 					baseChart.deleteSeries(seriesId);

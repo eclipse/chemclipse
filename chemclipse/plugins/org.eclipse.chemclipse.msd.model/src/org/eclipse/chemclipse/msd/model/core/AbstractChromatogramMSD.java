@@ -131,9 +131,8 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public void fireUpdate(IChromatogramSelection chromatogramSelection) {
+	public void fireUpdate(IChromatogramSelection<?, ?>chromatogramSelection) {
 
 		/*
 		 * Fire an update to inform all listeners.

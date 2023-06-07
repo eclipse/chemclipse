@@ -74,8 +74,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 	private Button checkBoxTransfer;
 	private Button buttonExecute;
 	//
-	@SuppressWarnings("rawtypes")
-	private IChromatogramSelection chromatogramSelectionSource;
+	private IChromatogramSelection<?, ?> chromatogramSelectionSource;
 	//
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
@@ -88,8 +87,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public void update(IChromatogramSelection chromatogramSelectionSource) {
+	public void update(IChromatogramSelection<?, ?> chromatogramSelectionSource) {
 
 		this.chromatogramSelectionSource = chromatogramSelectionSource;
 		updateInput();
@@ -166,23 +164,20 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		comboViewer.setContentProvider(new ListContentProvider());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
-			@SuppressWarnings("rawtypes")
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IChromatogramSelection) {
+				if(element instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
 					/*
 					 * Editor
 					 */
-					IChromatogramSelection chromatogramSelection = (IChromatogramSelection)element;
 					String name = chromatogramSelection.getChromatogram().getName();
 					String type = ChromatogramDataSupport.getChromatogramType(chromatogramSelection);
 					return getChromatogramLabel(name, type, "External");
-				} else if(element instanceof IChromatogram) {
+				} else if(element instanceof IChromatogram<?> chromatogram) {
 					/*
 					 * Reference
 					 */
-					IChromatogram chromatogram = (IChromatogram)element;
 					String name = chromatogram.getName();
 					String type = ChromatogramDataSupport.getChromatogramType(chromatogram);
 					return getChromatogramLabel(name, type, "Internal");
@@ -297,12 +292,11 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.addSelectionListener(new SelectionAdapter() {
 
-			@SuppressWarnings("rawtypes")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewerSink.getStructuredSelection().getFirstElement();
-				IChromatogramSelection chromatogramSelectionSink = chromatogramDataSupport.getChromatogramSelection(object);
+				IChromatogramSelection<?, ?> chromatogramSelectionSink = chromatogramDataSupport.getChromatogramSelection(object);
 				transferTargets(chromatogramSelectionSource, chromatogramSelectionSink, e.display.getActiveShell());
 			}
 		});
@@ -336,7 +330,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		chromatogramSourceCombo.setEnabled(chromatogramSelectionSource != null);
 		//
 		Object object = comboViewerSink.getStructuredSelection().getFirstElement();
-		if(object instanceof IChromatogramSelection || object instanceof IChromatogram) {
+		if(object instanceof IChromatogramSelection<?, ?> || object instanceof IChromatogram) {
 			buttonExecute.setEnabled(true);
 			checkBoxTransfer.setEnabled(true);
 		}
@@ -346,13 +340,12 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		textTimeDelta.setEnabled(comboType.getText().equals(TYPE_PEAKS));
 	}
 
-	@SuppressWarnings("rawtypes")
-	private List<IChromatogramSelection> getFilteredEditorChromatogramSelections() {
+	private List<IChromatogramSelection<?, ?>> getFilteredEditorChromatogramSelections() {
 
-		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();
+		List<IChromatogramSelection<?, ?>> chromatogramSelections = new ArrayList<>();
 		if(chromatogramSelectionSource != null) {
 			String nameSource = ChromatogramDataSupport.getChromatogramEditorLabel(chromatogramSelectionSource);
-			for(IChromatogramSelection chromatogramSelectionTarget : editorUpdateSupport.getChromatogramSelections()) {
+			for(IChromatogramSelection<?, ?> chromatogramSelectionTarget : editorUpdateSupport.getChromatogramSelections()) {
 				String nameTarget = ChromatogramDataSupport.getChromatogramEditorLabel(chromatogramSelectionTarget);
 				if(!nameSource.equals(nameTarget)) {
 					chromatogramSelections.add(chromatogramSelectionTarget);
@@ -376,8 +369,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void transferTargets(IChromatogramSelection chromatogramSelectionSource, IChromatogramSelection chromatogramSelectionSink, Shell shell) {
+	private void transferTargets(IChromatogramSelection<?, ?> chromatogramSelectionSource, IChromatogramSelection<?, ?> chromatogramSelectionSink, Shell shell) {
 
 		if(chromatogramSelectionSource != null) {
 			if(chromatogramSelectionSink != null && chromatogramSelectionSink != chromatogramSelectionSource) {
@@ -405,8 +397,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void transferPeakTargets(IChromatogramSelection chromatogramSelectionSource, IChromatogramSelection chromatogramSelectionSink, Shell shell) {
+	private void transferPeakTargets(IChromatogramSelection<?, ?> chromatogramSelectionSource, IChromatogramSelection<?, ?> chromatogramSelectionSink, Shell shell) {
 
 		TargetTransferSupport targetTransferSupport = new TargetTransferSupport();
 		//
@@ -423,13 +414,12 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void transferScanTargets(IChromatogramSelection chromatogramSelectionSource, IChromatogramSelection chromatogramSelectionSink, Shell shell) {
+	private void transferScanTargets(IChromatogramSelection<?, ?> chromatogramSelectionSource, IChromatogramSelection<?, ?> chromatogramSelectionSink, Shell shell) {
 
 		TargetTransferSupport targetTransferSupport = new TargetTransferSupport();
 		//
 		List<IScan> scansSource = ChromatogramDataSupport.getIdentifiedScans(chromatogramSelectionSource.getChromatogram(), chromatogramSelectionSource);
-		IChromatogram chromatogramSink = chromatogramSelectionSink.getChromatogram();
+		IChromatogram<?> chromatogramSink = chromatogramSelectionSink.getChromatogram();
 		boolean useBestTargetOnly = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
 		//
 		String message = targetTransferSupport.transferScanTargets(scansSource, chromatogramSink, useBestTargetOnly);

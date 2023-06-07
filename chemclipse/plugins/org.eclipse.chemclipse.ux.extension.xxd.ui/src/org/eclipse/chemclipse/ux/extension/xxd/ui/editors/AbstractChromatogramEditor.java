@@ -90,7 +90,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.ICustomPaintListener;
 
-@SuppressWarnings("rawtypes")
 public abstract class AbstractChromatogramEditor extends AbstractUpdater<ExtendedChromatogramUI> implements IChromatogramEditor {
 
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramEditor.class);
@@ -220,7 +219,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	public boolean saveAs() {
 
 		boolean saveSuccessful = false;
-		IChromatogramSelection chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
+		IChromatogramSelection<?, ?> chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
 		if(chromatogramSelection != null) {
 			try {
 				/*
@@ -237,7 +236,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	}
 
 	@Override
-	public IChromatogramSelection getChromatogramSelection() {
+	public IChromatogramSelection<?, ?> getChromatogramSelection() {
 
 		return extendedChromatogramUI.getChromatogramSelection();
 	}
@@ -261,7 +260,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 
 	private synchronized void initialize(Composite parent) {
 
-		IChromatogramSelection chromatogramSelection = loadChromatogram();
+		IChromatogramSelection<?, ?> chromatogramSelection = loadChromatogram();
 		createEditorPages(parent);
 		extendedChromatogramUI.updateChromatogramSelection(chromatogramSelection);
 		processChromatogram(chromatogramSelection);
@@ -279,10 +278,10 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IChromatogramSelection chromatogramSelection) {
+			if(object instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
 				if(extendedChromatogramUI.isActiveChromatogramSelection(chromatogramSelection)) {
 					extendedChromatogramUI.update();
-					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+					IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 					if(chromatogram != null) {
 						dirtyable.setDirty(chromatogram.isDirty());
 					}
@@ -318,7 +317,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		return TOPIC_CHROMATOGRAM.equals(topic) || TOPIC_SCAN.equals(topic) || TOPIC_PEAK.equals(topic) || TOPIC_EDITOR_UPDATE.equals(topic) || TOPIC_EDITOR_ADJUST.equals(topic) || TOPIC_TOOLBAR_UPDATE.equals(topic);
 	}
 
-	private void processChromatogram(IChromatogramSelection chromatogramSelection) {
+	private void processChromatogram(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		File file = new File(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_LOAD_PROCESS_METHOD));
 		if(chromatogramSelection != null) {
@@ -344,9 +343,9 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		}
 	}
 
-	private synchronized IChromatogramSelection loadChromatogram() {
+	private synchronized IChromatogramSelection<?, ?> loadChromatogram() {
 
-		IChromatogramSelection chromatogramSelection = null;
+		IChromatogramSelection<?, ?> chromatogramSelection = null;
 		try {
 			Object object = part.getObject();
 			if(object instanceof Map) {
@@ -380,9 +379,9 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		return chromatogramSelection;
 	}
 
-	private synchronized IChromatogramSelection loadChromatogramSelection(File file, boolean batch) throws ChromatogramIsNullException {
+	private synchronized IChromatogramSelection<?, ?> loadChromatogramSelection(File file, boolean batch) throws ChromatogramIsNullException {
 
-		IChromatogramSelection chromatogramSelection = null;
+		IChromatogramSelection<?, ?> chromatogramSelection = null;
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(file, dataType);
 		//
@@ -407,14 +406,14 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 
 	private void saveChromatogram(IProgressMonitor monitor) throws NoChromatogramConverterAvailableException {
 
-		IChromatogramSelection chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
+		IChromatogramSelection<?, ?> chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
 		if(chromatogramSelection != null && shell != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			String converterId = chromatogram.getConverterId();
 			if(converterId != null && !converterId.equals("") && chromatogramFile != null) {
 				monitor.subTask(ExtensionMessages.saveChromatogram);
 				//
-				IProcessingInfo processingInfo = null;
+				IProcessingInfo<?> processingInfo = null;
 				if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 					processingInfo = ChromatogramConverterMSD.getInstance().convert(chromatogramFile, chromatogramMSD, converterId, monitor);
 				} else if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {

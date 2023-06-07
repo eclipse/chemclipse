@@ -67,8 +67,7 @@ public class ChromatogramActionUI extends Composite {
 	private ComboViewer comboChromatogramAction;
 	private Button buttonChromatogramAction;
 	//
-	@SuppressWarnings("rawtypes")
-	private IChromatogramSelection chromatogramSelection;
+	private IChromatogramSelection<?, ?> chromatogramSelection;
 	private String selectedActionId = "";
 	private final HashMap<String, ChromatogramEditorActionExtension> actionHashMap = new HashMap<>();
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -79,8 +78,7 @@ public class ChromatogramActionUI extends Composite {
 		initialize();
 	}
 
-	@SuppressWarnings("rawtypes")
-	public void setChromatogramActionMenu(IChromatogramSelection chromatogramSelection) {
+	public void setChromatogramActionMenu(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;
 		boolean enabled = enableChromatogramActionMenu(chromatogramSelection);
@@ -187,8 +185,7 @@ public class ChromatogramActionUI extends Composite {
 		return button;
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	private boolean setChromatogramActionItems(Control parent, IChromatogramSelection chromatogramSelection) {
+	private boolean setChromatogramActionItems(Control parent, IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		/*
 		 * Fill the hash map.
@@ -222,8 +219,7 @@ public class ChromatogramActionUI extends Composite {
 		return success;
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	private boolean enableChromatogramActionMenu(IChromatogramSelection chromatogramSelection) {
+	private boolean enableChromatogramActionMenu(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		boolean enabled = false;
 		IConfigurationElement[] elements = getConfigurationElements();
