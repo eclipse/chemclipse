@@ -32,9 +32,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegra
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
@@ -151,16 +151,16 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 			 * Write the mass spectra.
 			 */
 			File peakOutputFile = new File(outputFolder + peakIdentificationBatchJob.getName());
-			IPeaks<?> peaks = getPeaksInstance(peakList);
+			IPeaks<? extends IPeakMSD> peaks = getPeaksInstance(peakList);
 			IProcessingInfo<?> processingInfo = PeakConverterMSD.convert(peakOutputFile, peaks, false, converterId, monitor);
 			peakIdentificationProcessingInfo.addMessages(processingInfo);
 		}
 		return peakIdentificationProcessingInfo;
 	}
 
-	private IPeaks<?> getPeaksInstance(List<IPeakMSD> peakList) {
+	private IPeaks<? extends IPeakMSD> getPeaksInstance(List<IPeakMSD> peakList) {
 
-		IPeaks<?> peaks = new Peaks();
+		IPeaks<? extends IPeakMSD> peaks = new PeaksMSD();
 		for(IPeakMSD peak : peakList) {
 			peaks.addPeak(peak);
 		}

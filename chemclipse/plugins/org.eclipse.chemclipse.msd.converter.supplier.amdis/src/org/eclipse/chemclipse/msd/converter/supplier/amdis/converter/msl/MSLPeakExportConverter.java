@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakExportConverter;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSL;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.PeakWriterMSL;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -31,21 +32,20 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * otherwise massSpectrum.getIdentifier().
  * 
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
 public class MSLPeakExportConverter extends AbstractPeakExportConverter {
 
 	private static final Logger logger = Logger.getLogger(MSLPeakExportConverter.class);
 	private static final String DESCRIPTION = "AMDIS MSL Peak Export";
 
 	@Override
-	public IProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IPeaks<? extends IPeakMSD> peaks, boolean append, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		/*
 		 * Checks that file and mass spectra are not null.
 		 */
 		file = SpecificationValidatorMSL.validateSpecification(file);
-		IProcessingInfo processingInfoValidate = validate(file, peaks);
+		IProcessingInfo<File> processingInfoValidate = validate(file, peaks);
 		if(processingInfoValidate.hasErrorMessages()) {
 			processingInfo.addMessages(processingInfoValidate);
 		} else {
@@ -67,9 +67,9 @@ public class MSLPeakExportConverter extends AbstractPeakExportConverter {
 		return processingInfo;
 	}
 
-	private IProcessingInfo validate(File file, IPeaks<?> peaks) {
+	private IProcessingInfo<File> validate(File file, IPeaks<?> peaks) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(super.validate(file));
 		processingInfo.addMessages(super.validate(peaks));
 		return processingInfo;

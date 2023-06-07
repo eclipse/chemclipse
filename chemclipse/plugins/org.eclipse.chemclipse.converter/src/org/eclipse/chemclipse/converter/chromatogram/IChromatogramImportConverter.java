@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,7 +40,7 @@ public interface IChromatogramImportConverter<R extends IChromatogram<?>> extend
 	default IProcessingInfo<IChromatogramOverview> convertOverview(File file, IProgressMonitor monitor) {
 
 		IProcessingInfo<R> chromatogramInfo = convert(file, monitor);
-		ProcessingInfo<IChromatogramOverview> info = new ProcessingInfo<IChromatogramOverview>();
+		ProcessingInfo<IChromatogramOverview> info = new ProcessingInfo<>();
 		info.addMessages(chromatogramInfo);
 		info.setProcessingResult(chromatogramInfo.getProcessingResult());
 		return info;

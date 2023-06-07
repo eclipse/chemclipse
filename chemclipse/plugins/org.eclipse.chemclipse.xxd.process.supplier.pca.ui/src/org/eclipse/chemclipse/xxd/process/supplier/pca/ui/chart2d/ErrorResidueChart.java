@@ -126,7 +126,7 @@ public class ErrorResidueChart extends BarChart {
 			primaryAxisSettingsX.setCategorySeries(getCategories(pcaResults));
 			applySettings(chartSettings);
 			//
-			List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+			List<IBarSeriesData> barSeriesDataList = new ArrayList<>();
 			ISeriesData seriesData = getSeries(pcaResults);
 			IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
 			IBarSeriesSettings settings = barSeriesData.getSettings();
@@ -139,10 +139,9 @@ public class ErrorResidueChart extends BarChart {
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private String[] getCategories(IResultsPCA pcaResults) {
+	private String[] getCategories(IResultsPCA<? extends IResultPCA, ?> pcaResults) {
 
-		List<IResultPCA> pcaResultList = pcaResults.getPcaResultList();
+		List<? extends IResultPCA> pcaResultList = pcaResults.getPcaResultList();
 		int size = pcaResultList.size();
 		String[] categories = new String[size];
 		//
@@ -154,10 +153,9 @@ public class ErrorResidueChart extends BarChart {
 		return categories;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private ISeriesData getSeries(IResultsPCA pcaResults) {
+	private ISeriesData getSeries(IResultsPCA<? extends IResultPCA, ?> pcaResults) {
 
-		List<IResultPCA> pcaResultList = pcaResults.getPcaResultList();
+		List<? extends IResultPCA> pcaResultList = pcaResults.getPcaResultList();
 		int size = pcaResultList.size();
 		double[] xSeries = new double[size];
 		double[] ySeries = new double[size];

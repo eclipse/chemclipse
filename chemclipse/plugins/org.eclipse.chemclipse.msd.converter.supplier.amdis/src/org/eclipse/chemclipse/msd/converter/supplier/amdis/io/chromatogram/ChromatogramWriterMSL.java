@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,23 +12,23 @@
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io.chromatogram;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLPeakExportConverter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramWriterMSL extends AbstractChromatogramMSDWriter {
 
 	@Override
-	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		if(chromatogram == null || file == null) {
 			throw new IOException("The chromatogram and the file must be not null.");
@@ -36,7 +36,7 @@ public class ChromatogramWriterMSL extends AbstractChromatogramMSDWriter {
 		/*
 		 * Extract the peaks
 		 */
-		IPeaks<?> peaks = new Peaks();
+		IPeaks<? extends IPeakMSD> peaks = new PeaksMSD();
 		List<IChromatogramPeakMSD> chromatogramPeaks = chromatogram.getPeaks();
 		for(IChromatogramPeakMSD chromatogramPeak : chromatogramPeaks) {
 			peaks.addPeak(chromatogramPeak);
