@@ -17,6 +17,8 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexCalculator;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 
@@ -31,7 +33,7 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements {
 	private String stopIndexName = "";
 	private boolean useAlreadyDetectedPeaks = false;
 	//
-	private IChromatogramSelection<?, ?> chromatogramSelection;
+	private IChromatogramSelection<IPeak, IChromatogram<IPeak>> chromatogramSelection;
 	private ISeparationColumnIndices separationColumnIndices = new SeparationColumnIndices();
 	//
 	private boolean retentionIndexDataIsValidated = false;
@@ -140,12 +142,12 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements {
 		this.useAlreadyDetectedPeaks = useAlreadyDetectedPeaks;
 	}
 
-	public IChromatogramSelection<?, ?> getChromatogramSelection() {
+	public IChromatogramSelection<IPeak, IChromatogram<IPeak>> getChromatogramSelection() {
 
 		return chromatogramSelection;
 	}
 
-	public void setChromatogramSelection(IChromatogramSelection<?, ?> chromatogramSelection) {
+	public void setChromatogramSelection(IChromatogramSelection<IPeak, IChromatogram<IPeak>> chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;
 	}

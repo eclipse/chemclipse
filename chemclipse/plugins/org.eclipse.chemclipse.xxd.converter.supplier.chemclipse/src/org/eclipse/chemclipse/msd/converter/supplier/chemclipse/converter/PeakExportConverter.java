@@ -16,22 +16,22 @@ import java.io.File;
 
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakExportConverter;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakExportConverter extends AbstractPeakExportConverter {
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public IProcessingInfo convert(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IPeaks<? extends IPeakMSD> peaks, boolean append, IProgressMonitor monitor) {
 
 		return getErrorMessage();
 	}
 
-	private IProcessingInfo<?> getErrorMessage() {
+	private IProcessingInfo<File> getErrorMessage() {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("OCB Peak Writer", "There is no capability to write peaks in *.ocb format.");
 		return processingInfo;
 	}

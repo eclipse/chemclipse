@@ -129,7 +129,7 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "deprecation"})
+	@SuppressWarnings({"deprecation"})
 	private void parseTargetMassLib(IChromatogramMSD chromatogramMSD, File directory) {
 
 		if(PreferenceSupplier.isParseTargetDataMassLib()) {
@@ -143,13 +143,12 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 				String referenceIdentifierPrefix = PreferenceSupplier.getReferenceIdentifierPrefix();
 				//
 				try {
-					IProcessingInfo processingInfo = massLibConverter.parseTargets(file);
+					IProcessingInfo<?> processingInfo = massLibConverter.parseTargets(file);
 					@SuppressWarnings("unchecked")
-					Map<Integer, String> targets = (Map<Integer, String>)processingInfo.getProcessingResult(Map.class);
+					Map<Integer, String> targets = processingInfo.getProcessingResult(Map.class);
 					for(Map.Entry<Integer, String> target : targets.entrySet()) {
 						IScan scan = chromatogramMSD.getScan(target.getKey());
-						if(scan != null && scan instanceof IScanMSD) {
-							IScanMSD scanMSD = (IScanMSD)scan;
+						if(scan != null && scan instanceof IScanMSD scanMSD) {
 							ILibraryInformation libraryInformation = new LibraryInformation();
 							libraryInformationSupport.extractNameAndReferenceIdentifier(target.getValue(), libraryInformation, referenceIdentifierMarker, referenceIdentifierPrefix);
 							IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,15 +24,14 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.quantit
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.quantitation.IDatabaseWriter;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class DatabaseExportConverter<R> extends AbstractQuantDBExportConverter<R> implements IQuantDBExportConverter<R> {
+public class DatabaseExportConverter extends AbstractQuantDBExportConverter<File> implements IQuantDBExportConverter<File> {
 
 	private static final Logger logger = Logger.getLogger(DatabaseExportConverter.class);
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public IProcessingInfo convert(File file, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		try {
 			IDatabaseWriter writer = new DatabaseWriter_1000();
 			writer.convert(file, quantitationDatabase, monitor);

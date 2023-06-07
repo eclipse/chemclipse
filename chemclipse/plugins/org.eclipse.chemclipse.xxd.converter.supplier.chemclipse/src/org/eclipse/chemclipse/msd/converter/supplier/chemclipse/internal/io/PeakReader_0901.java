@@ -68,12 +68,11 @@ public class PeakReader_0901 extends AbstractZipReader implements IPeakReader {
 
 	private static final Logger logger = Logger.getLogger(PeakReader_0901.class);
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public IProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		ZipFile zipFile = new ZipFile(file);
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
 		try {
 			IPeaks<?> peaks = readPeaksFromZipFile(zipFile, monitor);
 			processingInfo.setProcessingResult(peaks);
@@ -83,7 +82,6 @@ public class PeakReader_0901 extends AbstractZipReader implements IPeakReader {
 		return processingInfo;
 	}
 
-	
 	private IPeaks<?> readPeaksFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
 
 		IPeaks<?> peaks = new Peaks();

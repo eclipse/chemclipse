@@ -113,8 +113,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		updateChromatogram(chromatogramSelection, peakChartSettingsDefault);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void updateChromatogram(IChromatogramSelection chromatogramSelection, PeakChartSettings peakChartSettings) {
+	public void updateChromatogram(IChromatogramSelection<?, ?> chromatogramSelection, PeakChartSettings peakChartSettings) {
 
 		this.chromatogramSelection = chromatogramSelection;
 		//
@@ -128,7 +127,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 			 * Add series
 			 */
 			targetDisplaySettings = chromatogramSelection.getChromatogram();
-			List<IPeak> peaks = chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection);
+			List<? extends IPeak> peaks = chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection);
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			addChromatogramData(lineSeriesDataList, peakChartSettings);
@@ -376,7 +375,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		}
 	}
 
-	private void addPeakData(List<IPeak> peaks, List<ILineSeriesData> lineSeriesDataList) {
+	private void addPeakData(List<? extends IPeak> peaks, List<ILineSeriesData> lineSeriesDataList) {
 
 		int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
 		PlotSymbolType symbolTypeActiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_MARKER_TYPE));

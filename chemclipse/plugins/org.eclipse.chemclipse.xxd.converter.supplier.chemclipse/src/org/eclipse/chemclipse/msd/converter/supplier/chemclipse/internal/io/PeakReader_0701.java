@@ -13,14 +13,11 @@ package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipFile;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
@@ -63,12 +60,11 @@ public class PeakReader_0701 extends AbstractZipReader implements IPeakReader {
 
 	private static final Logger logger = Logger.getLogger(PeakReader_0701.class);
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public IProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws IOException {
 
 		ZipFile zipFile = new ZipFile(file);
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
 		try {
 			IPeaks<?> peaks = readPeaksFromZipFile(zipFile, monitor);
 			processingInfo.setProcessingResult(peaks);

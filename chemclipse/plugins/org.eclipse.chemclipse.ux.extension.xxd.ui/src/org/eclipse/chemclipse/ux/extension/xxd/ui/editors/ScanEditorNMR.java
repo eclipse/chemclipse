@@ -277,7 +277,7 @@ public class ScanEditorNMR implements IScanEditorNMR {
 		left.setLayout(new FillLayout());
 		Composite right = new Composite(sashForm, SWT.NONE);
 		right.setLayout(new FillLayout());
-		sashForm.setWeights(new int[]{800, 200});
+		sashForm.setWeights(800, 200);
 		extendedNMRScanUI = new ExtendedNMRScanUI(left);
 		Composite composite = new Composite(right, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
@@ -287,7 +287,6 @@ public class ScanEditorNMR implements IScanEditorNMR {
 		DynamicSettingsUI settingsUI = new DynamicSettingsUI(composite, new GridData(SWT.FILL, SWT.FILL, true, false));
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
-			@SuppressWarnings({"rawtypes", "unchecked"})
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
@@ -296,7 +295,7 @@ public class ScanEditorNMR implements IScanEditorNMR {
 					FilterContext<?, ?> context = ((Filtered<?, ?>)measurement).getFilterContext();
 					Object filteredObject = context.getFilteredObject();
 					if(filteredObject instanceof IComplexSignalMeasurement<?> original) {
-						settingsUI.setActiveContext(context, new UpdatingObserver(context, measurement, original));
+						settingsUI.setActiveContext(context, new UpdatingObserver<>(context, measurement, original));
 						composite.layout();
 						return;
 					}

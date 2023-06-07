@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
@@ -74,8 +75,7 @@ public class PeakConverterMSD {
 		return getPeaks(file, monitor);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public static IProcessingInfo<?> convert(File file, IPeaks peaks, boolean append, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> convert(File file, IPeaks<? extends IPeakMSD> peaks, boolean append, String converterId, IProgressMonitor monitor) {
 
 		IProcessingInfo<?> processingInfo;
 		/*

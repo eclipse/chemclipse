@@ -271,7 +271,6 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 		});
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void deleteEntries(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
@@ -282,11 +281,12 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 			 * Delete
 			 */
 			if(measurementInfo != null) {
-				Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+				Iterator<?> iterator = tableViewer.get().getStructuredSelection().iterator();
 				Set<String> keysNotRemoved = new HashSet<>();
 				while(iterator.hasNext()) {
 					Object mapObject = iterator.next();
 					if(mapObject instanceof Map.Entry) {
+						@SuppressWarnings("unchecked")
 						Map.Entry<String, String> entry = (Map.Entry<String, String>)mapObject;
 						String key = entry.getKey();
 						try {
