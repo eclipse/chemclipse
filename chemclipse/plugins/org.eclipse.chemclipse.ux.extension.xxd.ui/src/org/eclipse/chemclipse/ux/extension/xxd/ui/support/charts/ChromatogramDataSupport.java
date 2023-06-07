@@ -45,11 +45,10 @@ public class ChromatogramDataSupport {
 
 	private static PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 
-	@SuppressWarnings("rawtypes")
 	public static String getChromatogramEditorLabel(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			return chromatogram.getName() + " " + getChromatogramType(chromatogramSelection);
 		} else {
 			return "";
@@ -105,12 +104,12 @@ public class ChromatogramDataSupport {
 
 		if(object instanceof IChromatogramSelection) {
 			return (IChromatogramSelection<?, ?>)object;
-		} else if(object instanceof IChromatogramCSD) {
-			return new ChromatogramSelectionCSD((IChromatogramCSD)object);
-		} else if(object instanceof IChromatogramMSD) {
-			return new ChromatogramSelectionMSD((IChromatogramMSD)object);
-		} else if(object instanceof IChromatogramWSD) {
-			return new ChromatogramSelectionWSD((IChromatogramWSD)object);
+		} else if(object instanceof IChromatogramCSD chromatogramCSD) {
+			return new ChromatogramSelectionCSD(chromatogramCSD);
+		} else if(object instanceof IChromatogramMSD chromatogramMSD) {
+			return new ChromatogramSelectionMSD(chromatogramMSD);
+		} else if(object instanceof IChromatogramWSD chromatogramWSD) {
+			return new ChromatogramSelectionWSD(chromatogramWSD);
 		} else {
 			return null;
 		}

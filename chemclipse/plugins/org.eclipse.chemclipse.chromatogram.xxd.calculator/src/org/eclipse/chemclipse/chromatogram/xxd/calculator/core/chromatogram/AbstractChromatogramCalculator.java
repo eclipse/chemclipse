@@ -36,10 +36,9 @@ public abstract class AbstractChromatogramCalculator implements IChromatogramCal
 	 * @param chromatogramSelection
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings("rawtypes")
-	private IProcessingInfo validateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
+	private IProcessingInfo<?> validateChromatogramSelection(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramSelection == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram selection is not valid.");
 		} else {

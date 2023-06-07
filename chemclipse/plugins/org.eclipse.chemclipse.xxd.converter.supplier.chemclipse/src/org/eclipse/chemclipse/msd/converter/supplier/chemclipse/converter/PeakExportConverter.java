@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,10 +29,9 @@ public class PeakExportConverter extends AbstractPeakExportConverter {
 		return getErrorMessage();
 	}
 
-	@SuppressWarnings("rawtypes")
-	private IProcessingInfo getErrorMessage() {
+	private IProcessingInfo<?> getErrorMessage() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("OCB Peak Writer", "There is no capability to write peaks in *.ocb format.");
 		return processingInfo;
 	}

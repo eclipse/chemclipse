@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilterMSD;
@@ -36,27 +37,25 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramFilterMSx extends AbstractChromatogramFilterMSD {
 
 	@Override
-	public IProcessingInfo<?> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> validation = validate(chromatogramSelection, chromatogramFilterSettings);
-		IProcessingInfo<Object> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IChromatogramFilterResult> validation = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(validation);
 		//
 		if(!processingInfo.hasErrorMessages()) {
 			//
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-			if(chromatogram instanceof IChromatogramMSD) {
+			if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 				//
 				Map<Short, List<IScan>> splittedScanMap = new HashMap<>();
 				//
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
 				for(IScan scan : chromatogramMSD.getScans()) {
-					if(scan instanceof IRegularMassSpectrum) {
-						IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)scan;
+					if(scan instanceof IRegularMassSpectrum massSpectrum) {
 						short massSpectrometer = massSpectrum.getMassSpectrometer();
 						List<IScan> scans = splittedScanMap.get(massSpectrometer);
 						if(scans == null) {
-							scans = new ArrayList<IScan>();
+							scans = new ArrayList<>();
 							splittedScanMap.put(massSpectrometer, scans);
 						}
 						scans.add(scan);
@@ -90,7 +89,7 @@ public class ChromatogramFilterMSx extends AbstractChromatogramFilterMSD {
 	}
 
 	@Override
-	public IProcessingInfo<?> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsMSx splitterSettings = PreferenceSupplier.getFilterSettingsMSx();
 		return applyFilter(chromatogramSelection, splitterSettings, monitor);

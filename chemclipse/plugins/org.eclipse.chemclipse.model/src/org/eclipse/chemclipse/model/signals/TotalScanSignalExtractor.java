@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -156,15 +156,15 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection) {
+	
+	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?>chromatogramSelection) {
 
 		return getTotalScanSignals(chromatogramSelection, true);
 	}
 
-	@SuppressWarnings("rawtypes")
+	
 	@Override
-	public ITotalScanSignals getTotalScanSignals(IChromatogram chromatogram, boolean validatePositive, boolean condenseCycleNumberScans) {
+	public ITotalScanSignals getTotalScanSignals(IChromatogram<?> chromatogram, boolean validatePositive, boolean condenseCycleNumberScans) {
 
 		/*
 		 * If the chromatogram selection is null, return an empty
@@ -182,15 +182,15 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection, boolean validatePositive) {
+	
+	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?>chromatogramSelection, boolean validatePositive) {
 
 		return getTotalScanSignals(chromatogramSelection, validatePositive, false);
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection, boolean validatePositive, boolean condenseCycleNumberScans) {
+	
+	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?>chromatogramSelection, boolean validatePositive, boolean condenseCycleNumberScans) {
 
 		/*
 		 * If the chromatogram selection is null, return an empty

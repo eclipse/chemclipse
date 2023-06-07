@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,8 +28,8 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 	 * 
 	 * @return {@link IChromatogram}
 	 */
-	@SuppressWarnings("rawtypes")
-	IChromatogram getChromatogram();
+	
+	IChromatogram<?> getChromatogram();
 
 	/**
 	 * Adds an {@link ITotalScanSignal} instance at the end of the stored

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -83,7 +83,7 @@ public class PeakReader_1004 extends AbstractZipReader implements IPeakReader {
 		ZipFile zipFile = new ZipFile(file);
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		try {
-			IPeaks peaks = readPeaksFromZipFile(zipFile, monitor);
+			IPeaks<?> peaks = readPeaksFromZipFile(zipFile, monitor);
 			processingInfo.setProcessingResult(peaks);
 		} finally {
 			zipFile.close();
@@ -91,10 +91,10 @@ public class PeakReader_1004 extends AbstractZipReader implements IPeakReader {
 		return processingInfo;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private IPeaks readPeaksFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
+	
+	private IPeaks<?> readPeaksFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
 
-		IPeaks peaks = new Peaks();
+		IPeaks<?> peaks = new Peaks();
 		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_PEAKS_MSD);
 		//
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks

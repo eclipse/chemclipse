@@ -218,8 +218,7 @@ public class ChromatogramChartSupport {
 		return lineSeriesData;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline, boolean useRetentionIndex) {
+	private ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, int startScan, int stopScan, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline, boolean useRetentionIndex) {
 
 		IBaselineModel baselineModel = null;
 		if(baseline) {

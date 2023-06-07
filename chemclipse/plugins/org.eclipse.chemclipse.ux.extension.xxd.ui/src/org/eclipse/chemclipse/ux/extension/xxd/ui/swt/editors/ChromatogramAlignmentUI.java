@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,8 +55,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 	private ChromatogramSourceCombo chromatogramSourceCombo;
 	private List<Button> buttons = new ArrayList<>();
 	//
-	@SuppressWarnings("rawtypes")
-	private IChromatogramSelection chromatogramSelectionSource = null;
+	private IChromatogramSelection<?, ?>chromatogramSelectionSource = null;
 	private List<IChromatogramSelection<?, ?>> chromatogramSelectionsInternal = new ArrayList<>();
 	//
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
@@ -69,8 +68,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public void update(IChromatogramSelection chromatogramSelectionSource) {
+	public void update(IChromatogramSelection<?, ?>chromatogramSelectionSource) {
 
 		this.chromatogramSelectionSource = chromatogramSelectionSource;
 		enableButtons();
@@ -232,7 +230,6 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 		label.setLayoutData(gridData);
 	}
 
-	@SuppressWarnings("rawtypes")
 	private boolean setRanges() {
 
 		if(chromatogramSelectionSource != null) {
@@ -244,7 +241,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 			/*
 			 * Editor
 			 */
-			for(IChromatogramSelection selection : getTargetChromatogramSelections()) {
+			for(IChromatogramSelection<?, ?>selection : getTargetChromatogramSelections()) {
 				if(selection != chromatogramSelectionSource) {
 					/*
 					 * Don't fire an update. The next time the selection is on focus,
@@ -264,14 +261,13 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void modifyChromatogramLength(Shell shell, String modifyLengthType) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Modify Chromatogram Length");
 		messageBox.setMessage("Would you like to modify the length of all opened chromatograms? Peaks will be deleted.");
 		if(messageBox.open() == SWT.YES) {
-			IChromatogram chromatogram = getChromatogram(modifyLengthType);
+			IChromatogram<?> chromatogram = getChromatogram(modifyLengthType);
 			if(chromatogram != null) {
 				/*
 				 * Settings
@@ -290,7 +286,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 				/*
 				 * Modify chromatograms.
 				 */
-				for(IChromatogramSelection chromatogramSelection : getTargetChromatogramSelections()) {
+				for(IChromatogramSelection<?, ?> chromatogramSelection : getTargetChromatogramSelections()) {
 					if(realignChromatogram(modifyLengthType, chromatogramSelection, chromatogram)) {
 						IRunnableWithProgress runnable = new ChromatogramLengthModifier(chromatogramSelection, scanDelay, chromatogramLength);
 						ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
@@ -300,6 +296,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 							logger.warn(e);
 						} catch(InterruptedException e) {
 							logger.warn(e);
+							Thread.currentThread().interrupt();
 						}
 					}
 					/*
@@ -313,8 +310,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private boolean realignChromatogram(String modifyLengthType, IChromatogramSelection chromatogramSelection, IChromatogram chromatogram) {
+	private boolean realignChromatogram(String modifyLengthType, IChromatogramSelection<?, ?> chromatogramSelection, IChromatogram<?> chromatogram) {
 
 		/*
 		 * Don't re-align the template chromatogram.
@@ -329,10 +325,9 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private IChromatogram getChromatogram(String modifyLengthType) {
+	private IChromatogram<?> getChromatogram(String modifyLengthType) {
 
-		IChromatogram chromatogram;
+		IChromatogram<?> chromatogram;
 		switch(modifyLengthType) {
 			case MODIFY_LENGTH_SHORTEST:
 				chromatogram = getShortestChromatogram();
@@ -360,12 +355,11 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 	 * 
 	 * @return IChromatogram
 	 */
-	@SuppressWarnings("rawtypes")
-	private IChromatogram getShortestChromatogram() {
+	private IChromatogram<?> getShortestChromatogram() {
 
-		IChromatogram chromatogram = null;
+		IChromatogram<?> chromatogram = null;
 		int maxRetentionTime = Integer.MAX_VALUE;
-		for(IChromatogramSelection chromatogramSelection : getTargetChromatogramSelections()) {
+		for(IChromatogramSelection<?, ?> chromatogramSelection : getTargetChromatogramSelections()) {
 			if(chromatogramSelection.getChromatogram().getStopRetentionTime() < maxRetentionTime) {
 				maxRetentionTime = chromatogramSelection.getChromatogram().getStopRetentionTime();
 				chromatogram = chromatogramSelection.getChromatogram();
@@ -379,12 +373,11 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 	 * 
 	 * @return IChromatogram
 	 */
-	@SuppressWarnings("rawtypes")
-	private IChromatogram getLongestChromatogram() {
+	private IChromatogram<?> getLongestChromatogram() {
 
-		IChromatogram chromatogram = null;
+		IChromatogram<?> chromatogram = null;
 		int minRetentionTime = Integer.MIN_VALUE;
-		for(IChromatogramSelection chromatogramSelection : getTargetChromatogramSelections()) {
+		for(IChromatogramSelection<?, ?> chromatogramSelection : getTargetChromatogramSelections()) {
 			if(chromatogramSelection.getChromatogram().getStopRetentionTime() > minRetentionTime) {
 				minRetentionTime = chromatogramSelection.getChromatogram().getStopRetentionTime();
 				chromatogram = chromatogramSelection.getChromatogram();

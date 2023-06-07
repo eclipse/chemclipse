@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -59,14 +59,12 @@ public class PeakQuantifierISTD extends AbstractPeakQuantifier implements IPeakQ
 		return quantify(peaks, peakQuantifierSettings, monitor);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo quantifySelectedPeak(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantifySelectedPeak(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		return calculatorISTD.quantifySelectedPeak(chromatogramSelection, monitor);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo quantifyAllPeaks(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantifyAllPeaks(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		return calculatorISTD.quantifyAllPeaks(chromatogramSelection, monitor);
 	}

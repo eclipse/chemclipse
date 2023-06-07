@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -50,13 +50,12 @@ public class ExtendedScanInfoUI extends Composite implements IExtendedPartUI {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void setInput(Object input) {
 
-		if(input instanceof IChromatogramSelection) {
-			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)input;
+		if(input instanceof IChromatogramSelection chromatogramSelection) {
 			IChromatogram<IPeak> chromatogram = chromatogramSelection.getChromatogram();
 			labelInfo.setText(chromatogram.getName());
 			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
 			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-			List<IScan> selectedScans = new ArrayList<IScan>();
+			List<IScan> selectedScans = new ArrayList<>();
 			for(IScan scan : chromatogram.getScans()) {
 				if(scan.getRetentionTime() >= startRetentionTime && scan.getRetentionTime() <= stopRetentionTime) {
 					selectedScans.add(scan);
@@ -142,8 +141,8 @@ public class ExtendedScanInfoUI extends Composite implements IExtendedPartUI {
 
 				IStructuredSelection structuredSelection = scanInfoListUI.getStructuredSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof IScanMSD) {
-					UpdateNotifierUI.update(e.display, (IScanMSD)object);
+				if(object instanceof IScanMSD scanMSD) {
+					UpdateNotifierUI.update(e.display, scanMSD);
 				}
 			}
 		});

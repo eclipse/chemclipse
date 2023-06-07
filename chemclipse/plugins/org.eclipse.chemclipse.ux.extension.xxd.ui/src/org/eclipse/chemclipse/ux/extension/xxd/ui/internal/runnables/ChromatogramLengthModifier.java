@@ -19,27 +19,25 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-@SuppressWarnings("rawtypes")
 public class ChromatogramLengthModifier implements IRunnableWithProgress {
 
-	private IChromatogramSelection chromatogramSelection;
+	private IChromatogramSelection<?, ?> chromatogramSelection;
 	private int scanDelay;
 	private int chromatogramLength;
 
-	public ChromatogramLengthModifier(IChromatogramSelection chromatogramSelection, int scanDelay, int chromatogramLength) {
+	public ChromatogramLengthModifier(IChromatogramSelection<?, ?> chromatogramSelection, int scanDelay, int chromatogramLength) {
 
 		this.chromatogramSelection = chromatogramSelection;
 		this.scanDelay = scanDelay;
 		this.chromatogramLength = chromatogramLength;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
 			monitor.beginTask(ExtensionMessages.chromatogramLengthModified, IProgressMonitor.UNKNOWN);
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			int scanRange = chromatogram.getNumberOfScans() - 1;
 			if(scanRange > 0) {
 				/*

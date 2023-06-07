@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
- * Why does IChromatogram extends ({@link IChromatogramOverview})?<br/>
+ * Why does IChromatogram<?> extends ({@link IChromatogramOverview})?<br/>
  * See the description in ({@link AbstractChromatogramMSD}).
  */
 public interface IChromatogramMSD extends IChromatogram<IChromatogramPeakMSD> {

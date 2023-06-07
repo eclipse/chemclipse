@@ -590,7 +590,6 @@ public class ChromatogramWriter_1400 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void writeReferencedChromatograms(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram<?>> referencedChromatograms, IProgressMonitor monitor) throws IOException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Chromatogram", referencedChromatograms.size() * 20);
@@ -600,7 +599,7 @@ public class ChromatogramWriter_1400 extends AbstractChromatogramWriter implemen
 			ChromatogramWriterWSD chromatogramWriterWSD = new ChromatogramWriterWSD();
 			//
 			int i = 0;
-			for(IChromatogram referencedChromatogram : referencedChromatograms) {
+			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
 				/*
 				 * Create the measurement folder.
 				 */

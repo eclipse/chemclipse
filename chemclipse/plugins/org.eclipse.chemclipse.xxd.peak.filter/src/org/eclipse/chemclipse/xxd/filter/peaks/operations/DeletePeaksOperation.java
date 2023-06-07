@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,13 +23,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-@SuppressWarnings("rawtypes")
 public class DeletePeaksOperation extends AbstractOperation {
 
 	private IChromatogramSelection<?, ?> chromatogramSelection;
 	private List<IPeak> peaksToDelete;
 
-	public DeletePeaksOperation(IChromatogramSelection chromatogramSelection, List<IPeak> peaksToDelete) {
+	public DeletePeaksOperation(IChromatogramSelection<?, ?> chromatogramSelection, List<IPeak> peaksToDelete) {
 
 		super("Delete Peaks");
 		this.chromatogramSelection = chromatogramSelection;
@@ -54,7 +53,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 		return !peaksToDelete.isEmpty();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 
@@ -84,7 +83,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();

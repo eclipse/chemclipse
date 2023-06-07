@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,12 +18,10 @@ import org.eclipse.jface.viewers.Viewer;
 
 public class SynonymsListContentProvider implements IStructuredContentProvider {
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if(inputElement instanceof Set) {
-			Set set = (Set)inputElement;
+		if(inputElement instanceof Set<?> set) {
 			return set.toArray();
 		} else {
 			return null;

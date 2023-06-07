@@ -35,14 +35,13 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-@SuppressWarnings("rawtypes")
 public class ChromatogramEditorDialog extends Dialog {
 
 	private static final int WIDTH = 450;
 	private static final int HEIGHT = 150;
 	//
-	private IChromatogram chromatogramMaster = null;
-	private IChromatogramSelection chromatogramSelection = null;
+	private IChromatogram<?> chromatogramMaster = null;
+	private IChromatogramSelection<?, ?> chromatogramSelection = null;
 	//
 	private ComboViewer comboViewer;
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
@@ -59,7 +58,7 @@ public class ChromatogramEditorDialog extends Dialog {
 	 * @param parentShell
 	 * @param chromatogramMaster
 	 */
-	public ChromatogramEditorDialog(Shell parentShell, IChromatogram chromatogramMaster) {
+	public ChromatogramEditorDialog(Shell parentShell, IChromatogram<?> chromatogramMaster) {
 
 		super(parentShell);
 		this.chromatogramMaster = chromatogramMaster;
@@ -78,7 +77,7 @@ public class ChromatogramEditorDialog extends Dialog {
 		return true;
 	}
 
-	public IChromatogramSelection getChromatogramSelection() {
+	public IChromatogramSelection<?, ?> getChromatogramSelection() {
 
 		return chromatogramSelection;
 	}
@@ -120,7 +119,7 @@ public class ChromatogramEditorDialog extends Dialog {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IChromatogramSelection chromatogramSelection) {
+				if(element instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
 					String name = chromatogramSelection.getChromatogram().getName();
 					String type = ChromatogramDataSupport.getChromatogramType(chromatogramSelection);
 					return getChromatogramLabel(name, type, "Editor");
@@ -139,8 +138,8 @@ public class ChromatogramEditorDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof IChromatogramSelection) {
-					chromatogramSelection = (IChromatogramSelection)object;
+				if(object instanceof IChromatogramSelection<?, ?> firstChromatogramSelection) {
+					chromatogramSelection = firstChromatogramSelection;
 				}
 			}
 		});
@@ -160,12 +159,12 @@ public class ChromatogramEditorDialog extends Dialog {
 		return label;
 	}
 
-	private void updateComboViewer(IChromatogram chromatogramMaster) {
+	private void updateComboViewer(IChromatogram<?> chromatogramMaster) {
 
-		List<IChromatogramSelection> chromatogramSelections = editorUpdateSupport.getChromatogramSelections();
+		List<IChromatogramSelection<?, ?>> chromatogramSelections = editorUpdateSupport.getChromatogramSelections();
 		if(chromatogramMaster != null) {
-			List<IChromatogramSelection> removeSelections = new ArrayList<>();
-			for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+			List<IChromatogramSelection<?, ?>> removeSelections = new ArrayList<>();
+			for(IChromatogramSelection<?, ?> chromatogramSelection : chromatogramSelections) {
 				if(chromatogramSelection.getChromatogram() == chromatogramMaster) {
 					removeSelections.add(chromatogramSelection);
 				}

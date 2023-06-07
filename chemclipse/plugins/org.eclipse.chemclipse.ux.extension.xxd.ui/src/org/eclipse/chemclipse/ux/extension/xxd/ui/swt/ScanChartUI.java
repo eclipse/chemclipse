@@ -560,7 +560,6 @@ public class ScanChartUI extends ScrollableChart {
 		addSeriesLabelMarker(labelPaintListener);
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void addBarSeriesData(List<IBarSeriesData> barSeriesDataList) {
 
 		/*
@@ -578,7 +577,7 @@ public class ScanChartUI extends ScrollableChart {
 					ISeriesData optimizedSeriesData = calculateSeries(seriesData, COMPRESS_TO_LENGTH);
 					IBarSeriesSettings barSeriesSettings = barSeriesData.getSettings();
 					barSeriesSettings.getSeriesSettingsHighlight(); // Initialize
-					IBarSeries barSeries = (IBarSeries)createSeries(optimizedSeriesData, barSeriesSettings);
+					IBarSeries<?> barSeries = (IBarSeries<?>)createSeries(optimizedSeriesData, barSeriesSettings);
 					barSeriesSettings.setBarOverlay(true);
 					baseChart.applySeriesSettings(barSeries, barSeriesSettings);
 					/*

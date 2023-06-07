@@ -31,8 +31,7 @@ public class ChromatogramImporterTestCase extends TestCase {
 	private static final String EXTENSION_POINT_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
 	//
 	protected IChromatogramMSD chromatogram;
-	@SuppressWarnings("rawtypes")
-	protected IChromatogramSelection chromatogramSelection;
+	protected IChromatogramSelection<?, ?> chromatogramSelection;
 
 	@Override
 	protected void setUp() throws Exception {

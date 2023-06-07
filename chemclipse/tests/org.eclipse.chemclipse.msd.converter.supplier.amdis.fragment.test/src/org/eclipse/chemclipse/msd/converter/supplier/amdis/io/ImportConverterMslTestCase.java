@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,7 +23,6 @@ import org.junit.Ignore;
 
 import junit.framework.TestCase;
 
-@SuppressWarnings("rawtypes")
 @Ignore
 public class ImportConverterMslTestCase extends TestCase {
 
@@ -36,7 +35,7 @@ public class ImportConverterMslTestCase extends TestCase {
 
 		super.setUp();
 		importConverter = new MSLDatabaseImportConverter();
-		IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		massSpectra = (IMassSpectra)processingInfo.getProcessingResult();
 	}
 

@@ -88,7 +88,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 			IChromatogramSelection chromatogramSelection = getChromatogramSelection();
 			wizardElements.setChromatogramSelection(chromatogramSelection);
 			if(chromatogramSelection != null) {
-				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				/*
 				 * Hide the mass spectrum view if it is CSD data.
 				 */
@@ -215,15 +215,14 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		}
 	}
 
-	@SuppressWarnings({"rawtypes"})
-	private IChromatogramSelection getChromatogramSelection() {
+	private IChromatogramSelection<?, ?> getChromatogramSelection() {
 
-		IChromatogramSelection chromatogramSelection = null;
+		IChromatogramSelection<?, ?> chromatogramSelection = null;
 		ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(wizardElements);
 		//
 		try {
 			getContainer().run(true, false, runnable);
-			IChromatogram chromatogram = runnable.getChromatogram();
+			IChromatogram<?> chromatogram = runnable.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 				chromatogramSelection = new ChromatogramSelectionMSD(chromatogramMSD);
 			} else if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
@@ -260,7 +259,6 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		return peakList;
 	}
 
-	@SuppressWarnings({"rawtypes"})
 	private void validateSelection() {
 
 		String message = null;
@@ -275,7 +273,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		}
 		//
 		if(message == null) {
-			IChromatogram chromatogram = wizardElements.getChromatogramSelection().getChromatogram();
+			IChromatogram<?> chromatogram = wizardElements.getChromatogramSelection().getChromatogram();
 			if(chromatogram == null || chromatogram.getPeaks().isEmpty()) {
 				message = "There is no peak available.";
 			}
@@ -286,8 +284,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		updateStatus(message);
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void updateChromatogramChart(IChromatogramSelection chromatogramSelection) {
+	private void updateChromatogramChart(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		chromatogramPeakChart.updateChromatogram(chromatogramSelection);
 	}

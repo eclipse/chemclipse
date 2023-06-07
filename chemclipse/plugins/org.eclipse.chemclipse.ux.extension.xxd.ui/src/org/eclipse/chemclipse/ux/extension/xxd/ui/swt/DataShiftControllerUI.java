@@ -373,7 +373,6 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 		button.setData(KEY_MIRROR_MODUS, DisplayModus.NORMAL);
 		button.addSelectionListener(new SelectionAdapter() {
 
-			@SuppressWarnings("rawtypes")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
@@ -392,7 +391,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 						displayModus = DisplayModus.MIRROR;
 						int i = 0;
 						int modulo = preferences.getInt(PreferenceConstants.P_MODULO_AUTO_MIRROR_CHROMATOGRAMS);
-						for(ISeries series : baseChart.getSeriesSet().getSeries()) {
+						for(ISeries<?> series : baseChart.getSeriesSet().getSeries()) {
 							if(i % modulo == 1) {
 								String seriesId = series.getId();
 								if(!mirroredSeries.contains(seriesId)) {
@@ -407,7 +406,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 						 * If status is mirrored, then set the series to normal.
 						 */
 						displayModus = DisplayModus.NORMAL;
-						for(ISeries series : baseChart.getSeriesSet().getSeries()) {
+						for(ISeries<?> series : baseChart.getSeriesSet().getSeries()) {
 							String seriesId = series.getId();
 							if(mirroredSeries.contains(seriesId)) {
 								baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);

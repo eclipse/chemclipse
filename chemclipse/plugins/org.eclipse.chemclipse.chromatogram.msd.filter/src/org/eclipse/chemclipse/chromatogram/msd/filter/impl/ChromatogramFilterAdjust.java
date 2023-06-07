@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.impl;
 
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilterMSD;
@@ -32,16 +33,14 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public class ChromatogramFilterAdjust extends AbstractChromatogramFilterMSD {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramFilterAdjust.class);
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			if(chromatogramFilterSettings instanceof FilterSettingsAdjust) {
 				/*
@@ -62,8 +61,7 @@ public class ChromatogramFilterAdjust extends AbstractChromatogramFilterMSD {
 						//
 						for(int i = startScan; i <= stopScan; i++) {
 							IScan scan = chromatogram.getScan(i);
-							if(scan instanceof IScanMSD) {
-								IScanMSD scanMSD = (IScanMSD)scan;
+							if(scan instanceof IScanMSD scanMSD) {
 								IExtractedIonSignal extractedIonSignalOriginal = scanMSD.getExtractedIonSignal();
 								IExtractedIonSignal extractedIonSignalAdjusted = extractedIonSignals.getExtractedIonSignal(i);
 								int startMZ = extractedIonSignalAdjusted.getStartIon();
@@ -103,7 +101,7 @@ public class ChromatogramFilterAdjust extends AbstractChromatogramFilterMSD {
 	}
 
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsAdjust filterSettings = PreferenceSupplier.getFilterSettingsAdjust();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);

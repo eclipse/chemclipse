@@ -27,13 +27,11 @@ import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 
-@SuppressWarnings("rawtypes")
 public abstract class AbstractTransferFilter extends AbstractChromatogramFilter implements IChromatogramFilter {
 
-	@SuppressWarnings("unchecked")
-	protected List<IScan> extractIdentifiedScans(IChromatogramSelection chromatogramSelection) {
+	protected List<IScan> extractIdentifiedScans(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		//
 		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
 		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
@@ -51,7 +49,7 @@ public abstract class AbstractTransferFilter extends AbstractChromatogramFilter 
 		return identifiedScans;
 	}
 
-	protected List<? extends IPeak> extractPeaks(IChromatogram chromatogram) {
+	protected List<? extends IPeak> extractPeaks(IChromatogram<?> chromatogram) {
 
 		if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 			return extractPeaks(new ChromatogramSelectionCSD(chromatogramCSD));
@@ -64,8 +62,7 @@ public abstract class AbstractTransferFilter extends AbstractChromatogramFilter 
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	protected List<? extends IPeak> extractPeaks(IChromatogramSelection chromatogramSelection) {
+	protected List<? extends IPeak> extractPeaks(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		return chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection);
 	}

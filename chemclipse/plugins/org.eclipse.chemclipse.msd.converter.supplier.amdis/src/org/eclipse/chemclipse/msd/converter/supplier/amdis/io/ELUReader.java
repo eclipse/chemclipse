@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -47,7 +47,6 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public class ELUReader implements IPeakReader {
 
 	/*
@@ -210,13 +209,12 @@ public class ELUReader implements IPeakReader {
 	 * @param scanInterval
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings("unchecked")
-	private void extractAmdisPeaks(String content, int scanInterval, IProcessingInfo processingInfo) {
+	private void extractAmdisPeaks(String content, int scanInterval, IProcessingInfo<IPeaks<?>> processingInfo) {
 
 		if(scanInterval <= 0) {
 			processingInfo.addErrorMessage("AMDIS ELU Parser", "There seems to be no peak in the file. The scan interval is <= 0.");
 		} else {
-			IPeaks peaks = new Peaks();
+			IPeaks<?> peaks = new Peaks();
 			Matcher matcher = PEAK_DATA_PATTERN.matcher(content);
 			while(matcher.find()) {
 				/*

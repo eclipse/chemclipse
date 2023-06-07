@@ -50,7 +50,6 @@ public class ScalingRange extends AbstractScaling {
 		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).mapToDouble(value -> getData(value)).summaryStatistics().getMin();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
@@ -66,7 +65,7 @@ public class ScalingRange extends AbstractScaling {
 			final double max = getMax(samplesList, i);
 			final double min = getMin(samplesList, i);
 			for(ISample sample : samplesList) {
-				ISampleData sampleData = sample.getSampleData().get(i);
+				ISampleData<?> sampleData = sample.getSampleData().get(i);
 				if((sample.isSelected() || !onlySelected)) {
 					double data = getData(sampleData);
 					double scaleData = (data - mean) / (max - min);

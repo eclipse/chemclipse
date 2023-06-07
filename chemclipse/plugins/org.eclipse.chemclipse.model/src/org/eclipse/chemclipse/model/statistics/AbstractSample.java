@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@SuppressWarnings("rawtypes")
-public abstract class AbstractSample<D extends ISampleData> implements ISample {
+public abstract class AbstractSample<D extends ISampleData<?>> implements ISample {
 
 	private String sampleName = "";
 	private String groupName = "";
@@ -130,6 +129,7 @@ public abstract class AbstractSample<D extends ISampleData> implements ISample {
 		if(getClass() != obj.getClass()) {
 			return false;
 		}
+		@SuppressWarnings("rawtypes")
 		AbstractSample other = (AbstractSample)obj;
 		return Objects.equals(sampleName, other.sampleName);
 	}

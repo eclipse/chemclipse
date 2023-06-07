@@ -62,7 +62,6 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 		openEditor(file, object, elementId, contributionURI, iconURI, tooltip, false);
 	}
 
-	@SuppressWarnings("rawtypes")
 	default void openEditor(File file, Object object, String elementId, String contributionURI, String iconURI, String tooltip, boolean batch) {
 
 		EModelService modelService = Activator.getDefault().getModelService();
@@ -133,24 +132,24 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 				if(file == null) {
 					if(object != null) {
 						part.setObject(object);
-						if(object instanceof IChromatogram) {
+						if(object instanceof IChromatogram<?> chromatogram) {
 							String type = "";
-							if(object instanceof IChromatogramMSD chromatogramMSD) {
+							if(object instanceof IChromatogramMSD) {
 								type = " [MSD]";
-							} else if(object instanceof IChromatogramCSD chromatogramCSD) {
+							} else if(object instanceof IChromatogramCSD) {
 								type = " [CSD]";
-							} else if(object instanceof IChromatogramWSD chromatogramWSD) {
+							} else if(object instanceof IChromatogramWSD) {
 								type = " [WSD]";
-							} else if(object instanceof IChromatogramISD chromatogramISD) {
+							} else if(object instanceof IChromatogramISD) {
 								type = " [ISD]";
 							}
-							part.setLabel(((IChromatogram)object).getName() + type);
-						} else if(object instanceof IMassSpectra) {
-							part.setLabel(((IMassSpectra)object).getName());
+							part.setLabel(chromatogram.getName() + type);
+						} else if(object instanceof IMassSpectra massSpectra) {
+							part.setLabel(massSpectra.getName());
 						} else if(object instanceof ISpectrumXIR) {
 							part.setLabel("FTIR");
-						} else if(object instanceof IMeasurement) {
-							part.setLabel(((IMeasurement)object).getDataName());
+						} else if(object instanceof IMeasurement measurement) {
+							part.setLabel(measurement.getDataName());
 						}
 					} else {
 						part.setObject(null);
@@ -160,7 +159,7 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 					/*
 					 * Get the file to load via the map.
 					 */
-					Map<String, Object> map = new HashMap<String, Object>();
+					Map<String, Object> map = new HashMap<>();
 					map.put(EditorSupport.MAP_FILE, file.getAbsolutePath());
 					map.put(EditorSupport.MAP_BATCH, batch);
 					part.setObject(map);

@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.widgets.Display;
 
-@SuppressWarnings("rawtypes")
+
 public class DeleteScanTargetsOperation extends AbstractOperation {
 
 	private IChromatogramSelection<?, ?> chromatogramSelection;
@@ -37,7 +37,7 @@ public class DeleteScanTargetsOperation extends AbstractOperation {
 	private List<IScan> scansToClear;
 	private List<IScan> backupScans;
 
-	public DeleteScanTargetsOperation(Display display, IChromatogramSelection chromatogramSelection, List<IScan> scansToClear) {
+	public DeleteScanTargetsOperation(Display display, IChromatogramSelection<?, ?>chromatogramSelection, List<IScan> scansToClear) {
 
 		super(ExtensionMessages.deleteScanTargets);
 		this.display = display;

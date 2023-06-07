@@ -27,14 +27,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.widgets.Display;
 
-@SuppressWarnings("rawtypes")
 public class DeletePeaksOperation extends AbstractOperation {
 
 	private IChromatogramSelection<?, ?> chromatogramSelection;
 	private Display display;
 	private List<IPeak> peaksToDelete;
 
-	public DeletePeaksOperation(Display display, IChromatogramSelection chromatogramSelection, List<IPeak> peaksToDelete) {
+	public DeletePeaksOperation(Display display, IChromatogramSelection<?, ?> chromatogramSelection, List<IPeak> peaksToDelete) {
 
 		super(ExtensionMessages.deletePeaks);
 		this.display = display;
@@ -60,7 +59,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 		return !peaksToDelete.isEmpty();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 
@@ -90,7 +89,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();

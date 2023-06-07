@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,17 +23,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderiv
 public class FirstDerivativePeakDetector_2_Test extends FirstDerivativeSlopesTestCase {
 
 	private IFirstDerivativeDetectorSlopes slopes;
-	@SuppressWarnings("rawtypes")
-	private PeakDetectorMSD firstDerivativePeakDetector;
+	private PeakDetectorMSD<?, ?, ?> firstDerivativePeakDetector;
 	private Class<?> firstDerivativePeakDetectorClass;
 	private Method method;
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		firstDerivativePeakDetector = new PeakDetectorMSD();
+		firstDerivativePeakDetector = new PeakDetectorMSD<>();
 		firstDerivativePeakDetectorClass = BasePeakDetector.class;
 		slopes = getFirstDerivativeSlopes();
 		slopes.calculateMovingAverage(5);

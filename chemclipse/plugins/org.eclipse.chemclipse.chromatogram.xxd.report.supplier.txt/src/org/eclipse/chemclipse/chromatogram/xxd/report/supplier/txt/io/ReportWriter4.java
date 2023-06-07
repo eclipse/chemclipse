@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -75,8 +75,7 @@ public class ReportWriter4 {
 	 * @param chromatogram
 	 * @param monitor
 	 */
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void reportChromatogram(PrintWriter printWriter, IChromatogram chromatogram, IProgressMonitor monitor) {
+	private void reportChromatogram(PrintWriter printWriter, IChromatogram<?> chromatogram, IProgressMonitor monitor) {
 
 		List<IPeak> peaks = new ArrayList<>(chromatogram.getPeaks());
 		Collections.sort(peaks, peakComparator);

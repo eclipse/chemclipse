@@ -29,11 +29,11 @@ import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
+
 public class FilterScanSelector extends AbstractChromatogramFilter {
 
 	@Override
-	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?>chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
@@ -53,15 +53,15 @@ public class FilterScanSelector extends AbstractChromatogramFilter {
 	}
 
 	@Override
-	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?>chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsScanSelector filterSettings = PreferenceSupplier.getFilterSettingsScanSelector();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void selectScan(IChromatogramSelection chromatogramSelection, FilterSettingsScanSelector filterSettingsScanSelector) throws FilterException {
+	private void selectScan(IChromatogramSelection<?, ?>chromatogramSelection, FilterSettingsScanSelector filterSettingsScanSelector) throws FilterException {
 
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
 		int scanNumber = getScanNumber(chromatogram, filterSettingsScanSelector);
@@ -74,7 +74,7 @@ public class FilterScanSelector extends AbstractChromatogramFilter {
 		}
 	}
 
-	private int getScanNumber(IChromatogram chromatogram, FilterSettingsScanSelector filterSettingsScanSelector) {
+	private int getScanNumber(IChromatogram<?> chromatogram, FilterSettingsScanSelector filterSettingsScanSelector) {
 
 		int scanNumber;
 		double value = filterSettingsScanSelector.getScanSelectorValue();

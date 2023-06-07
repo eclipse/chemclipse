@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,18 +19,15 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-@SuppressWarnings("rawtypes")
 public class IntegrationAreaContentProvider implements IStructuredContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if(inputElement instanceof IPeak) {
-			IPeak peak = (IPeak)inputElement;
+		if(inputElement instanceof IPeak peak) {
 			List<? extends IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
 			return integrationEntries.toArray();
-		} else if(inputElement instanceof IChromatogram) {
-			IChromatogram chromatogram = (IChromatogram)inputElement;
+		} else if(inputElement instanceof IChromatogram<?> chromatogram) {
 			List<? extends IIntegrationEntry> integrationEntries = chromatogram.getChromatogramIntegrationEntries();
 			return integrationEntries.toArray();
 		} else {

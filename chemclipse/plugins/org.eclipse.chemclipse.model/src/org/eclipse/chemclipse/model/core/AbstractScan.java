@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,8 +28,7 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	 * methods.
 	 */
 	private static final long serialVersionUID = 642924518234776409L;
-	@SuppressWarnings("rawtypes")
-	private transient IChromatogram parentChromatogram;
+	private transient IChromatogram<?> parentChromatogram;
 	//
 	private int retentionTime = 0;
 	private int retentionTimeColumn1 = 0; // GCxGC, LCxLC
@@ -56,7 +55,7 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	private boolean isDirty = false;
 	private String identifier = "";
 
-	public AbstractScan() {
+	protected AbstractScan() {
 
 	}
 
@@ -67,7 +66,7 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	 * @param templateScan
 	 *            {@link IScan scan} that is used as a template
 	 */
-	public AbstractScan(IScan templateScan) {
+	protected AbstractScan(IScan templateScan) {
 
 		this.parentChromatogram = templateScan.getParentChromatogram();
 		this.retentionIndex = templateScan.getRetentionIndex();
@@ -90,16 +89,14 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 		return getTotalSignal();
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	public IChromatogram getParentChromatogram() {
+	public IChromatogram<?> getParentChromatogram() {
 
 		return parentChromatogram;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public void setParentChromatogram(IChromatogram parentChromatogram) {
+	public void setParentChromatogram(IChromatogram<?> parentChromatogram) {
 
 		this.parentChromatogram = parentChromatogram;
 	}
@@ -192,7 +189,7 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 		if(additionalRetentionIndices == null) {
 			return false;
 		} else {
-			return (additionalRetentionIndices.size() > 0) ? true : false;
+			return (additionalRetentionIndices.size() > 0);
 		}
 	}
 
@@ -210,7 +207,7 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	public void setRetentionIndex(SeparationColumnType separationColumnType, float retentionIndex) {
 
 		if(additionalRetentionIndices == null) {
-			additionalRetentionIndices = new HashMap<SeparationColumnType, Float>();
+			additionalRetentionIndices = new HashMap<>();
 		}
 		/*
 		 * Add the index.
@@ -228,9 +225,9 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	public Map<SeparationColumnType, Float> getRetentionIndicesTyped() {
 
 		if(additionalRetentionIndices == null) {
-			return new HashMap<SeparationColumnType, Float>();
+			return new HashMap<>();
 		} else {
-			return new HashMap<SeparationColumnType, Float>(additionalRetentionIndices);
+			return new HashMap<>(additionalRetentionIndices);
 		}
 	}
 

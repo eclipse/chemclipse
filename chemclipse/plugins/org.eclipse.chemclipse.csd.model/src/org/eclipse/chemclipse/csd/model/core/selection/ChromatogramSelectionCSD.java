@@ -49,11 +49,10 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 		selectedScan = null;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public IChromatogramCSD getChromatogramCSD() {
 
-		IChromatogram chromatogram = getChromatogram();
+		IChromatogram<?> chromatogram = getChromatogram();
 		if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 			return chromatogramCSD;
 		}

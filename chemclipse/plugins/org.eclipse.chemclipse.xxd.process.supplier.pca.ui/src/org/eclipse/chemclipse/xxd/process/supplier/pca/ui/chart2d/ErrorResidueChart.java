@@ -48,11 +48,10 @@ public class ErrorResidueChart extends BarChart {
 		createControl();
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void setInput(EvaluationPCA evaluationPCA) {
 
 		if(evaluationPCA != null) {
-			IResultsPCA resultsPCA = evaluationPCA.getResults();
+			IResultsPCA<?, ?> resultsPCA = evaluationPCA.getResults();
 			updateChart(resultsPCA);
 		} else {
 			updateChart(null);
@@ -116,8 +115,7 @@ public class ErrorResidueChart extends BarChart {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void updateChart(IResultsPCA pcaResults) {
+	private void updateChart(IResultsPCA<?, ?> pcaResults) {
 
 		deleteSeries();
 		if(pcaResults != null) {

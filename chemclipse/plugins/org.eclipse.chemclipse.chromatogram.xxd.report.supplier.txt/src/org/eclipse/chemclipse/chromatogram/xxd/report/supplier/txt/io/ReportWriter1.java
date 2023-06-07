@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -133,8 +133,7 @@ public class ReportWriter1 {
 	 * @param chromatogram
 	 * @param monitor
 	 */
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void reportChromatogram(PrintWriter printWriter, IChromatogram chromatogram, IProgressMonitor monitor) {
+	private void reportChromatogram(PrintWriter printWriter, IChromatogram<?> chromatogram, IProgressMonitor monitor) {
 
 		/*
 		 * Print
@@ -198,8 +197,7 @@ public class ReportWriter1 {
 		printWriter.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	}
 
-	@SuppressWarnings("rawtypes")
-	private String getChromatogramType(IChromatogram chromatogram) {
+	private String getChromatogramType(IChromatogram<?> chromatogram) {
 
 		if(chromatogram instanceof IChromatogramCSD) {
 			return "CSD";
@@ -463,8 +461,7 @@ public class ReportWriter1 {
 		return false;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void reportChromatogramIdentificationResults(PrintWriter printWriter, IChromatogram chromatogram, String messageNoResults, IProgressMonitor monitor) {
+	private void reportChromatogramIdentificationResults(PrintWriter printWriter, IChromatogram<?> chromatogram, String messageNoResults, IProgressMonitor monitor) {
 
 		/*
 		 * Get the targets

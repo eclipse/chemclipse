@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -69,10 +69,9 @@ public class BaselineDetector {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	@SuppressWarnings("rawtypes")
-	public static IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, final String detectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> setBaseline(IChromatogramSelection<?, ?> chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, final String detectorId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IBaselineDetector detector = getBaselineDetector(detectorId);
 		if(detector != null && chromatogramSelection != null) {
 			processingInfo = detector.setBaseline(chromatogramSelection, baselineDetectorSettings, monitor);
@@ -91,10 +90,9 @@ public class BaselineDetector {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	@SuppressWarnings("rawtypes")
-	public static IProcessingInfo setBaseline(IChromatogramSelection chromatogramSelection, final String detectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> setBaseline(IChromatogramSelection<?, ?> chromatogramSelection, final String detectorId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IBaselineDetector detector = getBaselineDetector(detectorId);
 		if(detector != null) {
 			processingInfo = detector.setBaseline(chromatogramSelection, monitor);
@@ -172,7 +170,7 @@ public class BaselineDetector {
 
 	private static IProcessingInfo<?> getNoDetectorAvailableProcessingInfo() {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<Object>();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Baseline Detector", NO_DETECTOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

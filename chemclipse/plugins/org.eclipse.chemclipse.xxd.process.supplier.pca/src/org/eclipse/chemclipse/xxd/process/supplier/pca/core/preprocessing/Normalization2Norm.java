@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,13 +39,12 @@ public class Normalization2Norm extends AbstractDataModificator implements INorm
 		return "Normalization 2-Norm";
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
 		for(ISample sample : samples.getSampleList()) {
 			if(sample.isSelected() || !isOnlySelected()) {
-				List<? extends ISampleData> sampleData = sample.getSampleData();
+				List<? extends ISampleData<?>> sampleData = sample.getSampleData();
 				double sum = Math.sqrt(IntStream.range(0, sampleData.size()).filter(i -> !sampleData.get(i).isEmpty()).filter(i -> !skipVariable(samples, i))//
 						.mapToDouble(i -> getData(sampleData.get(i)) * getData(sampleData.get(i))).sum());
 				IntStream.range(0, sampleData.size()).filter(i -> !sampleData.get(i).isEmpty()).filter(i -> !skipVariable(samples, i))//

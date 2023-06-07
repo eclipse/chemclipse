@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.impl;
 
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilterMSD;
@@ -26,9 +27,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilterMSD {
 
 	@Override
-	public IProcessingInfo<?> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<Object> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
 		//
 		if(!processingInfo.hasErrorMessages()) {
@@ -36,7 +37,6 @@ public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilt
 				/*
 				 * No settings needed yet.
 				 */
-				// FilterSettingsAdjust filterSettings = (FilterSettingsAdjust)chromatogramFilterSettings;
 				if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 					IChromatogramSelectionMSD chromatogramSelectionMSD = chromatogramSelection;
 					ExtractedMatrix extract = new ExtractedMatrix(chromatogramSelectionMSD);
@@ -87,7 +87,7 @@ public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilt
 	}
 
 	@Override
-	public IProcessingInfo<?> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsAdjust filterSettings = PreferenceSupplier.getFilterSettingsAdjust();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);

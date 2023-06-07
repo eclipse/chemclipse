@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
-@SuppressWarnings("rawtypes")
 public class MSLImportConverter_1_ITest extends TestCase {
 
 	private IDatabaseImportConverter importConverter;
@@ -43,21 +42,21 @@ public class MSLImportConverter_1_ITest extends TestCase {
 	public void testExceptions_1() {
 
 		importFile = null;
-		IProcessingInfo processingInfo = importConverter.convert(null, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = importConverter.convert(null, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
 	public void testExceptions_2() {
 
 		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_EMPTY));
-		IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
 	public void testExceptions_3() {
 
 		importFile = new File("nirvana");
-		IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
@@ -66,7 +65,7 @@ public class MSLImportConverter_1_ITest extends TestCase {
 		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_NOT_READABLE));
 		importFile.setReadable(false);
 		try {
-			IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+			IProcessingInfo<?> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} finally {
 			importFile.setReadable(true);

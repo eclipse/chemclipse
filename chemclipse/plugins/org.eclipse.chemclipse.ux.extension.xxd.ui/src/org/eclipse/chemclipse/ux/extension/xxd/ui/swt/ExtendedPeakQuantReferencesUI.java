@@ -276,7 +276,6 @@ public class ExtendedPeakQuantReferencesUI extends Composite implements IExtende
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void deleteReferences(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
@@ -284,11 +283,11 @@ public class ExtendedPeakQuantReferencesUI extends Composite implements IExtende
 		messageBox.setMessage("Would you like to delete the selected quantitations?");
 		if(messageBox.open() == SWT.YES) {
 			//
-			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+			Iterator<?> iterator = tableViewer.get().getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
-				if(object instanceof String) {
-					deleteReference((String)object);
+				if(object instanceof String text) {
+					deleteReference(text);
 				}
 			}
 			updateReferences();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,7 +27,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
-@SuppressWarnings("rawtypes")
 public class MSPImportConverter_1_ITest extends TestCase {
 
 	private IMassSpectra massSpectra;
@@ -38,7 +37,7 @@ public class MSPImportConverter_1_ITest extends TestCase {
 		super.setUp();
 		File importFile = new File(PathResolver.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_LIB_1_MSP));
 		IDatabaseImportConverter importConverter = new MSPDatabaseImportConverter();
-		IProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		massSpectra = (IMassSpectra)processingInfo.getProcessingResult();
 	}
 

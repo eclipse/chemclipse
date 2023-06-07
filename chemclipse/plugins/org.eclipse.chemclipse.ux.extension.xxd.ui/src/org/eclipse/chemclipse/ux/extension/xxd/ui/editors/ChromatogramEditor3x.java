@@ -184,9 +184,9 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		return false;
 	}
 
-	@SuppressWarnings("rawtypes")
+	
 	@Override
-	public IChromatogramSelection getChromatogramSelection() {
+	public IChromatogramSelection<?, ?>getChromatogramSelection() {
 
 		if(chromatogramEditor != null) {
 			return chromatogramEditor.getChromatogramSelection();
