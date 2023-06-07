@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.exceptions.FilterException;
@@ -27,18 +28,15 @@ import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
-@SuppressWarnings("rawtypes")
 public class FilterDeleteIdentifier extends AbstractChromatogramFilter {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			try {
-				if(chromatogramFilterSettings instanceof FilterSettingsDeleteIdentifier) {
-					FilterSettingsDeleteIdentifier settings = (FilterSettingsDeleteIdentifier)chromatogramFilterSettings;
+				if(chromatogramFilterSettings instanceof FilterSettingsDeleteIdentifier settings) {
 					if(settings.isDeleteScanIdentifications()) {
 						removeScanIdentifications(chromatogramSelection, monitor);
 						processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Delete Scan Targets", "Scan Targets have been removed successfully."));
@@ -54,15 +52,15 @@ public class FilterDeleteIdentifier extends AbstractChromatogramFilter {
 	}
 
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsDeleteIdentifier filterSettings = PreferenceSupplier.getDeleteIdentifierFilterSettings();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void removeScanIdentifications(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) throws FilterException {
+	private void removeScanIdentifications(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) throws FilterException {
 
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Delete Scan Targets from chromatogram.", stopScan - startScan);

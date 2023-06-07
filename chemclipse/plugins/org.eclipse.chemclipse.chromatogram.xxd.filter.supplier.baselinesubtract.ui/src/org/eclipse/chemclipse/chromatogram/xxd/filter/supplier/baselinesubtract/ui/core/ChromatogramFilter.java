@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.core.ChromatogramSubtractor;
@@ -28,14 +29,12 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 
-@SuppressWarnings("rawtypes")
 public class ChromatogramFilter extends AbstractChromatogramFilter {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			Shell shell = DisplayUtils.getShell();
 			if(shell != null) {
@@ -67,15 +66,15 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 	}
 
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		ChromatogramFilterSettings filterSettings = PreferenceSupplier.getFilterSettings();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void subtractChromatogram(Shell shell, IChromatogramSelection chromatogramSelectionMaster) {
+	private void subtractChromatogram(Shell shell, IChromatogramSelection<?, ?> chromatogramSelectionMaster) {
 
-		IChromatogram chromatogramMaster = chromatogramSelectionMaster.getChromatogram();
+		IChromatogram<?> chromatogramMaster = chromatogramSelectionMaster.getChromatogram();
 		ChromatogramEditorDialog dialog = new ChromatogramEditorDialog(shell, chromatogramMaster);
 		//
 		if(IDialogConstants.OK_ID == dialog.open()) {
@@ -84,7 +83,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 				/*
 				 * Check that both chromatograms are not the same
 				 */
-				IChromatogram chromatogramSubtract = chromatogramSelectionSubtract.getChromatogram();
+				IChromatogram<?> chromatogramSubtract = chromatogramSelectionSubtract.getChromatogram();
 				if(chromatogramMaster != chromatogramSubtract) {
 					int startRetentionTime = chromatogramSelectionMaster.getStartRetentionTime();
 					int stopRetentionTime = chromatogramSelectionMaster.getStopRetentionTime();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.exceptions.FilterException;
@@ -30,18 +31,15 @@ import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public class FilterRemover extends AbstractChromatogramFilter {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			try {
-				if(chromatogramFilterSettings instanceof FilterSettingsRemover) {
-					FilterSettingsRemover settings = (FilterSettingsRemover)chromatogramFilterSettings;
+				if(chromatogramFilterSettings instanceof FilterSettingsRemover settings) {
 					ScanRemoverPattern scanRemoverPattern = new ScanRemoverPattern(settings.getScanRemoverPattern());
 					applyScanRemoverFilter(chromatogramSelection, scanRemoverPattern, monitor);
 					processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Scan Remover", "Scans have been removed successfully."));
@@ -56,7 +54,7 @@ public class FilterRemover extends AbstractChromatogramFilter {
 	}
 
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsRemover filterSettings = PreferenceSupplier.getRemoverFilterSettings();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
@@ -69,7 +67,7 @@ public class FilterRemover extends AbstractChromatogramFilter {
 	 * @param chromatogramSelection
 	 * @throws FilterException
 	 */
-	private void applyScanRemoverFilter(IChromatogramSelection chromatogramSelection, ScanRemoverPattern scanRemoverPattern, IProgressMonitor monitor) throws FilterException {
+	private void applyScanRemoverFilter(IChromatogramSelection<?, ?> chromatogramSelection, ScanRemoverPattern scanRemoverPattern, IProgressMonitor monitor) throws FilterException {
 
 		if(chromatogramSelection != null && scanRemoverPattern != null) {
 			/*

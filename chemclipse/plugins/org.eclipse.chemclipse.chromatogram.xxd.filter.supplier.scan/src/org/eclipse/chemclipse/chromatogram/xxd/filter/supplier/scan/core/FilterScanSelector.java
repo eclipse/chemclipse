@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.exceptions.FilterException;
@@ -31,16 +32,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 @SuppressWarnings("rawtypes")
 public class FilterScanSelector extends AbstractChromatogramFilter {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			try {
-				if(chromatogramFilterSettings instanceof FilterSettingsScanSelector) {
-					FilterSettingsScanSelector settings = (FilterSettingsScanSelector)chromatogramFilterSettings;
-					selectScan(chromatogramSelection, settings, monitor);
+				if(chromatogramFilterSettings instanceof FilterSettingsScanSelector settings) {
+					selectScan(chromatogramSelection, settings);
 					processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Select Scan", "The scan has been selected successfully."));
 					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Scan selection was successful."));
 					chromatogramSelection.getChromatogram().setDirty(true);
@@ -54,13 +53,13 @@ public class FilterScanSelector extends AbstractChromatogramFilter {
 	}
 
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsScanSelector filterSettings = PreferenceSupplier.getFilterSettingsScanSelector();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void selectScan(IChromatogramSelection chromatogramSelection, FilterSettingsScanSelector filterSettingsScanSelector, IProgressMonitor monitor) throws FilterException {
+	private void selectScan(IChromatogramSelection chromatogramSelection, FilterSettingsScanSelector filterSettingsScanSelector) throws FilterException {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());

@@ -35,12 +35,10 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public class ScanTargetsToPeakFilter extends AbstractTransferFilter {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
@@ -54,13 +52,13 @@ public class ScanTargetsToPeakFilter extends AbstractTransferFilter {
 	}
 
 	@Override
-	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		ScanTargetsToPeakSettings settings = PreferenceSupplier.getScanToPeakTargetTransferSettings();
 		return applyFilter(chromatogramSelection, settings, monitor);
 	}
 
-	private void transferTargets(IChromatogramSelection chromatogramSelection, ScanTargetsToPeakSettings settings) {
+	private void transferTargets(IChromatogramSelection<?, ?> chromatogramSelection, ScanTargetsToPeakSettings settings) {
 
 		List<IScan> identifiedScans = extractIdentifiedScans(chromatogramSelection);
 		List<? extends IPeak> peaks = extractPeaks(chromatogramSelection);

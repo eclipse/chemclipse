@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class MedianNormalizerFilter_1_Test extends ChromatogramImporterTestCase {
 
-	@SuppressWarnings("rawtypes")
 	private IChromatogramFilter chromatogramFilter;
 	private FilterSettings filterSettings;
 
@@ -38,7 +37,6 @@ public class MedianNormalizerFilter_1_Test extends ChromatogramImporterTestCase 
 		super.tearDown();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void testApplyFilter_1() {
 
 		float totalSignal;

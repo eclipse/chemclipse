@@ -16,9 +16,9 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRetentionIndexSelector;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -36,35 +36,29 @@ import org.eclipse.core.runtime.IProgressMonitor;
 @SuppressWarnings("rawtypes")
 public class FilterRetentionIndexSelector extends AbstractChromatogramFilter {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			try {
-				if(chromatogramFilterSettings instanceof FilterSettingsRetentionIndexSelector settings) {
-					selectRetentionIndices(chromatogramSelection, settings, monitor);
-					processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Select Retention Index", "The retention indices have been selected successfully."));
-					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Retention Index selection was successful."));
-					chromatogramSelection.getChromatogram().setDirty(true);
-				}
-			} catch(FilterException e) {
-				processingInfo.addMessage(new ProcessingMessage(MessageType.WARN, "Select Retention Index", e.getMessage()));
-				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
+			if(chromatogramFilterSettings instanceof FilterSettingsRetentionIndexSelector settings) {
+				selectRetentionIndices(chromatogramSelection, settings);
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Select Retention Index", "The retention indices have been selected successfully."));
+				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Retention Index selection was successful."));
+				chromatogramSelection.getChromatogram().setDirty(true);
 			}
 		}
 		return processingInfo;
 	}
 
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsRetentionIndexSelector filterSettings = PreferenceSupplier.getFilterSettingsRetentionIndexSelector();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void selectRetentionIndices(IChromatogramSelection<?, ?> chromatogramSelection, FilterSettingsRetentionIndexSelector settings, IProgressMonitor monitor) throws FilterException {
+	private void selectRetentionIndices(IChromatogramSelection<?, ?> chromatogramSelection, FilterSettingsRetentionIndexSelector settings) {
 
 		String searchColumn = settings.getSearchColumn();
 		if(!searchColumn.isEmpty()) {

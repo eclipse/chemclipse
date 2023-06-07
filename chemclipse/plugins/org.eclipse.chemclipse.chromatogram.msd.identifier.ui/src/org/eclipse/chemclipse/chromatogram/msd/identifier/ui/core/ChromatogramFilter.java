@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupplier;
@@ -31,14 +32,12 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-@SuppressWarnings("rawtypes")
 public class ChromatogramFilter extends AbstractChromatogramFilter {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			Shell shell = DisplayUtils.getShell();
 			if(shell != null) {
@@ -70,13 +69,13 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 	}
 
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		IChromatogramFilterSettings filterSettings = new FilterSettings();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void identifyScanMaxima(Shell shell, IChromatogramSelection chromatogramSelection, Display display, IProgressMonitor monitor) {
+	private void identifyScanMaxima(Shell shell, IChromatogramSelection<?, ?> chromatogramSelection, Display display, IProgressMonitor monitor) {
 
 		ChromatogramFilterDialog dialog = new ChromatogramFilterDialog(shell);
 		if(IDialogConstants.OK_ID == dialog.open()) {
@@ -92,8 +91,8 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 				List<IScanMSD> massSpectra = new ArrayList<>();
 				for(int i = startScan; i <= stopScan; i++) {
 					IScan scan = chromatogram.getScan(i);
-					if(scan instanceof IScanMSD && scan.getTargets().size() > 0) {
-						massSpectra.add((IScanMSD)scan);
+					if(scan instanceof IScanMSD scanMSD && !scan.getTargets().isEmpty()) {
+						massSpectra.add(scanMSD);
 					}
 				}
 				/*
