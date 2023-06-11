@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -96,14 +96,14 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 
 	// export
 	@Override
-	public IProcessingInfo<?> convert(File file, IPeaks<? extends IPeakMSD> peaks, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IPeaks<? extends IPeakMSD> peaks, boolean append, IProgressMonitor monitor) {
 
 		try {
 			try (FileOutputStream stream = new FileOutputStream(file, append)) {
 				writePeaks(peaks, new OutputStreamWriter(stream, CHARSET), !append);
 			}
 		} catch(IOException e) {
-			ProcessingInfo<Object> error = new ProcessingInfo<>();
+			ProcessingInfo<File> error = new ProcessingInfo<>();
 			error.addErrorMessage(NAME, "Export to CSV failed", e);
 			return error;
 		}

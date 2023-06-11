@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.msd.converter.supplier.csv.core;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -39,9 +40,13 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 					IChromatogramMSD chromatogram = reader.read(file, monitor);
 					processingInfo.setProcessingResult(chromatogram);
 				}
-			} catch(Exception e) {
+			} catch(InterruptedException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
+				Thread.currentThread().interrupt();
+				processingInfo.addErrorMessage(DESCRIPTION, "Failed to convert: " + file.getAbsolutePath());
+			} catch(IOException e) {
+				logger.warn(e);
+				processingInfo.addErrorMessage(DESCRIPTION, "Failed to convert: " + file.getAbsolutePath());
 			}
 		}
 		return processingInfo;
@@ -58,7 +63,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 					IChromatogramOverview chromatogramOverview = reader.readOverview(file, monitor);
 					processingInfo.setProcessingResult(chromatogramOverview);
 				}
-			} catch(Exception e) {
+			} catch(IOException e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
 			}

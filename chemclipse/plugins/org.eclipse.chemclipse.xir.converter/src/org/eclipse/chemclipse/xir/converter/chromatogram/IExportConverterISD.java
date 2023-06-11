@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xir.converter.chromatogram;
 
+import java.io.File;
 import java.io.OutputStream;
 
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
@@ -21,5 +22,5 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IExportConverterISD extends IChromatogramExportConverter {
 
-	IProcessingInfo<?> convert(OutputStream outputStream, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor);
+	IProcessingInfo<File> convert(OutputStream outputStream, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor);
 }

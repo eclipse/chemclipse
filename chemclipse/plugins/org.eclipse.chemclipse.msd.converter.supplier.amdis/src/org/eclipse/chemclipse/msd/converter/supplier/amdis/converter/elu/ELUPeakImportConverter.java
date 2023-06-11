@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,7 +39,7 @@ public class ELUPeakImportConverter extends AbstractPeakImportConverter {
 	public IProcessingInfo<IPeaks<?>> convert(File file, IProgressMonitor monitor) {
 
 		IProcessingMessage processingMessage;
-		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<IPeaks<?>>();
+		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
 		try {
 			super.validate(file);
 			file = SpecificationValidatorELU.validateSpecification(file);

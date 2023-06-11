@@ -87,14 +87,14 @@ public class QuantDBConverter {
 		return processingInfo;
 	}
 
-	public static <R> IProcessingInfo<R> convert(File file, IQuantitationDatabase quantitationDatabase, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<File> convert(File file, IQuantitationDatabase quantitationDatabase, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<R> processingInfo = null;
+		IProcessingInfo<File> processingInfo = null;
 		QuantDBConverterSupport converterSupport = getQuantDBConverterSupport();
 		exitloop:
 		for(ISupplier supplier : converterSupport.getSupplier()) {
 			if(supplier.isExportable() && supplier.getId().equals(converterId)) {
-				IQuantDBExportConverter<R> exportConverter = getExportConverter(converterId);
+				IQuantDBExportConverter exportConverter = getExportConverter(converterId);
 				processingInfo = exportConverter.convert(file, quantitationDatabase, monitor);
 				break exitloop;
 			}
@@ -123,15 +123,14 @@ public class QuantDBConverter {
 		return instance;
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <R> IQuantDBExportConverter<R> getExportConverter(final String converterId) {
+	private static IQuantDBExportConverter getExportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IQuantDBExportConverter<R> instance = null;
+		IQuantDBExportConverter instance = null;
 		if(element != null) {
 			try {
-				instance = (IQuantDBExportConverter<R>)element.createExecutableExtension(EXPORT_CONVERTER);
+				instance = (IQuantDBExportConverter)element.createExecutableExtension(EXPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.error(e);
 			}

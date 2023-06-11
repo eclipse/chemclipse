@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.tsd.converter.core;
 
+import java.io.File;
 import java.io.OutputStream;
 
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
@@ -21,5 +22,5 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IExportConverterTSD extends IChromatogramExportConverter {
 
-	IProcessingInfo<?> convert(OutputStream outputStream, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor);
+	IProcessingInfo<File> convert(OutputStream outputStream, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor);
 }

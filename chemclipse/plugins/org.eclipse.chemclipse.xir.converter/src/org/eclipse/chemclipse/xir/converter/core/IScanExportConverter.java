@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public interface IScanExportConverter<T> extends IExportConverter {
+public interface IScanExportConverter extends IExportConverter {
 
-	IProcessingInfo<T> convert(File file, ISpectrumXIR scan, IProgressMonitor monitor);
+	IProcessingInfo<File> convert(File file, ISpectrumXIR scan, IProgressMonitor monitor);
 }

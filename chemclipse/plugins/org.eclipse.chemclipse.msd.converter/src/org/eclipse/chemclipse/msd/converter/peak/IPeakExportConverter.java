@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,5 +31,5 @@ public interface IPeakExportConverter extends IExportConverter {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	IProcessingInfo<?> convert(File file, IPeaks<? extends IPeakMSD> peaks, boolean append, IProgressMonitor monitor);
+	IProcessingInfo<File> convert(File file, IPeaks<? extends IPeakMSD> peaks, boolean append, IProgressMonitor monitor);
 }

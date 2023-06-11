@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,20 +23,17 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MassSpectrumExportConverter extends AbstractMassSpectrumExportConverter {
 
 	@Override
-	public IProcessingInfo<?> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
 
-		return getProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
+		processingInfo.addErrorMessage("ASCII Library", "The ASCII converter has no capabilities to export a library.");
+		return processingInfo;
 	}
 
 	@Override
-	public IProcessingInfo<?> convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
 
-		return getProcessingInfo();
-	}
-
-	private IProcessingInfo<?> getProcessingInfo() {
-
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("ASCII Library", "The ASCII converter has no capabilities to export a library.");
 		return processingInfo;
 	}

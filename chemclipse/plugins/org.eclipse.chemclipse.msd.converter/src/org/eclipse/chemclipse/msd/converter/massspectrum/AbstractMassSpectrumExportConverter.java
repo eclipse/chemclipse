@@ -20,13 +20,12 @@ import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
-@SuppressWarnings("rawtypes") // TODO this can't both be IScanMSD and IMassSpectra so the generic approach is likely false
 public abstract class AbstractMassSpectrumExportConverter extends AbstractExportConverter implements IMassSpectrumExportConverter {
 
 	@Override
-	public IProcessingInfo<?> validate(IScanMSD massSpectrum) {
+	public IProcessingInfo<IScanMSD> validate(IScanMSD massSpectrum) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IScanMSD> processingInfo = new ProcessingInfo<>();
 		if(massSpectrum == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Mass Spectra Export", "The is no mass spectrum to export.");
 			processingInfo.addMessage(processingMessage);
@@ -35,9 +34,9 @@ public abstract class AbstractMassSpectrumExportConverter extends AbstractExport
 	}
 
 	@Override
-	public IProcessingInfo<?> validate(IMassSpectra massSpectra) {
+	public IProcessingInfo<IMassSpectra> validate(IMassSpectra massSpectra) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
 		if(massSpectra == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Mass Spectra Export", "The are no mass spectra to export.");
 			processingInfo.addMessage(processingMessage);

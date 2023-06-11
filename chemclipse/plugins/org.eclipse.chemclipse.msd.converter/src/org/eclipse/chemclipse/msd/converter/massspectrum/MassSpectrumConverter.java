@@ -71,9 +71,8 @@ public class MassSpectrumConverter {
 		IMassSpectrumImportConverter importConverter = getMassSpectrumImportConverter(converterId);
 		if(importConverter != null) {
 			return importConverter.convert(file, monitor);
-		} else {
-			return getNoImportConverterAvailableProcessingInfo(file);
 		}
+		return getNoImportConverterAvailableProcessingInfo(file);
 	}
 
 	/**
@@ -152,13 +151,13 @@ public class MassSpectrumConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static <T> IProcessingInfo<T> convert(File file, IScanMSD massSpectrum, boolean append, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<File> convert(File file, IScanMSD massSpectrum, boolean append, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
+		IProcessingInfo<File> processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
-		IMassSpectrumExportConverter<T> exportConverter = getMassSpectrumExportConverter(converterId);
+		IMassSpectrumExportConverter exportConverter = getMassSpectrumExportConverter(converterId);
 		if(exportConverter != null) {
 			processingInfo = exportConverter.convert(file, massSpectrum, append, monitor);
 		} else {
@@ -177,13 +176,13 @@ public class MassSpectrumConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static <T> IProcessingInfo<T> convert(File file, IMassSpectra massSpectra, boolean append, String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<File> convert(File file, IMassSpectra massSpectra, boolean append, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
+		IProcessingInfo<File> processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
-		IMassSpectrumExportConverter<T> exportConverter = getMassSpectrumExportConverter(converterId);
+		IMassSpectrumExportConverter exportConverter = getMassSpectrumExportConverter(converterId);
 		if(exportConverter != null) {
 			processingInfo = exportConverter.convert(file, massSpectra, append, monitor);
 		} else {
@@ -223,15 +222,14 @@ public class MassSpectrumConverter {
 	 * @param converterId
 	 * @return IMassSpectrumExportConverter
 	 */
-	@SuppressWarnings("unchecked")
-	private static <T> IMassSpectrumExportConverter<T> getMassSpectrumExportConverter(final String converterId) {
+	private static IMassSpectrumExportConverter getMassSpectrumExportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IMassSpectrumExportConverter<T> instance = null;
+		IMassSpectrumExportConverter instance = null;
 		if(element != null) {
 			try {
-				instance = (IMassSpectrumExportConverter<T>)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
+				instance = (IMassSpectrumExportConverter)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.error(e);
 			}

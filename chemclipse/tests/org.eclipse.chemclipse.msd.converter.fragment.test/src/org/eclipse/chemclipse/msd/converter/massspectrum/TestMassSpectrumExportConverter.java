@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,9 +29,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class TestMassSpectrumExportConverter extends AbstractMassSpectrumExportConverter {
 
 	@Override
-	public IProcessingInfo<?> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		try {
 			processingInfo.addMessages(super.validate(file));
 			processingInfo.addMessages(super.validate(massSpectrum));
@@ -43,9 +43,9 @@ public class TestMassSpectrumExportConverter extends AbstractMassSpectrumExportC
 	}
 
 	@Override
-	public IProcessingInfo<?> convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		try {
 			processingInfo.addMessages(super.validate(file));
 			processingInfo.addMessages(super.validate(massSpectra));

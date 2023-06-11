@@ -56,14 +56,14 @@ public class ScanConverterXIR {
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {
-			processingInfo = getProcessingError(file);
+			processingInfo = getImportProcessingError(file);
 		}
 		return processingInfo;
 	}
 
 	public static IProcessingInfo<ISpectrumXIR> convert(final File file, final IProgressMonitor monitor) {
 
-		return getScan(file, false, monitor);
+		return getScan(file, monitor);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class ScanConverterXIR {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	private static IProcessingInfo<ISpectrumXIR> getScan(final File file, boolean overview, IProgressMonitor monitor) {
+	private static IProcessingInfo<ISpectrumXIR> getScan(final File file, IProgressMonitor monitor) {
 
 		IProcessingInfo<ISpectrumXIR> processingInfo;
 		IScanConverterSupport converterSupport = getScanConverterSupport();
@@ -97,21 +97,21 @@ public class ScanConverterXIR {
 		} catch(NoConverterAvailableException e) {
 			logger.info(e);
 		}
-		return getProcessingError(file);
+		return getImportProcessingError(file);
 	}
 
-	public static IProcessingInfo<ISpectrumXIR> convert(final File file, final ISpectrumXIR scan, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo<File> convert(final File file, final ISpectrumXIR scan, final String converterId, final IProgressMonitor monitor) {
 
-		IProcessingInfo<ISpectrumXIR> processingInfo;
+		IProcessingInfo<File> processingInfo;
 		/*
 		 * Do not use a safe runnable here, because an object must
 		 * be returned or null.
 		 */
-		IScanExportConverter<ISpectrumXIR> exportConverter = getScanExportConverter(converterId);
+		IScanExportConverter exportConverter = getScanExportConverter(converterId);
 		if(exportConverter != null) {
 			processingInfo = exportConverter.convert(file, scan, monitor);
 		} else {
-			processingInfo = getProcessingError(file);
+			processingInfo = getExportProcessingError(file);
 		}
 		return processingInfo;
 	}
@@ -132,15 +132,14 @@ public class ScanConverterXIR {
 		return instance;
 	}
 
-	@SuppressWarnings("unchecked")
-	private static IScanExportConverter<ISpectrumXIR> getScanExportConverter(final String converterId) {
+	private static IScanExportConverter getScanExportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IScanExportConverter<ISpectrumXIR> instance = null;
+		IScanExportConverter instance = null;
 		if(element != null) {
 			try {
-				instance = (IScanExportConverter<ISpectrumXIR>)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
+				instance = (IScanExportConverter)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.error(e);
 			}
@@ -209,10 +208,17 @@ public class ScanConverterXIR {
 		return magicNumberMatcher;
 	}
 
-	private static <T> IProcessingInfo<T> getProcessingError(File file) {
+	private static IProcessingInfo<File> getExportProcessingError(File file) {
 
-		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
-		processingInfo.addErrorMessage("Scan Converter", "No suitable converter was found for: " + file);
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
+		processingInfo.addErrorMessage("Scan Converter", "No suitable export converter was found for: " + file);
+		return processingInfo;
+	}
+
+	private static IProcessingInfo<ISpectrumXIR> getImportProcessingError(File file) {
+
+		IProcessingInfo<ISpectrumXIR> processingInfo = new ProcessingInfo<>();
+		processingInfo.addErrorMessage("Scan Converter", "No suitable import converter was found for: " + file);
 		return processingInfo;
 	}
 }
