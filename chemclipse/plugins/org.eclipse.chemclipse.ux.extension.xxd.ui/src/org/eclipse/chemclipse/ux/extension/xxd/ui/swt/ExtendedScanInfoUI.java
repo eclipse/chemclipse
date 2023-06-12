@@ -47,7 +47,7 @@ public class ExtendedScanInfoUI extends Composite implements IExtendedPartUI {
 		createControl();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void setInput(Object input) {
 
 		if(input instanceof IChromatogramSelection chromatogramSelection) {

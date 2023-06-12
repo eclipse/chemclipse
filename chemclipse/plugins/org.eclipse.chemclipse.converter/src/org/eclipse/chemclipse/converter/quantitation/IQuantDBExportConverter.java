@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public interface IQuantDBExportConverter<R> extends IExportConverter {
+public interface IQuantDBExportConverter extends IExportConverter {
 
-	IProcessingInfo<R> convert(File file, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor);
+	IProcessingInfo<File> convert(File file, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor);
 }

@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.quantit
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.quantitation.IDatabaseWriter;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class DatabaseExportConverter extends AbstractQuantDBExportConverter<File> implements IQuantDBExportConverter<File> {
+public class DatabaseExportConverter extends AbstractQuantDBExportConverter implements IQuantDBExportConverter {
 
 	private static final Logger logger = Logger.getLogger(DatabaseExportConverter.class);
 

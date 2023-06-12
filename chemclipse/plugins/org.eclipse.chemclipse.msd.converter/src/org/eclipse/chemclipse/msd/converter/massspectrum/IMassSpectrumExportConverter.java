@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * @author eselmeister
  */
-public interface IMassSpectrumExportConverter<T> extends IExportConverter {
+public interface IMassSpectrumExportConverter extends IExportConverter {
 
 	/**
 	 * Exports the mass spectrum to the given file.
@@ -34,7 +34,7 @@ public interface IMassSpectrumExportConverter<T> extends IExportConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<T> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor);
+	IProcessingInfo<File> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor);
 
 	/**
 	 * Exports the mass spectra to the given file.
@@ -45,7 +45,7 @@ public interface IMassSpectrumExportConverter<T> extends IExportConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<T> convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor);
+	IProcessingInfo<File> convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor);
 
 	/**
 	 * Checks the mass spectrum instance and throws an exception if the mass
@@ -54,7 +54,7 @@ public interface IMassSpectrumExportConverter<T> extends IExportConverter {
 	 * @param massSpectrum
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<T> validate(IScanMSD massSpectrum);
+	IProcessingInfo<IScanMSD> validate(IScanMSD massSpectrum);
 
 	/**
 	 * Checks the mass spectra instance and throws an exception if the mass
@@ -63,5 +63,5 @@ public interface IMassSpectrumExportConverter<T> extends IExportConverter {
 	 * @param massSpectrum
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<T> validate(IMassSpectra massSpectra);
+	IProcessingInfo<IMassSpectra> validate(IMassSpectra massSpectra);
 }
