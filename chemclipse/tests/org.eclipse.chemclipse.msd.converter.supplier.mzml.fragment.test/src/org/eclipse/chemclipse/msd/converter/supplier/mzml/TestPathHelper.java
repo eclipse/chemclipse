@@ -22,4 +22,9 @@ public class TestPathHelper extends PathResolver {
 	 */
 	public static final String TESTFILE_IMPORT_TINY_PWIZ_1_0 = "testData/files/import/tiny.pwiz.1.0.mzML";
 	public static final String TESTFILE_IMPORT_TINY_PWIZ_1_1 = "testData/files/import/tiny.pwiz.1.1.mzML";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1 = "testData/files/import/Chromatogram1.ocb";
+	/*
+	 * EXPORT
+	 */
+	public static final String DIRECTORY_EXPORT_TEST = "testData/files/export";
 }
