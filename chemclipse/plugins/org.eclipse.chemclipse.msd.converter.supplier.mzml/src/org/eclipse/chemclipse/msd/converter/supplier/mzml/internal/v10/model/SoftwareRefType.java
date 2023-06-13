@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlIDREF;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 
@@ -26,16 +25,15 @@ import jakarta.xml.bind.annotation.XmlType;
 public class SoftwareRefType {
 
 	@XmlAttribute(name = "ref", required = true)
-	@XmlIDREF
 	@XmlSchemaType(name = "IDREF")
-	protected Object ref;
+	protected String ref;
 
-	public Object getRef() {
+	public String getRef() {
 
 		return ref;
 	}
 
-	public void setRef(Object value) {
+	public void setRef(String value) {
 
 		this.ref = value;
 	}

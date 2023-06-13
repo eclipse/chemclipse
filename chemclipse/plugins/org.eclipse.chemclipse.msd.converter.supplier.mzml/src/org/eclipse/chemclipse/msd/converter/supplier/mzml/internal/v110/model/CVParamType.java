@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,7 @@ public class CVParamType {
 	@XmlAttribute(name = "cvRef", required = true)
 	@XmlIDREF
 	@XmlSchemaType(name = "IDREF")
-	private Object cvRef;
+	private CVType cvRef;
 	@XmlAttribute(name = "accession", required = true)
 	private String accession;
 	@XmlAttribute(name = "value")
@@ -39,14 +39,14 @@ public class CVParamType {
 	@XmlAttribute(name = "unitCvRef")
 	@XmlIDREF
 	@XmlSchemaType(name = "IDREF")
-	private Object unitCvRef;
+	private CVType unitCvRef;
 
 	public Object getCvRef() {
 
 		return cvRef;
 	}
 
-	public void setCvRef(Object value) {
+	public void setCvRef(CVType value) {
 
 		this.cvRef = value;
 	}
@@ -106,7 +106,7 @@ public class CVParamType {
 		return unitCvRef;
 	}
 
-	public void setUnitCvRef(Object value) {
+	public void setUnitCvRef(CVType value) {
 
 		this.unitCvRef = value;
 	}

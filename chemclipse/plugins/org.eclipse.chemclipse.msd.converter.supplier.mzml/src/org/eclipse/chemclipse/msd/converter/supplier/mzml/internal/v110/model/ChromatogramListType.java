@@ -55,12 +55,12 @@ public class ChromatogramListType {
 		this.count = value;
 	}
 
-	public String getDefaultDataProcessingRef() {
+	public Object getDefaultDataProcessingRef() {
 
 		return defaultDataProcessingRef;
 	}
 
-	public void setDefaultDataProcessingRef(String value) {
+	public void setDefaultDataProcessingRef(Object value) {
 
 		this.defaultDataProcessingRef = value;
 	}

@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {"cvList", "fileDescription", "referenceableParamGroupList", "sampleList", "softwareList", "scanSettingsList", "instrumentConfigurationList", "dataProcessingList", "run"})
-@XmlRootElement(name = "mzML") // namespace = "http://psi.hupo.org/ms/mzml"
+@XmlRootElement(name = "mzML")
 public class MzMLType implements Serializable {
 
 	private static final long serialVersionUID = 110L;

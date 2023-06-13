@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,15 +37,15 @@ public class RunType extends ParamGroupType {
 	@XmlAttribute(name = "defaultInstrumentConfigurationRef", required = true)
 	@XmlIDREF
 	@XmlSchemaType(name = "IDREF")
-	private Object defaultInstrumentConfigurationRef;
+	private InstrumentConfigurationType defaultInstrumentConfigurationRef;
 	@XmlAttribute(name = "defaultSourceFileRef")
 	@XmlIDREF
 	@XmlSchemaType(name = "IDREF")
-	private Object defaultSourceFileRef;
+	private SourceFileType defaultSourceFileRef;
 	@XmlAttribute(name = "sampleRef")
 	@XmlIDREF
 	@XmlSchemaType(name = "IDREF")
-	private Object sampleRef;
+	private SampleType sampleRef;
 	@XmlAttribute(name = "startTimeStamp")
 	@XmlSchemaType(name = "dateTime")
 	private XMLGregorianCalendar startTimeStamp;
@@ -85,27 +85,27 @@ public class RunType extends ParamGroupType {
 		return defaultInstrumentConfigurationRef;
 	}
 
-	public void setDefaultInstrumentConfigurationRef(Object value) {
+	public void setDefaultInstrumentConfigurationRef(InstrumentConfigurationType value) {
 
 		this.defaultInstrumentConfigurationRef = value;
 	}
 
-	public Object getDefaultSourceFileRef() {
+	public SourceFileType getDefaultSourceFileRef() {
 
 		return defaultSourceFileRef;
 	}
 
-	public void setDefaultSourceFileRef(Object value) {
+	public void setDefaultSourceFileRef(SourceFileType value) {
 
 		this.defaultSourceFileRef = value;
 	}
 
-	public Object getSampleRef() {
+	public SampleType getSampleRef() {
 
 		return sampleRef;
 	}
 
-	public void setSampleRef(Object value) {
+	public void setSampleRef(SampleType value) {
 
 		this.sampleRef = value;
 	}

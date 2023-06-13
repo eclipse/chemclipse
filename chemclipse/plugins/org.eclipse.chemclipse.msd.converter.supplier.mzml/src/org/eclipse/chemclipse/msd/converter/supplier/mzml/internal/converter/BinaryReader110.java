@@ -44,7 +44,7 @@ public class BinaryReader110 {
 		ByteBuffer byteBuffer = ByteBuffer.wrap(binary);
 		boolean compressed = false;
 		boolean doublePrecision = false;
-		int multiplicator = 1;
+		float multiplicator = 1f;
 		for(CVParamType cvParam : binaryDataArrayType.getCvParam()) {
 			if(cvParam.getAccession().equals("MS:1000574")) {
 				if(cvParam.getName().equals("zlib compression")) {
