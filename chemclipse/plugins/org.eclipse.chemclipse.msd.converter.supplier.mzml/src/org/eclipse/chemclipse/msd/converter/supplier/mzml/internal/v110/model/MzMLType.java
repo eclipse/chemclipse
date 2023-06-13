@@ -25,7 +25,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "mzML") // namespace = "http://psi.hupo.org/ms/mzml"
 public class MzMLType implements Serializable {
 
-	private final static long serialVersionUID = 110L;
+	private static final long serialVersionUID = 110L;
 	@XmlElement(required = true)
 	private CVListType cvList;
 	@XmlElement(required = true)

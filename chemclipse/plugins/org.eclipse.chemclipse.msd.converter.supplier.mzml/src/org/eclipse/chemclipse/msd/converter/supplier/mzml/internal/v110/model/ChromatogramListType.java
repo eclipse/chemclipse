@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,7 +40,7 @@ public class ChromatogramListType {
 	public List<ChromatogramType> getChromatogram() {
 
 		if(chromatogram == null) {
-			chromatogram = new ArrayList<ChromatogramType>();
+			chromatogram = new ArrayList<>();
 		}
 		return this.chromatogram;
 	}
@@ -55,12 +55,12 @@ public class ChromatogramListType {
 		this.count = value;
 	}
 
-	public Object getDefaultDataProcessingRef() {
+	public String getDefaultDataProcessingRef() {
 
 		return defaultDataProcessingRef;
 	}
 
-	public void setDefaultDataProcessingRef(Object value) {
+	public void setDefaultDataProcessingRef(String value) {
 
 		this.defaultDataProcessingRef = value;
 	}

@@ -36,7 +36,6 @@ import org.eclipse.swt.widgets.Table;
 
 public class ExtendedScanInfoUI extends Composite implements IExtendedPartUI {
 
-	private Composite toolbarInfo;
 	private Label labelInfo;
 	private ScanInfoListUI scanListUI;
 
@@ -76,7 +75,7 @@ public class ExtendedScanInfoUI extends Composite implements IExtendedPartUI {
 		composite.setLayout(layout);
 		//
 		createToolbarMain(composite);
-		toolbarInfo = createToolbarInfo(composite);
+		Composite toolbarInfo = createToolbarInfo(composite);
 		scanListUI = createScanInfoList(composite);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);

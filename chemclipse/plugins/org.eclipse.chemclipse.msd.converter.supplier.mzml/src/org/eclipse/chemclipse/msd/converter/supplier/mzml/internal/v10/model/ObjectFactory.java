@@ -262,24 +262,24 @@ public class ObjectFactory {
 	@XmlElementDecl(namespace = "http://psi.hupo.org/schema_revision/mzML_1.0.0", name = "mzML")
 	public JAXBElement<MzMLType> createMzML(MzMLType value) {
 
-		return new JAXBElement<MzMLType>(_MzML_QNAME, MzMLType.class, null, value);
+		return new JAXBElement<>(_MzML_QNAME, MzMLType.class, null, value);
 	}
 
 	@XmlElementDecl(namespace = "http://psi.hupo.org/schema_revision/mzML_1.0.0", name = "detector", scope = ComponentListType.class)
 	public JAXBElement<ComponentType> createComponentListTypeDetector(ComponentType value) {
 
-		return new JAXBElement<ComponentType>(_ComponentListTypeDetector_QNAME, ComponentType.class, ComponentListType.class, value);
+		return new JAXBElement<>(_ComponentListTypeDetector_QNAME, ComponentType.class, ComponentListType.class, value);
 	}
 
 	@XmlElementDecl(namespace = "http://psi.hupo.org/schema_revision/mzML_1.0.0", name = "source", scope = ComponentListType.class)
 	public JAXBElement<ComponentType> createComponentListTypeSource(ComponentType value) {
 
-		return new JAXBElement<ComponentType>(_ComponentListTypeSource_QNAME, ComponentType.class, ComponentListType.class, value);
+		return new JAXBElement<>(_ComponentListTypeSource_QNAME, ComponentType.class, ComponentListType.class, value);
 	}
 
 	@XmlElementDecl(namespace = "http://psi.hupo.org/schema_revision/mzML_1.0.0", name = "analyzer", scope = ComponentListType.class)
 	public JAXBElement<ComponentType> createComponentListTypeAnalyzer(ComponentType value) {
 
-		return new JAXBElement<ComponentType>(_ComponentListTypeAnalyzer_QNAME, ComponentType.class, ComponentListType.class, value);
+		return new JAXBElement<>(_ComponentListTypeAnalyzer_QNAME, ComponentType.class, ComponentListType.class, value);
 	}
 }

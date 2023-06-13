@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,7 +31,7 @@ public class ParamGroupType {
 	public List<ReferenceableParamGroupRefType> getReferenceableParamGroupRef() {
 
 		if(referenceableParamGroupRef == null) {
-			referenceableParamGroupRef = new ArrayList<ReferenceableParamGroupRefType>();
+			referenceableParamGroupRef = new ArrayList<>();
 		}
 		return this.referenceableParamGroupRef;
 	}
@@ -39,7 +39,7 @@ public class ParamGroupType {
 	public List<CVParamType> getCvParam() {
 
 		if(cvParam == null) {
-			cvParam = new ArrayList<CVParamType>();
+			cvParam = new ArrayList<>();
 		}
 		return this.cvParam;
 	}
@@ -47,7 +47,7 @@ public class ParamGroupType {
 	public List<UserParamType> getUserParam() {
 
 		if(userParam == null) {
-			userParam = new ArrayList<UserParamType>();
+			userParam = new ArrayList<>();
 		}
 		return this.userParam;
 	}
