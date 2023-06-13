@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -47,11 +46,10 @@ public class ExtendedScanInfoUI extends Composite implements IExtendedPartUI {
 		createControl();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setInput(Object input) {
 
-		if(input instanceof IChromatogramSelection chromatogramSelection) {
-			IChromatogram<IPeak> chromatogram = chromatogramSelection.getChromatogram();
+		if(input instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			labelInfo.setText(chromatogram.getName());
 			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
 			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
