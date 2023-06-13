@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,15 +30,21 @@ public class BaselineSelectionPaintListener implements ICustomPaintListener {
 	@Override
 	public void paintControl(PaintEvent e) {
 
-		if(x1 != x2) {
-			Color foreground = e.gc.getForeground();
-			Color background = e.gc.getBackground();
-			e.gc.setForeground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-			e.gc.drawLine(x1, y1 - VERTICAL_MARKER_SIZE, x1, y1 + VERTICAL_MARKER_SIZE); // vertical start
-			e.gc.drawLine(x1, y1, x2, y2);
-			e.gc.drawLine(x2, y2 - VERTICAL_MARKER_SIZE, x2, y2 + VERTICAL_MARKER_SIZE); // vertical stop
-			e.gc.setForeground(foreground);
-			e.gc.setBackground(background);
+		/*
+		 * Prevent that a line is drawn accidentally
+		 * from upper * left to the current selection.
+		 */
+		if(x2 > 0 && y2 > 0) {
+			if(x1 != x2) {
+				Color foreground = e.gc.getForeground();
+				Color background = e.gc.getBackground();
+				e.gc.setForeground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+				e.gc.drawLine(x1, y1 - VERTICAL_MARKER_SIZE, x1, y1 + VERTICAL_MARKER_SIZE); // vertical start
+				e.gc.drawLine(x1, y1, x2, y2);
+				e.gc.drawLine(x2, y2 - VERTICAL_MARKER_SIZE, x2, y2 + VERTICAL_MARKER_SIZE); // vertical stop
+				e.gc.setForeground(foreground);
+				e.gc.setBackground(background);
+			}
 		}
 	}
 

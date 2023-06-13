@@ -246,41 +246,52 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 
 	private void adjustTimeRange(Event event) {
 
-		TimeRange timeRange = TimeRangeSelector.selectRange(getBaseChart(), event, xStart, xStop, timeRanges);
-		if(timeRange != null) {
-			updateTimeRange(timeRange); // Update
-		} else {
+		/*
+		 * Prevent an accidental selection.
+		 */
+		if(Math.abs(xStop - xStart) > 0) {
 			/*
-			 * Add a new TimeRange
+			 * Update the existing time range or create a new one.
 			 */
-			if(timeRanges != null && !getBaseChart().getSeriesIds().isEmpty()) {
-				TimeRangeDialog timeRangeDialog = new TimeRangeDialog(event.display.getActiveShell(), timeRangeLabels, new IInputValidator() {
+			TimeRange timeRange = TimeRangeSelector.selectRange(getBaseChart(), event, xStart, xStop, timeRanges);
+			if(timeRange != null) {
+				/*
+				 * Update
+				 */
+				updateTimeRange(timeRange);
+			} else {
+				/*
+				 * Add a new TimeRange
+				 */
+				if(timeRanges != null && !getBaseChart().getSeriesIds().isEmpty()) {
+					TimeRangeDialog timeRangeDialog = new TimeRangeDialog(event.display.getActiveShell(), timeRangeLabels, new IInputValidator() {
 
-					@Override
-					public String isValid(String newText) {
+						@Override
+						public String isValid(String newText) {
 
-						if(newText == null || newText.isEmpty() || newText.isBlank()) {
-							return timeRangeLabels.getAddError();
-						} else if(newText.contains(TimeRangeLabels.DELIMITER)) {
-							return timeRangeLabels.getErrorDelimiter();
-						} else {
-							for(TimeRange timeRangeX : timeRanges.values()) {
-								if(timeRangeX.getIdentifier().equals(newText)) {
-									return timeRangeLabels.getAddExists();
+							if(newText == null || newText.isEmpty() || newText.isBlank()) {
+								return timeRangeLabels.getAddError();
+							} else if(newText.contains(TimeRangeLabels.DELIMITER)) {
+								return timeRangeLabels.getErrorDelimiter();
+							} else {
+								for(TimeRange timeRangeX : timeRanges.values()) {
+									if(timeRangeX.getIdentifier().equals(newText)) {
+										return timeRangeLabels.getAddExists();
+									}
 								}
 							}
+							return null;
 						}
-						return null;
+					});
+					/*
+					 * Add a new time range.
+					 */
+					if(timeRangeDialog.open() == Window.OK) {
+						String identifier = timeRangeDialog.getIdentifier();
+						TimeRange timeRangeAdd = new TimeRange(identifier, 0, 0);
+						timeRanges.add(timeRangeAdd);
+						updateTimeRange(timeRangeAdd);
 					}
-				});
-				/*
-				 * Add a new time range.
-				 */
-				if(timeRangeDialog.open() == Window.OK) {
-					String identifier = timeRangeDialog.getIdentifier();
-					TimeRange timeRangeAdd = new TimeRange(identifier, 0, 0);
-					timeRanges.add(timeRangeAdd);
-					updateTimeRange(timeRangeAdd);
 				}
 			}
 		}
@@ -308,6 +319,19 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 			double millisecondsWidth = millisecondsRange.upper - millisecondsRange.lower;
 			int startRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStartWidth);
 			int stopRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStopWidth);
+			/*
+			 * Adjust the start and stop time.
+			 */
+			if(startRetentionTime < 0) {
+				startRetentionTime = 0;
+			}
+			//
+			if(stopRetentionTime < startRetentionTime) {
+				stopRetentionTime = 0;
+			}
+			/*
+			 * Update the range.
+			 */
 			timeRange.update(startRetentionTime, stopRetentionTime);
 		}
 		//
