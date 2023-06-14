@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,8 +35,7 @@ public class ChromatogramPeakExportConverter extends AbstractChromatogramExportC
 
 		file = SpecificationValidatorMSL.validateSpecification(file);
 		IProcessingInfo<File> processingInfo = super.validate(file);
-		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 			IChromatogramMSDWriter writer = new ChromatogramWriterMSL();
 			try {
 				writer.writeChromatogram(file, chromatogramMSD, monitor);

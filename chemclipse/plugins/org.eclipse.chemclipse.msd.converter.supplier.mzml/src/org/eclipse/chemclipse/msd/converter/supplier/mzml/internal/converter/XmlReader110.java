@@ -18,6 +18,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CVParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.MzMLType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ObjectFactory;
@@ -40,6 +41,7 @@ public class XmlReader110 {
 	public static MzMLType getMzML(File file) throws SAXException, IOException, JAXBException, ParserConfigurationException {
 
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		documentBuilderFactory.setNamespaceAware(true);
 		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		Document document = documentBuilder.parse(file);
 		NodeList topNode = document.getElementsByTagName("mzML");
@@ -49,22 +51,22 @@ public class XmlReader110 {
 		return (MzMLType)unmarshaller.unmarshal(topNode.item(0));
 	}
 
-	public static int getTimeMultiplicator(CVParamType cvParam) {
+	public static float getTimeMultiplicator(CVParamType cvParam) {
 
-		int multiplicator = 1;
+		float multiplicator = 1f;
 		if(cvParam.getUnitAccession().equals("UO:0000028")) {
 			if(cvParam.getUnitName().equals("millisecond")) {
-				multiplicator = 1;
+				multiplicator = 1f;
 			}
 		}
 		if(cvParam.getUnitAccession().equals("UO:0000010")) {
 			if(cvParam.getUnitName().equals("second")) {
-				multiplicator = 1000;
+				multiplicator = (float)IChromatogramOverview.SECOND_CORRELATION_FACTOR;
 			}
 		}
 		if(cvParam.getUnitAccession().equals("UO:0000031")) {
 			if(cvParam.getUnitName().equals("minute")) {
-				multiplicator = 60 * 1000;
+				multiplicator = (float)IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
 			}
 		}
 		return multiplicator;

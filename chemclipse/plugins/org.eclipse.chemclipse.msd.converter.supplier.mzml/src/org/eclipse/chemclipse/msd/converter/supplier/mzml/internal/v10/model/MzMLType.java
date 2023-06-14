@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model;
 
+import java.io.Serializable;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
@@ -24,8 +26,9 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {"cvList", "fileDescription", "referenceableParamGroupList", "sampleList", "instrumentConfigurationList", "softwareList", "dataProcessingList", "acquisitionSettingsList", "run"})
 @XmlRootElement(name = "mzML")
-public class MzMLType {
+public class MzMLType implements Serializable {
 
+	private static final long serialVersionUID = 10L;
 	@XmlElement(required = true)
 	protected CVListType cvList;
 	@XmlElement(required = true)

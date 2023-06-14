@@ -19,6 +19,7 @@ import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.util.zip.Deflater;
 
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.io.ChromatogramWriterVersion110;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.BinaryDataArrayType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CVParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.preferences.PreferenceSupplier;
@@ -38,10 +39,11 @@ public class BinaryWriter {
 		byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
 		byteBuffer.asFloatBuffer().put(floatBuffer);
 		BinaryDataArrayType binaryDataArrayType = createBinaryDataArray(byteBuffer);
-		CVParamType cvParamDataType = new CVParamType();
-		cvParamDataType.setAccession("MS:1000521");
-		cvParamDataType.setName("32-bit float");
-		binaryDataArrayType.getCvParam().add(cvParamDataType);
+		CVParamType cvParamData = new CVParamType();
+		cvParamData.setCvRef(ChromatogramWriterVersion110.MS);
+		cvParamData.setAccession("MS:1000521");
+		cvParamData.setName("32-bit float");
+		binaryDataArrayType.getCvParam().add(cvParamData);
 		return binaryDataArrayType;
 	}
 
@@ -52,10 +54,11 @@ public class BinaryWriter {
 		byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
 		byteBuffer.asDoubleBuffer().put(doubleBuffer);
 		BinaryDataArrayType binaryDataArrayType = createBinaryDataArray(byteBuffer);
-		CVParamType cvParamDataType = new CVParamType();
-		cvParamDataType.setAccession("MS:1000523");
-		cvParamDataType.setName("64-bit float");
-		binaryDataArrayType.getCvParam().add(cvParamDataType);
+		CVParamType cvParamData = new CVParamType();
+		cvParamData.setCvRef(ChromatogramWriterVersion110.MS);
+		cvParamData.setAccession("MS:1000523");
+		cvParamData.setName("64-bit float");
+		binaryDataArrayType.getCvParam().add(cvParamData);
 		return binaryDataArrayType;
 	}
 
@@ -65,6 +68,7 @@ public class BinaryWriter {
 		boolean compression = PreferenceSupplier.getChromatogramSaveCompression();
 		if(compression) {
 			CVParamType cvParamCompression = new CVParamType();
+			cvParamCompression.setCvRef(ChromatogramWriterVersion110.MS);
 			cvParamCompression.setAccession("MS:1000574");
 			cvParamCompression.setName("zlib compression");
 			binaryDataArrayType.getCvParam().add(cvParamCompression);

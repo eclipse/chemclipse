@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.zip.ZipOutputStream;
 
@@ -46,7 +45,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramWriterMSD extends AbstractChromatogramWriter implements IChromatogramMSDZipWriter {
 
 	@Override
-	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		IChromatogramMSDZipWriter chromatogramWriter = getChromatogramWriter(chromatogram, monitor);
 		chromatogramWriter.writeChromatogram(file, chromatogram, monitor);

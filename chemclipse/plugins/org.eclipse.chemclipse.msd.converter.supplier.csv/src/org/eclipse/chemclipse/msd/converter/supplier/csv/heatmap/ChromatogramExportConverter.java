@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -36,8 +36,7 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 
 		file = SpecificationValidator.validateSpecification(file, "mzrt.csv");
 		IProcessingInfo<File> processingInfo = super.validate(file);
-		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 			IChromatogramMSDWriter writer = new ChromatogramWriter();
 			monitor.subTask(IConstants.EXPORT_CSV_CHROMATOGRAM);
 			try {

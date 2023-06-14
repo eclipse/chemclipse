@@ -60,7 +60,7 @@ public class MassSpectrumReaderVersion110 extends AbstractMassSpectraReader impl
 			massSpectrum.setFile(file);
 			massSpectrum.setIdentifier(file.getName());
 			//
-			MzMLType mzML = (MzMLType)XmlReader110.getMzML(file);
+			MzMLType mzML = XmlReader110.getMzML(file);
 			//
 			FileDescriptionType fileDescription = mzML.getFileDescription();
 			if(fileDescription != null) {
