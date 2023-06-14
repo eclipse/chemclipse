@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,7 +43,13 @@ public class TimeRange {
 	 * @param stop
 	 */
 	public TimeRange(String identifier, int start, int stop) throws IllegalArgumentException {
+
 		this(identifier, start, calculateCenter(start, stop), stop);
+	}
+
+	public TimeRange(TimeRange timeRange) throws IllegalArgumentException {
+
+		this(timeRange.getIdentifier(), timeRange.getStart(), timeRange.getCenter(), timeRange.getStop());
 	}
 
 	/**
@@ -55,6 +61,7 @@ public class TimeRange {
 	 * @param stop
 	 */
 	public TimeRange(String identifier, int start, int center, int stop) throws IllegalArgumentException {
+
 		/*
 		 * Validity checks.
 		 */

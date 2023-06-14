@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum TimeRangeModus implements ILabel {
 
+	NONE("--"), // No action
 	TEMPLATE("Template"), // Use the range template
 	BASELINE("Baseline"), // Select the baseline
 	POINTS("Points"); // Select points

@@ -161,12 +161,14 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 	public void handleMouseDownEvent(Event event) {
 
 		super.handleMouseDownEvent(event);
-		if(isControlKeyPressed(event)) {
-			if(!isPointModus()) {
-				startBaselineSelection(event.x, event.y);
-				setCursor(SWT.CURSOR_CROSS);
-			} else {
-				resetSelectedRange();
+		if(isTimeRangeModusActive()) {
+			if(isControlKeyPressed(event)) {
+				if(!isPointModus()) {
+					startBaselineSelection(event.x, event.y);
+					setCursor(SWT.CURSOR_CROSS);
+				} else {
+					resetSelectedRange();
+				}
 			}
 		}
 	}
@@ -175,10 +177,12 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 	public void handleMouseMoveEvent(Event event) {
 
 		super.handleMouseMoveEvent(event);
-		if(isControlKeyPressed(event)) {
-			if(!isPointModus()) {
-				if(xStart > 0 && yStart > 0) {
-					trackBaselineSelection(event.x, event.y);
+		if(isTimeRangeModusActive()) {
+			if(isControlKeyPressed(event)) {
+				if(!isPointModus()) {
+					if(xStart > 0 && yStart > 0) {
+						trackBaselineSelection(event.x, event.y);
+					}
 				}
 			}
 		}
@@ -188,21 +192,23 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 	public void handleMouseUpEvent(Event event) {
 
 		super.handleMouseUpEvent(event);
-		if(isControlKeyPressed(event)) {
-			if(isPointModus()) {
-				if(pointSelectionActive) {
-					pointSelection.add(new Point(event.x, event.y));
-					timeRangePointsMarker.setPointSelection(pointSelection);
-				}
-			} else {
-				stopBaselineSelection(event.x, event.y);
-				if(TimeRangeModus.BASELINE.equals(timeRangeModus)) {
-					fireUpdatePeakRange(xStart, yStart, xStop, yStop);
+		if(isTimeRangeModusActive()) {
+			if(isControlKeyPressed(event)) {
+				if(isPointModus()) {
+					if(pointSelectionActive) {
+						pointSelection.add(new Point(event.x, event.y));
+						timeRangePointsMarker.setPointSelection(pointSelection);
+					}
 				} else {
-					adjustTimeRange(event);
+					stopBaselineSelection(event.x, event.y);
+					if(TimeRangeModus.BASELINE.equals(timeRangeModus)) {
+						fireUpdatePeakRange(xStart, yStart, xStop, yStop);
+					} else {
+						adjustTimeRange(event);
+					}
+					setCursorDefault();
+					resetSelectedRange();
 				}
-				setCursorDefault();
-				resetSelectedRange();
 			}
 		}
 	}
@@ -222,6 +228,11 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 	private boolean isPointModus() {
 
 		return TimeRangeModus.POINTS.equals(timeRangeModus);
+	}
+
+	private boolean isTimeRangeModusActive() {
+
+		return !TimeRangeModus.NONE.equals(timeRangeModus);
 	}
 
 	private void createControl() {
