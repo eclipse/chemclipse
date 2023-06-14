@@ -59,7 +59,7 @@ public class ReaderVersion31 extends AbstractReaderVersion implements IChromatog
 	public static final String VERSION = "mzXML_3.1";
 	//
 	private static final Logger logger = Logger.getLogger(ReaderVersion31.class);
-	private static final int ION_PRECISION = 4;
+	private static final int ION_PRECISION = 6;
 
 	@Override
 	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
