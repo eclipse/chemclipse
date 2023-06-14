@@ -90,6 +90,7 @@ public class ScanChartUI extends ScrollableChart {
 	//
 	private DecimalFormat decimalFormatNormalIntensity = ValueFormat.getDecimalFormatEnglish("0");
 	private DecimalFormat decimalFormatLowIntensity = ValueFormat.getDecimalFormatEnglish("0.0000");
+	private DecimalFormat decimalFormatHighResolution = ValueFormat.getDecimalFormatEnglish("0.000###");
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private Font systemFont = DisplayUtils.getDisplay().getSystemFont();
 	//
@@ -674,8 +675,7 @@ public class ScanChartUI extends ScrollableChart {
 				}
 				break;
 			case EXACT:
-				DecimalFormat decimalFormat = getDecimalFormatValue();
-				label = decimalFormat.format(value);
+				label = decimalFormatHighResolution.format(value);
 				break;
 			case CUSTOM:
 				label = customLabels.get(value);
