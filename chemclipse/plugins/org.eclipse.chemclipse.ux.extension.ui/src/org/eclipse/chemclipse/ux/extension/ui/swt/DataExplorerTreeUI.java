@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ import java.util.function.Function;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.ui.listener.DataExplorerDragListener;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.core.runtime.IStatus;
@@ -30,6 +31,9 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
@@ -47,6 +51,10 @@ public class DataExplorerTreeUI {
 
 		this.dataExplorerTreeRoot = dataExplorerTreeRoot;
 		treeViewer = createTreeViewer(parent, identifier);
+		//
+		DataExplorerDragListener dragListener = new DataExplorerDragListener(treeViewer);
+		Transfer[] transferTypes = new Transfer[]{FileTransfer.getInstance()};
+		this.treeViewer.addDragSupport(DND.DROP_MOVE | DND.DROP_COPY, transferTypes, dragListener);
 	}
 
 	public DataExplorerTreeRoot getRoot() {
