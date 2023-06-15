@@ -21,14 +21,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramReader;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendorChromatogram;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorChromatogram;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorIon;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorScan;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.BinaryReader10;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader10;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.BinaryDataArrayType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.CVParamType;
@@ -45,14 +42,11 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.Sam
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.ScanType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.SoftwareType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.SpectrumType;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionGroup;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransition;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.chemclipse.support.history.EditInformation;
@@ -90,22 +84,7 @@ public class ChromatogramReaderVersion10 extends AbstractChromatogramReader impl
 					}
 				}
 			}
-			int tic = Math.min(retentionTimes.length, intensities.length);
-			try {
-				for(int i = 0; i < tic; i++) {
-					VendorScan scan = new VendorScan();
-					int retentionTime = (int)(retentionTimes[i]);
-					scan.setRetentionTime(retentionTime);
-					float intensity = (float)intensities[i];
-					VendorIon ion = new VendorIon(IIon.TIC_ION, intensity);
-					scan.addIon(ion, false);
-					chromatogram.addScan(scan);
-				}
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			XmlReader.addIons(intensities, retentionTimes, chromatogram);
 		} catch(JAXBException e) {
 			logger.warn(e);
 		} catch(SAXException e) {
@@ -222,21 +201,7 @@ public class ChromatogramReaderVersion10 extends AbstractChromatogramReader impl
 						intensities = binaryData.getValue();
 					}
 				}
-				int ions = Math.min(mzs.length, intensities.length);
-				for(int i = 0; i < ions; i++) {
-					try {
-						double intensity = intensities[i];
-						double mz = AbstractIon.getIon(mzs[i]);
-						if(intensity >= VendorIon.MIN_ABUNDANCE && intensity <= VendorIon.MAX_ABUNDANCE) {
-							IVendorIon ion = new VendorIon(mz, (float)intensity);
-							massSpectrum.addIon(ion);
-						}
-					} catch(AbundanceLimitExceededException e) {
-						logger.warn(e);
-					} catch(IonLimitExceededException e) {
-						logger.warn(e);
-					}
-				}
+				XmlReader.addIons(intensities, mzs, massSpectrum);
 				chromatogram.addScan(massSpectrum);
 			}
 		} catch(DataFormatException e) {
