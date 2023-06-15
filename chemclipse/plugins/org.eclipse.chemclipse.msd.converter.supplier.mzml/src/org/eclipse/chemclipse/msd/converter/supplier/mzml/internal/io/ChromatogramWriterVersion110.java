@@ -296,7 +296,6 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 			mzML.setDataProcessingList(dataProcessingList);
 			mzML.setVersion(XmlReader110.VERSION);
 			mzML.setRun(run);
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, "http://psi.hupo.org/ms/mzml http://psidev.info/files/ms/mzML/xsd/mzML1.1.0.xsd");
 			marshaller.marshal(mzML, file);
 		} catch(JAXBException e) {
