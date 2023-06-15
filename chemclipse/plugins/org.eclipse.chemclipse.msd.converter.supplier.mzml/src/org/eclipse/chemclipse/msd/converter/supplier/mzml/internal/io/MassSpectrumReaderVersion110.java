@@ -19,14 +19,12 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendorMassSpectra;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorMassSpectra;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.BinaryReader110;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader110;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.BinaryDataArrayType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CVParamType;
@@ -35,10 +33,8 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.Mz
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ParamGroupType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.RunType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.SpectrumType;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.xml.sax.SAXException;
@@ -95,21 +91,7 @@ public class MassSpectrumReaderVersion110 extends AbstractMassSpectraReader impl
 					}
 				}
 			}
-			int ions = Math.min(mzs.length, intensities.length);
-			for(int i = 0; i < ions; i++) {
-				try {
-					double intensity = intensities[i];
-					if(intensity >= VendorIon.MIN_ABUNDANCE && intensity <= VendorIon.MAX_ABUNDANCE) {
-						double mz = AbstractIon.getIon(mzs[i]);
-						IVendorIon ion = new VendorIon(mz, (float)intensity);
-						massSpectrum.addIon(ion);
-					}
-				} catch(AbundanceLimitExceededException e) {
-					logger.warn(e);
-				} catch(IonLimitExceededException e) {
-					logger.warn(e);
-				}
-			}
+			XmlReader.addIons(mzs, intensities, massSpectrum);
 		} catch(SAXException e) {
 			logger.warn(e);
 		} catch(JAXBException e) {

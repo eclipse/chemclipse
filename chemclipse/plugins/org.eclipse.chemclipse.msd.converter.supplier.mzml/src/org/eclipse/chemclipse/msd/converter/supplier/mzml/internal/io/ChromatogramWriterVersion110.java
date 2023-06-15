@@ -296,7 +296,6 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 			mzML.setDataProcessingList(dataProcessingList);
 			mzML.setVersion(XmlReader110.VERSION);
 			mzML.setRun(run);
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, "http://psi.hupo.org/ms/mzml http://psidev.info/files/ms/mzML/xsd/mzML1.1.0.xsd");
 			marshaller.marshal(mzML, file);
 		} catch(JAXBException e) {
@@ -315,13 +314,127 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 		sourceFile.setLocation(file.getAbsolutePath());
 		sourceFile.setId(file.getName());
 		sourceFile.setName(file.getName());
+		//
 		CVParamType cvParamSHA1 = new CVParamType();
 		cvParamSHA1.setCvRef(MS);
 		cvParamSHA1.setAccession("MS:1000569");
 		cvParamSHA1.setName("SHA-1");
 		cvParamSHA1.setValue(calculateSHA1(file));
 		sourceFile.getCvParam().add(cvParamSHA1);
-		// TODO: source file formats
+		//
+		if(chromatogram.getConverterId().equals("org.eclipse.chemclipse.xxd.converter.supplier.chemclipse")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1003374");
+			cvParamFileFormat.setName("Open Chromatography Binary OCB format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("net.openchrom.msd.converter.supplier.mz5")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1000560");
+			cvParamFileFormat.setName("mz5 format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("net.openchrom.msd.converter.supplier.cdf")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1002443");
+			cvParamFileFormat.setName("Andi-CHROM format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("net.openchrom.msd.converter.supplier.mzmlb")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1000560");
+			cvParamFileFormat.setName("mzMLb format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("net.openchrom.msd.converter.supplier.shimadzu.lcd")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1003009");
+			cvParamFileFormat.setName("Shimadzu Biotech LCD format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("net.openchrom.msd.converter.supplier.waters.micromass")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1000526");
+			cvParamFileFormat.setName("Waters raw format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("net.openchrom.msd.converter.supplier.absciex")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1000562");
+			cvParamFileFormat.setName("ABI WIFF format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("net.openchrom.msd.converter.supplier.finnigan.raw")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1000563");
+			cvParamFileFormat.setName("Thermo RAW format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("org.eclipse.chemclipse.msd.converter.supplier.mzdata")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1000564");
+			cvParamFileFormat.setName("PSI mzData format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("org.eclipse.chemclipse.msd.converter.supplier.mzxml.chromatogram")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1000566");
+			cvParamFileFormat.setName("ISB mzXML format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("net.openchrom.msd.converter.supplier.bruker.baf")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1000815");
+			cvParamFileFormat.setName("Bruker BAF format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("net.openchrom.msd.converter.supplier.bruker.flex.chromatogram")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1000825");
+			cvParamFileFormat.setName("Bruker FID format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("org.eclipse.chemclipse.msd.converter.supplier.mgf")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1001062");
+			cvParamFileFormat.setName("Mascot MGF format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		} else if(chromatogram.getConverterId().equals("net.openchrom.msd.converter.supplier.masshunter.msd")) {
+			CVParamType cvParamFileFormat = new CVParamType();
+			cvParamFileFormat.setCvRef(MS);
+			cvParamFileFormat.setAccession("MS:1001509");
+			cvParamFileFormat.setName("Agilent MassHunter format");
+			cvParamFileFormat.setValue("");
+			sourceFile.getCvParam().add(cvParamFileFormat);
+			sourceFileListType.setCount(BigInteger.valueOf(2));
+		}
 		sourceFileListType.getSourceFile().add(sourceFile);
 		return sourceFileListType;
 	}
@@ -396,7 +509,22 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 			software.setId(product.getName());
 			Version version = product.getDefiningBundle().getVersion();
 			software.setVersion(version.getMajor() + "." + version.getMinor() + "." + version.getMicro());
-			// TODO: ontology
+			if(product.getName().equals("ChemClipse")) {
+				CVParamType cvParamSoftware = new CVParamType();
+				cvParamSoftware.setCvRef(MS);
+				cvParamSoftware.setAccession("MS:1003376");
+				cvParamSoftware.setName("ChemClipse");
+				cvParamSoftware.setValue("");
+				software.getCvParam().add(cvParamSoftware);
+			}
+			if(product.getName().equals("OpenChrom")) {
+				CVParamType cvParamSoftware = new CVParamType();
+				cvParamSoftware.setCvRef(MS);
+				cvParamSoftware.setAccession("MS:1003377");
+				cvParamSoftware.setName("OpenChrom");
+				cvParamSoftware.setValue("");
+				software.getCvParam().add(cvParamSoftware);
+			}
 		}
 		softwareList.getSoftware().add(software);
 		return softwareList;
@@ -440,8 +568,8 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 		CVType cvTypeMS = new CVType();
 		cvTypeMS.setId("MS");
 		cvTypeMS.setFullName("Proteomics Standards Initiative Mass Spectrometry Ontology");
-		cvTypeMS.setVersion("4.1.121");
-		cvTypeMS.setURI("https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.121/psi-ms.obo");
+		cvTypeMS.setVersion("4.1.123");
+		cvTypeMS.setURI("https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.123/psi-ms.obo");
 		return cvTypeMS;
 	}
 
