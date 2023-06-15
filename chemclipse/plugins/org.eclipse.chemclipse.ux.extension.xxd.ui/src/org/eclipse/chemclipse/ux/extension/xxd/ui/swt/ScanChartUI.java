@@ -56,7 +56,6 @@ import org.eclipse.swtchart.extensions.barcharts.IBarSeriesData;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesSettings;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.ChartType;
-import org.eclipse.swtchart.extensions.core.IAxisSettings;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
@@ -74,7 +73,6 @@ public class ScanChartUI extends ScrollableChart {
 	private int labelHighestIntensities = 5;
 	private boolean addModuloLabels = false;
 	//
-	private DecimalFormat defaultDecimalFormat = ValueFormat.getDecimalFormatEnglish();
 	private DecimalFormat decimalFormatQ3 = ValueFormat.getDecimalFormatEnglish("0.0");
 	//
 	private BarSeriesYComparator barSeriesIntensityComparator = new BarSeriesYComparator();
@@ -711,15 +709,5 @@ public class ScanChartUI extends ScrollableChart {
 			}
 		}
 		return barSeriesIons;
-	}
-
-	private DecimalFormat getDecimalFormatValue() {
-
-		IAxisSettings axisSettings = getBaseChart().getXAxisSettings(BaseChart.ID_PRIMARY_X_AXIS);
-		if(axisSettings != null) {
-			return axisSettings.getDecimalFormat();
-		} else {
-			return defaultDecimalFormat;
-		}
 	}
 }
