@@ -34,7 +34,7 @@ public class ScorePlot extends AbtractPlotPCA {
 
 		deleteSeries();
 		if(evaluationPCA != null) {
-			IResultsPCA<?, ?> resultsPCA = evaluationPCA.getResults();
+			IResultsPCA<? extends IResultPCA, ?> resultsPCA = evaluationPCA.getResults();
 			addSeriesData(SeriesConverter.sampleToSeries(resultsPCA, pcX, pcY, extractedResults));
 			update(pcX, pcY, resultsPCA.getExplainedVariances());
 		}

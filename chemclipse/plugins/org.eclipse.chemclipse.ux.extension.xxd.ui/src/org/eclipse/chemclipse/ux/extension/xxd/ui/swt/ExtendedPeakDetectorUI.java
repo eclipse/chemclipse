@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
@@ -76,10 +77,9 @@ import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 import org.eclipse.swtchart.extensions.core.IMouseSupport;
 import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
 import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
+import org.eclipse.swtchart.extensions.linecharts.ICompressionSupport;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
-import org.eclipse.swtchart.extensions.linecharts.LineChart;
-
 
 public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI {
 
@@ -132,7 +132,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 	private Button buttonAddPeak;
 	private AtomicReference<ChromatogramChart> chartControl = new AtomicReference<>();
 	//
-	private IChromatogramSelection<?, ?>chromatogramSelection;
+	private IChromatogramSelection<?, ?> chromatogramSelection;
 	private IPeak peak;
 	//
 	private BaselineSelectionPaintListener baselineSelectionPaintListener;
@@ -293,7 +293,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 	public ExtendedPeakDetectorUI(Composite parent, int style) {
 
 		super(parent, SWT.NONE);
-		detectionTypeDescriptions = new HashMap<String, String>();
+		detectionTypeDescriptions = new HashMap<>();
 		detectionTypeDescriptions.put(DETECTION_TYPE_BASELINE, "Modus (Baseline) [Key:" + KEY_BASELINE + "]");
 		detectionTypeDescriptions.put(DETECTION_TYPE_BOX_BB, "Modus (BB) [Key:" + KEY_BB + "]");
 		detectionTypeDescriptions.put(DETECTION_TYPE_BOX_VV, "Modus (VV) [Key:" + KEY_VV + "]");
@@ -304,13 +304,14 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		createControl();
 	}
 
+	@Override
 	public boolean setFocus() {
 
 		updateChromatogramAndPeak();
 		return true;
 	}
 
-	public void update(IChromatogramSelection<?, ?>chromatogramSelection) {
+	public void update(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;
 		IChromatogram<?> chromatogram = null;
@@ -334,7 +335,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		if(chromatogramSelection != null) {
 			//
 			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			/*
 			 * Chromatogram
 			 */
@@ -367,7 +368,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 				}
 			}
 			//
-			chartControl.get().addSeriesData(lineSeriesDataList, LineChart.LOW_COMPRESSION);
+			chartControl.get().addSeriesData(lineSeriesDataList, ICompressionSupport.LOW_COMPRESSION);
 		}
 	}
 
@@ -441,7 +442,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText(detectionTypeDescriptions.get(detectionType));
-		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -461,7 +462,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Add the manually detected peak.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -469,19 +470,17 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 
 				if(peak != null) {
 					IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-					if(chromatogram instanceof IChromatogramMSD) {
-						if(peak instanceof IChromatogramPeakMSD) {
-							IChromatogramPeakMSD peakMSD = (IChromatogramPeakMSD)peak;
-							((IChromatogramMSD)chromatogram).addPeak(peakMSD);
+					if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
+						if(peak instanceof IChromatogramPeakMSD peakMSD) {
+							chromatogramMSD.addPeak(peakMSD);
 							peak = null;
 							setDetectionType(DETECTION_TYPE_NONE);
 							updateChromatogramAndPeak();
 							chromatogramSelection.update(true);
 						}
-					} else if(chromatogram instanceof IChromatogramCSD) {
-						if(peak instanceof IChromatogramPeakCSD) {
-							IChromatogramPeakCSD peakCSD = (IChromatogramPeakCSD)peak;
-							((IChromatogramCSD)chromatogram).addPeak(peakCSD);
+					} else if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
+						if(peak instanceof IChromatogramPeakCSD peakCSD) {
+							chromatogramCSD.addPeak(peakCSD);
 							peak = null;
 							setDetectionType(DETECTION_TYPE_NONE);
 							updateChromatogramAndPeak();
@@ -796,6 +795,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		updateChromatogramAndPeak();
 	}
 
+	@Override
 	public void redraw() {
 
 		chartControl.get().getBaseChart().redraw();
@@ -1011,12 +1011,11 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		/*
 		 * Try to detect the peak.
 		 */
-		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 			/*
 			 * Peak Detection MSD
 			 */
 			try {
-				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 				ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
 				IChromatogramMSD chromatogram = chromatogramSelectionMSD.getChromatogram();
 				IChromatogramPeakMSD chromatogramPeak = manualPeakDetector.calculatePeak(chromatogram, startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
@@ -1024,12 +1023,11 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 			} catch(PeakException e) {
 				logger.warn(e);
 			}
-		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD chromatogramSelectionCSD) {
 			/*
 			 * Peak Detection CSD
 			 */
 			try {
-				IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
 				ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
 				IChromatogramCSD chromatogram = chromatogramSelectionCSD.getChromatogram();
 				IChromatogramPeakCSD chromatogramPeak = manualPeakDetector.calculatePeak(chromatogram, startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
@@ -1037,12 +1035,11 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 			} catch(PeakException e) {
 				logger.warn(e);
 			}
-		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD chromatogramSelectionWSD) {
 			/*
 			 * Peak Detection WSD
 			 */
 			try {
-				IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
 				ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
 				IChromatogramWSD chromatogram = chromatogramSelectionWSD.getChromatogram();
 				IChromatogramPeakWSD chromatogramPeak = manualPeakDetector.calculatePeak(chromatogram, startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);

@@ -132,7 +132,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	}
 
 	@Override
-	public void fireUpdate(IChromatogramSelection<?, ?>chromatogramSelection) {
+	public void fireUpdate(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		/*
 		 * Fire an update to inform all listeners.
@@ -160,8 +160,8 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		int position = scan;
 		if(position > 0 && position <= getScans().size()) {
 			IScan storedScan = getScans().get(--position);
-			if(storedScan instanceof IVendorMassSpectrum) {
-				return (IVendorMassSpectrum)storedScan;
+			if(storedScan instanceof IVendorMassSpectrum vendorMassSpectrum) {
+				return vendorMassSpectrum;
 			}
 		}
 		return null;
@@ -175,8 +175,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		IIon ion;
 		float minAbundance = Float.MAX_VALUE;
 		for(IScan scan : getScans()) {
-			if(scan instanceof IVendorMassSpectrum) {
-				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
+			if(scan instanceof IVendorMassSpectrum ms) {
 				ion = ms.getLowestAbundance();
 				if(!isZeroImmutableIon(ion)) {
 					if(ion.getAbundance() < minAbundance) {
@@ -194,8 +193,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		IIon ion;
 		float maxAbundance = Float.MIN_VALUE;
 		for(IScan scan : getScans()) {
-			if(scan instanceof IVendorMassSpectrum) {
-				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
+			if(scan instanceof IVendorMassSpectrum ms) {
 				ion = ms.getHighestAbundance();
 				if(!isZeroImmutableIon(ion)) {
 					if(ion.getAbundance() > maxAbundance) {
@@ -213,7 +211,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		/*
 		 * Return 0 if no scan is stored.
 		 */
-		if(getScans().size() == 0) {
+		if(getScans().isEmpty()) {
 			return 0;
 		}
 		double lowestIon = Double.MAX_VALUE;
@@ -222,8 +220,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		 * Check all scans.
 		 */
 		for(IScan scan : getScans()) {
-			if(scan instanceof IVendorMassSpectrum) {
-				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
+			if(scan instanceof IVendorMassSpectrum ms) {
 				IIon ion = ms.getLowestIon();
 				if(!isZeroImmutableIon(ion)) {
 					actualIon = ion.getIon();
@@ -242,7 +239,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		/*
 		 * Return 0 if no scan is stored.
 		 */
-		if(getScans().size() == 0) {
+		if(getScans().isEmpty()) {
 			return 0;
 		}
 		double highestIon = Double.MIN_VALUE;
@@ -251,8 +248,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		 * Check all scans.
 		 */
 		for(IScan scan : getScans()) {
-			if(scan instanceof IVendorMassSpectrum) {
-				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
+			if(scan instanceof IVendorMassSpectrum ms) {
 				IIon ion = ms.getHighestIon();
 				if(!isZeroImmutableIon(ion)) {
 					actualIon = ion.getIon();

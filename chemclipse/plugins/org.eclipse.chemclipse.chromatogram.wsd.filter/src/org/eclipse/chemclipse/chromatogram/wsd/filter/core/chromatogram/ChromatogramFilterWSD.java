@@ -74,7 +74,7 @@ public class ChromatogramFilterWSD {
 	// TODO JUnit
 	/**
 	 * Applies the specified filter, but retrieves the IChromatogramFilterSettings dynamically.<br/>
-	 * See also method: applyFilter(IChromatogramSelection<?, ?>chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor)
+	 * See also method: applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor)
 	 * 
 	 * @param chromatogramSelection
 	 * @param filterId

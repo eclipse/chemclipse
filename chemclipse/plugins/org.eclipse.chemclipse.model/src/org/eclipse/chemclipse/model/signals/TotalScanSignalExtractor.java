@@ -157,7 +157,7 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 
 	@Override
 	
-	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?>chromatogramSelection) {
+	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		return getTotalScanSignals(chromatogramSelection, true);
 	}
@@ -183,14 +183,14 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 
 	@Override
 	
-	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?>chromatogramSelection, boolean validatePositive) {
+	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?> chromatogramSelection, boolean validatePositive) {
 
 		return getTotalScanSignals(chromatogramSelection, validatePositive, false);
 	}
 
 	@Override
 	
-	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?>chromatogramSelection, boolean validatePositive, boolean condenseCycleNumberScans) {
+	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?> chromatogramSelection, boolean validatePositive, boolean condenseCycleNumberScans) {
 
 		/*
 		 * If the chromatogram selection is null, return an empty

@@ -64,7 +64,7 @@ public class ChromatogramMoveArrowKeyHandler extends AbstractHandledEventProcess
 	
 	private void handleArrowMoveWindowSelection(int keyCode) {
 
-		IChromatogramSelection<?, ?>chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
+		IChromatogramSelection<?, ?> chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
 		if(chromatogramSelection != null) {
 			if(keyCode == SWT.ARROW_RIGHT || keyCode == SWT.ARROW_LEFT) {
 				/*

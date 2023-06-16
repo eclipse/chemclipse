@@ -356,8 +356,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 	protected float getScanSignal(IChromatogramMSD chromatogram, int scanNumber, IMarkedIons ions) {
 
 		IScan scan = chromatogram.getScan(scanNumber);
-		if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
+		if(scan instanceof IScanMSD scanMSD) {
 			return scanMSD.getTotalSignal(ions);
 		}
 		return scan.getTotalSignal();

@@ -53,6 +53,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -149,7 +150,7 @@ public class ChromatogramReferencesUI {
 
 	private Action createReferencesAction() {
 
-		Action action = new Action("References", Action.AS_CHECK_BOX) {
+		return new Action("References", IAction.AS_CHECK_BOX) {
 
 			@Override
 			public void run() {
@@ -171,8 +172,6 @@ public class ChromatogramReferencesUI {
 				super.setChecked(checked);
 			}
 		};
-		//
-		return action;
 	}
 
 	private void setActionChecked(Action action, boolean checked) {

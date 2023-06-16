@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -69,8 +69,7 @@ public class ChromatogramProcedure implements Procedure<ChromatogramProcedureSet
 	public <ResultType> IProcessExecutionConsumer<ResultType> createConsumer(ChromatogramProcedureSettings settings, IProcessExecutionConsumer<ResultType> currentConsumer, ProcessExecutionContext context) {
 
 		ResultType result = currentConsumer.getResult();
-		if(result instanceof IChromatogramSelection<?, ?>) {
-			IChromatogramSelection<?, ?> originalSelection = (IChromatogramSelection<?, ?>)result;
+		if(result instanceof IChromatogramSelection<?, ?> originalSelection) {
 			IChromatogram<?> chromatogram = originalSelection.getChromatogram();
 			IChromatogramSelection<?, ?> copiedSelection;
 			//

@@ -24,10 +24,10 @@ import org.eclipse.swt.widgets.Shell;
 public class TargetTransferDialog extends Dialog {
 
 	
-	private IChromatogramSelection<?, ?>chromatogramSelection;
+	private IChromatogramSelection<?, ?> chromatogramSelection;
 
 	
-	public TargetTransferDialog(Shell shell, IChromatogramSelection<?, ?>chromatogramSelection) {
+	public TargetTransferDialog(Shell shell, IChromatogramSelection<?, ?> chromatogramSelection) {
 		super(shell);
 		this.chromatogramSelection = chromatogramSelection;
 	}

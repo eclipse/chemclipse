@@ -54,7 +54,7 @@ public class ScanSelectionHandler extends AbstractHandledEventProcessor implemen
 	@Override
 	public void handleEvent(BaseChart baseChart, Event event) {
 
-		IChromatogramSelection<?, ?>chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
+		IChromatogramSelection<?, ?> chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
 		if(chromatogramSelection != null) {
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			int retentionTime = (int)baseChart.getSelectedPrimaryAxisValue(event.x, IExtendedChart.X_AXIS);

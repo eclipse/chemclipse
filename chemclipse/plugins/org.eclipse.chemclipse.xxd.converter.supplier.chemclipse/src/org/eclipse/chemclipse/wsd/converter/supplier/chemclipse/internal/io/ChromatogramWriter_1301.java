@@ -623,7 +623,7 @@ public class ChromatogramWriter_1301 extends AbstractChromatogramWriter implemen
 					ZipEntry zipEntryChromtogram = new ZipEntry(prefix);
 					zipOutputStream.putNextEntry(zipEntryChromtogram);
 					chromatogramWriterCSD.writeChromatogram(zipOutputStream, prefix, (IChromatogramCSD)referencedChromatogram, monitor);
-				} else if(referencedChromatogram instanceof IChromatogramWSD) {
+				} else if(referencedChromatogram instanceof IChromatogramWSD chromatogramWSD) {
 					/*
 					 * WSD
 					 */
@@ -633,7 +633,7 @@ public class ChromatogramWriter_1301 extends AbstractChromatogramWriter implemen
 					prefix += IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
 					ZipEntry zipEntryChromtogram = new ZipEntry(prefix);
 					zipOutputStream.putNextEntry(zipEntryChromtogram);
-					chromatogramWriterWSD.writeChromatogram(zipOutputStream, prefix, (IChromatogramWSD)referencedChromatogram, monitor);
+					chromatogramWriterWSD.writeChromatogram(zipOutputStream, prefix, chromatogramWSD, monitor);
 				}
 				//
 				subMonitor.worked(20);

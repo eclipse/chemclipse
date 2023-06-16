@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,8 +23,6 @@ import java.util.Set;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.io.IFileHelper;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.ChromatogramReaderCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -98,7 +95,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 	private static final Logger logger = Logger.getLogger(ChromatogramReader_1301.class);
 
 	@Override
-	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramWSD chromatogram = null;
 		ZipFile zipFile = new ZipFile(file);
@@ -114,13 +111,13 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramOverview chromatogramOverview = null;
 		ZipFile zipFile = new ZipFile(file);
 		try {
 			if(isValidFileFormat(zipFile)) {
-				chromatogramOverview = readOverviewFromZipFile(zipFile, "", monitor);
+				chromatogramOverview = readOverviewFromZipFile(zipFile, "");
 			}
 		} finally {
 			zipFile.close();
@@ -146,12 +143,12 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 		return readZipData(zipFile, directoryPrefix, file, monitor);
 	}
 
-	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, String directoryPrefix, IProgressMonitor monitor) throws IOException {
+	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, String directoryPrefix) throws IOException {
 
 		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + IFormat.FILE_TIC_WSD);
 		//
 		IVendorChromatogram chromatogram = new VendorChromatogram();
-		readScansOverview(dataInputStream, chromatogram, monitor);
+		readScansOverview(dataInputStream, chromatogram);
 		//
 		dataInputStream.close();
 		//
@@ -197,7 +194,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_WSD), closeStream, chromatogram);
 			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_WSD), closeStream, chromatogram);
 			subMonitor.worked(20);
-			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_WSD), closeStream, chromatogram);
+			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_WSD), chromatogram);
 			readSeparationColumn(getDataInputStream(object, directoryPrefix + IFormat.FILE_SEPARATION_COLUMN_WSD), closeStream, chromatogram);
 			setAdditionalInformation(file, chromatogram);
 			subMonitor.worked(20);
@@ -220,7 +217,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 		return chromatogram;
 	}
 
-	private void readScansOverview(DataInputStream dataInputStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readScansOverview(DataInputStream dataInputStream, IChromatogramWSD chromatogram) throws IOException {
 
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; ++scan) {
@@ -314,7 +311,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 	private void readBaseline(DataInputStream dataInputStream, boolean closeStream, IChromatogramWSD chromatogram) throws IOException {
 
 		int scans = dataInputStream.readInt();
-		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
+		List<IBaselineElement> baselineElements = new ArrayList<>();
 		for(int scan = 1; scan <= scans; ++scan) {
 			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			int retentionTime = dataInputStream.readInt();
@@ -485,7 +482,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			Set<String> synonyms = new HashSet<>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
@@ -533,7 +530,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 
 	private List<IInternalStandard> readInternalStandards(DataInputStream dataInputStream) throws IOException {
 
-		List<IInternalStandard> internalStandards = new ArrayList<IInternalStandard>();
+		List<IInternalStandard> internalStandards = new ArrayList<>();
 		int numberOfInternalStandards = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfInternalStandards; i++) {
 			String name = readString(dataInputStream);
@@ -583,7 +580,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 
 	private List<IIntegrationEntry> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
 
-		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 		int numberOfIntegrationEntries = dataInputStream.readInt(); // Number Integration Entries
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double integratedArea = dataInputStream.readDouble(); // Integrated Area
@@ -610,7 +607,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			Set<String> synonyms = new HashSet<>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
@@ -678,7 +675,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 		}
 	}
 
-	private void readMiscellaneous(DataInputStream dataInputStream, boolean closeStream, IChromatogramWSD chromatogram) throws IOException {
+	private void readMiscellaneous(DataInputStream dataInputStream, IChromatogramWSD chromatogram) throws IOException {
 
 		int numberOfEntries = dataInputStream.readInt();
 		for(int i = 0; i < numberOfEntries; i++) {
@@ -756,11 +753,10 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 	private void parseChromatogram(Object object, String dataType, String directoryPrefix, IChromatogramWSD chromatogram, boolean closeStream, IProgressMonitor monitor) throws IOException {
 
 		String directory = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
-		if(object instanceof ZipFile) {
+		if(object instanceof ZipFile zipFile) {
 			/*
 			 * Chromatogram
 			 */
-			ZipFile zipFile = (ZipFile)object;
 			if(dataType.equals(IFormat.DATA_TYPE_MSD)) {
 				ChromatogramReaderMSD chromatogramReaderMSD = new ChromatogramReaderMSD();
 				IChromatogramMSD chromatogramMSD = chromatogramReaderMSD.read(zipFile, directory, monitor);
@@ -817,7 +813,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			Set<String> synonyms = new HashSet<>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
