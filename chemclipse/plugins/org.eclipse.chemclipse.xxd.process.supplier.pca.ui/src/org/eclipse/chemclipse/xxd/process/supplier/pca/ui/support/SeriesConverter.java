@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -107,16 +107,15 @@ public class SeriesConverter {
 		return scatterSeriesDataList;
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	public static List<IScatterSeriesData> sampleToSeries(IResultsPCA resultsPCA, int pcX, int pcY, Map<String, IResultPCA> extractedPcaResults) {
+	public static List<IScatterSeriesData> sampleToSeries(IResultsPCA<? extends IResultPCA, ?> resultsPCA, int pcX, int pcY, Map<String, IResultPCA> extractedPcaResults) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<IScatterSeriesData>();
+		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
 		extractedPcaResults.clear();
 		/*
 		 * Group Colors
 		 */
-		List<IResultPCA> resultList = resultsPCA.getPcaResultList();
+		List<? extends IResultPCA> resultList = resultsPCA.getPcaResultList();
 		LabelOptionPCA labelOptionPCA = resultsPCA.getPcaSettings().getLabelOptionPCA();
 		//
 		for(int i = 0; i < resultList.size(); i++) {

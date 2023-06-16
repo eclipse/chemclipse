@@ -21,5 +21,5 @@ public interface IChromatogramProcessorSupport {
 	 * @param chromatogramSelection
 	 */
 	
-	void fireUpdate(IChromatogramSelection<?, ?>chromatogramSelection);
+	void fireUpdate(IChromatogramSelection<?, ?> chromatogramSelection);
 }

@@ -15,5 +15,5 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public interface IChromatogramReferencesListener {
 
-	void update(IChromatogramSelection<?, ?>chromatogramSelection);
+	void update(IChromatogramSelection<?, ?> chromatogramSelection);
 }

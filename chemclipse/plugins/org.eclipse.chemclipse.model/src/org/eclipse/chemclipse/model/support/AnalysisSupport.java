@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -116,7 +116,7 @@ public class AnalysisSupport implements IAnalysisSupport {
 		 */
 		numberOfScans -= lastSegmentWidth;
 		int segmentParts = numberOfScans / segmentWidth;
-		List<X> analysisSegments = new ArrayList<X>();
+		List<X> analysisSegments = new ArrayList<>();
 		for(int i = 1; i <= segmentParts; i++) {
 			analysisSegments.add(constructor.apply(startScan, segmentWidth));
 			startScan += segmentWidth;

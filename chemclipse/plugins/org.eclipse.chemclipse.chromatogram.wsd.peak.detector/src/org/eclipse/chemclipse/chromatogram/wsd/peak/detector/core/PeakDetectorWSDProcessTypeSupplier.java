@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -61,6 +61,7 @@ public class PeakDetectorWSDProcessTypeSupplier implements IProcessTypeSupplier 
 
 		@SuppressWarnings("unchecked")
 		public PeakDetectorProcessorSupplier(IPeakDetectorSupplier supplier, IProcessTypeSupplier parent) {
+
 			super("PeakDetectorWSD." + supplier.getId(), supplier.getPeakDetectorName(), supplier.getDescription(), (Class<IPeakDetectorSettingsWSD>)supplier.getSettingsClass(), parent, DataType.WSD);
 			this.supplier = supplier;
 		}
@@ -68,8 +69,7 @@ public class PeakDetectorWSDProcessTypeSupplier implements IProcessTypeSupplier 
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IPeakDetectorSettingsWSD processSettings, IMessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-				IChromatogramSelectionWSD chromatogramSelectionCSD = (IChromatogramSelectionWSD)chromatogramSelection;
+			if(chromatogramSelection instanceof IChromatogramSelectionWSD chromatogramSelectionCSD) {
 				if(processSettings instanceof IPeakDetectorSettingsWSD) {
 					messageConsumer.addMessages(PeakDetectorWSD.detect(chromatogramSelectionCSD, processSettings, supplier.getId(), monitor));
 				} else {

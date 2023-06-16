@@ -29,7 +29,7 @@ public class ChromatogramSelectionHandler implements ICustomSelectionHandler {
 	@Override
 	public void handleUserSelection(Event event) {
 
-		IChromatogramSelection<?, ?>chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
+		IChromatogramSelection<?, ?> chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
 		if(chromatogramSelection != null) {
 			/*
 			 * Get the range.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.csv.io.core;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,8 +22,6 @@ import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
@@ -34,7 +31,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.csv.model.VendorChromatogra
 import org.eclipse.chemclipse.msd.converter.supplier.csv.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.model.VendorScan;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
@@ -49,7 +45,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 	private static final int ION_COLUMN_START = 3;
 
 	@Override
-	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		if(isValidFileFormat(file)) {
 			return readChromatogram(file, false);
@@ -58,7 +54,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		if(isValidFileFormat(file)) {
 			return readChromatogram(file, true);
@@ -101,8 +97,8 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 			 * Get the header inclusive ion description.
 			 */
 			Map<Integer, Float> ionsMap = getIonMap(csvParser);
-			for(CSVRecord record : csvParser.getRecords()) {
-				IVendorMassSpectrum supplierMassSpectrum = getScan(record, ionsMap, zeroMarker, overview);
+			for(CSVRecord csvRecord : csvParser.getRecords()) {
+				IVendorMassSpectrum supplierMassSpectrum = getScan(csvRecord, ionsMap, zeroMarker, overview);
 				chromatogram.addScan(supplierMassSpectrum);
 			}
 			//
@@ -115,7 +111,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 
 	private Map<Integer, Float> getIonMap(CSVParser csvParser) {
 
-		Map<Integer, Float> ions = new HashMap<Integer, Float>();
+		Map<Integer, Float> ions = new HashMap<>();
 		Map<String, Integer> headerMap = csvParser.getHeaderMap();
 		for(Map.Entry<String, Integer> entry : headerMap.entrySet()) {
 			try {
@@ -132,14 +128,14 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 
 		IVendorMassSpectrum massSpectrum = new VendorScan();
 		String retentionTimeInMilliseconds = csvRecord.get(0);
-		int retentionTime = Integer.valueOf(retentionTimeInMilliseconds);
+		int retentionTime = Integer.parseInt(retentionTimeInMilliseconds);
 		massSpectrum.setRetentionTime(retentionTime);
 		/*
 		 * The retention time in minutes will be not used.
 		 */
 		// String retentionTimeInMinutes = lineEntries.get(1);
 		String retentionIndexValue = csvRecord.get(2);
-		float retentionIndex = Float.valueOf(retentionIndexValue);
+		float retentionIndex = Float.parseFloat(retentionIndexValue);
 		massSpectrum.setRetentionIndex(retentionIndex);
 		if(overview) {
 			try {
@@ -164,22 +160,22 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		for(int index = ION_COLUMN_START; index < csvRecord.size(); index++) {
 			String abundanceValue = csvRecord.get(index);
 			if(!abundanceValue.startsWith(zeroMarker)) {
-				float abundance = Float.valueOf(abundanceValue);
+				float abundance = Float.parseFloat(abundanceValue);
 				abundanceTotalSignal += abundance;
 			}
 		}
 		//
-		return new VendorIon(AbstractIon.TIC_ION, abundanceTotalSignal);
+		return new VendorIon(IIon.TIC_ION, abundanceTotalSignal);
 	}
 
 	private List<IIon> getIons(CSVRecord csvRecord, Map<Integer, Float> ionsMap, String zeroMarker) {
 
-		List<IIon> ions = new ArrayList<IIon>();
+		List<IIon> ions = new ArrayList<>();
 		for(int index = ION_COLUMN_START; index < csvRecord.size(); index++) {
 			String abundanceValue = csvRecord.get(index);
 			if(!abundanceValue.startsWith(zeroMarker)) {
 				try {
-					float abundance = Float.valueOf(abundanceValue);
+					float abundance = Float.parseFloat(abundanceValue);
 					float ion = ionsMap.get(index);
 					IIon csvIon = new VendorIon(ion, abundance);
 					ions.add(csvIon);

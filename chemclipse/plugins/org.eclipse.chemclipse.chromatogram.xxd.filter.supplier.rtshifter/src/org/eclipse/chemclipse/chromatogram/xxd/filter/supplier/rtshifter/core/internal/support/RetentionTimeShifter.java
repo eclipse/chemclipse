@@ -29,7 +29,7 @@ public class RetentionTimeShifter extends AbstractRetentionTimeModifier {
 
 	}
 
-	public static void shiftRetentionTimes(IChromatogramSelection<?, ?>chromatogramSelection, FilterSettingsShift filterSettings) throws FilterException {
+	public static void shiftRetentionTimes(IChromatogramSelection<?, ?> chromatogramSelection, FilterSettingsShift filterSettings) throws FilterException {
 
 		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
 			throw new FilterException("The chromatogram must not be null.");

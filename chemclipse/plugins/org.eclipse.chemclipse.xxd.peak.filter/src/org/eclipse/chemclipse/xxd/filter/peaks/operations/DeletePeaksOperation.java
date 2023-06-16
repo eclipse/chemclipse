@@ -25,13 +25,14 @@ import org.eclipse.core.runtime.Status;
 
 public class DeletePeaksOperation extends AbstractOperation {
 
-	private IChromatogramSelection<?, ?> chromatogramSelection;
+	private IChromatogramSelection<IPeak, ?> chromatogramSelection;
 	private List<IPeak> peaksToDelete;
 
+	@SuppressWarnings("unchecked")
 	public DeletePeaksOperation(IChromatogramSelection<?, ?> chromatogramSelection, List<IPeak> peaksToDelete) {
 
 		super("Delete Peaks");
-		this.chromatogramSelection = chromatogramSelection;
+		this.chromatogramSelection = (IChromatogramSelection<IPeak, ?>)chromatogramSelection;
 		this.peaksToDelete = peaksToDelete;
 	}
 
@@ -53,11 +54,10 @@ public class DeletePeaksOperation extends AbstractOperation {
 		return !peaksToDelete.isEmpty();
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<IPeak> chromatogram = chromatogramSelection.getChromatogram();
 		chromatogram.removePeaks(peaksToDelete);
 		updateChromatogramSelection();
 		return Status.OK_STATUS;
@@ -83,10 +83,9 @@ public class DeletePeaksOperation extends AbstractOperation {
 	}
 
 	@Override
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<IPeak> chromatogram = chromatogramSelection.getChromatogram();
 		for(IPeak peak : peaksToDelete) {
 			chromatogram.addPeak(peak);
 		}

@@ -96,7 +96,7 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 
 	
 	@Override
-	public void fireUpdate(IChromatogramSelection<?, ?>chromatogramSelection) {
+	public void fireUpdate(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		/*
 		 * Fire an update to inform all listeners.

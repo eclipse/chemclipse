@@ -71,7 +71,7 @@ public interface ITotalScanSignalExtractor {
 	 * @return {@link ITotalScanSignal}
 	 */
 	
-	ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?>chromatogramSelection);
+	ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?> chromatogramSelection);
 
 	
 	ITotalScanSignals getTotalScanSignals(IChromatogram<?> chromatogram, boolean validatePositive, boolean condenseCycleNumberScans);
@@ -84,8 +84,8 @@ public interface ITotalScanSignalExtractor {
 	 * @return {@link ITotalScanSignal}
 	 */
 	
-	ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?>chromatogramSelection, boolean validatePositive);
+	ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?> chromatogramSelection, boolean validatePositive);
 
 	
-	ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?>chromatogramSelection, boolean validatePositive, boolean condenseCycleNumberScans);
+	ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?> chromatogramSelection, boolean validatePositive, boolean condenseCycleNumberScans);
 }

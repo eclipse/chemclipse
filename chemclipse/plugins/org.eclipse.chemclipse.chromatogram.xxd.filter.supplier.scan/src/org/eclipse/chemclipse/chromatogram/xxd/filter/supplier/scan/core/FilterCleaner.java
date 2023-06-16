@@ -42,7 +42,7 @@ import org.eclipse.core.runtime.SubMonitor;
 public class FilterCleaner extends AbstractChromatogramFilter {
 
 	@Override
-	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?>chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
@@ -60,13 +60,13 @@ public class FilterCleaner extends AbstractChromatogramFilter {
 	}
 
 	@Override
-	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?>chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsCleaner filterSettings = PreferenceSupplier.getCleanerFilterSettings();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void applyChromatogramCleanerFilter(IChromatogramSelection<?, ?>chromatogramSelection, IProgressMonitor monitor) throws FilterException {
+	private void applyChromatogramCleanerFilter(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) throws FilterException {
 
 		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());

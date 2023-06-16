@@ -16,10 +16,10 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 public abstract class AbstractChromatogramProcessor implements IChromatogramProcessor {
 
 	
-	private IChromatogramSelection<?, ?>chromatogramSelection;
+	private IChromatogramSelection<?, ?> chromatogramSelection;
 
 	
-	public AbstractChromatogramProcessor(IChromatogramSelection<?, ?>chromatogramSelection) {
+	public AbstractChromatogramProcessor(IChromatogramSelection<?, ?> chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
