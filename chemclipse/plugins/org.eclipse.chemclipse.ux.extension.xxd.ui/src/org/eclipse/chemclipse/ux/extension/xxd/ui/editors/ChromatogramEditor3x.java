@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
@@ -95,19 +96,21 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		String fileName = input.getName();
 		fileName = fileName.substring(0, fileName.length() - 4);
 		setPartName(fileName);
+		File file = null;
 		//
 		if(input instanceof IFileEditorInput fileEditorInput) {
-			File file = fileEditorInput.getFile().getLocation().toFile();
-			//
-			part.setLabel(ExtensionMessages.chromatogram);
-			Map<String, Object> map = new HashMap<>();
-			map.put(EditorSupport.MAP_FILE, file.getAbsolutePath());
-			map.put(EditorSupport.MAP_BATCH, false);
-			part.setObject(map);
-			part.setTooltip(ExtensionMessages.chromatogramFromProjectExplorer);
+			file = fileEditorInput.getFile().getLocation().toFile();
+		} else if(input instanceof IURIEditorInput uriEditorInput) {
+			file = new File(uriEditorInput.getURI());
 		} else {
-			throw new PartInitException("The file could't be loaded.");
+			throw new PartInitException("The file couldn't be loaded.");
 		}
+		part.setLabel(ExtensionMessages.chromatogram);
+		Map<String, Object> map = new HashMap<>();
+		map.put(EditorSupport.MAP_FILE, file.getAbsolutePath());
+		map.put(EditorSupport.MAP_BATCH, false);
+		part.setObject(map);
+		part.setTooltip(ExtensionMessages.chromatogramFromProjectExplorer);
 	}
 
 	@Override
@@ -184,9 +187,8 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		return false;
 	}
 
-	
 	@Override
-	public IChromatogramSelection<?, ?>getChromatogramSelection() {
+	public IChromatogramSelection<?, ?> getChromatogramSelection() {
 
 		if(chromatogramEditor != null) {
 			return chromatogramEditor.getChromatogramSelection();
