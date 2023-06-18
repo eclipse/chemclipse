@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,12 +29,8 @@ import org.eclipse.chemclipse.model.methods.ListProcessEntryContainer;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
-import org.eclipse.chemclipse.progress.core.InfoType;
-import org.eclipse.chemclipse.progress.core.StatusLineLogger;
 import org.eclipse.chemclipse.rcp.app.ui.console.MessageConsoleAppender;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -55,11 +50,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSup
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PreferencesConfig;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageChromatogramExport;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
@@ -354,7 +346,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
 				if(object instanceof IProcessMethod processMethod) {
-					runMethod(processMethod, e.display.getActiveShell());
+					MethodSupport.runMethod(methodListener, processMethod, e.display.getActiveShell());
 					UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "The process method has been applied.");
 				}
 			}
@@ -476,40 +468,6 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 		if(combo.getSelectionIndex() == -1) {
 			combo.select(0);
 			PreferenceSupplier.setSelectedMethodName(combo.getItem(0));
-		}
-	}
-
-	private void runMethod(IProcessMethod processMethod, Shell shell) {
-
-		if(methodListener != null && processMethod != null) {
-			try {
-				/*
-				 * Resume at a given position?
-				 */
-				int resumeIndex = ResumeMethodSupport.selectResumeIndex(shell, processMethod);
-				processMethod.setResumeIndex(resumeIndex);
-				//
-				ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
-				dialog.run(true, false, new IRunnableWithProgress() {
-
-					@Override
-					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-						methodListener.execute(processMethod, monitor);
-					}
-				});
-			} catch(InvocationTargetException e) {
-				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-				processingInfo.addErrorMessage(processMethod.getName(), "Execution failed", e.getCause());
-				StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, ExtensionMessages.processMethodFailedSeeFeedback);
-				ProcessingInfoPartSupport.getInstance().update(processingInfo);
-			} catch(InterruptedException e) {
-				Thread.currentThread().interrupt();
-			} catch(MethodCancelException e) {
-				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-				processingInfo.addWarnMessage(processMethod.getName(), ExtensionMessages.processMethodExecutionCanceled);
-				ProcessingInfoPartSupport.getInstance().update(processingInfo);
-			}
 		}
 	}
 
