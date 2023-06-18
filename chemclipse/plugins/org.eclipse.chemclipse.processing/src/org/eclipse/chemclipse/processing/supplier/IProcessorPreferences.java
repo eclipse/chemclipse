@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,12 +19,6 @@ import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
 import org.eclipse.chemclipse.support.settings.serialization.SettingsSerialization;
 
-/**
- * Represents user preference for a processor
- * 
- * @author Christoph Läubrich
- *
- */
 public interface IProcessorPreferences<SettingType> {
 
 	public static final SettingsSerialization DEFAULT_SETTINGS_SERIALIZATION = new JSONSerialization();
@@ -81,17 +75,28 @@ public interface IProcessorPreferences<SettingType> {
 	 * 
 	 * @param settingsClass
 	 * @return the currently stored user settings for this processor
-	 * @throws IOException
 	 */
-	default SettingType getUserSettings() throws IOException {
+	default SettingType getUserSettings() {
 
 		String serializedString = getUserSettingsAsString();
 		Class<SettingType> settingsClass = getSupplier().getSettingsClass();
 		if(serializedString == null || settingsClass == null) {
 			return null;
 		}
-		SettingType defaultInstance = getSupplier().getSettingsParser().createDefaultInstance();
-		getSerialization().updateFromString(defaultInstance, serializedString);
+		/*
+		 * Sometimes, the dialogs might no appear if errors occur
+		 * when parsing the user settings. In such a case, better
+		 * return null so that the user has to select the user
+		 * settings manually again instead of displaying no dialog.
+		 */
+		SettingType defaultInstance = null;
+		try {
+			defaultInstance = getSupplier().getSettingsParser().createDefaultInstance();
+			getSerialization().updateFromString(defaultInstance, serializedString);
+		} catch(IOException e) {
+			return null;
+		}
+		//
 		return defaultInstance;
 	}
 
