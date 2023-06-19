@@ -397,9 +397,9 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 		fileDialog.setOverwrite(true);
 		fileDialog.setText(ExtensionMessages.processMethod);
-		fileDialog.setFileName(MethodConverter.DEFAULT_METHOD_FILE_NAME);
-		fileDialog.setFilterExtensions(MethodConverter.DEFAULT_METHOD_FILE_EXTENSIONS);
-		fileDialog.setFilterNames(MethodConverter.DEFAULT_METHOD_FILE_NAMES);
+		fileDialog.setFileName(MethodConverter.FILE_NAME);
+		fileDialog.setFilterExtensions(new String[]{MethodConverter.FILTER_EXTENSION});
+		fileDialog.setFilterNames(new String[]{MethodConverter.FILTER_NAME});
 		fileDialog.setFilterPath(MethodConverter.getUserMethodDirectory().getAbsolutePath());
 		//
 		File file = null;

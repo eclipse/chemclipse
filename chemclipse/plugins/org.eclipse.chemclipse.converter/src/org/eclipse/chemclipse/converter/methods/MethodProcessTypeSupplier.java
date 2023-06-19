@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -175,7 +175,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 	private List<IProcessSupplier<?>> parseBundleMethods(Bundle bundle) {
 
 		List<IProcessSupplier<?>> processSupplierList = new ArrayList<>();
-		Enumeration<URL> entries = bundle.findEntries(PROCESSORS_ENTRY_PATH, "*." + MethodConverter.DEFAULT_METHOD_FILE_NAME_EXTENSION, true);
+		Enumeration<URL> entries = bundle.findEntries(PROCESSORS_ENTRY_PATH, "*" + MethodConverter.FILE_EXTENSION, true);
 		//
 		if(entries != null) {
 			while(entries.hasMoreElements()) {
@@ -189,7 +189,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 						String absolutePath = PathResolver.getAbsolutePath(bundle, urlPath);
 						File sourceFile = new File(absolutePath);
 						//
-						String path = url.getPath().replace(PROCESSORS_ENTRY_PATH, "").replace("." + MethodConverter.DEFAULT_METHOD_FILE_NAME_EXTENSION, "");
+						String path = url.getPath().replace(PROCESSORS_ENTRY_PATH, "").replace(MethodConverter.FILE_EXTENSION, "");
 						String externalForm = url.toExternalForm();
 						IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.load(inputStream, externalForm, null);
 						IProcessMethod processMethod = processingInfo.getProcessingResult();
@@ -223,7 +223,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 			File[] listFiles = systemMethodFolder.listFiles();
 			if(listFiles != null) {
 				for(File file : listFiles) {
-					if(file.isFile() && file.getName().toLowerCase().endsWith("." + MethodConverter.DEFAULT_METHOD_FILE_NAME_EXTENSION)) {
+					if(file.isFile() && file.getName().toLowerCase().endsWith(MethodConverter.FILE_EXTENSION)) {
 						try {
 							try (InputStream inputStream = new FileInputStream(file)) {
 								IProcessingInfo<IProcessMethod> load = MethodConverter.load(inputStream, file.getAbsolutePath(), null);

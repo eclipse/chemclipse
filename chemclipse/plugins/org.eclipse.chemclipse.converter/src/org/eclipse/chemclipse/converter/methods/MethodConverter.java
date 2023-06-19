@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,8 +26,8 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.Adapters;
@@ -40,40 +40,41 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class MethodConverter {
 
+	public static final String DEFAULT_METHOD_CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.processMethodSupplier";
+	//
+	public static final String DESCRIPTION = "Process Method";
+	public static final String FILE_EXTENSION = ".ocm";
+	public static final String FILE_NAME = DESCRIPTION.replaceAll("\\s", "") + FILE_EXTENSION;
+	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
+	public static final String FILTER_NAME = DESCRIPTION + " (*" + FILE_EXTENSION + ")";
+	/*
+	 * 5MB should be enough for all cases and don't hurt much...
+	 */
 	private static final String NAME_IMPORT = "Method Import Converter";
 	private static final String NAME_EXPORT = "Method Export Converter";
-	// 5MB should be enough for all cases and don't hurt much...
 	private static final int STREAM_BUFFER_SIZE = 1024 * 1024 * 5;
-	/*
-	 * Keep in sync with:
-	 * org.eclipse.chemclipse.xxd.converter.supplier.chemclipse
-	 */
-	public static final String DEFAULT_METHOD_CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.processMethodSupplier";
-	public static final String DEFAULT_METHOD_FILE_NAME_EXTENSION = "ocm";
-	public static final String DEFAULT_METHOD_FILE_NAME = "ProcessMethod." + DEFAULT_METHOD_FILE_NAME_EXTENSION;
-	public static final String[] DEFAULT_METHOD_FILE_EXTENSIONS = new String[]{"*." + DEFAULT_METHOD_FILE_NAME_EXTENSION};
-	public static final String[] DEFAULT_METHOD_FILE_NAMES = new String[]{"Process Method (*." + DEFAULT_METHOD_FILE_NAME_EXTENSION + ")"};
 	//
 	private static final Logger logger = Logger.getLogger(MethodConverter.class);
 	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.converter.processMethodSupplier";
 	/*
 	 * These are the attributes of the extension point elements.
 	 */
-	private static final String ID = "id"; //$NON-NLS-1$
-	private static final String DESCRIPTION = "description"; //$NON-NLS-1$
-	private static final String FILTER_NAME = "filterName"; //$NON-NLS-1$
-	private static final String FILE_EXTENSION = "fileExtension"; //$NON-NLS-1$
-	private static final String FILE_NAME = "fileName"; //$NON-NLS-1$
-	private static final String IMPORT_CONVERTER = "importConverter"; //$NON-NLS-1$
-	private static final String EXPORT_CONVERTER = "exportConverter"; //$NON-NLS-1$
-	private static final String IS_EXPORTABLE = "isExportable"; //$NON-NLS-1$
-	private static final String IS_IMPORTABLE = "isImportable"; //$NON-NLS-1$
-	private static final String IMPORT_MAGIC_NUMBER_MATCHER = "importMagicNumberMatcher"; //$NON-NLS-1$
+	private static final String EXTENSION_POINT_ID = "id"; //$NON-NLS-1$
+	private static final String EXTENSION_POINT_DESCRIPTION = "description"; //$NON-NLS-1$
+	private static final String EXTENSION_POINT_FILTER_NAME = "filterName"; //$NON-NLS-1$
+	private static final String EXTENSION_POINT_FILE_EXTENSION = "fileExtension"; //$NON-NLS-1$
+	private static final String EXTENSION_POINT_FILE_NAME = "fileName"; //$NON-NLS-1$
+	private static final String EXTENSION_POINT_IMPORT_CONVERTER = "importConverter"; //$NON-NLS-1$
+	private static final String EXTENSION_POINT_EXPORT_CONVERTER = "exportConverter"; //$NON-NLS-1$
+	private static final String EXTENSION_POINT_IS_EXPORTABLE = "isExportable"; //$NON-NLS-1$
+	private static final String EXTENSION_POINT_IS_IMPORTABLE = "isImportable"; //$NON-NLS-1$
+	private static final String EXTENSION_POINT_IMPORT_MAGIC_NUMBER_MATCHER = "importMagicNumberMatcher"; //$NON-NLS-1$
 
 	/**
 	 * This class has only static methods.
 	 */
 	private MethodConverter() {
+
 	}
 
 	public static IProcessingInfo<IProcessMethod> convert(final File file, IProgressMonitor monitor) {
@@ -182,7 +183,7 @@ public class MethodConverter {
 		IMethodImportConverter instance = null;
 		if(element != null) {
 			try {
-				instance = (IMethodImportConverter)element.createExecutableExtension(IMPORT_CONVERTER);
+				instance = (IMethodImportConverter)element.createExecutableExtension(EXTENSION_POINT_IMPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}
@@ -197,7 +198,7 @@ public class MethodConverter {
 		IMethodExportConverter instance = null;
 		if(element != null) {
 			try {
-				instance = (IMethodExportConverter)element.createExecutableExtension(EXPORT_CONVERTER);
+				instance = (IMethodExportConverter)element.createExecutableExtension(EXTENSION_POINT_EXPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}
@@ -213,7 +214,7 @@ public class MethodConverter {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
 		for(IConfigurationElement element : elements) {
-			if(element.getAttribute(ID).equals(converterId)) {
+			if(element.getAttribute(EXTENSION_POINT_ID).equals(converterId)) {
 				return element;
 			}
 		}
@@ -229,13 +230,13 @@ public class MethodConverter {
 		for(IConfigurationElement element : extensions) {
 			//
 			supplier = new MethodSupplier();
-			supplier.setFileExtension(element.getAttribute(FILE_EXTENSION));
-			supplier.setFileName(element.getAttribute(FILE_NAME));
-			supplier.setId(element.getAttribute(ID));
-			supplier.setDescription(element.getAttribute(DESCRIPTION));
-			supplier.setFilterName(element.getAttribute(FILTER_NAME));
-			supplier.setExportable(Boolean.valueOf(element.getAttribute(IS_EXPORTABLE)));
-			supplier.setImportable(Boolean.valueOf(element.getAttribute(IS_IMPORTABLE)));
+			supplier.setFileExtension(element.getAttribute(EXTENSION_POINT_FILE_EXTENSION));
+			supplier.setFileName(element.getAttribute(EXTENSION_POINT_FILE_NAME));
+			supplier.setId(element.getAttribute(EXTENSION_POINT_ID));
+			supplier.setDescription(element.getAttribute(EXTENSION_POINT_DESCRIPTION));
+			supplier.setFilterName(element.getAttribute(EXTENSION_POINT_FILTER_NAME));
+			supplier.setExportable(Boolean.valueOf(element.getAttribute(EXTENSION_POINT_IS_EXPORTABLE)));
+			supplier.setImportable(Boolean.valueOf(element.getAttribute(EXTENSION_POINT_IS_IMPORTABLE)));
 			supplier.setMagicNumberMatcher(getMagicNumberMatcher(element));
 			converterSupport.add(supplier);
 		}
@@ -273,7 +274,7 @@ public class MethodConverter {
 
 		IMagicNumberMatcher magicNumberMatcher;
 		try {
-			magicNumberMatcher = (IMagicNumberMatcher)element.createExecutableExtension(IMPORT_MAGIC_NUMBER_MATCHER);
+			magicNumberMatcher = (IMagicNumberMatcher)element.createExecutableExtension(EXTENSION_POINT_IMPORT_MAGIC_NUMBER_MATCHER);
 		} catch(Exception e) {
 			magicNumberMatcher = null;
 		}
