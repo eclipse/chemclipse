@@ -40,12 +40,12 @@ public enum PeakType implements ILabel {
 	VV("VV (Valley)"), //
 	VB("VB (Valley, Baseline)"), //
 	MM("MM (Manual)"), //
-	PV("PV (Perpendicular Drop, Valley"), //
-	PB("PB (Perpendicular Drop, Baseline"), //
-	VP("VP (Valley, Perpendicular Drop"), //
-	BP("BP (Baseline, Perpendicular Drop"), //
+	PV("PV (Perpendicular Drop, Valley)"), //
+	PB("PB (Perpendicular Drop, Baseline)"), //
+	VP("VP (Valley, Perpendicular Drop)"), //
+	BP("BP (Baseline, Perpendicular Drop)"), //
 	DD("DD (Deconvolution)"), //
-	TS("TS (Tangent Skim"); //
+	TS("TS (Tangent Skim)"); //
 
 	private String label = "";
 

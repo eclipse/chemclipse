@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,16 +16,15 @@ import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 
 public class PeakIntensityValues extends AbstractPeakIntensityValues implements IPeakIntensityValues {
 
-	/**
-	 * Renew the UUID on change.
-	 */
 	private static final long serialVersionUID = 8596503209176077779L;
 
 	public PeakIntensityValues() {
+
 		super();
 	}
 
 	public PeakIntensityValues(float maxIntensity) {
+
 		super(maxIntensity);
 	}
 }
