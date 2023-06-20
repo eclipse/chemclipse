@@ -750,7 +750,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		if(chromatogram instanceof IChromatogramWSD) {
 			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
 			for(Number number : wavelengths) {
-				double wavelength = number.doubleValue();
+				float wavelength = number.floatValue();
 				seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
 				availableSeriesIds.add(seriesId);
 				selectionSeries.add(seriesId);
@@ -760,7 +760,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 				//
 				if(!baseChart.isSeriesContained(seriesId)) {
 					ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
-					lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + description + ")");
+					lineSeriesData.getSettings().setDescription(Float.toString(wavelength) + " nm (" + description + ")");
 					lineSeriesDataList.add(lineSeriesData);
 				}
 			}
@@ -776,7 +776,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 					String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, false);
 					String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
 					for(Number number : wavelengths) {
-						double wavelength = number.doubleValue();
+						float wavelength = number.floatValue();
 						seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
 						availableSeriesIds.add(seriesId);
 						selectionSeries.add(seriesId);
@@ -786,7 +786,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						//
 						if(!baseChart.isSeriesContained(seriesId)) {
 							ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
-							lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + description + ")");
+							lineSeriesData.getSettings().setDescription(Float.toString(wavelength) + " nm (" + description + ")");
 							lineSeriesDataList.add(lineSeriesData);
 						}
 					}
@@ -834,7 +834,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		//
 		if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
 			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
-			for(double wavelength : chromatogramWSD.getWavelengths()) {
+			for(float wavelength : chromatogramWSD.getWavelengths()) {
 				String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
 				availableSeriesIds.add(seriesId);
 				selectionSeries.add(seriesId);
@@ -844,7 +844,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 				//
 				if(!baseChart.isSeriesContained(seriesId)) {
 					ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
-					lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + description + ")");
+					lineSeriesData.getSettings().setDescription(Float.toString(wavelength) + " nm (" + description + ")");
 					lineSeriesDataList.add(lineSeriesData);
 				}
 			}
@@ -859,7 +859,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		if(referencedChromatogram instanceof IChromatogramWSD referencedChromatogramWSD) {
 			String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, false);
 			String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j + 1;
-			for(double wavelength : referencedChromatogramWSD.getWavelengths()) {
+			for(float wavelength : referencedChromatogramWSD.getWavelengths()) {
 				//
 				String seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
 				availableSeriesIds.add(seriesId);
@@ -870,7 +870,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 				//
 				if(!baseChart.isSeriesContained(seriesId)) {
 					ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
-					lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + description + ")");
+					lineSeriesData.getSettings().setDescription(Float.toString(wavelength) + " nm (" + description + ")");
 					lineSeriesDataList.add(lineSeriesData);
 				}
 			}
@@ -892,12 +892,12 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			/*
 			 * Preselect certain wavelengths if too many are available.
 			 */
-			Set<Double> wavelengths = new HashSet<>();
-			List<Double> wavelengthList = new ArrayList<>(chromatogramWSD.getWavelengths());
+			Set<Float> wavelengths = new HashSet<>();
+			List<Float> wavelengthList = new ArrayList<>(chromatogramWSD.getWavelengths());
 			if(wavelengthList.size() > 40) {
 				Collections.sort(wavelengthList);
 				int h = 0;
-				for(Double wavelength : wavelengthList) {
+				for(Float wavelength : wavelengthList) {
 					if(h % 4 == 0) {
 						wavelengths.add(wavelength);
 					}

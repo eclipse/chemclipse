@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,14 +23,14 @@ public interface IMarkedWavelengths extends IMarkedTraces<IMarkedWavelength> {
 	 * 
 	 * @return Set<Double>
 	 */
-	Set<Double> getWavelengths();
+	Set<Float> getWavelengths();
 
 	/**
 	 * Adds the ion range with magnification factor = 1.
 	 * 
 	 * @param wavelength
 	 */
-	void add(double... wavelength);
+	void add(float... wavelength);
 
 	void add(Collection<? extends Number> wavelengths);
 

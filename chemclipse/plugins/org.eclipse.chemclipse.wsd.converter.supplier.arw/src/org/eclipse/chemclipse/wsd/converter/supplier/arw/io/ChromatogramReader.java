@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -35,7 +35,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReader extends AbstractChromatogramWSDReader {
 
-	private static final double INVALID_WAVELENGTH = -1.0d;
+	private static final float INVALID_WAVELENGTH = -1.0f;
 	private static final String DELIMITER = "\t";
 	private static final String WAVELENGTH = "Wavelength";
 	private static final String TIME = "Time";
@@ -69,7 +69,7 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 		/*
 		 * Parse via a buffered reader.
 		 */
-		List<Double> wavelengths = new ArrayList<>();
+		List<Float> wavelengths = new ArrayList<>();
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
 			String line = null;
 			while((line = bufferedReader.readLine()) != null) {
@@ -102,7 +102,7 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 								 * Wavelengths
 								 */
 								int index = 1;
-								for(double wavelength : wavelengths) {
+								for(float wavelength : wavelengths) {
 									if(wavelength != INVALID_WAVELENGTH) {
 										float intensity = extractIntensity(values[index]);
 										if(!Float.isNaN(intensity)) {
@@ -162,10 +162,10 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 		}
 	}
 
-	private double extractWavelength(String value) {
+	private float extractWavelength(String value) {
 
 		try {
-			return Double.parseDouble(value);
+			return Float.parseFloat(value);
 		} catch(NumberFormatException e) {
 			return INVALID_WAVELENGTH;
 		}

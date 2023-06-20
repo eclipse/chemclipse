@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,9 +26,9 @@ public class ExtractedSingleWavelengthSignals implements IExtractedSingleWavelen
 	private int startScan = 0;
 	private int stopScan = 0;
 	private IChromatogramWSD chromatogram = null;
-	private double wavelength;
+	private float wavelength;
 
-	public ExtractedSingleWavelengthSignals(int numberOfScans, double wavelength, IChromatogramWSD chromatogram) {
+	public ExtractedSingleWavelengthSignals(int numberOfScans, float wavelength, IChromatogramWSD chromatogram) {
 
 		if(numberOfScans <= 0) {
 			numberOfScans = 0;
@@ -51,7 +51,7 @@ public class ExtractedSingleWavelengthSignals implements IExtractedSingleWavelen
 	 * @param startScan
 	 * @param stopScan
 	 */
-	public ExtractedSingleWavelengthSignals(int startScan, int stopScan, double wavelength, IChromatogramWSD chromatogram) {
+	public ExtractedSingleWavelengthSignals(int startScan, int stopScan, float wavelength, IChromatogramWSD chromatogram) {
 
 		startScan = (startScan <= 0) ? 0 : startScan;
 		stopScan = (stopScan <= 0) ? 0 : stopScan;
@@ -127,7 +127,7 @@ public class ExtractedSingleWavelengthSignals implements IExtractedSingleWavelen
 	}
 
 	@Override
-	public double getWavelength() {
+	public float getWavelength() {
 
 		return wavelength;
 	}
@@ -135,8 +135,8 @@ public class ExtractedSingleWavelengthSignals implements IExtractedSingleWavelen
 	@Override
 	public void add(ITotalScanSignal totalScanSignal) {
 
-		if(totalScanSignal instanceof IExtractedSingleWavelengthSignal) {
-			add((IExtractedSingleWavelengthSignal)totalScanSignal);
+		if(totalScanSignal instanceof IExtractedSingleWavelengthSignal extractedSingleWavelengthSignal) {
+			add(extractedSingleWavelengthSignal);
 		} else {
 			// TODO: exception
 		}

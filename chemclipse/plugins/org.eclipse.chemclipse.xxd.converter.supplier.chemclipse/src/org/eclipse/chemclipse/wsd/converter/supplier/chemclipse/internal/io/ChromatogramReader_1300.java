@@ -230,7 +230,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			scanObject.setRetentionTime(retentionTime);
 			//
 			IScanSignalWSD scanSignalObject = new VendorScanSignal();
-			scanSignalObject.setWavelength(ISignal.TOTAL_INTENSITY);
+			scanSignalObject.setWavelength(IScanSignalWSD.TOTAL_INTENSITY);
 			scanSignalObject.setAbundance(totalSignal);
 			scanObject.addScanSignal(scanSignalObject);
 			chromatogram.addScan(scanObject);
@@ -264,7 +264,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			//
 			for(int scanSignal = 0; scanSignal < scanSignals; ++scanSignal) {
 				IScanSignalWSD scanSignalObject = new VendorScanSignal();
-				double wavelength = dataInputStream.readDouble();
+				float wavelength = (float)dataInputStream.readDouble();
 				float abundance = dataInputStream.readFloat();
 				//
 				scanSignalObject.setWavelength(wavelength);

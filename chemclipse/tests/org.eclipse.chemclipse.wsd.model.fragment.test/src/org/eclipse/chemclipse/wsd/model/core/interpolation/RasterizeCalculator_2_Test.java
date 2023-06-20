@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,18 +18,18 @@ import junit.framework.TestCase;
 
 public class RasterizeCalculator_2_Test extends TestCase {
 
-	private TreeMap<Double, Float> dataOriginal = new TreeMap<>();
+	private TreeMap<Float, Float> dataOriginal = new TreeMap<>();
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		dataOriginal.put(200.0d, 500.0f);
-		dataOriginal.put(202.0d, 1000.0f);
-		dataOriginal.put(204.0d, 1500.0f);
-		dataOriginal.put(206.0d, 1000.0f);
-		dataOriginal.put(208.0d, 800.0f);
-		dataOriginal.put(210.0d, 600.0f);
+		dataOriginal.put(200.0f, 500.0f);
+		dataOriginal.put(202.0f, 1000.0f);
+		dataOriginal.put(204.0f, 1500.0f);
+		dataOriginal.put(206.0f, 1000.0f);
+		dataOriginal.put(208.0f, 800.0f);
+		dataOriginal.put(210.0f, 600.0f);
 	}
 
 	@Override

@@ -169,7 +169,7 @@ public abstract class AbstractChromatogramSignalFilter extends AbstractChromatog
 		 */
 		for(IExtractedSingleWavelengthSignals totalSignals : extractedSingleWavelengthSignals) {
 			Iterator<Integer> itScan = totalSignals.iterator();
-			double wavelength = totalSignals.getWavelength();
+			float wavelength = totalSignals.getWavelength();
 			while(itScan.hasNext()) {
 				int scan = itScan.next();
 				Optional<IScanSignalWSD> optionalSignal = chromatogramWSD.getSupplierScan(scan).getScanSignal(wavelength);

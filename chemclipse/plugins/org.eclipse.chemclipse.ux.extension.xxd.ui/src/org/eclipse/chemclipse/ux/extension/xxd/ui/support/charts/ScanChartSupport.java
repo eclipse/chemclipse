@@ -100,11 +100,11 @@ public class ScanChartSupport {
 					ySeries.add((double)((mirrored) ? scan.getTotalSignal() * -1 : scan.getTotalSignal()));
 				}
 			} else if(displayType.equals(DisplayType.SWC)) {
-				if(scan instanceof IScanWSD && markedSignals instanceof IMarkedWavelengths) {
-					IScanWSD scanWSD = (IScanWSD)scan;
-					Iterator<IMarkedWavelength> markedWavelengths = ((IMarkedWavelengths)markedSignals).iterator();
-					if(markedWavelengths.hasNext()) {
-						Optional<IScanSignalWSD> scanSignal = scanWSD.getScanSignal(markedWavelengths.next().getTrace());
+				if(scan instanceof IScanWSD scanWSD && markedSignals instanceof IMarkedWavelengths markedWavelengths) {
+					Iterator<IMarkedWavelength> markedWavelengthsIterator = markedWavelengths.iterator();
+					if(markedWavelengthsIterator.hasNext()) {
+						float trace = (float)markedWavelengthsIterator.next().getTrace();
+						Optional<IScanSignalWSD> scanSignal = scanWSD.getScanSignal(trace);
 						if(scanSignal.isPresent()) {
 							xSeries.add((double)scan.getRetentionTime());
 							ySeries.add((double)scanSignal.get().getAbundance());

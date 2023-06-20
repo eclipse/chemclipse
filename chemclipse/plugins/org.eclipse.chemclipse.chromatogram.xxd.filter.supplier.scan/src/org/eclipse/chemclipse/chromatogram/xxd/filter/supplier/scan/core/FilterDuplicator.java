@@ -42,7 +42,6 @@ import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-
 public class FilterDuplicator extends AbstractChromatogramFilter {
 
 	@Override
@@ -131,10 +130,10 @@ public class FilterDuplicator extends AbstractChromatogramFilter {
 							 */
 							IScanWSD centerScan = new ScanWSD();
 							centerScan.setRetentionTime(retentionTimeCenter);
-							Map<Double, Float> traceMap = new HashMap<>();
+							Map<Float, Float> traceMap = new HashMap<>();
 							traceMap.putAll(getTraces(nextScan));
 							if(settings.isMergeScans()) {
-								for(Map.Entry<Double, Float> entry : getTraces(currentScan).entrySet()) {
+								for(Map.Entry<Float, Float> entry : getTraces(currentScan).entrySet()) {
 									Float abundance = traceMap.get(entry.getKey());
 									if(abundance == null) {
 										traceMap.put(entry.getKey(), entry.getValue());
@@ -143,7 +142,7 @@ public class FilterDuplicator extends AbstractChromatogramFilter {
 									}
 								}
 							}
-							for(Map.Entry<Double, Float> entry : traceMap.entrySet()) {
+							for(Map.Entry<Float, Float> entry : traceMap.entrySet()) {
 								centerScan.addScanSignal(new ScanSignalWSD(entry.getKey(), entry.getValue()));
 							}
 							centerScan.adjustTotalSignal(intensityCenter);
@@ -179,9 +178,9 @@ public class FilterDuplicator extends AbstractChromatogramFilter {
 		return traces;
 	}
 
-	private Map<Double, Float> getTraces(IScanWSD scanWSD) {
+	private Map<Float, Float> getTraces(IScanWSD scanWSD) {
 
-		Map<Double, Float> traceMap = new HashMap<>();
+		Map<Float, Float> traceMap = new HashMap<>();
 		for(IScanSignalWSD trace : scanWSD.getScanSignals()) {
 			traceMap.put(trace.getWavelength(), trace.getAbundance());
 		}

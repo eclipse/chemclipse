@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -109,11 +108,11 @@ public class TargetBuilderWSD {
 		final List<IScanSignalWSD> signalsSorted;
 		//
 		if(positive) {
-			signalsSorted = new ArrayList<>(unknown.getScanSignals().stream().filter(s -> s.getAbundance() >= 0).collect(Collectors.toList()));
-			Collections.sort(signalsSorted, (s1, s2) -> Float.compare(s2.getAbundance(), s1.getAbundance()));
+			signalsSorted = new ArrayList<>(unknown.getScanSignals().stream().filter(s -> s.getAbundance() >= 0).toList());
+			Collections.sort(signalsSorted, (s1, s2) -> Double.compare(s2.getAbundance(), s1.getAbundance()));
 		} else {
-			signalsSorted = new ArrayList<>(unknown.getScanSignals().stream().filter(s -> s.getAbundance() < 0).collect(Collectors.toList()));
-			Collections.sort(signalsSorted, (s1, s2) -> Float.compare(s1.getAbundance(), s2.getAbundance()));
+			signalsSorted = new ArrayList<>(unknown.getScanSignals().stream().filter(s -> s.getAbundance() < 0).toList());
+			Collections.sort(signalsSorted, (s1, s2) -> Double.compare(s1.getAbundance(), s2.getAbundance()));
 		}
 		//
 		int size = (signalsSorted.size() >= numberWavelengths) ? numberWavelengths : signalsSorted.size();

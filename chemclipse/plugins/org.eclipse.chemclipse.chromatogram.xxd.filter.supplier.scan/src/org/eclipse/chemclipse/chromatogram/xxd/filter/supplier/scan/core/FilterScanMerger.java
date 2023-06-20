@@ -125,7 +125,7 @@ public class FilterScanMerger extends AbstractChromatogramFilter {
 							if(scanNext instanceof IScanWSD nextScan) {
 								IScanWSD scanMerged = new ScanWSD();
 								scanMerged.setRetentionTime(retentionTimeCenter);
-								Map<Double, IScanSignalWSD> scanSignals = getScanSignals(currentScan, nextScan);
+								Map<Float, IScanSignalWSD> scanSignals = getScanSignals(currentScan, nextScan);
 								for(IScanSignalWSD scanSignalWSD : scanSignals.values()) {
 									scanMerged.addScanSignal(scanSignalWSD);
 								}
@@ -163,9 +163,9 @@ public class FilterScanMerger extends AbstractChromatogramFilter {
 		}
 	}
 
-	private Map<Double, IScanSignalWSD> getScanSignals(IScanWSD currentScan, IScanWSD nextScan) {
+	private Map<Float, IScanSignalWSD> getScanSignals(IScanWSD currentScan, IScanWSD nextScan) {
 
-		Map<Double, IScanSignalWSD> scanSignals = new HashMap<>();
+		Map<Float, IScanSignalWSD> scanSignals = new HashMap<>();
 		/*
 		 * Initial Scan
 		 */

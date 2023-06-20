@@ -777,24 +777,26 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 				/*
 				 * Add the signal.
 				 */
-				double valueX = Double.parseDouble(x);
-				float valueY = Float.parseFloat(y);
-				//
 				IScan scan = getScan();
 				if(scan instanceof IScanCSD scanCSD) {
 					/*
 					 * CSD
 					 */
+					float valueY = Float.parseFloat(y);
 					scanCSD.adjustTotalSignal(valueY);
 				} else if(scan instanceof IScanMSD scanMSD) {
 					/*
 					 * MSD
 					 */
+					double valueX = Double.parseDouble(x);
+					float valueY = Float.parseFloat(y);
 					scanMSD.addIon(new Ion(valueX, valueY));
 				} else if(scan instanceof IScanWSD scanWSD) {
 					/*
 					 * WSD
 					 */
+					float valueX = Float.parseFloat(x);
+					float valueY = Float.parseFloat(y);
 					scanWSD.addScanSignal(new ScanSignalWSD(valueX, valueY));
 				} else if(scan instanceof IScanISD) {
 					/*

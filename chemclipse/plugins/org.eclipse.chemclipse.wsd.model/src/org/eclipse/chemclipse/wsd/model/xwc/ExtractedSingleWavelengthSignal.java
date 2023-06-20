@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,11 +18,11 @@ import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 public class ExtractedSingleWavelengthSignal implements IExtractedSingleWavelengthSignal {
 
 	private float abundanceValue;
-	private double wavelength;
+	private float wavelength;
 	private int retentionTime;
 	private float retentionIndex;
 
-	public ExtractedSingleWavelengthSignal(double wavelength, float abundanceValue, int retentionTime, float retentionIndex) {
+	public ExtractedSingleWavelengthSignal(float wavelength, float abundanceValue, int retentionTime, float retentionIndex) {
 
 		this.wavelength = wavelength;
 		this.abundanceValue = abundanceValue;

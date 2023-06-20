@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -83,12 +83,12 @@ public class ExtractedSingleWavelengthSignalExtractor implements IExtractedSingl
 		 */
 		List<IExtractedSingleWavelengthSignals> extractedWavelengthSignals = new ArrayList<>();
 		if(startScan < 1 && stopScan > getNumberOfScansWithWavelengths(chromatogram)) {
-			extractedWavelengthSignals.add(new ExtractedSingleWavelengthSignals(0, Double.NaN, chromatogram));
+			extractedWavelengthSignals.add(new ExtractedSingleWavelengthSignals(0, Float.NaN, chromatogram));
 			return extractedWavelengthSignals;
 		}
-		Iterator<Double> itWavelengths = markedWavelengths.getWavelengths().stream().sorted().iterator();
+		Iterator<Float> itWavelengths = markedWavelengths.getWavelengths().stream().sorted().iterator();
 		while(itWavelengths.hasNext()) {
-			double wavelength = itWavelengths.next();
+			float wavelength = itWavelengths.next();
 			SortedMap<Integer, IExtractedSingleWavelengthSignal> extractedSignalsMap = null;
 			int startScanSignal = 0;
 			int stopScanSignal = 0;

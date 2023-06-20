@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,17 +16,17 @@ public abstract class AbstractScanSignalWSD implements IScanSignalWSD {
 	private static final long serialVersionUID = -1057079378330160588L;
 	private static final int MAX_PRECISION = 6;
 	//
-	private double wavelength;
+	private float wavelength;
 	private float abundance;
 
 	@Override
-	public double getWavelength() {
+	public float getWavelength() {
 
 		return wavelength;
 	}
 
 	@Override
-	public void setWavelength(double wavelength) {
+	public void setWavelength(float wavelength) {
 
 		this.wavelength = wavelength;
 	}

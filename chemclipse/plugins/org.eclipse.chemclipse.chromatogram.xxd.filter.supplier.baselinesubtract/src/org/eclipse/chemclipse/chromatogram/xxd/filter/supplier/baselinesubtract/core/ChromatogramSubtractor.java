@@ -85,7 +85,7 @@ public class ChromatogramSubtractor {
 			if(scanSubtract != null) {
 				List<IScanSignalWSD> signals = scanMasterWSD.getScanSignals();
 				for(IScanSignalWSD signal : signals) {
-					double wavelength = signal.getWavelength();
+					float wavelength = signal.getWavelength();
 					IScanSignalWSD subtract = scanSubtract.getScanSignal(wavelength).orElse(null);
 					if(subtract != null) {
 						float abundance = signal.getAbundance() - subtract.getAbundance();

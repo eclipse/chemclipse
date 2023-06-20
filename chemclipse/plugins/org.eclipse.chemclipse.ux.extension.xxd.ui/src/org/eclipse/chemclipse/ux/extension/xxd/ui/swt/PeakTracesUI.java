@@ -251,7 +251,7 @@ public class PeakTracesUI extends ScrollableChart {
 			/*
 			 * Add the trace.
 			 */
-			int trace = (int)Math.round(scanSignal.getWavelength());
+			int trace = Math.round(scanSignal.getWavelength());
 			if(!traces.contains(trace)) {
 				traces.add(trace);
 			}

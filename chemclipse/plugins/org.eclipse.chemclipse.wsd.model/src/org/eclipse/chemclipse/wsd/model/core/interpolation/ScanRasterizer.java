@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,7 +44,7 @@ public class ScanRasterizer {
 				/*
 				 * Collect the data
 				 */
-				TreeMap<Double, Float> wavelengthOriginal = new TreeMap<>();
+				TreeMap<Float, Float> wavelengthOriginal = new TreeMap<>();
 				for(IScanSignalWSD scanSignalWSD : scanWSD.getScanSignals()) {
 					wavelengthOriginal.put(scanSignalWSD.getWavelength(), scanSignalWSD.getAbundance());
 				}

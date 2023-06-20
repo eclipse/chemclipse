@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -114,11 +114,11 @@ public abstract class AbstractMarkedWavelengths implements IMarkedWavelengths {
 	}
 
 	@Override
-	public Set<Double> getWavelengths() {
+	public Set<Float> getWavelengths() {
 
-		Set<Double> wavelengths = new HashSet<>();
+		Set<Float> wavelengths = new HashSet<>();
 		for(IMarkedWavelength markedWavelength : markedWavelengths) {
-			wavelengths.add(markedWavelength.getTrace());
+			wavelengths.add((float)markedWavelength.getTrace());
 		}
 		return wavelengths;
 	}
@@ -138,7 +138,7 @@ public abstract class AbstractMarkedWavelengths implements IMarkedWavelengths {
 	}
 
 	@Override
-	public void add(double... wavelenghts) {
+	public void add(float... wavelenghts) {
 
 		for(double wavelenght : wavelenghts) {
 			markedWavelengths.add(new MarkedWavelength(wavelenght));
@@ -156,7 +156,7 @@ public abstract class AbstractMarkedWavelengths implements IMarkedWavelengths {
 	@Override
 	public Set<Integer> getTraces() {
 
-		Set<Integer> traces = new HashSet<Integer>();
+		Set<Integer> traces = new HashSet<>();
 		for(IMarkedWavelength markedWavelength : markedWavelengths) {
 			traces.add(markedWavelength.castTrace());
 		}

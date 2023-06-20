@@ -90,7 +90,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 			IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
 			if(mouseEvent.button == 1) {
-				double clickedWavelength = intensityGraphFigure.getYAxis().getPositionValue(mouseEvent.y, false);
+				float clickedWavelength = (float)intensityGraphFigure.getYAxis().getPositionValue(mouseEvent.y, false);
 				IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
 				markedWavelengths.add(clickedWavelength);
 				chromatogramSelectionWSD.setSelectedWavelengths(markedWavelengths);

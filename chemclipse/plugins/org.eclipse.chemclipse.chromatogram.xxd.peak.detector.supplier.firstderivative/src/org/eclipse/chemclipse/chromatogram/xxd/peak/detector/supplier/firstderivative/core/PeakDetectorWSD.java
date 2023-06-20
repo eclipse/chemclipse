@@ -207,7 +207,7 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 	private List<IChromatogramPeakWSD> extractPeaks(List<IRawPeak> rawPeaks, IChromatogramWSD chromatogram, PeakDetectorSettingsWSD peakDetectorSettings, IMarkedWavelengths wavelengths) {
 
 		List<IChromatogramPeakWSD> peaks = new ArrayList<>();
-		Set<Integer> traces = wavelengths.getWavelengths().stream().map(Double::intValue).collect(Collectors.toSet());
+		Set<Integer> traces = wavelengths.getWavelengths().stream().map(Float::intValue).collect(Collectors.toSet());
 		boolean includeBackground = peakDetectorSettings.isIncludeBackground();
 		boolean optimizeBaseline = peakDetectorSettings.isOptimizeBaseline();
 		//
