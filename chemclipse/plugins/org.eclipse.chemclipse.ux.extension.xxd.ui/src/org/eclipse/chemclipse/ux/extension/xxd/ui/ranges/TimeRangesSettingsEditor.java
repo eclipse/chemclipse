@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Table;
 
 public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUIControl, IExtendedPartUI {
 
@@ -58,11 +59,10 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 	//
 	private Button buttonToolbarSearch;
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
+	private AtomicReference<TimeRangesListUI> timeRangesControl = new AtomicReference<>();
 	//
 	private TimeRanges settings = new TimeRanges();
 	private TimeRangeLabels timeRangeLabels = new TimeRangeLabels();
-	//
-	private TimeRangesListUI listUI;
 	//
 	private List<Listener> listeners = new ArrayList<>();
 	//
@@ -89,7 +89,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 	@Override
 	public void setEnabled(boolean enabled) {
 
-		listUI.getControl().setEnabled(enabled);
+		timeRangesControl.get().getControl().setEnabled(enabled);
 	}
 
 	@Override
@@ -181,7 +181,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 			@Override
 			public void performSearch(String searchText, boolean caseSensitive) {
 
-				listUI.setSearchText(searchText, caseSensitive);
+				timeRangesControl.get().setSearchText(searchText, caseSensitive);
 			}
 		});
 		//
@@ -195,8 +195,18 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		composite.setLayoutData(gridData);
 		//
-		listUI = new TimeRangesListUI(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		createTable(composite);
+		//
 		setTableViewerInput();
+	}
+
+	private void createTable(Composite parent) {
+
+		TimeRangesListUI timeRangesListUI = new TimeRangesListUI(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		Table table = timeRangesListUI.getTable();
+		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		timeRangesControl.set(timeRangesListUI);
 	}
 
 	private Button createButtonAdd(Composite parent) {
@@ -234,7 +244,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 			public void widgetSelected(SelectionEvent e) {
 
-				IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
+				IStructuredSelection structuredSelection = (IStructuredSelection)timeRangesControl.get().getSelection();
 				Object object = structuredSelection.getFirstElement();
 				if(object instanceof TimeRange) {
 					Set<String> keySetEdit = new HashSet<>();
@@ -269,7 +279,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 			public void widgetSelected(SelectionEvent e) {
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getDeleteMessage())) {
-					IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
+					IStructuredSelection structuredSelection = (IStructuredSelection)timeRangesControl.get().getSelection();
 					for(Object object : structuredSelection.toArray()) {
 						if(object instanceof TimeRange) {
 							settings.remove(((TimeRange)object).getIdentifier());
@@ -391,6 +401,6 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 	private void setTableViewerInput() {
 
-		listUI.setInput(settings.values());
+		timeRangesControl.get().setInput(settings.values());
 	}
 }

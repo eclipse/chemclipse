@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
 
 public class RetentionIndexMarkerEditor extends Composite implements IChangeListener, IExtendedPartUI {
 
@@ -215,7 +216,8 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 	private void createTableSection(Composite parent) {
 
 		RetentionIndexTableViewerUI retentionIndexListUI = new RetentionIndexTableViewerUI(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		retentionIndexListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		Table table = retentionIndexListUI.getTable();
+		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
 		retentionIndexListUI.setUpdateListener(new IUpdateListener() {
 
