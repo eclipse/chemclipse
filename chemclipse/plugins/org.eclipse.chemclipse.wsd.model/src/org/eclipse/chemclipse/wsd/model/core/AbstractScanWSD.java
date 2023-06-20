@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,7 +36,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	 * methods.
 	 */
 	private static final long serialVersionUID = -8298107894544692691L;
-	private List<IScanSignalWSD> scanSignals = new ArrayList<IScanSignalWSD>();
+	private List<IScanSignalWSD> scanSignals = new ArrayList<>();
 
 	public AbstractScanWSD() {
 
@@ -66,7 +66,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	}
 
 	@Override
-	public Optional<IScanSignalWSD> getScanSignal(double wavelength) {
+	public Optional<IScanSignalWSD> getScanSignal(float wavelength) {
 
 		for(IScanSignalWSD scanSignal : scanSignals) {
 			if(scanSignal.getWavelength() == wavelength) {
@@ -160,7 +160,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 
 	private static boolean useWavelength(IScanSignalWSD scan, IMarkedWavelengths filterWavelengths) {
 
-		Set<Double> wavelengths = filterWavelengths.getWavelengths();
+		Set<Float> wavelengths = filterWavelengths.getWavelengths();
 		switch(filterWavelengths.getMarkedTraceModus()) {
 			case EXCLUDE:
 				return wavelengths.contains(scan.getWavelength());
@@ -203,8 +203,8 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 
 		if(hasScanSignals()) {
 			IWavelengthBounds bounds = getWavelengthBounds();
-			double startWavelength = bounds.getLowestWavelength().getWavelength();
-			double stopWavelength = bounds.getHighestWavelength().getWavelength();
+			float startWavelength = bounds.getLowestWavelength().getWavelength();
+			float stopWavelength = bounds.getHighestWavelength().getWavelength();
 			return getExtractedWavelengthSignal(startWavelength, stopWavelength);
 		} else {
 			return new ExtractedWavelengthSignal(0, 0);
@@ -213,7 +213,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 
 	@Override
 	@Deprecated
-	public IExtractedWavelengthSignal getExtractedWavelengthSignal(double startWavelength, double stopWavelength) {
+	public IExtractedWavelengthSignal getExtractedWavelengthSignal(float startWavelength, float stopWavelength) {
 
 		ExtractedWavelengthSignal extractedWavelengthSignal;
 		if(hasScanSignals()) {
@@ -231,7 +231,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	}
 
 	@Override
-	public Optional<IExtractedSingleWavelengthSignal> getExtractedSingleWavelengthSignal(double wavelength) {
+	public Optional<IExtractedSingleWavelengthSignal> getExtractedSingleWavelengthSignal(float wavelength) {
 
 		Optional<IScanSignalWSD> signal = getScanSignal(wavelength);
 		if(signal.isPresent()) {
@@ -244,7 +244,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	@Override
 	public boolean hasScanSignals() {
 
-		if(scanSignals.size() == 0) {
+		if(scanSignals.isEmpty()) {
 			return false;
 		}
 		return true;

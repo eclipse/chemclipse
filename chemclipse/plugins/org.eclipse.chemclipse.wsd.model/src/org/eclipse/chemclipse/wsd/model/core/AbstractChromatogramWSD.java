@@ -57,9 +57,9 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 	}
 
 	@Override
-	public Set<Double> getWavelengths() {
+	public Set<Float> getWavelengths() {
 
-		Set<Double> wavelengths = new HashSet<>();
+		Set<Float> wavelengths = new HashSet<>();
 		for(int i = 1; i < getNumberOfScans(); i++) {
 			getSupplierScan(i).getScanSignals().forEach(signal -> wavelengths.add(signal.getWavelength()));
 		}
@@ -94,7 +94,6 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 		return null;
 	}
 
-	
 	@Override
 	public void fireUpdate(IChromatogramSelection<?, ?> chromatogramSelection) {
 

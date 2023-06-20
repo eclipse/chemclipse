@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ public class ScanSignalWSD extends AbstractScanSignalWSD implements IScanSignalW
 		super();
 	}
 
-	public ScanSignalWSD(double wavelength, float abundance) {
+	public ScanSignalWSD(float wavelength, float abundance) {
 
 		super();
 		setWavelength(wavelength);

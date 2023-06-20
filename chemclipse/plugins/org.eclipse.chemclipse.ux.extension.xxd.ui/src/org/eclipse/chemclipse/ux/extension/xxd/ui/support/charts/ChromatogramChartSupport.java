@@ -516,7 +516,7 @@ public class ChromatogramChartSupport {
 			 */
 			if(scan instanceof IScanWSD scanWSD && signals instanceof IMarkedWavelengths markedWavelengths) {
 				float maxIntensity = -Float.MAX_VALUE;
-				for(double wavelength : markedWavelengths.getWavelengths()) {
+				for(float wavelength : markedWavelengths.getWavelengths()) {
 					float abundance = scanWSD.getScanSignal(wavelength).get().getAbundance();
 					if(abundance > maxIntensity) {
 						maxIntensity = abundance;

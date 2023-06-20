@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,14 +14,11 @@ package org.eclipse.chemclipse.wsd.converter.supplier.arw.io;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.wsd.converter.io.AbstractChromatogramWSDReader;
@@ -38,24 +35,24 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReader extends AbstractChromatogramWSDReader {
 
-	private static final double INVALID_WAVELENGTH = -1.0d;
+	private static final float INVALID_WAVELENGTH = -1.0f;
 	private static final String DELIMITER = "\t";
 	private static final String WAVELENGTH = "Wavelength";
 	private static final String TIME = "Time";
 
 	@Override
-	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws IOException {
 
-		return readChromatogram(file, false, monitor);
+		return readChromatogram(file, monitor);
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
-		return readChromatogram(file, true, monitor);
+		return readChromatogram(file, monitor);
 	}
 
-	private IChromatogramWSD readChromatogram(File file, boolean overview, IProgressMonitor monitor) throws IOException {
+	private IChromatogramWSD readChromatogram(File file, IProgressMonitor monitor) throws IOException {
 
 		/*
 		 * It's a simple text format:
@@ -72,7 +69,7 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 		/*
 		 * Parse via a buffered reader.
 		 */
-		List<Double> wavelengths = new ArrayList<>();
+		List<Float> wavelengths = new ArrayList<>();
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
 			String line = null;
 			while((line = bufferedReader.readLine()) != null) {
@@ -94,7 +91,7 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 					/*
 					 * Scans
 					 */
-					if(wavelengths.size() > 0) {
+					if(!wavelengths.isEmpty()) {
 						String[] values = line.split(DELIMITER);
 						if(values.length >= 1) {
 							try {
@@ -105,7 +102,7 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 								 * Wavelengths
 								 */
 								int index = 1;
-								for(double wavelength : wavelengths) {
+								for(float wavelength : wavelengths) {
 									if(wavelength != INVALID_WAVELENGTH) {
 										float intensity = extractIntensity(values[index]);
 										if(!Float.isNaN(intensity)) {
@@ -165,10 +162,10 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 		}
 	}
 
-	private double extractWavelength(String value) {
+	private float extractWavelength(String value) {
 
 		try {
-			return Double.parseDouble(value);
+			return Float.parseFloat(value);
 		} catch(NumberFormatException e) {
 			return INVALID_WAVELENGTH;
 		}
