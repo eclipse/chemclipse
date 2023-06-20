@@ -77,7 +77,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 	private static final String CATEGORY = "Retention Indices";
 	private static final String DELETE = "Delete";
 	//
-	private Button buttonToolbarSearch;
+	private AtomicReference<Button> buttonSearchControl = new AtomicReference<Button>();
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private AtomicReference<RetentionIndexTableViewerUI> tableViewer = new AtomicReference<>();
 	//
@@ -170,7 +170,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 
 	private void initialize() {
 
-		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH, false);
+		enableToolbar(toolbarSearch, buttonSearchControl.get(), IMAGE_SEARCH, TOOLTIP_SEARCH, false);
 		updateInput();
 	}
 
@@ -182,7 +182,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(8, false));
 		//
-		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		createButtonToggleSearch(composite);
 		add(createButtonAdd(composite));
 		add(createButtonAddFromFile(composite));
 		add(createButtonEdit(composite));
@@ -190,6 +190,12 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 		add(createButtonRemoveAll(composite));
 		add(createButtonImport(composite));
 		add(createButtonExport(composite));
+	}
+
+	private void createButtonToggleSearch(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		buttonSearchControl.set(button);
 	}
 
 	private void add(Button button) {
@@ -217,7 +223,12 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 
 		RetentionIndexTableViewerUI retentionIndexListUI = new RetentionIndexTableViewerUI(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		Table table = retentionIndexListUI.getTable();
-		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 600;
+		gridData.heightHint = 400;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		table.setLayoutData(gridData);
 		//
 		retentionIndexListUI.setUpdateListener(new IUpdateListener() {
 

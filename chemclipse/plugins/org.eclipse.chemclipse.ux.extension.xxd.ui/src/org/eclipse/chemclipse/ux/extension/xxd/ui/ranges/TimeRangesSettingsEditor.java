@@ -43,7 +43,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -57,7 +56,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 	private Composite control;
 	//
-	private Button buttonToolbarSearch;
+	private AtomicReference<Button> buttonSearchControl = new AtomicReference<>();
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private AtomicReference<TimeRangesListUI> timeRangesControl = new AtomicReference<>();
 	//
@@ -151,7 +150,8 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 	private void initialize() {
 
-		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH, false);
+		enableToolbar(toolbarSearch, buttonSearchControl.get(), IMAGE_SEARCH, TOOLTIP_SEARCH, false);
+		setTableViewerInput();
 	}
 
 	private void createButtonSection(Composite parent) {
@@ -162,7 +162,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(8, false));
 		//
-		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		createButtonToggleSearch(composite);
 		createButtonAdd(composite);
 		createButtonEdit(composite);
 		createButtonRemove(composite);
@@ -170,6 +170,12 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		createButtonImport(composite);
 		createButtonExport(composite);
 		createButtonSave(composite);
+	}
+
+	private void createButtonToggleSearch(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		buttonSearchControl.set(button);
 	}
 
 	private void createToolbarSearch(Composite parent) {
@@ -190,21 +196,14 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 	private void createTableSection(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		composite.setLayoutData(gridData);
-		//
-		createTable(composite);
-		//
-		setTableViewerInput();
-	}
-
-	private void createTable(Composite parent) {
-
 		TimeRangesListUI timeRangesListUI = new TimeRangesListUI(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		Table table = timeRangesListUI.getTable();
-		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 600;
+		gridData.heightHint = 400;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		table.setLayoutData(gridData);
 		//
 		timeRangesControl.set(timeRangesListUI);
 	}

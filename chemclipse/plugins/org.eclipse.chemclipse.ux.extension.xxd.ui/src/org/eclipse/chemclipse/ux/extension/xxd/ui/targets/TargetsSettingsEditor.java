@@ -53,7 +53,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -61,6 +60,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Table;
 
 public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIControl, IExtendedPartUI {
 
@@ -74,16 +74,15 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 	//
 	private Composite control;
 	//
-	private Button buttonToolbarSearch;
+	private AtomicReference<Button> buttonSearchControl = new AtomicReference<>();
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
-	//
-	private TargetTemplates settings = new TargetTemplates();
-	private TargetTemplateListUI listUI;
+	private AtomicReference<TargetTemplateListUI> targetTemplateListControl = new AtomicReference<>();
 	//
 	private List<Listener> listeners = new ArrayList<>();
-	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private IProcessorPreferences<TargetTemplates> preferences = null;
+	//
+	private TargetTemplates settings = new TargetTemplates();
 
 	public TargetsSettingsEditor(Composite parent, IProcessorPreferences<TargetTemplates> preferences, TargetTemplates targetTemplates) {
 
@@ -101,7 +100,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 	@Override
 	public void setEnabled(boolean enabled) {
 
-		listUI.getControl().setEnabled(enabled);
+		targetTemplateListControl.get().getControl().setEnabled(enabled);
 	}
 
 	@Override
@@ -163,7 +162,8 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 
 	private void initialize() {
 
-		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH, false);
+		enableToolbar(toolbarSearch, buttonSearchControl.get(), IMAGE_SEARCH, TOOLTIP_SEARCH, false);
+		setTableViewerInput();
 	}
 
 	private void createButtonSection(Composite parent) {
@@ -174,7 +174,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(9, false));
 		//
-		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		createButtonToggleToolbar(composite);
 		createButtonAdd(composite);
 		createButtonEdit(composite);
 		createButtonRemove(composite);
@@ -183,6 +183,12 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		createButtonImport(composite);
 		createButtonExport(composite);
 		createButtonSave(composite);
+	}
+
+	private void createButtonToggleToolbar(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		buttonSearchControl.set(button);
 	}
 
 	private void createToolbarSearch(Composite parent) {
@@ -194,7 +200,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 			@Override
 			public void performSearch(String searchText, boolean caseSensitive) {
 
-				listUI.setSearchText(searchText, caseSensitive);
+				targetTemplateListControl.get().setSearchText(searchText, caseSensitive);
 			}
 		});
 		//
@@ -203,13 +209,16 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 
 	private void createTableSection(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		composite.setLayoutData(gridData);
+		TargetTemplateListUI targetTemplateListUI = new TargetTemplateListUI(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		Table table = targetTemplateListUI.getTable();
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 600;
+		gridData.heightHint = 400;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		table.setLayoutData(gridData);
 		//
-		listUI = new TargetTemplateListUI(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		setTableViewerInput();
+		targetTemplateListControl.set(targetTemplateListUI);
 	}
 
 	private Button createButtonAdd(Composite parent) {
@@ -247,7 +256,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 
 			public void widgetSelected(SelectionEvent e) {
 
-				IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
+				IStructuredSelection structuredSelection = (IStructuredSelection)targetTemplateListControl.get().getSelection();
 				Object object = structuredSelection.getFirstElement();
 				if(object instanceof TargetTemplate) {
 					Set<String> keySetEdit = new HashSet<>();
@@ -285,7 +294,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 			public void widgetSelected(SelectionEvent e) {
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Templates", "Do you want to delete the selected target templates?")) {
-					IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
+					IStructuredSelection structuredSelection = (IStructuredSelection)targetTemplateListControl.get().getSelection();
 					for(Object object : structuredSelection.toArray()) {
 						if(object instanceof TargetTemplate) {
 							settings.remove(((TargetTemplate)object).getName());
@@ -487,6 +496,6 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 
 	private void setTableViewerInput() {
 
-		listUI.setInput(settings.values());
+		targetTemplateListControl.get().setInput(settings.values());
 	}
 }
