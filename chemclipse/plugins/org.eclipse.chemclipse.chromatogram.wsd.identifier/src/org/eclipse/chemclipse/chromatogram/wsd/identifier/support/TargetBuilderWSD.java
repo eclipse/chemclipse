@@ -39,8 +39,7 @@ public class TargetBuilderWSD {
 
 		try {
 			IScan scan = peakWSD.getPeakModel().getPeakMaximum();
-			if(scan instanceof IScanWSD) {
-				IScanWSD unknown = (IScanWSD)scan;
+			if(scan instanceof IScanWSD unknown) {
 				String traces = extractTraces(unknown, targetUnknownSettings);
 				ILibraryInformation libraryInformation = UnknownTargetBuilder.getLibraryInformationUnknown(unknown, targetUnknownSettings, traces);
 				IComparisonResult comparisonResult = UnknownTargetBuilder.getComparisonResultUnknown(targetUnknownSettings.getMatchQuality());
@@ -118,7 +117,7 @@ public class TargetBuilderWSD {
 		}
 		//
 		int size = (signalsSorted.size() >= numberWavelengths) ? numberWavelengths : signalsSorted.size();
-		double maxIntensity = signalsSorted.size() > 0 ? signalsSorted.get(0).getAbundance() : 0;
+		double maxIntensity = !signalsSorted.isEmpty() ? signalsSorted.get(0).getAbundance() : 0;
 		final double factorMax;
 		if(positive) {
 			factorMax = maxIntensity > 0 ? (100 / maxIntensity) : 0;

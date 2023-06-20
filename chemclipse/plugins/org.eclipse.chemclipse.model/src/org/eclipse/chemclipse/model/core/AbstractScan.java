@@ -189,7 +189,7 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 		if(additionalRetentionIndices == null) {
 			return false;
 		} else {
-			return (additionalRetentionIndices.size() > 0);
+			return (!additionalRetentionIndices.isEmpty());
 		}
 	}
 

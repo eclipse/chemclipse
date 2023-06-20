@@ -94,7 +94,7 @@ public class ExtractedSingleWavelengthSignalExtractor implements IExtractedSingl
 			int stopScanSignal = 0;
 			for(int scan = startScan; scan <= stopScan; scan++) {
 				IScanWSD scanWSD = chromatogram.getSupplierScan(scan);
-				if(scanWSD.getScanSignals().size() > 0) {
+				if(!scanWSD.getScanSignals().isEmpty()) {
 					Optional<IExtractedSingleWavelengthSignal> extractedWavelengthSignal = scanWSD.getExtractedSingleWavelengthSignal(wavelength);
 					if(extractedWavelengthSignal.isPresent()) {
 						/*
@@ -182,9 +182,8 @@ public class ExtractedSingleWavelengthSignalExtractor implements IExtractedSingl
 
 		int counter = 0;
 		for(IScan scan : chromatogram.getScans()) {
-			if(scan instanceof IScanWSD) {
-				IScanWSD scanWSD = (IScanWSD)scan;
-				if(scanWSD.getScanSignals().size() > 0) {
+			if(scan instanceof IScanWSD scanWSD) {
+				if(!scanWSD.getScanSignals().isEmpty()) {
 					counter++;
 				}
 			}

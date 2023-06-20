@@ -119,7 +119,7 @@ public class ChromatogramReader_1400 extends AbstractChromatogramReader implemen
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramOverview chromatogramOverview = null;
 		ZipFile zipFile = new ZipFile(file);

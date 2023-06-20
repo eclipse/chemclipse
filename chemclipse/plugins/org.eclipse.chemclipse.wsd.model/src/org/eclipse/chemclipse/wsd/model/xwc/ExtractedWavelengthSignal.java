@@ -65,7 +65,7 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 	public ExtractedWavelengthSignal(List<IScanSignalWSD> wavelengths) {
 
 		wavelengths = new ArrayList<>(wavelengths);
-		if(wavelengths != null && wavelengths.size() > 0) {
+		if(!wavelengths.isEmpty()) {
 			Collections.sort(wavelengths, new WavelengthValueComparator());
 			this.startWavelength = AbstractScanSignalWSD.getWavelength(wavelengths.get(0).getWavelength());
 			this.stopWavelength = AbstractScanSignalWSD.getWavelength(wavelengths.get(wavelengths.size() - 1).getWavelength());

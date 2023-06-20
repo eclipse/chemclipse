@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,8 +25,6 @@ import java.util.Set;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.io.IFileHelper;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.ChromatogramReaderCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -104,7 +101,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 	private static final Logger logger = Logger.getLogger(ChromatogramReader_1500.class);
 
 	@Override
-	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramWSD chromatogram = null;
 		ZipFile zipFile = new ZipFile(file);
@@ -120,7 +117,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramOverview chromatogramOverview = null;
 		ZipFile zipFile = new ZipFile(file);

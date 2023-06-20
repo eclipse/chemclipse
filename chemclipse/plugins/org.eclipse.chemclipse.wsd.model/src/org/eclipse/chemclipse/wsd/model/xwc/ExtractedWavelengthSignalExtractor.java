@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,7 @@ public class ExtractedWavelengthSignalExtractor implements IExtractedWavelengthS
 	 * @throws ChromatogramIsNullException
 	 */
 	public ExtractedWavelengthSignalExtractor(IChromatogramWSD chromatogram) throws ChromatogramIsNullException {
+
 		if(chromatogram == null) {
 			throw new ChromatogramIsNullException();
 		}
@@ -40,9 +41,8 @@ public class ExtractedWavelengthSignalExtractor implements IExtractedWavelengthS
 		IExtractedWavelengthSignals signals = new ExtractedWavelengthSignals(getNumberOfScansWithWavelengths(chromatogram), chromatogram);
 		IExtractedWavelengthSignal extractedWavelengthSignal;
 		for(IScan scan : chromatogram.getScans()) {
-			if(scan instanceof IScanWSD) {
-				IScanWSD scanWSD = (IScanWSD)scan;
-				if(scanWSD.getScanSignals().size() > 0) {
+			if(scan instanceof IScanWSD scanWSD) {
+				if(!scanWSD.getScanSignals().isEmpty()) {
 					extractedWavelengthSignal = scanWSD.getExtractedWavelengthSignal(startWavelength, stopWavelength);
 					signals.add(extractedWavelengthSignal);
 				}
@@ -57,9 +57,8 @@ public class ExtractedWavelengthSignalExtractor implements IExtractedWavelengthS
 		IExtractedWavelengthSignals signals = new ExtractedWavelengthSignals(getNumberOfScansWithWavelengths(chromatogram), chromatogram);
 		IExtractedWavelengthSignal extractedWavelengthSignal;
 		for(IScan scan : chromatogram.getScans()) {
-			if(scan instanceof IScanWSD) {
-				IScanWSD scanWSD = (IScanWSD)scan;
-				if(scanWSD.getScanSignals().size() > 0) {
+			if(scan instanceof IScanWSD scanWSD) {
+				if(!scanWSD.getScanSignals().isEmpty()) {
 					extractedWavelengthSignal = scanWSD.getExtractedWavelengthSignal();
 					signals.add(extractedWavelengthSignal);
 				}
@@ -97,7 +96,7 @@ public class ExtractedWavelengthSignalExtractor implements IExtractedWavelengthS
 		IExtractedWavelengthSignals extractedIonSignals = new ExtractedWavelengthSignals(startScan, stopScan, chromatogram);
 		for(int scan = startScan; scan <= stopScan; scan++) {
 			scanWSD = chromatogram.getSupplierScan(scan);
-			if(scanWSD.getScanSignals().size() > 0) {
+			if(!scanWSD.getScanSignals().isEmpty()) {
 				IExtractedWavelengthSignal extractedWavelengthSignal = scanWSD.getExtractedWavelengthSignal();
 				extractedWavelengthSignal.setRetentionTime(scanWSD.getRetentionTime());
 				extractedIonSignals.add(extractedWavelengthSignal);
@@ -115,9 +114,8 @@ public class ExtractedWavelengthSignalExtractor implements IExtractedWavelengthS
 
 		int counter = 0;
 		for(IScan scan : chromatogram.getScans()) {
-			if(scan instanceof IScanWSD) {
-				IScanWSD scanWSD = (IScanWSD)scan;
-				if(scanWSD.getScanSignals().size() > 0) {
+			if(scan instanceof IScanWSD scanWSD) {
+				if(!scanWSD.getScanSignals().isEmpty()) {
 					counter++;
 				}
 			}

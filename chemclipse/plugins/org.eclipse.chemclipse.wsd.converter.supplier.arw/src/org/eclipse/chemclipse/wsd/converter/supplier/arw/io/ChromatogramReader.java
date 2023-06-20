@@ -14,14 +14,11 @@ package org.eclipse.chemclipse.wsd.converter.supplier.arw.io;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.wsd.converter.io.AbstractChromatogramWSDReader;
@@ -44,18 +41,18 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 	private static final String TIME = "Time";
 
 	@Override
-	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws IOException {
 
-		return readChromatogram(file, false, monitor);
+		return readChromatogram(file, monitor);
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
-		return readChromatogram(file, true, monitor);
+		return readChromatogram(file, monitor);
 	}
 
-	private IChromatogramWSD readChromatogram(File file, boolean overview, IProgressMonitor monitor) throws IOException {
+	private IChromatogramWSD readChromatogram(File file, IProgressMonitor monitor) throws IOException {
 
 		/*
 		 * It's a simple text format:
@@ -94,7 +91,7 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 					/*
 					 * Scans
 					 */
-					if(wavelengths.size() > 0) {
+					if(!wavelengths.isEmpty()) {
 						String[] values = line.split(DELIMITER);
 						if(values.length >= 1) {
 							try {

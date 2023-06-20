@@ -244,7 +244,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	@Override
 	public boolean hasScanSignals() {
 
-		if(scanSignals.size() == 0) {
+		if(scanSignals.isEmpty()) {
 			return false;
 		}
 		return true;
