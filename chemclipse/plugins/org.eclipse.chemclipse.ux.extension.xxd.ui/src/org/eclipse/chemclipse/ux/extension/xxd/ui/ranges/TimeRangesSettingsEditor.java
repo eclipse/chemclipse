@@ -198,7 +198,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 		TimeRangesListUI timeRangesListUI = new TimeRangesListUI(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		Table table = timeRangesListUI.getTable();
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.widthHint = 600;
 		gridData.heightHint = 400;
 		gridData.grabExcessHorizontalSpace = true;
