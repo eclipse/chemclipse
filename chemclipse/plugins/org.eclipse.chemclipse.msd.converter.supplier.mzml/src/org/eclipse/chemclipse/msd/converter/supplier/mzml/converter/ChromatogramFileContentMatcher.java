@@ -5,10 +5,10 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Matthias Mailänder - auto detection for MALDI files
+ * Matthias Mailänder - auto detection for chromatography files
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.converter;
 
@@ -19,29 +19,20 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
-import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
-import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.SpecificationValidator;
+import org.eclipse.chemclipse.converter.core.AbstractFileContentMatcher;
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 
-public class MassSpectrumMagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
+public class ChromatogramFileContentMatcher extends AbstractFileContentMatcher implements IFileContentMatcher {
 
 	@Override
 	public boolean checkFileFormat(File file) {
 
 		boolean isValidFormat = false;
 		try {
-			file = SpecificationValidator.validateSpecification(file);
-			if(!file.exists()) {
-				return isValidFormat;
-			}
-			if(!checkFileExtension(file, ".mzML")) {
-				return isValidFormat;
-			}
 			XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
 			XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(new FileInputStream(file));
 			boolean hasChromatogramList = false;
 			boolean hasRootElement = false;
-			boolean hasSpectrumList = false;
 			while(xmlStreamReader.hasNext()) {
 				int eventType = xmlStreamReader.next();
 				if(eventType == XMLStreamConstants.START_ELEMENT) {
@@ -50,13 +41,12 @@ public class MassSpectrumMagicNumberMatcher extends AbstractMagicNumberMatcher i
 						hasRootElement = true;
 					} else if(elementName.equals("chromatogramList")) {
 						hasChromatogramList = true;
-					} else if(elementName.equals("spectrumList")) {
-						hasSpectrumList = true;
+					}
+					if(hasRootElement && hasChromatogramList) {
+						isValidFormat = true;
+						break;
 					}
 				}
-			}
-			if(hasRootElement && hasSpectrumList && !hasChromatogramList) {
-				isValidFormat = true;
 			}
 			xmlStreamReader.close();
 		} catch(Exception e) {

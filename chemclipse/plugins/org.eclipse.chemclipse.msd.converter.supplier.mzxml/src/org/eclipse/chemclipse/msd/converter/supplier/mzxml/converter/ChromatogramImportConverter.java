@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportC
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.SpecificationValidator;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.io.ChromatogramReader;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -40,7 +39,6 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 			/*
 			 * Read the chromatogram.
 			 */
-			file = SpecificationValidator.validateSpecification(file);
 			IChromatogramMSDReader reader = new ChromatogramReader();
 			monitor.subTask(IMPORT_CHROMATOGRAM);
 			try {
@@ -63,7 +61,6 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 
 		IProcessingInfo<IChromatogramOverview> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
-			file = SpecificationValidator.validateSpecification(file);
 			IChromatogramMSDReader reader = new ChromatogramReader();
 			try {
 				IChromatogramOverview chromatogramOverview = reader.readOverview(file, monitor);

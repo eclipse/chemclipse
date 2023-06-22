@@ -9,8 +9,9 @@
             fileExtension=".csv"
             filterName="CSV Chromatogram (*.csv)"
             id="org.eclipse.chemclipse.msd.converter.supplier.csv"
+            importContentMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.FileContentMatcherChromatogram"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.core.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcherChromatogram"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
@@ -21,7 +22,7 @@
             filterName="CSV Heatmap Result (*.mzrt.csv)"
             id="org.eclipse.chemclipse.msd.converter.supplier.csv.heatmap"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.heatmap.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcherChromatogram"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>      
@@ -34,7 +35,7 @@
             fileExtension=".csv"
             filterName="CSV Chromatogram (*.csv)"
             id="org.eclipse.chemclipse.csd.converter.supplier.csv"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcherChromatogram"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>
@@ -47,7 +48,7 @@
             fileExtension=".csv"
             filterName="CSV Chromatogram (*.csv)"
             id="org.eclipse.chemclipse.csd.converter.supplier.csv"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcherChromatogram"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>
@@ -61,7 +62,7 @@
             filterName="CSV Mass Spectrum Peak List (*.csv)"
             id="org.eclipse.chemclipse.msd.converter.supplier.csv"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.core.DatabaseImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcherChromatogram"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </DatabaseSupplier>
@@ -72,7 +73,7 @@
             filterName="CSV Mass Spectrum Identification List (*.csv)"
             id="org.eclipse.chemclipse.msd.converter.supplier.csv.identification"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MassSpectrumIdentificationImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcherChromatogram"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </DatabaseSupplier>      

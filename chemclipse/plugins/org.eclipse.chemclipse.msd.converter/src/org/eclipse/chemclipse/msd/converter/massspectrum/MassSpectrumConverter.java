@@ -17,7 +17,9 @@ import java.io.File;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.Converter;
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.converter.core.NoFileContentMatcher;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
@@ -297,6 +299,7 @@ public class MassSpectrumConverter {
 				supplier.setExportable(Boolean.valueOf(element.getAttribute(Converter.IS_EXPORTABLE)));
 				supplier.setImportable(Boolean.valueOf(element.getAttribute(Converter.IS_IMPORTABLE)));
 				supplier.setMagicNumberMatcher(getMagicNumberMatcher(element));
+				supplier.setFileContentMatcher(getFileContentMatcher(element));
 				massSpectrumConverterSupport.add(supplier);
 			}
 		}
@@ -315,6 +318,17 @@ public class MassSpectrumConverter {
 			magicNumberMatcher = null;
 		}
 		return magicNumberMatcher;
+	}
+
+	private static IFileContentMatcher getFileContentMatcher(IConfigurationElement element) {
+
+		IFileContentMatcher fileContentMatcher;
+		try {
+			fileContentMatcher = (IFileContentMatcher)element.createExecutableExtension(Converter.IMPORT_FILE_CONTENT_MATCHER);
+		} catch(Exception e) {
+			fileContentMatcher = new NoFileContentMatcher(); // default to a dummy implementation that allows everything
+		}
+		return fileContentMatcher;
 	}
 
 	// ---------------------------------------------ConverterMethods

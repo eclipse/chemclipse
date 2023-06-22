@@ -9,18 +9,19 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.converter.core;
+package org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter;
 
 import java.io.File;
 
-public interface IMagicNumberMatcher {
+import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
+import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions.IFormatVersion;
 
-	/**
-	 * Shall be used to quickly identify potential files.
-	 * Use IFileContentMatcher for more expensive checks.
-	 * 
-	 * @param file
-	 * @return boolean
-	 */
-	boolean checkFileFormat(File file);
+public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
+
+	@Override
+	public boolean checkFileFormat(File file) {
+
+		return checkFileExtension(file, IFormatVersion.FILE_EXTENSION_CHROMATOGRAM);
+	}
 }

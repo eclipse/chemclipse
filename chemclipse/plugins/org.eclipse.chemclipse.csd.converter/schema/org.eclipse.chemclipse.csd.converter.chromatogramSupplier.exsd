@@ -59,7 +59,7 @@
          <attribute name="description" type="string" use="required">
             <annotation>
                <documentation>
-                  Describe in short words the intention of the supplier.
+                  Import chromatograms using chemically selective detectors which typically measure a current.
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
@@ -144,6 +144,16 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="importContentMatcher" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.converter.core.AbstractFileContentMatcher:org.eclipse.chemclipse.converter.core.IFileContentMatcher"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
@@ -152,7 +162,7 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         0.8.0
+         0.9.0
       </documentation>
    </annotation>
 
@@ -161,27 +171,11 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+         0.9.0: added importContentMatcher
       </documentation>
    </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="apiinfo"/>
-      </appinfo>
-      <documentation>
-         [Enter API information here.]
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="implementation"/>
-      </appinfo>
-      <documentation>
-         [Enter information about supplied implementation of this extension point.]
-      </documentation>
-   </annotation>
 
    <annotation>
       <appinfo>
@@ -189,7 +183,7 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
       </appinfo>
       <documentation>
          /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0

@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.Converter;
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.converter.core.NoFileContentMatcher;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -90,6 +92,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 				supplier.setImportable(isImportable(element));
 				supplier.setExportable(isExportable(element));
 				supplier.setMagicNumberMatcher(getMagicNumberMatcher(element));
+				supplier.setFileContentMatcher(getFileContentMatcher(element));
 				chromatogramConverterSupport.add(supplier);
 			}
 		}
@@ -391,5 +394,16 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 			magicNumberMatcher = null;
 		}
 		return magicNumberMatcher;
+	}
+
+	private IFileContentMatcher getFileContentMatcher(IConfigurationElement element) {
+
+		IFileContentMatcher fileContentMatcher;
+		try {
+			fileContentMatcher = (IFileContentMatcher)element.createExecutableExtension(Converter.IMPORT_FILE_CONTENT_MATCHER);
+		} catch(Exception e) {
+			fileContentMatcher = new NoFileContentMatcher(); // default to a dummy implementation that allows everything
+		}
+		return fileContentMatcher;
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -40,6 +40,7 @@ public class Converter {
 	public static final String EXPORT_CONVERTER = "exportConverter"; //$NON-NLS-1$
 	public static final String IMPORT_CONVERTER = "importConverter"; //$NON-NLS-1$
 	public static final String IMPORT_MAGIC_NUMBER_MATCHER = "importMagicNumberMatcher"; //$NON-NLS-1$
+	public static final String IMPORT_FILE_CONTENT_MATCHER = "importContentMatcher"; //$NON-NLS-1$
 
 	/**
 	 * This class has only static methods.

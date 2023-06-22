@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -81,4 +81,11 @@ public interface ISupplierSetter extends ISupplier {
 	 * @param magicNumberMatcher
 	 */
 	public void setMagicNumberMatcher(final IMagicNumberMatcher magicNumberMatcher);
+
+	/**
+	 * Sets the file content matcher.
+	 * 
+	 * @param fileContentMatcher
+	 */
+	public void setFileContentMatcher(final IFileContentMatcher fileContentMatcher);
 }

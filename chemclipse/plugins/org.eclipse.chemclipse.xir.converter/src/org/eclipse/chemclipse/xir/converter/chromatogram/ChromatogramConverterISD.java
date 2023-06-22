@@ -40,6 +40,7 @@ public class ChromatogramConverterISD implements IChromatogramConverter<IChromat
 		return instance;
 	}
 
+	@Override
 	public IChromatogramConverterSupport getChromatogramConverterSupport() {
 
 		ChromatogramConverterSupport chromatogramConverterSupport = new ChromatogramConverterSupport(DataCategory.ISD);
@@ -90,8 +91,7 @@ public class ChromatogramConverterISD implements IChromatogramConverter<IChromat
 
 		Object[] services = Activator.getDefault().getConverterServices();
 		for(Object service : services) {
-			if(service instanceof IConverterServiceISD) {
-				IConverterServiceISD converterServiceISD = (IConverterServiceISD)service;
+			if(service instanceof IConverterServiceISD converterServiceISD) {
 				if(file.getName().endsWith(converterServiceISD.getFileExtension())) {
 					IImportConverterISD importConverterISD = converterServiceISD.getImportConverter();
 					return importConverterISD.convert(file, monitor);

@@ -9,8 +9,9 @@
             fileExtension=".ocb"
             filterName="Open Chromatography Binary (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
+            importContentMatcher="org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.FileContentMatcherMSD"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.MagicNumberMatcherMSD"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
@@ -36,8 +37,9 @@
             fileExtension=".ocb"
             filterName="Open Chromatography Binary (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
+            importContentMatcher="org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.FileContentMatcherCSD"
             importConverter="org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.MagicNumberMatcherCSD"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
@@ -56,8 +58,9 @@
             fileExtension=".ocb"
             filterName="Open Chromatography Binary (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
+            importContentMatcher="org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.FileContentMatcherWSD"
             importConverter="org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.MagicNumberMatcherWSD"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>

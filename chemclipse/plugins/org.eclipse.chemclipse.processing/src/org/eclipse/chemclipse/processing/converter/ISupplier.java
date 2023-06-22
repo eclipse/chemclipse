@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -82,11 +82,19 @@ public interface ISupplier {
 
 	/**
 	 * This method tries to match the magic number or another specific file format identifier.
-	 * The other methods are used to determine if the file is importable. This check is more expensive
-	 * and shall be only applied if it is pretty sure, that the file is a chromatogram.
+	 * Only use cheap methods like scanning the first few bytes for signatures or check file endings.
 	 * 
 	 * @param file
 	 * @return boolean
 	 */
 	boolean isMatchMagicNumber(File file);
+
+	/**
+	 * This check can be a bit more expensive. Use it to partly parse the file to determine the contents.
+	 * It might be necessary if the container potentially hosts different data types.
+	 * 
+	 * @param file
+	 * @return boolean
+	 */
+	boolean isMatchContent(File file);
 }

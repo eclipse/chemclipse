@@ -144,6 +144,16 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="importContentMatcher" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.converter.core.AbstractFileContentMatcher:org.eclipse.chemclipse.converter.core.IFileContentMatcher"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
@@ -156,32 +166,8 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
       </documentation>
    </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="examples"/>
-      </appinfo>
-      <documentation>
-         [Enter extension point usage example here.]
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="apiinfo"/>
-      </appinfo>
-      <documentation>
-         [Enter API information here.]
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="implementation"/>
-      </appinfo>
-      <documentation>
-         [Enter information about supplied implementation of this extension point.]
-      </documentation>
-   </annotation>
 
    <annotation>
       <appinfo>
@@ -189,7 +175,7 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
       </appinfo>
       <documentation>
          /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,15 +41,16 @@ public class ChromatogramConverterTSD implements IChromatogramConverter<IChromat
 		return instance;
 	}
 
+	@Override
 	public IChromatogramConverterSupport getChromatogramConverterSupport() {
 
 		ChromatogramConverterSupport chromatogramConverterSupport = new ChromatogramConverterSupport(DataCategory.TSD);
 		Object[] services = Activator.getDefault().getConverterServices();
-		if(services == null)
+		if(services == null) {
 			return chromatogramConverterSupport;
+		}
 		for(Object service : services) {
-			if(service instanceof IConverterServiceTSD) {
-				IConverterServiceTSD converterServiceTSD = (IConverterServiceTSD)service;
+			if(service instanceof IConverterServiceTSD converterServiceTSD) {
 				ChromatogramSupplier supplier = new ChromatogramSupplier();
 				supplier.setFileExtension(converterServiceTSD.getFileExtension());
 				supplier.setFileName(converterServiceTSD.getFileName());
@@ -92,8 +93,7 @@ public class ChromatogramConverterTSD implements IChromatogramConverter<IChromat
 
 		Object[] services = Activator.getDefault().getConverterServices();
 		for(Object service : services) {
-			if(service instanceof IConverterServiceTSD) {
-				IConverterServiceTSD converterServiceTSD = (IConverterServiceTSD)service;
+			if(service instanceof IConverterServiceTSD converterServiceTSD) {
 				if(file.getName().endsWith(converterServiceTSD.getFileExtension())) {
 					IImportConverterTSD importConverterTSD = converterServiceTSD.getImportConverter();
 					return importConverterTSD.convert(file, monitor);

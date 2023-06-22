@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -163,8 +163,26 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 			boolean matched = supplier.isMatchMagicNumber(file);
 			long end = System.currentTimeMillis();
 			long spent = end - start;
-			if(spent > 0) {
+			if(spent > 10) {
 				logger.info("Magic number check of " + file.getName() + " by " + supplier.getFilterName() + " took " + timeFormat.format(spent / 1000.0d) + " seconds.");
+			}
+			if(matched) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isMatchContent(File file) {
+
+		for(ISupplier supplier : getSupplier()) {
+			long start = System.currentTimeMillis();
+			boolean matched = supplier.isMatchContent(file);
+			long end = System.currentTimeMillis();
+			long spent = end - start;
+			if(spent > 100) {
+				logger.info("File content check of " + file.getName() + " by " + supplier.getFilterName() + " took " + timeFormat.format(spent / 1000.0d) + " seconds.");
 			}
 			if(matched) {
 				return true;

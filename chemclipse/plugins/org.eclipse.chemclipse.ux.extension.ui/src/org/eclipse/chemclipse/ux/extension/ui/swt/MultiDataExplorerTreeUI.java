@@ -295,9 +295,18 @@ public class MultiDataExplorerTreeUI {
 				for(Object object : selection) {
 					if(object instanceof File file) {
 						Map<ISupplierFileIdentifier, Collection<ISupplier>> map = getIdentifierSupplier().apply(file);
-						converterSupplier.put(file, map);
-						for(Collection<ISupplier> value : map.values()) {
-							supplierSet.addAll(value);
+						if(map == null) {
+							continue;
+						}
+						for(ISupplierFileIdentifier supplierFileIdentifier : map.keySet()) {
+							if(supplierFileIdentifier.isMatchContent(file)) {
+								Collection<ISupplier> suppliers = map.get(supplierFileIdentifier);
+								for(ISupplier supplier : suppliers) {
+									if(supplier.isMatchMagicNumber(file) && supplier.isMatchContent(file)) {
+										supplierSet.add(supplier);
+									}
+								}
+							}
 						}
 					}
 				}
@@ -320,6 +329,9 @@ public class MultiDataExplorerTreeUI {
 							for(Object object : selection) {
 								if(object instanceof File file) {
 									Map<ISupplierFileIdentifier, Collection<ISupplier>> map = converterSupplier.get(file);
+									if(map == null) {
+										continue;
+									}
 									for(Entry<ISupplierFileIdentifier, Collection<ISupplier>> entry : map.entrySet()) {
 										ISupplierFileIdentifier identifier = entry.getKey();
 										if(identifier instanceof ISupplierFileEditorSupport supplierFileEditorSupport) {
@@ -427,6 +439,9 @@ public class MultiDataExplorerTreeUI {
 			//
 			Collection<ISupplierFileIdentifier> identifiers = getIdentifierSupplier().apply(file).keySet();
 			for(ISupplierFileIdentifier identifier : identifiers) {
+				if(!identifier.isMatchContent(file)) {
+					continue;
+				}
 				if(identifier instanceof ISupplierFileEditorSupport fileEditorSupport) {
 					fileEditorSupport.openOverview(file);
 					return;
@@ -447,9 +462,11 @@ public class MultiDataExplorerTreeUI {
 				ISupplierFileIdentifier identifier = entry.getKey();
 				if(identifier instanceof ISupplierFileEditorSupport supplierFileEditorSupport) {
 					for(ISupplier converter : entry.getValue()) {
-						success = success | openEditorWithSupplier(file, supplierFileEditorSupport, converter);
-						if(success && openFirstDataMatchOnly) {
-							return true;
+						if(converter.isMatchMagicNumber(file) && converter.isMatchContent(file)) {
+							success = success | openEditorWithSupplier(file, supplierFileEditorSupport, converter);
+							if(success && openFirstDataMatchOnly) {
+								return true;
+							}
 						}
 					}
 				}

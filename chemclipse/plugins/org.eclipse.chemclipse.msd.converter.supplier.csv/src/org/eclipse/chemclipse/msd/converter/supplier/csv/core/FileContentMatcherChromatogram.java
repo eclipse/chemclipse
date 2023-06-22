@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,23 +14,14 @@ package org.eclipse.chemclipse.msd.converter.supplier.csv.core;
 import java.io.File;
 import java.io.IOException;
 
-import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
-import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.converter.core.AbstractFileContentMatcher;
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.ChromatogramReader;
 
-public class MagicNumberMatcherChromatogram extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
+public class FileContentMatcherChromatogram extends AbstractFileContentMatcher implements IFileContentMatcher {
 
 	@Override
 	public boolean checkFileFormat(File file) {
-
-		boolean isValidFormat = checkFileExtension(file, ".csv");
-		if(isValidFormat) {
-			isValidFormat = (file.exists() && readTest(file));
-		}
-		return isValidFormat;
-	}
-
-	public static boolean readTest(File file) {
 
 		try {
 			return ChromatogramReader.isValidFileFormat(file);

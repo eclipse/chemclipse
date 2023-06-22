@@ -95,7 +95,7 @@ public class SequenceFileRunnable implements IRunnableWithProgress {
 	private boolean isSequenceFile(File file) {
 
 		if(supplierEditorSupport.isSupplierFile(file)) {
-			if(supplierEditorSupport.isMatchMagicNumber(file)) {
+			if(supplierEditorSupport.isMatchMagicNumber(file) && supplierEditorSupport.isMatchContent(file)) {
 				return true;
 			}
 		}

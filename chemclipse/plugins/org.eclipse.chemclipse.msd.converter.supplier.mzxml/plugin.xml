@@ -9,8 +9,9 @@
             fileExtension=".mzXML"
             filterName="mzXML Chromatogram (*.mzXML)"
             id="org.eclipse.chemclipse.msd.converter.supplier.mzxml.chromatogram"
+            importContentMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.ChromatogramFileContentMatcher"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.ChromatogramMagicNumberMatcher"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
@@ -23,8 +24,9 @@
             fileExtension=".mzXML"
             filterName="mzXML Mass Spectra (*.mzXML)"
             id="org.eclipse.chemclipse.msd.converter.supplier.mzxml.ms"
+            importContentMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.MassSpectrumFileContentMatcher"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.MassSpectrumImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.MassSpectrumMagicNumberMatcher"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.MagicNumberMatcher"
             isExportable="false"
             isImportable="true">
       </MassSpectrumSupplier>
