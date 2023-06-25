@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.converter.sequence;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 
@@ -24,6 +25,7 @@ public class SequenceSupplier implements ISequenceSupplierSetter {
 	private String fileExtension = "";
 	private String fileName = "";
 	private IMagicNumberMatcher magicNumberMatcher = null;
+	private IFileContentMatcher fileContentMatcher = null;
 
 	@Override
 	public String getId() {
@@ -99,6 +101,7 @@ public class SequenceSupplier implements ISequenceSupplierSetter {
 		}
 	}
 
+	@Override
 	public boolean isMatchMagicNumber(File file) {
 
 		if(magicNumberMatcher != null) {
@@ -112,7 +115,27 @@ public class SequenceSupplier implements ISequenceSupplierSetter {
 
 		this.magicNumberMatcher = magicNumberMatcher;
 	}
-	
+
+	public IFileContentMatcher getFileContentMatcher() {
+
+		return fileContentMatcher;
+	}
+
+	@Override
+	public boolean isMatchContent(File file) {
+
+		if(fileContentMatcher != null) {
+			return fileContentMatcher.checkFileFormat(file);
+		}
+		return false;
+	}
+
+	@Override
+	public void setFileContentMatcher(IFileContentMatcher fileContentMatcher) {
+
+		this.fileContentMatcher = fileContentMatcher;
+	}
+
 	@Override
 	public String getDirectoryExtension() {
 

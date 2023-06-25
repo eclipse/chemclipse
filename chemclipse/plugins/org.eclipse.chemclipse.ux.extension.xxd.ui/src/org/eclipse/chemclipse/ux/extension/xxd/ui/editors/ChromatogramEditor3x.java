@@ -174,7 +174,7 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 
 		boolean isMatch = false;
 		if(supplierFileIdentifier != null && file != null && file.exists()) {
-			if(supplierFileIdentifier.isSupplierFile(file) && supplierFileIdentifier.isMatchMagicNumber(file)) {
+			if(supplierFileIdentifier.isSupplierFile(file) && supplierFileIdentifier.isMatchMagicNumber(file) && supplierFileIdentifier.isMatchContent(file)) {
 				isMatch = true;
 			}
 		}

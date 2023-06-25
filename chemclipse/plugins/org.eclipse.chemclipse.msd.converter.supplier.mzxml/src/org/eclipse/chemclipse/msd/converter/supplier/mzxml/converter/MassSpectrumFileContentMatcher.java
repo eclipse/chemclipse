@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Matthias Mailänder - auto detection for chromatography files
+ * Matthias Mailänder - auto detection for MALDI files
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter;
 
@@ -17,37 +17,28 @@ import java.io.File;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
-import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.converter.core.AbstractFileContentMatcher;
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.AbstractReaderVersion;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.SpecificationValidator;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-public class ChromatogramMagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
+public class MassSpectrumFileContentMatcher extends AbstractFileContentMatcher implements IFileContentMatcher {
 
 	@Override
 	public boolean checkFileFormat(File file) {
 
 		boolean isValidFormat = false;
 		try {
-			file = SpecificationValidator.validateSpecification(file);
-			if(!file.exists()) {
-				return isValidFormat;
-			}
-			if(!checkFileExtension(file, ".mzXML")) {
-				return isValidFormat;
-			}
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-			documentBuilderFactory.setNamespaceAware(true);
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(file);
-			NodeList root = document.getElementsByTagNameNS("*", AbstractReaderVersion.NODE_MZXML);
+			NodeList root = document.getElementsByTagName(AbstractReaderVersion.NODE_MZXML);
 			if(root.getLength() != 1) {
 				return isValidFormat;
 			}
 			NodeList scanList = document.getElementsByTagName(AbstractReaderVersion.NODE_SCAN);
-			if(scanList.getLength() > 1) {
+			if(scanList.getLength() == 1) {
 				isValidFormat = true;
 			}
 		} catch(Exception e) {

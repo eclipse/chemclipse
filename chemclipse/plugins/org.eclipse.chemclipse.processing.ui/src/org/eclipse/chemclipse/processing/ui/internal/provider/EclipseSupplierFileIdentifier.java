@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,7 +41,7 @@ public class EclipseSupplierFileIdentifier implements SupplierContext {
 	public Collection<ISupplier> getSupplier() {
 
 		if(list == null) {
-			ArrayList<ISupplier> items = new ArrayList<ISupplier>();
+			ArrayList<ISupplier> items = new ArrayList<>();
 			IEditorRegistry editorRegistry = PlatformUI.getWorkbench().getEditorRegistry();
 			IFileEditorMapping[] editorMappings = editorRegistry.getFileEditorMappings();
 			for(IFileEditorMapping editorMapping : editorMappings) {
@@ -125,11 +125,16 @@ public class EclipseSupplierFileIdentifier implements SupplierContext {
 
 			try {
 				IEditorDescriptor descriptor = IDE.getEditorDescriptor(file.getName(), false, false);
-				boolean matches = descriptor != null && getId().equals(descriptor.getId());
-				return matches;
+				return descriptor != null && getId().equals(descriptor.getId());
 			} catch(PartInitException | OperationCanceledException e) {
 				return false;
 			}
+		}
+
+		@Override
+		public boolean isMatchContent(File file) {
+
+			return true;
 		}
 
 		@Override

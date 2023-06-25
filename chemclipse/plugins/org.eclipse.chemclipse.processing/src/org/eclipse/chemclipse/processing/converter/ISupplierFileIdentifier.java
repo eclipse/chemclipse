@@ -79,9 +79,21 @@ public interface ISupplierFileIdentifier extends SupplierContext {
 	 * If true, it's pretty likely that the format can be imported.
 	 * 
 	 * @param file
-	 * @return true
+	 * @return boolean
 	 */
 	default boolean isMatchMagicNumber(File file) {
+
+		return false;
+	}
+
+	/**
+	 * We go a bit deeper to confirm and find the data type if necessary.
+	 * If not required, simply leave this out.
+	 * 
+	 * @param file
+	 * @return boolean
+	 */
+	default boolean isMatchContent(File file) {
 
 		return true;
 	}

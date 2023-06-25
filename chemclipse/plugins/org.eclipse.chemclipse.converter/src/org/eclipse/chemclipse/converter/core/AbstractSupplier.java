@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,6 +27,7 @@ public abstract class AbstractSupplier implements ISupplierSetter {
 	private boolean exportable = false;
 	private boolean importable = false;
 	private IMagicNumberMatcher magicNumberMatcher = null;
+	private IFileContentMatcher fileContentMatcher = null;
 
 	@Override
 	public String getId() {
@@ -155,6 +156,26 @@ public abstract class AbstractSupplier implements ISupplierSetter {
 	public void setMagicNumberMatcher(final IMagicNumberMatcher magicNumberMatcher) {
 
 		this.magicNumberMatcher = magicNumberMatcher;
+	}
+
+	public IFileContentMatcher getFileContentMatcher() {
+
+		return fileContentMatcher;
+	}
+
+	@Override
+	public boolean isMatchContent(File file) {
+
+		if(fileContentMatcher != null) {
+			return fileContentMatcher.checkFileFormat(file);
+		}
+		return false;
+	}
+
+	@Override
+	public void setFileContentMatcher(IFileContentMatcher fileContentMatcher) {
+
+		this.fileContentMatcher = fileContentMatcher;
 	}
 
 	// -----------------------------------------------equals, hashCode, toString

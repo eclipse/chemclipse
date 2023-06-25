@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.sequence;
 
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 
 public interface ISequenceSupplierSetter extends ISequenceSupplier {
@@ -26,4 +27,6 @@ public interface ISequenceSupplierSetter extends ISequenceSupplier {
 	void setFileName(final String fileName);
 
 	void setMagicNumberMatcher(final IMagicNumberMatcher magicNumberMatcher);
+
+	void setFileContentMatcher(IFileContentMatcher fileContentMatcher);
 }

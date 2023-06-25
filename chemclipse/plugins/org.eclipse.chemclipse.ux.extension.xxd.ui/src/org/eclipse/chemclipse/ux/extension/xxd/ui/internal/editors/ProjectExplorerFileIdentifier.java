@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,13 +24,14 @@ public class ProjectExplorerFileIdentifier extends AbstractSupplierFileIdentifie
 	private String type = "";
 
 	public ProjectExplorerFileIdentifier(DataType dataType) {
+
 		super(getSupplier(dataType));
 		initialize(dataType);
 	}
 
 	private static List<ISupplier> getSupplier(DataType dataType) {
 
-		List<ISupplier> supplier = new ArrayList<ISupplier>();
+		List<ISupplier> supplier = new ArrayList<>();
 		switch(dataType) {
 			case CAL:
 				supplier.add(new CalibrationFileSupplier());
