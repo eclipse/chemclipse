@@ -46,6 +46,7 @@ public class ScanConverterNMR {
 	 * This class has only static methods.
 	 */
 	private ScanConverterNMR() {
+
 	}
 
 	public static IProcessingInfo<IMeasurement> convert(final File file, final String converterId, final IProgressMonitor monitor) {
@@ -81,14 +82,12 @@ public class ScanConverterNMR {
 							error.addMessages(processingInfo);
 						} else {
 							Object object = processingInfo.getProcessingResult();
-							if(object instanceof IComplexSignalMeasurement<?>) {
-								IComplexSignalMeasurement<?> measurement = (IComplexSignalMeasurement<?>)object;
+							if(object instanceof IComplexSignalMeasurement<?> measurement) {
 								ProcessingInfo<Collection<IComplexSignalMeasurement<?>>> info = new ProcessingInfo<>();
 								info.setProcessingResult(Collections.singleton(measurement));
 								info.addMessages(processingInfo);
 								return info;
-							} else if(object instanceof Collection<?>) {
-								Collection<?> collection = (Collection<?>)object;
+							} else if(object instanceof Collection<?> collection) {
 								ProcessingInfo<Collection<IComplexSignalMeasurement<?>>> info = new ProcessingInfo<>();
 								info.setProcessingResult((Collection<IComplexSignalMeasurement<?>>)collection);
 								info.addMessages(processingInfo);
@@ -103,7 +102,7 @@ public class ScanConverterNMR {
 		return error;
 	}
 
-	public static IProcessingInfo<?> export(final File file, final IComplexSignalMeasurement<?> measurement, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo<Void> export(final File file, final IComplexSignalMeasurement<?> measurement, final String converterId, final IProgressMonitor monitor) {
 
 		try {
 			IScanExportConverter exportConverter = getScanExportConverter(converterId);
@@ -114,7 +113,7 @@ public class ScanConverterNMR {
 			}
 			return getProcessingError(file);
 		} catch(Exception e) {
-			ProcessingInfo<Object> processingInfo = new ProcessingInfo<>();
+			ProcessingInfo<Void> processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(converterId, "Failed to export", e);
 			return processingInfo;
 		}
