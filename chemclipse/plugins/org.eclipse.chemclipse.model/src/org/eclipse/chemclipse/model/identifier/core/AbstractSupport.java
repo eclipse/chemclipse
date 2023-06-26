@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,6 +25,7 @@ public abstract class AbstractSupport<S extends ISupplier> implements ISupport {
 	private final List<S> suppliers;
 
 	public AbstractSupport() {
+
 		suppliers = new ArrayList<>();
 	}
 
@@ -41,7 +42,7 @@ public abstract class AbstractSupport<S extends ISupplier> implements ISupport {
 	 */
 	private void areIdentifiersStored() throws NoIdentifierAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoIdentifierAvailableException();
 		}
 	}
@@ -54,7 +55,7 @@ public abstract class AbstractSupport<S extends ISupplier> implements ISupport {
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		areIdentifiersStored();
-		List<String> availableIdentifiers = new ArrayList<String>();
+		List<String> availableIdentifiers = new ArrayList<>();
 		for(S supplier : suppliers) {
 			availableIdentifiers.add(supplier.getId());
 		}
@@ -92,7 +93,7 @@ public abstract class AbstractSupport<S extends ISupplier> implements ISupport {
 		 * If the ArrayList is not empty, return the registered identifier
 		 * names.<br/>
 		 */
-		ArrayList<String> identifierNames = new ArrayList<String>();
+		ArrayList<String> identifierNames = new ArrayList<>();
 		for(S supplier : suppliers) {
 			identifierNames.add(supplier.getIdentifierName());
 		}
