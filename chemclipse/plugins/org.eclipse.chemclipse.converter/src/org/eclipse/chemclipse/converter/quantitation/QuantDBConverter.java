@@ -14,7 +14,9 @@ package org.eclipse.chemclipse.converter.quantitation;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.converter.core.NoFileContentMatcher;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
@@ -52,6 +54,7 @@ public class QuantDBConverter {
 	private static final String IS_EXPORTABLE = "isExportable"; //$NON-NLS-1$
 	private static final String IS_IMPORTABLE = "isImportable"; //$NON-NLS-1$
 	private static final String IMPORT_MAGIC_NUMBER_MATCHER = "importMagicNumberMatcher"; //$NON-NLS-1$
+	private static final String IMPORT_FILE_CONTENT_MATCHER = "importContentMatcher"; //$NON-NLS-1$
 
 	/**
 	 * This class has only static methods.
@@ -170,6 +173,7 @@ public class QuantDBConverter {
 			supplier.setExportable(Boolean.valueOf(element.getAttribute(IS_EXPORTABLE)));
 			supplier.setImportable(Boolean.valueOf(element.getAttribute(IS_IMPORTABLE)));
 			supplier.setMagicNumberMatcher(getMagicNumberMatcher(element));
+			supplier.setFileContentMatcher(getFileContentMatcher(element));
 			converterSupport.add(supplier);
 		}
 		return converterSupport;
@@ -201,5 +205,16 @@ public class QuantDBConverter {
 			magicNumberMatcher = null;
 		}
 		return magicNumberMatcher;
+	}
+
+	private static IFileContentMatcher getFileContentMatcher(IConfigurationElement element) {
+
+		IFileContentMatcher fileContentMatcher;
+		try {
+			fileContentMatcher = (IFileContentMatcher)element.createExecutableExtension(IMPORT_FILE_CONTENT_MATCHER);
+		} catch(Exception e) {
+			fileContentMatcher = new NoFileContentMatcher(); // default to a dummy implementation that allows everything
+		}
+		return fileContentMatcher;
 	}
 }
