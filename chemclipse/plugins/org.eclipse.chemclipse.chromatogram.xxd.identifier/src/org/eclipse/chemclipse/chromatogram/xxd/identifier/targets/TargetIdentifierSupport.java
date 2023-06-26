@@ -9,14 +9,16 @@
  * Contributors:
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.identifier.target;
+package org.eclipse.chemclipse.chromatogram.xxd.identifier.targets;
 
-import java.net.URL;
+import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
+import org.eclipse.chemclipse.model.identifier.core.AbstractSupport;
 
-import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.identifier.core.ISupplier;
+public class TargetIdentifierSupport extends AbstractSupport<ITargetIdentifierSupplier> implements ITargetIdentifierSupport {
 
-public interface ITargetIdentifierSupplier extends ISupplier {
+	@Override
+	public ITargetIdentifierSupplier getIdentifierSupplier(String identifierId) throws NoIdentifierAvailableException {
 
-	URL getURL(ILibraryInformation libraryInformation);
+		return getSpecificIdentifierSupplier(identifierId);
+	}
 }
