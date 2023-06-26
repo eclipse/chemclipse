@@ -230,10 +230,8 @@ public class ScanIdentifierUI extends Composite {
 		/*
 		 * Get a default identifier.
 		 */
-		if(massSpectrumIdentifierSupplier == null) {
-			if(!identifierSuppliers.isEmpty()) {
-				massSpectrumIdentifierSupplier = identifierSuppliers.get(0);
-			}
+		if(massSpectrumIdentifierSupplier == null && !identifierSuppliers.isEmpty()) {
+			massSpectrumIdentifierSupplier = identifierSuppliers.get(0);
 		}
 		/*
 		 * Set the tooltip.
@@ -377,39 +375,35 @@ public class ScanIdentifierUI extends Composite {
 	 */
 	private void runIdentification(Display display, List<IScanMSD> massSpectra, List<IScanWSD> waveSpectra, boolean update) {
 
-		if(!massSpectra.isEmpty()) {
-			if(massSpectrumIdentifierSupplier != null) {
-				IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(massSpectra, massSpectrumIdentifierSupplier.getId());
-				ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
-				try {
-					monitor.run(true, true, runnable);
-					if(update) {
-						fireUpdate(display);
-					}
-				} catch(InvocationTargetException e) {
-					logger.warn(e);
-				} catch(InterruptedException e) {
-					Thread.currentThread().interrupt();
-					logger.warn(e);
+		if(!massSpectra.isEmpty() && massSpectrumIdentifierSupplier != null) {
+			IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(massSpectra, massSpectrumIdentifierSupplier.getId());
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+			try {
+				monitor.run(true, true, runnable);
+				if(update) {
+					fireUpdate(display);
 				}
+			} catch(InvocationTargetException e) {
+				logger.warn(e);
+			} catch(InterruptedException e) {
+				Thread.currentThread().interrupt();
+				logger.warn(e);
 			}
 		}
 		//
-		if(!waveSpectra.isEmpty()) {
-			if(waveSpectrumIdentifierSupplier != null) {
-				IRunnableWithProgress runnable = new WaveSpectrumIdentifierRunnable(waveSpectra, waveSpectrumIdentifierSupplier.getId());
-				ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
-				try {
-					monitor.run(true, true, runnable);
-					if(update) {
-						fireUpdate(display);
-					}
-				} catch(InvocationTargetException e) {
-					logger.warn(e);
-				} catch(InterruptedException e) {
-					Thread.currentThread().interrupt();
-					logger.warn(e);
+		if(!waveSpectra.isEmpty() && waveSpectrumIdentifierSupplier != null) {
+			IRunnableWithProgress runnable = new WaveSpectrumIdentifierRunnable(waveSpectra, waveSpectrumIdentifierSupplier.getId());
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+			try {
+				monitor.run(true, true, runnable);
+				if(update) {
+					fireUpdate(display);
 				}
+			} catch(InvocationTargetException e) {
+				logger.warn(e);
+			} catch(InterruptedException e) {
+				Thread.currentThread().interrupt();
+				logger.warn(e);
 			}
 		}
 	}

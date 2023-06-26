@@ -94,6 +94,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SCAN_IDENTIFER_WSD, PreferenceConstants.DEF_SCAN_IDENTIFER_WSD);
 		store.setDefault(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG, PreferenceConstants.DEF_SHOW_SUBTRACT_DIALOG);
 		store.setDefault(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT, PreferenceConstants.DEF_ENABLE_MULTI_SUBTRACT);
+		store.setDefault(PreferenceConstants.P_TARGET_IDENTIFER, PreferenceConstants.DEF_TARGET_IDENTIFER);
 		//
 		store.setDefault(PreferenceConstants.P_SCAN_CHART_ENABLE_FIXED_RANGE_X, PreferenceConstants.DEF_SCAN_CHART_ENABLE_FIXED_RANGE_X);
 		store.setDefault(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_START_X, PreferenceConstants.DEF_SCAN_CHART_FIXED_RANGE_START_X);
