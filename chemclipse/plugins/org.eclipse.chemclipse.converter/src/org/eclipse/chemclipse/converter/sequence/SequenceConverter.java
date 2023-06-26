@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,9 @@ package org.eclipse.chemclipse.converter.sequence;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.converter.core.NoFileContentMatcher;
 import org.eclipse.chemclipse.converter.model.reports.ISequence;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
@@ -40,6 +42,7 @@ public class SequenceConverter {
 	private static final String FILE_NAME = "fileName"; //$NON-NLS-1$
 	private static final String IMPORT_CONVERTER = "importConverter"; //$NON-NLS-1$
 	private static final String IMPORT_MAGIC_NUMBER_MATCHER = "importMagicNumberMatcher"; //$NON-NLS-1$
+	private static final String IMPORT_FILE_CONTENT_MATCHER = "importContentMatcher"; //$NON-NLS-1$
 
 	/**
 	 * This class has only static methods.
@@ -122,6 +125,7 @@ public class SequenceConverter {
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setFilterName(element.getAttribute(FILTER_NAME));
 			supplier.setMagicNumberMatcher(getMagicNumberMatcher(element));
+			supplier.setFileContentMatcher(getFileContentMatcher(element));
 			sequenceConverterSupport.add(supplier);
 		}
 		return sequenceConverterSupport;
@@ -146,5 +150,16 @@ public class SequenceConverter {
 			magicNumberMatcher = null;
 		}
 		return magicNumberMatcher;
+	}
+
+	private static IFileContentMatcher getFileContentMatcher(IConfigurationElement element) {
+
+		IFileContentMatcher fileContentMatcher;
+		try {
+			fileContentMatcher = (IFileContentMatcher)element.createExecutableExtension(IMPORT_FILE_CONTENT_MATCHER);
+		} catch(Exception e) {
+			fileContentMatcher = new NoFileContentMatcher(); // default to a dummy implementation that allows everything
+		}
+		return fileContentMatcher;
 	}
 }
