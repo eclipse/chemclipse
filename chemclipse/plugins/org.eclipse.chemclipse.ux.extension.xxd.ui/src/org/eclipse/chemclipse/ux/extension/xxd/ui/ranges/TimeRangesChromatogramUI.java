@@ -165,6 +165,7 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 				TimeRangesUI timeRangeUI = rangesControl.get();
 				timeRangeUI.update();
 				timeRangeUI.select(timeRange);
+				chartControl.get().updateTimeRangeMarker(timeRange);
 				updateTimeRangeMarker(timeRange);
 				fireUpdate(timeRange);
 			}
@@ -217,8 +218,9 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 			 * Don't set the time ranges visible, e.g. if the user has set
 			 * the composite invisible. The time ranges can be toggled via
 			 * IExtendedPartUI & AtomicReference<TimeRangesUI> getTimeRangesControl().
+			 * setTimeRangesVisible(true);
 			 */
-			// setTimeRangesVisible(true);
+			chartControl.get().updateTimeRangeMarker(timeRange);
 			rangesControl.get().select(timeRange);
 			timeRangeMarker.getTimeRanges().addAll(timeRanges.values());
 			timeRangeMarker.setTimeRangeSelected(timeRange);
