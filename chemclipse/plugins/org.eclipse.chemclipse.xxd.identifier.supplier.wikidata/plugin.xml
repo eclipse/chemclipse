@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.xxd.identifier.targetIdentifier">
+      <TargetIdentificationSupplier
+            description="Links to the corresponding Wikidata entry."
+            id="org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.identifier"
+            identifierName="Wikidata"
+            targetURL="org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.identifier.WikidataExternalTargetIdentifier">
+      </TargetIdentificationSupplier>
+   </extension>
+</plugin>
