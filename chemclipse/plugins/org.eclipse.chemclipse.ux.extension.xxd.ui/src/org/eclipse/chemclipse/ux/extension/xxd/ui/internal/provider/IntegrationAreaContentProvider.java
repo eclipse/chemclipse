@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IntegrationType;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -25,10 +27,29 @@ public class IntegrationAreaContentProvider implements IStructuredContentProvide
 	public Object[] getElements(Object inputElement) {
 
 		if(inputElement instanceof IPeak peak) {
-			List<? extends IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
+			/*
+			 * Peaks
+			 */
+			List<IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
+			adjustIntegrationType(integrationEntries, IntegrationType.PEAK);
 			return integrationEntries.toArray();
 		} else if(inputElement instanceof IChromatogram<?> chromatogram) {
-			List<? extends IIntegrationEntry> integrationEntries = chromatogram.getChromatogramIntegrationEntries();
+			/*
+			 * Chromatogram
+			 */
+			List<IIntegrationEntry> integrationEntriesChromatogram = new ArrayList<>(chromatogram.getChromatogramIntegrationEntries());
+			adjustIntegrationType(integrationEntriesChromatogram, IntegrationType.CHROMATOGRAM);
+			/*
+			 * Background
+			 */
+			List<IIntegrationEntry> integrationEntriesBackground = new ArrayList<>(chromatogram.getBackgroundIntegrationEntries());
+			adjustIntegrationType(integrationEntriesBackground, IntegrationType.BACKGROUND);
+			/*
+			 * Merged
+			 */
+			List<IIntegrationEntry> integrationEntries = new ArrayList<>();
+			integrationEntries.addAll(integrationEntriesChromatogram);
+			integrationEntries.addAll(integrationEntriesBackground);
 			return integrationEntries.toArray();
 		} else {
 			return null;
@@ -43,5 +64,12 @@ public class IntegrationAreaContentProvider implements IStructuredContentProvide
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 
+	}
+
+	private void adjustIntegrationType(List<IIntegrationEntry> integrationEntries, IntegrationType integrationType) {
+
+		for(IIntegrationEntry integrationEntry : integrationEntries) {
+			integrationEntry.setIntegrationType(integrationType);
+		}
 	}
 }

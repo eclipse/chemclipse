@@ -94,8 +94,8 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	 * Integration entries.
 	 */
 	private String integratorDescription = "";
-	private List<IIntegrationEntry> chromatogramIntegrationEntries;
-	private List<IIntegrationEntry> backgroundIntegrationEntries;
+	private List<IIntegrationEntry> chromatogramIntegrationEntries = new ArrayList<>();
+	private List<IIntegrationEntry> backgroundIntegrationEntries = new ArrayList<>();
 	//
 	private final IMethod method;
 	private ISeparationColumnIndices separationColumnIndices;
@@ -117,8 +117,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		updateSupport = new ArrayList<>(5);
 		editHistory = new EditHistory();
 		baselineModelMap.put(DEFAULT_BASELINE_ID, new BaselineModel(this));
-		chromatogramIntegrationEntries = new ArrayList<>();
-		backgroundIntegrationEntries = new ArrayList<>();
 		method = new TripleQuadMethod();
 		separationColumnIndices = SeparationColumnFactory.getSeparationColumnIndices(SeparationColumnType.DEFAULT);
 	}

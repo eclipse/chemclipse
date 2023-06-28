@@ -25,14 +25,18 @@ public class IntegrationAreaLabelProvider extends AbstractChemClipseLabelProvide
 
 	public static final String AREA = ExtensionMessages.area;
 	public static final String TRACE = ExtensionMessages.trace;
+	public static final String TYPE = ExtensionMessages.type;
 	//
 	public static final String[] TITLES = { //
 			AREA, //
-			TRACE //
+			TRACE, //
+			TYPE //
 	};
+	//
 	public static final int[] BOUNDS = { //
-			300, //
-			300 //
+			150, //
+			150, //
+			150 //
 	};
 
 	@Override
@@ -49,14 +53,16 @@ public class IntegrationAreaLabelProvider extends AbstractChemClipseLabelProvide
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IIntegrationEntry) {
-			IIntegrationEntry integrationEntry = (IIntegrationEntry)element;
+		if(element instanceof IIntegrationEntry integrationEntry) {
 			switch(columnIndex) {
 				case 0:
 					text = decimalFormat.format(integrationEntry.getIntegratedArea());
 					break;
 				case 1: // TIC ...
 					text = SignalSupport.asText(integrationEntry.getSignal(), decimalFormat);
+					break;
+				case 2:
+					text = integrationEntry.getIntegrationType().label();
 					break;
 				default:
 					text = "n.v.";

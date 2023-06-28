@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,9 +26,9 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ExtendedIntegrationAreaUI extends Composite implements IExtendedPartUI {
 
-	private Button buttonToolbarInfo;
+	private AtomicReference<Button> buttonToolbarControl = new AtomicReference<>();
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
-	private IntegrationAreaUI integrationAreaUI;
+	private AtomicReference<IntegrationAreaUI> integrationAreaControl = new AtomicReference<>();
 	//
 	private Object object;
 	//
@@ -49,12 +49,10 @@ public class ExtendedIntegrationAreaUI extends Composite implements IExtendedPar
 	public void update(Object object) {
 
 		this.object = object;
-		if(object instanceof IPeak) {
-			IPeak peak = (IPeak)object;
+		if(object instanceof IPeak peak) {
 			String description = peak.getIntegratorDescription();
 			toolbarInfo.get().setText(peakDataSupport.getPeakLabel(peak) + " | " + description);
-		} else if(object instanceof IChromatogram<?>) {
-			IChromatogram<?> chromatogram = (IChromatogram<?>)object;
+		} else if(object instanceof IChromatogram<?> chromatogram) {
 			String description = chromatogram.getIntegratorDescription();
 			toolbarInfo.get().setText(ChromatogramDataSupport.getChromatogramLabel(chromatogram) + " | " + description);
 		} else {
@@ -66,9 +64,9 @@ public class ExtendedIntegrationAreaUI extends Composite implements IExtendedPar
 	private void updateObject() {
 
 		if(object != null) {
-			integrationAreaUI.setInput(object);
+			integrationAreaControl.get().setInput(object);
 		} else {
-			integrationAreaUI.clear();
+			integrationAreaControl.get().clear();
 		}
 	}
 
@@ -85,7 +83,7 @@ public class ExtendedIntegrationAreaUI extends Composite implements IExtendedPar
 
 	private void initialize() {
 
-		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarInfo, buttonToolbarControl.get(), IMAGE_INFO, TOOLTIP_INFO, true);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -96,7 +94,13 @@ public class ExtendedIntegrationAreaUI extends Composite implements IExtendedPar
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		//
-		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
+		createButtonToggleToolbar(composite);
+	}
+
+	private void createButtonToggleToolbar(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
+		buttonToolbarControl.set(button);
 	}
 
 	private void createToolbarInfo(Composite parent) {
@@ -109,7 +113,9 @@ public class ExtendedIntegrationAreaUI extends Composite implements IExtendedPar
 
 	private void createQuantitationTable(Composite parent) {
 
-		integrationAreaUI = new IntegrationAreaUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		IntegrationAreaUI integrationAreaUI = new IntegrationAreaUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		integrationAreaUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		integrationAreaControl.set(integrationAreaUI);
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,8 +44,7 @@ public class IntegrationAreaPart extends AbstractPart<ExtendedIntegrationAreaUI>
 			Object object = null;
 			if(isUpdateEvent(topic) || isChromatogramEvent(topic)) {
 				object = objects.get(0);
-				if(object instanceof IChromatogramSelection) {
-					IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
+				if(object instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
 					object = chromatogramSelection.getChromatogram();
 				}
 			}

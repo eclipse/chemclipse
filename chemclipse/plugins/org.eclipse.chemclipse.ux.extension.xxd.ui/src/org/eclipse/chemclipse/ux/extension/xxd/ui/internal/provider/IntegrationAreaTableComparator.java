@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
@@ -32,13 +32,18 @@ public class IntegrationAreaTableComparator extends AbstractRecordTableComparato
 				case 1:
 					sortOrder = Double.compare(integrationEntry2.getSignal(), integrationEntry1.getSignal());
 					break;
+				case 2:
+					sortOrder = integrationEntry2.getIntegrationType().compareTo(integrationEntry1.getIntegrationType());
+					break;
 				default:
 					sortOrder = 0;
 			}
 		}
+		//
 		if(getDirection() == ASCENDING) {
 			sortOrder = -sortOrder;
 		}
+		//
 		return sortOrder;
 	}
 }
