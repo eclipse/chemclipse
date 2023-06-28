@@ -24,6 +24,9 @@ Require-Bundle: org.eclipse.core.runtime,
  wrapped.org.apache.httpcomponents.httpcore;bundle-version="4.4.16",
  slf4j.api;bundle-version="1.7.36",
  com.github.jsonld-java;bundle-version="0.13.4",
- wrapped.org.apache.httpcomponents.httpclient-cache;bundle-version="4.5.14"
+ wrapped.org.apache.httpcomponents.httpclient-cache;bundle-version="4.5.14",
+ org.eclipse.chemclipse.logging;bundle-version="0.9.0",
+ org.eclipse.chemclipse.model;bundle-version="0.9.0",
+ org.eclipse.chemclipse.chromatogram.xxd.identifier;bundle-version="0.9.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy

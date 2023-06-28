@@ -21,18 +21,9 @@ import org.apache.jena.rdf.model.RDFNode;
 
 public class QueryStructuralFormula {
 
-	private static final String ENDPOINT = "https://query.wikidata.org/sparql";
-	private static final String PROP = "PREFIX p: <http://www.wikidata.org/prop/>\n";
-	private static final String STATEMENT = "PREFIX ps: <http://www.wikidata.org/prop/statement/>\n";
-	private static final String WIKIBASE = "PREFIX wikibase: <http://wikiba.se/ontology#>\n";
-	private static final String BIGDATA = "PREFIX bd: <http://www.bigdata.com/rdf#>\n";
-	private static final String WDT = "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n";
-	private static final String RDFS = "PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n";
-	private static final String SKOS = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n";
-
 	public static String fromName(String name) {
 
-		String select = PROP + RDFS + SKOS + WIKIBASE + BIGDATA + WDT + //
+		String select = Wikidata.PROP + Wikidata.RDFS + Wikidata.SKOS + Wikidata.WIKIBASE + Wikidata.BIGDATA + Wikidata.WDT + //
 				"SELECT ?item ?itemLabel ?pic\n" + //
 				"WHERE {\n" + //
 				"  {\n" + //
@@ -50,7 +41,7 @@ public class QueryStructuralFormula {
 
 	public static String fromCAS(String cas) {
 
-		String select = PROP + STATEMENT + WIKIBASE + BIGDATA + WDT + //
+		String select = Wikidata.PROP + Wikidata.STATEMENT + Wikidata.WIKIBASE + Wikidata.BIGDATA + Wikidata.WDT + //
 				"SELECT ?item ?itemLabel ?pic WHERE {\n" + //
 				"  ?item p:P231 ?_cas.\n" + //
 				"  ?_cas (ps:P231) \"" + cas + "\".\n" + //
@@ -62,7 +53,7 @@ public class QueryStructuralFormula {
 
 	public static String fromSMILES(String smiles) {
 
-		String select = PROP + STATEMENT + WIKIBASE + BIGDATA + WDT + //
+		String select = Wikidata.PROP + Wikidata.STATEMENT + Wikidata.WIKIBASE + Wikidata.BIGDATA + Wikidata.WDT + //
 				"SELECT ?item ?itemLabel ?pic WHERE {\n" + //
 				"  ?item p:P233 ?_smiles.\n" + //
 				"  ?_smiles (ps:P233) \"" + smiles + "\".\n" + //
@@ -74,7 +65,7 @@ public class QueryStructuralFormula {
 
 	public static String fromInChI(String inchi) {
 
-		String select = PROP + STATEMENT + WIKIBASE + BIGDATA + WDT + //
+		String select = Wikidata.PROP + Wikidata.STATEMENT + Wikidata.WIKIBASE + Wikidata.BIGDATA + Wikidata.WDT + //
 				"SELECT ?item ?itemLabel ?pic WHERE {\n" + //
 				"  ?item p:P234 ?_inchi.\n" + //
 				"  ?_inchi (ps:P234) \"" + inchi + "\".\n" + //
@@ -86,7 +77,7 @@ public class QueryStructuralFormula {
 
 	public static String fromInChIKey(String inchiKey) {
 
-		String select = PROP + STATEMENT + WIKIBASE + BIGDATA + WDT + //
+		String select = Wikidata.PROP + Wikidata.STATEMENT + Wikidata.WIKIBASE + Wikidata.BIGDATA + Wikidata.WDT + //
 				"SELECT ?item ?itemLabel ?pic WHERE {\n" + //
 				"  ?item p:P235 ?_inchiKey.\n" + //
 				"  ?_inchiKey (ps:P235) \"" + inchiKey + "\".\n" + //
@@ -103,7 +94,7 @@ public class QueryStructuralFormula {
 	private static String query(String queryString) {
 
 		Query query = QueryFactory.create(queryString);
-		try (QueryExecution qexec = QueryExecutionFactory.sparqlService(ENDPOINT, query)) {
+		try (QueryExecution qexec = QueryExecutionFactory.sparqlService(Wikidata.ENDPOINT, query)) {
 			ResultSet results = qexec.execSelect();
 			while(results.hasNext()) {
 				QuerySolution solution = results.next();

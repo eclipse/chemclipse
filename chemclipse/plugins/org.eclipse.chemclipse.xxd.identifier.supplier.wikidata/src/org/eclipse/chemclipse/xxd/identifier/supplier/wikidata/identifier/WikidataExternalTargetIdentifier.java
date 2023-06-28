@@ -9,39 +9,38 @@
  * Contributors:
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.identifier;
+package org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.identifier;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.targets.ITargetIdentifierSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.cas.CasSupport;
 import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.rest.PowerUserGateway;
+import org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.query.QueryEntity;
 
-public class PubChemExternalTargetIdentifier implements ITargetIdentifierSupplier {
+public class WikidataExternalTargetIdentifier implements ITargetIdentifierSupplier {
 
-	private static final Logger logger = Logger.getLogger(PubChemExternalTargetIdentifier.class);
-	private static final String PREFIX = "https://pubchem.ncbi.nlm.nih.gov/compound/";
+	private static final Logger logger = Logger.getLogger(WikidataExternalTargetIdentifier.class);
 
 	@Override
 	public String getId() {
 
-		return "org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.identifier";
+		return "org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.identifier";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Click to open the corresponding PubChem database entry in a web browser.";
+		return "Click to open the corresponding Wikidata entry in a web browser.";
 	}
 
 	@Override
 	public String getIdentifierName() {
 
-		return "PubChem";
+		return "Wikidata";
 	}
 
 	@Override
@@ -53,17 +52,24 @@ public class PubChemExternalTargetIdentifier implements ITargetIdentifierSupplie
 	@Override
 	public URL getURL(ILibraryInformation libraryInformation) {
 
-		List<Integer> cids = PowerUserGateway.getCIDS(libraryInformation);
-		if(cids.isEmpty()) {
-			return null;
+		String url = null;
+		String cas = libraryInformation.getCasNumber().trim();
+		if(cas != null && !cas.isEmpty() && !CasSupport.CAS_DEFAULT.equals(cas)) {
+			url = QueryEntity.fromCAS(cas);
 		}
-		int cid = cids.get(0);
-		URL url = null;
-		try {
-			url = new URL(PREFIX + cid);
-		} catch(MalformedURLException e) {
-			logger.warn(e);
+		if(url == null) {
+			String name = libraryInformation.getName().trim();
+			if(!name.isEmpty()) {
+				url = QueryEntity.fromName(name);
+			}
 		}
-		return url;
+		if(url != null) {
+			try {
+				return new URL(url);
+			} catch(MalformedURLException e) {
+				logger.warn(e);
+			}
+		}
+		return null;
 	}
 }
