@@ -178,7 +178,6 @@ public abstract class AbstractSupplier implements ISupplierSetter {
 		this.fileContentMatcher = fileContentMatcher;
 	}
 
-	// -----------------------------------------------equals, hashCode, toString
 	@Override
 	public boolean equals(final Object otherObject) {
 
@@ -218,5 +217,4 @@ public abstract class AbstractSupplier implements ISupplierSetter {
 		builder.append("]");
 		return builder.toString();
 	}
-	// -----------------------------------------------equals, hashCode, toString
 }

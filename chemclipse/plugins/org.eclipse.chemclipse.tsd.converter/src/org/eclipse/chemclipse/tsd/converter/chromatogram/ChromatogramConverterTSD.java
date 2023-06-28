@@ -66,6 +66,7 @@ public class ChromatogramConverterTSD implements IChromatogramConverter<IChromat
 					supplier.setImportable(converterServiceTSD.isImportable());
 					supplier.setExportable(converterServiceTSD.isExportable());
 					supplier.setMagicNumberMatcher(converterServiceTSD.getMagicNumberMatcher());
+					supplier.setFileContentMatcher(converterServiceTSD.getFileContentMatcher());
 					chromatogramConverterSupport.add(supplier);
 				}
 			}
@@ -77,14 +78,12 @@ public class ChromatogramConverterTSD implements IChromatogramConverter<IChromat
 	@Override
 	public IProcessingInfo<IChromatogramOverview> convertOverview(File file, IProgressMonitor monitor) {
 
-		System.out.println("A");
 		return null;
 	}
 
 	@Override
 	public IProcessingInfo<IChromatogramOverview> convertOverview(File file, String converterId, IProgressMonitor monitor) {
 
-		System.out.println("B");
 		return null;
 	}
 
@@ -107,27 +106,23 @@ public class ChromatogramConverterTSD implements IChromatogramConverter<IChromat
 	@Override
 	public IProcessingInfo<IChromatogramTSD> convert(File file, String converterId, IProgressMonitor monitor) {
 
-		System.out.println("D");
 		return null;
 	}
 
 	@Override
 	public IProcessingInfo<IChromatogramTSD> getChromatogram(File file, boolean overview, IProgressMonitor monitor) {
 
-		System.out.println("E");
 		return null;
 	}
 
 	@Override
 	public void postProcessChromatogram(IProcessingInfo<IChromatogramTSD> processingInfo, IProgressMonitor monitor) {
 
-		System.out.println("F");
 	}
 
 	@Override
 	public IProcessingInfo<File> convert(File file, IChromatogramTSD chromatogram, String converterId, IProgressMonitor monitor) {
 
-		System.out.println("G");
 		return null;
 	}
 }

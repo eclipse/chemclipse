@@ -7,9 +7,19 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.converter.core;
+package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.methods;
 
-public abstract class AbstractFileContentMatcher implements IFileContentMatcher {
+import java.io.File;
+
+import org.eclipse.chemclipse.converter.core.AbstractFileContentMatcher;
+
+public class FileContentMatcher extends AbstractFileContentMatcher {
+
+	@Override
+	public boolean checkFileFormat(File file) {
+
+		return true;
+	}
 }

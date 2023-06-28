@@ -21,7 +21,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.chemclipse.converter.core.Converter;
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.converter.core.NoFileContentMatcher;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -56,19 +59,6 @@ public class MethodConverter {
 	//
 	private static final Logger logger = Logger.getLogger(MethodConverter.class);
 	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.converter.processMethodSupplier";
-	/*
-	 * These are the attributes of the extension point elements.
-	 */
-	private static final String EXTENSION_POINT_ID = "id"; //$NON-NLS-1$
-	private static final String EXTENSION_POINT_DESCRIPTION = "description"; //$NON-NLS-1$
-	private static final String EXTENSION_POINT_FILTER_NAME = "filterName"; //$NON-NLS-1$
-	private static final String EXTENSION_POINT_FILE_EXTENSION = "fileExtension"; //$NON-NLS-1$
-	private static final String EXTENSION_POINT_FILE_NAME = "fileName"; //$NON-NLS-1$
-	private static final String EXTENSION_POINT_IMPORT_CONVERTER = "importConverter"; //$NON-NLS-1$
-	private static final String EXTENSION_POINT_EXPORT_CONVERTER = "exportConverter"; //$NON-NLS-1$
-	private static final String EXTENSION_POINT_IS_EXPORTABLE = "isExportable"; //$NON-NLS-1$
-	private static final String EXTENSION_POINT_IS_IMPORTABLE = "isImportable"; //$NON-NLS-1$
-	private static final String EXTENSION_POINT_IMPORT_MAGIC_NUMBER_MATCHER = "importMagicNumberMatcher"; //$NON-NLS-1$
 
 	/**
 	 * This class has only static methods.
@@ -183,7 +173,7 @@ public class MethodConverter {
 		IMethodImportConverter instance = null;
 		if(element != null) {
 			try {
-				instance = (IMethodImportConverter)element.createExecutableExtension(EXTENSION_POINT_IMPORT_CONVERTER);
+				instance = (IMethodImportConverter)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}
@@ -198,7 +188,7 @@ public class MethodConverter {
 		IMethodExportConverter instance = null;
 		if(element != null) {
 			try {
-				instance = (IMethodExportConverter)element.createExecutableExtension(EXTENSION_POINT_EXPORT_CONVERTER);
+				instance = (IMethodExportConverter)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}
@@ -214,7 +204,7 @@ public class MethodConverter {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
 		for(IConfigurationElement element : elements) {
-			if(element.getAttribute(EXTENSION_POINT_ID).equals(converterId)) {
+			if(element.getAttribute(Converter.ID).equals(converterId)) {
 				return element;
 			}
 		}
@@ -230,14 +220,15 @@ public class MethodConverter {
 		for(IConfigurationElement element : extensions) {
 			//
 			supplier = new MethodSupplier();
-			supplier.setFileExtension(element.getAttribute(EXTENSION_POINT_FILE_EXTENSION));
-			supplier.setFileName(element.getAttribute(EXTENSION_POINT_FILE_NAME));
-			supplier.setId(element.getAttribute(EXTENSION_POINT_ID));
-			supplier.setDescription(element.getAttribute(EXTENSION_POINT_DESCRIPTION));
-			supplier.setFilterName(element.getAttribute(EXTENSION_POINT_FILTER_NAME));
-			supplier.setExportable(Boolean.valueOf(element.getAttribute(EXTENSION_POINT_IS_EXPORTABLE)));
-			supplier.setImportable(Boolean.valueOf(element.getAttribute(EXTENSION_POINT_IS_IMPORTABLE)));
+			supplier.setFileExtension(element.getAttribute(Converter.FILE_EXTENSION));
+			supplier.setFileName(element.getAttribute(Converter.FILE_NAME));
+			supplier.setId(element.getAttribute(Converter.ID));
+			supplier.setDescription(element.getAttribute(Converter.DESCRIPTION));
+			supplier.setFilterName(element.getAttribute(Converter.FILTER_NAME));
+			supplier.setExportable(Boolean.valueOf(element.getAttribute(Converter.IS_EXPORTABLE)));
+			supplier.setImportable(Boolean.valueOf(element.getAttribute(Converter.IS_IMPORTABLE)));
 			supplier.setMagicNumberMatcher(getMagicNumberMatcher(element));
+			supplier.setFileContentMatcher(getFileContentMatcher(element));
 			converterSupport.add(supplier);
 		}
 		return converterSupport;
@@ -274,11 +265,22 @@ public class MethodConverter {
 
 		IMagicNumberMatcher magicNumberMatcher;
 		try {
-			magicNumberMatcher = (IMagicNumberMatcher)element.createExecutableExtension(EXTENSION_POINT_IMPORT_MAGIC_NUMBER_MATCHER);
+			magicNumberMatcher = (IMagicNumberMatcher)element.createExecutableExtension(Converter.IMPORT_MAGIC_NUMBER_MATCHER);
 		} catch(Exception e) {
 			magicNumberMatcher = null;
 		}
 		return magicNumberMatcher;
+	}
+
+	private static IFileContentMatcher getFileContentMatcher(IConfigurationElement element) {
+
+		IFileContentMatcher fileContentMatcher;
+		try {
+			fileContentMatcher = (IFileContentMatcher)element.createExecutableExtension(Converter.IMPORT_FILE_CONTENT_MATCHER);
+		} catch(Exception e) {
+			fileContentMatcher = new NoFileContentMatcher();
+		}
+		return fileContentMatcher;
 	}
 
 	public static Collection<IProcessMethod> getUserMethods() {

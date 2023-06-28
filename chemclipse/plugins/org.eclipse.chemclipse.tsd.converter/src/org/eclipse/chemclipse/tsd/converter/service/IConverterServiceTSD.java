@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.tsd.converter.service;
 
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.tsd.converter.core.IExportConverterTSD;
@@ -35,6 +36,8 @@ public interface IConverterServiceTSD {
 	IExportConverterTSD getExportConverter();
 
 	IMagicNumberMatcher getMagicNumberMatcher();
+
+	IFileContentMatcher getFileContentMatcher();
 
 	IProcessSettings getProcessSettings();
 

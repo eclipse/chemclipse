@@ -75,6 +75,7 @@
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.processMethodSupplier"
             importConverter="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.methods.MethodImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.methods.MagicNumberMatcher"
+            importContentMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.methods.FileContentMatcher"
             isExportable="true"
             isImportable="true">
       </ProcessMethodSupplier>

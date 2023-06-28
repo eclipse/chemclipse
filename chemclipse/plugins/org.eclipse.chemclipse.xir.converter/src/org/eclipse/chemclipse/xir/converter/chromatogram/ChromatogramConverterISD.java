@@ -66,6 +66,7 @@ public class ChromatogramConverterISD implements IChromatogramConverter<IChromat
 					supplier.setImportable(converterServiceISD.isImportable());
 					supplier.setExportable(converterServiceISD.isExportable());
 					supplier.setMagicNumberMatcher(converterServiceISD.getMagicNumberMatcher());
+					supplier.setFileContentMatcher(converterServiceISD.getFileContentMatcher());
 					chromatogramConverterSupport.add(supplier);
 				}
 			}

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xir.converter.service;
 
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.xir.converter.chromatogram.IExportConverterISD;
@@ -35,6 +36,8 @@ public interface IConverterServiceISD {
 	IExportConverterISD getExportConverter();
 
 	IMagicNumberMatcher getMagicNumberMatcher();
+
+	IFileContentMatcher getFileContentMatcher();
 
 	IProcessSettings getProcessSettings();
 
