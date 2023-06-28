@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - enable ISD
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.core;
 
@@ -25,8 +26,8 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -63,7 +64,8 @@ public class ChromatogramReportsProcessSupplier implements IProcessTypeSupplier 
 
 		@SuppressWarnings("unchecked")
 		public ChromatogramReportProcessorSupplier(IChromatogramReportSupplier supplier, IProcessTypeSupplier parent) {
-			super(supplier.getId(), supplier.getReportName(), supplier.getDescription(), (Class<IChromatogramReportSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD);
+
+			super(supplier.getId(), supplier.getReportName(), supplier.getDescription(), (Class<IChromatogramReportSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD, DataType.ISD);
 			this.supplier = supplier;
 		}
 

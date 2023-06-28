@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - enable ISD
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core;
 
@@ -57,7 +58,7 @@ public class BaselineDetectorProcessTypeSupplier implements IProcessTypeSupplier
 		@SuppressWarnings("unchecked")
 		public BaselineDetectorProcessorSupplier(IBaselineDetectorSupplier supplier, IProcessTypeSupplier parent) {
 
-			super(supplier.getId(), supplier.getDetectorName(), supplier.getDescription(), (Class<IBaselineDetectorSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD);
+			super(supplier.getId(), supplier.getDetectorName(), supplier.getDescription(), (Class<IBaselineDetectorSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD, DataType.ISD);
 		}
 
 		@Override
