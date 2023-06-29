@@ -92,8 +92,9 @@
             fileExtension=".csv"
             filterName="CSV Peak Export (*.csv)"
             id="org.eclipse.chemclipse.msd.converter.supplier.csv.PeakSupplierCSV"
+            importContentMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.FileContentMatcherPeak"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.CSVPeakConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.CSVPeakConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </PeakSupplier>
