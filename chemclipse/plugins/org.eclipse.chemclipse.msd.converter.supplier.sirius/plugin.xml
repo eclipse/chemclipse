@@ -15,18 +15,4 @@
             isImportable="true">
       </MassSpectrumSupplier>
    </extension>
-   <extension
-         point="org.eclipse.chemclipse.msd.converter.databaseSupplier">
-      <DatabaseSupplier
-            description="Reads SIRIUS mass spectra"
-            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.sirius.converter.SiriusExportConverter"
-            fileExtension=".zip"
-            filterName="Compressed SIRIUS Mass Spectrum Database (*.zip)"
-            id="org.eclipse.chemclipse.msd.converter.supplier.sirius.DatabaseSupplier"
-            importConverter="org.eclipse.chemclipse.msd.converter.supplier.sirius.converter.SiriusImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.sirius.converter.MagicNumberMatcher"
-            isExportable="false"
-            isImportable="true">
-      </DatabaseSupplier>
-   </extension>
 </plugin>

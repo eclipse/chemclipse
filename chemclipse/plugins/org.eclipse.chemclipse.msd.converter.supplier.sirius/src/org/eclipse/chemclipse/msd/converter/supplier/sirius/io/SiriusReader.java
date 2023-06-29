@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,9 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -59,41 +56,17 @@ public class SiriusReader extends AbstractMassSpectraReader implements IMassSpec
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
-		if(file.getName().toLowerCase().endsWith(".zip")) {
-			if(monitor != null) {
-				monitor.beginTask("Reading mass spectras from " + file.getName(), IProgressMonitor.UNKNOWN);
+		IMassSpectra massSpectra = new MassSpectra();
+		try (FileInputStream inputStream = new FileInputStream(file)) {
+			IScanMSD massSpectrum = readMassSpectrum(inputStream);
+			if(!massSpectrum.isEmpty()) {
+				massSpectra.addMassSpectrum(massSpectrum);
 			}
-			IMassSpectra massSpectra = new MassSpectra();
-			massSpectra.setConverterId("SIRIUS");
-			try (ZipFile zipFile = new ZipFile(file)) {
-				Enumeration<? extends ZipEntry> entries = zipFile.entries();
-				while(entries.hasMoreElements()) {
-					ZipEntry entry = entries.nextElement();
-					if(entry.isDirectory()) {
-						continue;
-					}
-					if(entry.getName().toLowerCase().endsWith(".ms")) {
-						IScanMSD massSpectrum = readMassSpectrum(zipFile.getInputStream(entry), null);
-						if(!massSpectrum.isEmpty()) {
-							massSpectra.addMassSpectrum(massSpectrum);
-						}
-					}
-				}
-			}
-			return massSpectra;
-		} else {
-			IMassSpectra massSpectra = new MassSpectra();
-			try (FileInputStream inputStream = new FileInputStream(file)) {
-				IScanMSD massSpectrum = readMassSpectrum(inputStream, monitor);
-				if(!massSpectrum.isEmpty()) {
-					massSpectra.addMassSpectrum(massSpectrum);
-				}
-			}
-			return massSpectra;
 		}
+		return massSpectra;
 	}
 
-	public static IScanMSD readMassSpectrum(InputStream stream, IProgressMonitor monitor) throws IOException {
+	public static IScanMSD readMassSpectrum(InputStream stream) throws IOException {
 
 		VendorLibraryMassSpectrum massSpectrum = new VendorLibraryMassSpectrum();
 		ILibraryInformation libraryInformation = massSpectrum.getLibraryInformation();
@@ -127,18 +100,21 @@ public class SiriusReader extends AbstractMassSpectraReader implements IMassSpec
 			}
 			if(line.startsWith(INCHI)) {
 				String value = line.split(INCHI)[1].trim();
-				if(!value.equals("N/A"))
+				if(!value.equals("N/A")) {
 					libraryInformation.setInChI(value);
+				}
 			}
 			if(line.startsWith(CASNUMBER)) {
 				String value = line.split(CASNUMBER)[1].trim();
-				if(!value.equals("N/A"))
+				if(!value.equals("N/A")) {
 					libraryInformation.setCasNumber(value);
+				}
 			}
 			if(line.startsWith(SMILES)) {
 				String value = line.split(SMILES)[1].trim();
-				if(!value.equals("N/A"))
+				if(!value.equals("N/A")) {
 					libraryInformation.setSmiles(value);
+				}
 			}
 			if(line.startsWith(EXACTMASS)) {
 				String value = line.split(EXACTMASS)[1].trim();
