@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +22,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -107,14 +109,14 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle search toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSearch);
-				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16, visible));
+				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImageProvider.SIZE_16x16, visible));
 			}
 		});
 		//
@@ -126,7 +128,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Reset the sequence file editor.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -188,8 +190,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof File) {
-					File file = (File)element;
+				if(element instanceof File file) {
 					return file.getName();
 				}
 				return null;
@@ -204,9 +205,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof File) {
-					//
-					File file = (File)object;
+				if(object instanceof File file) {
 					preferenceStore.setValue(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER, file.getAbsolutePath());
 					if(preferenceStore.getBoolean(PreferenceConstants.P_SEQUENCE_EXPLORER_USE_SUBFOLDER)) {
 						List<File> files = getDirectories(file);
@@ -226,7 +225,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Select the root folder.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -258,8 +257,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof File) {
-					File file = (File)element;
+				if(element instanceof File file) {
 					return file.getName();
 				}
 				return null;
@@ -276,12 +274,9 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof File) {
-					File file = (File)object;
-					if(file.isDirectory()) {
-						preferenceStore.setValue(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER, file.getAbsolutePath());
-						setSequenceListContent(file);
-					}
+				if(object instanceof File file && file.isDirectory()) {
+					preferenceStore.setValue(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER, file.getAbsolutePath());
+					setSequenceListContent(file);
 				}
 			}
 		});
@@ -303,8 +298,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 			public void mouseDoubleClick(MouseEvent e) {
 
 				Object object = sequenceFilesUI.getStructuredSelection().getFirstElement();
-				if(object instanceof File) {
-					File file = (File)object;
+				if(object instanceof File file) {
 					supplierEditorSupport.openEditor(file, false);
 				}
 			}
@@ -318,7 +312,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Open Sequences");
 		button.setToolTipText("Open the selected sequences.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImageProvider.SIZE_16x16));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		button.setLayoutData(gridData);
@@ -331,8 +325,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 				int[] indices = table.getSelectionIndices();
 				for(int index : indices) {
 					Object object = table.getItem(index).getData();
-					if(object instanceof File) {
-						File file = (File)object;
+					if(object instanceof File file) {
 						supplierEditorSupport.openEditor(file, true);
 					}
 				}
@@ -360,7 +353,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 		Collections.sort(files);
 		rootFolderComboViewer.setInput(files);
 		//
-		if(files.size() > 0) {
+		if(!files.isEmpty()) {
 			int index = getSelectedDirectoryIndex(files, preferenceStore.getString(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER));
 			File file = files.get(index);
 			rootFolderComboViewer.getCombo().select(index);
@@ -375,7 +368,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 		Collections.sort(files);
 		subFolderComboViewer.setInput(files);
 		//
-		if(files.size() > 0) {
+		if(!files.isEmpty()) {
 			int index = getSelectedDirectoryIndex(files, preferenceStore.getString(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER));
 			File file = files.get(index);
 			subFolderComboViewer.getCombo().select(index);
@@ -405,8 +398,11 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 				dialog.run(true, true, runnable);
 				List<File> files = runnable.getSequenceFiles();
 				sequenceFilesUI.setInput(files);
-			} catch(Exception e) {
-				logger.error(e);
+			} catch(InvocationTargetException e) {
+				logger.error(e.getCause());
+			} catch(InterruptedException e) {
+				logger.warn(e);
+				Thread.currentThread().interrupt();
 			}
 		} else {
 			sequenceFilesUI.setInput(null);
