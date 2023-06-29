@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,12 +12,13 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalibrationFile;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.ChromatogramWriter;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.SpecificationValidator;
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramExportConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -31,16 +32,18 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 	@Override
 	public IProcessingInfo<File> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
-		file = SpecificationValidator.validateSpecification(file);
 		IProcessingInfo<File> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
 			try {
 				ChromatogramWriter writer = new ChromatogramWriter();
 				writer.writeChromatogram(file, chromatogram, monitor);
 				processingInfo.setProcessingResult(file);
-			} catch(Exception e) {
+			} catch(IOException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(CalibrationFile.DESCRIPTION, "Something has definitely gone wrong with the file: " + file);
+				processingInfo.addErrorMessage(CalibrationFile.DESCRIPTION, "Failed to write file: " + file);
+			} catch(FileIsNotWriteableException e) {
+				logger.warn(e);
+				processingInfo.addErrorMessage(CalibrationFile.DESCRIPTION, "File is not writeable: " + file);
 			}
 		}
 		return processingInfo;

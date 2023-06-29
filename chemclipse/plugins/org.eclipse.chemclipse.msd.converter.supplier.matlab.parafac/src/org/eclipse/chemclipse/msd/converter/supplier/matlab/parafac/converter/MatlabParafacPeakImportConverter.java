@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakImportConverter;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.IConstants;
-import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.SpecificationValidator;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.io.MatlabParafacPeakReader;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
@@ -42,7 +41,6 @@ public class MatlabParafacPeakImportConverter extends AbstractPeakImportConverte
 		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
 		try {
 			super.validate(file);
-			file = SpecificationValidator.validateSpecification(file);
 			IPeakReader peakReader = new MatlabParafacPeakReader();
 			processingInfo = peakReader.read(file, monitor);
 		} catch(FileNotFoundException e) {
