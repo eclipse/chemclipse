@@ -11,16 +11,28 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xir.converter.supplier.jcampdx.io;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
-import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
-import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.converter.core.AbstractFileContentMatcher;
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 
-public class MagicNumberMatcherInfraredSpectroscopy extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
+public class FileContentMatcherInfraredSpectroscopy extends AbstractFileContentMatcher implements IFileContentMatcher {
 
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		return checkFileExtension(file, ".dx");
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+			for(int i = 0; i < 3; i++) {
+				if(bufferedReader.readLine().contains("##DATA TYPE=INFRARED SPECTRUM")) {
+					return true;
+				}
+			}
+		} catch(IOException e) {
+			return false;
+		}
+		return false;
 	}
 }

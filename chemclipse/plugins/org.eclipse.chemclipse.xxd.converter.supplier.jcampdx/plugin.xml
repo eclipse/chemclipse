@@ -61,11 +61,12 @@
          point="org.eclipse.chemclipse.xir.converter.scanSupplier">
       <ScanSupplier
             description="Reads JCAMP-DX FT-IR (*.dx) scans."
+            exportConverter="org.eclipse.chemclipse.xir.converter.supplier.jcampdx.converter.ScanExportConverter"
             fileExtension=".dx"
             filterName="FT-IR (*.dx)"
             id="org.eclipse.chemclipse.xir.converter.supplier.jcampdx"
+            importContentMatcher="org.eclipse.chemclipse.xir.converter.supplier.jcampdx.io.FileContentMatcherInfraredSpectroscopy"
             importConverter="org.eclipse.chemclipse.xir.converter.supplier.jcampdx.converter.ScanImportConverter"
-            exportConverter="org.eclipse.chemclipse.xir.converter.supplier.jcampdx.converter.ScanExportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.xir.converter.supplier.jcampdx.io.MagicNumberMatcherInfraredSpectroscopy"
             isExportable="false"
             isImportable="true">

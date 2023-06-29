@@ -9,6 +9,7 @@
             fileExtension=".msd"
             filterName="mMass Mass Spectrum (*.msd)"
             id="org.eclipse.chemclipse.msd.converter.supplier.mmass"
+            importContentMatcher="org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.MassSpectrumFileContentMatcher"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.MassSpectrumImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.MassSpectrumMagicNumberMatcher"
             isExportable="false"

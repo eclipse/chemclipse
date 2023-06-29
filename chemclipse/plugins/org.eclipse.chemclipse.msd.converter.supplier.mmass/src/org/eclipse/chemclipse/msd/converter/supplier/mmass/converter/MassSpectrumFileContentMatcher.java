@@ -12,15 +12,28 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mmass.converter;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
-import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
-import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.converter.core.AbstractFileContentMatcher;
+import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 
-public class MassSpectrumMagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
+public class MassSpectrumFileContentMatcher extends AbstractFileContentMatcher implements IFileContentMatcher {
 
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		return checkFileExtension(file, ".msd");
+		boolean isValidFormat = false;
+		try (FileReader fileReader = new FileReader(file)) {
+			final char[] charBuffer = new char[60];
+			fileReader.read(charBuffer);
+			final String header = new String(charBuffer);
+			if(header.contains("<mSD version")) {
+				isValidFormat = true;
+			}
+		} catch(IOException e) {
+			// fail silently
+		}
+		return isValidFormat;
 	}
 }
