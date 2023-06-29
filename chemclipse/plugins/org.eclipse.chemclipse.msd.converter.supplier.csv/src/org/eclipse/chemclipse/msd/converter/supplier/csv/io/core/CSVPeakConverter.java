@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.converter.supplier.csv.io.core;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -37,7 +36,6 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.csv.QuoteMode;
-import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
@@ -73,7 +71,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConverter, IMagicNumberMatcher {
+public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConverter {
 
 	public static final Charset CHARSET = StandardCharsets.UTF_8;
 	//
@@ -91,8 +89,10 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 	private static final Pattern SEPERATOR_VALUE_PATTERN = Pattern.compile(String.valueOf(SEPERATOR_VALUE), Pattern.LITERAL);
 	private static final Pattern SEPERATOR_RECORD_PATTERN = Pattern.compile(String.valueOf(SEPERATOR_RECORD), Pattern.LITERAL);
 	private static final String NAME = "CSV Peak Export";
-	private static final String[] HEADERS = {HEADER_NAME, HEADER_RT, HEADER_RRT, HEADER_RI, HEADER_AREA, "S/N", "CAS", HEADER_MZ, HEADER_INTENSITIES};
+	//
 	private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("0.000", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+	//
+	public static final String[] HEADERS = {HEADER_NAME, HEADER_RT, HEADER_RRT, HEADER_RI, HEADER_AREA, "S/N", "CAS", HEADER_MZ, HEADER_INTENSITIES};
 
 	// export
 	@Override
@@ -275,25 +275,6 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 		});
 		intensityValues.normalize();
 		return intensityValues;
-	}
-
-	// magic number
-	@Override
-	public boolean checkFileFormat(File file) {
-
-		return file.getName().toLowerCase().endsWith(".csv") && matchHeader(file);
-	}
-
-	private boolean matchHeader(File file) {
-
-		try {
-			try (CSVParser parser = new CSVParser(new FileReader(file), CSVFormat.EXCEL.withHeader())) {
-				String[] array = parser.getHeaderMap().keySet().toArray(new String[0]);
-				return Arrays.equals(array, HEADERS);
-			}
-		} catch(IOException e) {
-		}
-		return false;
 	}
 
 	/**
