@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,6 @@ import java.io.File;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
 import org.eclipse.chemclipse.csd.converter.io.IChromatogramCSDReader;
-import org.eclipse.chemclipse.csd.converter.supplier.xy.internal.support.SpecificationValidator;
 import org.eclipse.chemclipse.csd.converter.supplier.xy.io.ChromatogramReader;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -34,7 +33,6 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 
 		IProcessingInfo<IChromatogramCSD> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
-			file = SpecificationValidator.validateSpecification(file);
 			IChromatogramCSDReader reader = new ChromatogramReader();
 			try {
 				IChromatogramCSD chromatogram = reader.read(file, monitor);
@@ -52,7 +50,6 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 
 		IProcessingInfo<IChromatogramOverview> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
-			file = SpecificationValidator.validateSpecification(file);
 			IChromatogramCSDReader reader = new ChromatogramReader();
 			try {
 				IChromatogramOverview chromatogramOverview = reader.readOverview(file, monitor);

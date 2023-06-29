@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakWriter;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakExportConverter;
-import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.SpecificationValidator;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.io.MatlabParafacPeakWriter;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -43,7 +42,6 @@ public class MatlabParafacPeakExportConverter extends AbstractPeakExportConverte
 		/*
 		 * Checks that file and mass spectra are not null.
 		 */
-		file = SpecificationValidator.validateSpecification(file);
 		IProcessingInfo<File> processingInfoValidate = validate(file, peaks);
 		if(processingInfoValidate.hasErrorMessages()) {
 			processingInfo.addMessages(processingInfoValidate);
