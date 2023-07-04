@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -252,7 +252,13 @@ public class NistResultFileParser {
 				logger.warn(e);
 			}
 			/*
-			 * RI
+			 * ---------------------------
+			 * RI (There is something odd with the listed retention index in NIST 23)
+			 * ---------------------------
+			 * NIST20
+			 * Hit 4 : <<3-Hydroxy-4-methoxy-2,3-dihydropyran-6-one>>;<<C6H8O4>>; MF: 641; RMF: 650; Prob: 3.47; CAS:1332747-94-0; Mw: 144; Lib: <<mainlib>>; Id: 112275; RI: 1509.
+			 * NIST23
+			 * Hit 4 : <<3-Hydroxy-4-methoxy-2,3-dihydropyran-6-one>>;<<C6H8O4>>; MF: 640; RMF: 648; Prob: 3.83; CAS:1332747-94-0; Mw: 144; Lib: <<mainlib>>; Id: 125690; RI: 1361381.
 			 */
 			try {
 				hit.setRetentionIndex(Integer.valueOf(ri));
