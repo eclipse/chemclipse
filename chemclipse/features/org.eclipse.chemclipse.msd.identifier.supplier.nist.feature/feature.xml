@@ -3,26 +3,24 @@
       id="org.eclipse.chemclipse.msd.identifier.supplier.nist.feature"
       label="NIST-DB Identifier"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding"
+      license-feature="org.eclipse.license"
+      license-feature-version="1.0.0.qualifier">
 
    <description url="http://www.chemclipse.net">
-      This is a plug in utilizing NIST to identify peaks.
+      This is a plug in utilizing NIST MSSEARCH to identify peaks.
    </description>
 
    <copyright url="http://www.chemclipse.net">
       Copyright (c) 2010, 2018 Lablicate GmbH.
    </copyright>
 
-   <license url="http://www.eclipse.org/legal/epl-v10.html">
-      Copyright (c) 2010, 2018 Lablicate GmbH.
-All rights reserved. This program and the accompanying materials
-are made available under the terms of the Eclipse Public License
-v1.0 which accompanies this distribution, and is available at
-http://www.eclipse.org/legal/epl-v10.html
+   <license url="%licenseURL">
+      %license
    </license>
 
    <url>
-      <discovery label="NIST Peak Identifier" url="https://www.openchrom.net"/>
+      <discovery label="NIST MS Search Program" url="https://chemdata.nist.gov/mass-spc/ms-search/"/>
    </url>
 
    <plugin

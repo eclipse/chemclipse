@@ -3,28 +3,21 @@
       id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.feature"
       label="Peak Detector First Derivative"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding"
+      license-feature="org.eclipse.license"
+      license-feature-version="1.0.0.qualifier">
 
-   <description url="http://www.chemclipse.net/plugins/peakdetectors/peakdetector1/">
+   <description url="http://www.chemclipse.net/">
       This feature tries to implement a peak detector similar to the known ChemStation peak detector.
    </description>
 
-   <copyright url="http://www.chemclipse.net/plugins/peakdetectors/peakdetector1">
-      This feature is published under the Eclispe Public License v1.0.
+   <copyright url="http://www.chemclipse.net/">
+      Copyright (c) 2008, 2018 Lablicate GmbH.
    </copyright>
 
-   <license url="http://www.eclipse.org/legal/epl-v10.html">
-      Copyright (c) 2008, 2018 Lablicate GmbH.
-
-All rights reserved. This program and the accompanying materials
-are made available under the terms of the Eclipse Public License
-v1.0 which accompanies this distribution, and is available at
-http://www.eclipse.org/legal/epl-v10.html
+   <license url="%licenseURL">
+      %license
    </license>
-
-   <url>
-      <discovery label="Peak Detector" url="http://www.chemclipse.net/plugins/peakdetectors/peakdetector1"/>
-   </url>
 
    <plugin
          id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative"
