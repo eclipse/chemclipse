@@ -21,6 +21,12 @@ public class RetentionIndexSettings {
 	@JsonProperty(value = "Retention Index Marker", defaultValue = "")
 	@JsonPropertyDescription("The list of retention index markers.")
 	private RetentionIndexMarker retentionIndexMarker = new RetentionIndexMarker();
+	@JsonProperty(value = "Extrapolate (Left)", defaultValue = "false")
+	@JsonPropertyDescription("Extrapolate the index schema (left) to the start of the chromatogram.")
+	private boolean extrapolateLeft = false;
+	@JsonProperty(value = "Extrapolate (Right)", defaultValue = "false")
+	@JsonPropertyDescription("Extrapolate the index schema (right) to the end of the chromatogram.")
+	private boolean extrapolateRight = false;
 	@JsonProperty(value = "Store In Chromatogram", defaultValue = "true")
 	@JsonPropertyDescription("Store the retention index marker in the chromatogram.")
 	private boolean storeInChromatogram = true;
@@ -36,6 +42,26 @@ public class RetentionIndexSettings {
 	public void setRetentionIndexMarker(RetentionIndexMarker retentionIndexMarker) {
 
 		this.retentionIndexMarker = retentionIndexMarker;
+	}
+
+	public boolean isExtrapolateLeft() {
+
+		return extrapolateLeft;
+	}
+
+	public void setExtrapolateLeft(boolean extrapolateLeft) {
+
+		this.extrapolateLeft = extrapolateLeft;
+	}
+
+	public boolean isExtrapolateRight() {
+
+		return extrapolateRight;
+	}
+
+	public void setExtrapolateRight(boolean extrapolateRight) {
+
+		this.extrapolateRight = extrapolateRight;
 	}
 
 	public boolean isStoreInChromatogram() {

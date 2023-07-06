@@ -50,6 +50,7 @@ public class RetentionIndexCalculator {
 	public static final String ALKANE_REGEX = "(" + ALKANE_PREFIX + ")(\\d+)";
 	public static final int ALKANE_MISSING = 0;
 	public static final int INDEX_MISSING = 0;
+	public static final float ALKANE_FACTOR = 100.0f;
 	//
 	private static final Pattern PATTERN_ALKANE = Pattern.compile(ALKANE_REGEX);
 	private static final String DESCRIPTION = "Retention Index Calculator";
@@ -72,6 +73,15 @@ public class RetentionIndexCalculator {
 				RetentionIndexCalculator.calculateIndex(referencedChromatogram, separationColumnIndices);
 			}
 		}
+	}
+
+	public static String getAlkaneLabel(String[] standards, int index) {
+
+		if(index > 0 && index <= standards.length) {
+			return standards[index - 1];
+		}
+		//
+		return "Alkane Missing";
 	}
 
 	public static String[] getStandards() {
@@ -203,6 +213,7 @@ public class RetentionIndexCalculator {
 		alkanesByCAS.put("638-68-6", "Triacontane");
 		alkanesByCAS.put("630-04-6", "Hentriacontane/Untriacontane");
 		alkanesByCAS.put("544-85-4", "Dotriacontane");
+		//
 		return alkanesByCAS;
 	}
 

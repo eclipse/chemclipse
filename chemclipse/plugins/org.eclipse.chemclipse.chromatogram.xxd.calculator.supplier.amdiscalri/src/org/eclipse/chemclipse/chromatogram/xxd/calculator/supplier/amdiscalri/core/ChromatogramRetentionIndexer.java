@@ -11,10 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexExtrapolator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.RetentionIndexMarker;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.RetentionIndexSettings;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
@@ -61,7 +65,9 @@ public class ChromatogramRetentionIndexer implements IProcessTypeSupplier {
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, RetentionIndexSettings processSettings, ProcessExecutionContext context) throws InterruptedException {
 
 			IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
-			RetentionIndexMarker retentionIndexMarker = processSettings.getRetentionIndexMarker();
+			boolean extrapolateLeft = processSettings.isExtrapolateLeft();
+			boolean extrapolateRight = processSettings.isExtrapolateRight();
+			RetentionIndexMarker retentionIndexMarker = getRetentionIndexMarker(processSettings.getRetentionIndexMarker(), chromatogram, extrapolateLeft, extrapolateRight);
 			boolean processReferenceChromatograms = processSettings.isProcessReferenceChromatograms();
 			RetentionIndexCalculator.calculateIndex(chromatogram, retentionIndexMarker, processReferenceChromatograms);
 			/*
@@ -80,5 +86,58 @@ public class ChromatogramRetentionIndexer implements IProcessTypeSupplier {
 			//
 			return chromatogramSelection;
 		}
+	}
+
+	private static RetentionIndexMarker getRetentionIndexMarker(RetentionIndexMarker retentionIndexMarker, IChromatogram<?> chromatogram, boolean extrapolateLeft, boolean extrapolateRight) {
+
+		if(retentionIndexMarker != null && retentionIndexMarker.size() >= 2) {
+			if(extrapolateData(extrapolateLeft, extrapolateRight)) {
+				/*
+				 * Get the start/stop marker
+				 */
+				Optional<IRetentionIndexEntry> markerStart = retentionIndexMarker.stream().min((m1, m2) -> Integer.compare(m1.getRetentionTime(), m2.getRetentionTime()));
+				Optional<IRetentionIndexEntry> markerStop = retentionIndexMarker.stream().max((m1, m2) -> Integer.compare(m1.getRetentionTime(), m2.getRetentionTime()));
+				/*
+				 * Calculate the missing ranges.
+				 */
+				RetentionIndexExtrapolator retentionIndexExtrapolator = new RetentionIndexExtrapolator();
+				retentionIndexExtrapolator.extrapolateMissingAlkaneRanges(retentionIndexMarker);
+				/*
+				 * Constraint Remove (Left)
+				 */
+				if(!extrapolateLeft && markerStart.isPresent()) {
+					List<IRetentionIndexEntry> removeEntries = new ArrayList<>();
+					int retentionTimeStart = markerStart.get().getRetentionTime();
+					for(IRetentionIndexEntry retentionIndexEntry : retentionIndexMarker) {
+						if(retentionIndexEntry.getRetentionTime() < retentionTimeStart) {
+							removeEntries.add(retentionIndexEntry);
+						}
+					}
+					retentionIndexMarker.removeAll(removeEntries);
+				}
+				/*
+				 * Constraint Remove (Right)
+				 */
+				if(!extrapolateRight && markerStop.isPresent()) {
+					List<IRetentionIndexEntry> removeEntries = new ArrayList<>();
+					int retentionTimeStop = markerStop.get().getRetentionTime();
+					for(IRetentionIndexEntry retentionIndexEntry : retentionIndexMarker) {
+						if(retentionIndexEntry.getRetentionTime() > retentionTimeStop) {
+							removeEntries.add(retentionIndexEntry);
+						}
+					}
+					retentionIndexMarker.removeAll(removeEntries);
+				}
+			}
+		}
+		/*
+		 * Return the initial marker.
+		 */
+		return retentionIndexMarker;
+	}
+
+	private static boolean extrapolateData(boolean extrapolateLeft, boolean extrapolateRight) {
+
+		return extrapolateLeft == true || extrapolateRight == true;
 	}
 }
