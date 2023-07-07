@@ -121,10 +121,10 @@ public class ProcessorSupport {
 		}
 	}
 
-	public static List<Processor> getProcessors(Set<IProcessSupplier<?>> processSuppliers, String preference) {
+	public static List<Processor> getProcessors(Set<IProcessSupplier<?>> processSuppliers, String settings) {
 
 		List<Processor> processors = new ArrayList<>();
-		Map<String, String> activeProcessorMap = getActiveProcessorMap(preference);
+		Map<String, String> activeProcessorMap = getActiveProcessorMap(settings);
 		/*
 		 * Fetch the processor list.
 		 */
@@ -141,7 +141,7 @@ public class ProcessorSupport {
 		/*
 		 * Swap elements, bases on the order of the persisted processors.
 		 */
-		List<Tuple> activeProcessorSwapList = getActiveProcessorSwapList(processors, preference);
+		List<Tuple> activeProcessorSwapList = getActiveProcessorSwapList(processors, settings);
 		int sizeSwapList = activeProcessorSwapList.size();
 		Set<Integer> swappedIndices = new HashSet<>();
 		//
@@ -166,12 +166,12 @@ public class ProcessorSupport {
 		return processors;
 	}
 
-	private static Map<String, String> getActiveProcessorMap(String preference) {
+	private static Map<String, String> getActiveProcessorMap(String settings) {
 
 		Map<String, String> activeProcessorMap = new HashMap<>();
 		//
-		if(preference != null && !preference.isEmpty()) {
-			String[] processors = preference.split(PROCESSOR_DELIMITER);
+		if(settings != null && !settings.isEmpty()) {
+			String[] processors = settings.split(PROCESSOR_DELIMITER);
 			for(String processor : processors) {
 				String[] values = processor.split(VALUE_DELIMITER);
 				if(values != null && values.length == 3) {

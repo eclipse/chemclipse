@@ -83,11 +83,11 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private static final String MENU_CATEGORY_TARGETS = "Targets";
 	private static final int INDEX_CHROMATOGRAM = 1;
 	//
-	private Button buttonToolbarInfo;
+	private AtomicReference<Button> buttonToolbarInfo = new AtomicReference<>();
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
-	private Button buttonToolbarSearch;
+	private AtomicReference<Button> buttonToolbarSearch = new AtomicReference<>();
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
-	private Button buttonToolbarEdit;
+	private AtomicReference<Button> buttonToolbarEdit = new AtomicReference<>();
 	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
 	//
 	private ComboTarget comboTarget;
@@ -191,9 +191,9 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void initialize() {
 
-		enableToolbar(toolbarInfo, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
-		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH, false);
-		enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
+		enableToolbar(toolbarInfo, buttonToolbarInfo.get(), IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarSearch, buttonToolbarSearch.get(), IMAGE_SEARCH, TOOLTIP_SEARCH, false);
+		enableToolbar(toolbarEdit, buttonToolbarEdit.get(), IMAGE_EDIT, TOOLTIP_EDIT, false);
 		//
 		enableEdit(Arrays.asList(targetListOther, targetListChromatogram), buttonTableEdit, IMAGE_EDIT_ENTRY, false);
 		applySettings();
@@ -207,13 +207,31 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(7, false));
 		//
-		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
+		createButtonToggleToolbarInfo(composite);
 		targetIdentifierUI = createTargetIdentifierUI(composite);
-		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
-		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
+		createButtonToggleToolbarSearch(composite);
+		createButtonToggleToolbarEdit(composite);
 		buttonDeleteTargets = createButtonDeleteAll(composite);
 		createButtonHelp(composite);
 		createButtonSettings(composite);
+	}
+
+	private void createButtonToggleToolbarInfo(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
+		buttonToolbarInfo.set(button);
+	}
+
+	private void createButtonToggleToolbarSearch(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		buttonToolbarSearch.set(button);
+	}
+
+	private void createButtonToggleToolbarEdit(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
+		buttonToolbarEdit.set(button);
 	}
 
 	private Button createButtonDeleteAll(Composite parent) {
@@ -573,7 +591,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			targetList.get().setInput(identificationTargets);
 		} else {
 			targetList.get().setInput(null);
-			enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
+			enableToolbar(toolbarEdit, buttonToolbarEdit.get(), IMAGE_EDIT, TOOLTIP_EDIT, false);
 		}
 		//
 		updateLabelInfo();

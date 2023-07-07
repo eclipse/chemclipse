@@ -164,8 +164,7 @@ public class ProcessorToolbarSelectionUI extends Composite {
 			public void mouseDoubleClick(MouseEvent e) {
 
 				Object object = processSupplierListUI.getStructuredSelection().getFirstElement();
-				if(object instanceof Processor) {
-					Processor processor = (Processor)object;
+				if(object instanceof Processor processor) {
 					processor.setActive(!processor.isActive());
 					updateProcessorLists();
 				}
@@ -218,8 +217,7 @@ public class ProcessorToolbarSelectionUI extends Composite {
 	private void modifySelectedProcessors(ProcessSupplierListUI listUI, boolean show) {
 
 		for(Object object : listUI.getStructuredSelection().toArray()) {
-			if(object instanceof Processor) {
-				Processor processor = (Processor)object;
+			if(object instanceof Processor processor) {
 				processor.setActive(show);
 			}
 		}
@@ -299,9 +297,8 @@ public class ProcessorToolbarSelectionUI extends Composite {
 	private void switchProcessor(boolean moveUp) {
 
 		Object object = processorListActive.getStructuredSelection().getFirstElement();
-		if(object instanceof Processor) {
-			Processor processorActive = (Processor)object;
-			ProcessorSupport.switchProcessor(processors, processorActive, moveUp);
+		if(object instanceof Processor processor) {
+			ProcessorSupport.switchProcessor(processors, processor, moveUp);
 		}
 	}
 

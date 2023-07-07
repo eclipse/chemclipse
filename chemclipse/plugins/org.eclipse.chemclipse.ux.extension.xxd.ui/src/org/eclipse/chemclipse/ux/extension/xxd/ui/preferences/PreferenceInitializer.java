@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -57,6 +58,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA, PreferenceConstants.DEF_STACK_POSITION_INTEGRATION_AREA);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS, PreferenceConstants.DEF_STACK_POSITION_INTERNAL_STANDARDS);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_MEASUREMENT_RESULTS, PreferenceConstants.DEF_STACK_POSITION_MEASUREMENT_RESULTS);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_INDICES, PreferenceConstants.DEF_STACK_POSITION_CHROMATOGRAM_INDICES);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_HEATMAP, PreferenceConstants.DEF_STACK_POSITION_CHROMATOGRAM_HEATMAP);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_REFERENCES, PreferenceConstants.DEF_STACK_POSITION_PEAK_QUANTITATION_REFERENCES);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_CHART, PreferenceConstants.DEF_STACK_POSITION_QUANT_RESPONSE_CHART);
@@ -354,7 +356,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_PROCESSOR_TOOLBAR, PreferenceConstants.DEF_CHROMATOGRAM_PROCESSOR_TOOLBAR);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR, PreferenceConstants.DEF_CHROMATOGRAM_SHOW_METHODS_TOOLBAR);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SHOW_REFERENCES_COMBO, PreferenceConstants.DEF_CHROMATOGRAM_SHOW_REFERENCES_COMBO);
-		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SHOW_TOOLBAR_TEXT, PreferenceConstants.DEF_CHROMATOGRAM_SHOW_TOOLBAR_TEXT);
 		//
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_TITLE_X_AXIS_MILLISECONDS);
 		store.setDefault(PreferenceConstants.P_FORMAT_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_FORMAT_X_AXIS_MILLISECONDS);
@@ -455,6 +456,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_DELTA_MILLISECONDS_PEAK_SELECTION, PreferenceConstants.DEF_DELTA_MILLISECONDS_PEAK_SELECTION);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS, PreferenceConstants.DEF_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS);
 		store.setDefault(PreferenceConstants.P_SHOW_RESUME_METHOD_DIALOG, PreferenceConstants.DEF_SHOW_RESUME_METHOD_DIALOG);
+		store.setDefault(PreferenceConstants.P_SHOW_RETENTION_INDEX_MARKER, PreferenceConstants.DEF_SHOW_RETENTION_INDEX_MARKER);
 		/*
 		 * Time Ranges
 		 */
@@ -480,6 +482,12 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 * Editors
 		 */
 		store.setDefault(PreferenceConstants.P_EDITOR_TSD, PreferenceConstants.DEF_EDITOR_TSD);
+		/*
+		 * Quick-Access Processors
+		 */
+		for(DataCategory dataCategory : DataCategory.values()) {
+			store.setDefault(PreferenceConstants.P_QUICK_ACCESS_PROCESSORS + dataCategory.name(), PreferenceConstants.DEF_QUICK_ACCESS_PROCESSORS);
+		}
 		//
 		return store;
 	}

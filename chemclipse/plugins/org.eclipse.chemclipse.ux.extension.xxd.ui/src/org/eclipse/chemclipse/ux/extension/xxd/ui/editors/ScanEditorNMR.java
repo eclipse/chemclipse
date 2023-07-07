@@ -18,7 +18,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -61,14 +60,11 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.DynamicSettingsUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.NMRMeasurementsUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedNMRScanUI;
@@ -80,7 +76,6 @@ import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -270,7 +265,6 @@ public class ScanEditorNMR implements IScanEditorNMR {
 	private void createEditorPages(Composite parent) {
 
 		Composite container = createContainer(parent);
-		createToolbar(container);
 		SashForm sashForm = new SashForm(container, SWT.HORIZONTAL);
 		maximize(sashForm);
 		Composite left = new Composite(sashForm, SWT.NONE);
@@ -304,23 +298,6 @@ public class ScanEditorNMR implements IScanEditorNMR {
 			}
 		});
 		// extendedMeasurementResultUI = new ExtendedMeasurementResultUI(composite);
-	}
-
-	private EditorToolBar createToolbar(Composite container) {
-
-		EditorToolBar toolBar = new EditorToolBar(container);
-		toolBar.addPreferencePages(() -> {
-			List<IPreferencePage> list = new ArrayList<>();
-			list.add(new PreferencePageProcessors(processSupplierContext));
-			return list;
-		}, this::updateSetting);
-		toolBar.enableToolbarTextButton(Activator.getDefault().getPreferenceStore(), getClass().getSimpleName() + ".showToolBarText");
-		return toolBar;
-	}
-
-	private void updateSetting() {
-
-		// TODO nothing to do at the moment
 	}
 
 	private final class UpdatingObserver<FilteredType, ConfigType> implements PropertyChangeListener {

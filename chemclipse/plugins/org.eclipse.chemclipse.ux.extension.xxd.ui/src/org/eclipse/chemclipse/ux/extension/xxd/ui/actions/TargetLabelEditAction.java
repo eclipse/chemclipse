@@ -23,37 +23,30 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.model.targets.TargetReference;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizardListener;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 
-public class TargetLabelEditAction extends Action {
+public class TargetLabelEditAction {
 
 	public static final boolean DEF_SHOW_PREVIEW = false;
 	public static final String P_SHOW_PREVIEW = "TargetLabelEditAction.showPreview";
 	//
-	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private final List<Runnable> listeners = new CopyOnWriteArrayList<>();
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private List<Runnable> listeners = new CopyOnWriteArrayList<>();
 	private ILabelEditSettings labelEditSettings = null;
 
 	public TargetLabelEditAction(ILabelEditSettings labelEditSettings) {
 
-		super("Labels", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImageProvider.SIZE_16x16));
 		this.labelEditSettings = labelEditSettings;
-		setToolTipText(ExtensionMessages.manageLabelsChromatogram);
 		setShowPreviewDefault(DEF_SHOW_PREVIEW);
 	}
 
@@ -64,8 +57,7 @@ public class TargetLabelEditAction extends Action {
 		}
 	}
 
-	@Override
-	public void run() {
+	public void openWizard(Shell shell) {
 
 		if(labelEditSettings != null && labelEditSettings.getChromatogramSelection() != null && labelEditSettings.getChromatogramUI() != null) {
 			IChromatogramSelection<?, ?> chromatogramSelection = labelEditSettings.getChromatogramSelection();
@@ -149,7 +141,6 @@ public class TargetLabelEditAction extends Action {
 			 * Opens the Wizard
 			 */
 			BaseChart baseChart = chromatogramChart.getBaseChart();
-			Shell shell = baseChart.getShell();
 			boolean settingsChanged = TargetDisplaySettingsWizard.openWizard(shell, targetReferences, chromatogramSelection.getChromatogram(), settingsWizardListener);
 			baseChart.getPlotArea().removeCustomPaintListener(targetReferenceLabelMarker);
 			settingsWizardListener.setPreviewSettings(null);

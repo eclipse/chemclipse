@@ -89,7 +89,6 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 		setLayout(new FillLayout());
 		//
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		GridLayout gridLayout = new GridLayout(8, false);
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;

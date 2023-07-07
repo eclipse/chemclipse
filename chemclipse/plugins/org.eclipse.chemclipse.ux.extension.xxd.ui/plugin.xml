@@ -232,7 +232,31 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMergePeaks"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageMergePeaks"
             name="Merge Peaks">
-      </page>                                                                                           
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarCSD"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageProcessorToolbarCSD"
+            name="Processor Quick-Access (CSD)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarMSD"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageProcessorToolbarMSD"
+            name="Processor Quick-Access (MSD)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarWSD"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageProcessorToolbarWSD"
+            name="Processor Quick-Access (WSD)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarISD"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageProcessorToolbarISD"
+            name="Processor Quick-Access (ISD)">
+      </page>                                                                                                               
    </extension> 
    <extension
          point="org.eclipse.ui.editors">  

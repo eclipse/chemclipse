@@ -300,6 +300,8 @@ public class ExtensionMessages extends NLS {
 	public static String compressionType;
 	public static String displayColorScheme;
 	public static String openDataTypeFiles;
+	public static String processorQuickAccess;
+	public static String selectProcessorToolbarItems;
 	//
 	static {
 		NLS.initializeMessages("org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.messages", ExtensionMessages.class); //$NON-NLS-1$

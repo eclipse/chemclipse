@@ -298,11 +298,12 @@ public class RetentionIndexCalculator {
 	public IProcessingInfo<?> resetIndices(IChromatogramSelection<?, ?> chromatogramSelection, ResetterSettings resetterSettings) {
 
 		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		boolean clearStoredRetentionIndices = resetterSettings.isClearStoredRetentionIndices();
 		/*
 		 * Master
 		 */
 		if(chromatogramSelection != null) {
-			resetIndex(chromatogramSelection.getChromatogram());
+			resetIndex(chromatogramSelection.getChromatogram(), clearStoredRetentionIndices);
 			if(resetterSettings.isProcessReferencedChromatograms()) {
 				/*
 				 * References
@@ -310,7 +311,7 @@ public class RetentionIndexCalculator {
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				for(Object object : chromatogram.getReferencedChromatograms()) {
 					if(object instanceof IChromatogram<?> referencedChromatograms) {
-						resetIndex(referencedChromatograms);
+						resetIndex(referencedChromatograms, clearStoredRetentionIndices);
 					}
 				}
 			}
@@ -444,7 +445,7 @@ public class RetentionIndexCalculator {
 		return separationColumnIndices;
 	}
 
-	private void resetIndex(IChromatogram<? extends IPeak> chromatogram) {
+	private void resetIndex(IChromatogram<? extends IPeak> chromatogram, boolean clearStoredRetentionIndices) {
 
 		float retentionIndex = 0.0f;
 		/*
@@ -468,6 +469,12 @@ public class RetentionIndexCalculator {
 		for(IPeak peak : chromatogram.getPeaks()) {
 			IScan scan = peak.getPeakModel().getPeakMaximum();
 			scan.setRetentionIndex(retentionIndex);
+		}
+		/*
+		 * Stored Indices
+		 */
+		if(clearStoredRetentionIndices) {
+			chromatogram.getSeparationColumnIndices().clear();
 		}
 	}
 }

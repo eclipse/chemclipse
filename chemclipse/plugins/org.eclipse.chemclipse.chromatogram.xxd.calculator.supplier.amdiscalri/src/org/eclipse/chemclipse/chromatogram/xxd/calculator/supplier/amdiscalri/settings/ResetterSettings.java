@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class ResetterSettings extends AbstractChromatogramCalculatorSettings implements IRetentionIndexFilterSettings {
 
+	@JsonProperty(value = "Clear Retention Indices (Stored)", defaultValue = "true")
+	@JsonPropertyDescription("The retention indices, that are stored in the chromatogram, will be cleared.")
+	private boolean clearStoredRetentionIndices = true;
 	@JsonProperty(value = "Process Referenced Chromatograms", defaultValue = "true")
 	@JsonPropertyDescription("Referenced chromatgrams will be also processed.")
 	private boolean processReferencedChromatograms = true;
@@ -38,6 +41,16 @@ public class ResetterSettings extends AbstractChromatogramCalculatorSettings imp
 	public void setRetentionIndexFiles(List<String> retentionIndexFiles) {
 
 		this.retentionIndexFiles = retentionIndexFiles;
+	}
+
+	public boolean isClearStoredRetentionIndices() {
+
+		return clearStoredRetentionIndices;
+	}
+
+	public void setClearStoredRetentionIndices(boolean clearStoredRetentionIndices) {
+
+		this.clearStoredRetentionIndices = clearStoredRetentionIndices;
 	}
 
 	public boolean isProcessReferencedChromatograms() {

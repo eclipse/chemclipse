@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -58,6 +59,7 @@ public interface IExtendedPartUI {
 	String TOOLTIP_LEGEND = "the chart legend.";
 	String TOOLTIP_LEGEND_MARKER = "the chart legend marker.";
 	String TOOLTIP_CHART_GRID = "the chart grid.";
+	String TOOLTIP_RETENTION_INDICES = "displaying retention index marker";
 	//
 	String IMAGE_INFO = IApplicationImage.IMAGE_INFO;
 	String IMAGE_RESULTS = IApplicationImage.IMAGE_RESULTS;
@@ -68,6 +70,7 @@ public interface IExtendedPartUI {
 	String IMAGE_LEGEND_MARKER = IApplicationImage.IMAGE_CHART_LEGEND_MARKER;
 	String IMAGE_EDIT_ENTRY = IApplicationImage.IMAGE_EDIT_ENTRY;
 	String IMAGE_CHART_GRID = IApplicationImage.IMAGE_GRID;
+	String IMAGE_RETENTION_INDICES = IApplicationImage.IMAGE_RETENION_INDEX;
 
 	default Button createButton(Composite parent, String text, String tooltip, String image) {
 
@@ -237,7 +240,20 @@ public interface IExtendedPartUI {
 		return createSettingsButton(parent, preferencePages, settingsHandler, true);
 	}
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	default Button createSettingsButton(Composite parent, List<Class<? extends IPreferencePage>> preferencePages, ISettingsHandler settingsHandler, boolean sortByTitle) {
+
+		return createSettingsButton(parent, new Supplier() {
+
+			@Override
+			public List<Class<? extends IPreferencePage>> get() {
+
+				return preferencePages;
+			}
+		}, settingsHandler, sortByTitle);
+	}
+
+	default Button createSettingsButton(Composite parent, Supplier<List<Class<? extends IPreferencePage>>> supplierPreferencePages, ISettingsHandler settingsHandler, boolean sortByTitle) {
 
 		Button button = createSettingsButtonBasic(parent);
 		button.addSelectionListener(new SelectionAdapter() {
@@ -245,7 +261,7 @@ public interface IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 
-				showPreferencesDialog(event, preferencePages, settingsHandler, sortByTitle);
+				showPreferencesDialog(event, supplierPreferencePages.get(), settingsHandler, sortByTitle);
 			}
 		});
 		//

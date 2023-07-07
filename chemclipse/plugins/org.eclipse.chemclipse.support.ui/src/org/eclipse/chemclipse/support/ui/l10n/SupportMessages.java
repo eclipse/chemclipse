@@ -48,7 +48,6 @@ public class SupportMessages extends NLS {
 	public static String labelName;
 	public static String maximumAllowedUndoSteps;
 	public static String processorImage;
-	public static String processorQuickAccess;
 	public static String remove;
 	public static String removeAllFilesFromList;
 	public static String removeTICbeforeAddingIonValues;
@@ -56,7 +55,6 @@ public class SupportMessages extends NLS {
 	public static String selectAll;
 	public static String selectEntriesinList;
 	public static String selectFile;
-	public static String selectProcessorToolbarItems;
 	public static String settings;
 	public static String showLabelsInToolbar;
 	public static String showText;
