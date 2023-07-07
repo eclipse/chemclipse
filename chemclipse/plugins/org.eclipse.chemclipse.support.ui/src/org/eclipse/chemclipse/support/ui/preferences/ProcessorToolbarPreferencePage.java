@@ -30,7 +30,7 @@ public class ProcessorToolbarPreferencePage extends PreferencePage {
 	private static final int DEFAULT_WIDTH = 400;
 	private static final int DEFAULT_HEIGHT = 600;
 	//
-	private final PreferencesSupport preferencesSupport;
+	private PreferencesSupport preferencesSupport;
 	private ProcessorToolbarSelectionUI processorToolbarSelectionUI;
 
 	public ProcessorToolbarPreferencePage(PreferencesSupport preferencesSupport) {

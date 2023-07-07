@@ -81,6 +81,7 @@ public class ChromatogramReferencesUI extends Composite {
 	private ComboContainer comboChromatograms = null;
 	//
 	private Button buttonPrevious;
+	private ComboViewer comboViewerReferences;
 	private Button buttonNext;
 	private Button buttonAdd;
 	private Button buttonImport;
@@ -88,6 +89,7 @@ public class ChromatogramReferencesUI extends Composite {
 	private Button buttonRemoveAll;
 	private Button buttonOpen;
 	//
+	private ISelectionChangedListener selectionChangeListener = null;
 	private HashMap<IChromatogram<?>, IChromatogramSelection<?, ?>> referenceSelections = new HashMap<>();
 
 	public ChromatogramReferencesUI(Composite parent, int style) {
@@ -99,6 +101,20 @@ public class ChromatogramReferencesUI extends Composite {
 	public void update(Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
 
 		comboChromatograms = new ComboContainer(chromatogramReferencesListener.andThen(t -> updateButtons()));
+		/*
+		 * Remove the existing change listener.
+		 */
+		if(selectionChangeListener != null) {
+			comboViewerReferences.removeSelectionChangedListener(selectionChangeListener);
+		}
+		/*
+		 * Add data and change listener.
+		 */
+		if(comboChromatograms != null) {
+			selectionChangeListener = comboChromatograms;
+			comboViewerReferences.addSelectionChangedListener(selectionChangeListener);
+			comboViewerReferences.setInput(comboChromatograms.data);
+		}
 	}
 
 	public void updateInput() {
@@ -180,7 +196,7 @@ public class ChromatogramReferencesUI extends Composite {
 		composite.setLayout(gridLayout);
 		//
 		buttonPrevious = createButtonSelectPreviousChromatogram(composite);
-		createComboChromatograms(composite);
+		comboViewerReferences = createComboChromatograms(composite);
 		buttonNext = createButtonSelectNextChromatogram(composite);
 		buttonRemove = createButtonRemoveReference(composite);
 		buttonRemoveAll = createButtonRemoveReferenceAll(composite);
@@ -245,17 +261,7 @@ public class ChromatogramReferencesUI extends Composite {
 		});
 		//
 		combo.setToolTipText("Select a referenced chromatogram.");
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.widthHint = 150;
-		combo.setLayoutData(gridData);
-		combo.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				System.out.println("TODO");
-			}
-		});
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return comboViewer;
 	}

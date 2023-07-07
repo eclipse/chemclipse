@@ -74,6 +74,7 @@ import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
+import org.eclipse.chemclipse.support.ui.swt.ProcessorToolbarUI;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
@@ -186,6 +187,7 @@ import org.eclipse.ui.commands.ICommandService;
  * Chromatogram Selection
  * Shortcuts - Runnable Elements/Icons
  * Preference Page - Shortcut Runnables
+ * Retention Index Axis - update values
  */
 public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, IExtendedPartUI {
 
@@ -1147,11 +1149,10 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(12, false));
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		composite.setLayout(new GridLayout(13, false));
 		//
+		createProcessorToolbarUI(composite);
 		createButtonToggleInfo(composite);
 		createButtonTargetLabels(composite);
 		createComboViewerColumns(composite);
@@ -1166,6 +1167,12 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		createButtonSettings(composite);
 		//
 		toolbarMainControl.set(composite);
+	}
+
+	private void createProcessorToolbarUI(Composite parent) {
+
+		ProcessorToolbarUI processorToolbarUI = new ProcessorToolbarUI(parent, SWT.NONE);
+		processorToolbarUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
 	private void createButtonToggleInfo(Composite parent) {
@@ -1232,7 +1239,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		});
 		//
 		combo.setToolTipText("Select a separation column.");
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gridData = new GridData();
 		gridData.widthHint = 100;
 		combo.setLayoutData(gridData);
 		combo.addSelectionListener(new SelectionAdapter() {

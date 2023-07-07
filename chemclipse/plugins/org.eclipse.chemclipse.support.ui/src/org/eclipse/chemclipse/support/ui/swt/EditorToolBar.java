@@ -18,7 +18,6 @@ import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.maximize;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
@@ -31,7 +30,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
-import org.eclipse.chemclipse.support.ui.preferences.ToolbarPreferencePage;
 import org.eclipse.jface.action.AbstractGroupMarker;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -330,14 +328,14 @@ public class EditorToolBar {
 	public void enableToolbarTextPage(IPreferenceStore preferenceStore, String key) {
 
 		if(preferenceStore != null) {
-			if(parent != null) {
-				parent.enableToolbarTextPage(preferenceStore, key);
-			} else {
-				config.addPreferencePageContainer(new PreferencePageContainer(() -> {
-					return Collections.singleton(new ToolbarPreferencePage(preferenceStore, key));
-				}, () -> updateShowTextByPreference(preferenceStore, key)));
-				fireUpdateEvent();
-			}
+			// if(parent != null) {
+			// parent.enableToolbarTextPage(preferenceStore, key);
+			// } else {
+			// config.addPreferencePageContainer(new PreferencePageContainer(() -> {
+			// return Collections.singleton(new ToolbarPreferencePage(preferenceStore, key));
+			// }, () -> updateShowTextByPreference(preferenceStore, key)));
+			// fireUpdateEvent();
+			// }
 		}
 	}
 
