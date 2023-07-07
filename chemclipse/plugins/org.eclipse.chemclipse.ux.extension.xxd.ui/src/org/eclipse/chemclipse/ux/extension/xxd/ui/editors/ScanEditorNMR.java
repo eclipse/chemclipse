@@ -311,7 +311,7 @@ public class ScanEditorNMR implements IScanEditorNMR {
 		EditorToolBar toolBar = new EditorToolBar(container);
 		toolBar.addPreferencePages(() -> {
 			List<IPreferencePage> list = new ArrayList<>();
-			list.add(new PreferencePageProcessors(processSupplierContext));
+			list.add(new PreferencePageProcessors());
 			return list;
 		}, this::updateSetting);
 		toolBar.enableToolbarTextButton(Activator.getDefault().getPreferenceStore(), getClass().getSimpleName() + ".showToolBarText");

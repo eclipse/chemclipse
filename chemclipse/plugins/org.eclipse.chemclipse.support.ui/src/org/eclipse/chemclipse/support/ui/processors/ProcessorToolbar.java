@@ -87,6 +87,7 @@ public class ProcessorToolbar {
 			toolBar.setVisible(true);
 			toolBar.addSeparator();
 		}
+		//
 		editorToolBar.update();
 	}
 }

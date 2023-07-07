@@ -83,6 +83,7 @@ public class EditorToolBar {
 		actionContributions = new ArrayList<>();
 		ToolBarManager toolbarManagerSWT = new ToolBarManager(SWT.FLAT | SWT.WRAP);
 		group = null;
+		//
 		ToolBar toolBar = toolbarManagerSWT.createControl(parent);
 		toolBar.setLayoutData(new GridData(align, SWT.CENTER, true, false));
 		toolBarManager = toolbarManagerSWT;

@@ -148,6 +148,8 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_INTERNAL_STANDARDS = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_MEASUREMENT_RESULTS = "stackPositionMeasurementResults";
 	public static final String DEF_STACK_POSITION_MEASUREMENT_RESULTS = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String P_STACK_POSITION_CHROMATOGRAM_INDICES = "stackPositionChromatogramIndices";
+	public static final String DEF_STACK_POSITION_CHROMATOGRAM_INDICES = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_CHROMATOGRAM_HEATMAP = "stackPositionChromatogramHeatmap";
 	public static final String DEF_STACK_POSITION_CHROMATOGRAM_HEATMAP = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_PEAK_QUANTITATION_REFERENCES = "stackPositionPeakQuantitationReferences";
@@ -597,8 +599,6 @@ public class PreferenceConstants {
 	public static final boolean DEF_CHROMATOGRAM_SHOW_METHODS_TOOLBAR = false;
 	public static final String P_CHROMATOGRAM_SHOW_REFERENCES_COMBO = "chromatogramShowReferencesCombo";
 	public static final boolean DEF_CHROMATOGRAM_SHOW_REFERENCES_COMBO = false;
-	public static final String P_CHROMATOGRAM_SHOW_TOOLBAR_TEXT = "ChromatogramUI.showToolbarText";
-	public static final boolean DEF_CHROMATOGRAM_SHOW_TOOLBAR_TEXT = true;
 	//
 	public static final String P_TITLE_X_AXIS_MILLISECONDS = "titleXAxisMilliseconds";
 	public static final String DEF_TITLE_X_AXIS_MILLISECONDS = "Time [ms]";
@@ -786,6 +786,8 @@ public class PreferenceConstants {
 	public static final boolean DEF_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS = false;
 	public static final String P_SHOW_RESUME_METHOD_DIALOG = "showResumeMethodDialog";
 	public static final boolean DEF_SHOW_RESUME_METHOD_DIALOG = true;
+	public static final String P_SHOW_RETENTION_INDEX_MARKER = "showRetenetionIndexMarker";
+	public static final boolean DEF_SHOW_RETENTION_INDEX_MARKER = false;
 	/*
 	 * Calibration Chart
 	 */

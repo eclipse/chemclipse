@@ -76,7 +76,6 @@ import org.eclipse.chemclipse.xir.model.core.selection.ChromatogramSelectionISD;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
@@ -107,8 +106,6 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	private final DataType dataType;
 	private final MPart part;
 	private final MDirtyable dirtyable;
-	//
-	private final IEventBroker eventBroker;
 	//
 	private File chromatogramFile = null;
 	private ExtendedChromatogramUI extendedChromatogramUI;
@@ -144,7 +141,6 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		this.part = part;
 		this.dirtyable = dirtyable;
 		this.processSupplierContext = processSupplierContext;
-		this.eventBroker = Activator.getDefault().getEventBroker();
 		this.shell = shell;
 		//
 		initialize(parent);
@@ -156,6 +152,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		if(shell != null) {
 			extendedChromatogramUI.fireUpdate(shell.getDisplay());
 		}
+		//
 		extendedChromatogramUI.checkUpdates();
 	}
 
@@ -443,7 +440,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 
 	private void createChromatogramPage(Composite parent) {
 
-		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.BORDER, eventBroker, processSupplierContext);
+		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.NONE);
 	}
 
 	private final class MeasurementResultListener implements ObjectChangedListener<IMeasurementResult<?>>, PropertyChangeListener {
