@@ -36,10 +36,9 @@ public class ProcessorToolbarUI extends Composite {
 	private PreferencesProcessSupport preferencesSupport;
 	private BiConsumer<IProcessSupplier<?>, IProcessSupplierContext> executionListener;
 	//
-	private Composite control;
-	//
 	private List<Processor> processors = new ArrayList<>();
 	private List<Button> buttons = new ArrayList<>();
+	private Composite control;
 	//
 	private IProcessSupplierContext context = new ProcessTypeSupport();
 

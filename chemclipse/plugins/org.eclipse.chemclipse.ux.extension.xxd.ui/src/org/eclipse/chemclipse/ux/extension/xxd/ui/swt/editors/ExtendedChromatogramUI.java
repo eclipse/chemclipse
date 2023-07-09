@@ -116,7 +116,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ProcessorToolbarPreferencePage;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbar;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
@@ -1330,7 +1330,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private void createButtonSettings(Composite parent) {
 
 		List<Class<? extends IPreferencePage>> preferencePages = new ArrayList<>();
-		preferencePages.add(ProcessorToolbarPreferencePage.class);
+		preferencePages.add(PreferencePageProcessorToolbar.class);
 		preferencePages.add(PreferencePageProcessors.class);
 		preferencePages.add(PreferencePageChromatogram.class);
 		preferencePages.add(ChromatogramAxisMilliseconds.class);

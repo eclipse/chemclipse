@@ -26,7 +26,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-public class ProcessorToolbarPreferencePage extends PreferencePage {
+public class PreferencePageProcessorToolbar extends PreferencePage {
 
 	private static final int DEFAULT_WIDTH = 400;
 	private static final int DEFAULT_HEIGHT = 600;
@@ -34,7 +34,7 @@ public class ProcessorToolbarPreferencePage extends PreferencePage {
 	private PreferencesProcessSupport preferencesProcessSupport = new PreferencesProcessSupport(Activator.getDefault().getPreferenceStore());
 	private ProcessorToolbarSelectionUI processorToolbarSelectionUI;
 
-	public ProcessorToolbarPreferencePage() {
+	public PreferencePageProcessorToolbar() {
 
 		setTitle(ExtensionMessages.processorQuickAccess);
 		setDescription(ExtensionMessages.selectProcessorToolbarItems);
