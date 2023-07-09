@@ -68,7 +68,11 @@ public class ProcessorToolbarUI extends Composite {
 		//
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(1, true));
+		GridLayout gridLayout = new GridLayout(1, true);
+		gridLayout.marginRight = 0;
+		gridLayout.marginLeft = 0;
+		gridLayout.marginWidth = 0;
+		composite.setLayout(gridLayout);
 		//
 		createToolbarMain(composite);
 		//
@@ -81,7 +85,11 @@ public class ProcessorToolbarUI extends Composite {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		GridLayout gridLayout = new GridLayout(1, false);
+		gridLayout.marginRight = 0;
+		gridLayout.marginLeft = 0;
+		gridLayout.marginWidth = 0;
+		composite.setLayout(gridLayout);
 		/*
 		 * The toolbar buttons are set dynamically.
 		 */
