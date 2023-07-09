@@ -152,8 +152,6 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		if(shell != null) {
 			extendedChromatogramUI.fireUpdate(shell.getDisplay());
 		}
-		//
-		extendedChromatogramUI.checkUpdates();
 	}
 
 	@PostConstruct

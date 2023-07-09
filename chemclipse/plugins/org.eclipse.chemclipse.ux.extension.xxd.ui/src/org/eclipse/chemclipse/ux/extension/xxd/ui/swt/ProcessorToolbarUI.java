@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -35,12 +36,13 @@ public class ProcessorToolbarUI extends Composite {
 
 	private PreferencesProcessSupport preferencesSupport;
 	private BiConsumer<IProcessSupplier<?>, IProcessSupplierContext> executionListener;
+	private DataCategory dataCategory = null;
 	//
 	private List<Processor> processors = new ArrayList<>();
 	private List<Button> buttons = new ArrayList<>();
 	private Composite control;
 	//
-	private IProcessSupplierContext context = new ProcessTypeSupport();
+	private IProcessSupplierContext processSupplierContext = new ProcessTypeSupport();
 
 	public ProcessorToolbarUI(Composite parent, int style) {
 
@@ -48,10 +50,9 @@ public class ProcessorToolbarUI extends Composite {
 		createControl();
 	}
 
-	@Override
-	public void update() {
+	public void updateToolbar(DataCategory dataCategory) {
 
-		super.update();
+		this.dataCategory = dataCategory;
 		updateInput();
 	}
 
@@ -59,6 +60,7 @@ public class ProcessorToolbarUI extends Composite {
 
 		this.preferencesSupport = preferencesSupport;
 		this.executionListener = executionListener;
+		//
 		updateInput();
 	}
 
@@ -103,12 +105,11 @@ public class ProcessorToolbarUI extends Composite {
 
 	private void updateInput() {
 
-		clearElements();
+		clearProcessorButtons(control);
 		createProcessorButtons(control);
-		layoutControl(control);
 	}
 
-	private void clearElements() {
+	private void clearProcessorButtons(Composite parent) {
 
 		processors.clear();
 		for(Button button : buttons) {
@@ -118,6 +119,7 @@ public class ProcessorToolbarUI extends Composite {
 		}
 		//
 		buttons.clear();
+		updateLayout(parent);
 	}
 
 	private void createProcessorButtons(Composite parent) {
@@ -125,19 +127,31 @@ public class ProcessorToolbarUI extends Composite {
 		if(preferencesSupport != null) {
 			processors.addAll(preferencesSupport.getStoredProcessors());
 			for(Processor processor : processors) {
-				if(processor != null && processor.isActive()) {
-					buttons.add(createButton(parent, processor, executionListener, context));
+				if(processor != null && processor.isActive() && isActiveDataCategory(processor)) {
+					buttons.add(createButton(parent, processor, executionListener, processSupplierContext));
 				}
 			}
 		}
+		//
+		updateLayout(parent);
 	}
 
-	private void layoutControl(Composite parent) {
+	private void updateLayout(Composite parent) {
 
 		if(parent.getLayout() instanceof GridLayout gridLayout) {
 			gridLayout.numColumns = buttons.size();
-			parent.getParent().layout(true);
+			Composite composite = parent.getParent();
+			composite.layout(true);
 		}
+	}
+
+	private boolean isActiveDataCategory(Processor processor) {
+
+		if(dataCategory != null) {
+			return processor.getProcessSupplier().getSupportedDataTypes().contains(dataCategory);
+		}
+		//
+		return false;
 	}
 
 	private Button createButton(Composite parent, Processor processor, BiConsumer<IProcessSupplier<?>, IProcessSupplierContext> executionListener, IProcessSupplierContext processSupplierContext) {

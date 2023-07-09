@@ -101,7 +101,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodCancelException;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ResumeMethodSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisIntensity;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisMilliseconds;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisMinutes;
@@ -186,7 +185,7 @@ import org.eclipse.ui.commands.ICommandService;
 
 /*
  * TODO
- * Method Toolbar Status
+ * Method Toolbar Status / Update on Change
  * Chromatogram Selection
  * Shortcuts - Runnable Elements/Icons
  * Preference Page - Shortcut Runnables
@@ -263,7 +262,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	//
 	private MethodSupportUI methodSupportUI;
 	private ITargetDisplaySettings targetDisplaySettings;
-	private Predicate<IProcessSupplier<?>> dataCategoryPredicate;
+	private Predicate<IProcessSupplier<?>> dataCategoryPredicate = null;
 	//
 	private Object menuCache = null;
 	private boolean menuActive = false;
@@ -293,7 +292,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	public void updateToolbar() {
 
-		processorToolbarControl.get().update();
+		processorToolbarControl.get().updateToolbar(getDataCategory());
 	}
 
 	/**
@@ -381,26 +380,14 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private void setChromatogramSelectionInternal(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(this.chromatogramSelection != chromatogramSelection) {
-			DataCategory dataCategory = DataCategory.AUTO_DETECT;
-			if(chromatogramSelection != null) {
-				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-				if(chromatogram instanceof IChromatogramMSD) {
-					dataCategory = DataCategory.MSD;
-				} else if(chromatogram instanceof IChromatogramWSD) {
-					dataCategory = DataCategory.WSD;
-				} else if(chromatogram instanceof IChromatogramCSD) {
-					dataCategory = DataCategory.CSD;
-				} else if(chromatogram instanceof IChromatogramISD) {
-					dataCategory = DataCategory.ISD;
-				}
-			}
 			/*
-			 * Adjust Menu
+			 * Adjust Toolbar / Menu
 			 */
-			dataCategoryPredicate = IProcessSupplierContext.createDataCategoryPredicate(dataCategory);
-			targetDisplaySettings = null;
 			this.chromatogramSelection = chromatogramSelection;
+			dataCategoryPredicate = IProcessSupplierContext.createDataCategoryPredicate(getDataCategory());
+			targetDisplaySettings = null;
 			toolbarAlignmentControl.get().update(chromatogramSelection);
+			updateToolbar();
 			//
 			if(chromatogramSelection != null) {
 				adjustAxisSettings();
@@ -424,6 +411,26 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		}
 	}
 
+	private DataCategory getDataCategory() {
+
+		DataCategory dataCategory = DataCategory.AUTO_DETECT;
+		//
+		if(chromatogramSelection != null) {
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+			if(chromatogram instanceof IChromatogramMSD) {
+				dataCategory = DataCategory.MSD;
+			} else if(chromatogram instanceof IChromatogramWSD) {
+				dataCategory = DataCategory.WSD;
+			} else if(chromatogram instanceof IChromatogramCSD) {
+				dataCategory = DataCategory.CSD;
+			} else if(chromatogram instanceof IChromatogramISD) {
+				dataCategory = DataCategory.ISD;
+			}
+		}
+		//
+		return dataCategory;
+	}
+
 	@Override
 	public void update() {
 
@@ -434,15 +441,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				setSeparationColumnSelection();
 				updateWavelengths();
 			}
-		}
-	}
-
-	public void checkUpdates() {
-
-		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-		List<Object> updates = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_TOOLBAR_UPDATE);
-		if(!updates.isEmpty()) {
-			updateToolbar();
 		}
 	}
 
