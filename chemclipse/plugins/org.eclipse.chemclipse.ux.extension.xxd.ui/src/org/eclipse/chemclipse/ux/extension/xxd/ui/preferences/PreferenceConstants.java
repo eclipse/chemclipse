@@ -938,6 +938,13 @@ public class PreferenceConstants {
 	 */
 	public static final String P_EDITOR_TSD = "editorTSD";
 	public static final String DEF_EDITOR_TSD = ChromatogramEditorTSD.CONTRIBUTION_URI;
+	/*
+	 * Quick-Access Processors
+	 */
+	public static final String P_QUICK_ACCESS_PROCESSORS_CSD = "quickAccessProcessorsCSD";
+	public static final String DEF_QUICK_ACCESS_PROCESSORS_CSD = "";
+	public static final String P_QUICK_ACCESS_PROCESSORS_MSD = "quickAccessProcessorsMSD";
+	public static final String DEF_QUICK_ACCESS_PROCESSORS_MSD = "";
 
 	private PreferenceConstants() {
 

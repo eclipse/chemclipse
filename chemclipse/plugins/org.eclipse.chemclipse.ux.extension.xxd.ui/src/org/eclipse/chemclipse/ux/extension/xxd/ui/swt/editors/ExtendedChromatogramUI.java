@@ -42,7 +42,6 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
@@ -114,7 +113,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbar;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarCSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentPaintListener;
@@ -292,7 +292,10 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	public void updateToolbar() {
 
-		processorToolbarControl.get().updateToolbar(getDataCategory());
+		ProcessorToolbarUI processorToolbarUI = processorToolbarControl.get();
+		if(processorToolbarUI.isVisible()) {
+			processorToolbarUI.updateToolbar(getDataCategory());
+		}
 	}
 
 	/**
@@ -1327,32 +1330,60 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void createButtonSettings(Composite parent) {
 
-		List<Class<? extends IPreferencePage>> preferencePages = new ArrayList<>();
-		preferencePages.add(PreferencePageProcessorToolbar.class);
-		preferencePages.add(PreferencePageProcessors.class);
-		preferencePages.add(PreferencePageChromatogram.class);
-		preferencePages.add(ChromatogramAxisMilliseconds.class);
-		preferencePages.add(ChromatogramAxisRetentionIndex.class);
-		preferencePages.add(ChromatogramAxisIntensity.class);
-		preferencePages.add(ChromatogramAxisSeconds.class);
-		preferencePages.add(ChromatogramAxisScans.class);
-		preferencePages.add(ChromatogramAxisMinutes.class);
-		preferencePages.add(ChromatogramAxisRelativeIntensity.class);
-		preferencePages.add(PreferencePageChromatogramPeaks.class);
-		preferencePages.add(PreferencePageChromatogramScans.class);
-		preferencePages.add(PreferencePageSystem.class);
-		preferencePages.add(PreferencePage.class);
-		preferencePages.add(PreferencePageReportExport.class);
-		preferencePages.add(PreferencePageChromatogramExport.class);
-		//
-		createSettingsButton(parent, preferencePages, new ISettingsHandler() {
+		createSettingsButton(parent, getPreferencePagesSupplier(), new ISettingsHandler() {
 
 			@Override
 			public void apply(Display display) {
 
-				applySettings();
+				applySettings(display);
 			}
 		}, false);
+	}
+
+	private Supplier<List<Class<? extends IPreferencePage>>> getPreferencePagesSupplier() {
+
+		return new Supplier<List<Class<? extends IPreferencePage>>>() {
+
+			@Override
+			public List<Class<? extends IPreferencePage>> get() {
+
+				List<Class<? extends IPreferencePage>> preferencePages = new ArrayList<>();
+				/*
+				 * Specific Pages
+				 */
+				DataCategory dataCategory = getDataCategory();
+				switch(dataCategory) {
+					case CSD:
+						preferencePages.add(PreferencePageProcessorToolbarCSD.class);
+						break;
+					case MSD:
+						preferencePages.add(PreferencePageProcessorToolbarMSD.class);
+						break;
+					default:
+						break;
+				}
+				/*
+				 * Standard Pages
+				 */
+				preferencePages.add(PreferencePageProcessors.class);
+				preferencePages.add(PreferencePageChromatogram.class);
+				preferencePages.add(ChromatogramAxisMilliseconds.class);
+				preferencePages.add(ChromatogramAxisRetentionIndex.class);
+				preferencePages.add(ChromatogramAxisIntensity.class);
+				preferencePages.add(ChromatogramAxisSeconds.class);
+				preferencePages.add(ChromatogramAxisScans.class);
+				preferencePages.add(ChromatogramAxisMinutes.class);
+				preferencePages.add(ChromatogramAxisRelativeIntensity.class);
+				preferencePages.add(PreferencePageChromatogramPeaks.class);
+				preferencePages.add(PreferencePageChromatogramScans.class);
+				preferencePages.add(PreferencePageSystem.class);
+				preferencePages.add(PreferencePage.class);
+				preferencePages.add(PreferencePageReportExport.class);
+				preferencePages.add(PreferencePageChromatogramExport.class);
+				//
+				return preferencePages;
+			}
+		};
 	}
 
 	private void createChromatogramChart(Composite parent) {
@@ -1539,13 +1570,13 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		return button;
 	}
 
-	private void applySettings() {
+	private void applySettings(Display display) {
 
 		adjustAxisSettings();
 		updateChromatogram();
 		toolbarReferencesControl.get().update();
 		updateRetentionIndexDisplayStatus();
-		UpdateNotifier.update(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_TOOLBAR_UPDATE, true);
+		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_TOOLBAR_UPDATE, true);
 	}
 
 	private void reset(boolean resetRange) {

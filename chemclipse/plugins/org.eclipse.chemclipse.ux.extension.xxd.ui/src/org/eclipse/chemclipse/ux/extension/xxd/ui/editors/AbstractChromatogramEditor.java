@@ -150,7 +150,16 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	public void onFocus() {
 
 		if(shell != null) {
-			extendedChromatogramUI.fireUpdate(shell.getDisplay());
+			Display display = shell.getDisplay();
+			extendedChromatogramUI.fireUpdate(display);
+			shell.getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					extendedChromatogramUI.updateToolbar();
+				}
+			});
 		}
 	}
 

@@ -481,6 +481,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 * Editors
 		 */
 		store.setDefault(PreferenceConstants.P_EDITOR_TSD, PreferenceConstants.DEF_EDITOR_TSD);
+		/*
+		 * Quick-Access Processors
+		 */
+		store.setDefault(PreferenceConstants.P_QUICK_ACCESS_PROCESSORS_CSD, PreferenceConstants.DEF_QUICK_ACCESS_PROCESSORS_CSD);
+		store.setDefault(PreferenceConstants.P_QUICK_ACCESS_PROCESSORS_MSD, PreferenceConstants.DEF_QUICK_ACCESS_PROCESSORS_MSD);
 		//
 		return store;
 	}

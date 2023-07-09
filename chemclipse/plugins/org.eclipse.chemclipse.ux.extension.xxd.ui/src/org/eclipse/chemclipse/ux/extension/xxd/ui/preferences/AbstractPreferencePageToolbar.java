@@ -14,11 +14,13 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.support.ui.processors.Processor;
 import org.eclipse.chemclipse.support.ui.processors.ProcessorToolbarSelectionUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PreferencesProcessSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -26,22 +28,28 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-public class PreferencePageProcessorToolbar extends PreferencePage {
+public abstract class AbstractPreferencePageToolbar extends PreferencePage {
 
 	private static final int DEFAULT_WIDTH = 400;
 	private static final int DEFAULT_HEIGHT = 600;
 	//
 	private PreferencesProcessSupport preferencesProcessSupport = new PreferencesProcessSupport(Activator.getDefault().getPreferenceStore());
 	private ProcessorToolbarSelectionUI processorToolbarSelectionUI;
+	@SuppressWarnings("unused")
+	private String name;
+	@SuppressWarnings("unused")
+	private DataCategory dataCategory;
 
-	public PreferencePageProcessorToolbar() {
+	public AbstractPreferencePageToolbar(IPreferenceStore preferenceStore, String name, DataCategory dataCategory) {
 
 		setTitle(ExtensionMessages.processorQuickAccess);
 		setDescription(ExtensionMessages.selectProcessorToolbarItems);
 		noDefaultAndApplyButton();
 		setSize(new Point(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 		//
-		setPreferenceStore(preferencesProcessSupport.getPreferenceStore());
+		this.name = name;
+		this.dataCategory = dataCategory;
+		setPreferenceStore(preferenceStore);
 	}
 
 	@Override

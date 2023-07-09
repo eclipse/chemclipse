@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -239,7 +240,20 @@ public interface IExtendedPartUI {
 		return createSettingsButton(parent, preferencePages, settingsHandler, true);
 	}
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	default Button createSettingsButton(Composite parent, List<Class<? extends IPreferencePage>> preferencePages, ISettingsHandler settingsHandler, boolean sortByTitle) {
+
+		return createSettingsButton(parent, new Supplier() {
+
+			@Override
+			public List<Class<? extends IPreferencePage>> get() {
+
+				return preferencePages;
+			}
+		}, settingsHandler, sortByTitle);
+	}
+
+	default Button createSettingsButton(Composite parent, Supplier<List<Class<? extends IPreferencePage>>> supplierPreferencePages, ISettingsHandler settingsHandler, boolean sortByTitle) {
 
 		Button button = createSettingsButtonBasic(parent);
 		button.addSelectionListener(new SelectionAdapter() {
@@ -247,7 +261,7 @@ public interface IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 
-				showPreferencesDialog(event, preferencePages, settingsHandler, sortByTitle);
+				showPreferencesDialog(event, supplierPreferencePages.get(), settingsHandler, sortByTitle);
 			}
 		});
 		//

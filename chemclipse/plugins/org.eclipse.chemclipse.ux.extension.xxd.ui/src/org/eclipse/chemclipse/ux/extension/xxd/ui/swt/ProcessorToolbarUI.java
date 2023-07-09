@@ -53,7 +53,9 @@ public class ProcessorToolbarUI extends Composite {
 	public void updateToolbar(DataCategory dataCategory) {
 
 		this.dataCategory = dataCategory;
-		updateInput();
+		if(this.isVisible()) {
+			updateInput();
+		}
 	}
 
 	public void setInput(PreferencesProcessSupport preferencesSupport, BiConsumer<IProcessSupplier<?>, IProcessSupplierContext> executionListener) {
