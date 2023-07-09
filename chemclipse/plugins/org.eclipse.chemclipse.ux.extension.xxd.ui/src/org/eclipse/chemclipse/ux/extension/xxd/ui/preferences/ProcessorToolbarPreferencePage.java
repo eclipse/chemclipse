@@ -10,14 +10,15 @@
  * Christoph Läubrich - initial API and implementation
  * Philip Wenig - support for sorting / icons
  *******************************************************************************/
-package org.eclipse.chemclipse.support.ui.preferences;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
-import org.eclipse.chemclipse.support.ui.processors.PreferencesSupport;
 import org.eclipse.chemclipse.support.ui.processors.Processor;
 import org.eclipse.chemclipse.support.ui.processors.ProcessorToolbarSelectionUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PreferencesProcessSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -30,18 +31,17 @@ public class ProcessorToolbarPreferencePage extends PreferencePage {
 	private static final int DEFAULT_WIDTH = 400;
 	private static final int DEFAULT_HEIGHT = 600;
 	//
-	private PreferencesSupport preferencesSupport;
+	private PreferencesProcessSupport preferencesProcessSupport = new PreferencesProcessSupport(Activator.getDefault().getPreferenceStore());
 	private ProcessorToolbarSelectionUI processorToolbarSelectionUI;
 
-	public ProcessorToolbarPreferencePage(PreferencesSupport preferencesSupport) {
+	public ProcessorToolbarPreferencePage() {
 
-		setTitle(SupportMessages.processorQuickAccess);
-		setDescription(SupportMessages.selectProcessorToolbarItems);
+		setTitle(ExtensionMessages.processorQuickAccess);
+		setDescription(ExtensionMessages.selectProcessorToolbarItems);
 		noDefaultAndApplyButton();
 		setSize(new Point(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 		//
-		this.preferencesSupport = preferencesSupport;
-		setPreferenceStore(preferencesSupport.getPreferenceStore());
+		setPreferenceStore(preferencesProcessSupport.getPreferenceStore());
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class ProcessorToolbarPreferencePage extends PreferencePage {
 
 		if(processorToolbarSelectionUI != null) {
 			List<Processor> processors = processorToolbarSelectionUI.getProcessors();
-			preferencesSupport.persist(processors);
+			preferencesProcessSupport.persist(processors);
 		}
 		//
 		return true;
@@ -60,7 +60,7 @@ public class ProcessorToolbarPreferencePage extends PreferencePage {
 
 		processorToolbarSelectionUI = new ProcessorToolbarSelectionUI(parent, SWT.NONE);
 		processorToolbarSelectionUI.setLayoutData(new GridData(GridData.FILL_BOTH));
-		processorToolbarSelectionUI.setInput(preferencesSupport.getStoredProcessors());
+		processorToolbarSelectionUI.setInput(preferencesProcessSupport.getStoredProcessors());
 		//
 		return processorToolbarSelectionUI;
 	}

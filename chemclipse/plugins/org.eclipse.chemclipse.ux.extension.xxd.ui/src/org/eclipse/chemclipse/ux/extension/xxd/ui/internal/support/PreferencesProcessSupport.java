@@ -9,7 +9,7 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.support.ui.processors;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 import java.util.List;
 import java.util.Set;
@@ -18,28 +18,36 @@ import java.util.function.Predicate;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.support.ui.processors.Processor;
+import org.eclipse.chemclipse.support.ui.processors.ProcessorSupport;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-public class PreferencesSupport {
+public class PreferencesProcessSupport {
 
 	private final IPreferenceStore preferenceStore;
-	private final IProcessSupplierContext context;
-	private final Predicate<IProcessSupplier<?>> filter;
-	private final String keyDefault;
 	//
+	private IProcessSupplierContext processSupplierContext = new ProcessTypeSupport();
+	private Predicate<IProcessSupplier<?>> predicateProcessSupplier;
 	private Set<IProcessSupplier<?>> processSuppliers;
+	private String keyDefault = getClass().getName();
 	private String keyActive;
 
-	public PreferencesSupport(IPreferenceStore preferenceStore, String key, IProcessSupplierContext context, Predicate<IProcessSupplier<?>> filter) {
+	public PreferencesProcessSupport(IPreferenceStore preferenceStore) {
 
 		this.preferenceStore = preferenceStore;
-		this.context = context;
-		this.filter = filter;
+		this.predicateProcessSupplier = new Predicate<IProcessSupplier<?>>() {
+
+			@Override
+			public boolean test(IProcessSupplier<?> t) {
+
+				return true; // TODO
+			}
+		};
 		/*
 		 * Use the default key as a fallback.
 		 * Differentiate between specific editors MSD, CSD, WSD, ... .
 		 */
-		this.keyDefault = key;
 		for(DataCategory dataCategory : DataCategory.values()) {
 			preferenceStore.setDefault(getKeyActive(dataCategory), "");
 		}
@@ -76,7 +84,7 @@ public class PreferencesSupport {
 
 	private void updateProcessSuppliers() {
 
-		processSuppliers = context.getSupplier(filter);
+		processSuppliers = processSupplierContext.getSupplier(predicateProcessSupplier);
 		this.keyActive = determineKeyActive(processSuppliers);
 	}
 

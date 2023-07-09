@@ -42,6 +42,7 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
@@ -74,7 +75,6 @@ import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
-import org.eclipse.chemclipse.support.ui.swt.ProcessorToolbarUI;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
@@ -93,6 +93,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSuppl
 import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers.DynamicHandler;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PreferencesProcessSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.marker.PositionMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.marker.RetentionIndexMarker;
@@ -115,6 +116,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ProcessorToolbarPreferencePage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
@@ -127,6 +129,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramBaselinesUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramReferencesUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ProcessorToolbarUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarConfig;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
@@ -223,6 +226,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scans Selected";
 	//
+	private AtomicReference<ProcessorToolbarUI> processorToolbarControl = new AtomicReference<>();
 	private AtomicReference<Composite> toolbarMainControl = new AtomicReference<>();
 	private AtomicReference<Button> buttonToolbarInfo = new AtomicReference<>();
 	private AtomicReference<InformationUI> toolbarInfoControl = new AtomicReference<>();
@@ -289,11 +293,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	public void updateToolbar() {
 
-		/*
-		 * TODO - Problem!
-		 */
-		// toolbarMain.update();
-		// processorToolbar.update();
+		processorToolbarControl.get().update();
 	}
 
 	/**
@@ -417,7 +417,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			 * fireUpdate(getChromatogramChart().getDisplay()); makes problems here.
 			 * The update process needs to be addressed generally.
 			 */
-			// processorToolbar.update();
+			processorToolbarControl.get().update();
 			if(chromatogramSelection != null) {
 				UpdateNotifierUI.update(getDisplay(), chromatogramSelection);
 			}
@@ -1173,6 +1173,10 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 		ProcessorToolbarUI processorToolbarUI = new ProcessorToolbarUI(parent, SWT.NONE);
 		processorToolbarUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		PreferencesProcessSupport preferencesProcessSupport = new PreferencesProcessSupport(Activator.getDefault().getPreferenceStore());
+		processorToolbarUI.setInput(preferencesProcessSupport, this::executeSupplier);
+		//
+		processorToolbarControl.set(processorToolbarUI);
 	}
 
 	private void createButtonToggleInfo(Composite parent) {
@@ -1326,6 +1330,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private void createButtonSettings(Composite parent) {
 
 		List<Class<? extends IPreferencePage>> preferencePages = new ArrayList<>();
+		preferencePages.add(ProcessorToolbarPreferencePage.class);
 		preferencePages.add(PreferencePageProcessors.class);
 		preferencePages.add(PreferencePageChromatogram.class);
 		preferencePages.add(ChromatogramAxisMilliseconds.class);
@@ -1399,8 +1404,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		chartSettings.setRangeSelectorDefaultAxisY(1); // Relative Abundance
 		chartSettings.setShowRangeSelectorInitially(false);
 		/*
-		 * Replace the existing reset handler with a specific
-		 * chromatogram reset handler.
+		 * Replace the existing reset handler with a specific chromatogram reset handler.
 		 */
 		IChartMenuEntry chartMenuEntry = chartSettings.getChartMenuEntry(new ResetChartHandler().getName());
 		chartSettings.removeMenuEntry(chartMenuEntry);
@@ -1543,6 +1547,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		updateChromatogram();
 		toolbarReferencesControl.get().update();
 		updateRetentionIndexDisplayStatus();
+		UpdateNotifier.update(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_TOOLBAR_UPDATE, true);
 	}
 
 	private void reset(boolean resetRange) {
