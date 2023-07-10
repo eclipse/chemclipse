@@ -92,7 +92,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSuppl
 import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers.DynamicHandler;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PreferencesProcessSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.marker.PositionMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.marker.RetentionIndexMarker;
@@ -185,10 +184,7 @@ import org.eclipse.ui.commands.ICommandService;
 
 /*
  * TODO
- * Method Toolbar Status / Update on Change
  * Chromatogram Selection
- * Shortcuts - Runnable Elements/Icons
- * Preference Page - Shortcut Runnables
  * Retention Index Axis - update values
  */
 public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, IExtendedPartUI {
@@ -1174,8 +1170,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 		ProcessorToolbarUI processorToolbarUI = new ProcessorToolbarUI(parent, SWT.NONE);
 		processorToolbarUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		PreferencesProcessSupport preferencesProcessSupport = new PreferencesProcessSupport(Activator.getDefault().getPreferenceStore());
-		processorToolbarUI.setInput(preferencesProcessSupport, this::executeSupplier);
+		processorToolbarUI.setInput(this::executeSupplier);
 		//
 		processorToolbarControl.set(processorToolbarUI);
 	}

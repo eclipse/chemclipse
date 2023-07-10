@@ -940,11 +940,10 @@ public class PreferenceConstants {
 	public static final String DEF_EDITOR_TSD = ChromatogramEditorTSD.CONTRIBUTION_URI;
 	/*
 	 * Quick-Access Processors
+	 * The basic setting is initialized with DataCategory elements
 	 */
-	public static final String P_QUICK_ACCESS_PROCESSORS_CSD = "quickAccessProcessorsCSD";
-	public static final String DEF_QUICK_ACCESS_PROCESSORS_CSD = "";
-	public static final String P_QUICK_ACCESS_PROCESSORS_MSD = "quickAccessProcessorsMSD";
-	public static final String DEF_QUICK_ACCESS_PROCESSORS_MSD = "";
+	public static final String P_QUICK_ACCESS_PROCESSORS = "quickAccessProcessors";
+	public static final String DEF_QUICK_ACCESS_PROCESSORS = "";
 
 	private PreferenceConstants() {
 

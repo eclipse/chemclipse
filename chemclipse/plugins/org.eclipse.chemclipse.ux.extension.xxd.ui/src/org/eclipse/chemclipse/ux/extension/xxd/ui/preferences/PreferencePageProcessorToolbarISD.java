@@ -14,10 +14,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 
-public class PreferencePageProcessorToolbarMSD extends AbstractPreferencePageToolbar {
+public class PreferencePageProcessorToolbarISD extends AbstractPreferencePageToolbar {
 
-	public PreferencePageProcessorToolbarMSD() {
+	public PreferencePageProcessorToolbarISD() {
 
-		super(Activator.getDefault().getPreferenceStore(), PreferenceConstants.P_QUICK_ACCESS_PROCESSORS, DataCategory.MSD);
+		super(Activator.getDefault().getPreferenceStore(), PreferenceConstants.P_QUICK_ACCESS_PROCESSORS, DataCategory.ISD);
 	}
 }

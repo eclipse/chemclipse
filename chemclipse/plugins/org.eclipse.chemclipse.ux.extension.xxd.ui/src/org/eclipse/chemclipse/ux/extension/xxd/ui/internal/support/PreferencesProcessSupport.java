@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -20,92 +21,61 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.processors.Processor;
 import org.eclipse.chemclipse.support.ui.processors.ProcessorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class PreferencesProcessSupport {
 
-	private final IPreferenceStore preferenceStore;
-	//
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private IProcessSupplierContext processSupplierContext = new ProcessTypeSupport();
+	private Set<IProcessSupplier<?>> processSuppliers = new HashSet<>();
+	//
 	private Predicate<IProcessSupplier<?>> predicateProcessSupplier;
-	private Set<IProcessSupplier<?>> processSuppliers;
-	private String keyDefault = getClass().getName();
-	private String keyActive;
+	private DataCategory dataCategory = DataCategory.AUTO_DETECT;
 
-	public PreferencesProcessSupport(IPreferenceStore preferenceStore) {
+	public PreferencesProcessSupport(DataCategory dataCategory) {
 
-		this.preferenceStore = preferenceStore;
+		this.dataCategory = dataCategory;
 		this.predicateProcessSupplier = new Predicate<IProcessSupplier<?>>() {
 
 			@Override
-			public boolean test(IProcessSupplier<?> t) {
+			public boolean test(IProcessSupplier<?> processSupplier) {
 
-				return true; // TODO
+				return processSupplier.getSupportedDataTypes().contains(getDataCategory());
 			}
 		};
-		/*
-		 * Use the default key as a fallback.
-		 * Differentiate between specific editors MSD, CSD, WSD, ... .
-		 */
-		for(DataCategory dataCategory : DataCategory.values()) {
-			preferenceStore.setDefault(getKeyActive(dataCategory), "");
-		}
 		//
 		updateProcessSuppliers();
 	}
 
-	public void persist(List<Processor> processors) {
+	public DataCategory getDataCategory() {
+
+		return dataCategory;
+	}
+
+	public void setDataCategory(DataCategory dataCategory) {
+
+		this.dataCategory = dataCategory;
+	}
+
+	public String persist(List<Processor> processors) {
 
 		updateProcessSuppliers();
-		preferenceStore.setValue(keyActive, ProcessorSupport.getActiveProcessors(processors));
+		return ProcessorSupport.getActiveProcessors(processors);
 	}
 
 	public List<Processor> getStoredProcessors() {
 
 		updateProcessSuppliers();
-		return ProcessorSupport.getProcessors(processSuppliers, getPreference());
-	}
-
-	/**
-	 * Use getStoredProcessors() or persist() instead.
-	 * 
-	 * @return {@link IPreferenceStore}
-	 */
-	public IPreferenceStore getPreferenceStore() {
-
-		return preferenceStore;
-	}
-
-	private String getPreference() {
-
-		return preferenceStore.getString(keyActive);
+		String settings = preferenceStore.getString(PreferenceConstants.P_QUICK_ACCESS_PROCESSORS + dataCategory.name());
+		return ProcessorSupport.getProcessors(processSuppliers, settings);
 	}
 
 	private void updateProcessSuppliers() {
 
-		processSuppliers = processSupplierContext.getSupplier(predicateProcessSupplier);
-		this.keyActive = determineKeyActive(processSuppliers);
-	}
-
-	private String determineKeyActive(Set<IProcessSupplier<?>> processSuppliers) {
-
-		for(IProcessSupplier<?> processSupplier : processSuppliers) {
-			Set<DataCategory> dataCategories = processSupplier.getSupportedDataTypes();
-			if(dataCategories.size() == 1) {
-				return dataCategories.iterator().next().name();
-			}
-		}
-		//
-		return getKeyActive(null);
-	}
-
-	private String getKeyActive(DataCategory dataCategory) {
-
-		if(dataCategory != null) {
-			return keyDefault + "." + dataCategory.name();
-		} else {
-			return keyDefault;
-		}
+		processSuppliers.clear();
+		processSuppliers.addAll(processSupplierContext.getSupplier(predicateProcessSupplier));
 	}
 }

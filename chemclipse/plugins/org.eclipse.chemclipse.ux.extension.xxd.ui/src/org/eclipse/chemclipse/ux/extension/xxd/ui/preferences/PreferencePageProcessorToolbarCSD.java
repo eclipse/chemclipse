@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,8 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Christoph Läubrich - initial API and implementation
- * Philip Wenig - support for sorting / icons
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -19,6 +18,6 @@ public class PreferencePageProcessorToolbarCSD extends AbstractPreferencePageToo
 
 	public PreferencePageProcessorToolbarCSD() {
 
-		super(Activator.getDefault().getPreferenceStore(), PreferenceConstants.P_QUICK_ACCESS_PROCESSORS_MSD, DataCategory.MSD);
+		super(Activator.getDefault().getPreferenceStore(), PreferenceConstants.P_QUICK_ACCESS_PROCESSORS, DataCategory.CSD);
 	}
 }

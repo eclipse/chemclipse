@@ -34,15 +34,15 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ProcessorToolbarUI extends Composite {
 
-	private PreferencesProcessSupport preferencesSupport;
 	private BiConsumer<IProcessSupplier<?>, IProcessSupplierContext> executionListener;
-	private DataCategory dataCategory = null;
-	//
+	private DataCategory dataCategory = DataCategory.AUTO_DETECT;
 	private List<Processor> processors = new ArrayList<>();
 	private List<Button> buttons = new ArrayList<>();
-	private Composite control;
 	//
 	private IProcessSupplierContext processSupplierContext = new ProcessTypeSupport();
+	private PreferencesProcessSupport preferencesProcessSupport = new PreferencesProcessSupport(DataCategory.AUTO_DETECT);
+	//
+	private Composite control;
 
 	public ProcessorToolbarUI(Composite parent, int style) {
 
@@ -53,16 +53,16 @@ public class ProcessorToolbarUI extends Composite {
 	public void updateToolbar(DataCategory dataCategory) {
 
 		this.dataCategory = dataCategory;
+		preferencesProcessSupport.setDataCategory(dataCategory);
+		//
 		if(this.isVisible()) {
 			updateInput();
 		}
 	}
 
-	public void setInput(PreferencesProcessSupport preferencesSupport, BiConsumer<IProcessSupplier<?>, IProcessSupplierContext> executionListener) {
+	public void setInput(BiConsumer<IProcessSupplier<?>, IProcessSupplierContext> executionListener) {
 
-		this.preferencesSupport = preferencesSupport;
 		this.executionListener = executionListener;
-		//
 		updateInput();
 	}
 
@@ -126,12 +126,10 @@ public class ProcessorToolbarUI extends Composite {
 
 	private void createProcessorButtons(Composite parent) {
 
-		if(preferencesSupport != null) {
-			processors.addAll(preferencesSupport.getStoredProcessors());
-			for(Processor processor : processors) {
-				if(processor != null && processor.isActive() && isActiveDataCategory(processor)) {
-					buttons.add(createButton(parent, processor, executionListener, processSupplierContext));
-				}
+		processors.addAll(preferencesProcessSupport.getStoredProcessors());
+		for(Processor processor : processors) {
+			if(processor != null && processor.isActive() && isActiveDataCategory(processor)) {
+				buttons.add(createButton(parent, processor, executionListener, processSupplierContext));
 			}
 		}
 		//

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -484,8 +485,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		/*
 		 * Quick-Access Processors
 		 */
-		store.setDefault(PreferenceConstants.P_QUICK_ACCESS_PROCESSORS_CSD, PreferenceConstants.DEF_QUICK_ACCESS_PROCESSORS_CSD);
-		store.setDefault(PreferenceConstants.P_QUICK_ACCESS_PROCESSORS_MSD, PreferenceConstants.DEF_QUICK_ACCESS_PROCESSORS_MSD);
+		for(DataCategory dataCategory : DataCategory.values()) {
+			store.setDefault(PreferenceConstants.P_QUICK_ACCESS_PROCESSORS + dataCategory.name(), PreferenceConstants.DEF_QUICK_ACCESS_PROCESSORS);
+		}
 		//
 		return store;
 	}
