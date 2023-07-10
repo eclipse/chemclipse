@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.msd.identifier
 Eclipse-BuddyPolicy: registered
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.identifier.chromatogram,
+ org.eclipse.chemclipse.chromatogram.xxd.identifier.scan,
  org.eclipse.chemclipse.chromatogram.xxd.identifier.settings,
  org.eclipse.chemclipse.chromatogram.xxd.identifier.targets
 Bundle-ManifestVersion: 2

@@ -111,6 +111,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	private Button buttonSubtractOption;
 	private ScanFilterUI scanFilterUI;
 	private ScanIdentifierUI scanIdentifierUI;
+	private ScanWebIdentifierUI scanWebIdentifierUI; // show database link
 	//
 	private IScan scan;
 	//
@@ -229,6 +230,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		//
 		scanFilterUI.setInput(scan);
 		scanIdentifierUI.setInput(scan);
+		scanWebIdentifierUI.setInput(scan);
 		toolbarInfo.get().setText(scanDataSupport.getScanLabel(scan));
 		setDetectorSignalType(scan);
 		updateScanChart(scan);
@@ -303,7 +305,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(13, false));
+		composite.setLayout(new GridLayout(14, false));
 		//
 		labelEdit = createInfoLabelEdit(composite);
 		labelSubtract = createInfoLabelSubtract(composite);
@@ -313,6 +315,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
 		scanIdentifierUI = createScanIdentifierUI(composite);
 		buttonCopyTraces = createButtonCopyTracesClipboard(composite);
+		scanWebIdentifierUI = createScanWebIdentifierUI(composite);
 		createResetButton(composite);
 		buttonSave = createSaveButton(composite);
 		buttonDeleteOptimized = createDeleteOptimizedButton(composite);
@@ -627,6 +630,9 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		boolean enabled = isMassSpectrum();
 		//
 		scanIdentifierUI.setEnabled(enabled || isWaveSpectrum());
+		if(!enabled) {
+			scanWebIdentifierUI.setEnabled(false);
+		}
 		buttonCopyTraces.setEnabled(scan instanceof IScanMSD || scan instanceof IScanWSD);
 		buttonSave.setEnabled(enabled);
 		buttonDeleteOptimized.setEnabled(enabled && isOptimizedScan());
@@ -650,6 +656,11 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		});
 		//
 		return button;
+	}
+
+	private ScanWebIdentifierUI createScanWebIdentifierUI(Composite parent) {
+
+		return new ScanWebIdentifierUI(parent, SWT.NONE);
 	}
 
 	private void createResetButton(Composite parent) {

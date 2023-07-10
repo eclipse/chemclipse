@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-public class TargetIdentifierUI extends Composite {
+public class TargetWebIdentifierUI extends Composite {
 
 	private ILibraryInformation libraryInformation;
 	//
@@ -49,7 +49,7 @@ public class TargetIdentifierUI extends Composite {
 	private List<ITargetIdentifierSupplier> identifierSuppliers = getTargetIdentifierSuppliers();
 	private ITargetIdentifierSupplier targetIdentifierSupplier;
 
-	public TargetIdentifierUI(Composite parent, int style) {
+	public TargetWebIdentifierUI(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
