@@ -89,6 +89,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
 	private Button buttonCopyTraces;
 	private Button buttonSaveScan;
+	private ScanWebIdentifierUI scanWebIdentifierUI; // show database link
 	//
 	private CLabel labelOptimized;
 	private Button buttonDeleteOptimized;
@@ -240,6 +241,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		setInfoTop();
 		setInfoBottom();
 		scanTableUI.setInput(getScan());
+		scanWebIdentifierUI.setInput(getScan());
 		updateEditFields();
 		updateButtonStatus();
 		//
@@ -364,13 +366,14 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(9, false));
+		composite.setLayout(new GridLayout(10, false));
 		//
 		labelOptimized = createInfoLabelOptimized(composite);
 		buttonToolbarInfo = createButtonToggleToolbar(composite, Arrays.asList(toolbarInfoTop, toolbarInfoBottom), IMAGE_INFO, TOOLTIP_INFO);
 		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
 		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
 		buttonCopyTraces = createButtonCopyTracesClipboard(composite);
+		scanWebIdentifierUI = createScanWebIdentifierUI(composite);
 		createResetButton(composite);
 		buttonSaveScan = createSaveButton(composite);
 		buttonDeleteOptimized = createDeleteOptimizedButton(composite);
@@ -620,6 +623,11 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		});
 		//
 		toolbarSearch.set(searchSupportUI);
+	}
+
+	private ScanWebIdentifierUI createScanWebIdentifierUI(Composite parent) {
+
+		return new ScanWebIdentifierUI(parent, SWT.NONE);
 	}
 
 	private Text createText(Composite parent) {

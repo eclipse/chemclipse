@@ -107,7 +107,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private TargetIdentifierUI targetIdentifierUI; // show database link
+	private TargetWebIdentifierUI targetWebIdentifierUI; // show database link
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent, int style) {
@@ -208,7 +208,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		composite.setLayout(new GridLayout(7, false));
 		//
 		createButtonToggleToolbarInfo(composite);
-		targetIdentifierUI = createTargetIdentifierUI(composite);
+		targetWebIdentifierUI = createTargetIdentifierUI(composite);
 		createButtonToggleToolbarSearch(composite);
 		createButtonToggleToolbarEdit(composite);
 		buttonDeleteTargets = createButtonDeleteAll(composite);
@@ -256,9 +256,9 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		return button;
 	}
 
-	private TargetIdentifierUI createTargetIdentifierUI(Composite parent) {
+	private TargetWebIdentifierUI createTargetIdentifierUI(Composite parent) {
 
-		TargetIdentifierUI targetIdentifierUI = new TargetIdentifierUI(parent, SWT.NONE);
+		TargetWebIdentifierUI targetIdentifierUI = new TargetWebIdentifierUI(parent, SWT.NONE);
 		return targetIdentifierUI;
 	}
 
@@ -801,7 +801,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 				/*
 				 * Then update the weblink button.
 				 */
-				targetIdentifierUI.setInput(identificationTarget.getLibraryInformation());
+				targetWebIdentifierUI.setInput(identificationTarget.getLibraryInformation());
 			}
 		}
 	}

@@ -15,7 +15,8 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntege
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.TargetIdentifierUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ScanWebIdentifierUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.TargetWebIdentifierUI;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
@@ -42,7 +43,8 @@ public class PreferencePageTargets extends FieldEditorPreferencePage implements 
 		addField(new BooleanFieldEditor(PreferenceConstants.P_TARGETS_TABLE_SHOW_DEVIATION_RT, "Show Deviation Retention Time", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_TARGETS_TABLE_SHOW_DEVIATION_RI, "Show Deviation Retention Index", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, "Library Path", getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_TARGET_IDENTIFER, "Target Identifier:", TargetIdentifierUI.getTargetIdentifier(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_TARGET_IDENTIFER, "Target Identifier:", TargetWebIdentifierUI.getTargetIdentifier(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_SCAN_IDENTIFER, "Scan Identifier:", ScanWebIdentifierUI.getScanIdentifier(), getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_USE_ABSOLUTE_DEVIATION_RETENTION_TIME, "Retention Time: Use absolute deviation", getFieldEditorParent()));

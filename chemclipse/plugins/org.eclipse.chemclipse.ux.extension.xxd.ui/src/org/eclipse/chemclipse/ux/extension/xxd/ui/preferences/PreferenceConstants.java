@@ -260,6 +260,8 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_SUBTRACT_DIALOG = true;
 	public static final String P_TARGET_IDENTIFER = "targetIdentifier";
 	public static final String DEF_TARGET_IDENTIFER = "org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.identifier";
+	public static final String P_SCAN_IDENTIFER = "scanIdentifier";
+	public static final String DEF_SCAN_IDENTIFER = "";
 	//
 	public static final String P_SCAN_CHART_ENABLE_FIXED_RANGE_X = "scanChartEnableFixedRangeX";
 	public static final boolean DEF_SCAN_CHART_ENABLE_FIXED_RANGE_X = false;
