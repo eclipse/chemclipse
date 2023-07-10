@@ -88,6 +88,7 @@ public class ChromatogramReferencesUI extends Composite {
 	private Button buttonRemove;
 	private Button buttonRemoveAll;
 	private Button buttonOpen;
+	private Button buttonRefresh;
 	//
 	private ISelectionChangedListener selectionChangeListener = null;
 	private HashMap<IChromatogram<?>, IChromatogramSelection<?, ?>> referenceSelections = new HashMap<>();
@@ -98,9 +99,13 @@ public class ChromatogramReferencesUI extends Composite {
 		createControl();
 	}
 
-	public void update(Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
+	public void update(IChromatogramSelection<?, ?> chromatogramSelection, Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
 
+		/*
+		 * Create the container
+		 */
 		comboChromatograms = new ComboContainer(chromatogramReferencesListener.andThen(t -> updateButtons()));
+		comboChromatograms.viewerReference.set(comboViewerReferences);
 		/*
 		 * Remove the existing change listener.
 		 */
@@ -113,6 +118,15 @@ public class ChromatogramReferencesUI extends Composite {
 		if(comboChromatograms != null) {
 			selectionChangeListener = comboChromatograms;
 			comboViewerReferences.addSelectionChangedListener(selectionChangeListener);
+			//
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+			List<IChromatogramSelection<?, ?>> chromatogramSelections = new ArrayList<IChromatogramSelection<?, ?>>();
+			chromatogramSelections.add(chromatogramSelection);
+			for(IChromatogram<?> chromatogramReference : chromatogram.getReferencedChromatograms()) {
+				chromatogramSelections.add(createChromatogramSelection(chromatogramReference));
+			}
+			comboChromatograms.data = chromatogramSelections;
+			//
 			comboViewerReferences.setInput(comboChromatograms.data);
 		}
 	}
@@ -190,7 +204,7 @@ public class ChromatogramReferencesUI extends Composite {
 		setLayout(new FillLayout());
 		//
 		Composite composite = new Composite(this, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(8, false);
+		GridLayout gridLayout = new GridLayout(9, false);
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
@@ -203,6 +217,7 @@ public class ChromatogramReferencesUI extends Composite {
 		buttonAdd = createButtonAddReference(composite);
 		buttonImport = createButtonImportReferences(composite);
 		buttonOpen = createButtonOpenReference(composite);
+		buttonRefresh = createButtonRefresh(composite);
 		//
 		initialize();
 	}
@@ -511,6 +526,24 @@ public class ChromatogramReferencesUI extends Composite {
 		return button;
 	}
 
+	private Button createButtonRefresh(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Refresh the references selection.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_REFRESH, IApplicationImageProvider.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				update();
+			}
+		});
+		//
+		return button;
+	}
+
 	private void updateButtons() {
 
 		try {
@@ -526,6 +559,7 @@ public class ChromatogramReferencesUI extends Composite {
 					buttonAdd.setEnabled(selectionIndex == 0); // 0 references can be added only to master
 					buttonImport.setEnabled(selectionIndex == 0); // 0 references can be added only to master
 					buttonOpen.setEnabled(true); // Always true
+					buttonRefresh.setEnabled(selectionIndex > 0);
 				}
 			}
 		} catch(Exception e) {
