@@ -190,10 +190,10 @@ public class TargetsListUI extends ExtendedTableViewer {
 								if(deviation < deviationWarn) {
 									cell.setBackground(Colors.getColor(Colors.LIGHT_GREEN));
 									cell.setForeground(Colors.BLACK);
-								} else if(deviation >= deviationWarn && deviation < deviationError) {
+								} else if(deviation < deviationError) {
 									cell.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
 									cell.setForeground(Colors.BLACK);
-								} else if(deviation >= deviationError) {
+								} else {
 									cell.setBackground(Colors.getColor(Colors.LIGHT_RED));
 									cell.setForeground(Colors.BLACK);
 								}
