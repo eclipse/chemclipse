@@ -113,7 +113,9 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarCSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarISD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarMSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentPaintListener;
@@ -1353,6 +1355,12 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 						break;
 					case MSD:
 						preferencePages.add(PreferencePageProcessorToolbarMSD.class);
+						break;
+					case WSD:
+						preferencePages.add(PreferencePageProcessorToolbarWSD.class);
+						break;
+					case ISD:
+						preferencePages.add(PreferencePageProcessorToolbarISD.class);
 						break;
 					default:
 						break;
