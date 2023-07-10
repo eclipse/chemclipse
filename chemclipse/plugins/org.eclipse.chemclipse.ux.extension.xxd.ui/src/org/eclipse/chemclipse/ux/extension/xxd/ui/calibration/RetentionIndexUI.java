@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.calibration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
@@ -25,6 +26,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -33,7 +35,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -174,16 +175,15 @@ public class RetentionIndexUI extends Composite implements IExtendedPartUI {
 					Table table = retentionIndexListUI.get().getTable();
 					int index = table.getSelectionIndex();
 					if(index >= 0) {
-						MessageBox messageBox = new MessageBox(calibrationEditUI.getShell(), SWT.ICON_WARNING);
-						messageBox.setText(ExtensionMessages.deleteReferences);
-						messageBox.setMessage(ExtensionMessages.shallDeleteReferences);
-						if(messageBox.open() == SWT.OK) {
+						if(MessageDialog.openQuestion(calibrationEditUI.getShell(), ExtensionMessages.deleteReferences, ExtensionMessages.shallDeleteReferences)) {
 							List<Integer> keysToRemove = new ArrayList<>();
 							TableItem[] tableItems = table.getSelection();
 							for(TableItem tableItem : tableItems) {
 								Object object = tableItem.getData();
-								if(object instanceof IRetentionIndexEntry retentionIndexEntry) {
-									keysToRemove.add(retentionIndexEntry.getRetentionTime());
+								if(object instanceof Map.Entry entry) {
+									if(entry.getValue() instanceof IRetentionIndexEntry retentionIndexEntry) {
+										keysToRemove.add(retentionIndexEntry.getRetentionTime());
+									}
 								}
 							}
 							/*
