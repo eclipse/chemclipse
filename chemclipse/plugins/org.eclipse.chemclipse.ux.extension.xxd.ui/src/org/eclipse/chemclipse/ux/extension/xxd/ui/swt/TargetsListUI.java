@@ -140,6 +140,8 @@ public class TargetsListUI extends ExtendedTableViewer {
 				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
 			} else if(label.equals(TargetsLabelProvider.INCHI)) {
 				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
+			} else if(label.equals(TargetsLabelProvider.INCHI_KEY)) {
+				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
 			} else if(label.equals(TargetsLabelProvider.CONTRIBUTOR)) {
 				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
 			} else if(label.equals(TargetsLabelProvider.REFERENCE_ID)) {

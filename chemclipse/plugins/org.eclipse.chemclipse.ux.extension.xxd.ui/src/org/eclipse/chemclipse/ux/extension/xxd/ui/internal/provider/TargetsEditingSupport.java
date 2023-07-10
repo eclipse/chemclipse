@@ -79,6 +79,9 @@ public class TargetsEditingSupport extends EditingSupport {
 			if(column.equals(TargetsLabelProvider.INCHI)) {
 				return identificationTarget.getLibraryInformation().getInChI();
 			}
+			if(column.equals(TargetsLabelProvider.INCHI_KEY)) {
+				return identificationTarget.getLibraryInformation().getInChIKey();
+			}
 			if(column.equals(TargetsLabelProvider.CONTRIBUTOR)) {
 				return identificationTarget.getLibraryInformation().getContributor();
 			}
@@ -113,6 +116,9 @@ public class TargetsEditingSupport extends EditingSupport {
 			}
 			if(column.equals(TargetsLabelProvider.INCHI)) {
 				identificationTarget.getLibraryInformation().setInChI((String)value);
+			}
+			if(column.equals(TargetsLabelProvider.INCHI_KEY)) {
+				identificationTarget.getLibraryInformation().setInChIKey((String)value);
 			}
 			if(column.equals(TargetsLabelProvider.CONTRIBUTOR)) {
 				identificationTarget.getLibraryInformation().setContributor((String)value);
