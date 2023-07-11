@@ -34,6 +34,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		addField(new LabelFieldEditor("Export Options", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_CALIBRATION_EXPORT_USE_CURATED_NAMES, "Use Curated Names", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES, "Derive Missing Indices", getFieldEditorParent()));
 	}
 
 	@Override

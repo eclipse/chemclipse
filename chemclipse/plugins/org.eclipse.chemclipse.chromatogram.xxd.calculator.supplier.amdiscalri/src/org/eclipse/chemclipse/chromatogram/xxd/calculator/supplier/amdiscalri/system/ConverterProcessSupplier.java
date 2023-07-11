@@ -48,6 +48,7 @@ public class ConverterProcessSupplier extends AbstractSystemProcessSettings {
 
 			if(settings instanceof ConverterProcessSettings processSettings) {
 				PreferenceSupplier.setCalibrationExportUseCuratedNames(processSettings.isCalibrationExportUseCuratedNames());
+				PreferenceSupplier.setCalibrationExportDeriveMissingIndices(processSettings.isCalibrationExportDeriveMissingIndices());
 			}
 		}
 	}

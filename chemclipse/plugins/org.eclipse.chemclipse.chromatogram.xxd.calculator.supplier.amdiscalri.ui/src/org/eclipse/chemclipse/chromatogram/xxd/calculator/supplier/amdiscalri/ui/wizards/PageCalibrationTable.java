@@ -74,7 +74,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				updateChromatogramChart(chromatogramSelection);
 				RetentionIndexExtractor retentionIndexExtractor = new RetentionIndexExtractor();
-				ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogram, true);
+				ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogram, false, true);
 				wizardElements.setSeparationColumnIndices(separationColumnIndices);
 				extendedRetentionIndexTableViewerUI.setInput(separationColumnIndices);
 			}

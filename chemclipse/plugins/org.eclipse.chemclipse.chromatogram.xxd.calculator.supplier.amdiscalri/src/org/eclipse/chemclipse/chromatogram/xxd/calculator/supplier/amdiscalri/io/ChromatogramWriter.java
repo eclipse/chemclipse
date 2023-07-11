@@ -34,7 +34,8 @@ public class ChromatogramWriter {
 		 */
 		RetentionIndexExtractor retentionIndexExtractor = new RetentionIndexExtractor();
 		boolean useCuratedNames = PreferenceSupplier.isCalibrationExportUseCuratedNames();
-		ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogram, useCuratedNames);
+		boolean deriveMissingIndices = PreferenceSupplier.isCalibrationExportDeriveMissingIndices();
+		ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogram, deriveMissingIndices, useCuratedNames);
 		CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
 		calibrationFileWriter.write(file, separationColumnIndices);
 	}

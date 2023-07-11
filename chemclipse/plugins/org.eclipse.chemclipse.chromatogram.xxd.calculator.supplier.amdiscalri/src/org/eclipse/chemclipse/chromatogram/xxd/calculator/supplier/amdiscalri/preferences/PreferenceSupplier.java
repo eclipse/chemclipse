@@ -78,6 +78,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static final String P_CALIBRATION_EXPORT_USE_CURATED_NAMES = "calibrationExportUseCuratedNames";
 	public static final boolean DEF_CALIBRATION_EXPORT_USE_CURATED_NAMES = true;
+	public static final String P_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES = "calibrationExportDeriveMissingIndices";
+	public static final boolean DEF_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -119,6 +121,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_LIST_PATH_IMPORT_TEMPLATE, DEF_LIST_PATH_IMPORT_TEMPLATE);
 		defaultValues.put(P_LIST_PATH_EXPORT_TEMPLATE, DEF_LIST_PATH_EXPORT_TEMPLATE);
 		defaultValues.put(P_CALIBRATION_EXPORT_USE_CURATED_NAMES, Boolean.toString(DEF_CALIBRATION_EXPORT_USE_CURATED_NAMES));
+		defaultValues.put(P_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES, Boolean.toString(DEF_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES));
 		return defaultValues;
 	}
 
@@ -260,6 +263,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static void setCalibrationExportUseCuratedNames(boolean value) {
 
 		INSTANCE().putBoolean(P_CALIBRATION_EXPORT_USE_CURATED_NAMES, value);
+	}
+
+	public static boolean isCalibrationExportDeriveMissingIndices() {
+
+		return INSTANCE().getBoolean(P_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES, DEF_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES);
+	}
+
+	public static void setCalibrationExportDeriveMissingIndices(boolean value) {
+
+		INSTANCE().putBoolean(P_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES, value);
 	}
 
 	private static CalculatorStrategy getCalculatorStrategy() {
