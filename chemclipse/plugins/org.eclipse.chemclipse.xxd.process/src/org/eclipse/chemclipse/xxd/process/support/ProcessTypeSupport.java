@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,21 +25,20 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.supplier.IMeasurementProcessSupplier;
 import org.eclipse.chemclipse.processing.DataCategory;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.xxd.process.Activator;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * You could also use the {@link IProcessSupplierContext} OSGI-Service or the E4ProcessSupplierContext if context injection is desired
- *
  */
 public class ProcessTypeSupport implements IProcessSupplierContext {
 
@@ -82,6 +81,7 @@ public class ProcessTypeSupport implements IProcessSupplierContext {
 		Set<IProcessSupplier<?>> supplier = new TreeSet<>((o1, o2) -> o1.getId().compareTo(o2.getId()));
 		addMatchingSupplier(dataTypes, supplier, localProcessSupplier.toArray(new IProcessTypeSupplier[0]));
 		addMatchingSupplier(dataTypes, supplier, Activator.geIProcessTypeSuppliers());
+		//
 		return supplier;
 	}
 
@@ -91,6 +91,7 @@ public class ProcessTypeSupport implements IProcessSupplierContext {
 		for(IProcessTypeSupplier typeSupplier : localProcessSupplier) {
 			typeSupplier.getProcessorSuppliers().forEach(consumer);
 		}
+		//
 		for(IProcessTypeSupplier typeSupplier : Activator.geIProcessTypeSuppliers()) {
 			typeSupplier.getProcessorSuppliers().forEach(consumer);
 		}
@@ -106,6 +107,7 @@ public class ProcessTypeSupport implements IProcessSupplierContext {
 			}
 			return;
 		}
+		//
 		for(IProcessTypeSupplier processTypeSupplier : processTypeSuppliers) {
 			for(IProcessSupplier<?> processSupplier : processTypeSupplier.getProcessorSuppliers()) {
 				for(DataCategory category : dataTypes) {
@@ -145,6 +147,7 @@ public class ProcessTypeSupport implements IProcessSupplierContext {
 		for(IChromatogramSelection<?, ?> selection : chromatogramSelections) {
 			ProcessEntryContainer.applyProcessEntries(processMethod, executionContext.split(), IChromatogramSelectionProcessSupplier.createConsumer(selection));
 		}
+		//
 		return processingInfo;
 	}
 

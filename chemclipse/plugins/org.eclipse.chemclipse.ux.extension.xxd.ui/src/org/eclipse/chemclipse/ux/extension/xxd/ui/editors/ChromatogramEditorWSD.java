@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,8 +27,8 @@ public class ChromatogramEditorWSD extends ChromatogramEditor {
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorWSD";
 
 	@Inject
-	public ChromatogramEditorWSD(Composite parent, MPart part, MDirtyable dirtyable, Shell shell, E4ProcessSupplierContext filterFactory, IEclipseContext eclipseContext) {
+	public ChromatogramEditorWSD(Composite parent, MPart part, MDirtyable dirtyable, Shell shell, E4ProcessSupplierContext processSupplierContext, IEclipseContext eclipseContext) {
 
-		super(DataType.WSD, parent, part, dirtyable, shell, filterFactory, eclipseContext);
+		super(DataType.WSD, parent, part, dirtyable, shell, processSupplierContext, eclipseContext);
 	}
 }

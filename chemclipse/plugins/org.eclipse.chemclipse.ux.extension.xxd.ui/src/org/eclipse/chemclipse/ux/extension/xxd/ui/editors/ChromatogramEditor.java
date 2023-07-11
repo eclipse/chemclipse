@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,9 +23,9 @@ public class ChromatogramEditor extends AbstractChromatogramEditor {
 
 	private final Composite parent;
 
-	public ChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, Shell shell, IProcessSupplierContext filterFactory, IEclipseContext eclipseContext) {
+	public ChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, Shell shell, IProcessSupplierContext processSupplierContext, IEclipseContext eclipseContext) {
 
-		super(dataType, parent, part, dirtyable, filterFactory, shell);
+		super(dataType, parent, part, dirtyable, processSupplierContext, shell);
 		this.parent = parent;
 	}
 

@@ -188,11 +188,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
 	//
-	private ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
-	//
 	private static final DecimalFormat FORMAT = ValueFormat.getDecimalFormatEnglish("0.000");
-	//
-	private String titleScans = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_SCANS);
 	private static final String LABEL_SCAN_NUMBER = "Scan Number";
 	//
 	private static final String IMAGE_ALIGNMENT = IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS;
@@ -217,6 +213,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private static final String SERIES_ID_SELECTED_SCAN = "Selected Scan";
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scans Selected";
+	//
+	private String titleScans = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_SCANS);
+	private ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
 	//
 	private AtomicReference<ProcessorToolbarUI> processorToolbarControl = new AtomicReference<>();
 	private AtomicReference<Composite> toolbarMainControl = new AtomicReference<>();
@@ -250,9 +249,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private DisplayType displayType;
 	//
 	private boolean suspendUpdate = false;
-	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private final IProcessSupplierContext processTypeSupport = new ProcessTypeSupport();
-	//
+	private IProcessSupplierContext processTypeSupport;
 	private MethodSupportUI methodSupportUI;
 	private ITargetDisplaySettings targetDisplaySettings;
 	private Predicate<IProcessSupplier<?>> dataCategoryPredicate = null;
@@ -264,10 +261,12 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private RetentionIndexMarker retentionIndexMarker;
 	//
 	private IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
-	public ExtendedChromatogramUI(Composite parent, int style) {
+	public ExtendedChromatogramUI(Composite parent, int style, IProcessSupplierContext processTypeSupport) {
 
 		super(parent, style);
+		this.processTypeSupport = processTypeSupport != null ? processTypeSupport : new ProcessTypeSupport();
 		createControl();
 	}
 

@@ -27,8 +27,8 @@ public class ChromatogramEditorISD extends ChromatogramEditor {
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorISD";
 
 	@Inject
-	public ChromatogramEditorISD(Composite parent, MPart part, MDirtyable dirtyable, Shell shell, E4ProcessSupplierContext filterFactory, IEclipseContext eclipseContext) {
+	public ChromatogramEditorISD(Composite parent, MPart part, MDirtyable dirtyable, Shell shell, E4ProcessSupplierContext processSupplierContext, IEclipseContext eclipseContext) {
 
-		super(DataType.ISD, parent, part, dirtyable, shell, filterFactory, eclipseContext);
+		super(DataType.ISD, parent, part, dirtyable, shell, processSupplierContext, eclipseContext);
 	}
 }

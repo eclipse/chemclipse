@@ -40,7 +40,6 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
-import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
@@ -73,7 +72,6 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xir.model.core.selection.ChromatogramSelectionISD;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.ui.di.Focus;
@@ -112,6 +110,9 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	//
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private final Shell shell;
+	private final ObjectChangedListener<IMeasurementResult<?>> updateMeasurementResult = new MeasurementResultListener();
+	private final IProcessSupplierContext processSupplierContext;
+	//
 	private final ObjectChangedListener<Object> updateMenuListener = new ObjectChangedListener<>() {
 
 		@Override
@@ -123,16 +124,17 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 			}
 		}
 	};
-	//
-	private final ObjectChangedListener<IMeasurementResult<?>> updateMeasurementResult = new MeasurementResultListener();
-	private final IProcessSupplierContext processSupplierContext;
 
-	@Deprecated
-	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, ProcessorFactory filterFactory, Shell shell) {
-
-		this(dataType, parent, part, dirtyable, new ProcessTypeSupport(), shell);
-	}
-
+	/**
+	 * The process supplier context contains elements like PerspectiveSwicher, UISynchronize, ... important.
+	 * 
+	 * @param dataType
+	 * @param parent
+	 * @param part
+	 * @param dirtyable
+	 * @param processSupplierContext
+	 * @param shell
+	 */
 	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, IProcessSupplierContext processSupplierContext, Shell shell) {
 
 		super(TOPIC_CHROMATOGRAM);
@@ -447,7 +449,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 
 	private void createChromatogramPage(Composite parent) {
 
-		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.NONE);
+		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.NONE, processSupplierContext);
 	}
 
 	private final class MeasurementResultListener implements ObjectChangedListener<IMeasurementResult<?>>, PropertyChangeListener {
