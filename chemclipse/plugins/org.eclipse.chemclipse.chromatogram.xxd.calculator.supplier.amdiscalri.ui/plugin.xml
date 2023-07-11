@@ -71,5 +71,9 @@
             class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.icon.RetentionIndexMenuIcon"
             id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.retentionindex">
       </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.icon.IndexAssignerMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.retentionindexassigner">
+      </icon>      
    </extension>
 </plugin>

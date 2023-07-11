@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,17 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.validators;
 
-import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
-import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IndexNameMarker;
 import org.eclipse.chemclipse.support.util.ValueParserSupport;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
-public class RetentionIndexEntryValidator extends ValueParserSupport implements IValidator<String> {
+public class RetentionIndexAssignerValidator extends ValueParserSupport implements IValidator<String> {
 
-	public static final String EXAMPLE_SINGLE = "22.549 | 1400.0 | C14";
+	public static final String EXAMPLE_SINGLE = "600 | Hexane";
 	//
 	public static final String WHITE_SPACE = " ";
 	public static final String SEPARATOR_TOKEN = ";";
@@ -30,8 +28,7 @@ public class RetentionIndexEntryValidator extends ValueParserSupport implements 
 	private static final String ERROR_MESSAGE = "";
 	private static final String ERROR_TOKEN = "The item must not contain: " + SEPARATOR_TOKEN;
 	//
-	private int retentionTime = 0;
-	private float retentionIndex = 0.0f;
+	private int retentionIndex = 0;
 	private String name = "";
 
 	@Override
@@ -49,18 +46,12 @@ public class RetentionIndexEntryValidator extends ValueParserSupport implements 
 				message = ERROR_MESSAGE;
 			} else {
 				String[] values = text.trim().split("\\" + SEPARATOR_ENTRY); // The pipe needs to be escaped.
-				if(values.length >= 3) {
-					double retentionTimeMinutes = parseDouble(values, 0);
-					retentionTime = (int)(retentionTimeMinutes * IChromatogramOverview.MINUTE_CORRELATION_FACTOR); // Minutes to milliseconds.
-					if(retentionTime <= 0) {
-						message = "Please type in a valid retention time.";
+				if(values.length >= 2) {
+					retentionIndex = parseInteger(values, 0);
+					if(retentionIndex <= 0) {
+						message = "Please type in a valid retention index.";
 					} else {
-						retentionIndex = parseFloat(values, 1);
-						if(retentionIndex <= 0) {
-							message = "Please type in a valid retention index.";
-						} else {
-							name = parseString(values, 2);
-						}
+						name = parseString(values, 1);
 					}
 				}
 			}
@@ -75,13 +66,12 @@ public class RetentionIndexEntryValidator extends ValueParserSupport implements 
 
 	private void clear() {
 
-		retentionTime = 0;
-		retentionIndex = 0.0f;
+		retentionIndex = 0;
 		name = "";
 	}
 
-	public IRetentionIndexEntry getSetting() {
+	public IndexNameMarker getSetting() {
 
-		return new RetentionIndexEntry(retentionTime, retentionIndex, name);
+		return new IndexNameMarker(retentionIndex, name);
 	}
 }
