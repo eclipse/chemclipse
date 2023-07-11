@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.SplitSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ManualPeakDetector;
@@ -53,7 +54,6 @@ import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 import org.eclipse.swtchart.extensions.core.IMouseSupport;
 import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
 import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
-
 
 public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 
@@ -152,7 +152,7 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 	public ExtendedPeakChartUI(Composite parent, int style) {
 
 		super(parent, style);
-		detectionTypeDescriptions = new HashMap<String, String>();
+		detectionTypeDescriptions = new HashMap<>();
 		detectionTypeDescriptions.put(DETECTION_TYPE_TANGENT, "Modus (Tangent) [Key:" + KEY_TANGENT + "]");
 		detectionTypeDescriptions.put(DETECTION_TYPE_PERPENDICULAR, "Modus (Perpendicular) [Key:" + KEY_PERPENDICULAR + "]");
 		detectionTypeDescriptions.put(DETECTION_TYPE_NONE, "");
@@ -249,14 +249,14 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle info toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
-				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16, visible));
+				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImageProvider.SIZE_16x16, visible));
 			}
 		});
 		//
@@ -269,7 +269,7 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 		button.setToolTipText("Use Tangent Skim.");
 		button.setText("");
 		button.setEnabled(false);
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DETECTION_TYPE_TANGENT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DETECTION_TYPE_TANGENT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -306,14 +306,13 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Add the splitted peaks.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(peak instanceof IChromatogramPeakMSD) {
-					IChromatogramPeakMSD peakMSD = (IChromatogramPeakMSD)peak;
+				if(peak instanceof IChromatogramPeakMSD peakMSD) {
 					IChromatogramMSD chromatogram = peakMSD.getChromatogram();
 					if(chromatogram != null) {
 						addPeaks(chromatogram, peak, peakSplitted1, peakSplitted2);
@@ -322,8 +321,7 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 						setDetectionType(DETECTION_TYPE_NONE);
 						updatePeaks();
 					}
-				} else if(peak instanceof IChromatogramPeakCSD) {
-					IChromatogramPeakCSD peakCSD = (IChromatogramPeakCSD)peak;
+				} else if(peak instanceof IChromatogramPeakCSD peakCSD) {
 					IChromatogramCSD chromatogram = peakCSD.getChromatogram();
 					if(chromatogram != null) {
 						addPeaks(chromatogram, peak, peakSplitted1, peakSplitted2);
@@ -350,12 +348,10 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 	private void removePeakFromChromatogram(IChromatogram<?> chromatogram, IPeak peak) {
 
 		if(peak != null) {
-			if(chromatogram instanceof IChromatogramMSD && peak instanceof IChromatogramPeakMSD) {
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-				chromatogramMSD.removePeak((IChromatogramPeakMSD)peak);
-			} else if(chromatogram instanceof IChromatogramCSD && peak instanceof IChromatogramPeakCSD) {
-				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-				chromatogramCSD.removePeak((IChromatogramPeakCSD)peak);
+			if(chromatogram instanceof IChromatogramMSD chromatogramMSD && peak instanceof IChromatogramPeakMSD chromatogramPeakMSD) {
+				chromatogramMSD.removePeak(chromatogramPeakMSD);
+			} else if(chromatogram instanceof IChromatogramCSD chromatogramCSD && peak instanceof IChromatogramPeakCSD chromatogramPeakCSD) {
+				chromatogramCSD.removePeak(chromatogramPeakCSD);
 			}
 		}
 	}
@@ -363,11 +359,9 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 	private void addPeakToChromatogram(IChromatogram<?> chromatogram, IPeak peak) {
 
 		if(peak != null) {
-			if(chromatogram instanceof IChromatogramMSD) {
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+			if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 				chromatogramMSD.addPeak((IChromatogramPeakMSD)peak);
-			} else if(chromatogram instanceof IChromatogramCSD) {
-				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+			} else if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 				chromatogramCSD.addPeak((IChromatogramPeakCSD)peak);
 			}
 		}
@@ -377,7 +371,7 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the chart series legend.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -392,7 +386,7 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the chart legend marker.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_LEGEND_MARKER, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_LEGEND_MARKER, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -411,7 +405,7 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Reset the Overlay");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -652,12 +646,11 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 
 		IPeak peakSplitted = null;
 		//
-		if(peak instanceof IChromatogramPeakMSD) {
+		if(peak instanceof IChromatogramPeakMSD chromatogramPeakMSD) {
 			/*
 			 * Peak Detection MSD
 			 */
 			try {
-				IChromatogramPeakMSD chromatogramPeakMSD = (IChromatogramPeakMSD)peak;
 				if(chromatogramPeakMSD.getChromatogram() != null) {
 					ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
 					IChromatogramMSD chromatogram = chromatogramPeakMSD.getChromatogram();
@@ -666,12 +659,11 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 			} catch(PeakException e) {
 				logger.warn(e);
 			}
-		} else if(peak instanceof IChromatogramPeakCSD) {
+		} else if(peak instanceof IChromatogramPeakCSD chromatogramPeakCSD) {
 			/*
 			 * Peak Detection FID
 			 */
 			try {
-				IChromatogramPeakCSD chromatogramPeakCSD = (IChromatogramPeakCSD)peak;
 				if(chromatogramPeakCSD.getChromatogram() != null) {
 					ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
 					IChromatogramCSD chromatogram = chromatogramPeakCSD.getChromatogram();

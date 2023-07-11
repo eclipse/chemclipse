@@ -165,8 +165,8 @@ public class PartSupport {
 	public static MPartStack getPartStack(String partStackId, EModelService modelService, MApplication application) {
 
 		MUIElement element = getElement(partStackId, modelService, application);
-		if(element instanceof MPartStack) {
-			return (MPartStack)element;
+		if(element instanceof MPartStack partStack) {
+			return partStack;
 		}
 		//
 		return null;
@@ -175,8 +175,8 @@ public class PartSupport {
 	public static MToolBar getToolBar(String toolBarId, EModelService modelService, MApplication application) {
 
 		MUIElement element = getElement(toolBarId, modelService, application);
-		if(element instanceof MToolBar) {
-			return (MToolBar)element;
+		if(element instanceof MToolBar toolbar) {
+			return toolbar;
 		}
 		//
 		return null;
@@ -185,8 +185,8 @@ public class PartSupport {
 	public static MDirectToolItem getDirectToolItem(String toolItemId, EModelService modelService, MApplication application) {
 
 		MUIElement element = getElement(toolItemId, modelService, application);
-		if(element instanceof MDirectToolItem) {
-			return (MDirectToolItem)element;
+		if(element instanceof MDirectToolItem directToolItem) {
+			return directToolItem;
 		}
 		//
 		return null;
@@ -195,8 +195,8 @@ public class PartSupport {
 	public static MPart getPart(String partId, EModelService modelService, MApplication application) {
 
 		MUIElement element = getElement(partId, modelService, application);
-		if(element instanceof MPart) {
-			return (MPart)element;
+		if(element instanceof MPart part) {
+			return part;
 		}
 		//
 		return null;
@@ -325,8 +325,7 @@ public class PartSupport {
 		if(composite != null) {
 			composite.setVisible(visible);
 			Object layoutData = composite.getLayoutData();
-			if(layoutData instanceof GridData) {
-				GridData gridData = (GridData)layoutData;
+			if(layoutData instanceof GridData gridData) {
 				gridData.exclude = !visible;
 			}
 			Composite parent = composite.getParent();
