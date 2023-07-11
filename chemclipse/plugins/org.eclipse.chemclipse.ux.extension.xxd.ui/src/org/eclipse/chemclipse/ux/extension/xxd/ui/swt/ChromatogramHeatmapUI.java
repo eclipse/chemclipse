@@ -290,7 +290,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 	private Button createButtonZoom(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
 		button.setToolTipText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ZOOM_IN, IApplicationImageProvider.SIZE_16x16));
@@ -311,7 +311,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 	private void updateButtonZoom() {
 
-		enableButton(buttonZoom, IMAGE_ZOOM, TOOLTIP_ZOOM, preferenceStore.getBoolean(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM));
+		buttonZoom.setSelection(preferenceStore.getBoolean(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM));
 	}
 
 	private void createButtonSettings(Composite parent) {

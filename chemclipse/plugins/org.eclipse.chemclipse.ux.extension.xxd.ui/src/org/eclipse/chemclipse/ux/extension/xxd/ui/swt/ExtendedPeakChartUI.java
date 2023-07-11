@@ -246,7 +246,7 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setToolTipText("Toggle info toolbar.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImageProvider.SIZE_16x16));
@@ -369,7 +369,7 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 
 	private void createToggleChartSeriesLegendButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setToolTipText("Toggle the chart series legend.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {

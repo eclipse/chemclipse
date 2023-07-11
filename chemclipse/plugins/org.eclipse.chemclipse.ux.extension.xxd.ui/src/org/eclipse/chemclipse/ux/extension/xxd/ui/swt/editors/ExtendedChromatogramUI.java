@@ -1316,7 +1316,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void createButtonToggleRetentionIndex(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
 		setButtonImage(button, IMAGE_RETENTION_INDICES, PREFIX_SHOW, PREFIX_HIDE, TOOLTIP_RETENTION_INDICES, preferenceStore.getBoolean(PreferenceConstants.P_SHOW_RETENTION_INDEX_MARKER));
 		button.addSelectionListener(new SelectionAdapter() {

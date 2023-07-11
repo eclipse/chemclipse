@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -174,10 +175,10 @@ public class SearchSupportUI extends Composite {
 
 	private void createButtonCaseSensitive(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
 		button.setToolTipText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CASE_SENSITIVE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CASE_SENSITIVE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -197,8 +198,9 @@ public class SearchSupportUI extends Composite {
 
 		Button button = buttonControl.get();
 		if(button != null) {
+			button.setSelection(caseSensitive);
 			button.setToolTipText(caseSensitive ? "Search: Case Sensitive" : "Search: Case Insensitive");
-			button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CASE_SENSITIVE, IApplicationImage.SIZE_16x16, caseSensitive));
+			button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CASE_SENSITIVE, IApplicationImageProvider.SIZE_16x16));
 		}
 	}
 
