@@ -73,6 +73,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_LIST_PATH_IMPORT_TEMPLATE = "";
 	public static final String P_LIST_PATH_EXPORT_TEMPLATE = "listPathExportTemplate";
 	public static final String DEF_LIST_PATH_EXPORT_TEMPLATE = "";
+	/*
+	 * Cal Export
+	 */
+	public static final String P_CALIBRATION_EXPORT_USE_CURATED_NAMES = "calibrationExportUseCuratedNames";
+	public static final boolean DEF_CALIBRATION_EXPORT_USE_CURATED_NAMES = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -113,6 +118,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_LIST_PATH_IMPORT_FILE, DEF_LIST_PATH_IMPORT_FILE);
 		defaultValues.put(P_LIST_PATH_IMPORT_TEMPLATE, DEF_LIST_PATH_IMPORT_TEMPLATE);
 		defaultValues.put(P_LIST_PATH_EXPORT_TEMPLATE, DEF_LIST_PATH_EXPORT_TEMPLATE);
+		defaultValues.put(P_CALIBRATION_EXPORT_USE_CURATED_NAMES, Boolean.toString(DEF_CALIBRATION_EXPORT_USE_CURATED_NAMES));
 		return defaultValues;
 	}
 
@@ -244,6 +250,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static void setListPathExportTemplate(String filterPath) {
 
 		INSTANCE().put(P_LIST_PATH_EXPORT_TEMPLATE, filterPath);
+	}
+
+	public static boolean isCalibrationExportUseCuratedNames() {
+
+		return INSTANCE().getBoolean(P_CALIBRATION_EXPORT_USE_CURATED_NAMES, DEF_CALIBRATION_EXPORT_USE_CURATED_NAMES);
+	}
+
+	public static void setCalibrationExportUseCuratedNames(boolean value) {
+
+		INSTANCE().putBoolean(P_CALIBRATION_EXPORT_USE_CURATED_NAMES, value);
 	}
 
 	private static CalculatorStrategy getCalculatorStrategy() {

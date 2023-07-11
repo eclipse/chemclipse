@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexExtractor;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -32,7 +33,8 @@ public class ChromatogramWriter {
 		 * Write the cal specifiation.
 		 */
 		RetentionIndexExtractor retentionIndexExtractor = new RetentionIndexExtractor();
-		ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogram);
+		boolean useCuratedNames = PreferenceSupplier.isCalibrationExportUseCuratedNames();
+		ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogram, useCuratedNames);
 		CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
 		calibrationFileWriter.write(file, separationColumnIndices);
 	}

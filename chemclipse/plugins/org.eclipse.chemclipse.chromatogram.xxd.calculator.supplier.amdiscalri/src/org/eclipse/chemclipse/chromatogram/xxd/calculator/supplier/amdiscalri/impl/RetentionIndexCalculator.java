@@ -250,6 +250,9 @@ public class RetentionIndexCalculator {
 		Map<String, String> alkanesByCAS = getAlkanesByCAS();
 		String cas = libraryInformation.getCasNumber().trim();
 		String name = libraryInformation.getName().trim();
+		/*
+		 * Try to match the alkane by the CAS#.
+		 */
 		if(getAlkanesByCAS().containsKey(cas)) {
 			// 111-65-9 => 8
 			ArrayList<String> casNumbers = new ArrayList<>(alkanesByCAS.keySet());

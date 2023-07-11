@@ -26,8 +26,9 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
 public class RetentionIndexExtractor {
 
-	public ISeparationColumnIndices extract(IChromatogram<?> chromatogram) {
+	public ISeparationColumnIndices extract(IChromatogram<?> chromatogram, boolean useCuratedNames) {
 
+		String[] standards = RetentionIndexCalculator.getStandards();
 		ISeparationColumnIndices separationColumnIndices = new SeparationColumnIndices();
 		separationColumnIndices.setSeparationColumn(chromatogram.getSeparationColumnIndices().getSeparationColumn());
 		//
@@ -37,13 +38,25 @@ public class RetentionIndexExtractor {
 			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndexPeak);
 			IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
 			if(identificationTarget != null) {
+				/*
+				 * Validate
+				 */
 				ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
-				String name = libraryInformation.getName().trim();
-				int retentionIndex = RetentionIndexCalculator.getRetentionIndex(name);
-				if(retentionIndex == RetentionIndexCalculator.INDEX_MISSING) {
-					retentionIndex = RetentionIndexCalculator.getRetentionIndex(libraryInformation);
-				}
+				int retentionIndex = extractRetentionIndex(libraryInformation);
 				if(retentionIndex > RetentionIndexCalculator.INDEX_MISSING) {
+					/*
+					 * Determine the name
+					 */
+					String name = libraryInformation.getName().trim();
+					if(useCuratedNames) {
+						int index = retentionIndex / 100 - 1;
+						if(index >= 0 && index < standards.length) {
+							name = standards[index];
+						}
+					}
+					/*
+					 * Create a new entry.
+					 */
 					int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
 					IRetentionIndexEntry retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, name);
 					separationColumnIndices.put(retentionIndexEntry);
@@ -51,6 +64,16 @@ public class RetentionIndexExtractor {
 			}
 		}
 		return separationColumnIndices;
+	}
+
+	private int extractRetentionIndex(ILibraryInformation libraryInformation) {
+
+		int retentionIndex = RetentionIndexCalculator.getRetentionIndex(libraryInformation.getName().trim());
+		if(retentionIndex == RetentionIndexCalculator.INDEX_MISSING) {
+			retentionIndex = RetentionIndexCalculator.getRetentionIndex(libraryInformation);
+		}
+		//
+		return retentionIndex;
 	}
 
 	private List<? extends IPeak> getPeaks(IChromatogram<?> chromatogram) {
