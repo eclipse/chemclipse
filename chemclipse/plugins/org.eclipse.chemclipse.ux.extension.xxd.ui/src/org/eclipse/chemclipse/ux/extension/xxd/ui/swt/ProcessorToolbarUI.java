@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.processors.Processor;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PreferencesProcessSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.swt.SWT;
@@ -107,8 +108,10 @@ public class ProcessorToolbarUI extends Composite {
 
 	private void updateInput() {
 
-		clearProcessorButtons(control);
-		createProcessorButtons(control);
+		if(this.isVisible()) {
+			clearProcessorButtons(control);
+			createProcessorButtons(control);
+		}
 	}
 
 	private void clearProcessorButtons(Composite parent) {
@@ -119,7 +122,6 @@ public class ProcessorToolbarUI extends Composite {
 				button.dispose();
 			}
 		}
-		//
 		buttons.clear();
 		updateLayout(parent);
 	}
@@ -143,6 +145,12 @@ public class ProcessorToolbarUI extends Composite {
 			Composite composite = parent.getParent();
 			composite.layout(true);
 		}
+		/*
+		 * This is needed, otherwise the icons
+		 * are displayed only partly when the
+		 * processor toolbar was empty initially.
+		 */
+		PartSupport.setCompositeVisibility(this, true);
 	}
 
 	private boolean isActiveDataCategory(Processor processor) {
