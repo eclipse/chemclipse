@@ -714,7 +714,7 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 			writeString(dataOutputStream, internalStandard.getName());
 			dataOutputStream.writeDouble(internalStandard.getConcentration());
 			writeString(dataOutputStream, internalStandard.getConcentrationUnit());
-			dataOutputStream.writeDouble(internalStandard.getResponseFactor());
+			dataOutputStream.writeDouble(internalStandard.getCompensationFactor());
 			writeString(dataOutputStream, internalStandard.getChemicalClass());
 		}
 	}
@@ -797,7 +797,6 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	
 	private void writeReferencedChromatograms(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram<?>> referencedChromatograms, IProgressMonitor monitor) throws IOException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Chromatogram", referencedChromatograms.size() * 20);

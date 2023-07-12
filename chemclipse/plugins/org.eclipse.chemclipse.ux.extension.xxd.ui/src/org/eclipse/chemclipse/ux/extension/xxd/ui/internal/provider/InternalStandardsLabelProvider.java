@@ -25,6 +25,7 @@ public class InternalStandardsLabelProvider extends AbstractChemClipseLabelProvi
 	public static final String NAME = ExtensionMessages.name;
 	public static final String CONCENTRATION = ExtensionMessages.concentration;
 	public static final String UNIT = ExtensionMessages.unit;
+	public static final String COMPENSATION_FACTOR = ExtensionMessages.compensationFactor;
 	public static final String RESPONSE_FACTOR = ExtensionMessages.responseFactor;
 	public static final String CHEMICAL_CLASS = ExtensionMessages.chemicalClass;
 	//
@@ -32,6 +33,7 @@ public class InternalStandardsLabelProvider extends AbstractChemClipseLabelProvi
 			NAME, //
 			CONCENTRATION, //
 			UNIT, //
+			COMPENSATION_FACTOR, //
 			RESPONSE_FACTOR, //
 			CHEMICAL_CLASS //
 	};
@@ -40,7 +42,8 @@ public class InternalStandardsLabelProvider extends AbstractChemClipseLabelProvi
 			170, //
 			170, //
 			150, //
-			170, //
+			120, //
+			120, //
 			150 //
 	};
 
@@ -76,9 +79,12 @@ public class InternalStandardsLabelProvider extends AbstractChemClipseLabelProvi
 					text = internalStandard.getConcentrationUnit();
 					break;
 				case 3:
-					text = decimalFormat.format(internalStandard.getResponseFactor());
+					text = decimalFormat.format(internalStandard.getCompensationFactor());
 					break;
 				case 4:
+					text = decimalFormat.format(internalStandard.getResponseFactor());
+					break;
+				case 5:
 					text = internalStandard.getChemicalClass();
 					break;
 				default:

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,10 +22,7 @@ public class InternalStandardsTableComparator extends AbstractRecordTableCompara
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IInternalStandard && e2 instanceof IInternalStandard) {
-			IInternalStandard internalStandard1 = (IInternalStandard)e1;
-			IInternalStandard internalStandard2 = (IInternalStandard)e2;
-			//
+		if(e1 instanceof IInternalStandard internalStandard1 && e2 instanceof IInternalStandard internalStandard2) {
 			switch(getPropertyIndex()) {
 				case 0:
 					sortOrder = internalStandard2.getName().compareTo(internalStandard1.getName());
@@ -37,18 +34,23 @@ public class InternalStandardsTableComparator extends AbstractRecordTableCompara
 					sortOrder = internalStandard2.getConcentrationUnit().compareTo(internalStandard1.getConcentrationUnit());
 					break;
 				case 3:
-					sortOrder = Double.compare(internalStandard2.getResponseFactor(), internalStandard1.getResponseFactor());
+					sortOrder = Double.compare(internalStandard2.getCompensationFactor(), internalStandard1.getCompensationFactor());
 					break;
 				case 4:
+					sortOrder = Double.compare(internalStandard2.getResponseFactor(), internalStandard1.getResponseFactor());
+					break;
+				case 5:
 					sortOrder = internalStandard2.getChemicalClass().compareTo(internalStandard1.getChemicalClass());
 					break;
 				default:
 					sortOrder = 0;
 			}
 		}
+		//
 		if(getDirection() == ASCENDING) {
 			sortOrder = -sortOrder;
 		}
+		//
 		return sortOrder;
 	}
 }

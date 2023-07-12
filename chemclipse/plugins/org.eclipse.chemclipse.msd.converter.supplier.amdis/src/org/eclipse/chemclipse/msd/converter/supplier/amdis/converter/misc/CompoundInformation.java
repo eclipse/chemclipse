@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,7 +33,7 @@ public class CompoundInformation {
 	private String signalToNoise = "";
 	private String chemicalClass = "";
 	private String referenceConcentration = "";
-	private String responseFactor = "";
+	private String compensationFactor = "";
 	private String minMatchFactor = "";
 	private String number = "";
 	private String name = "";
@@ -120,14 +120,14 @@ public class CompoundInformation {
 		this.referenceConcentration = referenceConcentration;
 	}
 
-	public String getResponseFactor() {
+	public String getCompensationFactor() {
 
-		return responseFactor;
+		return compensationFactor;
 	}
 
-	public void setResponseFactor(String responseFactor) {
+	public void setCompensationFactor(String compensationFactor) {
 
-		this.responseFactor = responseFactor;
+		this.compensationFactor = compensationFactor;
 	}
 
 	public String getMinMatchFactor() {

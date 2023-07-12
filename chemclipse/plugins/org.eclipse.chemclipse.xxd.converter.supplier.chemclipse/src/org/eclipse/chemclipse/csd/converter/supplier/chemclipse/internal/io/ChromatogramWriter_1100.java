@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -323,7 +323,7 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 			writeString(dataOutputStream, internalStandard.getName());
 			dataOutputStream.writeDouble(internalStandard.getConcentration());
 			writeString(dataOutputStream, internalStandard.getConcentrationUnit());
-			dataOutputStream.writeDouble(internalStandard.getResponseFactor());
+			dataOutputStream.writeDouble(internalStandard.getCompensationFactor());
 			writeString(dataOutputStream, internalStandard.getChemicalClass());
 		}
 	}

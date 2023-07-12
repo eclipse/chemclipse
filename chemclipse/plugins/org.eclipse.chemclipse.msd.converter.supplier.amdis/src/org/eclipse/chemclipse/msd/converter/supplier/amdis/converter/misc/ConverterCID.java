@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -171,7 +171,16 @@ public class ConverterCID {
 			} else if(value.startsWith(MARKER_REFERENCE_CONCENTRATION)) {
 				compoundInformation.setReferenceConcentration(getValue(value, 2));
 			} else if(value.startsWith(MARKER_RESPONSE_FACTOR)) {
-				compoundInformation.setResponseFactor(getValue(value, 2));
+				double compensationFactor = 0.0d;
+				try {
+					double responseFactor = Double.parseDouble(getValue(value, 2));
+					if(responseFactor > 0.0d) {
+						compensationFactor = 1.0d / responseFactor;
+					}
+				} catch(NumberFormatException e) {
+					logger.warn(e);
+				}
+				compoundInformation.setCompensationFactor(Double.toString(compensationFactor));
 			} else if(value.startsWith(MARKER_MIN_MATCH_FACTOR)) {
 				compoundInformation.setMinMatchFactor(getValue(value, 2));
 			} else if(value.startsWith(MARKER_NUMBER)) {

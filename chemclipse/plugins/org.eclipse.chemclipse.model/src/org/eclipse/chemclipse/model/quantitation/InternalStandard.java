@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,14 +16,20 @@ public class InternalStandard implements IInternalStandard {
 	private String name = "";
 	private double concentration;
 	private String concentrationUnit;
-	private double responseFactor;
+	private double compensationFactor;
 	private String chemicalClass = "";
 
-	public InternalStandard(String name, double concentration, String concentrationUnit, double responseFactor) {
+	public InternalStandard(String name, double concentration, String concentrationUnit) {
+
+		this(name, concentration, concentrationUnit, STANDARD_COMPENSATION_FACTOR);
+	}
+
+	public InternalStandard(String name, double concentration, String concentrationUnit, double compensationFactor) {
+
 		this.name = name;
 		this.concentration = concentration;
 		this.concentrationUnit = concentrationUnit;
-		this.responseFactor = responseFactor;
+		this.compensationFactor = compensationFactor;
 	}
 
 	@Override
@@ -55,9 +61,19 @@ public class InternalStandard implements IInternalStandard {
 	}
 
 	@Override
+	public double getCompensationFactor() {
+
+		return compensationFactor;
+	}
+
+	@Override
 	public double getResponseFactor() {
 
-		return responseFactor;
+		if(compensationFactor > 0.0d) {
+			return 1.0d / compensationFactor;
+		}
+		//
+		return 0.0d;
 	}
 
 	@Override
@@ -113,6 +129,6 @@ public class InternalStandard implements IInternalStandard {
 	@Override
 	public String toString() {
 
-		return "InternalStandard [name=" + name + ", concentration=" + concentration + ", concentrationUnit=" + concentrationUnit + ", responseFactor=" + responseFactor + ", chemicalClass=" + chemicalClass + "]";
+		return "InternalStandard [name=" + name + ", concentration=" + concentration + ", concentrationUnit=" + concentrationUnit + ", compensationFactor=" + compensationFactor + ", chemicalClass=" + chemicalClass + "]";
 	}
 }

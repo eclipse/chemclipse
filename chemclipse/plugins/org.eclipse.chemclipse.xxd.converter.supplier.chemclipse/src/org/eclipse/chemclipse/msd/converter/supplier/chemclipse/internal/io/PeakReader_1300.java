@@ -194,9 +194,9 @@ public class PeakReader_1300 extends AbstractZipReader implements IPeakReader {
 			String name = readString(dataInputStream);
 			double concentration = dataInputStream.readDouble();
 			String concentrationUnit = readString(dataInputStream);
-			double responseFactor = dataInputStream.readDouble();
+			double compensationFactor = dataInputStream.readDouble();
 			String chemicalClass = readString(dataInputStream);
-			IInternalStandard internalStandard = new InternalStandard(name, concentration, concentrationUnit, responseFactor);
+			IInternalStandard internalStandard = new InternalStandard(name, concentration, concentrationUnit, compensationFactor);
 			internalStandard.setChemicalClass(chemicalClass);
 			internalStandards.add(internalStandard);
 		}

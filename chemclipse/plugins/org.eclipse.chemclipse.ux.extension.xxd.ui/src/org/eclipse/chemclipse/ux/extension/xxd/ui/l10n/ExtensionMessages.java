@@ -85,6 +85,7 @@ public class ExtensionMessages extends NLS {
 	public static String trace;
 	public static String concentration;
 	public static String unit;
+	public static String compensationFactor;
 	public static String responseFactor;
 	public static String chemicalClass;
 	public static String type;
@@ -190,7 +191,9 @@ public class ExtensionMessages extends NLS {
 	public static String enterCorrectName;
 	public static String enterCompoundExample;
 	public static String enterSignalExample;
+	public static String enterCorrectCompensationFactor;
 	public static String enterCorrectResponseFactor;
+	public static String compensationFactorMustNotBeNegative;
 	public static String responseFactorMustNotBeNegative;
 	public static String enterResponseSignalExample;
 	public static String enterCorrectRetentionIndexExample;

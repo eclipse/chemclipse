@@ -16,18 +16,18 @@ import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
-public class ResponseFactorValidator implements IValidator<Object> {
+public class CompensationFactorValidator implements IValidator<Object> {
 
-	private static final String ERROR = ExtensionMessages.enterCorrectResponseFactor;
-	private static final String ERROR_VALUE_RANGE = ExtensionMessages.responseFactorMustNotBeNegative;
+	private static final String ERROR = ExtensionMessages.enterCorrectCompensationFactor;
+	private static final String ERROR_VALUE_RANGE = ExtensionMessages.compensationFactorMustNotBeNegative;
 	//
-	private double responseFactor = 0.0d;
+	private double compensationFactor = 0.0d;
 
 	@Override
 	public IStatus validate(Object value) {
 
 		String message = null;
-		this.responseFactor = 0.0d;
+		this.compensationFactor = 0.0d;
 		//
 		if(value == null) {
 			message = ERROR;
@@ -35,11 +35,11 @@ public class ResponseFactorValidator implements IValidator<Object> {
 			if(value instanceof String text) {
 				text = text.trim();
 				try {
-					double responseFactor = Double.parseDouble(text);
-					if(responseFactor <= 0.0d) {
+					double compensationFactor = Double.parseDouble(text);
+					if(compensationFactor <= 0.0d) {
 						message = ERROR_VALUE_RANGE;
 					} else {
-						this.responseFactor = responseFactor;
+						this.compensationFactor = compensationFactor;
 					}
 				} catch(NumberFormatException e) {
 					message = ERROR;
@@ -56,8 +56,8 @@ public class ResponseFactorValidator implements IValidator<Object> {
 		}
 	}
 
-	public double getResponseFactor() {
+	public double getCompensationFactor() {
 
-		return responseFactor;
+		return compensationFactor;
 	}
 }

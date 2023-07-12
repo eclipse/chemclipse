@@ -97,10 +97,10 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 						double peakAreaISTD = peakISTD.getIntegratedArea();
 						double concentration = internalStandard.getConcentration();
 						String concentrationUnit = internalStandard.getConcentrationUnit();
-						double responseFactor = internalStandard.getResponseFactor();
+						double compensationFactor = internalStandard.getCompensationFactor();
 						String chemicalClass = internalStandard.getChemicalClass();
 						double integratedArea = peakToQuantify.getIntegratedArea();
-						double concentrationCalculated = ((concentration / peakAreaISTD) * integratedArea) * responseFactor;
+						double concentrationCalculated = ((concentration / peakAreaISTD) * integratedArea) * compensationFactor;
 						//
 						IQuantitationEntry quantitationEntryMSD = new QuantitationEntry(nameOfStandard, concentrationCalculated, concentrationUnit, integratedArea);
 						quantitationEntryMSD.setSignal(ISignal.TOTAL_INTENSITY);
@@ -114,7 +114,6 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 		}
 	}
 
-	
 	private List<? extends IPeak> getInternalStandardPeaks(IChromatogram<?> chromatogram) {
 
 		if(chromatogram != null) {

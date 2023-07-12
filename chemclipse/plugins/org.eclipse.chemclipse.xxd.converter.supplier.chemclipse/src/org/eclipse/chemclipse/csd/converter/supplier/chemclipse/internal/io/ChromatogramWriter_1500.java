@@ -450,7 +450,7 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 			writeString(dataOutputStream, internalStandard.getName());
 			dataOutputStream.writeDouble(internalStandard.getConcentration());
 			writeString(dataOutputStream, internalStandard.getConcentrationUnit());
-			dataOutputStream.writeDouble(internalStandard.getResponseFactor());
+			dataOutputStream.writeDouble(internalStandard.getCompensationFactor());
 			writeString(dataOutputStream, internalStandard.getChemicalClass());
 		}
 	}

@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.InternalStandard;
+import org.eclipse.chemclipse.model.quantitation.ResponseOption;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -35,8 +36,8 @@ import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.support.validators.ConcentrationValidator;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.CompensationFactorValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.NameValidator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.ResponseFactorValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
@@ -44,6 +45,7 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -80,15 +82,16 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 	//
 	private ComboViewer comboName;
 	private Text textConcentration;
-	private Text textResponseFactor;
+	private ComboViewer comboViewerFactor;
+	private Text textFactor;
 	private Button buttonInsert;
 	//
 	private NameValidator nameValidator;
 	private ControlDecoration nameControlDecoration;
 	private ConcentrationValidator concentrationValidator;
 	private ControlDecoration concentrationControlDecoration;
-	private ResponseFactorValidator responseFactorValidator;
-	private ControlDecoration responseFactorControlDecoration;
+	private CompensationFactorValidator compensationFactorValidator;
+	private ControlDecoration compensationFactorControlDecoration;
 	//
 	private Button buttonCancel;
 	private Button buttonAdd;
@@ -280,11 +283,12 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
 		createTextName(composite);
 		createTextConcentration(composite);
-		createTextResponseFactor(composite);
+		createComboViewerFactor(composite);
+		createTextFactor(composite);
 		buttonInsert = createButtonInsert(composite);
 		//
 		return composite;
@@ -341,23 +345,47 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 		});
 	}
 
-	private void createTextResponseFactor(Composite parent) {
+	private void createComboViewerFactor(Composite parent) {
 
-		textResponseFactor = new Text(parent, SWT.BORDER);
-		textResponseFactor.setText("1.0");
-		textResponseFactor.setToolTipText("Response Factor");
+		comboViewerFactor = new EnhancedComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewerFactor.getCombo();
+		comboViewerFactor.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewerFactor.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof ResponseOption responseOption) {
+					return responseOption.label();
+				}
+				return null;
+			}
+		});
+		//
+		combo.setToolTipText("Response Option");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		comboViewerFactor.setInput(ResponseOption.values());
+		comboViewerFactor.setSelection(new StructuredSelection(ResponseOption.COMPENSATION_FACTOR));
+	}
+
+	private void createTextFactor(Composite parent) {
+
+		textFactor = new Text(parent, SWT.BORDER);
+		textFactor.setText("1.0");
+		textFactor.setToolTipText("Factor");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumWidth = 50;
-		textResponseFactor.setLayoutData(gridData);
+		textFactor.setLayoutData(gridData);
 		//
-		responseFactorValidator = new ResponseFactorValidator();
-		responseFactorControlDecoration = new ControlDecoration(textResponseFactor, SWT.LEFT | SWT.TOP);
-		textResponseFactor.addKeyListener(new KeyAdapter() {
+		compensationFactorValidator = new CompensationFactorValidator();
+		compensationFactorControlDecoration = new ControlDecoration(textFactor, SWT.LEFT | SWT.TOP);
+		textFactor.addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				validate(responseFactorValidator, responseFactorControlDecoration, textResponseFactor);
+				validate(compensationFactorValidator, compensationFactorControlDecoration, textFactor);
 			}
 		});
 	}
@@ -557,7 +585,7 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 				String name = "";
 				double concentration = 0.0d;
 				String concentrationUnit = "";
-				double responseFactor = 0.0d;
+				double factor = 0.0d;
 				//
 				isInputValid = validate(nameValidator, nameControlDecoration, comboName);
 				name = nameValidator.getName();
@@ -569,15 +597,16 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 				}
 				//
 				if(isInputValid) {
-					isInputValid = validate(responseFactorValidator, responseFactorControlDecoration, textResponseFactor);
-					responseFactor = responseFactorValidator.getResponseFactor();
+					isInputValid = validate(compensationFactorValidator, compensationFactorControlDecoration, textFactor);
+					factor = compensationFactorValidator.getCompensationFactor();
 				}
 				/*
 				 * Add
 				 */
 				if(isInputValid) {
 					String chemicalClass = ""; // Use the edit modus to set it.
-					IInternalStandard internalStandard = new InternalStandard(name, concentration, concentrationUnit, responseFactor);
+					double compensationFactor = getCompensationFactor(factor);
+					IInternalStandard internalStandard = new InternalStandard(name, concentration, concentrationUnit, compensationFactor);
 					internalStandard.setChemicalClass(chemicalClass);
 					//
 					if(peak.getInternalStandards().contains(internalStandard)) {
@@ -589,7 +618,7 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 						peak.addInternalStandard(internalStandard);
 						comboName.getCombo().setText("");
 						textConcentration.setText("");
-						textResponseFactor.setText("1.0");
+						textFactor.setText(Double.toString(IInternalStandard.STANDARD_COMPENSATION_FACTOR));
 						enableButtonFields(ACTION_INITIALIZE);
 						updatePeak();
 					}
@@ -602,6 +631,21 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 				messageBox.open();
 			}
 		}
+	}
+
+	private double getCompensationFactor(double factor) {
+
+		double compensationFactor = factor;
+		Object object = comboViewerFactor.getStructuredSelection().getFirstElement();
+		if(object instanceof ResponseOption responseOption) {
+			if(ResponseOption.RESPONSE_FACTOR.equals(responseOption)) {
+				if(factor != 0) {
+					compensationFactor = 1.0d / factor;
+				}
+			}
+		}
+		//
+		return compensationFactor;
 	}
 
 	private void enableButtonFields(String action) {
@@ -618,7 +662,7 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 				buttonCancel.setEnabled(true);
 				comboName.getCombo().setEnabled(true);
 				textConcentration.setEnabled(true);
-				textResponseFactor.setEnabled(true);
+				textFactor.setEnabled(true);
 				buttonInsert.setEnabled(true);
 				break;
 			case ACTION_DELETE:
@@ -645,7 +689,7 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 		//
 		comboName.getCombo().setEnabled(enabled);
 		textConcentration.setEnabled(enabled);
-		textResponseFactor.setEnabled(enabled);
+		textFactor.setEnabled(enabled);
 		buttonInsert.setEnabled(enabled);
 	}
 
