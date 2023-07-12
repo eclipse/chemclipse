@@ -232,8 +232,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private AtomicReference<Button> buttonToolbarMethod = new AtomicReference<>();
 	private AtomicReference<MethodSupportUI> toolbarMethodControl = new AtomicReference<>();
 	private AtomicReference<Button> buttonToggleRetentionIndexControl = new AtomicReference<>();
-	//
-	private ChromatogramChart chromatogramChart;
+	private AtomicReference<Button> buttonChartGridControl = new AtomicReference<>();
+	private AtomicReference<ChromatogramChart> chromatogramChartControl = new AtomicReference<>();
 	//
 	private IChromatogramSelection<?, ?> chromatogramSelection = null;
 	private final List<IChartMenuEntry> cachedMenuEntries = new ArrayList<>();
@@ -262,6 +262,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	//
 	private IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private ChartGridSupport chartGridSupport = new ChartGridSupport();
 
 	public ExtendedChromatogramUI(Composite parent, int style, IProcessSupplierContext processTypeSupport) {
 
@@ -300,7 +301,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	public void adjustChromatogramChart() {
 
 		if(!menuActive) {
-			chromatogramChart.adjustRange(true);
+			chromatogramChartControl.get().adjustRange(true);
 		}
 	}
 
@@ -351,7 +352,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	public ChromatogramChart getChromatogramChart() {
 
-		return chromatogramChart;
+		return chromatogramChartControl.get();
 	}
 
 	public synchronized void updateChromatogramSelection(IChromatogramSelection<?, ?> chromatogramSelection) {
@@ -448,8 +449,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	public void updateSelectedScan() {
 
 		if(!menuActive) {
-			chromatogramChart.deleteSeries(SERIES_ID_SELECTED_SCAN);
-			chromatogramChart.deleteSeries(SERIES_ID_IDENTIFIED_SCAN_SELECTED);
+			chromatogramChartControl.get().deleteSeries(SERIES_ID_SELECTED_SCAN);
+			chromatogramChartControl.get().deleteSeries(SERIES_ID_IDENTIFIED_SCAN_SELECTED);
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			addSelectedScanData(lineSeriesDataList);
@@ -462,12 +463,12 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	public void updateSelectedPeak() {
 
 		if(!menuActive) {
-			Set<String> seriesIds = chromatogramChart.getBaseChart().getSeriesIds();
+			Set<String> seriesIds = chromatogramChartControl.get().getBaseChart().getSeriesIds();
 			//
-			chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_MARKER);
+			chromatogramChartControl.get().deleteSeries(SERIES_ID_SELECTED_PEAK_MARKER);
 			for(String seriesId : seriesIds) {
 				if(seriesId.startsWith(SERIES_ID_SELECTED_PEAK_SHAPE) || seriesId.startsWith(SERIES_ID_SELECTED_PEAK_BACKGROUND)) {
-					chromatogramChart.deleteSeries(seriesId);
+					chromatogramChartControl.get().deleteSeries(seriesId);
 				}
 			}
 			//
@@ -542,7 +543,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			/*
 			 * Clean the Menu
 			 */
-			IChartSettings chartSettings = chromatogramChart.getChartSettings();
+			IChartSettings chartSettings = chromatogramChartControl.get().getChartSettings();
 			for(IChartMenuEntry cachedEntry : cachedMenuEntries) {
 				chartSettings.removeMenuEntry(cachedEntry);
 			}
@@ -561,7 +562,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			/*
 			 * Apply the menu items.
 			 */
-			chromatogramChart.applySettings(chartSettings);
+			chromatogramChartControl.get().applySettings(chartSettings);
 			menuCache = chromatogramSelection;
 		}
 	}
@@ -571,7 +572,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		Command command = commandService.getCommand(supplier.getId());
 		Category category = commandService.getCategory(supplier.getCategory());
 		command.define(supplier.getName(), supplier.getDescription(), category);
-		command.setHandler(new DynamicHandler(cachedEntry, chromatogramChart));
+		command.setHandler(new DynamicHandler(cachedEntry, chromatogramChartControl.get()));
 	}
 
 	private <C> void executeSupplier(IProcessSupplier<C> processSupplier, IProcessSupplierContext processSupplierContext) {
@@ -676,7 +677,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		updateLabel();
 		clearPeakAndScanLabels();
 		deleteScanNumberSecondaryAxisX();
-		chromatogramChart.deleteSeries();
+		chromatogramChartControl.get().deleteSeries();
 		//
 		if(chromatogramSelection != null) {
 			setRangeRestrictions();
@@ -705,7 +706,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void removeIdentificationLabelMarker(Map<String, ? extends ICustomPaintListener> markerMap, String seriesId) {
 
-		IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
+		IPlotArea plotArea = chromatogramChartControl.get().getBaseChart().getPlotArea();
 		ICustomPaintListener labelMarker = markerMap.get(seriesId);
 		/*
 		 * Remove the label marker.
@@ -717,7 +718,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void setRangeRestrictions() {
 
-		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		IChartSettings chartSettings = chromatogramChartControl.get().getChartSettings();
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		/*
 		 * Add space on top to show labels correctly.
@@ -750,7 +751,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		rangeRestriction.setRestrictZoomX(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_ZOOM_X));
 		rangeRestriction.setRestrictZoomY(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_ZOOM_Y));
 		//
-		chromatogramChart.applySettings(chartSettings);
+		chromatogramChartControl.get().applySettings(chartSettings);
 	}
 
 	private void addChromatogramSeriesData() {
@@ -894,7 +895,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
 			if(displaySettings.isShowPeakLabels()) {
 				ITargetDisplaySettings targetDisplaySettings = chromatogramSelection.getChromatogram();
-				BaseChart baseChart = chromatogramChart.getBaseChart();
+				BaseChart baseChart = chromatogramChartControl.get().getBaseChart();
 				IPlotArea plotArea = baseChart.getPlotArea();
 				List<TargetReference> peakReferences = TargetReference.getPeakReferences(peaks, targetDisplaySettings);
 				//
@@ -919,7 +920,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			removeIdentificationLabelMarker(scanLabelMarkerMap, seriesId);
 			if(displaySettings.isShowScanLabels()) {
 				ITargetDisplaySettings targetDisplaySettings = chromatogramSelection.getChromatogram();
-				BaseChart baseChart = chromatogramChart.getBaseChart();
+				BaseChart baseChart = chromatogramChartControl.get().getBaseChart();
 				IPlotArea plotArea = baseChart.getPlotArea();
 				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(TargetReference.getScanReferences(scans, targetDisplaySettings), displaySettings, symbolSize * 2);
 				plotArea.addCustomPaintListener(scanLabelMarker);
@@ -1036,7 +1037,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		 */
 		String compressionType = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE);
 		int compressionToLength = chromatogramChartSupport.getCompressionLength(compressionType, lineSeriesDataList.size());
-		chromatogramChart.addSeriesData(lineSeriesDataList, compressionToLength);
+		chromatogramChartControl.get().addSeriesData(lineSeriesDataList, compressionToLength);
 	}
 
 	private void createControl() {
@@ -1069,6 +1070,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		enableToolbar(toolbarEditControl, buttonToolbarEdit.get(), IMAGE_EDIT, TOOLTIP_EDIT, false);
 		enableToolbar(toolbarAlignmentControl, buttonToolbarAlignment.get(), IMAGE_ALIGNMENT, TOOLTIP_ALIGNMENT, false);
 		enableToolbar(toolbarMethodControl, buttonToolbarMethod.get(), IMAGE_METHOD, TOOLTIP_METHOD, preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR));
+		enableChartGrid(chromatogramChartControl, buttonChartGridControl.get(), IMAGE_CHART_GRID, chartGridSupport);
+		//
 		comboViewerColumnsControl.get().setInput(separationColumns);
 	}
 
@@ -1159,12 +1162,18 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		createButtonToggleAlignment(composite);
 		createButtonToggleMethod(composite);
 		createButtonToggleRetentionIndex(composite);
-		createButtonGridline(composite);
+		createButtonToggleChartGrid(composite);
 		createButtonReset(composite);
 		createButtonHelp(composite);
 		createButtonSettings(composite);
 		//
 		toolbarMainControl.set(composite);
+	}
+
+	private void createButtonToggleChartGrid(Composite parent) {
+
+		Button button = createButtonToggleChartGrid(parent, chromatogramChartControl, IMAGE_CHART_GRID, chartGridSupport);
+		buttonChartGridControl.set(button);
 	}
 
 	private void createProcessorToolbarUI(Composite parent) {
@@ -1399,7 +1408,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void createChromatogramChart(Composite parent) {
 
-		chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
+		ChromatogramChart chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
 		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Custom Selection Handler
@@ -1477,28 +1486,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				menuActive = false;
 			}
 		});
-	}
-
-	private Button createButtonGridline(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Select previous chromatogram.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_GRID, IApplicationImageProvider.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				ChartGridSupport chartGridSupport = new ChartGridSupport();
-				IChartSettings chartSettings = chromatogramChart.getChartSettings();
-				boolean isGridDisplayed = chartGridSupport.isGridDisplayed(chartSettings);
-				chartGridSupport.showGrid(chartSettings, !isGridDisplayed);
-				chromatogramChart.applySettings(chartSettings);
-			}
-		});
 		//
-		return button;
+		chromatogramChartControl.set(chromatogramChart);
 	}
 
 	private void createChromatogramBaselinesUI(Composite parent) {
@@ -1527,7 +1516,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				chromatogramChart.toggleSeriesLegendVisibility();
+				chromatogramChartControl.get().toggleSeriesLegendVisibility();
 			}
 		});
 	}
@@ -1542,8 +1531,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				chromatogramChart.togglePositionLegendVisibility();
-				chromatogramChart.redraw();
+				chromatogramChartControl.get().togglePositionLegendVisibility();
+				chromatogramChartControl.get().redraw();
 			}
 		});
 	}
@@ -1558,7 +1547,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				chromatogramChart.toggleRangeSelectorVisibility();
+				chromatogramChartControl.get().toggleRangeSelectorVisibility();
 			}
 		});
 	}
@@ -1609,7 +1598,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void deleteScanNumberSecondaryAxisX() {
 
-		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		IChartSettings chartSettings = chromatogramChartControl.get().getChartSettings();
 		List<ISecondaryAxisSettings> secondaryAxisSettings = chartSettings.getSecondaryAxisSettingsListX();
 		//
 		ISecondaryAxisSettings secondaryAxisScanNumber = null;
@@ -1625,14 +1614,14 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			secondaryAxisSettings.remove(secondaryAxisScanNumber);
 		}
 		//
-		chromatogramChart.applySettings(chartSettings);
+		chromatogramChartControl.get().applySettings(chartSettings);
 	}
 
 	private void adjustChromatogramSelectionRange() {
 
 		if(chromatogramSelection != null) {
-			chromatogramChart.setRange(IExtendedChart.X_AXIS, chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime());
-			chromatogramChart.setRange(IExtendedChart.Y_AXIS, chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
+			chromatogramChartControl.get().setRange(IExtendedChart.X_AXIS, chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime());
+			chromatogramChartControl.get().setRange(IExtendedChart.Y_AXIS, chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
 		}
 	}
 
@@ -1652,14 +1641,14 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void adjustAxisSettings() {
 
-		chromatogramChart.modifyAxes(true);
+		chromatogramChartControl.get().modifyAxes(true);
 		/*
 		 * Scan Axis
 		 */
 		if(chromatogramSelection != null) {
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram != null) {
-				IChartSettings chartSettings = chromatogramChart.getChartSettings();
+				IChartSettings chartSettings = chromatogramChartControl.get().getChartSettings();
 				ISecondaryAxisSettings axisSettings = ChartSupport.getSecondaryAxisSettingsX(titleScans, chartSettings);
 				String title = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_SCANS);
 				//
@@ -1686,7 +1675,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 					axisSettings.setTitle(title);
 					chartSettings.getSecondaryAxisSettingsListX().remove(axisSettings);
 				}
-				chromatogramChart.applySettings(chartSettings);
+				chromatogramChartControl.get().applySettings(chartSettings);
 				titleScans = title;
 			}
 		}
@@ -1704,7 +1693,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_SCANS);
 		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_SCANS);
 		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_X_AXIS_SCANS);
-		Font titleFont = Fonts.getCachedFont(chromatogramChart.getDisplay(), name, height, style);
+		Font titleFont = Fonts.getCachedFont(chromatogramChartControl.get().getDisplay(), name, height, style);
 		axisSettings.setTitleFont(titleFont);
 	}
 
@@ -1716,7 +1705,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	@Override
 	public void dispose() {
 
-		chromatogramChart.dispose();
+		chromatogramChartControl.get().dispose();
 		super.dispose();
 	}
 
@@ -1758,6 +1747,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		boolean showRetentionIndexMarker = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_RETENTION_INDEX_MARKER);
 		setButtonImage(buttonToggleRetentionIndexControl.get(), IMAGE_RETENTION_INDICES, PREFIX_SHOW, PREFIX_HIDE, TOOLTIP_RETENTION_INDICES, showRetentionIndexMarker);
 		retentionIndexMarker.setDraw(showRetentionIndexMarker);
-		chromatogramChart.redraw();
+		chromatogramChartControl.get().redraw();
 	}
 }
