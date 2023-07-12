@@ -181,7 +181,7 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 			int index = 0;
 			for(ISignalXIR scanSignal : spectrumXIR.getScanXIR().getProcessedSignals()) {
 				xSeries[index] = scanSignal.getWavenumber();
-				ySeries[index] = scanSignal.getAbsorbance(); // TODO
+				ySeries[index] = scanSignal.getIntensity();
 				index++;
 			}
 		} else {

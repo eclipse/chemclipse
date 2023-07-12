@@ -178,7 +178,7 @@ public class ScanChartSupport {
 			int index = 0;
 			for(ISignalXIR scanSignalISD : scanSignalsISD) {
 				xSeries[index] = scanSignalISD.getWavenumber();
-				ySeries[index] = (mirrored) ? scanSignalISD.getScattering() * -1 : scanSignalISD.getScattering();
+				ySeries[index] = (mirrored) ? scanSignalISD.getIntensity() * -1 : scanSignalISD.getIntensity();
 				index++;
 			}
 		} else {

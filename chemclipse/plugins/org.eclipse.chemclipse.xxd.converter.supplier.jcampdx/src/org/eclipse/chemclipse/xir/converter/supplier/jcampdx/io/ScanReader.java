@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.xir.converter.supplier.jcampdx.model.IVendorSpectrumXIR;
 import org.eclipse.chemclipse.xir.converter.supplier.jcampdx.model.VendorSpectrumXIR;
-import org.eclipse.chemclipse.xir.model.implementation.SignalXIR;
+import org.eclipse.chemclipse.xir.model.implementation.SignalInfrared;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import jakarta.activation.UnsupportedDataTypeException;
@@ -130,19 +130,22 @@ public class ScanReader {
 					if(!firstValue) {
 						rawX += deltaX;
 					}
-					double x = rawX * xFactor;
+					double wavenumber = rawX * xFactor;
 					//
 					int rawY = Integer.parseInt(rawYs.group(1));
 					double y = rawY * yFactor;
 					if(firstValue) {
-						if(firstY != y) { // TODO approximate here
+						if(firstY != y) {
+							/*
+							 * TODO approximate here
+							 */
 							logger.warn("Expected first Y to be " + firstY + " but calculated " + y);
 						}
 					}
 					if(absorbance) {
-						vendorScan.getScanXIR().getProcessedSignals().add(new SignalXIR(x, y, 0));
+						vendorScan.getScanXIR().getProcessedSignals().add(new SignalInfrared(wavenumber, y, 0));
 					} else if(transmission) {
-						vendorScan.getScanXIR().getProcessedSignals().add(new SignalXIR(x, 0, y));
+						vendorScan.getScanXIR().getProcessedSignals().add(new SignalInfrared(wavenumber, 0, y));
 					}
 					firstValue = false;
 				}

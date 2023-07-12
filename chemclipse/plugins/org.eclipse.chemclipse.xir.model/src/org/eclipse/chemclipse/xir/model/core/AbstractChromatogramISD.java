@@ -29,15 +29,14 @@ public abstract class AbstractChromatogramISD extends AbstractChromatogram<IChro
 		return integratedArea;
 	}
 
-	
 	@Override
 	public void fireUpdate(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		/*
 		 * Fire an update to inform all listeners.
 		 */
-		if(chromatogramSelection instanceof ChromatogramSelectionISD) {
-			((ChromatogramSelectionISD)chromatogramSelection).update(true);
+		if(chromatogramSelection instanceof ChromatogramSelectionISD chromatogramSelectionISD) {
+			chromatogramSelectionISD.update(true);
 		}
 	}
 }

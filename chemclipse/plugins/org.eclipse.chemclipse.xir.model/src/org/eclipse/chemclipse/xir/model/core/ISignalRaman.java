@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,21 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.xir.model.core;
 
-import java.io.Serializable;
+public interface ISignalRaman extends ISignalXIR {
 
-import org.eclipse.chemclipse.model.core.ISignal;
+	double getScattering();
 
-public interface ISignalXIR extends ISignal, Serializable {
-
-	double getWavenumber();
-
-	void setWavenumber(double wavenumber);
-
-	double getIntensity();
-
-	void setIntensity(double intensity);
+	void setScattering(double scattering);
 }

@@ -79,6 +79,8 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedScanTableUI.class);
 	//
+	private final ScanDataSupport scanDataSupport = new ScanDataSupport();
+	//
 	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();
 	private Button buttonToolbarInfo;
 	private AtomicReference<InformationUI> toolbarInfoTop = new AtomicReference<>();
@@ -112,7 +114,6 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 	private boolean forceEnableEditModus = false;
 	private boolean fireUpdate = true;
 	//
-	private final ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private EditListener editListener = null;
 
 	private class DeleteMenuEntry implements ITableMenuEntry {

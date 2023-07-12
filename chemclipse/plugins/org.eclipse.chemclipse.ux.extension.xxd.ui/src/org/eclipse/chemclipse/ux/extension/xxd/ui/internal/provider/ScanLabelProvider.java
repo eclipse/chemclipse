@@ -44,6 +44,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	public static final String DAUGHTER_ION = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_DAUGHTER_MZ);
 	public static final String DAUGHTER_RESOLUTION = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_DAUGHTER_RESOLUTION);
 	public static final String COLLISION_ENERGY = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_COLLISION_ENERGY);
+	public static final String WAVENUMBER = "Wavenumber";
 	//
 	public static final String[] TITLES_MSD_NOMINAL = {ION, INTENSITY, RELATIVE_INTENSITY};
 	public static final int[] BOUNDS_MSD_NOMINAL = {150, 150, 150};
@@ -55,8 +56,8 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	public static final int[] BOUNDS_CSD = {150, 150, 150};
 	public static final String[] TITLES_WSD = {WAVELENGTH, INTENSITY, RELATIVE_INTENSITY};
 	public static final int[] BOUNDS_WSD = {150, 150, 150};
-	public static final String[] TITLES_ISD = {"Wavenumber", "Absorbance", "Transmission", "Scattering"};
-	public static final int[] BOUNDS_ISD = {150, 150, 150, 150};
+	public static final String[] TITLES_ISD = {WAVENUMBER, INTENSITY, RELATIVE_INTENSITY};
+	public static final int[] BOUNDS_ISD = {150, 150, 150};
 	public static final String[] TITLES_EMPTY = {NO_VALUE};
 	public static final int[] BOUNDS_EMPTY = {150};
 	//
@@ -274,13 +275,15 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 					text = decimalFormatISD.format(scanSignal.getWavenumber());
 					break;
 				case 1:
-					text = decimalFormatIntensity.format(scanSignal.getAbsorbance());
+					text = decimalFormatIntensity.format(scanSignal.getIntensity());
 					break;
 				case 2:
-					text = decimalFormatIntensity.format(scanSignal.getTransmission());
-					break;
-				case 3:
-					text = decimalFormatIntensity.format(scanSignal.getScattering());
+					double signal = scanSignal.getIntensity();
+					if(signal < 0) {
+						text = "-" + decimalFormatRelativeIntensity.format(relativeIntensityFactorNegative * signal);
+					} else {
+						text = decimalFormatRelativeIntensity.format(relativeIntensityFactorPositive * signal);
+					}
 					break;
 				default:
 					text = NO_VALUE;

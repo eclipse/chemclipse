@@ -11,11 +11,21 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xir.model.core;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.eclipse.chemclipse.model.core.AbstractScan;
 
 public abstract class AbstractScanISD extends AbstractScan implements IScanISD {
 
 	private static final long serialVersionUID = 4376839034057299437L;
+	/*
+	 * Needed by FT-IR, NIR
+	 */
+	private double rotationAngle = 0.0d;
+	private double[] rawSignals = new double[0];
+	private double[] backgroundSignals = new double[0];
 
 	@Override
 	public void adjustTotalSignal(float totalSignal) {
@@ -33,12 +43,77 @@ public abstract class AbstractScanISD extends AbstractScan implements IScanISD {
 		double base = 100.0d;
 		double correctionFactor = ((base / getTotalSignal()) * totalSignal) / base;
 		/*
-		 * TODO - also adjust absorbance, transmittance?
+		 * Adjust signal
 		 */
 		for(ISignalXIR scanSignal : getProcessedSignals()) {
-			double scattering = scanSignal.getScattering();
-			scattering *= correctionFactor;
-			scanSignal.setScattering(scattering);
+			double intensity = scanSignal.getIntensity();
+			intensity *= correctionFactor;
+			scanSignal.setIntensity(intensity);
 		}
+	}
+
+	@Override
+	public double getRotationAngle() {
+
+		return rotationAngle;
+	}
+
+	@Override
+	public void setRotationAngle(double rotationAngle) {
+
+		this.rotationAngle = rotationAngle;
+	}
+
+	@Override
+	public double[] getRawSignals() {
+
+		return rawSignals;
+	}
+
+	@Override
+	public void setRawSignals(double[] rawSignals) {
+
+		this.rawSignals = rawSignals;
+	}
+
+	@Override
+	public double[] getBackgroundSignals() {
+
+		return backgroundSignals;
+	}
+
+	@Override
+	public void setBackgroundSignals(double[] backgroundSignals) {
+
+		this.backgroundSignals = backgroundSignals;
+	}
+
+	@Override
+	public void removeWavenumbers(Set<Integer> wavenumbers) {
+
+		List<ISignalXIR> scanSignalsRemove = new ArrayList<>();
+		for(ISignalXIR scanSignal : getProcessedSignals()) {
+			int wavenumber = (int)Math.round(scanSignal.getWavenumber());
+			if(wavenumbers.contains(wavenumber)) {
+				scanSignalsRemove.add(scanSignal);
+			}
+		}
+		//
+		getProcessedSignals().removeAll(scanSignalsRemove);
+	}
+
+	@Override
+	public void keepWavenumbers(Set<Integer> wavenumbers) {
+
+		List<ISignalXIR> scanSignalsKeep = new ArrayList<>();
+		for(ISignalXIR scanSignal : getProcessedSignals()) {
+			int wavenumber = (int)Math.round(scanSignal.getWavenumber());
+			if(wavenumbers.contains(wavenumber)) {
+				scanSignalsKeep.add(scanSignal);
+			}
+		}
+		//
+		getProcessedSignals().clear();
+		getProcessedSignals().addAll(scanSignalsKeep);
 	}
 }

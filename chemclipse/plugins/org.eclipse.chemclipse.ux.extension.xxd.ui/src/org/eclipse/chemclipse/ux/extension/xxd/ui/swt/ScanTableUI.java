@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
+import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -175,6 +176,9 @@ public class ScanTableUI extends ExtendedTableViewer {
 			} else if(scan instanceof IScanWSD scanWSD) {
 				minIntensity = scanWSD.getScanSignals().stream().mapToDouble(IScanSignalWSD::getAbundance).min().getAsDouble();
 				maxIntensity = scanWSD.getScanSignals().stream().mapToDouble(IScanSignalWSD::getAbundance).max().getAsDouble();
+			} else if(scan instanceof IScanISD scanISD) {
+				minIntensity = scanISD.getProcessedSignals().stream().mapToDouble(ISignalXIR::getIntensity).min().getAsDouble();
+				maxIntensity = scanISD.getProcessedSignals().stream().mapToDouble(ISignalXIR::getIntensity).max().getAsDouble();
 			}
 			//
 			scanLabelProvider.setTotalIntensity(minIntensity, maxIntensity);

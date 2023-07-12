@@ -486,6 +486,20 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+         
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.isd.filter"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.isd.filter.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>         
 
    <plugin
          id="org.eclipse.nebula.visualization.xygraph"

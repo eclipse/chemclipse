@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xir.model.core;
 
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.model.core.IScan;
@@ -30,4 +31,8 @@ public interface IScanISD extends IScan {
 	double[] getBackgroundSignals();
 
 	void setBackgroundSignals(double[] backgroundSignals);
+
+	void removeWavenumbers(Set<Integer> wavenumbers);
+
+	void keepWavenumbers(Set<Integer> wavenumbers);
 }

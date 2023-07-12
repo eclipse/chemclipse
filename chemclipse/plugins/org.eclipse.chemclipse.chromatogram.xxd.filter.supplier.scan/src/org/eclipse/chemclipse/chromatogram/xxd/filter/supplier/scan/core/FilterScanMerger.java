@@ -204,8 +204,7 @@ public class FilterScanMerger extends AbstractChromatogramFilter {
 			if(scanSignal == null) {
 				scanSignals.put(signalXIR.getWavenumber(), signalXIR);
 			} else {
-				// Adsorbance?
-				scanSignal.setScattering(scanSignal.getScattering() + signalXIR.getScattering());
+				scanSignal.setIntensity(scanSignal.getIntensity() + signalXIR.getIntensity());
 			}
 		}
 		//

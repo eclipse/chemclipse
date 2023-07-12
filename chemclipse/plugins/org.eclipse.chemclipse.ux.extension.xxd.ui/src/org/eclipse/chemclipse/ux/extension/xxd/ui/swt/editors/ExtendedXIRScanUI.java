@@ -24,6 +24,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
+import org.eclipse.chemclipse.xir.model.core.ISignalInfrared;
+import org.eclipse.chemclipse.xir.model.core.ISignalRaman;
 import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
 import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.swt.SWT;
@@ -126,10 +128,14 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 			int index = 0;
 			for(ISignalXIR scanSignal : spectrumXIR.getScanXIR().getProcessedSignals()) {
 				xSeries[index] = scanSignal.getWavenumber();
-				if(showAbsorbance) {
-					ySeries[index] = scanSignal.getAbsorbance();
-				} else {
-					ySeries[index] = scanSignal.getTransmission();
+				if(scanSignal instanceof ISignalInfrared signalInfrared) {
+					if(showAbsorbance) {
+						ySeries[index] = signalInfrared.getAbsorbance();
+					} else {
+						ySeries[index] = signalInfrared.getTransmission();
+					}
+				} else if(scanSignal instanceof ISignalRaman signalRaman) {
+					ySeries[index] = signalRaman.getScattering();
 				}
 				index++;
 			}
