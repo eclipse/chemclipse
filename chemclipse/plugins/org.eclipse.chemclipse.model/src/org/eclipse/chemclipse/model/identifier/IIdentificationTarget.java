@@ -18,10 +18,39 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
+import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.targets.ITarget;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public interface IIdentificationTarget extends ITarget {
+
+	/**
+	 * This method may return null.
+	 * 
+	 * @param peak
+	 * @return {@link ILibraryInformation}
+	 */
+	static ILibraryInformation getLibraryInformation(IPeak peak) {
+
+		ILibraryInformation libraryInformation = null;
+		//
+		if(peak != null) {
+			float retentionIndex = 0;
+			if(PreferenceSupplier.isUseRetentionIndexQC()) {
+				retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
+			}
+			//
+			IdentificationTargetComparator comparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+			IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), comparator);
+			//
+			libraryInformation = (identificationTarget != null) ? identificationTarget.getLibraryInformation() : null;
+		}
+		//
+		return libraryInformation;
+	}
 
 	static IIdentificationTarget createDefaultTarget(String name, String casNumber, String identifier) {
 
