@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -85,6 +85,11 @@ public class ChromatogramWriterCSD extends AbstractChromatogramWriter implements
 		} else {
 			chromatogramWriter = new ChromatogramWriter_1500();
 		}
+		/*
+		 * Monitor Message
+		 */
+		monitor.setTaskName("Open Chromatography Binary");
+		monitor.subTask("Export Chromatogram");
 		//
 		return chromatogramWriter;
 	}

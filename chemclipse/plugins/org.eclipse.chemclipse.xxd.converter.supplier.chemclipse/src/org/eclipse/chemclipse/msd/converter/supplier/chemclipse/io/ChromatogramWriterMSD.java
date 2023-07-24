@@ -106,6 +106,11 @@ public class ChromatogramWriterMSD extends AbstractChromatogramWriter implements
 			chromatogramWriter = new ChromatogramWriter_1500();
 		}
 		/*
+		 * Monitor Message
+		 */
+		monitor.setTaskName("Open Chromatography Binary");
+		monitor.subTask("Export Chromatogram");
+		/*
 		 * Load all scan proxies before exporting the file.
 		 */
 		chromatogram.enforceLoadScanProxies(monitor);

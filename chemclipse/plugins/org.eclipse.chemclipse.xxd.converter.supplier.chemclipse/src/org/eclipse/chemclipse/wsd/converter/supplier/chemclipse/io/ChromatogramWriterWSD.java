@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Michael Chang.
+ * Copyright (c) 2015, 2023 Michael Chang.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -74,6 +74,11 @@ public class ChromatogramWriterWSD extends AbstractChromatogramWriter implements
 		} else {
 			chromatogramWriter = new ChromatogramWriter_1500();
 		}
+		/*
+		 * Monitor Message
+		 */
+		monitor.setTaskName("Open Chromatography Binary");
+		monitor.subTask("Export Chromatogram");
 		//
 		return chromatogramWriter;
 	}
