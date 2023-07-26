@@ -16,7 +16,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -60,15 +59,9 @@ public class ComparisonScanChartPart extends AbstractPart<ExtendedComparisonScan
 					IScanMSD scan = null;
 					IIdentificationTarget identificationTarget = null;
 					if(object instanceof IScanMSD scanMSD) {
-						scan = scanMSD;
-						float retentionIndex = scan.getRetentionIndex();
-						IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-						identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), identificationTargetComparator);
+						identificationTarget = IIdentificationTarget.getIdentificationTarget(scanMSD);
 					} else if(object instanceof IPeakMSD peakMSD) {
-						scan = peakMSD.getExtractedMassSpectrum();
-						float retentionIndex = scan.getRetentionIndex();
-						IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-						identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peakMSD.getTargets(), identificationTargetComparator);
+						identificationTarget = IIdentificationTarget.getIdentificationTarget(peakMSD);
 					}
 					//
 					if(identificationTarget != null) {

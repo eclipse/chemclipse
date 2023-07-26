@@ -37,7 +37,6 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.csv.QuoteMode;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -182,9 +181,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 				 * Sort
 				 */
 				IPeakModel peakModel = peak.getPeakModel();
-				float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-				IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
+				IIdentificationTarget target = IIdentificationTarget.getIdentificationTarget(peak);
 				// Name
 				csv.print(getName(peak));
 				// RT
@@ -285,10 +282,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 	 */
 	public static String getName(IPeak peak) {
 
-		float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
-		IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-		ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets(), identificationTargetComparator);
-		//
+		ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(peak);
 		if(libraryInformation != null) {
 			return libraryInformation.getName();
 		}

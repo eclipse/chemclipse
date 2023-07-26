@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -47,8 +46,7 @@ public class ClassificationAssigner {
 			IPeakModel peakModel = peak.getPeakModel();
 			IScan scan = peakModel.getPeakMaximum();
 			float retentionIndex = scan.getRetentionIndex();
-			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-			IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(identificationTargets, identificationTargetComparator);
+			IIdentificationTarget identificationTarget = IIdentificationTarget.getIdentificationTarget(identificationTargets, retentionIndex);
 			if(identificationTarget != null) {
 				identificationTargets.add(identificationTarget);
 			}

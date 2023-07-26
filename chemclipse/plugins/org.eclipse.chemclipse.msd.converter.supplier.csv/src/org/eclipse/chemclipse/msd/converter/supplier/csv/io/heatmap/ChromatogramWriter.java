@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
@@ -71,10 +70,8 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 			//
 			for(IChromatogramPeakMSD chromatogramPeak : chromatogramPeaks) {
 				IPeakMassSpectrum peakMassSpectrum = chromatogramPeak.getExtractedMassSpectrum();
-				List<IIdentificationTarget> peakTargets = new ArrayList<>(chromatogramPeak.getTargets());
 				float retentionIndex = peakMassSpectrum.getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-				Collections.sort(peakTargets, identificationTargetComparator);
+				List<IIdentificationTarget> peakTargets = IIdentificationTarget.getTargetsSorted(chromatogramPeak.getTargets(), retentionIndex);
 				//
 				List<String> targetValues = new ArrayList<String>();
 				targetValues.add(decimalFormat.format(peakMassSpectrum.getLowestIon().getIon())); // mzLo

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,11 +21,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings2;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -36,7 +34,6 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -124,46 +121,36 @@ public class ReportWriter2 {
 			//
 			IPeakModel peakModelSource = peakSource.getPeakModel();
 			int retentionTime = peakModelSource.getRetentionTimeAtPeakMaximum();
-			Set<IIdentificationTarget> peakTargetsSource = peakSource.getTargets();
 			/*
-			 * Use peak only if targets and a library information
-			 * are available.
+			 * Get the best target
 			 */
-			if(!peakTargetsSource.isEmpty()) {
+			ILibraryInformation libraryInformationSource = IIdentificationTarget.getLibraryInformation(peakSource);
+			if(libraryInformationSource != null) {
+				printWriter.print((libraryInformationSource != null) ? libraryInformationSource.getName() : "");
+				printWriter.print(DELIMITER);
+				printWriter.print((libraryInformationSource != null) ? libraryInformationSource.getContributor() : "");
+				printWriter.print(DELIMITER);
+				printWriter.print((libraryInformationSource != null) ? libraryInformationSource.getReferenceIdentifier() : "");
+				printWriter.print(DELIMITER);
 				/*
-				 * Get the best target
+				 * Variable length depending on referenced chromatograms
 				 */
-				float retentionIndex = reportSettings.isUseRetentionIndexQC() ? peakModelSource.getPeakMaximum().getRetentionIndex() : 0.0f;
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-				ILibraryInformation libraryInformationSource = IIdentificationTarget.getBestLibraryInformation(peakTargetsSource, identificationTargetComparator);
-				//
-				if(libraryInformationSource != null) {
-					printWriter.print((libraryInformationSource != null) ? libraryInformationSource.getName() : "");
-					printWriter.print(DELIMITER);
-					printWriter.print((libraryInformationSource != null) ? libraryInformationSource.getContributor() : "");
-					printWriter.print(DELIMITER);
-					printWriter.print((libraryInformationSource != null) ? libraryInformationSource.getReferenceIdentifier() : "");
-					printWriter.print(DELIMITER);
-					/*
-					 * Variable length depending on referenced chromatograms
-					 */
-					peakAreaSumArray = printAreaPercentData(printWriter, chromatogramSource, peakSource, libraryInformationSource, peakAreaSumArray, reportSettings); // FID1%, ...
-					/*
-					 * Additional Entries
-					 */
-					printWriter.print(decimalFormat.format(libraryInformationSource.getRetentionIndex())); // "RI Library"
-					printWriter.print(DELIMITER);
-					printWriter.print(getRetentionIndex(peakModelSource)); // "RI DA"
-					printWriter.print(DELIMITER);
-					printWriter.print(chromatogramSource.getScanNumber(retentionTime));
-					printWriter.print(DELIMITER);
-					printWriter.print(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-					printWriter.print(DELIMITER);
-					printWriter.print(decimalFormat.format(getPurity(peakSource)));
-					printWriter.print(DELIMITER);
-					printWriter.print(decimalFormat.format(getExternalQuantAreaPercent(peakSource)));
-					printWriter.println("");
-				}
+				peakAreaSumArray = printAreaPercentData(printWriter, chromatogramSource, peakSource, libraryInformationSource, peakAreaSumArray, reportSettings); // FID1%, ...
+				/*
+				 * Additional Entries
+				 */
+				printWriter.print(decimalFormat.format(libraryInformationSource.getRetentionIndex())); // "RI Library"
+				printWriter.print(DELIMITER);
+				printWriter.print(getRetentionIndex(peakModelSource)); // "RI DA"
+				printWriter.print(DELIMITER);
+				printWriter.print(chromatogramSource.getScanNumber(retentionTime));
+				printWriter.print(DELIMITER);
+				printWriter.print(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+				printWriter.print(DELIMITER);
+				printWriter.print(decimalFormat.format(getPurity(peakSource)));
+				printWriter.print(DELIMITER);
+				printWriter.print(decimalFormat.format(getExternalQuantAreaPercent(peakSource)));
+				printWriter.println("");
 			}
 		}
 		/*

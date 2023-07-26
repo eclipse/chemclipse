@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -89,9 +88,7 @@ public class PeakSelectionHandler extends AbstractHandledEventProcessor implemen
 					extendedChromatogramUI.updateSelection();
 					//
 					UpdateNotifierUI.update(event.display, peak);
-					float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
-					IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-					IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
+					IIdentificationTarget identificationTarget = IIdentificationTarget.getIdentificationTarget(peak);
 					UpdateNotifierUI.update(event.display, identificationTarget);
 				}
 			}

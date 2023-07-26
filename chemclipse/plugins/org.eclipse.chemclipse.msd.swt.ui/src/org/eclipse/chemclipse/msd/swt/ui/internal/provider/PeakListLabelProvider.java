@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,12 +13,8 @@
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -31,7 +27,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -85,11 +80,8 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 		 */
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IPeakMSD) {
-			IPeakMSD peak = (IPeakMSD)element;
+		if(element instanceof IPeakMSD peak) {
 			IPeakModelMSD peakModel = peak.getPeakModel();
-			ILibraryInformation libraryInformation = getLibraryInformation(peak);
-			//
 			switch(columnIndex) {
 				case 0:
 					text = "";
@@ -147,6 +139,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 					text = Integer.toString(peak.getSuggestedNumberOfComponents());
 					break;
 				case 13: // Name
+					ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(peak);
 					if(libraryInformation != null) {
 						text = libraryInformation.getName();
 					}
@@ -162,18 +155,5 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 	public Image getImage(Object element) {
 
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
-	}
-
-	private ILibraryInformation getLibraryInformation(IPeak peak) {
-
-		ILibraryInformation libraryInformation = null;
-		List<IIdentificationTarget> targets = new ArrayList<>(peak.getTargets());
-		float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
-		IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-		Collections.sort(targets, identificationTargetComparator);
-		if(targets.size() >= 1) {
-			libraryInformation = targets.get(0).getLibraryInformation();
-		}
-		return libraryInformation;
 	}
 }

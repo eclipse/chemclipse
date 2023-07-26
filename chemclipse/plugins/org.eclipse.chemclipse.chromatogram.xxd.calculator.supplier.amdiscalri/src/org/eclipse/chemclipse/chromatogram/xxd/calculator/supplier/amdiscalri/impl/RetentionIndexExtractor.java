@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -54,8 +53,7 @@ public class RetentionIndexExtractor {
 			/*
 			 * Match the name
 			 */
-			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndexPeak);
-			IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
+			IIdentificationTarget identificationTarget = IIdentificationTarget.getIdentificationTarget(peak);
 			if(identificationTarget != null) {
 				/*
 				 * Validate

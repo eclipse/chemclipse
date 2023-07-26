@@ -19,9 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -52,13 +50,9 @@ public abstract class AbstractClassifierDescriptionExtractor {
 					/*
 					 * Descriptions
 					 */
-					IPeak peakX = peak.get();
-					IPeakModel peakModel = peakX.getPeakModel();
-					float retentionIndex = peakModel.getPeakMaximum().getRetentionIndex();
-					IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-					ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.get().getTargets(), identificationTargetComparator);
-					//
+					ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(peak.get());
 					if(libraryInformation != null) {
+						IPeakModel peakModel = peak.get().getPeakModel();
 						String value;
 						switch(descriptionOption) {
 							case RETENTION_TIME_MIN:

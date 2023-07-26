@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,13 +12,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.targets;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class TargetSupport {
 
@@ -42,11 +40,10 @@ public class TargetSupport {
 					retentionIndex = scan.getRetentionIndex();
 				}
 			}
-			IdentificationTargetComparator comparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
 			/*
 			 * Best Match
 			 */
-			IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(targetSupplier.getTargets(), comparator);
+			IIdentificationTarget identificationTarget = IIdentificationTarget.getIdentificationTarget(targetSupplier.getTargets(), retentionIndex);
 			LibraryField libraryField = PreferenceSupplier.getBestTargetLibraryField();
 			String name = libraryField.getTransformer().apply(identificationTarget);
 			if(name != null) {

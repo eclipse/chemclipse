@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -44,7 +43,6 @@ import org.eclipse.chemclipse.rcp.app.undo.UndoContextFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
@@ -649,8 +647,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					/*
 					 * Fire updates
 					 */
-					IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, peak.getPeakModel().getPeakMaximum().getRetentionIndex());
-					IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
+					IIdentificationTarget identificationTarget = IIdentificationTarget.getIdentificationTarget(peak);
 					if(moveRetentionTimeOnPeakSelection) {
 						ChromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
 					}
@@ -671,8 +668,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					/*
 					 * Fire updates
 					 */
-					IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, scan.getRetentionIndex());
-					IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), identificationTargetComparator);
+					IIdentificationTarget identificationTarget = IIdentificationTarget.getIdentificationTarget(scan);
 					//
 					scanIdentifierUI.setInput(scan);
 					chromatogramSelection.setSelectedScan(scan);

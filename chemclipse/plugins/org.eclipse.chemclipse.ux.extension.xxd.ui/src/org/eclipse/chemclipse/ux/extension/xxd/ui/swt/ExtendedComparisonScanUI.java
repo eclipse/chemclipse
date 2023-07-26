@@ -23,12 +23,10 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
@@ -118,17 +116,12 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		List<Object> objects = dataUpdateSupport.getUpdates(topic);
 		if(!objects.isEmpty()) {
 			Object last = objects.get(0);
-			if(last instanceof IScanMSD scan) {
-				float retentionIndex = scan.getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), identificationTargetComparator);
-				update(scan, identificationTarget);
+			if(last instanceof IScanMSD scanMSD) {
+				IIdentificationTarget identificationTarget = IIdentificationTarget.getIdentificationTarget(scanMSD);
+				update(scanMSD, identificationTarget);
 			} else if(last instanceof IPeakMSD peakMSD) {
-				IPeakMassSpectrum scan = peakMSD.getExtractedMassSpectrum();
-				float retentionIndex = scan.getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peakMSD.getTargets(), identificationTargetComparator);
-				update(scan, identificationTarget);
+				IIdentificationTarget identificationTarget = IIdentificationTarget.getIdentificationTarget(peakMSD);
+				update(peakMSD.getExtractedMassSpectrum(), identificationTarget);
 			} else if(last instanceof Object[] values) {
 				Object first = values[0];
 				Object second = values[1];

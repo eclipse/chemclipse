@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IClassifier;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -69,7 +68,7 @@ public class PeakQuantitationsExtractor {
 			 * Add the concentrations.
 			 */
 			for(IPeak peak : peaks) {
-				IIdentificationTarget identificationTarget = getIdentificationTarget(peak);
+				IIdentificationTarget identificationTarget = IIdentificationTarget.getIdentificationTarget(peak);
 				PeakQuantitation peakQuantitation = new PeakQuantitation();
 				peakQuantitation.setRetentionTime(peak.getPeakModel().getRetentionTimeAtPeakMaximum());
 				peakQuantitation.setName(getName(identificationTarget));
@@ -89,16 +88,6 @@ public class PeakQuantitationsExtractor {
 			}
 		}
 		return peakQuantitations;
-	}
-
-	private IIdentificationTarget getIdentificationTarget(IPeak peak) {
-
-		if(peak != null) {
-			float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
-			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-			return IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
-		}
-		return null;
 	}
 
 	private String getName(IIdentificationTarget identificationTarget) {

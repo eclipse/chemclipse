@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
@@ -26,7 +25,6 @@ import org.eclipse.chemclipse.model.quantitation.ResponseOption;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -132,9 +130,7 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 			 * Extract the targets to set an ISTD more easily.
 			 */
 			float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
-			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-			List<IIdentificationTarget> targets = new ArrayList<>(peak.getTargets());
-			Collections.sort(targets, identificationTargetComparator);
+			List<IIdentificationTarget> targets = IIdentificationTarget.getTargetsSorted(peak.getTargets(), retentionIndex);
 			List<String> names = new ArrayList<>();
 			for(IIdentificationTarget target : targets) {
 				String name = target.getLibraryInformation().getName();

@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -64,11 +63,8 @@ public class PeakTargetExtractor extends AbstractClassifierDescriptionExtractor 
 		//
 		for(IPeaks<?> peaks : peaksCollection) {
 			for(IPeak peak : peaks.getPeaks()) {
-				float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
-				if(identificationTarget != null) {
-					ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
+				ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(peak);
+				if(libraryInformation != null) {
 					targets.add(libraryInformation.getName());
 				}
 			}
@@ -87,12 +83,10 @@ public class PeakTargetExtractor extends AbstractClassifierDescriptionExtractor 
 			TreeMap<String, IPeak> peakTree = new TreeMap<>();
 			//
 			for(IPeak peak : peaks.getPeaks()) {
-				float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
 				String target;
-				if(identificationTarget != null) {
-					target = identificationTarget.getLibraryInformation().getName();
+				ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(peak);
+				if(libraryInformation != null) {
+					target = libraryInformation.getName();
 				} else {
 					target = "";
 				}

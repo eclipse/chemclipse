@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -12,22 +12,15 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
-import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -51,37 +44,20 @@ public class PeakTableTargetLabelProvider extends LabelProvider implements ITabl
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IPeak) {
-			IPeak peak = (IPeak)element;
-			IPeakModel peakModel = peak.getPeakModel();
-			IScan peakMaximum = peakModel.getPeakMaximum();
-			//
-			List<IIdentificationTarget> peakTargets = new ArrayList<>();
-			if(peak instanceof ITargetSupplier) {
-				ITargetSupplier targetSupplier = (ITargetSupplier)peak;
-				peakTargets.addAll(targetSupplier.getTargets());
-			}
-			//
-			String peakTarget = "";
-			if(peakTargets != null && peakTargets.size() > 0) {
-				float retentionIndex = peakMaximum.getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-				Collections.sort(peakTargets, identificationTargetComparator);
-				peakTarget = peakTargets.get(0).getLibraryInformation().getName();
-			}
-			//
+		if(element instanceof IPeak peak) {
 			switch(columnIndex) {
 				case 0:
-					text = decimalFormat.format(peakMaximum.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = decimalFormat.format(peak.getPeakModel().getPeakMaximum().getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 1:
-					text = peakTarget;
+					ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(peak);
+					text = libraryInformation != null ? libraryInformation.getName() : "";
 					break;
 				case 2:
-					if(peak instanceof IChromatogramPeakMSD) {
-						text = decimalFormat.format(((IChromatogramPeakMSD)peak).getSignalToNoiseRatio());
-					} else if(peak instanceof IChromatogramPeakCSD) {
-						text = decimalFormat.format(((IChromatogramPeakCSD)peak).getSignalToNoiseRatio());
+					if(peak instanceof IChromatogramPeakMSD chromatogramPeakMSD) {
+						text = decimalFormat.format(chromatogramPeakMSD.getSignalToNoiseRatio());
+					} else if(peak instanceof IChromatogramPeakCSD chromatogramPeakCSD) {
+						text = decimalFormat.format(chromatogramPeakCSD.getSignalToNoiseRatio());
 					}
 					break;
 				case 3:
@@ -91,6 +67,7 @@ public class PeakTableTargetLabelProvider extends LabelProvider implements ITabl
 					text = "n.v.";
 			}
 		}
+		//
 		return text;
 	}
 

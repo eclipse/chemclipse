@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,7 +18,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
@@ -67,7 +65,6 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -667,8 +664,7 @@ public class Identifier {
 				 */
 				IPeakModel peakModel = peak.getPeakModel();
 				float retentionIndex = peakModel.getPeakMaximum().getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-				Collections.sort(peakTargets, identificationTargetComparator);
+				peakTargets = IIdentificationTarget.getTargetsSorted(peakTargets, retentionIndex);
 				int size = numberOfTargets <= peakTargets.size() ? numberOfTargets : peakTargets.size();
 				for(int i = 0; i < size; i++) {
 					peak.getTargets().add(peakTargets.get(i));
@@ -815,8 +811,7 @@ public class Identifier {
 		 * Assign only the best hits.
 		 */
 		float retentionIndex = massSpectrum.getRetentionIndex();
-		IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-		Collections.sort(massSpectrumTargets, identificationTargetComparator);
+		massSpectrumTargets = IIdentificationTarget.getTargetsSorted(massSpectrumTargets, retentionIndex);
 		int size = numberOfTargets <= massSpectrumTargets.size() ? numberOfTargets : massSpectrumTargets.size();
 		for(int i = 0; i < size; i++) {
 			massSpectrum.getTargets().add(massSpectrumTargets.get(i));

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -22,7 +21,6 @@ import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
@@ -41,21 +39,17 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 
-		if(element instanceof IRegularLibraryMassSpectrum) {
+		if(element instanceof IRegularLibraryMassSpectrum libraryMassSpectrum) {
 			/*
 			 * Library Entry
 			 */
-			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)element;
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			return getText(libraryMassSpectrum, libraryInformation, columnIndex);
-		} else if(element instanceof IScanMSD) {
+		} else if(element instanceof IScanMSD massSpectrum) {
 			/*
 			 * Scan
 			 */
-			IScanMSD massSpectrum = (IScanMSD)element;
-			float retentionIndex = massSpectrum.getRetentionIndex();
-			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(massSpectrum.getTargets(), identificationTargetComparator);
+			ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(massSpectrum);
 			if(massSpectrum.getOptimizedMassSpectrum() != null) {
 				massSpectrum = massSpectrum.getOptimizedMassSpectrum();
 			}

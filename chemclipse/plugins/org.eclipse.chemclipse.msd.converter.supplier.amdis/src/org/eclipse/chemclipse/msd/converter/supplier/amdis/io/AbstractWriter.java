@@ -13,12 +13,10 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
@@ -41,7 +39,6 @@ import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.RegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public abstract class AbstractWriter {
@@ -183,28 +180,14 @@ public abstract class AbstractWriter {
 			/*
 			 * Scan MS
 			 */
-			List<IIdentificationTarget> targets = new ArrayList<IIdentificationTarget>(massSpectrum.getTargets());
-			float retentionIndex = massSpectrum.getRetentionIndex();
-			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-			Collections.sort(targets, identificationTargetComparator);
-			if(!targets.isEmpty()) {
-				identificationTarget = targets.get(0);
-			}
+			identificationTarget = IIdentificationTarget.getIdentificationTarget(massSpectrum);
 		}
 		return identificationTarget;
 	}
 
 	protected IIdentificationTarget getPeakTarget(IPeak peak) {
 
-		IIdentificationTarget identificationTarget = null;
-		List<IIdentificationTarget> targets = new ArrayList<>(peak.getTargets());
-		float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
-		IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-		Collections.sort(targets, identificationTargetComparator);
-		if(!targets.isEmpty()) {
-			identificationTarget = targets.get(0);
-		}
-		return identificationTarget;
+		return IIdentificationTarget.getIdentificationTarget(peak);
 	}
 
 	/**
@@ -443,9 +426,7 @@ public abstract class AbstractWriter {
 			/*
 			 * Set the library information.
 			 */
-			float retentionIndex = massSpectrum.getRetentionIndex();
-			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(massSpectrum.getTargets(), identificationTargetComparator);
+			ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(massSpectrum);
 			massSpectrumCopy.setLibraryInformation(libraryInformation);
 		}
 		//

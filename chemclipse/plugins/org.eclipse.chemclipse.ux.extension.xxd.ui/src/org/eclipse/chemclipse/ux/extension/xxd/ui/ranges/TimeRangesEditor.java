@@ -18,7 +18,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.comparator.TimeRangeComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -419,11 +418,8 @@ public class TimeRangesEditor extends Composite {
 				IPeakModel peakModel = peak.getPeakModel();
 				int start = peakModel.getStartRetentionTime();
 				int stop = peakModel.getStopRetentionTime();
-				float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
-				if(identificationTarget != null) {
-					ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
+				ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(peak);
+				if(libraryInformation != null) {
 					String identifier = libraryInformation.getName();
 					timeRanges.add(new TimeRange(identifier, start, stop));
 				}

@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.model.support;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -23,7 +22,6 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class TargetTransferSupport {
 
@@ -51,9 +49,7 @@ public class TargetTransferSupport {
 							 * Best target or all?
 							 */
 							if(useBestTargetOnly) {
-								float retentionIndex = peakSource.getPeakModel().getPeakMaximum().getRetentionIndex();
-								IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-								IIdentificationTarget peakTarget = IIdentificationTarget.getBestIdentificationTarget(peakSource.getTargets(), identificationTargetComparator);
+								IIdentificationTarget peakTarget = IIdentificationTarget.getIdentificationTarget(peakSource);
 								transferPeakTarget(peakTarget, peakSink);
 							} else {
 								for(IIdentificationTarget peakTarget : peakSource.getTargets()) {
@@ -73,7 +69,6 @@ public class TargetTransferSupport {
 		return null;
 	}
 
-	
 	public String transferScanTargets(List<IScan> scansSource, IChromatogram<?> chromatogramSink, boolean useBestTargetOnly) {
 
 		if(scansSource.size() > 0) {
@@ -83,10 +78,8 @@ public class TargetTransferSupport {
 					IScan scanSink = chromatogramSink.getScan(scanNumber);
 					if(scanSink != null) {
 						if(useBestTargetOnly) {
-							float retentionIndex = scanSource.getRetentionIndex();
-							IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-							IIdentificationTarget peakTarget = IIdentificationTarget.getBestIdentificationTarget(scanSource.getTargets(), identificationTargetComparator);
-							transferScanTarget(peakTarget, scanSink);
+							IIdentificationTarget scanTarget = IIdentificationTarget.getIdentificationTarget(scanSource);
+							transferScanTarget(scanTarget, scanSink);
 						} else {
 							for(IIdentificationTarget scanTarget : scanSource.getTargets()) {
 								transferScanTarget(scanTarget, scanSink);

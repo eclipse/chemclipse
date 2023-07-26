@@ -11,13 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.model;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.support.ScanSupport;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -57,8 +55,7 @@ public class TracesSupport {
 					/*
 					 * Styrene | 104 103 ...
 					 */
-					IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, scanInstance.getRetentionIndex());
-					ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(scanInstance.getTargets(), identificationTargetComparator);
+					ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(scanInstance);
 					if(libraryInformation != null) {
 						traces = libraryInformation.getName() + " | " + traces;
 					} else {

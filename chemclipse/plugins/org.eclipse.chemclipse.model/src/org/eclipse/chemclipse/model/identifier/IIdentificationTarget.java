@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.model.identifier;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.targets.ITarget;
@@ -35,21 +37,128 @@ public interface IIdentificationTarget extends ITarget {
 	 */
 	static ILibraryInformation getLibraryInformation(IPeak peak) {
 
-		ILibraryInformation libraryInformation = null;
-		//
+		IIdentificationTarget identificationTarget = getIdentificationTarget(peak);
+		return (identificationTarget != null) ? identificationTarget.getLibraryInformation() : null;
+	}
+
+	/**
+	 * This method may return null.
+	 * 
+	 * @param peak
+	 * @return {@link IIdentificationTarget}
+	 */
+	static IIdentificationTarget getIdentificationTarget(IPeak peak) {
+
 		if(peak != null) {
-			float retentionIndex = 0;
-			if(PreferenceSupplier.isUseRetentionIndexQC()) {
-				retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
-			}
-			//
-			IdentificationTargetComparator comparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-			IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), comparator);
-			//
-			libraryInformation = (identificationTarget != null) ? identificationTarget.getLibraryInformation() : null;
+			return getIdentificationTarget(peak.getPeakModel().getPeakMaximum());
 		}
 		//
-		return libraryInformation;
+		return null;
+	}
+
+	/**
+	 * This method may return null.
+	 * 
+	 * @param scan
+	 * @return {@link ILibraryInformation}
+	 */
+	static ILibraryInformation getLibraryInformation(IScan scan) {
+
+		IIdentificationTarget identificationTarget = getIdentificationTarget(scan);
+		return (identificationTarget != null) ? identificationTarget.getLibraryInformation() : null;
+	}
+
+	/**
+	 * This method may return null.
+	 * 
+	 * @param scan
+	 * @return {@link IdentificationTarget}
+	 */
+	static IIdentificationTarget getIdentificationTarget(IScan scan) {
+
+		if(scan != null) {
+			return getIdentificationTarget(scan.getTargets(), scan.getRetentionIndex());
+		}
+		//
+		return null;
+	}
+
+	/**
+	 * Returns a sorted list of the targets.
+	 * 
+	 * @param targets
+	 * @param retentionIndex
+	 * @return {@link List}
+	 */
+	static List<IIdentificationTarget> getTargetsSorted(Collection<IIdentificationTarget> targets, float retentionIndex) {
+
+		List<IIdentificationTarget> identificationTargets = new ArrayList<>();
+		if(targets != null) {
+			identificationTargets.addAll(targets);
+			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, PreferenceSupplier.isUseRetentionIndexQC() ? retentionIndex : 0.0f);
+			Collections.sort(identificationTargets, identificationTargetComparator);
+		}
+		//
+		return identificationTargets;
+	}
+
+	/**
+	 * This method may return null.
+	 * 
+	 * @param targets
+	 * @param retentionIndex
+	 * @return {@link ILibraryInformation}
+	 */
+	static ILibraryInformation getLibraryInformation(Set<IIdentificationTarget> targets, float retentionIndex) {
+
+		IIdentificationTarget identificationTarget = getIdentificationTarget(targets, retentionIndex);
+		if(identificationTarget != null) {
+			return identificationTarget.getLibraryInformation();
+		}
+		//
+		return null;
+	}
+
+	/**
+	 * This method may return null.
+	 * 
+	 * @param targets
+	 * @param retentionIndex
+	 * @return {@link IIdentificationTarget}
+	 */
+	static IIdentificationTarget getIdentificationTarget(Set<IIdentificationTarget> targets, float retentionIndex) {
+
+		if(targets != null && !targets.isEmpty()) {
+			IdentificationTargetComparator comparator = new IdentificationTargetComparator(SortOrder.DESC, PreferenceSupplier.isUseRetentionIndexQC() ? retentionIndex : 0.0f);
+			return IIdentificationTarget.getIdentificationTarget(targets, comparator);
+		}
+		//
+		return null;
+	}
+
+	/**
+	 * This method may return null.
+	 * 
+	 * @param targets
+	 * @param comparator
+	 * @return {@link IIdentificationTarget}
+	 */
+	static IIdentificationTarget getIdentificationTarget(Set<IIdentificationTarget> targets, Comparator<IIdentificationTarget> comparator) {
+
+		IIdentificationTarget identificationTarget = null;
+		if(targets != null && !targets.isEmpty()) {
+			if(targets.size() == 1) {
+				identificationTarget = targets.iterator().next();
+			} else {
+				List<IIdentificationTarget> targetsList = new ArrayList<>(targets);
+				if(comparator != null) {
+					Collections.sort(targetsList, comparator);
+				}
+				identificationTarget = targetsList.get(0);
+			}
+		}
+		//
+		return identificationTarget;
 	}
 
 	static IIdentificationTarget createDefaultTarget(String name, String casNumber, String identifier) {
@@ -66,45 +175,6 @@ public interface IIdentificationTarget extends ITarget {
 		identificationTarget.setIdentifier(identifier);
 		//
 		return identificationTarget;
-	}
-
-	/**
-	 * Returns the best matching identification target or
-	 * null if none is available.
-	 * 
-	 * @param targets
-	 * @param comparator
-	 * @return {@link IIdentificationTarget}
-	 */
-	static IIdentificationTarget getBestIdentificationTarget(Set<IIdentificationTarget> targets, Comparator<IIdentificationTarget> comparator) {
-
-		IIdentificationTarget identificationTarget = null;
-		if(targets != null && !targets.isEmpty()) {
-			if(targets.size() == 1) {
-				identificationTarget = targets.iterator().next();
-			} else {
-				List<IIdentificationTarget> targetsList = new ArrayList<>(targets);
-				if(comparator != null) {
-					Collections.sort(targetsList, comparator);
-				}
-				identificationTarget = targetsList.get(0);
-			}
-		}
-		return identificationTarget;
-	}
-
-	/**
-	 * Returns the best matching library information or
-	 * null if none is available.
-	 * 
-	 * @param targets
-	 * @param comparator
-	 * @return {@link ILibraryInformation}
-	 */
-	static ILibraryInformation getBestLibraryInformation(Set<IIdentificationTarget> targets, Comparator<IIdentificationTarget> comparator) {
-
-		IIdentificationTarget identificationTarget = getBestIdentificationTarget(targets, comparator);
-		return (identificationTarget != null) ? identificationTarget.getLibraryInformation() : null;
 	}
 
 	/**

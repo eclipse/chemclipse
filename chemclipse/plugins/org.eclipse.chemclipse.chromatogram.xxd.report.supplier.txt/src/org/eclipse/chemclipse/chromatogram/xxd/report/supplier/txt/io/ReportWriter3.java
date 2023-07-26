@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings3;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -31,7 +30,6 @@ import org.eclipse.chemclipse.model.core.SignalSupport;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -113,11 +111,9 @@ public class ReportWriter3 {
 		Collections.sort(sortedPeaks, (p1, p2) -> Integer.compare(p1.getPeakModel().getRetentionTimeAtPeakMaximum(), p2.getPeakModel().getRetentionTimeAtPeakMaximum()));
 		//
 		for(IPeak peak : sortedPeaks) {
-			//
 			IPeakModel peakModel = peak.getPeakModel();
 			float retentionIndex = peakModel.getPeakMaximum().getRetentionIndex();
-			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets(), identificationTargetComparator);
+			ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(peak);
 			String identification = (libraryInformation != null) ? libraryInformation.getName() : "";
 			String casNumber = (libraryInformation != null) ? libraryInformation.getCasNumber() : "";
 			String referenceIdentifier = (libraryInformation != null) ? libraryInformation.getReferenceIdentifier() : "";

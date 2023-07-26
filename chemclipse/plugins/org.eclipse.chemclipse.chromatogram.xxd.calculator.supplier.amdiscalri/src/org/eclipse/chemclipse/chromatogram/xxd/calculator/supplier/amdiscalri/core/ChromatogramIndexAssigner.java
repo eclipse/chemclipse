@@ -19,7 +19,6 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IndexNameMarker;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.RetentionIndexAssigner;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.IndexAssignerSettings;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -75,11 +74,8 @@ public class ChromatogramIndexAssigner implements IProcessTypeSupplier {
 			 */
 			for(IPeak peak : chromatogram.getPeaks()) {
 				IPeakModel peakModel = peak.getPeakModel();
-				float retentionIndexPeak = peakModel.getPeakMaximum().getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndexPeak);
-				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
-				if(identificationTarget != null) {
-					ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
+				ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(peak);
+				if(libraryInformation != null) {
 					int retentionIndex = retentionIndexMap.getOrDefault(libraryInformation.getName(), 0);
 					peakModel.getPeakMaximum().setRetentionIndex(retentionIndex);
 				}

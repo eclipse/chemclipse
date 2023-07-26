@@ -11,19 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
-import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
@@ -34,54 +26,17 @@ public class PeakTableTargetComparator extends AbstractRecordTableComparator imp
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IPeak && e2 instanceof IPeak) {
-			/*
-			 * Peak 1
-			 */
-			IPeak peak1 = (IPeak)e1;
-			IPeakModel peakModel1 = peak1.getPeakModel();
-			IScan peakMaximum1 = peakModel1.getPeakMaximum();
-			//
-			List<IIdentificationTarget> peakTargets1 = new ArrayList<>();
-			if(peak1 instanceof ITargetSupplier) {
-				ITargetSupplier targetSupplier = peak1;
-				peakTargets1.addAll(targetSupplier.getTargets());
-			}
-			//
-			String peakTarget1 = "";
-			if(peakTargets1 != null && !peakTargets1.isEmpty()) {
-				float retentionIndex = peakMaximum1.getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-				Collections.sort(peakTargets1, identificationTargetComparator);
-				peakTarget1 = peakTargets1.get(0).getLibraryInformation().getName();
-			}
-			/*
-			 * Peak 2
-			 */
-			IPeak peak2 = (IPeak)e2;
-			IPeakModel peakModel2 = peak2.getPeakModel();
-			IScan peakMaximum2 = peakModel2.getPeakMaximum();
-			//
-			List<IIdentificationTarget> peakTargets2 = new ArrayList<>();
-			if(peak2 instanceof ITargetSupplier) {
-				ITargetSupplier targetSupplier = peak2;
-				peakTargets2.addAll(targetSupplier.getTargets());
-			}
-			//
-			String peakTarget2 = "";
-			if(peakTargets2 != null && !peakTargets2.isEmpty()) {
-				float retentionIndex = peakMaximum2.getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
-				Collections.sort(peakTargets2, identificationTargetComparator);
-				peakTarget2 = peakTargets2.get(0).getLibraryInformation().getName();
-			}
-			//
+		if(e1 instanceof IPeak peak1 && e2 instanceof IPeak peak2) {
 			switch(getPropertyIndex()) {
 				case 0:
-					sortOrder = Integer.compare(peakMaximum2.getRetentionTime(), peakMaximum1.getRetentionTime());
+					sortOrder = Integer.compare(peak2.getPeakModel().getPeakMaximum().getRetentionTime(), peak1.getPeakModel().getPeakMaximum().getRetentionTime());
 					break;
 				case 1:
-					sortOrder = peakTarget2.compareTo(peakTarget1);
+					ILibraryInformation libraryInformation1 = IIdentificationTarget.getLibraryInformation(peak1);
+					ILibraryInformation libraryInformation2 = IIdentificationTarget.getLibraryInformation(peak2);
+					if(libraryInformation1 != null && libraryInformation2 != null) {
+						sortOrder = libraryInformation2.getName().compareTo(libraryInformation1.getName());
+					}
 					break;
 				case 2:
 					if(peak1 instanceof IChromatogramPeakMSD chromatogramPeakMSD1 && peak2 instanceof IChromatogramPeakMSD chromatogramPeakMSD2) {
@@ -95,9 +50,11 @@ public class PeakTableTargetComparator extends AbstractRecordTableComparator imp
 					break;
 			}
 		}
+		//
 		if(getDirection() == ASCENDING) {
 			sortOrder = -sortOrder;
 		}
+		//
 		return sortOrder;
 	}
 }
