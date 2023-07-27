@@ -284,7 +284,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void createButtonZoomLock(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
 		setButtonImage(button, IMAGE_ZOOM_LOCKED, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_ZOOM_LOCKED, preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_LOCK_ZOOM));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -303,7 +303,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void createButtonFocusSelection(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
 		setButtonImage(button, IMAGE_FOCUS_SELECTION, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_FOCUS_SELECTION, preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION));
 		button.addSelectionListener(new SelectionAdapter() {

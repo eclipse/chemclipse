@@ -104,7 +104,6 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 		setLayout(new FillLayout());
 		//
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setBackgroundMode(SWT.INHERIT_FORCE);
 		GridLayout layout = new GridLayout(1, true);
 		composite.setLayout(layout);
 		//

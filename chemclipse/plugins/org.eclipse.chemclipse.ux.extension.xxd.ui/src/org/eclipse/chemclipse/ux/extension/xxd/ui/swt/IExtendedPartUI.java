@@ -74,7 +74,15 @@ public interface IExtendedPartUI {
 
 	default Button createButton(Composite parent, String text, String tooltip, String image) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		/*
+		 * Validated SWT.PUSH - no toggle
+		 */
+		return createButton(parent, text, tooltip, image, SWT.PUSH);
+	}
+
+	default Button createButton(Composite parent, String text, String tooltip, String image, int style) {
+
+		Button button = new Button(parent, style);
 		button.setText("");
 		button.setToolTipText(tooltip);
 		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImageProvider.SIZE_16x16));
@@ -89,7 +97,7 @@ public interface IExtendedPartUI {
 
 	default Button createButtonToggleToolbar(Composite parent, List<AtomicReference<? extends Composite>> toolbars, String image, String tooltip) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
 		setButtonImage(button, image, PREFIX_SHOW, PREFIX_HIDE, tooltip, false);
 		button.addSelectionListener(new SelectionAdapter() {
@@ -112,6 +120,9 @@ public interface IExtendedPartUI {
 
 	default Button createButtonHelp(Composite parent) {
 
+		/*
+		 * Validated SWT.PUSH - no toggle
+		 */
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Show context sensitive help");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_QUESTION, IApplicationImageProvider.SIZE_16x16));
@@ -133,7 +144,7 @@ public interface IExtendedPartUI {
 
 	default Button createButtonToggleEditTable(Composite parent, List<AtomicReference<? extends ExtendedTableViewer>> viewers, String image) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
 		setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_TABLE, false);
 		button.addSelectionListener(new SelectionAdapter() {
@@ -170,7 +181,7 @@ public interface IExtendedPartUI {
 
 	default Button createButtonToggleChartGrid(Composite parent, AtomicReference<? extends ScrollableChart> chartControl, String image, ChartGridSupport chartGridSupport) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
 		setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_CHART_GRID, false);
 		button.addSelectionListener(new SelectionAdapter() {
@@ -194,7 +205,7 @@ public interface IExtendedPartUI {
 
 	default Button createButtonToggleChartLegend(Composite parent, AtomicReference<? extends ScrollableChart> scrollableChart, String image) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
 		setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_LEGEND, false);
 		button.addSelectionListener(new SelectionAdapter() {
@@ -215,7 +226,7 @@ public interface IExtendedPartUI {
 
 	default Button createButtonToggleLegendMarker(Composite parent, AtomicReference<? extends ScrollableChart> scrollableChart, String image) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
 		setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_LEGEND_MARKER, false);
 		button.addSelectionListener(new SelectionAdapter() {
@@ -270,6 +281,9 @@ public interface IExtendedPartUI {
 
 	default Button createSettingsButtonBasic(Composite parent) {
 
+		/*
+		 * Validated SWT.PUSH - no toggle
+		 */
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Open the Settings");
@@ -380,11 +394,29 @@ public interface IExtendedPartUI {
 
 	default void setButtonImage(Button button, String image, String prefixActivate, String prefixDeactivate, String tooltip, boolean enabled) {
 
-		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImageProvider.SIZE_16x16, enabled));
+		/*
+		 * TOGGLE / PUSH
+		 */
+		if(isToggleButton(button)) {
+			button.setSelection(enabled);
+			if(button.getImage() == null) {
+				button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImageProvider.SIZE_16x16));
+			}
+		} else {
+			button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImageProvider.SIZE_16x16, enabled));
+		}
+		/*
+		 * Tooltip
+		 */
 		StringBuilder builder = new StringBuilder();
 		builder.append(enabled ? prefixDeactivate : prefixActivate);
 		builder.append(" ");
 		builder.append(tooltip);
 		button.setToolTipText(builder.toString());
+	}
+
+	default boolean isToggleButton(Button button) {
+
+		return (button.getStyle() & SWT.TOGGLE) == SWT.TOGGLE;
 	}
 }

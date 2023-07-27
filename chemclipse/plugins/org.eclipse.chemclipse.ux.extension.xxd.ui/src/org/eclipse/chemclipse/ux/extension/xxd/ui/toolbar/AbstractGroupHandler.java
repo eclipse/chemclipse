@@ -168,8 +168,8 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 		MApplication application = ContextAddon.getApplication();
 		if(modelService != null && application != null) {
 			Object object = modelService.findElements(application, COMMAND_ID, MCommand.class, Collections.emptyList()).get(0);
-			if(object instanceof MCommand) {
-				return (MCommand)object;
+			if(object instanceof MCommand command) {
+				return command;
 			}
 		}
 		//
@@ -179,8 +179,8 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 	private MHandledMenuItem getHandledItem(MMenu menu, String id) {
 
 		MMenuElement menuElement = get(menu, id);
-		if(menuElement instanceof MHandledMenuItem) {
-			return (MHandledMenuItem)menuElement;
+		if(menuElement instanceof MHandledMenuItem handledMenuItem) {
+			return handledMenuItem;
 		}
 		//
 		return null;
@@ -189,8 +189,8 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 	private MDirectMenuItem getDirectItem(MMenu menu, String id) {
 
 		MMenuElement menuElement = get(menu, id);
-		if(menuElement instanceof MDirectMenuItem) {
-			return (MDirectMenuItem)menuElement;
+		if(menuElement instanceof MDirectMenuItem directMenuItem) {
+			return directMenuItem;
 		}
 		//
 		return null;
@@ -199,8 +199,8 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 	private MMenuSeparator getSeparatorItem(MMenu menu, String id) {
 
 		MMenuElement menuElement = get(menu, id);
-		if(menuElement instanceof MMenuSeparator) {
-			return (MMenuSeparator)menuElement;
+		if(menuElement instanceof MMenuSeparator menuSeparator) {
+			return menuSeparator;
 		}
 		//
 		return null;

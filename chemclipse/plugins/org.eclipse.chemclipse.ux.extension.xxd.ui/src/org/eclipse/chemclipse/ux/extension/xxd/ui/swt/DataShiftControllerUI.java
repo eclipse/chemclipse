@@ -366,7 +366,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 
 	private Button createButtonAutoMirror(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setToolTipText("");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_AUTO_MIRROR, IApplicationImage.SIZE_16x16));
@@ -478,7 +478,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 
 	private Button createButtonMirror(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setToolTipText(""); // Will be set dynamically
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_MIRROR, IApplicationImage.SIZE_16x16));

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,8 +55,7 @@ public class PerspectiveSupport {
 
 				if(topic.equals(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE)) {
 					Object object = objects.get(0);
-					if(object instanceof String) {
-						String label = (String)object;
+					if(object instanceof String label) {
 						if(DATA_ANALYSIS_PERSPECTIVE_LABEL.equals(label)) {
 							/*
 							 * Show parts initially.
@@ -73,8 +72,7 @@ public class PerspectiveSupport {
 					}
 				} else if(topic.equals(IChemClipseEvents.TOPIC_APPLICATION_RESET_PERSPECTIVE)) {
 					Object object = objects.get(0);
-					if(object instanceof String) {
-						String label = (String)object;
+					if(object instanceof String label) {
 						if(DATA_ANALYSIS_PERSPECTIVE_LABEL.equals(label)) {
 							enableToolBar(true);
 							GroupHandler.activateReferencedParts();
