@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -282,7 +281,6 @@ public class MultiDataExplorerTreeUI {
 			public void menuAboutToShow(IMenuManager mgr) {
 
 				Object[] selection = treeViewer.getStructuredSelection().toArray();
-				Map<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> converterSupplier = new HashMap<>();
 				Set<ISupplier> supplierSet = new TreeSet<>(new Comparator<ISupplier>() {
 
 					@Override
@@ -325,20 +323,15 @@ public class MultiDataExplorerTreeUI {
 						@Override
 						public void run() {
 
-							outer:
 							for(Object object : selection) {
 								if(object instanceof File file) {
-									Map<ISupplierFileIdentifier, Collection<ISupplier>> map = converterSupplier.get(file);
-									if(map == null) {
-										continue;
-									}
-									for(Entry<ISupplierFileIdentifier, Collection<ISupplier>> entry : map.entrySet()) {
+									Map<ISupplierFileIdentifier, Collection<ISupplier>> identifiers = getIdentifierSupplier().apply(file);
+									for(Entry<ISupplierFileIdentifier, Collection<ISupplier>> entry : identifiers.entrySet()) {
 										ISupplierFileIdentifier identifier = entry.getKey();
 										if(identifier instanceof ISupplierFileEditorSupport supplierFileEditorSupport) {
 											for(ISupplier supplier : entry.getValue()) {
 												if(activeFileSupplier.getId().equals(supplier.getId())) {
 													openEditorWithSupplier(file, supplierFileEditorSupport, supplier);
-													continue outer;
 												}
 											}
 										}
