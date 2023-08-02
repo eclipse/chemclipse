@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,9 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.services.ILibraryInformationResolverService;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.support.settings.serialization.JSONSerialization;
@@ -23,6 +27,7 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 public class Activator implements BundleActivator {
 
@@ -31,6 +36,10 @@ public class Activator implements BundleActivator {
 	private static Activator plugin;
 	private IEclipseContext eclipseContext = null;
 	private Bundle bundle;
+	/*
+	 * Services
+	 */
+	private ServiceTracker<ILibraryInformationResolverService, ILibraryInformationResolverService> libraryInformationResolverServiceTracker = null;
 
 	/**
 	 * The constructor
@@ -46,6 +55,7 @@ public class Activator implements BundleActivator {
 		JSONSerialization.addMapping(IProcessEntry.class, ProcessEntry.class);
 		plugin = this;
 		this.bundle = context.getBundle();
+		startServices(context);
 	}
 
 	@Override
@@ -53,6 +63,7 @@ public class Activator implements BundleActivator {
 
 		JSONSerialization.removeMapping(IProcessMethod.class, ProcessMethod.class);
 		JSONSerialization.removeMapping(IProcessEntry.class, ProcessEntry.class);
+		stopServices();
 		plugin = null;
 	}
 
@@ -93,5 +104,28 @@ public class Activator implements BundleActivator {
 		}
 		//
 		return eclipseContext;
+	}
+
+	public List<ILibraryInformationResolverService> getLibraryInformationResolverServices() {
+
+		List<ILibraryInformationResolverService> services = new ArrayList<>();
+		for(Object object : libraryInformationResolverServiceTracker.getServices()) {
+			if(object instanceof ILibraryInformationResolverService service) {
+				services.add(service);
+			}
+		}
+		//
+		return services;
+	}
+
+	private void startServices(BundleContext context) {
+
+		libraryInformationResolverServiceTracker = new ServiceTracker<>(context, ILibraryInformationResolverService.class, null);
+		libraryInformationResolverServiceTracker.open();
+	}
+
+	private void stopServices() {
+
+		libraryInformationResolverServiceTracker.close();
 	}
 }
