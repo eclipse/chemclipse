@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -115,6 +115,9 @@ public class ExtendedPeakDetailsUI extends Composite implements IExtendedPartUI 
 
 	private void createPeakList(Composite parent) {
 
+		if(clipboard != null && !clipboard.isDisposed()) {
+			clipboard.dispose();
+		}
 		clipboard = new Clipboard(DisplayUtils.getDisplay());
 		list = new List(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		list.setLayoutData(new GridData(GridData.FILL_BOTH));

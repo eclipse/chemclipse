@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,13 +27,6 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 
 public class CreateSnapshotHandler {
-
-	private Clipboard clipboard;
-
-	public CreateSnapshotHandler() {
-
-		clipboard = new Clipboard(DisplayUtils.getDisplay());
-	}
 
 	@Execute
 	public void execute(Composite composite) {
@@ -73,7 +66,9 @@ public class CreateSnapshotHandler {
 				ImageTransfer imageTransfer = ImageTransfer.getInstance();
 				Object[] data = new Object[]{image.getImageData()};
 				Transfer[] dataTypes = new Transfer[]{imageTransfer};
+				Clipboard clipboard = new Clipboard(DisplayUtils.getDisplay());
 				clipboard.setContents(data, dataTypes);
+				clipboard.dispose();
 				openMessageBox("The selected view/editor has been copied to clipboard.");
 			}
 		}

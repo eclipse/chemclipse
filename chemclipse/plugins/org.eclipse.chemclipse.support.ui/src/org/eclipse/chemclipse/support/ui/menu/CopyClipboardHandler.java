@@ -38,5 +38,6 @@ public class CopyClipboardHandler extends AbstractTableMenuEntry implements ITab
 
 		Clipboard clipboard = new Clipboard(Display.getDefault());
 		copyToClipboardProvider.copyToClipboard(clipboard, extendedTableViewer);
+		clipboard.dispose();
 	}
 }

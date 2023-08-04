@@ -107,8 +107,6 @@ public class PenaltyCalculationUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Clipboard clipboard = new Clipboard(Display.getDefault());
-				//
 				String lineDelimiter = OperatingSystemUtils.getLineDelimiter();
 				StringBuilder builder = new StringBuilder();
 				PenaltyCalculation penaltyCalculation = getPenaltySelection();
@@ -150,7 +148,9 @@ public class PenaltyCalculationUI extends Composite {
 				//
 				TextTransfer textTransfer = TextTransfer.getInstance();
 				Transfer[] dataTypes = new Transfer[]{textTransfer};
+				Clipboard clipboard = new Clipboard(Display.getDefault());
 				clipboard.setContents(data, dataTypes);
+				clipboard.dispose();
 			}
 		});
 		//

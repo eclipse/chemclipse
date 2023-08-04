@@ -74,6 +74,7 @@ public class TracesSupport {
 			Transfer[] dataTypes = new Transfer[]{textTransfer};
 			Clipboard clipboard = new Clipboard(display);
 			clipboard.setContents(data, dataTypes);
+			clipboard.dispose();
 		}
 	}
 

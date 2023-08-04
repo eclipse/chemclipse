@@ -70,6 +70,9 @@ public class ProcessingInfoUI {
 		/*
 		 * Clipboard / OS utils
 		 */
+		if(clipboard != null && !clipboard.isDisposed()) {
+			clipboard.dispose();
+		}
 		clipboard = new Clipboard(Display.getDefault());
 		Map<Long, String> substances = new HashMap<Long, String>();
 		tableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);

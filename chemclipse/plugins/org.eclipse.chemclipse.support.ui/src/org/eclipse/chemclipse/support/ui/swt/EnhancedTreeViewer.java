@@ -75,6 +75,9 @@ public class EnhancedTreeViewer extends Composite {
 
 	private void createControl() {
 
+		if(clipboard != null && !clipboard.isDisposed()) {
+			clipboard.dispose();
+		}
 		clipboard = new Clipboard(Display.getDefault());
 		//
 		treeViewer = new TreeViewer(this, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);

@@ -123,6 +123,9 @@ public class EnhancedTableViewer extends Composite {
 
 		tableViewerColumns = new ArrayList<>();
 		//
+		if(clipboard != null && !clipboard.isDisposed()) {
+			clipboard.dispose();
+		}
 		clipboard = new Clipboard(Display.getDefault());
 		//
 		tableViewer = new TableViewer(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);

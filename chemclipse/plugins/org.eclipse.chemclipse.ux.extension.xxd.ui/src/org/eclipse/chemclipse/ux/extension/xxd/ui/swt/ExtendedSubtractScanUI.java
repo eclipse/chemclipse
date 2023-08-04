@@ -274,6 +274,7 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 				Transfer[] dataTypes = new Transfer[]{textTransfer};
 				Clipboard clipboard = new Clipboard(e.widget.getDisplay());
 				clipboard.setContents(data, dataTypes);
+				clipboard.dispose();
 			}
 		});
 		//

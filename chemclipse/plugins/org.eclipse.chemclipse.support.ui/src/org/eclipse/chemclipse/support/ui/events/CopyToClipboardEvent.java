@@ -30,6 +30,7 @@ public class CopyToClipboardEvent implements IKeyEventProcessor {
 		if(e.stateMask == SWT.MOD1 && e.keyCode == KEY_CODE_C) {
 			Clipboard clipboard = new Clipboard(Display.getDefault());
 			copyToClipboardProvider.copyToClipboard(clipboard, extendedTableViewer);
+			clipboard.dispose();
 		}
 	}
 }
