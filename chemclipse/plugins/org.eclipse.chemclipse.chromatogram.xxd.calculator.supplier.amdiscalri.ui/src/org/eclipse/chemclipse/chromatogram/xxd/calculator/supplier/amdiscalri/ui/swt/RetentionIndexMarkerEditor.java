@@ -74,11 +74,16 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 	private static final String MESSAGE_EXPORT_SUCCESSFUL = "Marker have been exported successfully.";
 	private static final String MESSAGE_EXPORT_FAILED = "Failed to export the marker.";
 	//
+	private static final String TOOLTIP_ADJUST_POSITION = "the retention time adjust toolbar.";
+	private static final String IMAGE_ADJUST_POSITION = IApplicationImage.IMAGE_ADJUST_CHROMATOGRAMS;
+	//
 	private static final String CATEGORY = "Retention Indices";
 	private static final String DELETE = "Delete";
 	//
 	private AtomicReference<Button> buttonSearchControl = new AtomicReference<Button>();
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
+	private AtomicReference<Button> buttonShiftControl = new AtomicReference<>();
+	private AtomicReference<RetentionTimeShifterUI> toolbarShift = new AtomicReference<>();
 	private AtomicReference<RetentionIndexTableViewerUI> tableViewer = new AtomicReference<>();
 	//
 	private List<Button> buttons = new ArrayList<>();
@@ -142,6 +147,10 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 			button.addListener(SWT.MouseUp, listener);
 			button.addListener(SWT.MouseDoubleClick, listener);
 		}
+		/*
+		 * Specific Tools
+		 */
+		toolbarShift.get().addChangeListener(listener);
 	}
 
 	@Override
@@ -163,6 +172,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 		//
 		createToolbarMain(this);
 		createToolbarSearch(this);
+		createAdjustSection(this);
 		createTableSection(this);
 		//
 		initialize();
@@ -171,6 +181,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 	private void initialize() {
 
 		enableToolbar(toolbarSearch, buttonSearchControl.get(), IMAGE_SEARCH, TOOLTIP_SEARCH, false);
+		enableToolbar(toolbarShift, buttonShiftControl.get(), IMAGE_ADJUST_POSITION, TOOLTIP_ADJUST_POSITION, false);
 		updateInput();
 	}
 
@@ -180,9 +191,10 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(9, false));
 		//
 		createButtonToggleSearch(composite);
+		createButtonToggleShift(composite);
 		add(createButtonAdd(composite));
 		add(createButtonAddFromFile(composite));
 		add(createButtonEdit(composite));
@@ -196,6 +208,12 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 
 		Button button = createButtonToggleToolbar(parent, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
 		buttonSearchControl.set(button);
+	}
+
+	private void createButtonToggleShift(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarShift, IMAGE_ADJUST_POSITION, TOOLTIP_ADJUST_POSITION);
+		buttonShiftControl.set(button);
 	}
 
 	private void add(Button button) {
@@ -219,6 +237,23 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 		toolbarSearch.set(searchSupportUI);
 	}
 
+	private void createAdjustSection(Composite parent) {
+
+		RetentionTimeShifterUI retentionTimeShifterUI = new RetentionTimeShifterUI(parent, SWT.NONE);
+		retentionTimeShifterUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		retentionTimeShifterUI.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update(Display display) {
+
+				tableViewer.get().refresh();
+			}
+		});
+		//
+		toolbarShift.set(retentionTimeShifterUI);
+	}
+
 	private void createTableSection(Composite parent) {
 
 		RetentionIndexTableViewerUI retentionIndexListUI = new RetentionIndexTableViewerUI(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -236,6 +271,27 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 			public void update(Display display) {
 
 				updateInput();
+			}
+		});
+		//
+		table.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				/*
+				 * Set the selected elements.
+				 */
+				List<IRetentionIndexEntry> settings = new ArrayList<>();
+				List<?> objects = retentionIndexListUI.getStructuredSelection().toList();
+				//
+				for(Object object : objects) {
+					if(object instanceof IRetentionIndexEntry retentionIndexEntry) {
+						settings.add(retentionIndexEntry);
+					}
+				}
+				//
+				toolbarShift.get().setInput(settings);
 			}
 		});
 		//
