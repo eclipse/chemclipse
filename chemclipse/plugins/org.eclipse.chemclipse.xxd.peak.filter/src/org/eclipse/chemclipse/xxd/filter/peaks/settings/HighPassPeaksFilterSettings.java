@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,9 @@ public class HighPassPeaksFilterSettings {
 	@JsonPropertyDescription(value = "This value defines the number of n highest peaks to be preserved.")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_NUMBER_HIGHEST, maxValue = PreferenceSupplier.MAX_NUMBER_HIGHEST)
 	private int numberHighest = PreferenceSupplier.DEF_NUMBER_HIGHEST;
+	@JsonProperty(value = "Filter Option", defaultValue = "AREA")
+	@JsonPropertyDescription(value = "Select the option to filter the peaks.")
+	private PeakFilterOption peakFilterOption = PeakFilterOption.AREA;
 
 	public int getNumberHighest() {
 
@@ -32,5 +35,15 @@ public class HighPassPeaksFilterSettings {
 	public void setNumberHighest(int numberHighest) {
 
 		this.numberHighest = numberHighest;
+	}
+
+	public PeakFilterOption getPeakFilterOption() {
+
+		return peakFilterOption;
+	}
+
+	public void setPeakFilterOption(PeakFilterOption peakFilterOption) {
+
+		this.peakFilterOption = peakFilterOption;
 	}
 }

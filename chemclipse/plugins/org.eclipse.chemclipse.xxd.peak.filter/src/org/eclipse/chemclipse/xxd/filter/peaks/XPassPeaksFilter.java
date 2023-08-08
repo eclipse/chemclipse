@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,29 +18,33 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.xxd.filter.peaks.settings.PeakFilterOption;
 import org.eclipse.core.runtime.SubMonitor;
 
 public class XPassPeaksFilter {
 
-	public static List<IPeak> filterPeaks(Collection<IPeak> filterItems, ProcessExecutionContext context, int keepPeaks, boolean highPass) {
+	public static List<IPeak> filterPeaks(Collection<IPeak> filterItems, ProcessExecutionContext context, PeakFilterOption peakFilterOption, int keepPeaks, boolean highPass) {
 
 		String description = (highPass ? "High " : "Low ") + " Pass Peaks";
 		/*
-		 * Extract the peaks and check the area.
+		 * Extract the peaks and check the area
+		 * as well as the peak filter option.
 		 */
-		boolean peaksAreIntegrated = true;
-		List<IPeak> peaks = new ArrayList<>();
+		boolean usePeakArea = true;
+		List<IPeak> peaks = new ArrayList<>(filterItems);
 		//
-		for(IPeak peak : filterItems) {
-			peaks.add(peak);
-			if(peak.getIntegratedArea() == 0.0d) {
-				peaksAreIntegrated = false;
-			}
+		switch(peakFilterOption) {
+			case HEIGHT:
+				usePeakArea = false;
+				break;
+			default:
+				usePeakArea = isUsePeakArea(peaks);
+				break;
 		}
 		/*
 		 * Sort the peaks
 		 */
-		if(peaksAreIntegrated) {
+		if(usePeakArea) {
 			context.addInfoMessage(description, "The peak area is used to filter the peaks.");
 			if(highPass) {
 				Collections.sort(peaks, (p1, p2) -> Double.compare(p2.getIntegratedArea(), p1.getIntegratedArea()));
@@ -48,7 +52,7 @@ public class XPassPeaksFilter {
 				Collections.sort(peaks, (p1, p2) -> Double.compare(p1.getIntegratedArea(), p2.getIntegratedArea()));
 			}
 		} else {
-			context.addWarnMessage(description, "At least one peak is not integrated. Switch to peak height at maximum.");
+			context.addInfoMessage(description, "The peak height is used to filter the peaks.");
 			if(highPass) {
 				Collections.sort(peaks, (p1, p2) -> Double.compare(p2.getPeakModel().getPeakMaximum().getTotalSignal(), p1.getPeakModel().getPeakMaximum().getTotalSignal()));
 			} else {
@@ -67,6 +71,18 @@ public class XPassPeaksFilter {
 			}
 			subMonitor.worked(1);
 		}
+		//
 		return peaksToDelete;
+	}
+
+	private static boolean isUsePeakArea(List<IPeak> peaks) {
+
+		for(IPeak peak : peaks) {
+			if(peak.getIntegratedArea() == 0.0d) {
+				return false;
+			}
+		}
+		//
+		return true;
 	}
 }

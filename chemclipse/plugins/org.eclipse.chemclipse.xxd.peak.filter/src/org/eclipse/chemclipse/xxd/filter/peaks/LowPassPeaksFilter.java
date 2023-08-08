@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.xxd.filter.peaks.settings.LowPassPeaksFilterSettings;
+import org.eclipse.chemclipse.xxd.filter.peaks.settings.PeakFilterOption;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
@@ -54,7 +55,8 @@ public class LowPassPeaksFilter extends AbstractPeakFilter<LowPassPeaksFilterSet
 		}
 		//
 		int numberLowest = configuration.getNumberLowest();
-		List<IPeak> peaksToDelete = XPassPeaksFilter.filterPeaks(peaks, context, numberLowest, false);
+		PeakFilterOption peakFilterOption = configuration.getPeakFilterOption();
+		List<IPeak> peaksToDelete = XPassPeaksFilter.filterPeaks(peaks, context, peakFilterOption, numberLowest, false);
 		//
 		deletePeaks(peaksToDelete, chromatogramSelection);
 		resetPeakSelection(chromatogramSelection);

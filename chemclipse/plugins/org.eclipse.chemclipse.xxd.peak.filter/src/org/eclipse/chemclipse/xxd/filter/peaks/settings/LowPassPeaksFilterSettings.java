@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,9 @@ public class LowPassPeaksFilterSettings {
 	@JsonPropertyDescription(value = "This value defines the number of n lowest peaks to be preserved.")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_NUMBER_LOWEST, maxValue = PreferenceSupplier.MAX_NUMBER_LOWEST)
 	private int numberLowest = PreferenceSupplier.DEF_NUMBER_LOWEST;
+	@JsonProperty(value = "Filter Option", defaultValue = "AREA")
+	@JsonPropertyDescription(value = "Select the option to filter the peaks.")
+	private PeakFilterOption peakFilterOption = PeakFilterOption.AREA;
 
 	public int getNumberLowest() {
 
@@ -32,5 +35,15 @@ public class LowPassPeaksFilterSettings {
 	public void setNumberLowest(int numberLowest) {
 
 		this.numberLowest = numberLowest;
+	}
+
+	public PeakFilterOption getPeakFilterOption() {
+
+		return peakFilterOption;
+	}
+
+	public void setPeakFilterOption(PeakFilterOption peakFilterOption) {
+
+		this.peakFilterOption = peakFilterOption;
 	}
 }
