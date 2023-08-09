@@ -14,14 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.s
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class IndexCuratorSettings {
+public class IndexCuratorSettings extends IndexExportSettings {
 
-	@JsonProperty(value = "Curate Names", defaultValue = "true")
-	@JsonPropertyDescription(value = "Names are matched e.g. to C6 (Hexane).")
-	private boolean useCuratedNames = true;
-	@JsonProperty(value = "Derive Missing Indices", defaultValue = "true")
-	@JsonPropertyDescription(value = "If alkane indices are missing, try to calculate them existing peak retention indices.")
-	private boolean deriveMissingIndices = true;
 	@JsonProperty(value = "Extrapolate (Left)", defaultValue = "false")
 	@JsonPropertyDescription("Extrapolate the index schema (left) to the start of the chromatogram.")
 	private boolean extrapolateLeft = false;
@@ -34,26 +28,6 @@ public class IndexCuratorSettings {
 	@JsonProperty(value = "Reference Chromatograms", defaultValue = "true")
 	@JsonPropertyDescription("Process all referenced chromatograms.")
 	private boolean processReferenceChromatograms = true;
-
-	public boolean isUseCuratedNames() {
-
-		return useCuratedNames;
-	}
-
-	public void setUseCuratedNames(boolean useCuratedNames) {
-
-		this.useCuratedNames = useCuratedNames;
-	}
-
-	public boolean isDeriveMissingIndices() {
-
-		return deriveMissingIndices;
-	}
-
-	public void setDeriveMissingIndices(boolean deriveMissingIndices) {
-
-		this.deriveMissingIndices = deriveMissingIndices;
-	}
 
 	public boolean isExtrapolateLeft() {
 

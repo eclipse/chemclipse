@@ -16,6 +16,8 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalibrationFile;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.ChromatogramWriter;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.IndexExportSettings;
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramExportConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
@@ -36,7 +38,10 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 		if(!processingInfo.hasErrorMessages()) {
 			try {
 				ChromatogramWriter writer = new ChromatogramWriter();
-				writer.writeChromatogram(file, chromatogram, monitor);
+				IndexExportSettings indexExportSettings = new IndexExportSettings();
+				indexExportSettings.setUseCuratedNames(PreferenceSupplier.isCalibrationExportUseCuratedNames());
+				indexExportSettings.setDeriveMissingIndices(PreferenceSupplier.isCalibrationExportDeriveMissingIndices());
+				writer.writeChromatogram(file, chromatogram, indexExportSettings, monitor);
 				processingInfo.setProcessingResult(file);
 			} catch(IOException e) {
 				logger.warn(e);

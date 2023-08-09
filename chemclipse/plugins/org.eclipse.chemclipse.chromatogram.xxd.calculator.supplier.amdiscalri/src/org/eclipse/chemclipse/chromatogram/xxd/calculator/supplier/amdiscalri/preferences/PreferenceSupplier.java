@@ -80,6 +80,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_CALIBRATION_EXPORT_USE_CURATED_NAMES = true;
 	public static final String P_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES = "calibrationExportDeriveMissingIndices";
 	public static final boolean DEF_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES = true;
+	/*
+	 * General
+	 */
+	public static final String P_LIST_PATH_IMPORT = "listPathImport";
+	public static final String DEF_LIST_PATH_IMPORT = "";
+	public static final String P_LIST_PATH_EXPORT = "listPathExport";
+	public static final String DEF_LIST_PATH_EXPORT = "";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -122,6 +129,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_LIST_PATH_EXPORT_TEMPLATE, DEF_LIST_PATH_EXPORT_TEMPLATE);
 		defaultValues.put(P_CALIBRATION_EXPORT_USE_CURATED_NAMES, Boolean.toString(DEF_CALIBRATION_EXPORT_USE_CURATED_NAMES));
 		defaultValues.put(P_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES, Boolean.toString(DEF_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES));
+		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 		return defaultValues;
 	}
 
@@ -273,6 +282,26 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static void setCalibrationExportDeriveMissingIndices(boolean value) {
 
 		INSTANCE().putBoolean(P_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES, value);
+	}
+
+	public static String getListPathImport() {
+
+		return INSTANCE().get(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+	}
+
+	public static void setListPathImport(String filterPath) {
+
+		INSTANCE().put(P_LIST_PATH_IMPORT, filterPath);
+	}
+
+	public static String getListPathExport() {
+
+		return INSTANCE().get(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
+	}
+
+	public static void setListPathExport(String filterPath) {
+
+		INSTANCE().put(P_LIST_PATH_EXPORT, filterPath);
 	}
 
 	private static CalculatorStrategy getCalculatorStrategy() {
