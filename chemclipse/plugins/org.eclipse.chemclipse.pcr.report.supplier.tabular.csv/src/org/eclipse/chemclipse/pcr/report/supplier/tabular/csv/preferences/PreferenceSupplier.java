@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,13 +8,13 @@
  * Contributors:
  *
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - refactoring INSTANCE
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.preferences;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.settings.Delimiter;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.Activator;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMappings;
@@ -25,12 +25,9 @@ import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
-	//
 	public static final String P_DELIMITER = "separator";
 	public static final String DEF_DELIMITER = Delimiter.SEMICOLON.name();
 	public static final String P_DECIMAL_SEPARATOR = "decimal-separator";
@@ -78,6 +75,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_CHANNEL_MAPPING, DEF_CHANNEL_MAPPING);
 		defaultValues.put(P_WELL_MAPPING, DEF_WELL_MAPPING);
 		defaultValues.put(P_VIRTUAL_CHANNELS, DEF_VIRTUAL_CHANNELS);
+		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 		return defaultValues;
 	}
 
@@ -89,33 +88,32 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static ChannelMappings getChannelMappings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ChannelMappings channelMappings = new ChannelMappings();
-		channelMappings.load(preferences.get(P_CHANNEL_MAPPING, DEF_CHANNEL_MAPPING));
+		channelMappings.load(INSTANCE().get(P_CHANNEL_MAPPING, DEF_CHANNEL_MAPPING));
+		//
 		return channelMappings;
 	}
 
 	public static WellMappings getWellMappings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		WellMappings wellMappings = new WellMappings();
-		wellMappings.load(preferences.get(P_WELL_MAPPING, DEF_WELL_MAPPING));
+		wellMappings.load(INSTANCE().get(P_WELL_MAPPING, DEF_WELL_MAPPING));
+		//
 		return wellMappings;
 	}
 
 	public static VirtualChannels getVirtualChannels() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		VirtualChannels virtualChannels = new VirtualChannels();
-		virtualChannels.load(preferences.get(P_VIRTUAL_CHANNELS, DEF_VIRTUAL_CHANNELS));
+		virtualChannels.load(INSTANCE().get(P_VIRTUAL_CHANNELS, DEF_VIRTUAL_CHANNELS));
+		//
 		return virtualChannels;
 	}
 
 	public static Delimiter getDelimiter() {
 
 		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			return Delimiter.valueOf(preferences.get(P_DELIMITER, DEF_DELIMITER));
+			return Delimiter.valueOf(INSTANCE().get(P_DELIMITER, DEF_DELIMITER));
 		} catch(Exception e) {
 			return Delimiter.SEMICOLON;
 		}
@@ -124,8 +122,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static DecimalSeparator getDecimalSeparator() {
 
 		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			return DecimalSeparator.valueOf(preferences.get(P_DECIMAL_SEPARATOR, DEF_DECIMAL_SEPARATOR));
+			return DecimalSeparator.valueOf(INSTANCE().get(P_DECIMAL_SEPARATOR, DEF_DECIMAL_SEPARATOR));
 		} catch(Exception e) {
 			return DecimalSeparator.COMMA;
 		}
@@ -133,38 +130,21 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static String getListPathImport() {
 
-		return getFilterPath(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		return INSTANCE().get(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
 	}
 
 	public static void setListPathImport(String filterPath) {
 
-		setFilterPath(P_LIST_PATH_IMPORT, filterPath);
+		INSTANCE().put(P_LIST_PATH_IMPORT, filterPath);
 	}
 
 	public static String getListPathExport() {
 
-		return getFilterPath(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
+		return INSTANCE().get(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 	}
 
 	public static void setListPathExport(String filterPath) {
 
-		setFilterPath(P_LIST_PATH_EXPORT, filterPath);
-	}
-
-	private static String getFilterPath(String key, String def) {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(key, def);
-	}
-
-	private static void setFilterPath(String key, String filterPath) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.put(key, filterPath);
-			preferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
-		}
+		INSTANCE().put(P_LIST_PATH_EXPORT, filterPath);
 	}
 }
