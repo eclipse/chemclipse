@@ -8,23 +8,21 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - refactor menu categories
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.csd.filter.l10n;
+package org.eclipse.chemclipse.processing.l10n;
 
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 
-	private static final String BUNDLE_NAME = "org.eclipse.chemclipse.chromatogram.csd.filter.l10n.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.eclipse.chemclipse.processing.l10n.messages"; //$NON-NLS-1$
 	//
-	public static String invalidChromatogram;
-	public static String invalidChromatogramSelection;
-	public static String invalidFilterSettings;
-	public static String invalidPeak;
-	public static String invalidPeakList;
-	public static String noChromatogramFilterAvailable;
-	public static String noPeakFilterAvailable;
-	public static String onlyCSDchromatogramSupported;
+	public static String chromatogramFilter;
+	public static String chromatogramClassifier;
+	public static String peakFilter;
+	public static String peakIdentifier;
+	public static String peakDetector;
 	//
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider;
 
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -26,7 +27,7 @@ public class UpdateMenuEntry extends AbstractChartMenuEntry implements IChartMen
 	@Override
 	public String getCategory() {
 
-		return "Mass Spectrum";
+		return ICategories.MASS_SPECTRUM;
 	}
 
 	@Override

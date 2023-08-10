@@ -22,6 +22,7 @@ import java.util.function.Function;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.filter.IMeasurementFilter;
 import org.eclipse.chemclipse.processing.ProcessorFactory;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -38,7 +39,7 @@ public class IMeasurementFilterProcessTypeSupplier implements IProcessTypeSuppli
 	@Override
 	public String getCategory() {
 
-		return "Filter";
+		return ICategories.FILTER;
 	}
 
 	@Override

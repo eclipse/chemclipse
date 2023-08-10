@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactor menu categories
  *******************************************************************************/
 package org.eclipse.chemclipse.model.filter;
 
@@ -29,8 +30,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * @param <ConfigType>
  */
 public interface IPeakFilter<ConfigType> extends Filter<ConfigType> {
-
-	public static final String CATEGORY = "Peak Filter";
 
 	/**
 	 * Filters the given Collection of {@link IPeak}s with this filter and returns the result.

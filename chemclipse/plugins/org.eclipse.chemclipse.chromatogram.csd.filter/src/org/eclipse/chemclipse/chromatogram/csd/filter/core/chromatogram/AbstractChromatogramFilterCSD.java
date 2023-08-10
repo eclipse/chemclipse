@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.chromatogram.csd.filter.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
@@ -44,10 +45,10 @@ public abstract class AbstractChromatogramFilterCSD implements IChromatogramFilt
 
 		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramSelection == null) {
-			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.invalidChromatogramSelection);
+			processingInfo.addErrorMessage(ICategories.CHROMATOGRAM_FILTER, Messages.invalidChromatogramSelection);
 		} else {
 			if(chromatogramSelection.getChromatogram() == null) {
-				processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.invalidChromatogram);
+				processingInfo.addErrorMessage(ICategories.CHROMATOGRAM_FILTER, Messages.invalidChromatogram);
 			}
 		}
 		return processingInfo;
@@ -63,7 +64,7 @@ public abstract class AbstractChromatogramFilterCSD implements IChromatogramFilt
 
 		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramFilterSettings == null) {
-			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.invalidFilterSettings);
+			processingInfo.addErrorMessage(ICategories.CHROMATOGRAM_FILTER, Messages.invalidFilterSettings);
 		}
 		return processingInfo;
 	}

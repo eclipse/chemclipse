@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
 import org.eclipse.chemclipse.model.identifier.IIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.core.Identifier;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
@@ -75,7 +76,7 @@ public class PeakIdentifierCSD {
 	private static <T> IProcessingInfo<T> getNoIdentifierAvailableProcessingInfo() {
 
 		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
-		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, Messages.peakIdentifier, Messages.noIdentifierAvailable);
+		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, ICategories.PEAK_IDENTIFIER, Messages.noIdentifierAvailable);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
 	}

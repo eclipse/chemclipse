@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -50,8 +50,6 @@ public abstract class AbstractChromatogramReportSettings extends AbstractProcess
 		return exportFolder;
 	}
 
-	protected abstract String getDefaultFolder();
-
 	public void setExportFolder(File exportFolder) {
 
 		this.exportFolder = exportFolder;
@@ -68,4 +66,6 @@ public abstract class AbstractChromatogramReportSettings extends AbstractProcess
 
 		return filenamePattern;
 	}
+
+	protected abstract String getDefaultFolder();
 }

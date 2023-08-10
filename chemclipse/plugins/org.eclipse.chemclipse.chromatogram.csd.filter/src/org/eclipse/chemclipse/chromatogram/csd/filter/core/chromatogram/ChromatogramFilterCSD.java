@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResu
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;
@@ -64,7 +65,7 @@ public class ChromatogramFilterCSD {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 		} else {
 			processingInfo = new ProcessingInfo<>();
-			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.noChromatogramFilterAvailable);
+			processingInfo.addErrorMessage(ICategories.CHROMATOGRAM_FILTER, Messages.noChromatogramFilterAvailable);
 		}
 		return processingInfo;
 	}
@@ -87,7 +88,7 @@ public class ChromatogramFilterCSD {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
 		} else {
 			processingInfo = new ProcessingInfo<>();
-			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.noChromatogramFilterAvailable);
+			processingInfo.addErrorMessage(ICategories.CHROMATOGRAM_FILTER, Messages.noChromatogramFilterAvailable);
 		}
 		return processingInfo;
 	}

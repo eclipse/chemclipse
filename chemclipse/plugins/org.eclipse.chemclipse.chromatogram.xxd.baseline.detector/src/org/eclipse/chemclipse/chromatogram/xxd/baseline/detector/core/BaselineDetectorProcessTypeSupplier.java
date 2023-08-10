@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBasel
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -34,7 +35,7 @@ public class BaselineDetectorProcessTypeSupplier implements IProcessTypeSupplier
 	@Override
 	public String getCategory() {
 
-		return "Baseline Detector";
+		return ICategories.BASELINE_DETECTOR;
 	}
 
 	@Override

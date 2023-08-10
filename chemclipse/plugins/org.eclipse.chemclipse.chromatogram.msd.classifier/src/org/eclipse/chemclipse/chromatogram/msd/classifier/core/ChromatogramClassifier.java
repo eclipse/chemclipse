@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramCl
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
@@ -96,7 +97,6 @@ public class ChromatogramClassifier {
 		return classifierSupport;
 	}
 
-	// --------------------------------------------private methods
 	/**
 	 * Returns a {@link IChromatogramClassifier} instance given by the classifierId or
 	 * null, if none is available.
@@ -138,11 +138,10 @@ public class ChromatogramClassifier {
 		return null;
 	}
 
-	// --------------------------------------------private methods
 	private static IProcessingInfo<IChromatogramClassifierResult> getNoClassifierAvailableProcessingInfo() {
 
 		IProcessingInfo<IChromatogramClassifierResult> processingInfo = new ProcessingInfo<>();
-		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, Messages.chromatogramClassifier, NO_CHROMATOGRAM_CLASSIFIER_AVAILABLE);
+		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, ICategories.CHROMATOGRAM_CLASSIFIER, NO_CHROMATOGRAM_CLASSIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
 	}

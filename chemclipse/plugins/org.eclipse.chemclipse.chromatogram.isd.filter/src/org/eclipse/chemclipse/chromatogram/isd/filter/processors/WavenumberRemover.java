@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -41,7 +42,7 @@ public class WavenumberRemover implements IProcessTypeSupplier {
 	@Override
 	public String getCategory() {
 
-		return "Scan Filter";
+		return ICategories.SCAN_FILTER;
 	}
 
 	@Override

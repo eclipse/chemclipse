@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
@@ -39,7 +40,7 @@ public class ChromatogramReportsProcessSupplier implements IProcessTypeSupplier 
 	@Override
 	public String getCategory() {
 
-		return "Chromatogram Reports";
+		return ICategories.CHROMATOGRAM_REPORTS;
 	}
 
 	@Override

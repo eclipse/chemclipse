@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactor menu categories
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 
@@ -17,10 +18,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.NoChromatogramClassifierSupplierAvailableException;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -33,7 +34,7 @@ public class ChromatogramClassifierProcessTypeSupport implements IProcessTypeSup
 	@Override
 	public String getCategory() {
 
-		return Messages.chromatogramClassifier;
+		return ICategories.CHROMATOGRAM_CLASSIFIER;
 	}
 
 	@Override
@@ -61,6 +62,7 @@ public class ChromatogramClassifierProcessTypeSupport implements IProcessTypeSup
 
 		@SuppressWarnings("unchecked")
 		public ChromatogramClassifierProcessorSupplier(IChromatogramClassifierSupplier supplier, IChromatogramClassifier classifier, IProcessTypeSupplier parent) {
+
 			super(supplier.getId(), supplier.getClassifierName(), supplier.getDescription(), (Class<IChromatogramClassifierSettings>)supplier.getSettingsClass(), parent, classifier.getDataTypes());
 			this.classifier = classifier;
 		}

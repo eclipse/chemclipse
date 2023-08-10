@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -44,7 +45,7 @@ public class ChromatogramFilterISD implements IProcessTypeSupplier {
 	@Override
 	public String getCategory() {
 
-		return "Chromatogram Filter";
+		return ICategories.CHROMATOGRAM_FILTER;
 	}
 
 	@Override

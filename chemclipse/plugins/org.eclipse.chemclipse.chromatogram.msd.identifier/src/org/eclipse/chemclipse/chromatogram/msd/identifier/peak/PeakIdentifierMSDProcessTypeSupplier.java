@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactor menu categories
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.peak;
 
@@ -22,6 +23,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -34,7 +36,7 @@ public class PeakIdentifierMSDProcessTypeSupplier implements IProcessTypeSupplie
 	@Override
 	public String getCategory() {
 
-		return "Peak Identifier";
+		return ICategories.PEAK_IDENTIFIER;
 	}
 
 	@Override
@@ -59,6 +61,7 @@ public class PeakIdentifierMSDProcessTypeSupplier implements IProcessTypeSupplie
 
 		@SuppressWarnings("unchecked")
 		public PeakIdentifierProcessorSupplier(IPeakIdentifierSupplierMSD supplier, IProcessTypeSupplier parent) {
+
 			super("PeakIdentifierMSD." + supplier.getId(), supplier.getIdentifierName(), supplier.getDescription(), (Class<IPeakIdentifierSettingsMSD>)supplier.getSettingsClass(), parent, DataType.MSD);
 			this.supplier = supplier;
 		}

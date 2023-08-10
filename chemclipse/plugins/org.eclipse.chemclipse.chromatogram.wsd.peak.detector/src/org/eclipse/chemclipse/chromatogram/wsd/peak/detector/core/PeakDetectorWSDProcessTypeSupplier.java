@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.IPeakDetec
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -36,7 +37,7 @@ public class PeakDetectorWSDProcessTypeSupplier implements IProcessTypeSupplier 
 	@Override
 	public String getCategory() {
 
-		return "Peak Detector";
+		return ICategories.PEAK_DETECTOR;
 	}
 
 	@Override

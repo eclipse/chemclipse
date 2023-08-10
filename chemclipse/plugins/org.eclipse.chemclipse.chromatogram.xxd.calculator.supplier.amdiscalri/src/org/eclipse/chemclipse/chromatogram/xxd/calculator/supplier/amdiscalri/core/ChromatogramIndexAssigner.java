@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -43,7 +44,7 @@ public class ChromatogramIndexAssigner implements IProcessTypeSupplier {
 	@Override
 	public String getCategory() {
 
-		return "Chromatogram Calculator";
+		return ICategories.CHROMATOGRAM_CALCULATOR;
 	}
 
 	@Override

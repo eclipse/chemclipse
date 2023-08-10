@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.converter.PathResolver;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.logging.support.Settings;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
@@ -60,7 +61,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 	@Override
 	public String getCategory() {
 
-		return "User Methods";
+		return ICategories.USER_METHODS;
 	}
 
 	@Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.OPTIONAL)

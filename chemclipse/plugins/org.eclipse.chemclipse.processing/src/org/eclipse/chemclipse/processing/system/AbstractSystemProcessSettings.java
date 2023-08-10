@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.system;
 
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 
 public abstract class AbstractSystemProcessSettings implements ISystemProcessSettings, IProcessTypeSupplier {
@@ -18,6 +19,6 @@ public abstract class AbstractSystemProcessSettings implements ISystemProcessSet
 	@Override
 	public String getCategory() {
 
-		return "System";
+		return ICategories.SYSTEM;
 	}
 }

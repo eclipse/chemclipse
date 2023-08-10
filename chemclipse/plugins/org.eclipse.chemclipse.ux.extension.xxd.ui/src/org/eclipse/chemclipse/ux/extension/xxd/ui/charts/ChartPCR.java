@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
@@ -164,7 +165,7 @@ public class ChartPCR extends LineChart {
 				@Override
 				public String getCategory() {
 
-					return "Export";
+					return ICategories.EXPORT;
 				}
 
 				@Override

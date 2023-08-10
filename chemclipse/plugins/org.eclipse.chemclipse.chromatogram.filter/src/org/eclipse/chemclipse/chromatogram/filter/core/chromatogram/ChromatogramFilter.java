@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;
@@ -67,11 +68,11 @@ public class ChromatogramFilter {
 			} catch(Exception e) {
 				logger.error(e);
 				processingInfo = new ProcessingInfo<>();
-				processingInfo.addErrorMessage(Messages.chromatogramFilter, e.getLocalizedMessage());
+				processingInfo.addErrorMessage(ICategories.CHROMATOGRAM_FILTER, e.getLocalizedMessage());
 			}
 		} else {
 			processingInfo = new ProcessingInfo<>();
-			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.noChromatogramFilterAvailable);
+			processingInfo.addErrorMessage(ICategories.CHROMATOGRAM_FILTER, Messages.noChromatogramFilterAvailable);
 		}
 		return processingInfo;
 	}
@@ -96,11 +97,11 @@ public class ChromatogramFilter {
 			} catch(Exception e) {
 				logger.error(e);
 				processingInfo = new ProcessingInfo<>();
-				processingInfo.addErrorMessage(Messages.chromatogramFilter, e.getLocalizedMessage());
+				processingInfo.addErrorMessage(ICategories.CHROMATOGRAM_FILTER, e.getLocalizedMessage());
 			}
 		} else {
 			processingInfo = new ProcessingInfo<>();
-			processingInfo.addErrorMessage(Messages.chromatogramFilter, Messages.noChromatogramFilterAvailable);
+			processingInfo.addErrorMessage(ICategories.CHROMATOGRAM_FILTER, Messages.noChromatogramFilterAvailable);
 		}
 		return processingInfo;
 	}

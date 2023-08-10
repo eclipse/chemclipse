@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactor menu categories
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.internal;
 
@@ -20,15 +21,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.procedures.Procedure;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ExecutionResultTransformer;
-import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessExecutionConsumer;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 // import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -43,7 +45,7 @@ public class ProcedureProcessTypeSupplier implements IProcessTypeSupplier {
 	@Override
 	public String getCategory() {
 
-		return "Procedures";
+		return ICategories.PROCEDURES;
 	}
 
 	@Override
@@ -78,6 +80,7 @@ public class ProcedureProcessTypeSupplier implements IProcessTypeSupplier {
 		private final Procedure<ConfigType> procedure;
 
 		public ProcedureProcessSupplier(Procedure<ConfigType> procedure) {
+
 			super(procedure.getID(), procedure.getName(), procedure.getDescription(), procedure.getConfigClass(), ProcedureProcessTypeSupplier.this, procedure.getDataCategories());
 			this.procedure = procedure;
 		}

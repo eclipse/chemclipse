@@ -18,12 +18,13 @@ import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResu
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
 public abstract class AbstractPeakFilter implements IPeakFilter {
 
-	private static final String DESCRIPTION = Messages.peakFilter;
+	private static final String DESCRIPTION = ICategories.PEAK_FILTER;
 
 	@Override
 	public IProcessingInfo<IChromatogramFilterResult> validate(IPeakCSD peak, IPeakFilterSettings peakFilterSettings) {

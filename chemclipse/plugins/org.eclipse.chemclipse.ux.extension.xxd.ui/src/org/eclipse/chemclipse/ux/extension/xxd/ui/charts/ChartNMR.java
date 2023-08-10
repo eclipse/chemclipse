@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.core.PeakPosition;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
@@ -90,7 +91,7 @@ public class ChartNMR extends LineChart {
 					@Override
 					public String getCategory() {
 
-						return "Export";
+						return ICategories.EXPORT;
 					}
 
 					@Override

@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactor menu categories
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.identifier.peak;
 
@@ -23,6 +24,7 @@ import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -35,7 +37,7 @@ public class PeakIdentifierCSDProcessTypeSupplier implements IProcessTypeSupplie
 	@Override
 	public String getCategory() {
 
-		return Messages.peakIdentifier;
+		return ICategories.PEAK_IDENTIFIER;
 	}
 
 	@Override

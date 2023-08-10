@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpect
 import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -136,7 +137,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 				@Override
 				public String getCategory() {
 
-					return "Filter";
+					return ICategories.FILTER;
 				}
 
 				@Override
@@ -167,7 +168,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 				@Override
 				public String getCategory() {
 
-					return "Identifier";
+					return ICategories.IDENTIFIER;
 				}
 
 				@Override

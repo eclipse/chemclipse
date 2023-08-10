@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Lorenz Gerber - initial API and implementation
+ * Philip Wenig - refactor menu categories
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram;
 
@@ -24,6 +25,7 @@ import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -36,7 +38,7 @@ public class ChromatogramFilterCSDProcessSupplier implements IProcessTypeSupplie
 	@Override
 	public String getCategory() {
 
-		return Messages.chromatogramFilter;
+		return ICategories.CHROMATOGRAM_FILTER;
 	}
 
 	@Override

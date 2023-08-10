@@ -21,7 +21,6 @@ public class Messages extends NLS {
 	public static String identifierError;
 	public static String noIdentifierAvailable;
 	public static String onlyCSDchromatogramSupported;
-	public static String peakIdentifier;
 	public static String removedUnidentifiedPeaks;
 	//
 	static {

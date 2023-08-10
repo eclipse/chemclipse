@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.CoreException;
@@ -39,7 +40,7 @@ public class PeakFilter {
 	private static final String FILTER_NAME = "filterName"; //$NON-NLS-1$
 	private static final String FILTER = "filter"; //$NON-NLS-1$
 	//
-	private static final String PROCESSING_DESCRIPTION = Messages.peakFilter;
+	private static final String PROCESSING_DESCRIPTION = ICategories.PEAK_FILTER;
 	private static final String NO_PEAK_FILTER_AVAILABLE = Messages.noPeakFilterAvailable;
 
 	/**

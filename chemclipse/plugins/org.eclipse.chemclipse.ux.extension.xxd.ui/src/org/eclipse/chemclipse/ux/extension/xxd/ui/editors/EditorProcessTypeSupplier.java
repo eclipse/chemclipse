@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactor menu categories
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
@@ -23,6 +24,7 @@ import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSuppli
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -40,7 +42,7 @@ public class EditorProcessTypeSupplier implements IProcessTypeSupplier {
 	@Override
 	public String getCategory() {
 
-		return "User Interface";
+		return ICategories.USER_INTERFACE;
 	}
 
 	@Override
@@ -57,6 +59,7 @@ public class EditorProcessTypeSupplier implements IProcessTypeSupplier {
 		UISynchronize ui;
 
 		public OpenEditorSupplier(IProcessTypeSupplier parent) {
+
 			super("org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier.OpenEditorSupplier", "Open Editor", "Opens an editor with the given dataset", null, parent, DataCategory.MSD, DataCategory.CSD, DataCategory.WSD);
 		}
 

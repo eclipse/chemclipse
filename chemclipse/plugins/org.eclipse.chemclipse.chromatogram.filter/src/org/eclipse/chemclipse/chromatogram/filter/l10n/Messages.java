@@ -17,7 +17,6 @@ public class Messages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.eclipse.chemclipse.chromatogram.filter.l10n.messages"; //$NON-NLS-1$
 	//
-	public static String chromatogramFilter;
 	public static String chromatogramSelectionApplied;
 	public static String chromatogramSelectionInvalid;
 	public static String chromatogramSelectionReset;

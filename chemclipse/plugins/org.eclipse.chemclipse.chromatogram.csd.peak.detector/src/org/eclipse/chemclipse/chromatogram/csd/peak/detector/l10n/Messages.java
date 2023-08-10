@@ -19,7 +19,6 @@ public class Messages extends NLS {
 	//
 	public static String noPeakDetectorAvailable;
 	public static String onlyCSDchromatogramSupported;
-	public static String peakDetector;
 	public static String peakDetectorCSD;
 	//
 	static {

@@ -16,12 +16,13 @@ import org.eclipse.chemclipse.chromatogram.filter.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
 public abstract class AbstractChromatogramFilter implements IChromatogramFilter {
 
-	private static final String DESCRIPTION = Messages.chromatogramFilter;
+	private static final String DESCRIPTION = ICategories.CHROMATOGRAM_FILTER;
 
 	@Override
 	public IProcessingInfo<IChromatogramFilterResult> validate(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings) {

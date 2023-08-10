@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.IChromatogram
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -34,7 +35,7 @@ public class ChromatogramCalculatorProcessTypeSupplier implements IProcessTypeSu
 	@Override
 	public String getCategory() {
 
-		return "Chromatogram Calculator";
+		return ICategories.CHROMATOGRAM_CALCULATOR;
 	}
 
 	@Override
