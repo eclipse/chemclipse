@@ -13,8 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 
 import java.io.File;
 
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -131,10 +130,7 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(OperatingSystemUtils.isWindows()) {
-					WindowsFileDialog.ClearInitialDirectoryWorkaround();
-				}
-				FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
+				FileDialog fileDialog = ExtendedFileDialog.create(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText("Select an existing *.cal template file.");
 				fileDialog.setFilterExtensions(new String[]{"*.cal;*.CAL"});
 				fileDialog.setFilterNames(new String[]{"AMDIS Calibration (*.cal)"});

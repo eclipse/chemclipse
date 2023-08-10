@@ -22,8 +22,7 @@ import org.eclipse.chemclipse.converter.support.FileExtensionCompiler;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.SWT;
@@ -319,10 +318,7 @@ public class IdentifierTableEditor extends FieldEditor {
 
 		IdentifierFile identifierFile = null;
 		//
-		if(OperatingSystemUtils.isWindows()) {
-			WindowsFileDialog.ClearInitialDirectoryWorkaround();
-		}
-		FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
+		FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.OPEN);
 		fileDialog.setText("Select a Database");
 		fileDialog.setFilterPath(PreferenceSupplier.getFilterPathIdentifierFiles());
 		fileDialog.setFilterExtensions(fileExtensions);

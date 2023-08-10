@@ -19,10 +19,9 @@ import java.util.List;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
-import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PcaExtractionFileBinary;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PcaExtractionFileText;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Algorithm;
@@ -197,10 +196,7 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(OperatingSystemUtils.isWindows()) {
-					WindowsFileDialog.ClearInitialDirectoryWorkaround();
-				}
-				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
+				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText("Import");
 				fileDialog.setFilterExtensions(new String[]{PcaExtractionFileText.FILTER_EXTENSION + ";" + PcaExtractionFileBinary.FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{PcaExtractionFileText.FILTER_NAME + ";" + PcaExtractionFileBinary.FILTER_NAME});
@@ -231,10 +227,7 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(OperatingSystemUtils.isWindows()) {
-					WindowsFileDialog.ClearInitialDirectoryWorkaround();
-				}
-				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 				fileDialog.setText(PcaExtractionFileText.DESCRIPTION);
 				fileDialog.setFilterExtensions(new String[]{PcaExtractionFileText.FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{PcaExtractionFileText.FILTER_NAME});

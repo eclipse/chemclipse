@@ -20,8 +20,7 @@ import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.internal.support.ChromatogramExportRunnable;
@@ -60,13 +59,7 @@ public class ChromatogramFileSupport {
 			return false;
 		}
 		//
-		if(OperatingSystemUtils.isWindows()) {
-			WindowsFileDialog.ClearInitialDirectoryWorkaround();
-		}
-		FileDialog dialog = new FileDialog(DisplayUtils.getShell(), SWT.SAVE);
-		/*
-		 * Create the dialogue.
-		 */
+		FileDialog dialog = ExtendedFileDialog.create(DisplayUtils.getShell(), SWT.SAVE);
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
 		dialog.setFileName(chromatogram.getName());
 		dialog.setText("Save Chromatogram As");

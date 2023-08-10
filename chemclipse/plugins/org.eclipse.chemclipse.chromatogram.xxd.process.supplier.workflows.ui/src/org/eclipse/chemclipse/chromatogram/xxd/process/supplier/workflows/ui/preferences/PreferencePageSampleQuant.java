@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.Activator;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -38,6 +39,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageSampleQuant extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageSampleQuant() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Sample Quant Report");
@@ -66,7 +68,7 @@ public class PreferencePageSampleQuant extends FieldEditorPreferencePage impleme
 				 * Save a demo targets.txt
 				 */
 				Shell shell = Display.getCurrent().getActiveShell();
-				FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+				FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
 				fileDialog.setText("Demo targets.txt");
 				fileDialog.setFilterExtensions(new String[]{"*.txt"});
 				fileDialog.setFilterNames(new String[]{"Targets *.txt"});

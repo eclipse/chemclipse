@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -50,7 +51,7 @@ public class MethodFileSupport {
 			return false;
 		}
 		//
-		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
+		FileDialog dialog = ExtendedFileDialog.create(shell, SWT.SAVE);
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
 		dialog.setFileName(fileName);
 		dialog.setText(ExtensionMessages.saveProcessMethodAs + "...");

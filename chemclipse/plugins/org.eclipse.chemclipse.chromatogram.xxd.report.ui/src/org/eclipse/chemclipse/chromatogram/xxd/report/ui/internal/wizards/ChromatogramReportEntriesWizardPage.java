@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.model.ChromatogramReportSu
 import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -199,7 +200,7 @@ public class ChromatogramReportEntriesWizardPage extends WizardPage {
 						/*
 						 * Initialize the file dialog.
 						 */
-						FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+						FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
 						fileDialog.setText("Select a chromatogram report file:");
 						fileDialog.setFileName(fileName);
 						fileDialog.setFilterExtensions(filterExtensions);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.conver
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.converter.SampleQuantWriter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.ISampleQuantReport;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -68,7 +69,7 @@ public class EditorSampleQuant extends MultiPageEditorPart {
 	public void doSaveAs() {
 
 		Shell shell = Display.getCurrent().getActiveShell();
-		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+		FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
 		fileDialog.setText("Save the *.sqr report.");
 		fileDialog.setFilterExtensions(new String[]{"*.sqr", "*.csv", "*.pdf"});
 		fileDialog.setFilterNames(new String[]{"Sample Quant Report *.sqr", "CSV Report *.csv", "PDF Report *.pdf"});

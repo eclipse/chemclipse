@@ -22,10 +22,9 @@ import org.eclipse.chemclipse.model.targets.TargetValidator;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
-import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TargetTemplateInputValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -290,10 +289,7 @@ public class TargetTemplatesUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(targetTemplates != null) {
-					if(OperatingSystemUtils.isWindows()) {
-						WindowsFileDialog.ClearInitialDirectoryWorkaround();
-					}
-					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
+					FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 					fileDialog.setText(IMPORT_TITLE);
 					fileDialog.setFilterExtensions(new String[]{TargetTemplates.FILTER_EXTENSION});
 					fileDialog.setFilterNames(new String[]{TargetTemplates.FILTER_NAME});
@@ -325,10 +321,7 @@ public class TargetTemplatesUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(targetTemplates != null) {
-					if(OperatingSystemUtils.isWindows()) {
-						WindowsFileDialog.ClearInitialDirectoryWorkaround();
-					}
-					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+					FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
 					fileDialog.setText(EXPORT_TITLE);
 					fileDialog.setFilterExtensions(new String[]{TargetTemplates.FILTER_EXTENSION});

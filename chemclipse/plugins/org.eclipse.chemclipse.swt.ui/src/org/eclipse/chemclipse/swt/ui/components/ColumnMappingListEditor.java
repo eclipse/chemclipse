@@ -22,12 +22,11 @@ import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
-import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -279,11 +278,7 @@ public class ColumnMappingListEditor extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(OperatingSystemUtils.isWindows()) {
-					WindowsFileDialog.ClearInitialDirectoryWorkaround();
-				}
-				//
-				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
+				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText(IMPORT_TITLE);
 				fileDialog.setFilterExtensions(new String[]{SeparationColumnMapping.FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{SeparationColumnMapping.FILTER_NAME});
@@ -312,11 +307,7 @@ public class ColumnMappingListEditor extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(OperatingSystemUtils.isWindows()) {
-					WindowsFileDialog.ClearInitialDirectoryWorkaround();
-				}
-				//
-				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
 				fileDialog.setText(EXPORT_TITLE);
 				fileDialog.setFilterExtensions(new String[]{SeparationColumnMapping.FILTER_EXTENSION});

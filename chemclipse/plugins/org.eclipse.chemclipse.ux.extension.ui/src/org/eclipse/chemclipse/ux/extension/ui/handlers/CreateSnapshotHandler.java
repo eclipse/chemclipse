@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.ui.handlers;
 
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.swt.SWT;
@@ -47,7 +48,7 @@ public class CreateSnapshotHandler {
 				/*
 				 * Save the image to a file.
 				 */
-				FileDialog fileDialog = new FileDialog(DisplayUtils.getShell(), SWT.SAVE);
+				FileDialog fileDialog = ExtendedFileDialog.create(DisplayUtils.getShell(), SWT.SAVE);
 				fileDialog.setText("Save Clipboard To File");
 				fileDialog.setFileName("Clipboard.png");
 				fileDialog.setFilterExtensions(new String[]{"*.png"});

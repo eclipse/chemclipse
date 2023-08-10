@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,6 +16,7 @@ import java.io.File;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -83,7 +84,7 @@ public abstract class OLEEditor extends EditorPart {
 
 		if(isOleEditorActive()) {
 			Shell shell = Display.getCurrent().getActiveShell();
-			FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+			FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
 			fileDialog.setFilterExtensions(new String[]{filterExtension});
 			fileDialog.setFilterNames(new String[]{filterName});
 			String filePath;

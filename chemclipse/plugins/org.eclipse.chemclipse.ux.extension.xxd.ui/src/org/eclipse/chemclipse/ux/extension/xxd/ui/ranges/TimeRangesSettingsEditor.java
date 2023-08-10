@@ -24,8 +24,7 @@ import org.eclipse.chemclipse.model.ranges.TimeRanges;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -322,10 +321,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(OperatingSystemUtils.isWindows()) {
-					WindowsFileDialog.ClearInitialDirectoryWorkaround();
-				}
-				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
+				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText(timeRangeLabels.getTitle());
 				fileDialog.setFilterExtensions(new String[]{TimeRanges.FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{TimeRanges.FILTER_NAME});
@@ -354,10 +350,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(OperatingSystemUtils.isWindows()) {
-					WindowsFileDialog.ClearInitialDirectoryWorkaround();
-				}
-				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
 				fileDialog.setText(timeRangeLabels.getTitle());
 				fileDialog.setFilterExtensions(new String[]{TimeRanges.FILTER_EXTENSION});

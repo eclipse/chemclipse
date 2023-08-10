@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.util.FileSettingUtil;
 import org.eclipse.swt.SWT;
@@ -58,7 +59,7 @@ public class FileTableEditor extends TableViewerFieldEditor<File> {
 	protected List<File> getNewInputObject() {
 
 		List<File> files = new ArrayList<>();
-		FileDialog dialog = new FileDialog(getShell(), SWT.OPEN | SWT.MULTI);
+		FileDialog dialog = ExtendedFileDialog.create(getShell(), SWT.OPEN | SWT.MULTI);
 		dialog.setText(SupportMessages.selectFile);
 		if(filterExtensions != null) {
 			dialog.setFilterExtensions(filterExtensions);

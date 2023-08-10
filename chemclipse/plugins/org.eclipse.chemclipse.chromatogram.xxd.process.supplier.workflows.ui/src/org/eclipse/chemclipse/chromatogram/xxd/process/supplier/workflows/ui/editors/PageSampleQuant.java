@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -255,7 +256,7 @@ public class PageSampleQuant {
 				 * Save a demo targets.txt
 				 */
 				Shell shell = Display.getCurrent().getActiveShell();
-				FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+				FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
 				fileDialog.setText("Export targets.txt");
 				fileDialog.setFilterExtensions(new String[]{"*.txt"});
 				fileDialog.setFilterNames(new String[]{"Targets *.txt"});

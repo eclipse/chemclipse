@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.chemclipse.xxd.process.ui.menu.IMenuIcon;
@@ -174,7 +175,7 @@ public class ChartPCR extends LineChart {
 					if(plate == null) {
 						return;
 					}
-					FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+					FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
 					fileDialog.setText("PCR Export");
 					fileDialog.setFileName(plate.getName() + "." + supplier.getFileExtension());
 					fileDialog.setFilterExtensions(new String[]{"*" + supplier.getFileExtension()});

@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.support.ui.preferences.editors;
 
 import java.util.Arrays;
 
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -57,7 +58,7 @@ public class FileListEditor extends ListEditor {
 	protected String getNewInputObject() {
 
 		List list = getList();
-		FileDialog dialog = new FileDialog(getShell(), SWT.OPEN);
+		FileDialog dialog = ExtendedFileDialog.create(getShell(), SWT.OPEN);
 		dialog.setText(SupportMessages.selectFile);
 		if(filterExtensions != null && filterNames != null) {
 			dialog.setFilterExtensions(filterExtensions);

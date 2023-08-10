@@ -32,8 +32,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.DatabaseImportRunnable;
@@ -339,11 +338,8 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					if(OperatingSystemUtils.isWindows()) {
-						WindowsFileDialog.ClearInitialDirectoryWorkaround();
-					}
 					DatabaseConverterSupport databaseConverterSupport = DatabaseConverter.getDatabaseConverterSupport();
-					FileDialog fileDialog = new FileDialog(e.display.getActiveShell(), SWT.READ_ONLY);
+					FileDialog fileDialog = ExtendedFileDialog.create(e.display.getActiveShell(), SWT.READ_ONLY);
 					fileDialog.setText("Select a library to import");
 					fileDialog.setFilterExtensions(databaseConverterSupport.getFilterExtensions());
 					fileDialog.setFilterNames(databaseConverterSupport.getFilterNames());
@@ -393,10 +389,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(OperatingSystemUtils.isWindows()) {
-					WindowsFileDialog.ClearInitialDirectoryWorkaround();
-				}
-				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
+				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText("Target List");
 				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{FILTER_NAME});
@@ -425,10 +418,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(OperatingSystemUtils.isWindows()) {
-					WindowsFileDialog.ClearInitialDirectoryWorkaround();
-				}
-				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
 				fileDialog.setText("Target List");
 				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});

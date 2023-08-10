@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -124,7 +125,7 @@ public class TimeRangesEditor extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(timeRanges != null) {
-					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
+					FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 					fileDialog.setText(TimeRanges.DESCRIPTION);
 					fileDialog.setFilterExtensions(new String[]{TimeRanges.FILTER_EXTENSION});
 					fileDialog.setFilterNames(new String[]{TimeRanges.FILTER_NAME});
@@ -155,7 +156,7 @@ public class TimeRangesEditor extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(timeRanges != null) {
-					FileDialog fileDialog = new FileDialog(e.display.getActiveShell(), SWT.READ_ONLY);
+					FileDialog fileDialog = ExtendedFileDialog.create(e.display.getActiveShell(), SWT.READ_ONLY);
 					fileDialog.setText("Chromatogram (*.ocb)");
 					fileDialog.setFilterExtensions(new String[]{"*.ocb"});
 					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER));
@@ -188,7 +189,7 @@ public class TimeRangesEditor extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(timeRanges != null) {
-					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+					FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
 					fileDialog.setText(TimeRanges.DESCRIPTION);
 					fileDialog.setFilterExtensions(new String[]{TimeRanges.FILTER_EXTENSION});

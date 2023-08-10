@@ -12,8 +12,7 @@ import java.io.File;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.swt.SWT;
@@ -136,10 +135,7 @@ public class PageReportDataSelection extends AbstractExtendedWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				Shell shell = Display.getCurrent().getActiveShell();
-				if(OperatingSystemUtils.isWindows()) {
-					WindowsFileDialog.ClearInitialDirectoryWorkaround();
-				}
-				FileDialog fileDialog = new FileDialog(shell, SWT.READ_ONLY);
+				FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.READ_ONLY);
 				fileDialog.setText("Select the peaks area percent report.");
 				fileDialog.setFilterExtensions(new String[]{"*.txt"});
 				fileDialog.setFilterNames(new String[]{"rteres.txt"});
@@ -181,10 +177,7 @@ public class PageReportDataSelection extends AbstractExtendedWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				Shell shell = Display.getCurrent().getActiveShell();
-				if(OperatingSystemUtils.isWindows()) {
-					WindowsFileDialog.ClearInitialDirectoryWorkaround();
-				}
-				FileDialog fileDialog = new FileDialog(shell, SWT.READ_ONLY);
+				FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.READ_ONLY);
 				fileDialog.setText("Selec the quantitation report.");
 				fileDialog.setFilterExtensions(new String[]{"*.txt"});
 				fileDialog.setFilterNames(new String[]{"SumRpt.txt"});
@@ -226,10 +219,7 @@ public class PageReportDataSelection extends AbstractExtendedWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				Shell shell = Display.getCurrent().getActiveShell();
-				if(OperatingSystemUtils.isWindows()) {
-					WindowsFileDialog.ClearInitialDirectoryWorkaround();
-				}
-				FileDialog fileDialog = new FileDialog(shell, SWT.READ_ONLY);
+				FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.READ_ONLY);
 				fileDialog.setText("Selec the additional report data.");
 				fileDialog.setFilterExtensions(new String[]{"*.txt"});
 				fileDialog.setFilterNames(new String[]{"targets.txt"});

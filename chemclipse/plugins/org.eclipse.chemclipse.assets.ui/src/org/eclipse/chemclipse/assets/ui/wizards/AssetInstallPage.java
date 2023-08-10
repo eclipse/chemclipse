@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.ApplicationSettings;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.swt.columns.SimpleColumnDefinition;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
@@ -166,7 +167,7 @@ public class AssetInstallPage extends WizardPage {
 			@Override
 			public void run() {
 
-				FileDialog fileDialog = new FileDialog(getShell());
+				FileDialog fileDialog = ExtendedFileDialog.create(getShell(), SWT.READ_ONLY);
 				fileDialog.setText("Select an Asset");
 				/*
 				 * Display available options.
@@ -212,7 +213,7 @@ public class AssetInstallPage extends WizardPage {
 			@Override
 			public void run() {
 
-				FileDialog fileDialog = new FileDialog(getShell());
+				FileDialog fileDialog = ExtendedFileDialog.create(getShell(), SWT.READ_ONLY);
 				fileDialog.setText("Select Zipped Assets");
 				/*
 				 * Display available options.

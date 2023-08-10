@@ -36,12 +36,11 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.UserManagement;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
-import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -391,10 +390,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 	private File createNewMethod(Shell shell, boolean openEditor) {
 
-		if(OperatingSystemUtils.isWindows()) {
-			WindowsFileDialog.ClearInitialDirectoryWorkaround();
-		}
-		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+		FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
 		fileDialog.setOverwrite(true);
 		fileDialog.setText(ExtensionMessages.processMethod);
 		fileDialog.setFileName(MethodConverter.FILE_NAME);

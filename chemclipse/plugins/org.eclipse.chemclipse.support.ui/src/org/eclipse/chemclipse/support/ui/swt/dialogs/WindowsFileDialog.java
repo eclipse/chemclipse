@@ -16,13 +16,13 @@ import org.eclipse.swt.internal.ole.win32.IFileDialog;
 import org.eclipse.swt.internal.win32.OS;
 
 public class WindowsFileDialog {
-	/*
-	 * TODO: This is a workaround for Windows setting the default directory on its own.
-	 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=577190
-	 */
 
-	public static void ClearInitialDirectoryWorkaround() {
+	public static void clearInitialDirectoryWorkaround() {
 
+		/*
+		 * TODO: This is a workaround for Windows setting the default directory on its own.
+		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=577190
+		 */
 		long[] addresses = new long[1];
 		if(COM.CoCreateInstance(COM.CLSID_FileOpenDialog, 0, COM.CLSCTX_INPROC_SERVER, COM.IID_IFileOpenDialog, addresses) == OS.S_OK) {
 			IFileDialog fileDialog = new IFileDialog(addresses[0]);

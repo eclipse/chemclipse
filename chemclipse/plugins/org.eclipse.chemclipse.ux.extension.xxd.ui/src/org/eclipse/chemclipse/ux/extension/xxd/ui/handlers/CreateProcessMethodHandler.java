@@ -20,8 +20,7 @@ import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategoryGroup;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
@@ -46,10 +45,7 @@ public class CreateProcessMethodHandler {
 
 		DataCategoryGroup dataCategoryGroup = DataTypeTypeSelectionWizard.open(shell, ExtensionMessages.chooseDesiredCategoriesToCreateNewMethod, Activator.getDefault().getPreferenceStore());
 		if(dataCategoryGroup != null) {
-			if(OperatingSystemUtils.isWindows()) {
-				WindowsFileDialog.ClearInitialDirectoryWorkaround();
-			}
-			FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+			FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
 			fileDialog.setOverwrite(true);
 			fileDialog.setText(PROCESS_METHOD);
 			fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
