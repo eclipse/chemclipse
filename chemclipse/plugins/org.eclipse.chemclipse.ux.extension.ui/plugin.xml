@@ -234,10 +234,6 @@
             Section="Help">
       </WelcomeTile>
       <WelcomeTile
-            Description="Have a look at the Eclipse Science working group."
-            Section="Eclipse Science">
-      </WelcomeTile>
-      <WelcomeTile
             Description="If your data can&apos;t be loaded, please contact us."
             Section="Data Formats">
       </WelcomeTile>
