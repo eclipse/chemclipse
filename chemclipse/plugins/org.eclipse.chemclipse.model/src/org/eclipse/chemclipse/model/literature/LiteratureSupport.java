@@ -110,7 +110,8 @@ public class LiteratureSupport {
 	}
 	//
 	private static final Pattern PATTERN_TITLE = Pattern.compile("(TI\\s+-\\s+|T1\\s+-\\s+|Title: )(.*?)(\n|[A-Z][A-Z]|$)");
-	private static final Pattern PATTERN_DOI = Pattern.compile("(https://doi.org/)(.*?)(\\s+)");
+	private static final Pattern PATTERN_DOI_ORG = Pattern.compile("(http)(s?)(://doi.org/)(.*?)(\\s+)");
+	private static final Pattern PATTERN_DOI_DX = Pattern.compile("(http)(s?)(://dx.doi.org/)(.*?)(\\s+)");
 	private static final String PATTERN_KEY_RIS = "([A-Z])([A-Z]|[0-9])(  -)";
 
 	/**
@@ -192,18 +193,28 @@ public class LiteratureSupport {
 		return title;
 	}
 
+	public static String getContainedDOI(String content) {
+
+		String doi = getContainedDOI(content, LiteratureSupport.PATTERN_DOI_ORG);
+		if(doi.isEmpty()) {
+			doi = getContainedDOI(content, LiteratureSupport.PATTERN_DOI_DX);
+		}
+		//
+		return doi;
+	}
+
 	/**
 	 * This method tries to extract the URL of the first matched
 	 * DOI (digital object identifier) according to the specification
 	 * of the DOI Foundation:
 	 * https://www.doi.org
 	 */
-	public static String getContainedDOI(String content) {
+	private static String getContainedDOI(String content, Pattern pattern) {
 
 		String url = "";
 		if(content != null) {
 			if(!content.isEmpty()) {
-				Matcher matcher = PATTERN_DOI.matcher(content);
+				Matcher matcher = pattern.matcher(content);
 				if(matcher.find()) {
 					url = matcher.group().trim();
 				}
