@@ -9,6 +9,7 @@ Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.support.comparator,
+ org.eclipse.chemclipse.support.editor,
  org.eclipse.chemclipse.support.events,
  org.eclipse.chemclipse.support.files,
  org.eclipse.chemclipse.support.history,

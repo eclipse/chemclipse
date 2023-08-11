@@ -11,16 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.editor.SystemEditor;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -218,11 +217,9 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 							PreferenceSupplier.setPathExportFile(fileDialog.getFilterPath());
 							File file = new File(path);
 							FeatureDataMatrixIO.write(file, featureDataMatrix);
-							Desktop.getDesktop().open(file);
+							SystemEditor.open(file);
 						} catch(FileNotFoundException e1) {
 							MessageDialog.openWarning(e.display.getActiveShell(), "Export", "The feature data matrix file couldn't be found.");
-						} catch(IOException e1) {
-							logger.warn(e1);
 						}
 					}
 				}
