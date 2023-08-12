@@ -29,7 +29,9 @@ Export-Package: org.eclipse.chemclipse.csd.converter.supplier.chemclipse.convert
  org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter,
  org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io,
  org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter,
+ org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io,
  org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences,
+ org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.settings,
  org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions,
  org.eclipse.chemclipse.xxd.converter.supplier.io.exception
 Import-Package: org.osgi.service.component.annotations;version="1.2.0"

@@ -57,6 +57,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_QUANTITATION_DB_VERSION_SAVE = IFormat.QUANTDB_VERSION_LATEST;
 	public static final String P_QUANTITATION_DB_COMPRESSION_LEVEL = "quantitationDatabaseCompressionLevel";
 	public static final int DEF_QUANTITATION_DB_COMPRESSION_LEVEL = IFormat.QUANTDB_COMPRESSION_LEVEL;
+	/*
+	 * General
+	 */
+	public static final String P_LIST_PATH_IMPORT = "listPathImport";
+	public static final String DEF_LIST_PATH_IMPORT = "";
+	public static final String P_LIST_PATH_EXPORT = "listPathExport";
+	public static final String DEF_LIST_PATH_EXPORT = "";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -97,6 +104,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		//
 		defaultValues.put(P_QUANTITATION_DB_VERSION_SAVE, DEF_QUANTITATION_DB_VERSION_SAVE);
 		defaultValues.put(P_QUANTITATION_DB_COMPRESSION_LEVEL, Integer.toString(DEF_QUANTITATION_DB_COMPRESSION_LEVEL));
+		//
+		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 		//
 		return defaultValues;
 	}
@@ -155,5 +165,25 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static boolean isForceLoadAlternateDetector() {
 
 		return INSTANCE().getBoolean(P_FORCE_LOAD_ALTERNATE_DETECTOR, DEF_FORCE_LOAD_ALTERNATE_DETECTOR);
+	}
+
+	public static String getListPathImport() {
+
+		return INSTANCE().get(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+	}
+
+	public static void setListPathImport(String filterPath) {
+
+		INSTANCE().put(P_LIST_PATH_IMPORT, filterPath);
+	}
+
+	public static String getListPathExport() {
+
+		return INSTANCE().get(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
+	}
+
+	public static void setListPathExport(String filterPath) {
+
+		INSTANCE().put(P_LIST_PATH_EXPORT, filterPath);
 	}
 }

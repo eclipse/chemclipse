@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -38,10 +38,9 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 		/*
 		 * Don't process if errors have occurred.
 		 */
-		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramCSD) {
-			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-			IChromatogramCSDWriter writer = new ChromatogramWriterCSD();
+		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 			try {
+				IChromatogramCSDWriter writer = new ChromatogramWriterCSD();
 				writer.writeChromatogram(file, chromatogramCSD, monitor);
 			} catch(Exception e) {
 				logger.warn(e);

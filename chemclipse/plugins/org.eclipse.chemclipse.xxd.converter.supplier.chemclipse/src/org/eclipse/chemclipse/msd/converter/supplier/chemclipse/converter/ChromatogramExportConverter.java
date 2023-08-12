@@ -39,8 +39,8 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 		 * Don't process if errors have occurred.
 		 */
 		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramMSD chromatogramMSD) {
-			IChromatogramMSDWriter writer = new ChromatogramWriterMSD();
 			try {
+				IChromatogramMSDWriter writer = new ChromatogramWriterMSD();
 				writer.writeChromatogram(file, chromatogramMSD, monitor);
 			} catch(Exception e) {
 				logger.warn(e);
