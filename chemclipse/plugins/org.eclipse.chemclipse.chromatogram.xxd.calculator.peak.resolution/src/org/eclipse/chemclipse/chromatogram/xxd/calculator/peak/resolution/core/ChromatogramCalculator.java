@@ -14,12 +14,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.peak.resolution.core;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.AbstractChromatogramCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.peak.resolution.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.peak.resolution.result.IPeakResolutionResult;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.peak.resolution.result.PeakResolutionResult;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.IChromatogramCalculatorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.ResultStatus;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.implementation.MeasurementResult;

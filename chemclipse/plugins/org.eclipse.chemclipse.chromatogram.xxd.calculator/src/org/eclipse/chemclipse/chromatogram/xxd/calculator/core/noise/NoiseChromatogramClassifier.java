@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  * Matthias Mailänder - remove noise enums
+ * Philip Wenig - refactoring classifier
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise;
 
@@ -16,12 +17,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.core.AbstractChromatogramClassifier;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.AbstractChromatogramClassifierResult;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramClassifierResult;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.NoiseChromatogramClassifierSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.core.AbstractChromatogramClassifier;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.AbstractChromatogramClassifierResult;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.IChromatogramClassifierResult;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.ResultStatus;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.results.ChromatogramSegmentation;

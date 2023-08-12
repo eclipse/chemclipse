@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.peak.resolution.resul
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.AbstractChromatogramClassifierResult;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.AbstractChromatogramClassifierResult;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.ResultStatus;
 import org.eclipse.chemclipse.model.core.IPeakResolution;
 
 public class PeakResolutionResult extends AbstractChromatogramClassifierResult implements IPeakResolutionResult {

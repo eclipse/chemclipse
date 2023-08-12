@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,15 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.AbstractChromatogramClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.WncIons;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.settings.AbstractChromatogramClassifierSettings;
 
 public class ClassifierSettings extends AbstractChromatogramClassifierSettings {
 
 	private IWncIons wncIons;
 
 	public ClassifierSettings() {
+
 		wncIons = new WncIons();
 	}
 

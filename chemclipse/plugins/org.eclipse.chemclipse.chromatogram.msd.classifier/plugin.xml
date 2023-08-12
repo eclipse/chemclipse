@@ -2,5 +2,5 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.eclipse.chemclipse.chromatogram.msd.classifier.chromatogramClassifierSupplier" name="Chromatogram Classifier" schema="schema/org.eclipse.chemclipse.chromatogram.msd.classifier.chromatogramClassifierSupplier.exsd"/>
-
+   <extension-point id="org.eclipse.chemclipse.chromatogram.xxd.classifier.chromatogramClassifierSupplier" name="Chromatogram Classifier" schema="schema/org.eclipse.chemclipse.chromatogram.xxd.classifier.chromatogramClassifierSupplier.exsd"/>
 </plugin>

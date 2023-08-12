@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.core;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.core.AbstractChromatogramClassifier;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramClassifierResult;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.core.AbstractChromatogramClassifier;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.IChromatogramClassifierResult;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.ResultStatus;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.processor.DurbinWatsonProcessor;
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.DurbinWatsonClassifierResult;

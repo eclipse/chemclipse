@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring classifier
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt;
 
@@ -176,6 +177,7 @@ public class ControlBuilder {
 		layout.marginTop = 0;
 		layout.marginRight = 0;
 		composite.setLayout(layout);
+		//
 		return fill(composite);
 	}
 
@@ -188,6 +190,7 @@ public class ControlBuilder {
 			gridLayout.marginTop = margins;
 			gridLayout.marginRight = margins;
 		}
+		//
 		return control;
 	}
 
@@ -249,6 +252,7 @@ public class ControlBuilder {
 			data.horizontalAlignment = SWT.FILL;
 			data.grabExcessHorizontalSpace = true;
 		}
+		//
 		return control;
 	}
 
@@ -265,6 +269,7 @@ public class ControlBuilder {
 		gridData.verticalAlignment = SWT.FILL;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
+		//
 		return control;
 	}
 
@@ -282,6 +287,7 @@ public class ControlBuilder {
 		GridLayout layout = new GridLayout(2, false);
 		layout.horizontalSpacing = 10;
 		composite.setLayout(layout);
+		//
 		return fill(composite);
 	}
 
@@ -290,6 +296,7 @@ public class ControlBuilder {
 		ContentProposalAdapter adapter = new ContentProposalAdapter(text, new TextContentAdapter(), proposalProvider, null, null);
 		adapter.setPropagateKeys(true);
 		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+		//
 		return adapter;
 	}
 
@@ -298,6 +305,7 @@ public class ControlBuilder {
 		ContentProposalAdapter adapter = new ContentProposalAdapter(combo, new ComboContentAdapter(), proposalProvider, null, null);
 		adapter.setPropagateKeys(true);
 		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+		//
 		return adapter;
 	}
 
@@ -440,26 +448,31 @@ public class ControlBuilder {
 
 		final TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, definition.getStyle());
 		final TableColumn tableColumn = tableViewerColumn.getColumn();
+		//
 		tableColumn.setText(definition.getTitle());
 		int width = definition.getWidth();
 		boolean resizable = definition.isResizable();
 		tableColumn.setWidth(width);
 		tableColumn.setResizable(resizable);
 		tableColumn.setMoveable(false);
+		//
 		CellLabelProvider labelProvider = definition.getLabelProvider();
 		if(labelProvider != null) {
 			tableViewerColumn.setLabelProvider(labelProvider);
 		}
+		//
 		if(editEnabled) {
 			EditingSupport editingSupport = definition.getEditingSupport(viewer);
 			if(editingSupport != null) {
 				tableViewerColumn.setEditingSupport(editingSupport);
 			}
 		}
+		//
 		Layout layout = viewer.getControl().getParent().getLayout();
 		if(layout instanceof TableColumnLayout tableColumnLayout) {
 			tableColumnLayout.setColumnData(tableColumn, new ColumnWeightData(definition.getWidth(), definition.getMinWidth(), resizable));
 		}
+		//
 		return tableViewerColumn;
 	}
 }

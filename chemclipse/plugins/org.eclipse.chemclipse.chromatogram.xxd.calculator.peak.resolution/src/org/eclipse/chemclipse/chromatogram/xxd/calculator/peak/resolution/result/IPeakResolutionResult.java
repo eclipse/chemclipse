@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.peak.resolution.resul
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramClassifierResult;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.IChromatogramClassifierResult;
 import org.eclipse.chemclipse.model.core.IPeakResolution;
 
 public interface IPeakResolutionResult extends IChromatogramClassifierResult {

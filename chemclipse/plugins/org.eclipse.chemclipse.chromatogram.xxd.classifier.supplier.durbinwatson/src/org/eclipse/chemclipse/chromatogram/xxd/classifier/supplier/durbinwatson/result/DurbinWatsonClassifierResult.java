@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.AbstractChromatogramClassifierResult;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.AbstractChromatogramClassifierResult;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.ResultStatus;
 
 public class DurbinWatsonClassifierResult extends AbstractChromatogramClassifierResult implements IDurbinWatsonClassifierResult {
 

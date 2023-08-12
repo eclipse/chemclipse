@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,10 +15,10 @@ package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.classifier.core.AbstractChromatogramClassifier;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramClassifierResult;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.core.AbstractChromatogramClassifier;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.IChromatogramClassifierResult;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.result.ResultStatus;
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;

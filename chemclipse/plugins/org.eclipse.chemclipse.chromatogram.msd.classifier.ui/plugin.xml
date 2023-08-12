@@ -5,7 +5,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
       		category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"      
-            class="org.eclipse.chemclipse.chromatogram.msd.classifier.ui.preferences.PreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.classifier.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.chromatogram.msd.classifier.ui.preferences.classifierPreferencePage"
             name="Classifier">
       </page>

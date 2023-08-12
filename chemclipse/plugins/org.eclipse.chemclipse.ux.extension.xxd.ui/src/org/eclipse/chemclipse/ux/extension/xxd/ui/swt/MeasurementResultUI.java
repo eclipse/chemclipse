@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,6 +27,7 @@ public class MeasurementResultUI extends ExtendedTableViewer {
 	private ProxySelectionChangedListener selectionChangedListener;
 	private ProxyTableLabelProvider labelProvider;
 	private ProxyStructuredContentProvider contentProvider;
+	//
 	private IMeasurementResult<?> lastResult;
 
 	public MeasurementResultUI(Composite parent, int style) {
@@ -44,18 +45,28 @@ public class MeasurementResultUI extends ExtendedTableViewer {
 	public void update(IMeasurementResult<?> measurementResult) {
 
 		if(lastResult != measurementResult) {
+			/*
+			 * Content/Change Listener
+			 */
 			contentProvider.setProxy(adaptTo(measurementResult, IStructuredContentProvider.class));
 			selectionChangedListener.setProxy(adaptTo(measurementResult, ISelectionChangedListener.class));
 			clearColumns();
+			/*
+			 * Columns
+			 */
 			ColumnDefinitionProvider columnDefinitionProvider = adaptTo(measurementResult, ColumnDefinitionProvider.class);
 			if(columnDefinitionProvider != null) {
 				addColumns(columnDefinitionProvider);
 			}
+			/*
+			 * Labels
+			 */
 			ITableLabelProvider tableLabelProvider = adaptTo(measurementResult, ITableLabelProvider.class);
 			labelProvider.setProxy(tableLabelProvider);
 			if(tableLabelProvider != null) {
 				setLabelProvider(tableLabelProvider);
 			}
+			//
 			setInput(measurementResult);
 		}
 		lastResult = measurementResult;

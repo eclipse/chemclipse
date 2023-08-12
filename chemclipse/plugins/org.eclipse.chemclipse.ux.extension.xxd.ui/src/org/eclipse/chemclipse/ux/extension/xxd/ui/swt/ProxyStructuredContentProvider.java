@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -17,9 +18,6 @@ import org.eclipse.jface.viewers.Viewer;
 
 /**
  * A {@link IStructuredContentProvider} that uses the <a href="https://www.eclipse.org/articles/article.php?file=Article-Adapters/index.html">Adapter-Pattern</a>
- * 
- * @author Christoph Läubrich
- *
  */
 public class ProxyStructuredContentProvider implements ITreeContentProvider {
 
