@@ -35,6 +35,7 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IProcessTypeSupplier.class})
@@ -81,23 +82,42 @@ public class CalibrationFileExportProcessSupplier implements IProcessTypeSupplie
 								@Override
 								public void run() {
 
+									IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+									String fileName = chromatogram.getName().isEmpty() ? CalibrationFile.FILE_NAME : chromatogram.getName() + CalibrationFile.FILE_EXTENSION;
+									/*
+									 * Sometimes the shell is null.
+									 */
+									boolean disposeShell = false;
+									Shell shell = display.getActiveShell();
+									if(shell == null) {
+										shell = new Shell(display);
+										disposeShell = true;
+									}
+									//
 									FileDialog fileDialog = ExtendedFileDialog.create(display.getActiveShell(), SWT.SAVE);
 									fileDialog.setOverwrite(true);
 									fileDialog.setText(CalibrationFile.DESCRIPTION);
 									fileDialog.setFilterExtensions(new String[]{CalibrationFile.FILTER_EXTENSION});
 									fileDialog.setFilterNames(new String[]{CalibrationFile.FILTER_NAME});
-									fileDialog.setFileName(CalibrationFile.FILE_NAME);
+									fileDialog.setFileName(fileName);
 									fileDialog.setFilterPath(PreferenceSupplier.getListPathExport());
 									String path = fileDialog.open();
 									if(path != null) {
 										try {
 											PreferenceSupplier.setListPathExport(fileDialog.getFilterPath());
 											File file = new File(path);
-											IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 											ChromatogramWriter writer = new ChromatogramWriter();
 											writer.writeChromatogram(file, chromatogram, processSettings, context.getProgressMonitor());
 										} catch(Exception e) {
 											logger.warn(e);
+										}
+									}
+									/*
+									 * Dispose the shell on demand.
+									 */
+									if(disposeShell) {
+										if(!shell.isDisposed()) {
+											shell.dispose();
 										}
 									}
 								}
