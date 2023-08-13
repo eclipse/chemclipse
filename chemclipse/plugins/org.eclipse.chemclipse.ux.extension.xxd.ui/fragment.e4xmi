@@ -221,4 +221,7 @@
     <elements xsi:type="menu:HandledToolItem" xmi:id="_L8rzADOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledtoolitem.undo" label="%Undo" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/undo_edit.png" command="_9e0bQDOWEeuREPdzMrDpOQ"/>
     <elements xsi:type="menu:HandledToolItem" xmi:id="_MROfoDOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledtoolitem.redo" label="%Redo" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/redo_edit.png" command="_9wG_kDOWEeuREPdzMrDpOQ"/>
   </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_hfr2EDmzEe6JZff1ZvLO9g" featurename="descriptors" parentElementId="xpath:/">
+    <elements xsi:type="basic_1:PartDescriptor" xmi:id="_i-v1EDmzEe6JZff1ZvLO9g" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.regularExpressionPart" label="Regular Expression (Tester)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/interpolate.png" tooltip="This part offers a smart way to test regular expressions." closeable="true" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.RegularExpressionPart"/>
+  </fragments>
 </fragment:ModelFragments>
