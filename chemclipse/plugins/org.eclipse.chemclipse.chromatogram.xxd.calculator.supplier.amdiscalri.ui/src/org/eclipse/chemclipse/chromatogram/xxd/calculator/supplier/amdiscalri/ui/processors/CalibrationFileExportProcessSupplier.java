@@ -77,7 +77,7 @@ public class CalibrationFileExportProcessSupplier implements IProcessTypeSupplie
 
 						Display display = Display.getDefault();
 						if(display != null) {
-							display.asyncExec(new Runnable() {
+							display.syncExec(new Runnable() {
 
 								@Override
 								public void run() {

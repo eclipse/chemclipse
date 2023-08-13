@@ -85,7 +85,7 @@ public class ChromatogramFileExportProcessSupplier implements IProcessTypeSuppli
 
 						Display display = Display.getDefault();
 						if(display != null) {
-							display.asyncExec(new Runnable() {
+							display.syncExec(new Runnable() {
 
 								@Override
 								public void run() {
