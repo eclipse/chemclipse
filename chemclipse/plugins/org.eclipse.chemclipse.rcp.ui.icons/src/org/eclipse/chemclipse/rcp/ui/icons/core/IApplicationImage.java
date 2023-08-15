@@ -163,6 +163,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_WORD_DOCUMENT = "word_document.gif";
 	String IMAGE_EXCEL_DOCUMENT = "excel_document.gif";
 	String IMAGE_BITMAP_DOCUMENT = "bitmap_document.png";
+	String IMAGE_VECTOR_DOCUMENT = "vector_document.png";
 	String IMAGE_BACKWARD = "backward.gif";
 	String IMAGE_FAST_BACKWARD = "fastbackward.gif";
 	String IMAGE_FORWARD = "forward.gif";
