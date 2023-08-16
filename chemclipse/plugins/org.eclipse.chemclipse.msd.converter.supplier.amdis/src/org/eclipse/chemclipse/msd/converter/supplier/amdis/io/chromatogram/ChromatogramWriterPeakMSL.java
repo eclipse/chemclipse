@@ -7,29 +7,28 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io.chromatogram;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDWriter;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPPeakExportConverter;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLPeakExportConverter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramWriterMSP extends AbstractChromatogramMSDWriter {
+public class ChromatogramWriterPeakMSL extends AbstractChromatogramMSDWriter {
 
 	@Override
-	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		if(chromatogram == null || file == null) {
 			throw new IOException("The chromatogram and the file must be not null.");
@@ -45,7 +44,7 @@ public class ChromatogramWriterMSP extends AbstractChromatogramMSDWriter {
 		/*
 		 * Export the peaks
 		 */
-		MSPPeakExportConverter peakExportConverter = new MSPPeakExportConverter();
+		MSLPeakExportConverter peakExportConverter = new MSLPeakExportConverter();
 		peakExportConverter.convert(file, peaks, false, monitor);
 	}
 }

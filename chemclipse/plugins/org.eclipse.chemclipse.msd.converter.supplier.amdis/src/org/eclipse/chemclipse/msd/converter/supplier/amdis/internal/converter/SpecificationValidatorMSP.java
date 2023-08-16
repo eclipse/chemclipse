@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter;
 
@@ -19,6 +19,7 @@ public class SpecificationValidatorMSP {
 	 * Use only static methods.
 	 */
 	private SpecificationValidatorMSP() {
+
 	}
 
 	/**
@@ -50,6 +51,7 @@ public class SpecificationValidatorMSP {
 				validFile = file;
 			}
 		}
+		//
 		return validFile;
 	}
 }

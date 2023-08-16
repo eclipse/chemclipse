@@ -20,16 +20,16 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSL;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.chromatogram.ChromatogramWriterPeakMSL;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.chromatogram.ChromatogramWriterScanMSL;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramPeakExportConverter extends AbstractChromatogramExportConverter implements IChromatogramExportConverter {
+public class ChromatogramScanExportConverter extends AbstractChromatogramExportConverter implements IChromatogramExportConverter {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramPeakExportConverter.class);
+	private static final Logger logger = Logger.getLogger(ChromatogramScanExportConverter.class);
 	//
-	public static final String DESCRIPTION = "NIST Chromatogram Peaks";
+	public static final String DESCRIPTION = "NIST Chromatogram Scans";
 	public static final String FILE_EXTENSION = ".msl";
 	public static final String FILE_NAME = DESCRIPTION.replaceAll("\\s", "") + FILE_EXTENSION;
 	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
@@ -42,7 +42,7 @@ public class ChromatogramPeakExportConverter extends AbstractChromatogramExportC
 		IProcessingInfo<File> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 			try {
-				IChromatogramMSDWriter writer = new ChromatogramWriterPeakMSL();
+				IChromatogramMSDWriter writer = new ChromatogramWriterScanMSL();
 				writer.writeChromatogram(file, chromatogramMSD, monitor);
 				processingInfo.setProcessingResult(file);
 			} catch(Exception e) {

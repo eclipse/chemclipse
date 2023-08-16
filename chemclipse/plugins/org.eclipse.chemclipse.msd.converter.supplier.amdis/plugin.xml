@@ -73,27 +73,45 @@
    <extension
          point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
       <ChromatogramSupplier
-            description="Exports Chromatogram Peaks in MSP format"
-            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.ChromatogramPeakExportConverter"
+            filterName="NIST Chromatogram Peaks (*.msp)"
+            description="Exports the chromatogram peaks in (*.msp) format."
             fileExtension=".msp"
-            filterName="Chromatogram Peak NIST Text (*.msp)"
             id="org.eclipse.chemclipse.msd.converter.supplier.amdis.chromatogram.peak.msp"
-            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.ChromatogramPeakImportConverter"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.ChromatogramPeakExportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>
       <ChromatogramSupplier
-            description="Exports Chromatogram Peaks in MSL format"
-            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.ChromatogramPeakExportConverter"
+            filterName="NIST Chromatogram Scans (*.msp)"
+            description="Exports the chromatogram scans in (*.msp) format."
+            fileExtension=".msp"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.chromatogram.scan.msp"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.ChromatogramScanExportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>      
+      <ChromatogramSupplier
+            filterName="NIST Chromatogram Peaks (*.msl)"      
+            description="Exports the chromatogram peaks in (*.msl) format."
             fileExtension=".msl"
-            filterName="Chromatogram Peaks AMDIS (*.msl)"
             id="org.eclipse.chemclipse.msd.converter.supplier.amdis.chromatogram.peak.msl"
-            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.ChromatogramPeakImportConverter"
+			exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.ChromatogramPeakExportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>
+      <ChromatogramSupplier
+            filterName="NIST Chromatogram Scans (*.msl)"      
+            description="Exports the chromatogram scans in (*.msl) format."
+            fileExtension=".msl"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.chromatogram.scan.msl"
+			exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.ChromatogramScanExportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>      
       <ChromatogramSupplier
             description="Exports Chromatogram as Combined Spectrum in MSL format"
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.ChromatogramExportConverter"
