@@ -128,7 +128,7 @@ public class ProcessorToolbarUI extends Composite {
 
 	private void createProcessorButtons(Composite parent) {
 
-		processors.addAll(preferencesProcessSupport.getStoredProcessors());
+		processors.addAll(preferencesProcessSupport.getActiveProcessors());
 		for(Processor processor : processors) {
 			if(processor != null && processor.isActive() && isActiveDataCategory(processor)) {
 				buttons.add(createButton(parent, processor, executionListener, processSupplierContext));

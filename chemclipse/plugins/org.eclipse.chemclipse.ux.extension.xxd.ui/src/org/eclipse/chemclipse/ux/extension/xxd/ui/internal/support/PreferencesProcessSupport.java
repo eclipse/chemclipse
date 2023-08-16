@@ -66,11 +66,11 @@ public class PreferencesProcessSupport {
 		return ProcessorSupport.getActiveProcessors(processors);
 	}
 
-	public List<Processor> getStoredProcessors() {
+	public List<Processor> getActiveProcessors() {
 
 		updateProcessSuppliers();
 		String settings = preferenceStore.getString(PreferenceConstants.P_QUICK_ACCESS_PROCESSORS + dataCategory.name());
-		return ProcessorSupport.getProcessors(processSuppliers, settings);
+		return ProcessorSupport.getActiveProcessors(processSuppliers, settings);
 	}
 
 	private void updateProcessSuppliers() {

@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.support.ui.processors;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -62,7 +61,10 @@ public class ProcessorToolbarSelectionUI extends Composite {
 		if(processors != null) {
 			this.processors.addAll(processors);
 		}
-		updateProcessorLists();
+		/*
+		 * Backward compatibility (sort by default)
+		 */
+		updateProcessorLists(true);
 	}
 
 	private void createControl() {
@@ -166,7 +168,15 @@ public class ProcessorToolbarSelectionUI extends Composite {
 				Object object = processSupplierListUI.getStructuredSelection().getFirstElement();
 				if(object instanceof Processor processor) {
 					processor.setActive(!processor.isActive());
-					updateProcessorLists();
+					if(processor.isActive()) {
+						processor.setIndex(Processor.INDEX_MAX);
+					} else {
+						processor.setIndex(Processor.INDEX_NONE);
+					}
+					/*
+					 * Update indices, elements have been added/removed.
+					 */
+					updateProcessorLists(true);
 				}
 			}
 		});
@@ -192,8 +202,11 @@ public class ProcessorToolbarSelectionUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				/*
+				 * Update indices, elements have been added/removed.
+				 */
 				modifySelectedProcessors(processorListAvailable, true);
-				updateProcessorLists();
+				updateProcessorLists(true);
 			}
 		});
 	}
@@ -208,8 +221,11 @@ public class ProcessorToolbarSelectionUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				/*
+				 * Update indices, elements have been added/removed.
+				 */
 				modifySelectedProcessors(processorListActive, false);
-				updateProcessorLists();
+				updateProcessorLists(true);
 			}
 		});
 	}
@@ -219,6 +235,11 @@ public class ProcessorToolbarSelectionUI extends Composite {
 		for(Object object : listUI.getStructuredSelection().toArray()) {
 			if(object instanceof Processor processor) {
 				processor.setActive(show);
+				if(processor.isActive()) {
+					processor.setIndex(Processor.INDEX_MAX);
+				} else {
+					processor.setIndex(Processor.INDEX_NONE);
+				}
 			}
 		}
 	}
@@ -253,8 +274,11 @@ public class ProcessorToolbarSelectionUI extends Composite {
 					if(imageDialog.open() == Dialog.OK) {
 						String imageFileName = imageDialog.getImageFileName();
 						if(imageFileName != null) {
+							/*
+							 * No need to update the indices, only image changed
+							 */
 							processor.setImageFileName(imageFileName);
-							updateProcessorLists();
+							updateProcessorLists(false);
 						}
 					}
 				}
@@ -272,8 +296,11 @@ public class ProcessorToolbarSelectionUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				/*
+				 * The indices are already updated by switch operation
+				 */
 				switchProcessor(true);
-				updateProcessorLists();
+				updateProcessorLists(false);
 			}
 		});
 	}
@@ -288,8 +315,11 @@ public class ProcessorToolbarSelectionUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				/*
+				 * The indices are already updated by switch operation
+				 */
 				switchProcessor(false);
-				updateProcessorLists();
+				updateProcessorLists(false);
 			}
 		});
 	}
@@ -308,11 +338,11 @@ public class ProcessorToolbarSelectionUI extends Composite {
 		processorListAvailable.setSearchText(searchText, false);
 	}
 
-	private void updateProcessorLists() {
+	private void updateProcessorLists(boolean updateIndex) {
 
 		if(processors != null) {
-			processorListAvailable.setInput(processors.stream().filter(p -> !p.isActive()).collect(Collectors.toList()));
-			processorListActive.setInput(processors.stream().filter(p -> p.isActive()).collect(Collectors.toList()));
+			processorListAvailable.setInput(ProcessorSupport.filterProcessors(processors, false, updateIndex));
+			processorListActive.setInput(ProcessorSupport.filterProcessors(processors, true, updateIndex));
 		} else {
 			processorListAvailable.setInput(null);
 			processorListActive.setInput(null);

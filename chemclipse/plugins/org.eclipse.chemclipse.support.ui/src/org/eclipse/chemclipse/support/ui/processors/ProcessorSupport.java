@@ -13,22 +13,22 @@ package org.eclipse.chemclipse.support.ui.processors;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
-import org.eclipse.chemclipse.support.ui.internal.provider.Tuple;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.util.ValueParserSupport;
 
 public class ProcessorSupport {
 
 	private static final Logger logger = Logger.getLogger(ProcessorSupport.class);
+	//
+	public static final String PROCESSOR_IMAGE_DEFAULT = IApplicationImage.IMAGE_EXECUTE_EXTENSION;
 	/*
 	 * The processors must not contain the following persistence delimiters.
 	 * : can't be used as it could be part of the id. Regex keywords can be also
@@ -36,31 +36,47 @@ public class ProcessorSupport {
 	 */
 	private static final String VALUE_DELIMITER = "§";
 	private static final String PROCESSOR_DELIMITER = "%";
+	//
+	private static ValueParserSupport valueParseSupport = new ValueParserSupport();
 
-	public static List<Processor> getActiveProcessors(IProcessSupplierContext context, String preference) {
+	public static List<Processor> getActiveProcessors(Set<IProcessSupplier<?>> processSuppliers, String settings) {
 
-		List<Processor> activeProcessors = new ArrayList<>();
-		//
-		if(preference != null && !preference.isEmpty()) {
-			String[] processors = preference.split(PROCESSOR_DELIMITER);
-			for(String processor : processors) {
-				String[] values = processor.split(VALUE_DELIMITER);
-				if(values != null && values.length == 3) {
-					String id = values[0];
-					String imageFileName = values[1];
-					boolean isActive = Boolean.parseBoolean(values[2]);
-					IProcessSupplier<?> processSupplier = context.getSupplier(id);
-					if(processSupplier != null) {
-						Processor activeProcessor = new Processor(processSupplier);
-						activeProcessor.setImageFileName(imageFileName);
-						activeProcessor.setActive(isActive);
-						activeProcessors.add(activeProcessor);
+		List<Processor> processors = new ArrayList<>();
+		for(IProcessSupplier<?> processSupplier : processSuppliers) {
+			processors.add(new Processor(processSupplier));
+		}
+		/*
+		 * Fetch the processor list.
+		 */
+		if(settings != null && !settings.isEmpty()) {
+			for(String processorSettings : settings.split(PROCESSOR_DELIMITER)) {
+				String[] values = processorSettings.split(VALUE_DELIMITER);
+				if(values != null) {
+					/*
+					 * Parse the settings
+					 */
+					String id = getString(values, 0, "");
+					String imageFileName = getString(values, 1, "");
+					boolean active = getBoolean(values, 2, true);
+					int index = getInteger(values, 3, Processor.INDEX_NONE);
+					/*
+					 * Transfer
+					 */
+					if(!id.isEmpty()) {
+						Processor processor = getProcessor(processors, id);
+						if(processor != null) {
+							processor.setImageFileName(imageFileName);
+							processor.setActive(active);
+							processor.setIndex(index);
+						}
 					}
 				}
 			}
 		}
-		//
-		return activeProcessors;
+		/*
+		 * Sort by index
+		 */
+		return sortProcessorsByIndex(processors);
 	}
 
 	public static String getActiveProcessors(List<Processor> processors) {
@@ -80,6 +96,8 @@ public class ProcessorSupport {
 					builder.append(processor.getImageFileName());
 					builder.append(VALUE_DELIMITER);
 					builder.append(processor.isActive());
+					builder.append(VALUE_DELIMITER);
+					builder.append(processor.getIndex());
 					//
 					if(iterator.hasNext()) {
 						builder.append(PROCESSOR_DELIMITER);
@@ -91,6 +109,178 @@ public class ProcessorSupport {
 		}
 		//
 		return builder.toString();
+	}
+
+	public static List<Processor> filterProcessors(List<Processor> processors, boolean active, boolean updateIndex) {
+
+		/*
+		 * Filter Inactive/Active
+		 */
+		List<Processor> processorsFiltered = processors.stream().filter(p -> (p.isActive() == active)).collect(Collectors.toList());
+		if(active) {
+			/*
+			 * Update indices and sort on demand.
+			 */
+			if(updateIndex) {
+				ProcessorSupport.updateProcessorIndices(processorsFiltered);
+			}
+			Collections.sort(processors, (p1, p2) -> Integer.compare(p1.getIndex(), p2.getIndex()));
+		}
+		//
+		return processorsFiltered;
+	}
+
+	public static String getDefaultIcon(IProcessSupplier<?> processSupplier) {
+
+		String imageFileName = PROCESSOR_IMAGE_DEFAULT;
+		/*
+		 * Quick-Access Toolbar default icons.
+		 * -------------
+		 * This is a quick solution to assign specific process type icons.
+		 * In a further version, the process supplier itself may define their specific symbol.
+		 * To implement this feature, the platform needs to be reviewed thoroughly, hence
+		 * assigning the specific icons here is a compromise.
+		 */
+		if(processSupplier.getCategory().equals("Baseline Detector")) {
+			imageFileName = IApplicationImage.IMAGE_BASELINE;
+			if(processSupplier.getName().contains("SNIP")) {
+				imageFileName = IApplicationImage.IMAGE_BASELINE_SNIP;
+			} else if(processSupplier.getName().contains("Delete")) {
+				imageFileName = IApplicationImage.IMAGE_BASELINE_DELETE;
+			}
+		} else if(processSupplier.getCategory().equals("Chromatogram Calculator")) {
+			imageFileName = IApplicationImage.IMAGE_CALCULATE;
+			if(processSupplier.getName().contains("Retention Index Calculator")) {
+				imageFileName = IApplicationImage.IMAGE_RETENION_INDEX;
+			} else if(processSupplier.getName().contains("Reset")) {
+				imageFileName = IApplicationImage.IMAGE_RESET;
+			}
+		} else if(processSupplier.getCategory().equals("Chromatogram Classifier")) {
+			imageFileName = IApplicationImage.IMAGE_CLASSIFIER;
+			if(processSupplier.getName().contains("WNC")) {
+				imageFileName = IApplicationImage.IMAGE_CLASSIFIER_WNC;
+			} else if(processSupplier.getName().contains("Durbin-Watson")) {
+				imageFileName = IApplicationImage.IMAGE_CLASSIFIER_DW;
+			}
+		} else if(processSupplier.getCategory().equals("Chromatogram Export")) {
+			imageFileName = IApplicationImage.IMAGE_SAVE;
+			if(processSupplier.getName().contains("*.CAL")) {
+				imageFileName = IApplicationImage.IMAGE_SAMPLE_CALIBRATION;
+			} else if(processSupplier.getName().contains("Excel")) {
+				imageFileName = IApplicationImage.IMAGE_EXCEL_DOCUMENT;
+			} else if(processSupplier.getName().contains("ZIP")) {
+				imageFileName = IApplicationImage.IMAGE_ZIP_FILE;
+			} else if(processSupplier.getName().contains("mzML") || processSupplier.getName().contains("mzXML") || processSupplier.getName().contains("mzData") || processSupplier.getName().contains("AnIML") || processSupplier.getName().contains("GAML")) {
+				imageFileName = IApplicationImage.IMAGE_XML_FILE;
+			}
+		} else if(processSupplier.getCategory().equals("Chromatogram Filter")) {
+			imageFileName = IApplicationImage.IMAGE_CHROMATOGRAM;
+			if(processSupplier.getName().contains("(1:1)")) {
+				imageFileName = IApplicationImage.IMAGE_RESET_EQUAL;
+			} else if(processSupplier.getName().contains("CODA")) {
+				imageFileName = IApplicationImage.IMAGE_FILTER_CODA;
+			} else if(processSupplier.getName().contains("Backfolding")) {
+				imageFileName = IApplicationImage.IMAGE_FILTER_BACKFOLDING;
+			} else if(processSupplier.getName().contains("Denoising")) {
+				imageFileName = IApplicationImage.IMAGE_FILTER_DENOISING;
+			} else if(processSupplier.getName().contains("Mean Normalizer")) {
+				imageFileName = IApplicationImage.IMAGE_FILTER_MEAN_NORMALIZER;
+			} else if(processSupplier.getName().contains("Median Normalizer")) {
+				imageFileName = IApplicationImage.IMAGE_FILTER_MEDIAN_NORMALIZER;
+			} else if(processSupplier.getName().equals("Normalizer")) {
+				imageFileName = IApplicationImage.IMAGE_FILTER_NORMALIZER;
+			} else if(processSupplier.getName().contains("Savitzky-Golay")) {
+				imageFileName = IApplicationImage.IMAGE_FILTER_SAVITZKY_GOLAY;
+			} else if(processSupplier.getName().contains("Scan Remover")) {
+				imageFileName = IApplicationImage.IMAGE_FILTER_SCANREMOVER;
+			} else if(processSupplier.getName().contains("Subtract")) {
+				imageFileName = IApplicationImage.IMAGE_SUBTRACT_SCAN_DEFAULT;
+			}
+		} else if(processSupplier.getCategory().equals("Chromatogram Integrator")) {
+			imageFileName = IApplicationImage.IMAGE_CHROMATOGRAM_INTEGRATOR;
+			if(processSupplier.getName().contains("Sumarea")) {
+				imageFileName = IApplicationImage.IMAGE_INTEGRATOR_SUMAREA;
+			}
+		} else if(processSupplier.getCategory().equals("Chromatogram Reports")) {
+			imageFileName = IApplicationImage.IMAGE_CHROMATOGRAM_REPORT;
+		} else if(processSupplier.getCategory().equals("External Programs")) {
+			if(processSupplier.getName().contains("NIST")) {
+				imageFileName = IApplicationImage.IMAGE_NIST;
+			}
+		} else if(processSupplier.getCategory().equals("Combined Chromatogram and Peak Integrator")) {
+			imageFileName = IApplicationImage.IMAGE_COMBINED_INTEGRATOR;
+		} else if(processSupplier.getCategory().equals("Peak Detector")) {
+			imageFileName = IApplicationImage.IMAGE_PEAK_DETECTOR;
+			if(processSupplier.getName().contains("AMDIS") || processSupplier.getName().contains("MCR-AR")) {
+				imageFileName = IApplicationImage.IMAGE_DECONVOLUTION;
+			}
+		} else if(processSupplier.getCategory().equals("Peak Export")) {
+			imageFileName = IApplicationImage.IMAGE_EXPORT;
+		} else if(processSupplier.getCategory().equals("Peak Filter")) {
+			imageFileName = IApplicationImage.IMAGE_PEAKS;
+			if(processSupplier.getName().contains("Add")) {
+				imageFileName = IApplicationImage.IMAGE_ADD;
+			} else if(processSupplier.getName().contains("Remove")) {
+				imageFileName = IApplicationImage.IMAGE_REMOVE;
+			} else if(processSupplier.getName().contains("Delete")) {
+				imageFileName = IApplicationImage.IMAGE_DELETE;
+			}
+			if(processSupplier.getName().contains("Delete Peak")) {
+				imageFileName = IApplicationImage.IMAGE_DELETE_PEAKS;
+			} else if(processSupplier.getName().contains("Delete Integration")) {
+				imageFileName = IApplicationImage.IMAGE_DELETE_PEAK_INTEGRATIONS;
+			} else if(processSupplier.getName().contains("Delete Target")) {
+				imageFileName = IApplicationImage.IMAGE_DELETE_PEAK_IDENTIFICATIONS;
+			} else if(processSupplier.getName().contains("SNIP")) {
+				imageFileName = IApplicationImage.IMAGE_FILTER_SNIP_ALL_PEAKS;
+			}
+		} else if(processSupplier.getCategory().equals("Peak Identifier")) {
+			imageFileName = IApplicationImage.IMAGE_IDENTIFY_PEAKS;
+			if(processSupplier.getName().equals("Library File (MS)")) {
+				imageFileName = IApplicationImage.IMAGE_MASS_SPECTRUM_LIBRARY;
+			} else if(processSupplier.getName().equals("Unknown Marker")) {
+				imageFileName = IApplicationImage.IMAGE_UNKNOWN;
+			} else if(processSupplier.getName().contains("NIST")) {
+				imageFileName = IApplicationImage.IMAGE_NIST_PEAKS;
+			}
+		} else if(processSupplier.getCategory().equals("Peak Integrator")) {
+			imageFileName = IApplicationImage.IMAGE_PEAK_INTEGRATOR;
+			if(processSupplier.getName().contains("Peak Max")) {
+				imageFileName = IApplicationImage.IMAGE_PEAK_INTEGRATOR_MAX;
+			}
+		} else if(processSupplier.getCategory().equals("Peak Quantifier")) {
+			imageFileName = IApplicationImage.IMAGE_QUANTIFY_ALL_PEAKS;
+			if(processSupplier.getName().contains("ISTD")) {
+				imageFileName = IApplicationImage.IMAGE_INTERNAL_STANDARDS_DEFAULT;
+			} else if(processSupplier.getName().contains("ESTD")) {
+				imageFileName = IApplicationImage.IMAGE_EXTERNAL_STANDARDS_DEFAULT;
+			}
+			if(processSupplier.getName().contains("Add Peaks to DB")) {
+				imageFileName = IApplicationImage.IMAGE_ADD_PEAKS_TO_QUANTITATION_TABLE;
+			}
+		} else if(processSupplier.getCategory().equals("Peak Massspectrum Filter") || processSupplier.getCategory().equals("Scan Massspectrum Filter")) {
+			imageFileName = IApplicationImage.IMAGE_MASS_SPECTRUM;
+			if(processSupplier.getName().contains("Savitzky-Golay")) {
+				imageFileName = IApplicationImage.IMAGE_FILTER_SAVITZKY_GOLAY;
+			} else if(processSupplier.getName().contains("SNIP")) {
+				imageFileName = IApplicationImage.IMAGE_FILTER_SNIP_ALL_PEAKS;
+			} else if(processSupplier.getName().contains("Subtract")) {
+				imageFileName = IApplicationImage.IMAGE_SUBTRACT_SCAN_DEFAULT;
+			}
+		} else if(processSupplier.getCategory().equals("Scan Identifier")) {
+			imageFileName = IApplicationImage.IMAGE_IDENTIFY_MASS_SPECTRUM;
+			if(processSupplier.getName().equals("Library File (MS)")) {
+				imageFileName = IApplicationImage.IMAGE_MASS_SPECTRUM_LIBRARY;
+			} else if(processSupplier.getName().equals("Unknown Marker")) {
+				imageFileName = IApplicationImage.IMAGE_UNKNOWN;
+			} else if(processSupplier.getName().contains("NIST")) {
+				imageFileName = IApplicationImage.IMAGE_NIST_MASS_SPECTRUM;
+			}
+		} else if(processSupplier.getCategory().equals("System")) {
+			imageFileName = IApplicationImage.IMAGE_PREFERENCES;
+		}
+		//
+		return imageFileName;
 	}
 
 	public static void switchProcessor(List<Processor> processors, Processor processorActive, boolean moveUp) {
@@ -116,125 +306,38 @@ public class ProcessorSupport {
 				Integer indexSwitch = moveUp ? processorMap.lowerKey(indexActive) : processorMap.higherKey(indexActive);
 				if(indexSwitch != null) {
 					Collections.swap(processors, indexActive, indexSwitch);
+					updateProcessorIndices(processors);
 				}
 			}
 		}
 	}
 
-	public static List<Processor> getProcessors(Set<IProcessSupplier<?>> processSuppliers, String settings) {
+	public static List<Processor> sortProcessorsByIndex(List<Processor> processors) {
 
-		List<Processor> processors = new ArrayList<>();
-		Map<String, String> activeProcessorMap = getActiveProcessorMap(settings);
-		/*
-		 * Fetch the processor list.
-		 */
-		for(IProcessSupplier<?> processSupplier : processSuppliers) {
-			Processor processor = new Processor(processSupplier);
-			String id = processSupplier.getId();
-			String imageFileName = activeProcessorMap.get(id);
-			if(imageFileName != null) {
-				processor.setImageFileName(imageFileName);
-				processor.setActive(true);
-			}
-			processors.add(processor);
-		}
-		/*
-		 * Swap elements, bases on the order of the persisted processors.
-		 */
-		List<Tuple> activeProcessorSwapList = getActiveProcessorSwapList(processors, settings);
-		int sizeSwapList = activeProcessorSwapList.size();
-		Set<Integer> swappedIndices = new HashSet<>();
-		//
-		for(int i = 0; i < sizeSwapList; i++) {
-			if(!swappedIndices.contains(i)) {
-				Tuple tupleActive = activeProcessorSwapList.get(i);
-				int delta = tupleActive.getIndex() - i;
-				if(delta != 0) {
-					int deltaIndex = i + delta;
-					if(deltaIndex >= 0 && deltaIndex < sizeSwapList) {
-						Tuple tupleSwap = activeProcessorSwapList.get(deltaIndex);
-						int indexActive = tupleActive.getPosition();
-						int indexSwap = tupleSwap.getPosition();
-						Collections.swap(processors, indexActive, indexSwap);
-						swappedIndices.add(tupleActive.getIndex());
-						swappedIndices.add(tupleSwap.getIndex());
-					}
-				}
-			}
-		}
-		//
+		Collections.sort(processors, (p1, p2) -> Integer.compare(p1.getIndex(), p2.getIndex()));
 		return processors;
 	}
 
-	private static Map<String, String> getActiveProcessorMap(String settings) {
+	private static Processor getProcessor(List<Processor> processors, String id) {
 
-		Map<String, String> activeProcessorMap = new HashMap<>();
-		//
-		if(settings != null && !settings.isEmpty()) {
-			String[] processors = settings.split(PROCESSOR_DELIMITER);
-			for(String processor : processors) {
-				String[] values = processor.split(VALUE_DELIMITER);
-				if(values != null && values.length == 3) {
-					String id = values[0];
-					String imageFileName = values[1];
-					activeProcessorMap.put(id, imageFileName);
-				}
+		for(Processor processor : processors) {
+			if(processor.getProcessSupplier().getId().equals(id)) {
+				return processor;
 			}
 		}
 		//
-		return activeProcessorMap;
+		return null;
 	}
 
-	private static List<Tuple> getActiveProcessorSwapList(List<Processor> processors, String preference) {
+	/*
+	 * Assign the processor indices.
+	 */
+	private static void updateProcessorIndices(List<Processor> processors) {
 
-		List<String> activeProcessorIds = getActiveProcessorIds(preference);
-		List<Tuple> activeProcessorSwapList = new ArrayList<>();
-		//
 		for(int i = 0; i < processors.size(); i++) {
 			Processor processor = processors.get(i);
-			if(processor.isActive()) {
-				int j = getProcessorIndex(activeProcessorIds, processor.getProcessSupplier().getId());
-				if(j >= 0) {
-					/*
-					 * i = position in list
-					 * j = index active
-					 */
-					activeProcessorSwapList.add(new Tuple(i, j));
-				}
-			}
+			processor.setIndex(i);
 		}
-		//
-		return activeProcessorSwapList;
-	}
-
-	private static int getProcessorIndex(List<String> activeProcessorIds, String processorId) {
-
-		for(int i = 0; i < activeProcessorIds.size(); i++) {
-			String activeProcessorId = activeProcessorIds.get(i);
-			if(activeProcessorId.equals(processorId)) {
-				return i;
-			}
-		}
-		//
-		return -1;
-	}
-
-	private static List<String> getActiveProcessorIds(String preference) {
-
-		List<String> activeProcessorIds = new ArrayList<>();
-		//
-		if(preference != null && !preference.isEmpty()) {
-			String[] processors = preference.split(PROCESSOR_DELIMITER);
-			for(String processor : processors) {
-				String[] values = processor.split(VALUE_DELIMITER);
-				if(values != null && values.length == 3) {
-					String id = values[0];
-					activeProcessorIds.add(id);
-				}
-			}
-		}
-		//
-		return activeProcessorIds;
 	}
 
 	private static boolean isValid(Processor processor) {
@@ -255,5 +358,20 @@ public class ProcessorSupport {
 		}
 		//
 		return true;
+	}
+
+	private static String getString(String[] values, int index, String def) {
+
+		return valueParseSupport.parseString(values, index, def);
+	}
+
+	private static boolean getBoolean(String[] values, int index, boolean def) {
+
+		return valueParseSupport.parseBoolean(values, index, def);
+	}
+
+	private static int getInteger(String[] values, int index, int def) {
+
+		return valueParseSupport.parseInteger(values, index, def);
 	}
 }

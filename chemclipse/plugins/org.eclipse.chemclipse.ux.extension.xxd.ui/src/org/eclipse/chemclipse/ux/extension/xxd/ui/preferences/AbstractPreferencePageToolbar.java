@@ -79,7 +79,7 @@ public abstract class AbstractPreferencePageToolbar extends PreferencePage imple
 
 		ProcessorToolbarSelectionUI processorToolbarSelectionUI = new ProcessorToolbarSelectionUI(parent, SWT.NONE);
 		processorToolbarSelectionUI.setLayoutData(new GridData(GridData.FILL_BOTH));
-		processorToolbarSelectionUI.setInput(preferencesProcessSupport.getStoredProcessors());
+		processorToolbarSelectionUI.setInput(preferencesProcessSupport.getActiveProcessors());
 		//
 		return processorToolbarSelectionUI;
 	}
