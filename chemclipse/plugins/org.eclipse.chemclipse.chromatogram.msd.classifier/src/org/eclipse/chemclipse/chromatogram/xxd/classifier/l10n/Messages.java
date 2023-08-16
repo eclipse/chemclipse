@@ -15,7 +15,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 
-	private static final String BUNDLE_NAME = "org.eclipse.chemclipse.chromatogram.msd.classifier.l10n.messages"; //$NON-NLS-1$ 4
+	private static final String BUNDLE_NAME = "org.eclipse.chemclipse.chromatogram.xxd.classifier.l10n.messages"; //$NON-NLS-1$ 4
 	//
 	public static String chromatogramNull;
 	public static String chromatogramSelectionNull;
