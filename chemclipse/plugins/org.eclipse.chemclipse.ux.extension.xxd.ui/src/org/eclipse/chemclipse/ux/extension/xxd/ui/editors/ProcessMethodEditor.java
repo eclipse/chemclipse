@@ -34,8 +34,10 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ProcessMethodNotifications;
@@ -48,6 +50,7 @@ import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 public class ProcessMethodEditor implements IModificationHandler, IChemClipseEditor {
 
@@ -98,6 +101,7 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 				dirtyable.setDirty(false);
 				currentProcessMethod = newMethod;
 				notifications.updated(newMethod, oldMethod);
+				UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_METHOD_UPDATE, currentProcessMethod);
 			}
 		}
 	}

@@ -250,7 +250,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	//
 	private boolean suspendUpdate = false;
 	private IProcessSupplierContext processTypeSupport;
-	private MethodSupportUI methodSupportUI;
 	private ITargetDisplaySettings targetDisplaySettings;
 	private Predicate<IProcessSupplier<?>> dataCategoryPredicate = null;
 	//
@@ -565,6 +564,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			chromatogramChartControl.get().applySettings(chartSettings);
 			menuCache = chromatogramSelection;
 		}
+	}
+
+	public void updateMethods() {
+
+		toolbarMethodControl.get().updateInput();
 	}
 
 	private void addCommand(IProcessSupplier<?> supplier, IChartMenuEntry cachedEntry) {
@@ -1695,11 +1699,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_X_AXIS_SCANS);
 		Font titleFont = Fonts.getCachedFont(chromatogramChartControl.get().getDisplay(), name, height, style);
 		axisSettings.setTitleFont(titleFont);
-	}
-
-	public void updateMethods() {
-
-		methodSupportUI.applySettings();
 	}
 
 	@Override

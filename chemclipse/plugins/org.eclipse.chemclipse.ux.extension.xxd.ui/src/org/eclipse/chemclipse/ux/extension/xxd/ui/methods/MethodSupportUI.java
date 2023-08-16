@@ -19,8 +19,8 @@ import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
@@ -46,12 +46,9 @@ import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PreferencesConfig;
-import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageChromatogramExport;
-import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -65,19 +62,23 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventHandler;
 
-public class MethodSupportUI extends Composite implements PreferencesConfig {
+public class MethodSupportUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(MethodSupportUI.class);
 	//
-	private ComboViewer comboViewerMethods;
-	private Button buttonAddMethod;
-	private Button buttonEditMethod;
-	private Button buttonCopyMethod;
-	private Button buttonDeleteMethod;
-	private Button buttonMethodDirectory;
-	private Button buttonExecuteMethod;
+	private AtomicReference<ComboViewer> methodsControl = new AtomicReference<>();
+	private AtomicReference<Button> addControl = new AtomicReference<>();
+	private AtomicReference<Button> editControl = new AtomicReference<>();
+	private AtomicReference<Button> copyControl = new AtomicReference<>();
+	private AtomicReference<Button> deleteControl = new AtomicReference<>();
+	private AtomicReference<Button> directoryControl = new AtomicReference<>();
+	private AtomicReference<Button> executeControl = new AtomicReference<>();
 	//
+	private EventHandler eventHandler = null;
+	private IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 	private IMethodListener methodListener = null;
 	private SupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(DataType.MTH, () -> Activator.getDefault().getEclipseContext());
 
@@ -85,6 +86,18 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 		super(parent, style);
 		createControl();
+		//
+		eventHandler = createEventHandler();
+		eventBroker.subscribe(IChemClipseEvents.TOPIC_METHOD_UPDATE, null, eventHandler, true);
+	}
+
+	@Override
+	public void dispose() {
+
+		if(eventHandler != null) {
+			eventBroker.unsubscribe(eventHandler);
+		}
+		super.dispose();
 	}
 
 	public void setMethodListener(IMethodListener methodListener) {
@@ -92,21 +105,21 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 		this.methodListener = methodListener;
 	}
 
-	@Override
-	public IPreferencePage[] getPreferencePages() {
+	public void updateInput() {
 
-		IPreferencePage preferencePageReportExport = new PreferencePageReportExport();
-		preferencePageReportExport.setTitle(ExtensionMessages.reportExport);
-		IPreferencePage preferencePageChromatogramExport = new PreferencePageChromatogramExport();
-		preferencePageChromatogramExport.setTitle(ExtensionMessages.chromatogramExport);
-		//
-		return new IPreferencePage[]{preferencePageReportExport, preferencePageChromatogramExport};
+		updateMethods();
 	}
 
-	@Override
-	public void applySettings() {
+	private EventHandler createEventHandler() {
 
-		computeMethodComboItems();
+		return new EventHandler() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				updateInput();
+			}
+		};
 	}
 
 	private void createControl() {
@@ -119,18 +132,23 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
 		//
-		comboViewerMethods = createComboMethod(composite);
-		buttonAddMethod = createButtonAddMethod(composite);
-		buttonEditMethod = createButtonEditMethod(composite);
-		buttonCopyMethod = createButtonCopyMethod(composite);
-		buttonDeleteMethod = createButtonDeleteMethod(composite);
-		buttonMethodDirectory = createButtonMethodDirectory(composite);
-		buttonExecuteMethod = createButtonExecuteMethod(composite);
+		createComboMethod(composite);
+		createButtonAddMethod(composite);
+		createButtonEditMethod(composite);
+		createButtonCopyMethod(composite);
+		createButtonDeleteMethod(composite);
+		createButtonMethodDirectory(composite);
+		createButtonExecuteMethod(composite);
 		//
-		computeMethodComboItems();
+		initialize();
 	}
 
-	private ComboViewer createComboMethod(Composite parent) {
+	private void initialize() {
+
+		updateInput();
+	}
+
+	private void createComboMethod(Composite parent) {
 
 		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
@@ -164,10 +182,10 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			}
 		});
 		//
-		return comboViewer;
+		methodsControl.set(comboViewer);
 	}
 
-	private Button createButtonAddMethod(Composite parent) {
+	private void createButtonAddMethod(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -190,10 +208,10 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			}
 		});
 		//
-		return button;
+		addControl.set(button);
 	}
 
-	private Button createButtonEditMethod(Composite parent) {
+	private void createButtonEditMethod(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -204,8 +222,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
-				File file = getProcessMethodFile(object);
+				File file = getFile(getProcessMethod());
 				if(file != null) {
 					MessageConsoleAppender.printLine(ExtensionMessages.editMethod + ": " + file.getAbsolutePath());
 					openProcessMethodEditor(file);
@@ -213,10 +230,10 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			}
 		});
 		//
-		return button;
+		editControl.set(button);
 	}
 
-	private Button createButtonCopyMethod(Composite parent) {
+	private void createButtonCopyMethod(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -227,8 +244,8 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Object objectSource = comboViewerMethods.getStructuredSelection().getFirstElement();
-				if(objectSource instanceof IProcessMethod processMethod) {
+				IProcessMethod processMethod = getProcessMethod();
+				if(processMethod != null) {
 					/*
 					 * Container
 					 */
@@ -241,7 +258,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 					/*
 					 * Single Method
 					 */
-					File fileSource = getProcessMethodFile(objectSource);
+					File fileSource = getFile(processMethod);
 					if(fileSource != null && fileSource.exists()) {
 						if(MessageDialog.openQuestion(e.display.getActiveShell(), ExtensionMessages.copyMethod, MessageFormat.format(ExtensionMessages.shallCopyMethod, fileSource.getName()))) {
 							/*
@@ -272,7 +289,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 												/*
 												 * Open the editor
 												 */
-												computeMethodComboItems();
+												updateInput();
 												MessageConsoleAppender.printLine("Copied Method: " + fileSink.getAbsolutePath());
 												openProcessMethodEditor(fileSink);
 											}
@@ -293,10 +310,10 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			}
 		});
 		//
-		return button;
+		copyControl.set(button);
 	}
 
-	private Button createButtonDeleteMethod(Composite parent) {
+	private void createButtonDeleteMethod(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -307,32 +324,37 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
-				if(object instanceof IProcessMethod processMethod) {
+				IProcessMethod processMethod = getProcessMethod();
+				if(processMethod != null) {
+					/*
+					 * Check constraints
+					 */
 					if(processMethod instanceof ListProcessEntryContainer listProcessEntryContainer) {
 						if(listProcessEntryContainer.isReadOnly()) {
 							MessageDialog.openInformation(e.display.getActiveShell(), ExtensionMessages.deleteMethod, ExtensionMessages.cantDeleteMethodReadonly);
 							return;
 						}
 					}
-					File file = getProcessMethodFile(object);
+					//
+					File file = getFile(processMethod);
 					if(file != null && file.exists()) {
 						if(MessageDialog.openQuestion(e.display.getActiveShell(), ExtensionMessages.deleteMethod, MessageFormat.format(ExtensionMessages.shallDeleteMethod, file.getName()))) {
 							file.delete();
 							PreferenceSupplier.setSelectedMethodName("");
-							computeMethodComboItems();
+							updateInput();
 						}
 						return;
 					}
+					//
 					MessageDialog.openInformation(e.display.getActiveShell(), ExtensionMessages.deleteMethod, ExtensionMessages.cantDeleteMethodFilesystem);
 				}
 			}
 		});
 		//
-		return button;
+		deleteControl.set(button);
 	}
 
-	private Button createButtonExecuteMethod(Composite parent) {
+	private void createButtonExecuteMethod(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -343,18 +365,18 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
-				if(object instanceof IProcessMethod processMethod) {
+				IProcessMethod processMethod = getProcessMethod();
+				if(processMethod != null) {
 					MethodSupport.runMethod(methodListener, processMethod, e.display.getActiveShell());
 					UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "The process method has been applied.");
 				}
 			}
 		});
 		//
-		return button;
+		executeControl.set(button);
 	}
 
-	private Button createButtonMethodDirectory(Composite parent) {
+	private void createButtonMethodDirectory(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -366,11 +388,11 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			public void widgetSelected(SelectionEvent e) {
 
 				selectMethodDirectory(e.display.getActiveShell());
-				applySettings();
+				updateInput();
 			}
 		});
 		//
-		return button;
+		directoryControl.set(button);
 	}
 
 	private boolean selectMethodDirectory(Shell shell) {
@@ -413,7 +435,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			if(!processingInfo.hasErrorMessages()) {
 				PreferenceSupplier.setSelectedMethodName(file.getName());
 				if(openEditor) {
-					computeMethodComboItems();
+					updateInput();
 					MessageConsoleAppender.printLine("New Method: " + file.getAbsolutePath());
 					openProcessMethodEditor(file);
 				}
@@ -425,33 +447,29 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 		return file;
 	}
 
-	private void computeMethodComboItems() {
+	private void updateMethods() {
 
 		List<IProcessMethod> methods = new ArrayList<>(MethodConverter.getUserMethods());
 		if(!methods.isEmpty()) {
-			Collections.sort(methods, new Comparator<IProcessMethod>() {
-
-				@Override
-				public int compare(IProcessMethod o1, IProcessMethod o2) {
-
-					return o1.getName().compareToIgnoreCase(o2.getName());
-				}
-			});
-			comboViewerMethods.setInput(methods);
-			if(comboViewerMethods.getCombo().getItemCount() > 0) {
-				setSelectedMethod();
+			/*
+			 * Sort methods
+			 */
+			Collections.sort(methods, (m1, m2) -> m1.getName().compareToIgnoreCase(m2.getName()));
+			methodsControl.get().setInput(methods);
+			if(methodsControl.get().getCombo().getItemCount() > 0) {
+				updateProcessMethodSelection();
 			}
 		} else {
-			comboViewerMethods.setInput(null);
+			methodsControl.get().setInput(null);
 		}
 		//
 		enableWidgets();
 	}
 
-	private void setSelectedMethod() {
+	private void updateProcessMethodSelection() {
 
 		String selectedMethodName = PreferenceSupplier.getSelectedMethodName();
-		Combo combo = comboViewerMethods.getCombo();
+		Combo combo = methodsControl.get().getCombo();
 		//
 		exitloop:
 		for(int i = 0; i < combo.getItemCount(); i++) {
@@ -469,28 +487,39 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 	private void enableWidgets() {
 
-		buttonAddMethod.setEnabled(true);
-		buttonEditMethod.setEnabled(false);
-		buttonCopyMethod.setEnabled(false);
-		buttonDeleteMethod.setEnabled(false);
-		buttonExecuteMethod.setEnabled(false);
-		buttonMethodDirectory.setEnabled(true); // Always true
+		addControl.get().setEnabled(true);
+		editControl.get().setEnabled(false);
+		copyControl.get().setEnabled(false);
+		deleteControl.get().setEnabled(false);
+		executeControl.get().setEnabled(false);
+		directoryControl.get().setEnabled(true); // Always true
 		//
-		Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
-		if(object instanceof IProcessMethod) {
-			boolean editable = getProcessMethodFile(object) != null;
-			buttonEditMethod.setEnabled(editable);
-			buttonCopyMethod.setEnabled(editable);
-			buttonDeleteMethod.setEnabled(editable);
-			buttonExecuteMethod.setEnabled(true);
+		IProcessMethod processMethod = getProcessMethod();
+		if(processMethod != null) {
+			boolean editable = getFile(processMethod) != null;
+			editControl.get().setEnabled(editable);
+			copyControl.get().setEnabled(editable);
+			deleteControl.get().setEnabled(editable);
+			executeControl.get().setEnabled(true);
 		}
 	}
 
-	private File getProcessMethodFile(Object object) {
+	private IProcessMethod getProcessMethod() {
 
-		if(object instanceof ProcessMethod processMethod) {
+		Object object = methodsControl.get().getStructuredSelection().getFirstElement();
+		if(object instanceof IProcessMethod processMethod) {
+			return processMethod;
+		}
+		//
+		return null;
+	}
+
+	private File getFile(IProcessMethod processMethod) {
+
+		if(processMethod != null) {
 			return processMethod.getSourceFile();
 		}
+		//
 		return null;
 	}
 
