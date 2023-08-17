@@ -29,8 +29,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IMarkedTrace;
+import org.eclipse.chemclipse.model.core.IMarkedTraces;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.MarkedTrace;
 import org.eclipse.chemclipse.model.core.MarkedTraceModus;
+import org.eclipse.chemclipse.model.core.MarkedTraces;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.traces.NamedTrace;
 import org.eclipse.chemclipse.model.traces.NamedTraces;
@@ -69,6 +73,8 @@ import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
+import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
+import org.eclipse.chemclipse.xir.model.core.selection.IChromatogramSelectionISD;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
@@ -126,22 +132,21 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private AtomicReference<Button> buttonLockControl = new AtomicReference<>();
 	private AtomicReference<Button> buttonFocusControl = new AtomicReference<>();
 	private AtomicReference<NamedTracesUI> toolbarNamedTraces = new AtomicReference<>();
-	private Button buttonToolbarDataShift;
+	private AtomicReference<Button> buttonToolbarDataShift = new AtomicReference<>();
 	private AtomicReference<DataShiftControllerUI> toolbarDataShift = new AtomicReference<>();
-	private Button buttonToolbarRulerDetails;
+	private AtomicReference<Button> buttonToolbarRulerDetails = new AtomicReference<>();
 	private AtomicReference<RulerDetailsUI> toolbarRulerDetails = new AtomicReference<>();
-	private Button buttonChartGrid;
+	private AtomicReference<Button> buttonChartGrid = new AtomicReference<>();
 	private AtomicReference<ChromatogramRulerChart> chartControl = new AtomicReference<>();
+	private AtomicReference<Label> labelStatus = new AtomicReference<>();
+	private AtomicReference<Combo> comboOverlayType = new AtomicReference<>();
+	private AtomicReference<ComboViewer> comboViewerDerivative = new AtomicReference<>();
+	//
 	private ChartGridSupport chartGridSupport = new ChartGridSupport();
-	//
-	private Label labelStatus;
-	private Combo comboOverlayType;
-	private int previousChromatograms;
-	private ComboViewer comboViewerDerivative;
-	//
 	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private final OverlayChartSupport overlayChartSupport = new OverlayChartSupport();
 	//
+	private int previousChromatograms;
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
 	private final Map<IChromatogramSelection<?, ?>, List<String>> chromatogramSelections = new LinkedHashMap<>();
@@ -195,9 +200,9 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private void initialize() {
 
 		enableToolbar(toolbarNamedTraces, false);
-		enableToolbar(toolbarDataShift, buttonToolbarDataShift, IMAGE_SHIFT, TOOLTIP_SHIFT, false);
-		enableToolbar(toolbarRulerDetails, buttonToolbarRulerDetails, IMAGE_RULER, TOOLTIP_RULER, false);
-		enableChartGrid(chartControl, buttonChartGrid, IMAGE_CHART_GRID, chartGridSupport);
+		enableToolbar(toolbarDataShift, buttonToolbarDataShift.get(), IMAGE_SHIFT, TOOLTIP_SHIFT, false);
+		enableToolbar(toolbarRulerDetails, buttonToolbarRulerDetails.get(), IMAGE_RULER, TOOLTIP_RULER, false);
+		enableChartGrid(chartControl, buttonChartGrid.get(), IMAGE_CHART_GRID, chartGridSupport);
 		//
 		toolbarDataShift.get().setScrollableChart(chartControl.get());
 		toolbarRulerDetails.get().setScrollableChart(chartControl.get());
@@ -217,21 +222,44 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		composite.setLayout(new GridLayout(13, false));
 		//
-		labelStatus = createLabelStatus(composite);
+		createLabelStatus(composite);
 		createButtonZoomLock(composite);
 		createButtonFocusSelection(composite);
-		comboOverlayType = createOverlayTypeCombo(composite);
-		comboViewerDerivative = createDerivativeComboViewer(composite);
-		buttonToolbarDataShift = createButtonToggleToolbar(composite, toolbarDataShift, IMAGE_SHIFT, TOOLTIP_SHIFT);
-		buttonToolbarRulerDetails = createButtonToggleToolbar(composite, toolbarRulerDetails, IMAGE_RULER, TOOLTIP_RULER);
-		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
+		createOverlayTypeCombo(composite);
+		createDerivativeComboViewer(composite);
+		createToggleToolbarButton(composite);
+		createToggleRulerButton(composite);
+		createToggleLegendButton(composite);
 		createResetButton(composite);
 		createNewOverlayPartButton(composite);
-		buttonChartGrid = createButtonToggleChartGrid(composite, chartControl, IMAGE_CHART_GRID, chartGridSupport);
+		createToggleGridButton(composite);
 		createButtonHelp(composite);
 		createSettingsButton(composite);
 		//
 		return composite;
+	}
+
+	private void createToggleToolbarButton(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarDataShift, IMAGE_SHIFT, TOOLTIP_SHIFT);
+		buttonToolbarDataShift.set(button);
+	}
+
+	private void createToggleLegendButton(Composite parent) {
+
+		createButtonToggleChartLegend(parent, chartControl, IMAGE_LEGEND);
+	}
+
+	private void createToggleRulerButton(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarRulerDetails, IMAGE_RULER, TOOLTIP_RULER);
+		buttonToolbarRulerDetails.set(button);
+	}
+
+	private void createToggleGridButton(Composite parent) {
+
+		Button button = createButtonToggleChartGrid(parent, chartControl, IMAGE_CHART_GRID, chartGridSupport);
+		buttonChartGrid.set(button);
 	}
 
 	private void createNamedTraces(Composite parent) {
@@ -272,14 +300,14 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		toolbarRulerDetails.set(rulerDetailsUI);
 	}
 
-	private Label createLabelStatus(Composite parent) {
+	private void createLabelStatus(Composite parent) {
 
 		Label label = new Label(parent, SWT.NONE);
 		label.setToolTipText("Indicates whether the data has been modified or not.");
 		label.setText("");
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		return label;
+		labelStatus.set(label);
 	}
 
 	private void createButtonZoomLock(Composite parent) {
@@ -320,10 +348,10 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		buttonFocusControl.set(button);
 	}
 
-	private Combo createOverlayTypeCombo(Composite parent) {
+	private void createOverlayTypeCombo(Composite parent) {
 
 		Combo combo = EnhancedCombo.create(parent, SWT.READ_ONLY);
-		combo.setToolTipText("Select the overlay type");
+		combo.setToolTipText("Select the overlay display type");
 		GridData gridData = new GridData();
 		gridData.minimumWidth = 150;
 		combo.setLayoutData(gridData);
@@ -336,16 +364,16 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			public void widgetSelected(SelectionEvent e) {
 
 				int index = combo.getSelectionIndex();
-				comboOverlayType.select(index);
+				combo.select(index);
 				modifyWidgetStatus();
 				refreshUpdateOverlayChart();
 			}
 		});
 		//
-		return combo;
+		comboOverlayType.set(combo);
 	}
 
-	private ComboViewer createDerivativeComboViewer(Composite parent) {
+	private void createDerivativeComboViewer(Composite parent) {
 
 		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
@@ -376,7 +404,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			}
 		});
 		//
-		return comboViewer;
+		comboViewerDerivative.set(comboViewer);
 	}
 
 	private void createResetButton(Composite parent) {
@@ -462,12 +490,13 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void modifyDataStatusLabel() {
 
+		Label label = labelStatus.get();
 		if(chartControl.get().getBaseChart().isDataShifted()) {
-			labelStatus.setText("The displayed data is shifted.");
-			labelStatus.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
+			label.setText("The displayed data is shifted.");
+			label.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
 		} else {
-			labelStatus.setText("");
-			labelStatus.setBackground(null);
+			label.setText("");
+			label.setBackground(null);
 		}
 	}
 
@@ -483,10 +512,10 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		 * Overlay Type
 		 */
 		Set<DisplayType> types = getDisplayType();
-		comboOverlayType.setToolTipText(DisplayType.toDescription(types));
+		comboOverlayType.get().setToolTipText(DisplayType.toDescription(types));
 		// comboOverlayType.setText(DisplayType.toShortcut(types));
 		if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS)) {
-			if(isExtractedIonsModusEnabled() || isExtractedWavelengthsModusEnabled()) {
+			if(isExtractedIonsModusEnabled() || isExtractedWavelengthsModusEnabled() || isExtractedWavenumbersModusEnabled()) {
 				enableToolbar(toolbarNamedTraces, true);
 			} else {
 				enableToolbar(toolbarNamedTraces, false);
@@ -498,6 +527,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			namedTracesUI.setEnabled(true);
 		} else if(isExtractedWavelengthsModusEnabled()) {
 			namedTracesUI.setEnabled(true);
+		} else if(isExtractedWavenumbersModusEnabled()) {
+			namedTracesUI.setEnabled(true);
 		} else {
 			namedTracesUI.setEnabled(false);
 		}
@@ -508,9 +539,9 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private void setDerivatives() {
 
 		Derivative[] derivatives = Derivative.values();
-		comboViewerDerivative.setInput(Derivative.values());
+		comboViewerDerivative.get().setInput(Derivative.values());
 		if(derivatives.length > 0) {
-			comboViewerDerivative.getCombo().select(0);
+			comboViewerDerivative.get().getCombo().select(0);
 		}
 	}
 
@@ -602,6 +633,11 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.SWC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.XWC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.MPC));
+					} else if(chromatogramSelection instanceof IChromatogramSelectionISD) {
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.XXC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.SXC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.MPC));
 					} else {
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.BPC));
@@ -613,8 +649,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC, DisplayType.SIC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC, DisplayType.TSC));
 					}
-					comboOverlayType.setItems(usefulTypes.toArray(new String[usefulTypes.size()]));
-					comboOverlayType.select(0);
+					comboOverlayType.get().setItems(usefulTypes.toArray(new String[usefulTypes.size()]));
+					comboOverlayType.get().select(0);
 				}
 				//
 				List<String> selectionSeries = entry.getValue();
@@ -636,6 +672,10 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						appendMPC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					} else if(displayType.equals(DisplayType.BPC) || displayType.equals(DisplayType.XIC) || displayType.equals(DisplayType.TSC)) {
 						appendXXC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
+					} else if(displayType.equals(DisplayType.XXC)) {
+						appendXSC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
+					} else if(displayType.equals(DisplayType.SXC)) {
+						appendSSC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					} else {
 						appendTIC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					}
@@ -644,8 +684,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			}
 			//
 			if(previousChromatograms != chromatogramSelections.size()) {
-				comboOverlayType.setItems(usefulTypes.toArray(new String[usefulTypes.size()]));
-				comboOverlayType.select(0);
+				comboOverlayType.get().setItems(usefulTypes.toArray(new String[usefulTypes.size()]));
+				comboOverlayType.get().select(0);
 			}
 			previousChromatograms = chromatogramSelections.size();
 			/*
@@ -728,6 +768,113 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 							markedIons.add(ion);
 							ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, seriesId, displayType, derivative, color, markedIons, false);
 							lineSeriesData.getSettings().setDescription("m/z " + Integer.toString(ion) + " (" + description + ")");
+							lineSeriesDataList.add(lineSeriesData);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void appendXSC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
+
+		String seriesId;
+		Color color;
+		//
+		BaseChart baseChart = chartControl.get().getBaseChart();
+		Derivative derivative = getSelectedDerivative();
+		/*
+		 * XSC
+		 */
+		IMarkedTraces<IMarkedTrace> markedTraces = new MarkedTraces(MarkedTraceModus.INCLUDE);
+		List<Number> wavenumbers = getSelectedTraces(true);
+		for(Number wavenumber : wavenumbers) {
+			markedTraces.add(new MarkedTrace(wavenumber.intValue()));
+		}
+		//
+		if(chromatogram instanceof IChromatogramISD) {
+			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
+			seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + displayType.name() + OverlayChartSupport.OVERLAY_STOP_MARKER;
+			color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+			availableSeriesIds.add(seriesId);
+			selectionSeries.add(seriesId);
+			if(!baseChart.isSeriesContained(seriesId)) {
+				ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedTraces, false);
+				lineSeriesData.getSettings().setDescription(displayType.name() + " (" + description + ")");
+				lineSeriesDataList.add(lineSeriesData);
+			}
+		}
+		/*
+		 * References
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
+			int j = 1;
+			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+				if(referencedChromatogram instanceof IChromatogramMSD) {
+					String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, false);
+					String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
+					seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + displayType.name() + OverlayChartSupport.OVERLAY_STOP_MARKER;
+					color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+					availableSeriesIds.add(seriesId);
+					selectionSeries.add(seriesId);
+					ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, seriesId, displayType, derivative, color, markedTraces, false);
+					lineSeriesData.getSettings().setDescription(displayType.name() + " (" + description + ")");
+					lineSeriesDataList.add(lineSeriesData);
+				}
+			}
+		}
+	}
+
+	private void appendSSC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
+
+		String seriesId;
+		Color color;
+		//
+		BaseChart baseChart = chartControl.get().getBaseChart();
+		Derivative derivative = getSelectedDerivative();
+		/*
+		 * SSC
+		 */
+		List<Number> wavenumbers = getSelectedTraces(true);
+		if(chromatogram instanceof IChromatogramISD) {
+			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
+			for(Number number : wavenumbers) {
+				int wavenumber = number.intValue();
+				seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavenumber + OverlayChartSupport.OVERLAY_STOP_MARKER;
+				color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+				availableSeriesIds.add(seriesId);
+				selectionSeries.add(seriesId);
+				if(!baseChart.isSeriesContained(seriesId)) {
+					IMarkedTraces<IMarkedTrace> markedTraces = new MarkedTraces(MarkedTraceModus.INCLUDE);
+					markedTraces.add(new MarkedTrace(wavenumber));
+					ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedTraces, false);
+					lineSeriesData.getSettings().setDescription("Wavenumber " + Integer.toString(wavenumber) + " (" + description + ")");
+					lineSeriesDataList.add(lineSeriesData);
+				}
+			}
+		}
+		/*
+		 * References
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
+			int j = 1;
+			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+				if(referencedChromatogram instanceof IChromatogramMSD) {
+					String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, false);
+					for(Number number : wavenumbers) {
+						int wavenumber = number.intValue();
+						String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
+						seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavenumber + OverlayChartSupport.OVERLAY_STOP_MARKER;
+						color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+						availableSeriesIds.add(seriesId);
+						selectionSeries.add(seriesId);
+						if(!baseChart.isSeriesContained(seriesId)) {
+							IMarkedTraces<IMarkedTrace> markedTraces = new MarkedTraces(MarkedTraceModus.INCLUDE);
+							markedTraces.add(new MarkedTrace(wavenumber));
+							ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, seriesId, displayType, derivative, color, markedTraces, false);
+							lineSeriesData.getSettings().setDescription("Wavenumber " + Integer.toString(wavenumber) + " (" + description + ")");
 							lineSeriesDataList.add(lineSeriesData);
 						}
 					}
@@ -1030,13 +1177,11 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		//
 		BaseChart baseChart = chartControl.get().getBaseChart();
 		Derivative derivative = getSelectedDerivative();
-		//
 		IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
 		/*
 		 * Max Plot
 		 */
-		if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
-			markedWavelengths.add(chromatogramWSD.getWavelengths());
+		if(chromatogram instanceof IChromatogramWSD || chromatogram instanceof IChromatogramISD) {
 			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
 			seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + MPC_LABEL + OverlayChartSupport.OVERLAY_STOP_MARKER;
 			availableSeriesIds.add(seriesId);
@@ -1057,7 +1202,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
-				if(referencedChromatogram instanceof IChromatogramWSD) {
+				if(referencedChromatogram instanceof IChromatogramWSD || referencedChromatogram instanceof IChromatogramISD) {
 					String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, false);
 					String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
 					seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + MPC_LABEL + OverlayChartSupport.OVERLAY_STOP_MARKER;
@@ -1127,7 +1272,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	 */
 	private Derivative getSelectedDerivative() {
 
-		Object object = comboViewerDerivative.getStructuredSelection().getFirstElement();
+		Object object = comboViewerDerivative.get().getStructuredSelection().getFirstElement();
 		if(object instanceof Derivative derivative) {
 			return derivative;
 		}
@@ -1156,7 +1301,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private Set<DisplayType> getDisplayType() {
 
-		return DisplayType.toDisplayTypes(comboOverlayType.getText().trim());
+		return DisplayType.toDisplayTypes(comboOverlayType.get().getText().trim());
 	}
 
 	private boolean isExtractedIonsModusEnabled() {
@@ -1170,6 +1315,13 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private boolean isExtractedWavelengthsModusEnabled() {
 
 		return getDisplayType().contains(DisplayType.SWC);
+	}
+
+	private boolean isExtractedWavenumbersModusEnabled() {
+
+		Set<DisplayType> overlayType = getDisplayType();
+		return overlayType.contains(DisplayType.SXC) || //
+				overlayType.contains(DisplayType.XXC);
 	}
 
 	@Override

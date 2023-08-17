@@ -44,12 +44,15 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
+import org.eclipse.chemclipse.xir.model.core.IScanISD;
+import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swtchart.LineStyle;
@@ -174,16 +177,16 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, signals, baseline, false);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline) {
+	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType displayType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline) {
 
-		return getLineSeriesData(chromatogram, seriesId, dataType, derivative, color, signals, false, false);
+		return getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, signals, false, false);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline, boolean useRetentionIndex) {
+	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType displayType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline, boolean useRetentionIndex) {
 
 		int startScan = 1;
 		int stopScan = chromatogram.getNumberOfScans();
-		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, signals, baseline, useRetentionIndex);
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, displayType, derivative, color, signals, baseline, useRetentionIndex);
 	}
 
 	@Deprecated
@@ -218,7 +221,7 @@ public class ChromatogramChartSupport {
 		return lineSeriesData;
 	}
 
-	private ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, int startScan, int stopScan, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline, boolean useRetentionIndex) {
+	private ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, int startScan, int stopScan, String seriesId, DisplayType displayType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline, boolean useRetentionIndex) {
 
 		IBaselineModel baselineModel = null;
 		if(baseline) {
@@ -232,9 +235,9 @@ public class ChromatogramChartSupport {
 			}
 		}
 		//
-		LineStyle lineStyle = getLineStyle(dataType);
+		LineStyle lineStyle = getLineStyle(displayType);
 		boolean condenseCycleNumberScans = preferenceStore.getBoolean(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS);
-		boolean handleScanCycleSeriesTIC = chromatogram.containsScanCycles() && condenseCycleNumberScans && dataType.equals(DisplayType.TIC);
+		boolean handleScanCycleSeriesTIC = chromatogram.containsScanCycles() && condenseCycleNumberScans && displayType.equals(DisplayType.TIC);
 		//
 		double[] xSeries;
 		double[] ySeries;
@@ -300,7 +303,7 @@ public class ChromatogramChartSupport {
 						if(baseline) {
 							ySeries[index] = baselineModel.getBackground(retentionTime);
 						} else {
-							ySeries[index] = getIntensity(scan, dataType, signals);
+							ySeries[index] = getIntensity(scan, displayType, signals);
 						}
 					} else {
 						ySeries[index] = Double.NaN;
@@ -310,7 +313,7 @@ public class ChromatogramChartSupport {
 					if(baseline) {
 						ySeries[index] = baselineModel.getBackground(retentionTime);
 					} else {
-						ySeries[index] = getIntensity(scan, dataType, signals);
+						ySeries[index] = getIntensity(scan, displayType, signals);
 					}
 				}
 				index++;
@@ -454,6 +457,7 @@ public class ChromatogramChartSupport {
 	private double getIntensity(IScan scan, DisplayType dataType, IMarkedTraces<? extends IMarkedTrace> signals) {
 
 		double intensity = Double.NaN;
+		//
 		if(dataType.equals(DisplayType.TIC)) {
 			intensity = scan.getTotalSignal();
 		} else if(dataType.equals(DisplayType.BPC)) {
@@ -512,17 +516,53 @@ public class ChromatogramChartSupport {
 			}
 		} else if(dataType.equals(DisplayType.MPC)) {
 			/*
-			 * Max Plot: each point plotted at maximum absorbance
+			 * Max Plot: each point plotted at maximum absorbance/scattering
 			 */
-			if(scan instanceof IScanWSD scanWSD && signals instanceof IMarkedWavelengths markedWavelengths) {
+			if(scan instanceof IScanWSD scanWSD) {
 				float maxIntensity = -Float.MAX_VALUE;
-				for(float wavelength : markedWavelengths.getWavelengths()) {
-					float abundance = scanWSD.getScanSignal(wavelength).get().getAbundance();
+				for(IScanSignalWSD scanSignalWSD : scanWSD.getScanSignals()) {
+					float abundance = scanSignalWSD.getAbundance();
 					if(abundance > maxIntensity) {
 						maxIntensity = abundance;
 					}
 				}
 				intensity = maxIntensity;
+			} else if(scan instanceof IScanISD scanISD) {
+				double maxIntensity = -Double.MAX_VALUE;
+				for(ISignalXIR signalXIR : scanISD.getProcessedSignals()) {
+					double abundance = signalXIR.getIntensity();
+					if(abundance > maxIntensity) {
+						maxIntensity = abundance;
+					}
+				}
+				intensity = maxIntensity;
+			}
+		} else if(dataType.equals(DisplayType.XXC)) {
+			/*
+			 * Wavenumber
+			 */
+			if(scan instanceof IScanISD scanISD) {
+				Set<Integer> traces = signals.getTraces();
+				intensity = 0;
+				for(ISignalXIR scanSignal : scanISD.getProcessedSignals()) {
+					int wavenumber = (int)Math.round(scanSignal.getWavenumber());
+					if(traces.contains(wavenumber)) {
+						intensity += scanSignal.getIntensity();
+					}
+				}
+			}
+		} else if(dataType.equals(DisplayType.SXC)) {
+			/*
+			 * Wavenumber
+			 */
+			if(scan instanceof IScanISD scanISD) {
+				Set<Integer> traces = signals.getTraces();
+				for(ISignalXIR scanSignal : scanISD.getProcessedSignals()) {
+					int wavenumber = (int)Math.round(scanSignal.getWavenumber());
+					if(traces.contains(wavenumber)) {
+						intensity = scanSignal.getIntensity();
+					}
+				}
 			}
 		}
 		//

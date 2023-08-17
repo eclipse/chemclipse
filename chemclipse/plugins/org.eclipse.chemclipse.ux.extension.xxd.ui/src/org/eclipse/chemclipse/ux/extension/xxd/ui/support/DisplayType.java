@@ -26,6 +26,8 @@ public enum DisplayType {
 	SIC("SIC", "Selected Ion Chromatogram"), //
 	XWC("XWC", "Extracted Wavelength Chromatogram"), //
 	SWC("SWC", "Selected Wavelength Chromatogram"), //
+	XXC("XXC", "Extracted Wavenumber Chromatogram"), // X because W is already used
+	SXC("SXC", "Selected Wavenumber Chromatogram"), // X because W is already used
 	MPC("MPC", "Max Plot Chromatogram"), //
 	TSC("TSC", "Total Subtracted Chromatogram"), //
 	SRM("SRM", "Single Reaction Monitoring"), //
