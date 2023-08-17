@@ -42,7 +42,7 @@ public class QueryEntity {
 		String select = Wikidata.PROP + Wikidata.BIGDATA + Wikidata.SCHEMA + Wikidata.WIKIBASE + Wikidata.WD + Wikidata.WDT + //
 				"SELECT distinct ?item WHERE { \n" + //
 				"  ?item ?label \"" + name.toLowerCase() + "\"@en . \n" + //
-				"  ?item wdt:P31 wd:Q11173 . \n" + //
+				"  ?item wdt:P31 wd:Q113145171 . \n" + //
 				"  ?article schema:about ?item . \n" + //
 				"  ?article schema:inLanguage \"en\" . \n" + //
 				"  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". }\n" + //
