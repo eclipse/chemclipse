@@ -62,5 +62,9 @@ TabFolder {
 }
 
 Table {
-  background-color: #FFFFFF;
+	background-color: #FFFFFF;
+}
+
+#MethodWidgetItem {
+	background-color: #FFFFFF;
 }

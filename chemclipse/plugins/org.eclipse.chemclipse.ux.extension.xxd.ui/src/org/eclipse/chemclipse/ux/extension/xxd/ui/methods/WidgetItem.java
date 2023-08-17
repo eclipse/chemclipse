@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
@@ -396,6 +397,8 @@ public class WidgetItem {
 	private Control createTextWidget(Composite parent, int style, GridData gridData) {
 
 		Text text = new Text(parent, style);
+		text.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT)); // workaround
+		text.setData("org.eclipse.e4.ui.css.id", "MethodWidgetItem");
 		text.setText(getValueAsString());
 		text.setToolTipText(inputValue.getDescription());
 		text.setLayoutData(gridData);
