@@ -20,14 +20,17 @@ import java.util.stream.Collectors;
 
 public enum DisplayType {
 
+	/*
+	 * https://en.wikipedia.org/wiki/Wavenumber
+	 */
 	TIC("TIC", "Total Intensity Chromatogram"), // in MS - total ion chromatogram
 	BPC("BPC", "Base Peak Chromatogram"), //
 	XIC("XIC", "Extracted Ion Chromatogram"), // EIP - extracted ion profiles
 	SIC("SIC", "Selected Ion Chromatogram"), //
 	XWC("XWC", "Extracted Wavelength Chromatogram"), //
 	SWC("SWC", "Selected Wavelength Chromatogram"), //
-	XXC("XXC", "Extracted Wavenumber Chromatogram"), // X because W is already used
-	SXC("SXC", "Selected Wavenumber Chromatogram"), // X because W is already used
+	XVC("XVC", "Extracted Wavenumber Chromatogram"), // v = see wiki link above
+	SVC("SVC", "Selected Wavenumber Chromatogram"), //
 	MPC("MPC", "Max Plot Chromatogram"), //
 	TSC("TSC", "Total Subtracted Chromatogram"), //
 	SRM("SRM", "Single Reaction Monitoring"), //

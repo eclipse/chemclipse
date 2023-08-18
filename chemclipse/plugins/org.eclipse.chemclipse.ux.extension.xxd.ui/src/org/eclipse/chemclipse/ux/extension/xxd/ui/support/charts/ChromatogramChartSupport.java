@@ -537,7 +537,7 @@ public class ChromatogramChartSupport {
 				}
 				intensity = maxIntensity;
 			}
-		} else if(dataType.equals(DisplayType.XXC)) {
+		} else if(dataType.equals(DisplayType.XVC)) {
 			/*
 			 * Wavenumber
 			 */
@@ -551,7 +551,7 @@ public class ChromatogramChartSupport {
 					}
 				}
 			}
-		} else if(dataType.equals(DisplayType.SXC)) {
+		} else if(dataType.equals(DisplayType.SVC)) {
 			/*
 			 * Wavenumber
 			 */

@@ -635,8 +635,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.MPC));
 					} else if(chromatogramSelection instanceof IChromatogramSelectionISD) {
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC));
-						usefulTypes.add(DisplayType.toShortcut(DisplayType.XXC));
-						usefulTypes.add(DisplayType.toShortcut(DisplayType.SXC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.XVC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.SVC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.MPC));
 					} else {
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC));
@@ -672,10 +672,10 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						appendMPC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					} else if(displayType.equals(DisplayType.BPC) || displayType.equals(DisplayType.XIC) || displayType.equals(DisplayType.TSC)) {
 						appendXXC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
-					} else if(displayType.equals(DisplayType.XXC)) {
-						appendXSC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
-					} else if(displayType.equals(DisplayType.SXC)) {
-						appendSSC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
+					} else if(displayType.equals(DisplayType.XVC)) {
+						appendXVC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
+					} else if(displayType.equals(DisplayType.SVC)) {
+						appendSVC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					} else {
 						appendTIC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					}
@@ -776,7 +776,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		}
 	}
 
-	private void appendXSC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
+	private void appendXVC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
 
 		String seriesId;
 		Color color;
@@ -826,7 +826,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		}
 	}
 
-	private void appendSSC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
+	private void appendSVC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
 
 		String seriesId;
 		Color color;
@@ -1320,8 +1320,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private boolean isExtractedWavenumbersModusEnabled() {
 
 		Set<DisplayType> overlayType = getDisplayType();
-		return overlayType.contains(DisplayType.SXC) || //
-				overlayType.contains(DisplayType.XXC);
+		return overlayType.contains(DisplayType.SVC) || //
+				overlayType.contains(DisplayType.XVC);
 	}
 
 	@Override
