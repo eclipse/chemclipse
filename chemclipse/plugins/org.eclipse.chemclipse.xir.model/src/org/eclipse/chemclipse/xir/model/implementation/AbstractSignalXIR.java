@@ -41,11 +41,13 @@ public abstract class AbstractSignalXIR extends AbstractSignal implements ISigna
 	}
 
 	@Override
-	public void setWavenumber(double wavelength) {
+	public void setWavenumber(double wavenumber) {
 
-		if(wavelength >= 0) {
-			this.wavenumber = wavelength;
-		}
+		/*
+		 * Raman could be also negative,
+		 * hence no check.
+		 */
+		this.wavenumber = wavenumber;
 	}
 
 	@Override

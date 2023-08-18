@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.isd.filter.processors;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Iterator;
+import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.isd.filter.settings.WavenumberRemoverSettings;
+import org.eclipse.chemclipse.chromatogram.isd.filter.settings.WavenumberCalibratorSettings;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.processing.DataCategory;
@@ -27,17 +27,19 @@ import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
+import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
 import org.eclipse.chemclipse.xir.model.core.selection.IChromatogramSelectionISD;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IProcessTypeSupplier.class})
-public class WavenumberRemover implements IProcessTypeSupplier {
+public class WavenumberCalibrator implements IProcessTypeSupplier {
 
-	private static final String ID = "org.eclipse.chemclipse.chromatogram.isd.filter.processors.wavenumberRemover";
-	private static final String NAME = "Wavenumber Remover";
-	private static final String DESCRIPTION = "Removes wavenumbers from a ISD chromatogram.";
+	private static final String ID = "org.eclipse.chemclipse.chromatogram.isd.filter.processors.wavenumberCalibrator";
+	private static final String NAME = "Wavenumber Calibrator";
+	private static final String DESCRIPTION = "Calibrates wavenumbers of a ISD chromatogram.";
 
 	@Override
 	public String getCategory() {
@@ -51,23 +53,23 @@ public class WavenumberRemover implements IProcessTypeSupplier {
 		return Collections.singleton(new ProcessSupplier(this));
 	}
 
-	private static final class ProcessSupplier extends AbstractProcessSupplier<WavenumberRemoverSettings> implements IChromatogramSelectionProcessSupplier<WavenumberRemoverSettings> {
+	private static final class ProcessSupplier extends AbstractProcessSupplier<WavenumberCalibratorSettings> implements IChromatogramSelectionProcessSupplier<WavenumberCalibratorSettings> {
 
 		public ProcessSupplier(IProcessTypeSupplier parent) {
 
-			super(ID, NAME, DESCRIPTION, WavenumberRemoverSettings.class, parent, DataCategory.ISD);
+			super(ID, NAME, DESCRIPTION, WavenumberCalibratorSettings.class, parent, DataCategory.ISD);
 		}
 
 		@Override
-		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, WavenumberRemoverSettings processSettings, ProcessExecutionContext context) throws InterruptedException {
+		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, WavenumberCalibratorSettings processSettings, ProcessExecutionContext context) throws InterruptedException {
 
 			if(chromatogramSelection instanceof IChromatogramSelectionISD chromatogramSelectionISD) {
-				Set<Integer> wavenumbers = getWavenumbers(processSettings.getWavenumbers());
+				List<Double> wavenumbers = getWavenumbers(processSettings.getWavenumbers());
 				if(!wavenumbers.isEmpty()) {
 					/*
 					 * Settings
 					 */
-					MarkedTraceModus markedTraceModus = processSettings.getMarkMode();
+					int sizeWavenumbers = wavenumbers.size();
 					IChromatogramISD chromatogramISD = chromatogramSelectionISD.getChromatogram();
 					int startScan = chromatogramISD.getScanNumber(chromatogramSelection.getStartRetentionTime());
 					int stopScan = chromatogramISD.getScanNumber(chromatogramSelection.getStopRetentionTime());
@@ -75,10 +77,15 @@ public class WavenumberRemover implements IProcessTypeSupplier {
 					for(int scan = startScan; scan <= stopScan; scan++) {
 						IScan scanX = chromatogramISD.getScan(scan);
 						if(scanX instanceof IScanISD scanISD) {
-							if(MarkedTraceModus.INCLUDE.equals(markedTraceModus)) {
-								scanISD.removeWavenumbers(wavenumbers);
-							} else {
-								scanISD.keepWavenumbers(wavenumbers);
+							List<ISignalXIR> signals = new ArrayList<>(scanISD.getProcessedSignals());
+							Collections.sort(signals, (s1, s2) -> Double.compare(s1.getWavenumber(), s2.getWavenumber()));
+							int sizeSignals = signals.size();
+							if(sizeWavenumbers >= sizeSignals) {
+								Iterator<ISignalXIR> iteratorSignals = signals.iterator();
+								Iterator<Double> iteratorWavenumbers = wavenumbers.iterator();
+								while(iteratorSignals.hasNext()) {
+									iteratorSignals.next().setWavenumber(iteratorWavenumbers.next());
+								}
 							}
 						}
 					}
@@ -87,16 +94,21 @@ public class WavenumberRemover implements IProcessTypeSupplier {
 			return chromatogramSelection;
 		}
 
-		private Set<Integer> getWavenumbers(String selection) {
+		private List<Double> getWavenumbers(String selection) {
 
-			Set<Integer> wavelengths = new HashSet<>();
+			List<Double> wavelengths = new ArrayList<>();
 			//
-			String[] values = selection.split(" ");
-			for(String value : values) {
-				try {
-					int wavelength = Integer.parseInt(value.trim());
-					wavelengths.add(wavelength);
-				} catch(NumberFormatException e) {
+			String lineDelimiter = OperatingSystemUtils.getLineDelimiter();
+			String delimiter = selection.contains(lineDelimiter) ? lineDelimiter : "\n";
+			String[] lines = selection.split(delimiter);
+			for(String line : lines) {
+				String[] values = line.trim().split(" ");
+				for(String value : values) {
+					try {
+						double wavelength = Double.parseDouble(value.trim());
+						wavelengths.add(wavelength);
+					} catch(NumberFormatException e) {
+					}
 				}
 			}
 			//
