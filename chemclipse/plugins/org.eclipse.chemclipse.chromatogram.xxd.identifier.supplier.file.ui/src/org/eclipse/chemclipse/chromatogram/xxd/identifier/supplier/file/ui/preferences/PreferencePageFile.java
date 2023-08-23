@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.ui.preferences;
 
@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.ui.edito
 import org.eclipse.chemclipse.model.identifier.DeltaCalculation;
 import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
 import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
-import org.eclipse.chemclipse.msd.model.support.CalculationType;
+import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;

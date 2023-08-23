@@ -21,6 +21,11 @@ public class SignalInfrared extends AbstractSignalXIR implements ISignalInfrared
 	private double absorbance = 0.0d;
 	private double transmission = 0.0d;
 
+	public SignalInfrared(double wavenumber, double absorbance) {
+
+		this(wavenumber, absorbance, 0.0d);
+	}
+
 	public SignalInfrared(double wavenumber, double absorbance, double transmission) {
 
 		super(wavenumber);

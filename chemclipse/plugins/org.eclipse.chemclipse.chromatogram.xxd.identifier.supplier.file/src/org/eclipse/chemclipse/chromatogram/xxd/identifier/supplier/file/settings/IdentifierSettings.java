@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpect
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.ChromatogramIdentifierAdapterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
-import org.eclipse.chemclipse.msd.model.support.CalculationType;
+import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.support.settings.ComboSettingsProperty;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;

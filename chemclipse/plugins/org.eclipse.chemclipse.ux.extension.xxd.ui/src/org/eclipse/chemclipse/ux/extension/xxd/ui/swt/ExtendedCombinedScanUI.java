@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -20,12 +20,15 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -43,6 +46,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
+import org.eclipse.chemclipse.xir.model.core.selection.IChromatogramSelectionISD;
+import org.eclipse.chemclipse.xir.model.support.FilterSupportISD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.swt.SWT;
@@ -80,9 +85,11 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 	private Button buttonCopyTraces;
 	private Button buttonLocked;
 	private ScanIdentifierUI scanIdentifierUI;
-	//
-	private IChromatogramSelectionMSD chromatogramSelection = null;
-	private IScanMSD combinedMassSpectrum = null;
+	/*
+	 * MSD, ISD
+	 */
+	private IChromatogramSelection<?, ?> chromatogramSelection = null;
+	private IScan combinedScan = null;
 	private boolean locked = false;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
@@ -109,18 +116,21 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 
 		if(!locked) {
 			chromatogramSelection = null;
-			combinedMassSpectrum = null;
+			combinedScan = null;
 			//
+			CalculationType calculationType = PreferenceSupplier.getCalculationType();
 			if(object instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 				this.chromatogramSelection = chromatogramSelectionMSD;
 				boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
-				CalculationType calculationType = PreferenceSupplier.getCalculationType();
 				boolean usePeaksInsteadOfScans = PreferenceSupplier.isUsePeaksInsteadOfScans();
-				combinedMassSpectrum = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType, usePeaksInsteadOfScans);
+				combinedScan = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType, usePeaksInsteadOfScans);
+			} else if(object instanceof IChromatogramSelectionISD chromatogramSelectionISD) {
+				this.chromatogramSelection = chromatogramSelectionISD;
+				combinedScan = FilterSupportISD.getCombinedSpectrum(chromatogramSelectionISD, false, calculationType);
 			}
 			//
 			toolbarInfo.get().setText(getCombinedRangeInfo(object));
-			scanIdentifierUI.setInput(combinedMassSpectrum);
+			scanIdentifierUI.setInput(combinedScan);
 			updateScan();
 		}
 	}
@@ -254,8 +264,8 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 					/*
 					 * First update the mass spectrum.
 					 */
-					if(combinedMassSpectrum != null) {
-						UpdateNotifierUI.update(display, combinedMassSpectrum, identificationTarget);
+					if(combinedScan != null) {
+						UpdateNotifierUI.update(display, combinedScan, identificationTarget);
 					}
 					UpdateNotifierUI.update(display, identificationTarget);
 				}
@@ -331,7 +341,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			@Override
 			public void update(Display display) {
 
-				if(combinedMassSpectrum != null) {
+				if(combinedScan != null) {
 					tabFolder.setSelection(INDEX_TARGETS);
 					updateScan();
 				}
@@ -352,7 +362,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				TracesSupport.copyTracesToClipboard(e.display, combinedMassSpectrum);
+				TracesSupport.copyTracesToClipboard(e.display, combinedScan);
 			}
 		});
 		//
@@ -369,7 +379,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(combinedMassSpectrum != null) {
+				if(combinedScan instanceof ICombinedMassSpectrum combinedMassSpectrum) {
 					boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
 					CalculationType calculationType = PreferenceSupplier.getCalculationType();
 					IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
@@ -413,7 +423,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					if(combinedMassSpectrum != null) {
+					if(combinedScan instanceof ICombinedMassSpectrum combinedMassSpectrum) {
 						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), combinedMassSpectrum, "CombinedScan");
 					}
 				} catch(NoConverterAvailableException e1) {
@@ -477,17 +487,17 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		switch(tabFolder.getSelectionIndex()) {
 			case INDEX_CHART:
 				if(scanChartUI != null) {
-					scanChartUI.setInput(combinedMassSpectrum);
+					scanChartUI.setInput(combinedScan);
 				}
 				break;
 			case INDEX_TABLE:
 				if(scanTableUI != null) {
-					scanTableUI.setInput(combinedMassSpectrum);
+					scanTableUI.setInput(combinedScan);
 				}
 				break;
 			case INDEX_TARGETS:
 				if(tableViewer.get() != null) {
-					tableViewer.get().setInput(combinedMassSpectrum.getTargets());
+					tableViewer.get().setInput(combinedScan.getTargets());
 				}
 				break;
 		}
@@ -498,10 +508,10 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 	private String getCombinedRangeInfo(Object object) {
 
 		StringBuilder builder = new StringBuilder();
-		if(object instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
-			int startRetentionTime = chromatogramSelectionMSD.getStartRetentionTime();
-			int stopRetentionTime = chromatogramSelectionMSD.getStopRetentionTime();
-			IChromatogram<?> chromatogram = chromatogramSelectionMSD.getChromatogram();
+		if(object instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
+			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			builder.append("Scan range: ");
 			builder.append(chromatogram.getScanNumber(startRetentionTime));
 			builder.append("–");
@@ -520,6 +530,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 
 	private void updateButtons() {
 
-		buttonCopyTraces.setEnabled(combinedMassSpectrum != null);
+		boolean enabled = combinedScan instanceof ICombinedMassSpectrum combinedMassSpectrum;
+		buttonCopyTraces.setEnabled(enabled);
 	}
 }

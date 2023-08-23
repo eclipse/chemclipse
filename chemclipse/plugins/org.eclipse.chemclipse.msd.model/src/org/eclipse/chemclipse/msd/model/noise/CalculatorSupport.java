@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -7,12 +7,13 @@
  * available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add method to get combined spectrum
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.noise;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
@@ -21,7 +22,6 @@ import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.FilterException;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
-import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.support.CombinedMassSpectrumCalculator;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
@@ -34,6 +34,7 @@ public class CalculatorSupport {
 	private final SegmentValidator segmentValidator;
 
 	public CalculatorSupport() {
+
 		segmentValidator = new SegmentValidator();
 	}
 

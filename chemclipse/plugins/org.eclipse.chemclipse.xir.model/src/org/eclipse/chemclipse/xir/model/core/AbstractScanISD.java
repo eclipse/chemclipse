@@ -30,7 +30,7 @@ public abstract class AbstractScanISD extends AbstractScan implements IScanISD {
 	@Override
 	public void adjustTotalSignal(float totalSignal) {
 
-		if(totalSignal < 0.0f || Float.isNaN(totalSignal) || Float.isInfinite(totalSignal)) {
+		if(Float.isNaN(totalSignal) || Float.isInfinite(totalSignal)) {
 			return;
 		}
 		/*

@@ -81,7 +81,7 @@ public class ChromatogramSelectionISD extends AbstractChromatogramSelection<IChr
 	public void setSelectedScan(IScan selectedScan) {
 
 		if(selectedScan instanceof IScanISD scanISD) {
-			// setSelectedScan(scanISD);
+			setSelectedScan(scanISD, true);
 		}
 	}
 
@@ -89,7 +89,13 @@ public class ChromatogramSelectionISD extends AbstractChromatogramSelection<IChr
 	public void setSelectedScan(IScan selectedScan, boolean update) {
 
 		if(selectedScan instanceof IScanISD scanISD) {
-			// setSelectedScan(scanISD, update);
+			/*
+			 * Fire update change if neccessary.
+			 */
+			this.selectedScan = scanISD;
+			if(update) {
+				fireUpdateChange(false);
+			}
 		}
 	}
 
@@ -103,9 +109,7 @@ public class ChromatogramSelectionISD extends AbstractChromatogramSelection<IChr
 	public void update(boolean forceReload) {
 
 		super.update(forceReload);
-		//
 		setSelectedScan(selectedScan, false);
-		//
 		fireUpdateChange(forceReload);
 	}
 }

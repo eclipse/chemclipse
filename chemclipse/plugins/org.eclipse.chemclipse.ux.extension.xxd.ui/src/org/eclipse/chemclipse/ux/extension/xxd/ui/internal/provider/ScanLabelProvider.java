@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
@@ -68,7 +68,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	private DecimalFormat decimalFormatHighResMSD;
 	private DecimalFormat decimalFormatCSD;
 	private DecimalFormat decimalFormatWSD;
-	private DecimalFormat decimalFormatISD;
+	// private DecimalFormat decimalFormatISD;
 	//
 	private DecimalFormat decimalFormatIntensity;
 	private DecimalFormat decimalFormatRelativeIntensity;
@@ -84,7 +84,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 		decimalFormatHighResMSD = ValueFormat.getDecimalFormatEnglish("0.000###");
 		decimalFormatCSD = ValueFormat.getDecimalFormatEnglish("0.0000");
 		decimalFormatWSD = ValueFormat.getDecimalFormatEnglish("0.0");
-		decimalFormatISD = ValueFormat.getDecimalFormatEnglish("0.0");
+		// decimalFormatISD = ValueFormat.getDecimalFormatEnglish("0.0");
 		decimalFormatIntensity = ValueFormat.getDecimalFormatEnglish("0.0###");
 		decimalFormatRelativeIntensity = ValueFormat.getDecimalFormatEnglish("0.0000");
 	}
@@ -272,7 +272,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 		if(element instanceof ISignalXIR scanSignal) {
 			switch(columnIndex) {
 				case 0:
-					text = decimalFormatISD.format(scanSignal.getWavenumber());
+					text = Double.toString(scanSignal.getWavenumber()); // decimalFormatISD.format(scanSignal.getWavenumber());
 					break;
 				case 1:
 					text = decimalFormatIntensity.format(scanSignal.getIntensity());

@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - make the default for addUnknownMzListTarget to false
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences;
@@ -31,7 +31,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings
 import org.eclipse.chemclipse.model.identifier.DeltaCalculation;
 import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
 import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
-import org.eclipse.chemclipse.msd.model.support.CalculationType;
+import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;

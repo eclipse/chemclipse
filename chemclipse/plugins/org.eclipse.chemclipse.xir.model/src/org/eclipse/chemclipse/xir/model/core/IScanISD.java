@@ -18,6 +18,8 @@ import org.eclipse.chemclipse.model.core.IScan;
 
 public interface IScanISD extends IScan {
 
+	SignalType getSignalType();
+
 	TreeSet<ISignalXIR> getProcessedSignals();
 
 	double getRotationAngle();

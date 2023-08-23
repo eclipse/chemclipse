@@ -14,13 +14,30 @@ package org.eclipse.chemclipse.xir.model.implementation;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.xir.model.core.AbstractScanISD;
+import org.eclipse.chemclipse.xir.model.core.ISignalInfrared;
 import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.SignalType;
 
 public class ScanISD extends AbstractScanISD {
 
 	private static final long serialVersionUID = 4840397215574246595L;
 	//
 	private TreeSet<ISignalXIR> processedSignals = new TreeSet<ISignalXIR>();
+
+	@Override
+	public SignalType getSignalType() {
+
+		SignalType signalType = SignalType.RAMAN;
+		//
+		ISignalXIR signalXIR = processedSignals.first();
+		if(signalXIR != null) {
+			if(signalXIR instanceof ISignalInfrared) {
+				signalType = SignalType.FTIR;
+			}
+		}
+		//
+		return signalType;
+	}
 
 	@Override
 	public float getTotalSignal() {

@@ -21,6 +21,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.WavelengthSupport;
+import org.eclipse.chemclipse.xir.model.core.IScanISD;
+import org.eclipse.chemclipse.xir.model.support.WavenumberSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -44,6 +46,9 @@ public class TracesSupport {
 		} else if(scan instanceof IScanWSD scanWSD) {
 			traces = WavelengthSupport.extractTracesText(scanWSD, maxCopyTraces, sortTraces);
 			scanInstance = scanWSD;
+		} else if(scan instanceof IScanISD scanISD) {
+			traces = WavenumberSupport.extractTracesText(scanISD, maxCopyTraces, sortTraces);
+			scanInstance = scanISD;
 		}
 		/*
 		 * Copy to clipboard
