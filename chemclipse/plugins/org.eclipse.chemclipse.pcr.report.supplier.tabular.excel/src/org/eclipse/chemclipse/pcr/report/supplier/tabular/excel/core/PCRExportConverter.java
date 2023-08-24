@@ -216,7 +216,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 		if(!empty) {
 			sheet.createRow(sheet.getLastRowNum() + 1);
 		}
-		for(int i = 0; i < 7; i++) {
+		for(int i = 0; i < 8; i++) {
 			sheet.autoSizeColumn(i);
 		}
 		sheet.setColumnWidth(1, 11 * 480);
