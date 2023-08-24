@@ -71,7 +71,7 @@ public class ChromatogramFileExportProcessSupplier implements IProcessTypeSuppli
 
 		public ProcessSupplier(IProcessTypeSupplier parent) {
 
-			super(ID, NAME, DESCRIPTION, ChromatogramExportSettings.class, parent, DataCategory.CSD, DataCategory.MSD, DataCategory.WSD);
+			super(ID, NAME, DESCRIPTION, ChromatogramExportSettings.class, parent, DataCategory.chromatographyCategories());
 		}
 
 		@Override

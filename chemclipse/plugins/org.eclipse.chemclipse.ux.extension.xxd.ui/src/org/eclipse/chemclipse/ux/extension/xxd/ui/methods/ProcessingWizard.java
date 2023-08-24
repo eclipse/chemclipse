@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add support for different datatype sets
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
@@ -44,12 +44,6 @@ public class ProcessingWizard extends Wizard {
 		return true;
 	}
 
-	@Deprecated
-	public static IProcessEntry open(Shell shell, IProcessSupplierContext processingSupport, DataCategory[] dataCategories) {
-
-		return open(shell, Collections.singletonMap(processingSupport, "global"), dataCategories).get(processingSupport);
-	}
-
 	public static Map<IProcessSupplierContext, IProcessEntry> open(Shell shell, Map<IProcessSupplierContext, String> contexts, DataCategory[] dataCategories) {
 
 		ProcessingWizard wizard = new ProcessingWizard();
@@ -62,6 +56,7 @@ public class ProcessingWizard extends Wizard {
 		if(wizardDialog.open() == WizardDialog.OK) {
 			return Collections.singletonMap(wizardPage.getProcessSupplierContext(), wizardPage.getProcessEntry());
 		}
+		//
 		return null;
 	}
 }

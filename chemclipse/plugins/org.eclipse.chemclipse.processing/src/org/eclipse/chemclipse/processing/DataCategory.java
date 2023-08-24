@@ -46,4 +46,19 @@ public enum DataCategory implements ILabel {
 
 		return label;
 	}
+
+	public static DataCategory[] chromatographyCategories() {
+
+		return new DataCategory[]{CSD, MSD, WSD, ISD};
+	}
+
+	public static DataCategory[] spectroscopyCategories() {
+
+		return new DataCategory[]{FID, NMR};
+	}
+
+	public static DataCategory[] spectrometryCategories() {
+
+		return new DataCategory[]{MALDI};
+	}
 }

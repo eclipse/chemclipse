@@ -65,6 +65,6 @@ public interface IPeakFilter<ConfigType> extends Filter<ConfigType> {
 	@Override
 	default DataCategory[] getDataCategories() {
 
-		return new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD};
+		return new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD, DataCategory.ISD};
 	}
 }

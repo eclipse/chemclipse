@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Matthias Mailänder - match alkanes by CAS or IUPAC name
  *******************************************************************************/
@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.mo
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ResetterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
@@ -58,15 +57,10 @@ public class RetentionIndexCalculator {
 	public static void calculateIndex(IChromatogram<? extends IPeak> chromatogram, RetentionIndexMarker retentionIndexMarker, boolean processReferenceChromatograms) {
 
 		/*
-		 * Settings
-		 */
-		ISeparationColumnIndices separationColumnIndices = SeparationColumnFactory.getSeparationColumnIndices(SeparationColumnType.DEFAULT);
-		for(IRetentionIndexEntry retentionIndexEntry : retentionIndexMarker) {
-			separationColumnIndices.put(retentionIndexEntry);
-		}
-		/*
 		 * Calculate
 		 */
+		ISeparationColumnIndices separationColumnIndices = SeparationColumnFactory.getSeparationColumnIndices(SeparationColumnType.DEFAULT);
+		RetentionIndexSupport.transferRetentionIndexMarker(retentionIndexMarker, separationColumnIndices);
 		RetentionIndexCalculator.calculateIndex(chromatogram, separationColumnIndices);
 		if(processReferenceChromatograms) {
 			for(IChromatogram<? extends IPeak> referencedChromatogram : chromatogram.getReferencedChromatograms()) {

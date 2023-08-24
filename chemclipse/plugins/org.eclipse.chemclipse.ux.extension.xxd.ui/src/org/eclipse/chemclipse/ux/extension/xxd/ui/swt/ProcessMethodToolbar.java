@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - make UI configurable, support selection of existing process methods, support for init with different datatypes
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
@@ -271,12 +271,14 @@ public class ProcessMethodToolbar extends ToolBar {
 		//
 		item.addListener(SWT.Selection, event -> {
 			if(event.detail == SWT.ARROW) {
-				Rectangle rect = item.getBounds();
-				Point pt = new Point(rect.x, rect.y + rect.height);
-				pt = toolBar.toDisplay(pt);
+				Rectangle rectangle = item.getBounds();
+				Point point = new Point(rectangle.x, rectangle.y + rectangle.height);
+				point = toolBar.toDisplay(point);
+				//
 				for(MenuItem menuItem : menu.getItems()) {
 					menuItem.dispose();
 				}
+				//
 				Collection<IProcessMethod> userMethods = MethodConverter.getUserMethods();
 				for(IProcessMethod method : userMethods) {
 					MenuItem menuItem = new MenuItem(menu, SWT.NONE);
@@ -290,9 +292,11 @@ public class ProcessMethodToolbar extends ToolBar {
 						}
 					});
 				}
+				//
 				if(!userMethods.isEmpty()) {
 					new MenuItem(menu, SWT.SEPARATOR);
 				}
+				//
 				MenuItem loadItem = new MenuItem(menu, SWT.NONE);
 				loadItem.setText("Load from file...");
 				loadItem.addSelectionListener(new SelectionAdapter() {
@@ -313,7 +317,7 @@ public class ProcessMethodToolbar extends ToolBar {
 						}
 					}
 				});
-				menu.setLocation(pt.x, pt.y);
+				menu.setLocation(point.x, point.y);
 				menu.setVisible(true);
 			} else {
 				if(processMethod != null) {
@@ -328,6 +332,7 @@ public class ProcessMethodToolbar extends ToolBar {
 							contextList.put((IProcessSupplierContext)supplier, supplier.getName());
 						}
 					}
+					//
 					contextList.put(processingSupport, processMethod.getName());
 					Map<IProcessSupplierContext, IProcessEntry> map = ProcessingWizard.open(getShell(), contextList, dataCategories);
 					if(map != null) {
@@ -338,6 +343,7 @@ public class ProcessMethodToolbar extends ToolBar {
 							if(!edit) {
 								continue;
 							}
+							//
 							IProcessEntry newEntry;
 							if(supplierContext == processingSupport) {
 								// add to global context
@@ -354,6 +360,7 @@ public class ProcessMethodToolbar extends ToolBar {
 				}
 			}
 		});
+		//
 		return item;
 	}
 

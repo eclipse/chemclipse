@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.i
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.RetentionIndexMarker;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
@@ -22,6 +23,16 @@ import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 
 public class RetentionIndexSupport {
+
+	public static TreeMap<Integer, Integer> getRetentionIndexMap(RetentionIndexMarker retentionIndexMarker) {
+
+		TreeMap<Integer, Integer> retentionIndexMap = new TreeMap<>();
+		for(IRetentionIndexEntry retentionIndexEntry : retentionIndexMarker) {
+			retentionIndexMap.put(Math.round(retentionIndexEntry.getRetentionIndex()), retentionIndexEntry.getRetentionTime());
+		}
+		//
+		return retentionIndexMap;
+	}
 
 	public static void transferRetentionIndexMarker(RetentionIndexMarker retentionIndexMarkerSource, RetentionIndexMarker retentionIndexMarkerSink) {
 

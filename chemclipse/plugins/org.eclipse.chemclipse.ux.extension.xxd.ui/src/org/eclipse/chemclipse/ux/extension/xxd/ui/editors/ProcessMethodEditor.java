@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - refactoring for new method API, optimize E4 access
  *******************************************************************************/
@@ -143,9 +143,10 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 			logger.warn(message);
 			throw new RuntimeException(message);
 		}
+		//
 		DataCategory[] categories = currentProcessMethod.getDataCategories().toArray(new DataCategory[]{});
 		if(categories == null || categories.length == 0) {
-			categories = new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD};
+			categories = DataCategory.chromatographyCategories();
 		}
 		//
 		String processMethodName = currentProcessMethod.getName();

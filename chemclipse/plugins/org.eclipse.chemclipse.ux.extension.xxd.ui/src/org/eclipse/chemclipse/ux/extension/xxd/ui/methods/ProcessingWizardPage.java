@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - rework categories handling, support different datatype selections
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;

@@ -7,15 +7,13 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add equals method, add copy constructor, extend for new methods
  *******************************************************************************/
 package org.eclipse.chemclipse.model.methods;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,8 +24,8 @@ import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 
 public class ProcessMethod extends ListProcessEntryContainer implements IProcessMethod {
 
-	public static final Set<DataCategory> CHROMATOGRAPHY = Collections.unmodifiableSet(EnumSet.copyOf(Arrays.asList(DataCategory.MSD, DataCategory.CSD, DataCategory.WSD)));
-	public static final Set<DataCategory> NMR = Collections.unmodifiableSet(EnumSet.copyOf(Arrays.asList(DataCategory.FID, DataCategory.NMR)));
+	public static final Set<DataCategory> CHROMATOGRAPHY = Collections.unmodifiableSet(Set.of(DataCategory.chromatographyCategories()));
+	public static final Set<DataCategory> NMR = Collections.unmodifiableSet(Set.of(DataCategory.spectroscopyCategories()));
 	//
 	private final Map<String, String> metadata = new LinkedHashMap<>();
 	private final Set<DataCategory> catgories;
@@ -83,6 +81,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 		if(operator == null) {
 			return "";
 		}
+		//
 		return operator;
 	}
 
@@ -101,6 +100,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 			}
 			return "";
 		}
+		//
 		return name;
 	}
 
@@ -158,6 +158,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 		if(isFinal()) {
 			return Collections.unmodifiableMap(metadata);
 		}
+		//
 		return metadata;
 	}
 }

@@ -24,10 +24,12 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swtchart.IAxis;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToMinuteConverter;
 import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
+import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IAxisSettings;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
@@ -135,6 +137,30 @@ public class ChartSupport {
 		return getSecondaryAxisSettings(chartSettings.getSecondaryAxisSettingsListY(), title);
 	}
 
+	/**
+	 * May return null
+	 * 
+	 * @param baseChart
+	 * @param title
+	 * @return {@link IAxis}
+	 */
+	public static IAxis getAxisX(BaseChart baseChart, String title) {
+
+		return getAxis(baseChart.getAxisSet().getXAxes(), title);
+	}
+
+	/**
+	 * May return null
+	 * 
+	 * @param baseChart
+	 * @param title
+	 * @return {@link IAxis}
+	 */
+	public static IAxis getAxisY(BaseChart baseChart, String title) {
+
+		return getAxis(baseChart.getAxisSet().getYAxes(), title);
+	}
+
 	// TODO: this is very bad for l10n
 	public static ISecondaryAxisSettings getSecondaryAxisSettings(List<ISecondaryAxisSettings> secondaryAxisSettingsList, String title) {
 
@@ -152,5 +178,16 @@ public class ChartSupport {
 	public static boolean getBoolean(String preferenceName) {
 
 		return preferenceStore.getBoolean(preferenceName);
+	}
+
+	private static IAxis getAxis(IAxis[] axes, String title) {
+
+		for(IAxis axis : axes) {
+			if(axis.getTitle().getText().equals(title)) {
+				return axis;
+			}
+		}
+		//
+		return null;
 	}
 }

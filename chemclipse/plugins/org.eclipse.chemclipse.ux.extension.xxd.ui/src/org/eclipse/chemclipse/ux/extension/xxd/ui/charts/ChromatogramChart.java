@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - support usage of custom preference store
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
@@ -68,6 +68,11 @@ public class ChromatogramChart extends LineChart {
 			IChartSettings chartSettings = getChartSettings();
 			applySettings(chartSettings);
 		}
+	}
+
+	public String getTitleAxisRelativeIntensity() {
+
+		return titleRelativeIntensity;
 	}
 
 	private void initialize() {

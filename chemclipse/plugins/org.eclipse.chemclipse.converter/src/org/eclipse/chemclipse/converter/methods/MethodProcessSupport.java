@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
 
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,8 +37,9 @@ public class MethodProcessSupport {
 			/*
 			 * backward compatibility
 			 */
-			categories = EnumSet.of(DataCategory.CSD, DataCategory.MSD, DataCategory.WSD);
+			categories = Set.of(DataCategory.chromatographyCategories());
 		}
+		//
 		if(method.getNumberOfEntries() == 0) {
 			/*
 			 * When there are no entries, return the categories of the method even though this will be a noop when executed.
