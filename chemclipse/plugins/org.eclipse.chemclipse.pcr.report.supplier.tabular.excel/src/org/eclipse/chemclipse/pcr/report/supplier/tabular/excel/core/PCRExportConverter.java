@@ -22,8 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -85,6 +88,9 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 					}
 					sheet.createRow(sheet.getLastRowNum() + 1);
 					printValue(sheet, IPlate.DATE, headerDataMap);
+					for(String sampleSubset : sampleSubsets) {
+						removeEmptyColums(sheet, sampleSubset);
+					}
 					FileOutputStream fileout = new FileOutputStream(file);
 					workbook.write(fileout);
 					fileout.close();
@@ -216,7 +222,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 		if(!empty) {
 			sheet.createRow(sheet.getLastRowNum() + 1);
 		}
-		for(int i = 0; i < 7; i++) {
+		for(int i = 0; i < 8; i++) {
 			sheet.autoSizeColumn(i);
 		}
 		sheet.setColumnWidth(1, 11 * 480);
@@ -240,5 +246,74 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 		keyCell.setCellValue(key);
 		XSSFCell dataCell = row.createCell(0);
 		dataCell.setCellValue(data.getOrDefault(key, ""));
+	}
+
+	private void removeEmptyColums(XSSFSheet sheet, String targetSubset) {
+
+		Set<String> ignoredSubsets = PreferenceSupplier.getIgnoredSubsets();
+		if(ignoredSubsets.stream().anyMatch(targetSubset::equalsIgnoreCase)) {
+			return;
+		}
+		ChannelMappings channelMappings = PreferenceSupplier.getChannelMappings();
+		Set<Integer> channels = channelMappings.stream() //
+				.filter(c -> c.getSubset().equalsIgnoreCase(targetSubset)) //
+				.mapToInt(c -> c.getChannel()) //
+				.boxed().collect(Collectors.toSet()); //
+		if(channels.isEmpty()) {
+			return;
+		}
+		if(!channels.contains(1)) {
+			deleteColumn(sheet, 4);
+		}
+	}
+
+	private void deleteColumn(XSSFSheet sheet, int columnToDelete) {
+
+		int maxColumn = 0;
+		for(int r = 0; r < sheet.getLastRowNum() + 1; r++) {
+			Row row = sheet.getRow(r);
+			if(row == null) {
+				continue;
+			}
+			int lastColumn = row.getLastCellNum();
+			if(lastColumn > maxColumn) {
+				maxColumn = lastColumn;
+			}
+			if(lastColumn < columnToDelete) {
+				continue;
+			}
+			for(int x = columnToDelete + 1; x < lastColumn + 1; x++) {
+				Cell oldCell = row.getCell(x - 1);
+				if(oldCell != null) {
+					row.removeCell(oldCell);
+				}
+				Cell nextCell = row.getCell(x);
+				if(nextCell != null) {
+					Cell newCell = row.createCell(x - 1, nextCell.getCellType());
+					cloneCell(newCell, nextCell);
+				}
+			}
+		}
+		for(int c = 0; c < maxColumn; c++) {
+			sheet.setColumnWidth(c, sheet.getColumnWidth(c + 1));
+		}
+	}
+
+	private void cloneCell(Cell newCell, Cell oldCell) {
+
+		newCell.setCellComment(oldCell.getCellComment());
+		newCell.setCellStyle(oldCell.getCellStyle());
+		switch(newCell.getCellType()) {
+			case NUMERIC: {
+				newCell.setCellValue(oldCell.getNumericCellValue());
+				break;
+			}
+			case STRING: {
+				newCell.setCellValue(oldCell.getStringCellValue());
+				break;
+			}
+			default:
+				break;
+		}
 	}
 }
