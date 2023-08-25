@@ -19,6 +19,13 @@ public interface IFormatVersion {
 	String FILTER_EXTENSION_CHROMATOGRAM = "*" + FILE_EXTENSION_CHROMATOGRAM;
 	String FILTER_NAME_CHROMATOGRAM = DESCRIPTION_CHROMATOGRAM + " (*" + FILE_EXTENSION_CHROMATOGRAM + ")";
 	String CONVERTER_ID_CHROMATOGRAM = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
+	//
+	String DESCRIPTION_METHOD = "Open Chromatography Method";
+	String FILE_EXTENSION_METHOD = ".ocm";
+	String FILE_NAME_METHOD = DESCRIPTION_METHOD.replaceAll("\\s", "") + FILE_EXTENSION_METHOD;
+	String FILTER_EXTENSION_METHOD = "*" + FILE_EXTENSION_METHOD;
+	String FILTER_NAME_METHOD = DESCRIPTION_METHOD + " (*" + FILE_EXTENSION_METHOD + ")";
+	String CONVERTER_ID_METHOD = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.processMethodSupplier";
 
 	String getVersion();
 
