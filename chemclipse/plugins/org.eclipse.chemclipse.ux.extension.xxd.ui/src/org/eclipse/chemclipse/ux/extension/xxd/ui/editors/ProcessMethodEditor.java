@@ -15,6 +15,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -152,7 +154,9 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 		String processMethodName = currentProcessMethod.getName();
 		logger.info("Process Method Name: " + processMethodName);
 		String label = processMethodName.isEmpty() ? part.getLabel() : processMethodName;
-		part.setLabel(label + " " + Arrays.asList(categories));
+		List<DataCategory> categoriesSorted = Arrays.asList(categories);
+		Collections.sort(categoriesSorted, (c1, c2) -> c1.name().compareTo(c2.name()));
+		part.setLabel(label + " " + categoriesSorted);
 		/*
 		 * It seems to happen that the process supplier context is null.
 		 * Probably, it is not initialized in time. Hence this additional check.
