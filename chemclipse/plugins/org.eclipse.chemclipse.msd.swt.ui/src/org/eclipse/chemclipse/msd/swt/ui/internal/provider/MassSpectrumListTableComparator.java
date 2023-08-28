@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.splash.SplashFactory;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
@@ -112,6 +113,9 @@ public class MassSpectrumListTableComparator extends AbstractRecordTableComparat
 				if(libraryInformation1 != null && libraryInformation2 != null) {
 					sortOrder = libraryInformation2.getComments().compareTo(libraryInformation1.getComments());
 				}
+				break;
+			case 14:
+				new SplashFactory(massSpectrum1).getSplash().compareTo(new SplashFactory(massSpectrum2).getSplash());
 				break;
 			default:
 				sortOrder = 0;

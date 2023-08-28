@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.splash.SplashFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -158,6 +159,11 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 			case 13:
 				if(libraryInformation != null) {
 					text = libraryInformation.getComments();
+				}
+				break;
+			case 14:
+				if(massSpectrum != null) {
+					text = new SplashFactory(massSpectrum).getSplash();
 				}
 				break;
 			default:
