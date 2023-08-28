@@ -1132,11 +1132,10 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		createChromatogramBaselinesUI(composite);
 		createVerticalSeparator(composite);
-		createToggleChartSeriesLegendButton(composite);
 		createToggleLegendMarkerButton(composite);
 		createToggleRangeSelectorButton(composite);
 		//
@@ -1155,7 +1154,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(13, false));
+		composite.setLayout(new GridLayout(14, false));
 		//
 		createProcessorToolbarUI(composite);
 		createButtonToggleInfo(composite);
@@ -1167,6 +1166,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		createButtonToggleMethod(composite);
 		createButtonToggleRetentionIndex(composite);
 		createButtonToggleChartGrid(composite);
+		createToggleChartSeriesLegendButton(composite);
 		createButtonReset(composite);
 		createButtonHelp(composite);
 		createButtonSettings(composite);
