@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
+import org.eclipse.chemclipse.msd.model.splash.SplashFactory;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -32,6 +33,7 @@ public class LibraryTextEditingSupport extends EditingSupport {
 	private DecimalFormat decimalFormat;
 
 	public LibraryTextEditingSupport(ExtendedTableViewer tableViewer, String columnLabel) {
+
 		super(tableViewer);
 		//
 		this.tableViewer = tableViewer;
@@ -57,8 +59,7 @@ public class LibraryTextEditingSupport extends EditingSupport {
 	protected Object getValue(Object element) {
 
 		Object object = null;
-		if(element instanceof IRegularLibraryMassSpectrum) {
-			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)element;
+		if(element instanceof IRegularLibraryMassSpectrum libraryMassSpectrum) {
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			//
 			switch(columnLabel) {
@@ -92,6 +93,9 @@ public class LibraryTextEditingSupport extends EditingSupport {
 				case MassSpectrumListUI.COMMENTS:
 					object = libraryInformation.getComments();
 					break;
+				case MassSpectrumListUI.SPLASH:
+					object = new SplashFactory(libraryMassSpectrum).getSplash();
+					break;
 			}
 		}
 		return object;
@@ -100,8 +104,7 @@ public class LibraryTextEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof IRegularLibraryMassSpectrum) {
-			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)element;
+		if(element instanceof IRegularLibraryMassSpectrum libraryMassSpectrum) {
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			//
 			switch(columnLabel) {
@@ -134,6 +137,9 @@ public class LibraryTextEditingSupport extends EditingSupport {
 					break;
 				case MassSpectrumListUI.COMMENTS:
 					libraryInformation.setComments(value.toString());
+					break;
+				case MassSpectrumListUI.SPLASH:
+					// calculated property
 					break;
 			}
 			tableViewer.refresh();

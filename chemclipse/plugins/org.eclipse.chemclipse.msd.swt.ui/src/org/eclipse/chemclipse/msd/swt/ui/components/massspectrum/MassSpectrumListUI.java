@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -60,6 +60,7 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 	public static final String INCHI = "InChI";
 	public static final String REFERENCE_IDENTIFIER = "Reference Identifier";
 	public static final String COMMENTS = "Comments";
+	public static final String SPLASH = "Splash";
 	//
 	private String[] titles = {//
 			NAME, //
@@ -75,7 +76,8 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 			SMILES, //
 			INCHI, //
 			REFERENCE_IDENTIFIER, //
-			COMMENTS//
+			COMMENTS, //
+			SPLASH //
 	};
 	private int[] bounds = {//
 			300, //
@@ -91,7 +93,8 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 			100, //
 			100, //
 			100, //
-			100 //
+			100, //
+			300 //
 	};
 	//
 	private ITableLabelProvider labelProvider;
