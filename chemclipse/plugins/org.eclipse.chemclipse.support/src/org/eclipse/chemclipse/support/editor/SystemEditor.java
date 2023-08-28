@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.support.editor;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.net.URL;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 
@@ -30,6 +31,23 @@ public class SystemEditor {
 			if(Desktop.isDesktopSupported()) {
 				if(file != null && file.exists()) {
 					Desktop.getDesktop().open(file);
+					success = true;
+				}
+			}
+		} catch(Exception e) {
+			logger.warn(e);
+		}
+		//
+		return success;
+	}
+
+	public static boolean browse(URL url) {
+
+		boolean success = false;
+		try {
+			if(Desktop.isDesktopSupported()) {
+				if(url != null) {
+					Desktop.getDesktop().browse(url.toURI());
 					success = true;
 				}
 			}
