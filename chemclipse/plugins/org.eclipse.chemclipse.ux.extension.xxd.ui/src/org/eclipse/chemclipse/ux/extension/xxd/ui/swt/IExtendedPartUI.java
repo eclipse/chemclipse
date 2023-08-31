@@ -134,6 +134,7 @@ public interface IExtendedPartUI {
 				PlatformUI.getWorkbench().getHelpSystem().displayDynamicHelp();
 			}
 		});
+		//
 		return button;
 	}
 

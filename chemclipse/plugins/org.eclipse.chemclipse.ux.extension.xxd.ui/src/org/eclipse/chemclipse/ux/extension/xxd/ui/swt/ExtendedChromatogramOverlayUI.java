@@ -212,7 +212,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		 * This is needed to layout both combo boxes accordingly.
 		 */
 		this.layout(true);
-		//
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, HelpContext.CHROMATOGRAM_OVERLAY);
 	}
 
