@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -56,10 +55,11 @@ import org.eclipse.swtchart.ICustomPaintListener;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.ISeries;
 import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.model.ICustomSeries;
+import org.eclipse.swtchart.extensions.model.TextElement;
 
 public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
-	private static final boolean DEBUG = LabelBounds.DEBUG_LOG;
 	private static final int NO_ALPHA = 255;
 	//
 	private final int offset;
@@ -73,6 +73,8 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	private DecimalFormat decimalFormatRetentionIndex = ValueFormat.getDecimalFormatEnglish("0.00");
 	private DecimalFormat decimalFormatAreaPercent = ValueFormat.getDecimalFormatEnglish("0.000");
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	//
+	private ICustomSeries customSeries = null;
 
 	public TargetReferenceLabelMarker(boolean showReferenceId, int offset) {
 
@@ -82,10 +84,25 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
 	public TargetReferenceLabelMarker(Collection<? extends TargetReference> targetReferences, ITargetDisplaySettings targetDisplaySettings, int offset) {
 
+		this(targetReferences, targetDisplaySettings, offset, null, null, null);
+	}
+
+	public TargetReferenceLabelMarker(Collection<? extends TargetReference> targetReferences, ITargetDisplaySettings targetDisplaySettings, int offset, BaseChart baseChart, String label, String description) {
+
 		this.showReferenceId = false;
 		this.offset = offset;
 		this.targetDisplaySettings = targetDisplaySettings;
+		//
+		if(baseChart != null) {
+			this.customSeries = baseChart.createCustomSeries(label, description);
+		}
+		//
 		setTargetReferences(targetReferences);
+	}
+
+	public ICustomSeries getCustomSeries() {
+
+		return customSeries;
 	}
 
 	@Override
@@ -100,6 +117,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 						return;
 					}
 				}
+				//
 				ISeries<?> series = getReferenceSeries(chart);
 				if(series != null) {
 					IAxisSet axisSet = chart.getAxisSet();
@@ -139,16 +157,15 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		gc.setAlpha(NO_ALPHA);
 		float[] identityMatrix = new float[6];
 		oldTransform.getElements(identityMatrix);
+		//
 		try {
-			Color activeColor = getActiveColor(preferenceStore);
-			Color inactiveColor = getInactiveColor(preferenceStore);
-			Color idColor = getIdColor(preferenceStore);
+			Color colorActive = getActiveColor(preferenceStore);
+			Color colorInactive = getInactiveColor(preferenceStore);
+			Color colorId = getIdColor(preferenceStore);
+			//
 			Rectangle clipping = gc.getClipping();
 			TargetLabel lastReference = null;
-			if(DEBUG) {
-				System.out.println("---------------------- start label rendering -----------------------------");
-				System.out.println("identityMatrix: " + Arrays.toString(identityMatrix));
-			}
+			//
 			int collisions = 0;
 			for(TargetLabel reference : targetLabels) {
 				int x = xAxis.getPixelCoordinate(reference.getX());
@@ -156,6 +173,19 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				if(!clipping.contains(x, y)) {
 					continue;
 				}
+				/*
+				 * Map the labels to be drawn via SWTChart
+				 */
+				if(customSeries != null) {
+					TextElement textElement = new TextElement();
+					textElement.setLabel(reference.getLabel());
+					textElement.setColor(reference.isActive() ? colorActive : colorInactive);
+					textElement.setX(reference.getX());
+					textElement.setY(reference.getY());
+					textElement.setRotation(-rotation);
+					customSeries.getTextElements().add(textElement);
+				}
+				//
 				if(reference.getFontData() != null) {
 					Font font = fontMap.computeIfAbsent(reference.getFontData(), fd -> {
 						return Fonts.createDPIAwareFont(gc.getDevice(), fd);
@@ -164,23 +194,22 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				} else {
 					gc.setFont(oldFont);
 				}
+				//
 				reference.setBounds(new LabelBounds(gc, reference));
 				String label = reference.getLabel();
 				setTransform(transform, x, y, reference, identityMatrix);
 				if(reference.isActive()) {
-					gc.setForeground(activeColor);
-					gc.setBackground(activeColor);
+					gc.setForeground(colorActive);
+					gc.setBackground(colorActive);
 				} else {
-					gc.setForeground(inactiveColor);
-					gc.setBackground(inactiveColor);
+					gc.setForeground(colorInactive);
+					gc.setBackground(colorInactive);
 				}
+				//
 				if(detectionDepth > 0) {
 					if(lastReference != null && lastReference.getBounds() != null) {
 						if(lastReference.getBounds().getCx() > reference.getBounds().getCx() || lastReference.getBounds().intersects(reference.getBounds())) {
 							collisions++;
-							if(DEBUG) {
-								System.out.println("label " + label + " intersects with previous label " + lastReference.getLabel());
-							}
 							// first guess is to move the label up
 							float yoffset = lastReference.getBounds().offsetY(reference.getBounds());
 							setTransform(transform, Math.max(x, lastReference.getBounds().getCx()) + offset - identityMatrix[4], y - yoffset - offset, reference, identityMatrix);
@@ -192,41 +221,32 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 								// reset values
 								setTransform(transform, x, y, reference, identityMatrix);
 								// then move it to the right... (might still be cut of but that is the default behavior of current charting)
-								if(DEBUG) {
-									System.out.println("label " + label + " overflows");
-								}
 								float xoffset = lastReference.getBounds().offsetX(reference.getBounds());
 								setTransform(transform, x + xoffset + offset, y, reference, identityMatrix);
 								gc.setTransform(oldTransform);
 								drawHandle(gc, reference, x, y, false, identityMatrix);
 							}
 						} else {
-							if(DEBUG) {
-								System.out.println("label " + label + " do not intersect with previous label " + lastReference.getLabel());
-							}
 							collisions = 0;
 						}
 					}
-					if(DEBUG) {
-						reference.getBounds().paintBounds();
-					}
+					//
 					if(collisions > detectionDepth) {
 						lastReference = null;
 						collisions = 0;
 					} else {
 						lastReference = reference;
 					}
-					if(DEBUG) {
-						System.out.println("Current collisions: " + collisions);
-					}
 				}
+				//
 				gc.setTransform(transform);
 				gc.drawText(label, 0, 0, true);
 				if(reference.getId() != null && reference.isActive()) {
-					gc.setForeground(idColor);
+					gc.setForeground(colorId);
 					gc.drawText(reference.getId(), reference.getBounds().getWidth() + offset / 2, 0, true);
 				}
 			}
+			//
 			for(TargetLabel reference : targetLabels) {
 				if(reference.getBounds() != null) {
 					reference.getBounds().dispose();
@@ -252,6 +272,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		transform.rotate(-rotation);
 		transform.translate(0, -h / 2);
 		reference.getBounds().setTransform(transform);
+		//
 		return h;
 	}
 

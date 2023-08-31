@@ -165,7 +165,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swtchart.ICustomPaintListener;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.LineStyle;
@@ -181,6 +180,7 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 import org.eclipse.swtchart.extensions.menu.ResetChartHandler;
+import org.eclipse.swtchart.extensions.model.ICustomSeries;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 
@@ -197,6 +197,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private static final String TOOLTIP_METHOD = "the method toolbar.";
 	private static final String IMAGE_REFERENCES = IApplicationImage.IMAGE_EXPAND_ALL;
 	private static final String TOOLTIP_REFERENCES = "the references toolbar.";
+	//
+	public static final String LABEL_SCAN_TARGETS = "Scan Targets";
+	public static final String LABEL_PEAK_TARGETS = "Peak Targets";
 	//
 	public static final String SERIES_ID_CHROMATOGRAM = "Chromatogram";
 	//
@@ -708,14 +711,19 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		scanLabelMarkerMap.clear();
 	}
 
-	private void removeIdentificationLabelMarker(Map<String, ? extends ICustomPaintListener> markerMap, String seriesId) {
+	private void removeIdentificationLabelMarker(Map<String, TargetReferenceLabelMarker> markerMap, String seriesId) {
 
-		IPlotArea plotArea = chromatogramChartControl.get().getBaseChart().getPlotArea();
-		ICustomPaintListener labelMarker = markerMap.get(seriesId);
+		BaseChart baseChart = chromatogramChartControl.get().getBaseChart();
+		IPlotArea plotArea = baseChart.getPlotArea();
+		TargetReferenceLabelMarker labelMarker = markerMap.get(seriesId);
 		/*
-		 * Remove the label marker.
+		 * Remove the custom series and label marker.
 		 */
 		if(labelMarker != null) {
+			ICustomSeries customSeries = labelMarker.getCustomSeries();
+			if(customSeries != null) {
+				baseChart.deleteCustomSeries(customSeries.getId());
+			}
 			plotArea.removeCustomPaintListener(labelMarker);
 		}
 	}
@@ -863,12 +871,12 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				}
 			}
 			//
-			addPeaks(lineSeriesDataList, peaksActiveNormal, symbolTypeActiveNormal, symbolSize, colorTypeActiveNormal, SERIES_ID_PEAKS_NORMAL_ACTIVE, settings);
-			addPeaks(lineSeriesDataList, peaksActiveTargetsHidden, symbolTypeActiveNormal, symbolSize, colorTypeActiveTargetsHidden, SERIES_ID_PEAKS_NORMAL_TARGETS_HIDDEN, settings);
-			addPeaks(lineSeriesDataList, peaksInactiveNormal, symbolTypeInactiveNormal, symbolSize, colorTypeInactiveNormal, SERIES_ID_PEAKS_NORMAL_INACTIVE, settings);
-			addPeaks(lineSeriesDataList, peaksActiveIstd, symbolTypeActiveIstd, symbolSize, colorTypeActiveIstd, SERIES_ID_PEAKS_ISTD_ACTIVE, settings);
-			addPeaks(lineSeriesDataList, peaksActiveIstdTargetsHidden, symbolTypeActiveIstd, symbolSize, colorTypeActiveIstdTargetsHidden, SERIES_ID_PEAKS_ISTD_TARGETS_HIDDEN, settings);
-			addPeaks(lineSeriesDataList, peaksInactiveIstd, symbolTypeInactiveIstd, symbolSize, colorTypeInactiveIstd, SERIES_ID_PEAKS_ISTD_INACTIVE, settings);
+			addPeaks(lineSeriesDataList, peaksActiveNormal, symbolTypeActiveNormal, symbolSize, colorTypeActiveNormal, SERIES_ID_PEAKS_NORMAL_ACTIVE, settings, LABEL_PEAK_TARGETS, "Active Peaks");
+			addPeaks(lineSeriesDataList, peaksActiveTargetsHidden, symbolTypeActiveNormal, symbolSize, colorTypeActiveTargetsHidden, SERIES_ID_PEAKS_NORMAL_TARGETS_HIDDEN, settings, LABEL_PEAK_TARGETS, "Active Peaks (Hidden)");
+			addPeaks(lineSeriesDataList, peaksInactiveNormal, symbolTypeInactiveNormal, symbolSize, colorTypeInactiveNormal, SERIES_ID_PEAKS_NORMAL_INACTIVE, settings, LABEL_PEAK_TARGETS, "Inactive Peaks");
+			addPeaks(lineSeriesDataList, peaksActiveIstd, symbolTypeActiveIstd, symbolSize, colorTypeActiveIstd, SERIES_ID_PEAKS_ISTD_ACTIVE, settings, LABEL_PEAK_TARGETS, "Active Peaks (Internal Standards)");
+			addPeaks(lineSeriesDataList, peaksActiveIstdTargetsHidden, symbolTypeActiveIstd, symbolSize, colorTypeActiveIstdTargetsHidden, SERIES_ID_PEAKS_ISTD_TARGETS_HIDDEN, settings, LABEL_PEAK_TARGETS, "Active Peaks (Internal Standards - Hidden)");
+			addPeaks(lineSeriesDataList, peaksInactiveIstd, symbolTypeInactiveIstd, symbolSize, colorTypeInactiveIstd, SERIES_ID_PEAKS_ISTD_INACTIVE, settings, LABEL_PEAK_TARGETS, "Inactive Peaks (Internal Standards)");
 		}
 	}
 
@@ -880,7 +888,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		return new TargetReference(peak, TargetReferenceType.PEAK, retentionTimeMinutes, retentionIndex);
 	}
 
-	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<? extends IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, ITargetDisplaySettings displaySettings) {
+	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<? extends IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, ITargetDisplaySettings displaySettings, String label, String description) {
 
 		if(!peaks.isEmpty()) {
 			//
@@ -903,7 +911,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				IPlotArea plotArea = baseChart.getPlotArea();
 				List<TargetReference> peakReferences = TargetReference.getPeakReferences(peaks, targetDisplaySettings);
 				//
-				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(peakReferences, displaySettings, symbolSize * 2);
+				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(peakReferences, displaySettings, symbolSize * 2, baseChart, label, description);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -926,7 +934,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				ITargetDisplaySettings targetDisplaySettings = chromatogramSelection.getChromatogram();
 				BaseChart baseChart = chromatogramChartControl.get().getBaseChart();
 				IPlotArea plotArea = baseChart.getPlotArea();
-				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(TargetReference.getScanReferences(scans, targetDisplaySettings), displaySettings, symbolSize * 2);
+				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(TargetReference.getScanReferences(scans, targetDisplaySettings), displaySettings, symbolSize * 2, baseChart, LABEL_SCAN_TARGETS, "Identified Scans");
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
 			}
@@ -978,7 +986,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			/*
 			 * Peak Marker
 			 */
-			addPeaks(lineSeriesDataList, peaks, symbolTypePeakMarker, symbolSize, colorPeak, SERIES_ID_SELECTED_PEAK_MARKER, settings);
+			addPeaks(lineSeriesDataList, peaks, symbolTypePeakMarker, symbolSize, colorPeak, SERIES_ID_SELECTED_PEAK_MARKER, settings, LABEL_PEAK_TARGETS, "Selected Peaks");
 			//
 			int i = 0;
 			for(IPeak peak : peaks) {
