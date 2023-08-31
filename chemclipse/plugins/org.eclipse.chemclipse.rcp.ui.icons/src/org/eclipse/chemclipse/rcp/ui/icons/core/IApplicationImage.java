@@ -27,6 +27,10 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String PICTOGRAM_SUBTRACT_SCAN_ONE = "subtractScanOne.png";
 	String PICTOGRAM_SUBTRACT_SCAN_MANY = "subtractScanMany.png";
 	/*
+	 * 128x128
+	 */
+	String IMAGE_DRAG_AND_DROP = "draganddrop.png";
+	/*
 	 * 7x7 (Decorator)
 	 * 8x8 (Decorator)
 	 */
