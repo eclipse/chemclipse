@@ -90,9 +90,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static Set<String> getIgnoredSubsets() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		Set<String> subsets = new HashSet<String>();
+		Set<String> subsets = new HashSet<>();
 		String preferenceEntry = preferences.get(P_IGNORE_SUBSETS, DEF_IGNORE_SUBSETS);
-		if(preferenceEntry != "") {
+		if(!"".equals(preferenceEntry)) {
 			String[] items = StringUtils.parseString(preferenceEntry);
 			if(items.length > 0) {
 				for(String item : items) {

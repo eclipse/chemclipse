@@ -14,17 +14,16 @@ package org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.preferences;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.Activator;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class IgnoredSubsetPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePage() {
+	public IgnoredSubsetPreferencePage() {
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Exports plates into *.xlsx reports.");
+		setDescription("These subsets will never get reported.");
 	}
 
 	/**
@@ -35,7 +34,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	public void createFieldEditors() {
 
-		addField(new StringFieldEditor(PreferenceSupplier.P_ANALYSIS_SEPARATOR, "Sample Analysis Separator:", getFieldEditorParent()));
+		addField(new StringListFieldEditor(PreferenceSupplier.P_IGNORE_SUBSETS, "", getFieldEditorParent()));
 	}
 
 	/*

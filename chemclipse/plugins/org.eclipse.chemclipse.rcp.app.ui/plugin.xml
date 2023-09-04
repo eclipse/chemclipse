@@ -21,7 +21,12 @@
             class="org.eclipse.chemclipse.rcp.app.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
             name="Chromatography/Spectrometry">
-      </page>   
+      </page>
+      <page
+            class="org.eclipse.chemclipse.rcp.app.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePageMolecularBiology"
+            name="Molecular Biology">
+      </page>
       <page
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.rcp.app.ui.preferences.DevicesPreferencePage"

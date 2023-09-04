@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,10 +15,6 @@ import org.eclipse.chemclipse.model.settings.Delimiter;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.Activator;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.DecimalSeparator;
-import org.eclipse.chemclipse.pcr.report.supplier.tabular.ui.editors.ChannelMappingFieldEditor;
-import org.eclipse.chemclipse.pcr.report.supplier.tabular.ui.editors.VirtualChannelFieldEditor;
-import org.eclipse.chemclipse.pcr.report.supplier.tabular.ui.editors.WellMappingFieldEditor;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -30,7 +26,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Exports plates into *.csv reports according to these rules.");
+		setDescription("Exports plates into *.csv reports.");
 	}
 
 	/**
@@ -41,10 +37,6 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	public void createFieldEditors() {
 
-		addField(new ChannelMappingFieldEditor(PreferenceSupplier.P_CHANNEL_MAPPING, "Channel Mappings:", getFieldEditorParent()));
-		addField(new WellMappingFieldEditor(PreferenceSupplier.P_WELL_MAPPING, "Well Mappings:", getFieldEditorParent()));
-		addField(new VirtualChannelFieldEditor(PreferenceSupplier.P_VIRTUAL_CHANNELS, "Virtual Channels:", getFieldEditorParent()));
-		addField(new LabelFieldEditor("*.csv Options", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_DELIMITER, "Delimiter Character: ", Delimiter.getOptions(), getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_DECIMAL_SEPARATOR, "Decimal Separator: ", DecimalSeparator.getOptions(), getFieldEditorParent()));
 	}

@@ -9,22 +9,22 @@
  *
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.preferences;
+package org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences;
 
-import org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.Activator;
+import org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.Activator;
+import org.eclipse.chemclipse.pcr.report.supplier.tabular.ui.editors.VirtualChannelFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class VirtualChannelsPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePage() {
+	public VirtualChannelsPreferencePage() {
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Exports plates into *.xlsx reports.");
+		setDescription("Adds extra channels by combining existing ones according to these rules.");
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	public void createFieldEditors() {
 
-		addField(new StringFieldEditor(PreferenceSupplier.P_ANALYSIS_SEPARATOR, "Sample Analysis Separator:", getFieldEditorParent()));
+		addField(new VirtualChannelFieldEditor(PreferenceSupplier.P_VIRTUAL_CHANNELS, "", getFieldEditorParent()));
 	}
 
 	/*

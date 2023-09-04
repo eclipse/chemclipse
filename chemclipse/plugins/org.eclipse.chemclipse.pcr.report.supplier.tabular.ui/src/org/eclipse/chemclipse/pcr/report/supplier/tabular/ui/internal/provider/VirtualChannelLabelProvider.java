@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -47,8 +47,7 @@ public class VirtualChannelLabelProvider extends AbstractChemClipseLabelProvider
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof VirtualChannel) {
-			VirtualChannel virtualChannel = (VirtualChannel)element;
+		if(element instanceof VirtualChannel virtualChannel) {
 			switch(columnIndex) {
 				case 0:
 					text = virtualChannel.getSubset();

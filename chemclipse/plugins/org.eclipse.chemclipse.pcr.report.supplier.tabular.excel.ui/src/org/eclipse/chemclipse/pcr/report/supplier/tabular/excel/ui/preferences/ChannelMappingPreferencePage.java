@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,18 +13,18 @@ package org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.preferences;
 
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.Activator;
+import org.eclipse.chemclipse.pcr.report.supplier.tabular.ui.editors.ChannelMappingFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class ChannelMappingPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePage() {
+	public ChannelMappingPreferencePage() {
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Exports plates into *.xlsx reports.");
+		setDescription("Exports plates into *.xlsx reports according to these rules.");
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	public void createFieldEditors() {
 
-		addField(new StringFieldEditor(PreferenceSupplier.P_ANALYSIS_SEPARATOR, "Sample Analysis Separator:", getFieldEditorParent()));
+		addField(new ChannelMappingFieldEditor(PreferenceSupplier.P_CHANNEL_MAPPING, "", getFieldEditorParent()));
 	}
 
 	/*
