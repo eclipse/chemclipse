@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.Activator;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMappings;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.preferences.StringUtils;
@@ -24,12 +23,9 @@ import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
-	//
 	public static final String P_IGNORE_SUBSETS = "ignore-subsets";
 	public static final String DEF_IGNORE_SUBSETS = "New Subset";
 	public static final String P_CHANNEL_MAPPING = "channel-mapping-xlsx";
@@ -114,35 +110,14 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getFilterPath(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
 	}
 
-	public static void setListPathImport(String filterPath) {
-
-		setFilterPath(P_LIST_PATH_IMPORT, filterPath);
-	}
-
 	public static String getListPathExport() {
 
 		return getFilterPath(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
-	}
-
-	public static void setListPathExport(String filterPath) {
-
-		setFilterPath(P_LIST_PATH_EXPORT, filterPath);
 	}
 
 	private static String getFilterPath(String key, String def) {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.get(key, def);
-	}
-
-	private static void setFilterPath(String key, String filterPath) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.put(key, filterPath);
-			preferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
-		}
 	}
 }
