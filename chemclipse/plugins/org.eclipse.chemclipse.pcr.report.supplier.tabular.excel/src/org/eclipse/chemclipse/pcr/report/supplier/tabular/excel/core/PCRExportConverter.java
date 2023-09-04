@@ -295,9 +295,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 				}
 			}
 		}
-		for(int c = 0; c < maxColumn; c++) {
-			sheet.setColumnWidth(c, sheet.getColumnWidth(c + 1));
-		}
+		sheet.autoSizeColumn(columnToDelete);
 	}
 
 	private void cloneCell(Cell newCell, Cell oldCell) {
