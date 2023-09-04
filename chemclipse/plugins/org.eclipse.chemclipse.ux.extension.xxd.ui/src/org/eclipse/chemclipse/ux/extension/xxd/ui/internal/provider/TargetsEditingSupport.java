@@ -7,14 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.TargetsListUI;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -23,10 +23,10 @@ import org.eclipse.jface.viewers.TextCellEditor;
 public class TargetsEditingSupport extends EditingSupport {
 
 	private CellEditor cellEditor;
-	private ExtendedTableViewer tableViewer;
+	private TargetsListUI tableViewer;
 	private String column;
 
-	public TargetsEditingSupport(ExtendedTableViewer tableViewer, String column) {
+	public TargetsEditingSupport(TargetsListUI tableViewer, String column) {
 
 		super(tableViewer);
 		this.column = column;
@@ -89,6 +89,7 @@ public class TargetsEditingSupport extends EditingSupport {
 				return identificationTarget.getLibraryInformation().getReferenceIdentifier();
 			}
 		}
+		//
 		return false;
 	}
 
@@ -127,7 +128,9 @@ public class TargetsEditingSupport extends EditingSupport {
 				identificationTarget.getLibraryInformation().setReferenceIdentifier((String)value);
 			}
 		}
+		//
 		tableViewer.refresh();
+		tableViewer.updateContent();
 		UpdateNotifierUI.update(tableViewer.getTable().getDisplay(), IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "The target has been edited.");
 	}
 }

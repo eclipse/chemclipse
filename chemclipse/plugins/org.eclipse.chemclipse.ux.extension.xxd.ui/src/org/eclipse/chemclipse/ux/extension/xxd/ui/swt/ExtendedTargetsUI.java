@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - content-proposal support
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.targets.ITarget;
 import org.eclipse.chemclipse.model.updates.ITargetUpdateListener;
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -105,12 +106,13 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private TargetWebIdentifierUI targetWebIdentifierUI; // show database link
+	//
+	private IUpdateListener updateListener;
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent, int style) {
 
 		super(parent, style);
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, HelpContext.TARGETS);
 		createControl();
 	}
 
@@ -119,6 +121,11 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 		updateOnFocus();
 		return true;
+	}
+
+	public void setUpdateListener(IUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
 	}
 
 	public void clear() {
@@ -192,6 +199,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		enableToolbar(toolbarSearch, buttonToolbarSearch.get(), IMAGE_SEARCH, TOOLTIP_SEARCH, false);
 		enableToolbar(toolbarEdit, buttonToolbarEdit.get(), IMAGE_EDIT, TOOLTIP_EDIT, false);
 		//
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, HelpContext.TARGETS);
 		enableEdit(Arrays.asList(targetListOther, targetListChromatogram), buttonTableEdit, IMAGE_EDIT_ENTRY, false);
 		applySettings();
 	}
@@ -431,6 +439,15 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			public void mouseUp(MouseEvent e) {
 
 				propagateTarget(e.display);
+			}
+		});
+		//
+		targetListUI.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update() {
+
+				fireUpdate();
 			}
 		});
 		/*
@@ -850,5 +867,12 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private boolean isChromatogramActive() {
 
 		return tabControl.get().getSelectionIndex() == INDEX_CHROMATOGRAM;
+	}
+
+	private void fireUpdate() {
+
+		if(updateListener != null) {
+			updateListener.update();
+		}
 	}
 }

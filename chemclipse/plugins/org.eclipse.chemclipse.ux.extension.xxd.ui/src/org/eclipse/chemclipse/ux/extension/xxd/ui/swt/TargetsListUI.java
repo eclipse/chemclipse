@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - make more generic useable
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -51,6 +52,8 @@ public class TargetsListUI extends ExtendedTableViewer {
 	private Integer retentionTime = null;
 	private Float retentionIndex = null;
 	//
+	private IUpdateListener updateListener;
+	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public TargetsListUI(Composite parent, int style) {
@@ -66,6 +69,18 @@ public class TargetsListUI extends ExtendedTableViewer {
 		} else {
 			setComparator(null);
 			refresh();
+		}
+	}
+
+	public void setUpdateListener(IUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
+	}
+
+	public void updateContent() {
+
+		if(updateListener != null) {
+			updateListener.update();
 		}
 	}
 
