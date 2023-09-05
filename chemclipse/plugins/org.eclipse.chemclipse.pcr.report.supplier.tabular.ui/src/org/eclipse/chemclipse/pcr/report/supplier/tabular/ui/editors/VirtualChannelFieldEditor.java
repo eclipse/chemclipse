@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,6 +55,7 @@ public class VirtualChannelFieldEditor extends FieldEditor {
 		editor = new VirtualChannelTable(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.minimumHeight = 150;
+		gridData.widthHint = 600;
 		editor.setLayoutData(gridData);
 	}
 

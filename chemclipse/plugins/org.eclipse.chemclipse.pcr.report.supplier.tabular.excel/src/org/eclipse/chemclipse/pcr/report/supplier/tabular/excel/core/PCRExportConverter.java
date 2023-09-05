@@ -48,6 +48,7 @@ import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMappings;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.WellComparator;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.support.editor.SystemEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PCRExportConverter extends AbstractPlateExportConverter implements IPlateExportConverter {
@@ -98,17 +99,17 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 				} catch(FileNotFoundException e) {
 					logger.warn(e);
 					processingInfo.addErrorMessage(DESCRIPTION, "File not found.");
-				} catch(IOException e) {
-					processingInfo.addErrorMessage(DESCRIPTION, "Input/Output problem.");
-					logger.warn(e);
 				}
 			} else {
 				processingInfo.addErrorMessage(DESCRIPTION, "The PCR plate is not available.");
 			}
-		} catch(IOException e1) {
-			logger.warn(e1);
+		} catch(IOException e) {
+			processingInfo.addErrorMessage(DESCRIPTION, "Input/Output problem.");
+			logger.warn(e);
 		}
-		//
+		if(PreferenceSupplier.isOpenReport()) {
+			SystemEditor.open(file);
+		}
 		return processingInfo;
 	}
 
@@ -294,9 +295,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 				}
 			}
 		}
-		for(int c = 0; c < maxColumn; c++) {
-			sheet.setColumnWidth(c, sheet.getColumnWidth(c + 1));
-		}
+		sheet.autoSizeColumn(columnToDelete);
 	}
 
 	private void cloneCell(Cell newCell, Cell oldCell) {

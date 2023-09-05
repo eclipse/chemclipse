@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.Activator;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMappings;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.preferences.StringUtils;
@@ -24,12 +23,9 @@ import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
-	//
 	public static final String P_IGNORE_SUBSETS = "ignore-subsets";
 	public static final String DEF_IGNORE_SUBSETS = "New Subset";
 	public static final String P_CHANNEL_MAPPING = "channel-mapping-xlsx";
@@ -40,6 +36,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_LIST_PATH_EXPORT = "";
 	public static final String P_ANALYSIS_SEPARATOR = "xlsx-pcr-analysis-separator";
 	public static final String DEF_ANALYSIS_SEPARATOR = "_";
+	public static final String P_OPEN_REPORT = "xlsx-pcr-open-report";
+	public static final boolean DEF_OPEN_REPORT = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -70,6 +68,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_CHANNEL_MAPPING, DEF_CHANNEL_MAPPING);
 		defaultValues.put(P_IGNORE_SUBSETS, DEF_IGNORE_SUBSETS);
 		defaultValues.put(P_ANALYSIS_SEPARATOR, DEF_ANALYSIS_SEPARATOR);
+		defaultValues.put(P_OPEN_REPORT, Boolean.toString(DEF_OPEN_REPORT));
 		return defaultValues;
 	}
 
@@ -90,9 +89,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static Set<String> getIgnoredSubsets() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		Set<String> subsets = new HashSet<String>();
+		Set<String> subsets = new HashSet<>();
 		String preferenceEntry = preferences.get(P_IGNORE_SUBSETS, DEF_IGNORE_SUBSETS);
-		if(preferenceEntry != "") {
+		if(!"".equals(preferenceEntry)) {
 			String[] items = StringUtils.parseString(preferenceEntry);
 			if(items.length > 0) {
 				for(String item : items) {
@@ -114,35 +113,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getFilterPath(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
 	}
 
-	public static void setListPathImport(String filterPath) {
-
-		setFilterPath(P_LIST_PATH_IMPORT, filterPath);
-	}
-
 	public static String getListPathExport() {
 
 		return getFilterPath(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 	}
 
-	public static void setListPathExport(String filterPath) {
+	public static Boolean isOpenReport() {
 
-		setFilterPath(P_LIST_PATH_EXPORT, filterPath);
+		return INSTANCE().getBoolean(P_OPEN_REPORT, DEF_OPEN_REPORT);
 	}
 
 	private static String getFilterPath(String key, String def) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(key, def);
-	}
-
-	private static void setFilterPath(String key, String filterPath) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.put(key, filterPath);
-			preferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
-		}
+		return INSTANCE().get(key, def);
 	}
 }

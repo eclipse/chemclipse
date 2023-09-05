@@ -9,6 +9,18 @@
             id="org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.preferences.converterPreferencePage"
             name="Excel PCR Export Converter">
       </page>
+      <page
+            category="org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.preferences.converterPreferencePage"
+            class="org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.preferences.IgnoredSubsetPreferencePage"
+            id="org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.preferences.converterPreferencePageIgnoredSubsets"
+            name="Ignored PCR Subsets">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.preferences.converterPreferencePage"
+            class="org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.preferences.ChannelMappingPreferencePage"
+            id="org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui.preferences.converterPreferencePageIgnoredSubsets"
+            name="PCR Channel Mappings">
+      </page>
    </extension>
    <extension
          point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">

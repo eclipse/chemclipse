@@ -9,6 +9,24 @@
             id="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences.converterPreferencePage"
             name="CSV PCR Export Converter">
       </page>
+      <page
+            category="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences.converterPreferencePage"
+            class="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences.ChannelMappingPreferencePage"
+            id="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences.converterPreferencePage.ChannelMapping"
+            name="PCR Channel Mapping">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences.converterPreferencePage"
+            class="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences.WellMappingPreferencePage"
+            id="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences.converterPreferencePage.WellMapping"
+            name="PCR Well Mapping">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences.converterPreferencePage"
+            class="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences.VirtualChannelsPreferencePage"
+            id="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences.converterPreferencePage.VirtualChannels"
+            name="Virtual PCR Channels">
+      </page>
    </extension>
    <extension
          point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">

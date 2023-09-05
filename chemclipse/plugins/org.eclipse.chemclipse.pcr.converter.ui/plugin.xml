@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="org.eclipse.chemclipse.converter.ui.converterPreferencePage"      
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePageMolecularBiology"
             class="org.eclipse.chemclipse.pcr.converter.ui.preferences.ConverterPreferencePage"
             id="org.eclipse.chemclipse.pcr.converter.ui.converterPreferencePage"
             name="Converter PCR">
