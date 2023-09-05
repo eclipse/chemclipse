@@ -98,15 +98,14 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 				} catch(FileNotFoundException e) {
 					logger.warn(e);
 					processingInfo.addErrorMessage(DESCRIPTION, "File not found.");
-				} catch(IOException e) {
-					processingInfo.addErrorMessage(DESCRIPTION, "Input/Output problem.");
-					logger.warn(e);
 				}
 			} else {
 				processingInfo.addErrorMessage(DESCRIPTION, "The PCR plate is not available.");
 			}
-		} catch(IOException e1) {
-			logger.warn(e1);
+		} catch(IOException e) {
+			processingInfo.addErrorMessage(DESCRIPTION, "Input/Output problem.");
+			logger.warn(e);
+		}
 		}
 		//
 		return processingInfo;
