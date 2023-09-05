@@ -36,6 +36,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_LIST_PATH_EXPORT = "";
 	public static final String P_ANALYSIS_SEPARATOR = "xlsx-pcr-analysis-separator";
 	public static final String DEF_ANALYSIS_SEPARATOR = "_";
+	public static final String P_OPEN_REPORT = "xlsx-pcr-open-report";
+	public static final boolean DEF_OPEN_REPORT = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -66,6 +68,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_CHANNEL_MAPPING, DEF_CHANNEL_MAPPING);
 		defaultValues.put(P_IGNORE_SUBSETS, DEF_IGNORE_SUBSETS);
 		defaultValues.put(P_ANALYSIS_SEPARATOR, DEF_ANALYSIS_SEPARATOR);
+		defaultValues.put(P_OPEN_REPORT, Boolean.toString(DEF_OPEN_REPORT));
 		return defaultValues;
 	}
 
@@ -113,6 +116,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static String getListPathExport() {
 
 		return getFilterPath(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
+	}
+
+	public static Boolean isOpenReport() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_OPEN_REPORT, DEF_OPEN_REPORT);
 	}
 
 	private static String getFilterPath(String key, String def) {

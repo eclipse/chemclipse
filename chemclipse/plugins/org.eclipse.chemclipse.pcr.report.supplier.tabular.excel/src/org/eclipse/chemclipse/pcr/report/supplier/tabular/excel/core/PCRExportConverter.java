@@ -48,6 +48,7 @@ import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMappings;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.WellComparator;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.support.editor.SystemEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PCRExportConverter extends AbstractPlateExportConverter implements IPlateExportConverter {
@@ -106,8 +107,9 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 			processingInfo.addErrorMessage(DESCRIPTION, "Input/Output problem.");
 			logger.warn(e);
 		}
+		if(PreferenceSupplier.isOpenReport()) {
+			SystemEditor.open(file);
 		}
-		//
 		return processingInfo;
 	}
 
