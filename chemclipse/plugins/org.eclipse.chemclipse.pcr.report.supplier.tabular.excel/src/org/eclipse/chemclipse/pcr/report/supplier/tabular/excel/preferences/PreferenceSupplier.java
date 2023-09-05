@@ -120,13 +120,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static Boolean isOpenReport() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_OPEN_REPORT, DEF_OPEN_REPORT);
+		return INSTANCE().getBoolean(P_OPEN_REPORT, DEF_OPEN_REPORT);
 	}
 
 	private static String getFilterPath(String key, String def) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(key, def);
+		return INSTANCE().get(key, def);
 	}
 }
