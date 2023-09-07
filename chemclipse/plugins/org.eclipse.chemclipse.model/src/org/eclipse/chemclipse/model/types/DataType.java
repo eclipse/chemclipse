@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Matthias Mailänder - add MALDI support
  *******************************************************************************/
 package org.eclipse.chemclipse.model.types;
@@ -87,6 +87,7 @@ public enum DataType {
 		for(int i = 0; i < categories.length; i++) {
 			categories[i] = dataTypes[i].toDataCategory();
 		}
+		//
 		return categories;
 	}
 
@@ -96,6 +97,7 @@ public enum DataType {
 		for(int i = 0; i < categories.length; i++) {
 			dataTypes[i] = fromDataCategory(categories[i]);
 		}
+		//
 		return dataTypes;
 	}
 }

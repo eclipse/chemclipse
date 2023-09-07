@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.files;
 
@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.processing.converter.AbstractSupplierFileIdentifie
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
+import org.eclipse.chemclipse.xir.converter.chromatogram.ChromatogramConverterISD;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 
 public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
@@ -53,6 +54,9 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 				break;
 			case WSD:
 				supplier = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport().getSupplier();
+				break;
+			case ISD:
+				supplier = ChromatogramConverterISD.getInstance().getChromatogramConverterSupport().getSupplier();
 				break;
 			case XIR:
 				supplier = ScanConverterXIR.getScanConverterSupport().getSupplier();
@@ -93,6 +97,9 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 				break;
 			case WSD:
 				type = TYPE_WSD;
+				break;
+			case ISD:
+				type = TYPE_ISD;
 				break;
 			case XIR:
 				type = TYPE_XIR;

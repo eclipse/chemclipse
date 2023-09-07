@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2022 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add equals
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.model;
@@ -22,9 +22,16 @@ import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 
 public class BatchProcessJob {
 
-	private static final DataType[] DATA_TYPES = new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD};
+	public static final DataType[] DATA_TYPES = new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD, DataType.ISD};
+	public static final DataType DATA_TYPE_DEFAULT = DataType.MSD;
 	//
-	private List<DataType> dataTypeEntries = new ArrayList<>();
+	public static final String DESCRIPTION = "Batch Job";
+	public static final String FILE_EXTENSION = ".obj";
+	public static final String FILE_NAME = DESCRIPTION.replaceAll("\\s", "") + FILE_EXTENSION;
+	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
+	public static final String FILTER_NAME = DESCRIPTION + " (*" + FILE_EXTENSION + ")";
+	//
+	private DataType dataType = DATA_TYPE_DEFAULT;
 	private List<IChromatogramInputEntry> chromatogramInputEntries = new ArrayList<>();
 	private IProcessMethod processMethod;
 
@@ -38,18 +45,14 @@ public class BatchProcessJob {
 		this.processMethod = processMethod;
 	}
 
-	public DataType[] getDataTypes() {
+	public DataType getDataType() {
 
-		if(dataTypeEntries.isEmpty()) {
-			return DATA_TYPES;
-		} else {
-			return dataTypeEntries.toArray(new DataType[dataTypeEntries.size()]);
-		}
+		return dataType;
 	}
 
-	public List<DataType> getDataTypeEntries() {
+	public void setDataType(DataType dataType) {
 
-		return dataTypeEntries;
+		this.dataType = dataType;
 	}
 
 	public List<IChromatogramInputEntry> getChromatogramInputEntries() {
@@ -68,7 +71,7 @@ public class BatchProcessJob {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((chromatogramInputEntries == null) ? 0 : chromatogramInputEntries.hashCode());
-		result = prime * result + ((dataTypeEntries == null) ? 0 : dataTypeEntries.hashCode());
+		result = prime * result + ((dataType == null) ? 0 : dataType.hashCode());
 		return result;
 	}
 
@@ -87,10 +90,10 @@ public class BatchProcessJob {
 				return false;
 		} else if(!chromatogramInputEntries.equals(other.chromatogramInputEntries))
 			return false;
-		if(dataTypeEntries == null) {
-			if(other.dataTypeEntries != null)
+		if(dataType == null) {
+			if(other.dataType != null)
 				return false;
-		} else if(!dataTypeEntries.equals(other.dataTypeEntries))
+		} else if(!dataType.equals(other.dataType))
 			return false;
 		return true;
 	}

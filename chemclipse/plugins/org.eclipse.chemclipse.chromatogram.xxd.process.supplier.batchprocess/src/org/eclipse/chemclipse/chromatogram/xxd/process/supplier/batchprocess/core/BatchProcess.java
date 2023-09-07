@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - propagate errors/infos from processors to the user
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.core;
@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.xxd.process.support.ChromatogramTypeSupport;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class BatchProcess {
@@ -38,16 +37,10 @@ public class BatchProcess {
 	private final ChromatogramTypeSupport chromatogramTypeSupport;
 	private final IProcessSupplierContext processSupplierContext;
 
-	@Deprecated
-	public BatchProcess() {
-
-		this(new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD}, new ProcessTypeSupport());
-	}
-
-	public BatchProcess(DataType[] dataTypes, IProcessSupplierContext processSupplierContext) {
+	public BatchProcess(DataType dataType, IProcessSupplierContext processSupplierContext) {
 
 		this.processSupplierContext = processSupplierContext;
-		chromatogramTypeSupport = new ChromatogramTypeSupport(dataTypes);
+		chromatogramTypeSupport = new ChromatogramTypeSupport(new DataType[]{dataType});
 	}
 
 	public IProcessingInfo<?> execute(BatchProcessJob batchProcessJob, IProgressMonitor monitor) {
@@ -61,28 +54,28 @@ public class BatchProcess {
 		} else {
 			IProcessMethod processMethod = batchProcessJob.getProcessMethod();
 			for(IChromatogramInputEntry chromatogramInput : batchProcessJob.getChromatogramInputEntries()) {
-				String pathChromatogram = chromatogramInput.getInputFile();
+				String file = chromatogramInput.getInputFile();
 				try {
-					IProcessingInfo<IChromatogramSelection<?, ?>> processingInfoX = chromatogramTypeSupport.getChromatogramSelection(pathChromatogram, monitor);
+					IProcessingInfo<IChromatogramSelection<?, ?>> processingInfoX = chromatogramTypeSupport.getChromatogramSelection(file, monitor);
 					if(!processingInfoX.hasErrorMessages()) {
 						IChromatogramSelection<?, ?> chromatogramSelection = processingInfoX.getProcessingResult();
 						ProcessingInfo<?> processorResult = new ProcessingInfo<>();
 						ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processorResult, processSupplierContext), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
 						if(processorResult.hasErrorMessages()) {
-							processingInfo.addErrorMessage(DESCRIPTION, "Processing: " + pathChromatogram + " failed");
+							processingInfo.addErrorMessage(DESCRIPTION, "Processing: " + file + " failed");
 						} else {
-							processingInfo.addInfoMessage(DESCRIPTION, "Processing: " + pathChromatogram + " completed");
+							processingInfo.addInfoMessage(DESCRIPTION, "Processing: " + file + " completed");
 						}
 						processingInfo.addMessages(processorResult);
 					} else {
-						processingInfo.addErrorMessage(DESCRIPTION, "Failure to process: " + pathChromatogram);
+						processingInfo.addErrorMessage(DESCRIPTION, "Failure to process: " + file);
 					}
 				} catch(TypeCastException e) {
 					logger.warn(e);
-					processingInfo.addErrorMessage(DESCRIPTION, "Failure to process: " + pathChromatogram);
+					processingInfo.addErrorMessage(DESCRIPTION, "Failure to process: " + file);
 				} catch(ChromatogramIsNullException e) {
 					logger.error(e);
-					processingInfo.addErrorMessage(DESCRIPTION, "Chromatogram is empty: " + pathChromatogram);
+					processingInfo.addErrorMessage(DESCRIPTION, "Chromatogram is empty: " + file);
 				}
 			}
 		}

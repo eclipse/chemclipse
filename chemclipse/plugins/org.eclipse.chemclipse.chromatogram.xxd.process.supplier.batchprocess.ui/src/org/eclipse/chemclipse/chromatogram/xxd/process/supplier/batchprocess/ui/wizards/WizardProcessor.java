@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,14 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.wizards;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.io.JobWriter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -27,7 +26,7 @@ public class WizardProcessor extends AbstractFileWizard {
 
 	public WizardProcessor() {
 
-		super("BatchJob", ".obj");
+		super(BatchProcessJob.DESCRIPTION, BatchProcessJob.FILE_EXTENSION);
 	}
 
 	@Override
@@ -63,9 +62,7 @@ public class WizardProcessor extends AbstractFileWizard {
 	private BatchProcessJob createBatchProcessJob() {
 
 		BatchProcessJob batchProcessJob = new BatchProcessJob();
-		for(DataType dataType : pageDataType.getDataTypes()) {
-			batchProcessJob.getDataTypeEntries().add(dataType);
-		}
+		batchProcessJob.setDataType(pageDataType.getDataType());
 		//
 		return batchProcessJob;
 	}

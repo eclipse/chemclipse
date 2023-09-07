@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.support;
@@ -32,6 +32,9 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
+import org.eclipse.chemclipse.xir.converter.chromatogram.ChromatogramConverterISD;
+import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
+import org.eclipse.chemclipse.xir.model.core.selection.ChromatogramSelectionISD;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -77,6 +80,11 @@ public class ChromatogramTypeSupport {
 					IChromatogramWSD chromatogramWSD = processingInfoWSD.getProcessingResult();
 					chromatogramSelection = new ChromatogramSelectionWSD(chromatogramWSD, fireUpdate);
 					break;
+				case ISD:
+					IProcessingInfo<IChromatogramISD> processingInfoISD = ChromatogramConverterISD.getInstance().convert(file, monitor);
+					IChromatogramISD chromatogramISD = processingInfoISD.getProcessingResult();
+					chromatogramSelection = new ChromatogramSelectionISD(chromatogramISD, fireUpdate);
+					break;
 				default:
 					// No action
 			}
@@ -120,6 +128,9 @@ public class ChromatogramTypeSupport {
 				break;
 			case ISupplierFileIdentifier.TYPE_WSD:
 				dataType = DataType.WSD;
+				break;
+			case ISupplierFileIdentifier.TYPE_ISD:
+				dataType = DataType.ISD;
 				break;
 			default:
 				dataType = null;

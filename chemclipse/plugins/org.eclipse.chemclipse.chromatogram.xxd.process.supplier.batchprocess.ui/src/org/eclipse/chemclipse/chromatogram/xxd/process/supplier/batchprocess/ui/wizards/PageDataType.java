@@ -11,12 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.wizards;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -27,15 +29,13 @@ import org.eclipse.swt.widgets.Composite;
 
 public class PageDataType extends AbstractExtendedWizardPage {
 
-	private static final DataType[] DATA_TYPES = new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD};
-	//
-	private DataType[] dataTypesSelection = DATA_TYPES;
+	private DataType dataType = BatchProcessJob.DATA_TYPE_DEFAULT;
 
 	public PageDataType() {
 
 		super(PageDataType.class.getName());
 		setTitle("Chromatogram Batch Process");
-		setDescription("Select the data types to analyze.");
+		setDescription("Select the data type to be analyzed.");
 	}
 
 	@Override
@@ -55,9 +55,9 @@ public class PageDataType extends AbstractExtendedWizardPage {
 		super.setVisible(visible);
 	}
 
-	public DataType[] getDataTypes() {
+	public DataType getDataType() {
 
-		return dataTypesSelection;
+		return dataType;
 	}
 
 	@Override
@@ -81,16 +81,15 @@ public class PageDataType extends AbstractExtendedWizardPage {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof DataType) {
-					return ((DataType)element).name();
-				} else if(element instanceof String) {
-					return element.toString();
+				if(element instanceof DataType dataType) {
+					return dataType.name();
 				}
+				//
 				return null;
 			}
 		});
 		//
-		combo.setToolTipText("Select the data types that shall be batch processed.");
+		combo.setToolTipText("Select the data type, that shall be batch processed.");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
 
@@ -99,15 +98,15 @@ public class PageDataType extends AbstractExtendedWizardPage {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof DataType) {
-					dataTypesSelection = new DataType[]{(DataType)object};
+					dataType = (DataType)object;
 				} else {
-					dataTypesSelection = DATA_TYPES;
+					dataType = BatchProcessJob.DATA_TYPE_DEFAULT;
 				}
 			}
 		});
 		//
-		comboViewer.setInput(new Object[]{"All Data Types", DataType.CSD, DataType.MSD, DataType.WSD});
-		combo.select(0);
+		comboViewer.setInput(BatchProcessJob.DATA_TYPES);
+		comboViewer.setSelection(new StructuredSelection(BatchProcessJob.DATA_TYPE_DEFAULT));
 		//
 		return comboViewer;
 	}

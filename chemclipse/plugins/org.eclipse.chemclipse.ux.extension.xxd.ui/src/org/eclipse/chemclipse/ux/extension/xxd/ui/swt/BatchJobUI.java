@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - move execute Button to the top toolbar to conserve space, use DataListUI instead, refactor run action to be given from outside, optimize the general layout
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
@@ -49,20 +49,20 @@ public class BatchJobUI {
 	private IProcessSupplierContext processingSupport;
 	private IPreferenceStore preferenceStore;
 	private String userLocationPreferenceKey;
-	private DataCategory[] dataCategories;
+	private DataCategory dataCategory;
 	private IRunnableWithProgress executionRunnable;
 
-	public BatchJobUI(Composite parent, IProcessSupplierContext processingSupport, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataType[] dataTypes, IRunnableWithProgress executionRunnable) {
+	public BatchJobUI(Composite parent, IProcessSupplierContext processingSupport, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataType dataType, IRunnableWithProgress executionRunnable) {
 
-		this(parent, processingSupport, preferenceStore, userlocationPrefrenceKey, DataType.convert(dataTypes), executionRunnable);
+		this(parent, processingSupport, preferenceStore, userlocationPrefrenceKey, DataType.convert(new DataType[]{dataType})[0], executionRunnable);
 	}
 
-	public BatchJobUI(Composite parent, IProcessSupplierContext processingSupport, IPreferenceStore preferenceStore, String userLocationPreferenceKey, DataCategory[] dataCategories, IRunnableWithProgress executionRunnable) {
+	public BatchJobUI(Composite parent, IProcessSupplierContext processingSupport, IPreferenceStore preferenceStore, String userLocationPreferenceKey, DataCategory dataCategory, IRunnableWithProgress executionRunnable) {
 
 		this.processingSupport = processingSupport;
 		this.preferenceStore = preferenceStore;
 		this.userLocationPreferenceKey = userLocationPreferenceKey;
-		this.dataCategories = dataCategories;
+		this.dataCategory = dataCategory;
 		this.executionRunnable = executionRunnable;
 		//
 		composite = createControl(parent);
@@ -79,6 +79,16 @@ public class BatchJobUI {
 		extendedMethodUI.setProcessMethod(processMethod);
 		if(modificationHandler != null) {
 			modificationHandler.setDirty(false);
+		}
+	}
+
+	public DataType getDataType() {
+
+		DataType[] dataTypes = DataType.convert(new DataCategory[]{dataCategory});
+		if(dataTypes != null && dataTypes.length > 0) {
+			return dataTypes[0];
+		} else {
+			return DataType.MSD;
 		}
 	}
 
@@ -104,9 +114,9 @@ public class BatchJobUI {
 		}
 	}
 
-	protected DataListUI createDataList(Composite parent, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataCategory[] dataCategories) {
+	protected DataListUI createDataList(Composite parent, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataCategory dataCategory) {
 
-		return new DataListUI(parent, this::setEditorDirty, preferenceStore, userlocationPrefrenceKey, DataType.convert(dataCategories));
+		return new DataListUI(parent, this::setEditorDirty, preferenceStore, userlocationPrefrenceKey, DataType.convert(new DataCategory[]{dataCategory}));
 	}
 
 	private Composite createControl(Composite parent) {
@@ -138,7 +148,7 @@ public class BatchJobUI {
 
 	private DataListUI createDataListUI(Composite parent) {
 
-		DataListUI dataListUI = createDataList(parent, preferenceStore, userLocationPreferenceKey, dataCategories);
+		DataListUI dataListUI = createDataList(parent, preferenceStore, userLocationPreferenceKey, dataCategory);
 		dataListUI.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		dataListUI.getConfig().setToolbarVisible(false);
 		//
@@ -147,7 +157,7 @@ public class BatchJobUI {
 
 	private ExtendedMethodUI createExtendedMethodUI(Composite parent) {
 
-		ExtendedMethodUI extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, processingSupport, dataCategories);
+		ExtendedMethodUI extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, processingSupport, new DataCategory[]{dataCategory});
 		extendedMethodUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		extendedMethodUI.setToolbarHeaderVisible(false);
 		extendedMethodUI.setToolbarMainVisible(false);
@@ -159,7 +169,7 @@ public class BatchJobUI {
 	private ToolItem createLabelInfo(ToolBar toolBar) {
 
 		final ToolItem toolItem = new ToolItem(toolBar, SWT.NONE);
-		toolItem.setText(getDataCategories());
+		toolItem.setText(getDataCategoryLabel());
 		toolItem.setToolTipText("The following data types are active.");
 		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
 		toolItem.setEnabled(false);
@@ -167,18 +177,11 @@ public class BatchJobUI {
 		return toolItem;
 	}
 
-	private String getDataCategories() {
+	private String getDataCategoryLabel() {
 
 		StringBuilder builder = new StringBuilder();
 		builder.append("Data Types: ");
-		int size = dataCategories.length;
-		for(int i = 0; i < size; i++) {
-			DataCategory dataCategory = dataCategories[i];
-			builder.append(dataCategory.name());
-			if(i < (size - 1)) {
-				builder.append(" | ");
-			}
-		}
+		builder.append(dataCategory.name());
 		//
 		return builder.toString();
 	}
@@ -208,6 +211,7 @@ public class BatchJobUI {
 				}
 			}
 		});
+		//
 		return toolItem;
 	}
 }
