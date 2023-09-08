@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.extraction;
 import java.util.Map;
 
 import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.core.ValueOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.DescriptionOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Samples;
@@ -25,21 +26,22 @@ public class PeakExtractionSupport {
 
 		Samples samples;
 		DescriptionOption descriptionOption = extractionSettings.getDescriptionOption();
+		ValueOption valueOption = extractionSettings.getValueOption();
 		//
 		switch(extractionSettings.getExtractionOption()) {
 			case RETENTION_INDEX:
 				PeakRetentionIndexExtractor peakRetentionIndexExtractor = new PeakRetentionIndexExtractor();
 				int retentionIndexWindow = extractionSettings.getGroupValueWindow();
-				samples = peakRetentionIndexExtractor.extractPeakData(peaks, retentionIndexWindow, descriptionOption);
+				samples = peakRetentionIndexExtractor.extractPeakData(peaks, retentionIndexWindow, descriptionOption, valueOption);
 				break;
 			case PEAK_TARGETS:
 				PeakTargetExtractor peakTargetExtractor = new PeakTargetExtractor();
-				samples = peakTargetExtractor.extractPeakData(peaks, descriptionOption);
+				samples = peakTargetExtractor.extractPeakData(peaks, descriptionOption, valueOption);
 				break;
 			default:
 				PeakRetentionTimeExtractor peakRetentionTimeExtractor = new PeakRetentionTimeExtractor();
 				int retentionTimeWindow = extractionSettings.getGroupValueWindow();
-				samples = peakRetentionTimeExtractor.extractPeakData(peaks, retentionTimeWindow, descriptionOption);
+				samples = peakRetentionTimeExtractor.extractPeakData(peaks, retentionTimeWindow, descriptionOption, valueOption);
 				break;
 		}
 		//

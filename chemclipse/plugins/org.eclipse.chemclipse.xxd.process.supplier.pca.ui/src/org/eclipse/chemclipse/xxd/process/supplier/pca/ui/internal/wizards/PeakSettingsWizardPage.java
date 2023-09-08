@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.ExtractionOption;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.core.ValueOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.DescriptionOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.preferences.PreferenceSupplier;
@@ -46,6 +47,7 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 
 	private DescriptionOption descriptionOption = DescriptionOption.NAME;
 	private ExtractionOption extractionOption = ExtractionOption.RETENTION_TIME_MS;
+	private ValueOption valueOption = ValueOption.AREA;
 	private int groupWindow = 1500; // 1.5 sec
 	//
 	private DataBindingContext dataBindingContext = new DataBindingContext();
@@ -77,6 +79,8 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 		createComboViewerDescriptionOption(composite);
 		createLabel(composite, "Group By:");
 		createComboViewerExtractionOption(composite);
+		createLabel(composite, "Use Value:");
+		createComboViewerValueOption(composite);
 		createGroupLabel(composite);
 		createVariableSection(composite);
 		createLabel(composite, "Number of PCs:");
@@ -97,6 +101,11 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 	public ExtractionOption getExtractionOption() {
 
 		return extractionOption;
+	}
+
+	public ValueOption getValueOption() {
+
+		return valueOption;
 	}
 
 	public int getGroupValueWindow() {
@@ -175,6 +184,43 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 		//
 		comboViewer.setInput(ExtractionOption.values());
 		comboViewer.setSelection(new StructuredSelection(ExtractionOption.RETENTION_TIME_MS));
+		//
+		return comboViewer;
+	}
+
+	private ComboViewer createComboViewerValueOption(Composite parent) {
+
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof ValueOption valueOption) {
+					return valueOption.label();
+				}
+				return null;
+			}
+		});
+		//
+		Combo combo = comboViewer.getCombo();
+		combo.setToolTipText("Value Option (in case of concentration: take care that only one conc. is set.");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Object object = comboViewer.getStructuredSelection().getFirstElement();
+				if(object instanceof ValueOption option) {
+					valueOption = option;
+				}
+			}
+		});
+		//
+		comboViewer.setInput(ValueOption.values());
+		comboViewer.setSelection(new StructuredSelection(ValueOption.AREA));
 		//
 		return comboViewer;
 	}

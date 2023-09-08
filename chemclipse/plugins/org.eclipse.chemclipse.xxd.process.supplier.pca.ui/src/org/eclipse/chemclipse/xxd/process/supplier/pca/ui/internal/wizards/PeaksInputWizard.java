@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IExtractionData;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PcaExtractionPeaks;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.core.ValueOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.extraction.ExtractionSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.DescriptionOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IAnalysisSettings;
@@ -83,9 +84,11 @@ public class PeaksInputWizard extends Wizard implements IInputWizard {
 		List<IDataInputEntry> dataInputs = getDataInputEntries();
 		DescriptionOption descriptionOption = peakSettingsWizardPage.getDescriptionOption();
 		ExtractionOption extractionOption = peakSettingsWizardPage.getExtractionOption();
+		ValueOption valueOption = peakSettingsWizardPage.getValueOption();
 		int groupValueWindow = peakSettingsWizardPage.getGroupValueWindow();
-		ExtractionSettings extractionSettings = new ExtractionSettings(descriptionOption, extractionOption, groupValueWindow);
+		ExtractionSettings extractionSettings = new ExtractionSettings(descriptionOption, extractionOption, valueOption, groupValueWindow);
 		pcaExtractionData = new PcaExtractionPeaks(dataInputs, extractionSettings);
+		//
 		return true;
 	}
 }

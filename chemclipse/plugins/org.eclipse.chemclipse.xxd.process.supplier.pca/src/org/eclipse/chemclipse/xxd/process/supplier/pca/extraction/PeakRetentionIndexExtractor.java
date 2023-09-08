@@ -25,8 +25,10 @@ import java.util.TreeSet;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.model.statistics.RetentionIndex;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.core.ValueOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.DescriptionOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.PeakSampleData;
@@ -35,7 +37,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Samples;
 
 public class PeakRetentionIndexExtractor extends AbstractClassifierDescriptionExtractor {
 
-	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, int retentionIndexWindow, DescriptionOption descriptionOption) {
+	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, int retentionIndexWindow, DescriptionOption descriptionOption, ValueOption valueOption) {
 
 		List<Sample> samplesList = new ArrayList<>();
 		peaks.keySet().forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));
@@ -48,7 +50,7 @@ public class PeakRetentionIndexExtractor extends AbstractClassifierDescriptionEx
 		List<Integer> extractedRetentionIndices = calculateCondensedRetentionIndices(extractPeaks);
 		samples.getVariables().addAll(RetentionIndex.create(extractedRetentionIndices));
 		//
-		setExtractData(extractPeaks, samples);
+		setExtractData(extractPeaks, samples, valueOption);
 		setClassifierAndDescription(samples, descriptionOption);
 		//
 		return samples;
@@ -162,9 +164,10 @@ public class PeakRetentionIndexExtractor extends AbstractClassifierDescriptionEx
 		return null;
 	}
 
-	private void setExtractData(Map<String, SortedMap<Integer, IPeak>> extractData, Samples samples) {
+	private void setExtractData(Map<String, SortedMap<Integer, IPeak>> extractData, Samples samples, ValueOption valueOption) {
 
 		List<IVariable> extractedRetentionIndices = samples.getVariables();
+		boolean useQuantitationValue = ValueOption.CONCENTRATION.equals(valueOption);
 		//
 		for(Sample sample : samples.getSampleList()) {
 			Iterator<IVariable> it = extractedRetentionIndices.iterator();
@@ -175,7 +178,23 @@ public class PeakRetentionIndexExtractor extends AbstractClassifierDescriptionEx
 					if(variable instanceof RetentionIndex retentionIndex) {
 						IPeak peak = extractPeak.get(retentionIndex.getRetentionIndex());
 						if(peak != null) {
-							PeakSampleData sampleData = new PeakSampleData(peak.getIntegratedArea(), peak);
+							double value = 0.0d;
+							if(useQuantitationValue) {
+								/*
+								 * Concentration
+								 */
+								List<IQuantitationEntry> quantitationEntries = peak.getQuantitationEntries();
+								if(!quantitationEntries.isEmpty()) {
+									value = quantitationEntries.get(0).getConcentration();
+								}
+							} else {
+								/*
+								 * Area
+								 */
+								value = peak.getIntegratedArea();
+							}
+							//
+							PeakSampleData sampleData = new PeakSampleData(value, peak);
 							sampleData.setPeak(peak);
 							sample.getSampleData().add(sampleData);
 						} else {
