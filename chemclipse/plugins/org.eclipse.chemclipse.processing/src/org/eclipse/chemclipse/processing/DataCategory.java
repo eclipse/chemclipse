@@ -23,7 +23,6 @@ public enum DataCategory implements ILabel {
 	WSD(TranslationSupport.getTranslationService().translate("%DataCategory.WSD", Activator.getContributorURI())), //
 	ISD(TranslationSupport.getTranslationService().translate("%DataCategory.ISD", Activator.getContributorURI())), //
 	TSD(TranslationSupport.getTranslationService().translate("%DataCategory.TSD", Activator.getContributorURI())), //
-	FID(TranslationSupport.getTranslationService().translate("%DataCategory.FID", Activator.getContributorURI())), //
 	NMR(TranslationSupport.getTranslationService().translate("%DataCategory.NMR", Activator.getContributorURI())), //
 	XIR(TranslationSupport.getTranslationService().translate("%DataCategory.XIR", Activator.getContributorURI())), //
 	PCR(TranslationSupport.getTranslationService().translate("%DataCategory.PCR", Activator.getContributorURI())), //
@@ -54,7 +53,7 @@ public enum DataCategory implements ILabel {
 
 	public static DataCategory[] spectroscopyCategories() {
 
-		return new DataCategory[]{FID, NMR};
+		return new DataCategory[]{NMR};
 	}
 
 	public static DataCategory[] spectrometryCategories() {

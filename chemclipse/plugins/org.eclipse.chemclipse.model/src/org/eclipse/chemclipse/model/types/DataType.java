@@ -47,7 +47,6 @@ public enum DataType {
 				return DataType.CSD;
 			case ISD:
 				return DataType.ISD;
-			case FID:
 			case NMR:
 				return DataType.NMR;
 			case MALDI:
