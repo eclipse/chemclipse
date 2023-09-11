@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io;
 
@@ -27,12 +27,7 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 public class CalibrationFileWriter {
 
 	private static final Logger logger = Logger.getLogger(CalibrationFileWriter.class);
-	private DecimalFormat decimalFormat;
-
-	public CalibrationFileWriter() {
-
-		decimalFormat = ValueFormat.getDecimalFormatEnglish();
-	}
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 
 	public void write(File file, ISeparationColumnIndices separationColumnIndices) {
 
