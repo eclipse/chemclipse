@@ -1,0 +1,28 @@
+NAME: Benzoic acid, 2-hydroxy-, ethyl ester
+CASNO: 118-61-6
+CASNO: 1476043-16-9
+SYNON: o-(Ethoxycarbonyl)phenol
+SYNON: Salotan
+SYNON: Salicylic ether
+SYNON: Salicylic acid, ethyl ester
+SYNON: Sal ethyl
+SYNON: NSC 8209
+SYNON: Mesotol
+INCHI: 1S/C9H10O3/c1-2-12-9(11)7-5-3-4-6-8(7)10/h3-6,10H,2H2,1H3
+INCHIKEY: GYCKQBWUSACYIF-UHFFFAOYSA-N 
+RT: 0
+RRT: 0
+RI: 400.7
+COLUMNINDEX: 1832.0	FFAP	polar	Capillary		30 m	0.32 mm	FFAP	
+COLUMNINDEX: 1828.0	Supelcowax 10	polar	Capillary		60 m	0.25 mm	Supelcowax 10	
+COLUMNINDEX: 1280.0	HP-5	non-polar (apolar)	Capillary		50 m	0.3 mm	HP-5
+COLUMNINDEX: 1281.0	DB5	non-polar (apolar)
+CONTRIBUTOR: PubChem
+FORMULA: C9H10O3
+MW: 166
+EXACTMASS: 166.17
+COMMENTS: Demo for CAS Numbers, Synonyms
+SOURCE: Database
+NUM PEAKS: 10
+(120 1000) (92 401) (166 346) (121 314) (39 147)
+(65 137) (93 91) (64 85) (27 71) (63 67)

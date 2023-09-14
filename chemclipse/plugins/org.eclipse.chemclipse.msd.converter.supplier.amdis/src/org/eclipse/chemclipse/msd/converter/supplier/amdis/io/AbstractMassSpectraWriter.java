@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
@@ -32,9 +32,10 @@ public abstract class AbstractMassSpectraWriter extends AbstractWriter implement
 	@Override
 	public void write(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
-		FileWriter fileWriter = new FileWriter(file, append);
-		writeMassSpectrum(fileWriter, massSpectrum, monitor);
-		fileWriter.close();
+		try (FileWriter fileWriter = new FileWriter(file, append)) {
+			writeMassSpectrum(fileWriter, massSpectrum, monitor);
+			fileWriter.flush();
+		}
 	}
 
 	@Override

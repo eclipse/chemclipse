@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
@@ -24,8 +24,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.columns.ISeparationColumn;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
+import org.eclipse.chemclipse.model.columns.SeparationColumnPackaging;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
+import org.eclipse.chemclipse.model.identifier.ColumnIndexMarker;
+import org.eclipse.chemclipse.model.identifier.IColumnIndexMarker;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.misc.CompoundInformation;
@@ -39,6 +46,7 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
+import org.eclipse.chemclipse.support.util.ValueParserSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MSLReader extends AbstractMassSpectraReader implements IMassSpectraReader {
@@ -52,13 +60,22 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	private static final Pattern NAME = Pattern.compile("(NAME:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern COMMENTS = Pattern.compile("(COMMENT:|COMMENTS:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern CAS = Pattern.compile("(CAS(NO|#)?:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern SYNONYM = Pattern.compile("(Synon:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern DB_NAME = Pattern.compile("(DB(NO|#)?:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern CONTRIBUTOR = Pattern.compile("(CONTRIBUTOR:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern REFERENCE_IDENTIFIER = Pattern.compile("(REFID:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern SMILES = Pattern.compile("(SMILES:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern INCHI = Pattern.compile("(INCHI:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern INCHIKEY = Pattern.compile("(INCHIKEY:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern MW = Pattern.compile("(MW:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern EXACT_MASS = Pattern.compile("(EXACTMASS:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern FORMULA = Pattern.compile("(FORMULA:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RETENTION_TIME = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RELATIVE_RETENTION_TIME = Pattern.compile("(RRT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RETENTION_INDEX = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern COLUMN_INDEX = Pattern.compile("(COLUMNINDEX:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern DATA = Pattern.compile("(.*)(Num Peaks:)(\\s*)(\\d*)(.*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+	private static final Pattern SOURCE = Pattern.compile("(SOURCE:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern IONS = Pattern.compile("([+]?\\d+\\.?\\d*)(\\s+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)"); // "(\\d+)(\\s+)(\\d+)" or "(\\d+)(\\s+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)"
 	//
 	private static final String RETENTION_INDICES_DELIMITER = ", ";
@@ -118,35 +135,109 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	protected IVendorLibraryMassSpectrum extractMassSpectrum(String massSpectrumData, String referenceIdentifierMarker, String referenceIdentifierPrefix) {
 
 		IVendorLibraryMassSpectrum massSpectrum = new VendorLibraryMassSpectrum();
+		ILibraryInformation libraryInformation = massSpectrum.getLibraryInformation();
 		/*
 		 * Extract name and reference identifier.
 		 * Additionally, add the reference identifier if it is stored as a pattern.
 		 */
-		String name = extractContentAsString(massSpectrumData, NAME, 2);
-		extractNameAndReferenceIdentifier(massSpectrum, name, referenceIdentifierMarker, referenceIdentifierPrefix);
-		String referenceIdentifier = extractContentAsString(massSpectrumData, REFERENCE_IDENTIFIER, 2) + massSpectrum.getLibraryInformation().getReferenceIdentifier();
-		massSpectrum.getLibraryInformation().setReferenceIdentifier(referenceIdentifier);
-		//
-		String comments = extractContentAsString(massSpectrumData, COMMENTS, 2);
-		massSpectrum.getLibraryInformation().setComments(comments);
-		String casNumber = extractContentAsString(massSpectrumData, CAS, 3);
-		massSpectrum.getLibraryInformation().setCasNumber(casNumber);
-		String database = extractContentAsString(massSpectrumData, DB_NAME, 3);
-		massSpectrum.getLibraryInformation().setDatabase(database);
-		String smiles = extractContentAsString(massSpectrumData, SMILES, 2);
-		massSpectrum.getLibraryInformation().setSmiles(smiles);
-		int retentionTime = extractContentAsInt(massSpectrumData, RETENTION_TIME, 2);
-		massSpectrum.setRetentionTime(retentionTime);
-		int relativeRetentionTime = extractContentAsInt(massSpectrumData, RELATIVE_RETENTION_TIME, 2);
-		massSpectrum.setRelativeRetentionTime(relativeRetentionTime);
-		String retentionIndices = extractContentAsString(massSpectrumData, RETENTION_INDEX, 2);
-		extractRetentionIndices(massSpectrum, retentionIndices, RETENTION_INDICES_DELIMITER);
+		extractNameAndReferenceIdentifier(massSpectrum, extractContentAsString(massSpectrumData, NAME, 2), referenceIdentifierMarker, referenceIdentifierPrefix);
+		setSynonyms(extractContentAsStringList(massSpectrumData, SYNONYM, 2), libraryInformation);
+		setCasNumbers(extractContentAsStringList(massSpectrumData, CAS, 3), libraryInformation);
+		libraryInformation.setComments(extractContentAsString(massSpectrumData, COMMENTS, 2));
+		libraryInformation.setReferenceIdentifier(extractContentAsString(massSpectrumData, REFERENCE_IDENTIFIER, 2) + libraryInformation.getReferenceIdentifier());
+		libraryInformation.setFormula(extractContentAsString(massSpectrumData, FORMULA, 2));
+		libraryInformation.setInChI(extractContentAsString(massSpectrumData, INCHI, 2));
+		libraryInformation.setInChIKey(extractContentAsString(massSpectrumData, INCHIKEY, 2));
+		libraryInformation.setSmiles(extractContentAsString(massSpectrumData, SMILES, 2));
+		libraryInformation.setMolWeight(extractContentAsDouble(massSpectrumData, MW, 2));
+		libraryInformation.setExactMass(extractContentAsDouble(massSpectrumData, EXACT_MASS, 2));
+		libraryInformation.setDatabase(extractContentAsString(massSpectrumData, DB_NAME, 3));
+		libraryInformation.setContributor(extractContentAsString(massSpectrumData, CONTRIBUTOR, 2));
+		massSpectrum.setRetentionTime(extractRetentionTime(massSpectrumData, RETENTION_TIME, 2));
+		massSpectrum.setRelativeRetentionTime(extractRetentionTime(massSpectrumData, RELATIVE_RETENTION_TIME, 2));
+		extractRetentionIndices(massSpectrum, extractContentAsString(massSpectrumData, RETENTION_INDEX, 2), RETENTION_INDICES_DELIMITER);
+		setColumnIndices(extractContentAsStringList(massSpectrumData, COLUMN_INDEX, 2), libraryInformation);
+		massSpectrum.setSource(extractContentAsString(massSpectrumData, SOURCE, 2));
 		/*
 		 * Extracts all ions and stored them.
 		 */
 		extractIons(massSpectrum, massSpectrumData);
 		//
 		return massSpectrum;
+	}
+
+	private void setCasNumbers(List<String> casNumbers, ILibraryInformation libraryInformation) {
+
+		for(String casNumber : casNumbers) {
+			libraryInformation.addCasNumber(casNumber);
+		}
+	}
+
+	private void setSynonyms(List<String> synonyms, ILibraryInformation libraryInformation) {
+
+		for(String synonym : synonyms) {
+			libraryInformation.getSynonyms().add(synonym);
+		}
+	}
+
+	private void setColumnIndices(List<String> columnIndices, ILibraryInformation libraryInformation) {
+
+		ValueParserSupport valueParserSupport = new ValueParserSupport();
+		for(String columnIndex : columnIndices) {
+			String[] values = columnIndex.split(AbstractWriter.TAB);
+			if(values.length >= 3) {
+				float retentionIndex = valueParserSupport.parseFloat(values, 0, 0.0f);
+				String name = valueParserSupport.parseString(values, 1, "");
+				if(retentionIndex > 0.0f && !name.isEmpty()) {
+					/*
+					 * Separation Column
+					 */
+					SeparationColumnType separationColumnType = getSeparationColumnType(valueParserSupport.parseString(values, 2, ""));
+					SeparationColumnPackaging separationColumnPackaging = getSeparationColumnPackaging(valueParserSupport.parseString(values, 3, ""));
+					String calculationType = valueParserSupport.parseString(values, 4, "");
+					String length = valueParserSupport.parseString(values, 5, "");
+					String diameter = valueParserSupport.parseString(values, 6, "");
+					String phase = valueParserSupport.parseString(values, 7, "");
+					String thickness = valueParserSupport.parseString(values, 8, "");
+					//
+					ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(name, length, diameter, phase);
+					separationColumn.setSeparationColumnType(separationColumnType);
+					separationColumn.setSeparationColumnPackaging(separationColumnPackaging);
+					separationColumn.setCalculationType(calculationType);
+					separationColumn.setThickness(thickness);
+					IColumnIndexMarker columnIndexMarker = new ColumnIndexMarker(separationColumn, retentionIndex);
+					libraryInformation.add(columnIndexMarker);
+				}
+			}
+		}
+	}
+
+	private SeparationColumnType getSeparationColumnType(String value) {
+
+		try {
+			return SeparationColumnType.valueOf(value);
+		} catch(Exception e) {
+			for(SeparationColumnType type : SeparationColumnType.values()) {
+				if(type.label().equals(value)) {
+					return type;
+				}
+			}
+			return SeparationColumnType.DEFAULT;
+		}
+	}
+
+	private SeparationColumnPackaging getSeparationColumnPackaging(String value) {
+
+		try {
+			return SeparationColumnPackaging.valueOf(value);
+		} catch(Exception e) {
+			for(SeparationColumnPackaging packaging : SeparationColumnPackaging.values()) {
+				if(packaging.label().equals(value)) {
+					return packaging;
+				}
+			}
+			return SeparationColumnPackaging.CAPILLARY;
+		}
 	}
 
 	/**
@@ -301,24 +392,34 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 		return content.replace("\0", " ");
 	}
 
-	/**
-	 * Extracts the content from the given mass spectrum string defined by the
-	 * given pattern.
-	 * 
-	 * @param massSpectrumData
-	 * @return int
-	 */
-	private int extractContentAsInt(String massSpectrumData, Pattern pattern, int group) {
+	private List<String> extractContentAsStringList(String massSpectrumData, Pattern pattern, int group) {
 
-		int content = 0;
+		List<String> contentList = new ArrayList<>();
+		Matcher matcher = pattern.matcher(massSpectrumData);
+		while(matcher.find()) {
+			contentList.add(matcher.group(group).trim().replace("\0", " "));
+		}
+		//
+		return contentList;
+	}
+
+	private int extractRetentionTime(String massSpectrumData, Pattern pattern, int group) {
+
+		return (int)(extractContentAsDouble(massSpectrumData, pattern, group) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+	}
+
+	private double extractContentAsDouble(String massSpectrumData, Pattern pattern, int group) {
+
+		double content = 0;
 		try {
 			Matcher matcher = pattern.matcher(massSpectrumData);
 			if(matcher.find()) {
-				content = (int)(Double.parseDouble(matcher.group(group).trim()) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+				content = Double.parseDouble(matcher.group(group).trim());
 			}
 		} catch(Exception e) {
 			logger.warn(e);
 		}
+		//
 		return content;
 	}
 }

@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl;
 
@@ -38,7 +38,7 @@ public class MSLExportConverter_1_ITest extends TestCase {
 
 		super.setUp();
 		exportConverter = new MSLDatabaseExportConverter();
-		exportFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTDIR_EXPORT) + File.separator + TestPathHelper.TESTFILE_EXPORT_DB_MSL);
+		exportFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTDIR_EXPORT) + File.separator + TestPathHelper.TESTFILE_EXPORT_DB_1_MSL);
 		massSpectrum = new ScanMSD();
 		massSpectrum.addIon(new Ion(56.3f, 7382.3f));
 		massSpectrum.addIon(new Ion(26.3f, 73382.3f));

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
@@ -24,32 +24,40 @@ public class MSLWriter extends AbstractMassSpectraWriter implements IMassSpectra
 	@Override
 	public void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
 
+		/*
+		 * Retrieve the correct target.
+		 */
 		IScanMSD optimizedMassSpectrum = getOptimizedMassSpectrum(massSpectrum);
 		IIdentificationTarget identificationTarget = getIdentificationTarget(optimizedMassSpectrum);
-		if(identificationTarget == null || "".equals(identificationTarget.getLibraryInformation().getName())) {
+		if(identificationTarget == null || identificationTarget.getLibraryInformation().getName().isEmpty()) {
 			identificationTarget = getIdentificationTarget(massSpectrum);
 		}
 		/*
-		 * Write the fields
+		 * Write the fields ... retention time, retention index
 		 */
-		fileWriter.write(getNameField(massSpectrum, identificationTarget) + CRLF);
-		fileWriter.write(getCasNumberField(identificationTarget) + CRLF);
-		fileWriter.write(getSmilesField(identificationTarget) + CRLF);
-		/*
-		 * Retention time, retention index
-		 */
-		fileWriter.write(getRetentionTimeField(optimizedMassSpectrum) + CRLF);
-		fileWriter.write(getRelativeRetentionTimeField(optimizedMassSpectrum) + CRLF);
-		fileWriter.write(getRetentionIndexField(optimizedMassSpectrum) + CRLF);
-		fileWriter.write(getDBField(identificationTarget) + CRLF);
-		fileWriter.write(getReferenceIdentifierField(identificationTarget) + CRLF);
-		fileWriter.write(getCommentsField(optimizedMassSpectrum) + CRLF);
-		fileWriter.write(getSourceField(optimizedMassSpectrum, identificationTarget) + CRLF);
+		writeField(fileWriter, getNameField(massSpectrum, identificationTarget));
+		writeSynonymsFields(fileWriter, identificationTarget);
+		writeCasNumberFields(fileWriter, identificationTarget);
+		writeField(fileWriter, getCommentsField(optimizedMassSpectrum));
+		writeField(fileWriter, getReferenceIdentifierField(identificationTarget));
+		writeField(fileWriter, getFormulaField(identificationTarget));
+		writeField(fileWriter, getInChIField(identificationTarget));
+		writeField(fileWriter, getInChIKeyField(identificationTarget));
+		writeField(fileWriter, getSmilesField(identificationTarget));
+		writeField(fileWriter, getMolWeightField(identificationTarget));
+		writeField(fileWriter, getExactMassField(identificationTarget));
+		writeField(fileWriter, getDatabaseField(identificationTarget));
+		writeField(fileWriter, getContributorField(identificationTarget));
+		writeField(fileWriter, getRetentionTimeField(optimizedMassSpectrum));
+		writeField(fileWriter, getRelativeRetentionTimeField(optimizedMassSpectrum));
+		writeField(fileWriter, getRetentionIndexField(optimizedMassSpectrum));
+		writeColumnIndicesFields(fileWriter, identificationTarget);
+		writeField(fileWriter, getSourceField(massSpectrum, identificationTarget));
 		/*
 		 * Mass spectrum
 		 */
-		fileWriter.write(getNumberOfPeaks(optimizedMassSpectrum) + CRLF);
-		fileWriter.write(getIonsFormatMSL(optimizedMassSpectrum) + CRLF);
+		writeField(fileWriter, getNumberOfPeaks(optimizedMassSpectrum));
+		writeField(fileWriter, getIonsFormatMSL(optimizedMassSpectrum));
 		/*
 		 * To separate the mass spectra correctly.
 		 */

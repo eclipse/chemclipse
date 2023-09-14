@@ -7,20 +7,24 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IColumnIndexMarker;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
@@ -44,6 +48,7 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 public abstract class AbstractWriter {
 
 	public static final String CRLF = "\r\n";
+	public static final String TAB = "\t";
 	public static final float NORMALIZATION_BASE = 1000.0f;
 	//
 	private static final Logger logger = Logger.getLogger(AbstractWriter.class);
@@ -53,15 +58,20 @@ public abstract class AbstractWriter {
 	private static final String RT = "RT: ";
 	private static final String RRT = "RRT: ";
 	private static final String RI = "RI: ";
+	private static final String COLUMNINDEX = "COLUMNINDEX: ";
 	private static final String NAME = "NAME: ";
 	private static final String CASNO = "CASNO: ";
 	private static final String SMILES = "SMILES: ";
+	private static final String INCHI = "INCHI: ";
+	private static final String INCHIKEY = "INCHIKEY: ";
 	private static final String COMMENTS = "COMMENTS: ";
 	private static final String SOURCE = "SOURCE: ";
 	private static final String NUM_PEAKS = "NUM PEAKS: ";
 	private static final String FORMULA = "FORMULA: ";
 	private static final String MW = "MW: ";
+	private static final String EXACT_MASS = "EXACTMASS: ";
 	private static final String DB = "DB: ";
+	private static final String CONTRIBUTOR = "CONTRIBUTOR: ";
 	private static final String REFID = "REFID: ";
 	private static final String SYNONYM = "Synon:";
 	private static final String ISTD = "ISTD: ";
@@ -81,6 +91,7 @@ public abstract class AbstractWriter {
 		IScanMSD optimizedMassSpectrum = getUnitOrHighMassResolutionCopy(massSpectrum);
 		normalizeMassSpectrumOnDemand(optimizedMassSpectrum);
 		removeLowIntensityIonsOnDemand(optimizedMassSpectrum);
+		//
 		return optimizedMassSpectrum;
 	}
 
@@ -182,12 +193,18 @@ public abstract class AbstractWriter {
 			 */
 			identificationTarget = IIdentificationTarget.getIdentificationTarget(massSpectrum);
 		}
+		//
 		return identificationTarget;
 	}
 
 	protected IIdentificationTarget getPeakTarget(IPeak peak) {
 
 		return IIdentificationTarget.getIdentificationTarget(peak);
+	}
+
+	protected void writeField(FileWriter fileWriter, String content) throws IOException {
+
+		fileWriter.write(content + CRLF);
 	}
 
 	/**
@@ -202,7 +219,59 @@ public abstract class AbstractWriter {
 		if(identificationTarget != null) {
 			field += identificationTarget.getLibraryInformation().getCasNumber();
 		}
+		//
 		return field;
+	}
+
+	protected void writeCasNumberFields(FileWriter fileWriter, IIdentificationTarget identificationTarget) throws IOException {
+
+		if(identificationTarget != null) {
+			ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
+			for(String casNumber : libraryInformation.getCasNumbers()) {
+				writeField(fileWriter, CASNO + casNumber);
+			}
+		}
+	}
+
+	protected void writeSynonymsFields(FileWriter fileWriter, IIdentificationTarget identificationTarget) throws IOException {
+
+		if(identificationTarget != null) {
+			ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
+			for(String synonym : libraryInformation.getSynonyms()) {
+				writeField(fileWriter, SYNONYM + synonym);
+			}
+		}
+	}
+
+	protected void writeColumnIndicesFields(FileWriter fileWriter, IIdentificationTarget identificationTarget) throws IOException {
+
+		if(identificationTarget != null) {
+			ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
+			for(IColumnIndexMarker columnIndexMarker : libraryInformation.getColumnIndexMarkers()) {
+				ISeparationColumn separationColumn = columnIndexMarker.getSeparationColumn();
+				StringBuilder builder = new StringBuilder();
+				builder.append(COLUMNINDEX);
+				builder.append(columnIndexMarker.getRetentionIndex());
+				builder.append(TAB);
+				builder.append(separationColumn.getName());
+				builder.append(TAB);
+				builder.append(separationColumn.getSeparationColumnType());
+				builder.append(TAB);
+				builder.append(separationColumn.getSeparationColumnPackaging());
+				builder.append(TAB);
+				builder.append(separationColumn.getCalculationType());
+				builder.append(TAB);
+				builder.append(separationColumn.getLength());
+				builder.append(TAB);
+				builder.append(separationColumn.getDiameter());
+				builder.append(TAB);
+				builder.append(separationColumn.getPhase());
+				builder.append(TAB);
+				builder.append(separationColumn.getThickness());
+				builder.append(CRLF);
+				fileWriter.write(builder.toString());
+			}
+		}
 	}
 
 	/**
@@ -217,6 +286,57 @@ public abstract class AbstractWriter {
 		if(identificationTarget != null) {
 			field += identificationTarget.getLibraryInformation().getSmiles();
 		}
+		//
+		return field;
+	}
+
+	protected String getMolWeightField(IIdentificationTarget identificationTarget) {
+
+		String field = MW;
+		if(identificationTarget != null) {
+			field += identificationTarget.getLibraryInformation().getMolWeight();
+		}
+		//
+		return field;
+	}
+
+	protected String getExactMassField(IIdentificationTarget identificationTarget) {
+
+		String field = EXACT_MASS;
+		if(identificationTarget != null) {
+			field += identificationTarget.getLibraryInformation().getExactMass();
+		}
+		//
+		return field;
+	}
+
+	protected String getFormulaField(IIdentificationTarget identificationTarget) {
+
+		String field = FORMULA;
+		if(identificationTarget != null) {
+			field += identificationTarget.getLibraryInformation().getFormula();
+		}
+		//
+		return field;
+	}
+
+	protected String getInChIField(IIdentificationTarget identificationTarget) {
+
+		String field = INCHI;
+		if(identificationTarget != null) {
+			field += identificationTarget.getLibraryInformation().getInChI();
+		}
+		//
+		return field;
+	}
+
+	protected String getInChIKeyField(IIdentificationTarget identificationTarget) {
+
+		String field = INCHIKEY;
+		if(identificationTarget != null) {
+			field += identificationTarget.getLibraryInformation().getInChIKey();
+		}
+		//
 		return field;
 	}
 
@@ -232,6 +352,7 @@ public abstract class AbstractWriter {
 		if(massSpectrum instanceof IRegularLibraryMassSpectrum regularMassSpectrum) {
 			field += regularMassSpectrum.getLibraryInformation().getComments();
 		}
+		//
 		return field;
 	}
 
@@ -244,13 +365,14 @@ public abstract class AbstractWriter {
 	protected String getSourceField(IScanMSD massSpectrum, IIdentificationTarget identificationTarget) {
 
 		String field = SOURCE;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum amdisMassSpectrum) {
-			field += amdisMassSpectrum.getSource();
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorMassSpectrum) {
+			field += vendorMassSpectrum.getSource();
 		} else {
 			if(identificationTarget != null) {
 				field += identificationTarget.getIdentifier();
 			}
 		}
+		//
 		return field;
 	}
 
@@ -268,6 +390,7 @@ public abstract class AbstractWriter {
 		} else {
 			field += decimalFormat.format(0.0d);
 		}
+		//
 		return field;
 	}
 
@@ -285,6 +408,7 @@ public abstract class AbstractWriter {
 		} else {
 			field += decimalFormat.format(0.0d);
 		}
+		//
 		return field;
 	}
 
@@ -302,6 +426,7 @@ public abstract class AbstractWriter {
 		} else {
 			field += decimalFormat.format(0.0d);
 		}
+		//
 		return field;
 	}
 
@@ -315,6 +440,7 @@ public abstract class AbstractWriter {
 
 		String field = NUM_PEAKS;
 		field += massSpectrum.getNumberOfIons();
+		//
 		return field;
 	}
 
@@ -330,6 +456,7 @@ public abstract class AbstractWriter {
 		if(massSpectrum instanceof IRegularLibraryMassSpectrum regularMassSpectrum) {
 			field += regularMassSpectrum.getLibraryInformation().getFormula();
 		}
+		//
 		return field;
 	}
 
@@ -345,15 +472,27 @@ public abstract class AbstractWriter {
 		if(massSpectrum instanceof IRegularLibraryMassSpectrum regularMassSpectrum) {
 			field += regularMassSpectrum.getLibraryInformation().getMolWeight();
 		}
+		//
 		return field;
 	}
 
-	protected String getDBField(IIdentificationTarget identificationTarget) {
+	protected String getDatabaseField(IIdentificationTarget identificationTarget) {
 
 		String field = DB;
 		if(identificationTarget != null) {
 			field += identificationTarget.getLibraryInformation().getDatabase();
 		}
+		//
+		return field;
+	}
+
+	protected String getContributorField(IIdentificationTarget identificationTarget) {
+
+		String field = CONTRIBUTOR;
+		if(identificationTarget != null) {
+			field += identificationTarget.getLibraryInformation().getContributor();
+		}
+		//
 		return field;
 	}
 
@@ -363,6 +502,7 @@ public abstract class AbstractWriter {
 		if(identificationTarget != null) {
 			field += identificationTarget.getLibraryInformation().getReferenceIdentifier();
 		}
+		//
 		return field;
 	}
 
@@ -392,6 +532,7 @@ public abstract class AbstractWriter {
 			 */
 			optimizedMassSpectrum = getMassSpectrumCopy(massSpectrum, true);
 		}
+		//
 		return optimizedMassSpectrum;
 	}
 
@@ -491,6 +632,7 @@ public abstract class AbstractWriter {
 			 */
 			actualPosition++;
 		}
+		//
 		return builder.toString();
 	}
 
@@ -519,6 +661,7 @@ public abstract class AbstractWriter {
 			builder.append(";");
 			builder.append(CRLF);
 		}
+		//
 		return builder.toString();
 	}
 
@@ -572,6 +715,7 @@ public abstract class AbstractWriter {
 
 		String field = AREA;
 		field += decimalFormat.format(peak.getIntegratedArea());
+		//
 		return field;
 	}
 }

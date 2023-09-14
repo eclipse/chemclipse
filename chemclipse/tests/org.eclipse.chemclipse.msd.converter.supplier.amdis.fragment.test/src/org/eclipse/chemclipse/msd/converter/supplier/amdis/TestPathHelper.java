@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,15 +7,13 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis;
 
 /**
  * THIS CLASS IS NOT SUITED FOR PRODUCTIVE USE!<br/>
  * IT IS A TESTCLASS!
- * 
- * @author eselmeister
  */
 public class TestPathHelper extends PathResolver {
 
@@ -29,6 +27,7 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_DB_1 = "testData/files/import/msl/DB1.msl";
 	public static final String TESTFILE_IMPORT_DB_2 = "testData/files/import/msl/DB2.msl";
 	public static final String TESTFILE_IMPORT_DB_3 = "testData/files/import/msl/DB3.msl";
+	public static final String TESTFILE_IMPORT_DB_4 = "testData/files/import/msl/DB4.msl"; // Cas Numbers, Synoynms, ...
 	public static final String TESTFILE_IMPORT_GOLMDB_TEST_MSL = "testData/files/import/msl/GolmDB-Test.MSL";
 	public static final String TESTFILE_IMPORT_ENCODING_MSL = "testData/files/import/msl/Encoding.msl";
 	/*
@@ -56,7 +55,8 @@ public class TestPathHelper extends PathResolver {
 	 */
 	public static final String TESTDIR_EXPORT = "testData/files/export";
 	public static final String TESTFILE_EXPORT_TEST_MSL = TESTDIR_EXPORT + "/Test.msl";
-	public static final String TESTFILE_EXPORT_DB_MSL = "DB1.msl";
+	public static final String TESTFILE_EXPORT_DB_1_MSL = "DB1.msl";
+	public static final String TESTFILE_EXPORT_DB_2_MSL = "DB2.msl";
 	public static final String TESTFILE_EXPORT_TEST_MSP = TESTDIR_EXPORT + "/Test.msp";
 	public static final String TESTFILE_EXPORT_DB_MSP = TESTDIR_EXPORT + "/DB.msp";
 	public static final String TESTFILE_EXPORT_DB_MSL_IDENTIFIER = "DB-Identifier.msl";

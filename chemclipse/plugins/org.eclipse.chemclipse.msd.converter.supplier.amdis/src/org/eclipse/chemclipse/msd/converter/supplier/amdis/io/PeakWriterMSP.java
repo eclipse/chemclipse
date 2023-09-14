@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
@@ -69,7 +69,7 @@ public class PeakWriterMSP extends AbstractWriter {
 		fileWriter.write(getMWField(optimizedMassSpectrum) + CRLF);
 		fileWriter.write(getCasNumberField(identificationTarget) + CRLF);
 		fileWriter.write(getSmilesField(identificationTarget) + CRLF);
-		fileWriter.write(getDBField(identificationTarget) + CRLF);
+		fileWriter.write(getDatabaseField(identificationTarget) + CRLF);
 		fileWriter.write(getReferenceIdentifierField(identificationTarget) + CRLF);
 		/*
 		 * Mass spectrum
