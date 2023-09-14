@@ -38,7 +38,7 @@ public class MSPExportConverter_1_ITest extends TestCase {
 
 		super.setUp();
 		exportConverter = new MSPDatabaseExportConverter();
-		exportFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_EXPORT_DB_MSP));
+		exportFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTDIR_EXPORT) + File.separator + TestPathHelper.TESTFILE_EXPORT_DB_MSP);
 		massSpectrum = new ScanMSD();
 		massSpectrum.addIon(new Ion(56.3f, 7382.3f));
 		massSpectrum.addIon(new Ion(26.3f, 73382.3f));
