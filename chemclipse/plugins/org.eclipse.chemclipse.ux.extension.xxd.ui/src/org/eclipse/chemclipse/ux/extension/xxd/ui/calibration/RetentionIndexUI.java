@@ -180,7 +180,7 @@ public class RetentionIndexUI extends Composite implements IExtendedPartUI {
 							TableItem[] tableItems = table.getSelection();
 							for(TableItem tableItem : tableItems) {
 								Object object = tableItem.getData();
-								if(object instanceof Map.Entry entry) {
+								if(object instanceof Map.Entry<?, ?> entry) {
 									if(entry.getValue() instanceof IRetentionIndexEntry retentionIndexEntry) {
 										keysToRemove.add(retentionIndexEntry.getRetentionTime());
 									}

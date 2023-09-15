@@ -90,6 +90,8 @@ public class PeakSelectionHandler extends AbstractHandledEventProcessor implemen
 					UpdateNotifierUI.update(event.display, peak);
 					IIdentificationTarget identificationTarget = IIdentificationTarget.getIdentificationTarget(peak);
 					UpdateNotifierUI.update(event.display, identificationTarget);
+					//
+					showClickbindingHelp(baseChart, "Peak Selection", "Select nearest peak.");
 				}
 			}
 		}
