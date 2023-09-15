@@ -50,7 +50,6 @@ public class ScanSelectionHandler extends AbstractHandledEventProcessor implemen
 		return SWT.NONE;
 	}
 
-	
 	@Override
 	public void handleEvent(BaseChart baseChart, Event event) {
 
@@ -65,6 +64,8 @@ public class ScanSelectionHandler extends AbstractHandledEventProcessor implemen
 				chromatogramSelection.setSelectedScan(scan);
 				extendedChromatogramUI.updateSelectedScan();
 				UpdateNotifierUI.update(event.display, scan);
+				//
+				showClickbindingHelp(baseChart, "Scan Selection", "Select scan at retention time.");
 			}
 		}
 	}
