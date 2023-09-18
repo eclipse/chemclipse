@@ -331,6 +331,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SKIP = "skip.gif";
 	String IMAGE_SKIPPED = "skipped.gif";
 	String IMAGE_TAG = "tag.gif";
+	String IMAGE_EDITOR_TOP = "editorTop.gif";
+	String IMAGE_EDITOR_BOTTOM = "editorBottom.gif";
 	String IMAGE_SHIFT = "shift.gif";
 	String IMAGE_SHIFT_ACTIVE = "shiftActive.gif";
 	String IMAGE_SHIFT_DEFAULT = "shiftDefault.gif";
