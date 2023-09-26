@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -53,11 +54,16 @@ import org.eclipse.swt.widgets.Table;
 
 public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUIControl, IExtendedPartUI {
 
+	private static final String TOOLTIP_ADJUST_POSITION = "the retention time shift toolbar.";
+	private static final String IMAGE_ADJUST_POSITION = IApplicationImage.IMAGE_ADJUST_CHROMATOGRAMS;
+	//
 	private Composite control;
 	//
 	private AtomicReference<Button> buttonSearchControl = new AtomicReference<>();
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private AtomicReference<TimeRangesListUI> timeRangesControl = new AtomicReference<>();
+	private AtomicReference<Button> buttonShiftControl = new AtomicReference<>();
+	private AtomicReference<TimeRangeShifterUI> toolbarShiftControl = new AtomicReference<>();
 	//
 	private TimeRanges settings = new TimeRanges();
 	private TimeRangeLabels timeRangeLabels = new TimeRangeLabels();
@@ -122,7 +128,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 	public void load(String entries) {
 
 		settings.load(entries);
-		setTableViewerInput();
+		updateInput();
 	}
 
 	public String getValues() {
@@ -140,6 +146,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		//
 		createButtonSection(composite);
 		createToolbarSearch(composite);
+		createAdjustSection(composite);
 		createTableSection(composite);
 		//
 		initialize();
@@ -150,7 +157,8 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 	private void initialize() {
 
 		enableToolbar(toolbarSearch, buttonSearchControl.get(), IMAGE_SEARCH, TOOLTIP_SEARCH, false);
-		setTableViewerInput();
+		enableToolbar(toolbarShiftControl, buttonShiftControl.get(), IMAGE_ADJUST_POSITION, TOOLTIP_ADJUST_POSITION, false);
+		updateInput();
 	}
 
 	private void createButtonSection(Composite parent) {
@@ -159,9 +167,10 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(9, false));
 		//
 		createButtonToggleSearch(composite);
+		createButtonToggleShift(composite);
 		createButtonAdd(composite);
 		createButtonEdit(composite);
 		createButtonRemove(composite);
@@ -175,6 +184,12 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 		Button button = createButtonToggleToolbar(parent, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
 		buttonSearchControl.set(button);
+	}
+
+	private void createButtonToggleShift(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarShiftControl, IMAGE_ADJUST_POSITION, TOOLTIP_ADJUST_POSITION);
+		buttonShiftControl.set(button);
 	}
 
 	private void createToolbarSearch(Composite parent) {
@@ -193,6 +208,23 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		toolbarSearch.set(searchSupportUI);
 	}
 
+	private void createAdjustSection(Composite parent) {
+
+		TimeRangeShifterUI timeRangeShifterUI = new TimeRangeShifterUI(parent, SWT.NONE);
+		timeRangeShifterUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		timeRangeShifterUI.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update() {
+
+				timeRangesControl.get().refresh();
+			}
+		});
+		//
+		toolbarShiftControl.set(timeRangeShifterUI);
+	}
+
 	private void createTableSection(Composite parent) {
 
 		TimeRangesListUI timeRangesListUI = new TimeRangesListUI(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -203,6 +235,27 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
 		table.setLayoutData(gridData);
+		//
+		table.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				/*
+				 * Set the selected elements.
+				 */
+				List<TimeRange> settings = new ArrayList<>();
+				List<?> objects = timeRangesListUI.getStructuredSelection().toList();
+				//
+				for(Object object : objects) {
+					if(object instanceof TimeRange setting) {
+						settings.add(setting);
+					}
+				}
+				//
+				toolbarShiftControl.get().setInput(settings);
+			}
+		});
 		//
 		timeRangesControl.set(timeRangesListUI);
 	}
@@ -223,7 +276,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 					TimeRange timeRange = settings.extractTimeRange(item);
 					if(timeRange != null) {
 						settings.add(timeRange);
-						setTableViewerInput();
+						updateInput();
 					}
 				}
 			}
@@ -256,7 +309,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 						if(timeRangeNew != null) {
 							settings.remove(timeRange);
 							settings.add(timeRangeNew);
-							setTableViewerInput();
+							updateInput();
 						}
 					}
 				}
@@ -283,7 +336,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 							settings.remove(((TimeRange)object).getIdentifier());
 						}
 					}
-					setTableViewerInput();
+					updateInput();
 				}
 			}
 		});
@@ -303,7 +356,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getClearMessage())) {
 					settings.clear();
-					setTableViewerInput();
+					updateInput();
 				}
 			}
 		});
@@ -332,7 +385,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 					String path = file.getParentFile().getAbsolutePath();
 					preferenceStore.setValue(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, path);
 					settings.importItems(file);
-					setTableViewerInput();
+					updateInput();
 				}
 			}
 		});
@@ -391,8 +444,9 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		return button;
 	}
 
-	private void setTableViewerInput() {
+	private void updateInput() {
 
+		toolbarShiftControl.get().setInput(settings.values());
 		timeRangesControl.get().setInput(settings.values());
 	}
 }
