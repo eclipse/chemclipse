@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
@@ -54,6 +54,9 @@ public class QuantitationListTableComparator extends AbstractRecordTableComparat
 					break;
 				case 9:
 					sortOrder = quantitationEntry2.getDescription().compareTo(quantitationEntry1.getDescription());
+					break;
+				case 10:
+					sortOrder = quantitationEntry2.getGroup().compareTo(quantitationEntry1.getGroup());
 					break;
 				default:
 					sortOrder = 0;

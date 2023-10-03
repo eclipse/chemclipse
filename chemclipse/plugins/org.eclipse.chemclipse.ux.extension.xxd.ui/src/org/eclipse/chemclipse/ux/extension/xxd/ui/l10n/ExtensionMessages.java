@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Matthias Mailänder - new API and reimplementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.l10n;
@@ -72,6 +72,7 @@ public class ExtensionMessages extends NLS {
 	public static String undoOperationFailed;
 	public static String undoOperationFinished;
 	public static String name;
+	public static String group;
 	public static String value;
 	public static String fieldForColorCodeName;
 	public static String colorIsUsed;

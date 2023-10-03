@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
@@ -34,9 +34,11 @@ public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvid
 			ExtensionMessages.calibrationMethod, //
 			ExtensionMessages.crossZero, //
 			ExtensionMessages.flag, //
-			ExtensionMessages.description //
+			ExtensionMessages.description, //
+			ExtensionMessages.group, //
 	};
 	public static final int[] BOUNDS = { //
+			100, //
 			100, //
 			100, //
 			100, //
@@ -94,6 +96,9 @@ public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvid
 					break;
 				case 9:
 					text = quantitationEntry.getDescription();
+					break;
+				case 10:
+					text = quantitationEntry.getGroup();
 					break;
 				default:
 					text = "n.v.";

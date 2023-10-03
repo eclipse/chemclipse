@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
@@ -18,15 +18,12 @@ import org.eclipse.chemclipse.model.core.ISignal;
 
 public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = -6312658397485712262L;
-	//
+	private static final long serialVersionUID = -9169349509443899583L;
 	private static final String DESCRIPTION_DELIMITER = " | ";
 	//
 	private List<Double> signals = new ArrayList<>();
 	private String name = "";
+	private String group = ""; // Used e.g. for repetitions
 	private String chemicalClass = "";
 	private double concentration = 0.0d;
 	private String concentrationUnit = "";
@@ -36,9 +33,10 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 	private String description = "";
 	private QuantitationFlag quantitationFlag = QuantitationFlag.NONE;
 
-	public AbstractQuantitationEntry(String name, double concentration, String concentrationUnit, double area) {
+	public AbstractQuantitationEntry(String name, String group, double concentration, String concentrationUnit, double area) {
 
 		this.name = name;
+		this.group = group;
 		this.concentration = concentration;
 		this.concentrationUnit = concentrationUnit;
 		this.area = area;
@@ -81,6 +79,12 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 	public String getName() {
 
 		return name;
+	}
+
+	@Override
+	public String getGroup() {
+
+		return group;
 	}
 
 	@Override
@@ -235,6 +239,8 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 		builder.append(getClass().getName());
 		builder.append("[");
 		builder.append("name=" + name);
+		builder.append(",");
+		builder.append("group=" + group);
 		builder.append(",");
 		builder.append("chemicalClass=" + chemicalClass);
 		builder.append(",");
