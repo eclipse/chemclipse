@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,6 +17,7 @@ import java.io.File;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.PeakIdentifierAdapterSettingsMSD;
 import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.ByteSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
@@ -37,8 +38,8 @@ public class PeakIdentifierSettings extends PeakIdentifierAdapterSettingsMSD imp
 	private float limitMatchFactor = 80.0f;
 	@JsonProperty(value = "Number of Targets", defaultValue = "3")
 	@JsonPropertyDescription(value = "The max. number of targets that will be stored.")
-	@IntSettingsProperty
-	private int numberOfTargets = PreferenceSupplier.DEF_NUMBER_OF_TARGETS;
+	@ByteSettingsProperty(minValue = PreferenceSupplier.MIN_NUMBER_OF_TARGETS, maxValue = PreferenceSupplier.MAX_NUMBER_OF_TARGETS)
+	private byte numberOfTargets = PreferenceSupplier.DEF_NUMBER_OF_TARGETS;
 	@JsonProperty(value = "Use Optimized Mass Spectrum", defaultValue = "true")
 	@JsonPropertyDescription(value = "If true, the optimized spectrum will be used if available.")
 	private boolean useOptimizedMassSpectrum = true;
@@ -82,7 +83,7 @@ public class PeakIdentifierSettings extends PeakIdentifierAdapterSettingsMSD imp
 		return numberOfTargets;
 	}
 
-	public void setNumberOfTargets(int numberOfTargets) {
+	public void setNumberOfTargets(byte numberOfTargets) {
 
 		if(numberOfTargets >= PreferenceSupplier.MIN_NUMBER_OF_TARGETS && numberOfTargets <= PreferenceSupplier.MAX_NUMBER_OF_TARGETS) {
 			this.numberOfTargets = numberOfTargets;
