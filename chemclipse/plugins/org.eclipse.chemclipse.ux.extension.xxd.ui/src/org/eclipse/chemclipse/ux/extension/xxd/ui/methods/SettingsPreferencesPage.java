@@ -158,7 +158,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 
 	private Listener createValidationListener() {
 
-		Listener validationListener = new Listener() {
+		return new Listener() {
 
 			@Override
 			public void handleEvent(Event event) {
@@ -190,8 +190,6 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 				}
 			}
 		};
-		//
-		return validationListener;
 	}
 
 	private SelectionListener createSelectionListener(Listener validationListener) {

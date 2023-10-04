@@ -140,16 +140,16 @@ public class WidgetItem {
 				 */
 				String textValue = text.getText().trim();
 				//
-				if(rawType == long.class || rawType == Long.class) {
-					if(textValue.isEmpty()) {
-						return 0;
-					}
-					return Long.parseLong(textValue);
-				} else if(rawType == int.class || rawType == Integer.class) {
+				if(rawType == int.class || rawType == Integer.class) {
 					if(textValue.isEmpty()) {
 						return 0;
 					}
 					return Integer.parseInt(textValue);
+				} else if(rawType == long.class || rawType == Long.class) {
+					if(textValue.isEmpty()) {
+						return (long)0;
+					}
+					return Long.parseLong(textValue);
 				} else if(rawType == float.class || rawType == Float.class) {
 					if(textValue.isEmpty()) {
 						return 0f;
@@ -160,6 +160,16 @@ public class WidgetItem {
 						return 0d;
 					}
 					return Double.parseDouble(textValue);
+				} else if(rawType == byte.class || rawType == Byte.class) {
+					if(textValue.isEmpty()) {
+						return (byte)0;
+					}
+					return Byte.parseByte(textValue);
+				} else if(rawType == short.class || rawType == Short.class) {
+					if(textValue.isEmpty()) {
+						return (short)0;
+					}
+					return Short.parseShort(textValue);
 				} else {
 					return textValue;
 				}
@@ -215,13 +225,17 @@ public class WidgetItem {
 				 */
 				ComboViewer viewer = createGenericCombo(parent, inputValue.getComboSupplier());
 				return viewer.getControl();
-			} else if(rawType == long.class || rawType == Long.class) {
-				return createTextWidgetNormal(parent);
 			} else if(rawType == int.class || rawType == Integer.class) {
+				return createTextWidgetNormal(parent);
+			} else if(rawType == long.class || rawType == Long.class) {
 				return createTextWidgetNormal(parent);
 			} else if(rawType == float.class || rawType == Float.class) {
 				return createTextWidgetNormal(parent);
 			} else if(rawType == double.class || rawType == Double.class) {
+				return createTextWidgetNormal(parent);
+			} else if(rawType == short.class || rawType == Short.class) {
+				return createTextWidgetNormal(parent);
+			} else if(rawType == byte.class || rawType == Byte.class) {
 				return createTextWidgetNormal(parent);
 			} else if(rawType == String.class) {
 				if(inputValue.isMultiLine()) {
@@ -238,10 +252,10 @@ public class WidgetItem {
 				/*
 				 * Combo
 				 */
-				@SuppressWarnings("rawtypes")
-				Enum[] enums = (Enum[])rawType.getEnumConstants();
-				ComboViewer viewer = createLabeledEnumComboViewerWidget(parent, enums);
-				return viewer.getControl();
+				if(rawType.getEnumConstants() instanceof Enum[] enums) {
+					ComboViewer viewer = createLabeledEnumComboViewerWidget(parent, enums);
+					return viewer.getControl();
+				}
 			} else if(rawType == File.class) {
 				return createFileWidget(parent);
 			} else {
