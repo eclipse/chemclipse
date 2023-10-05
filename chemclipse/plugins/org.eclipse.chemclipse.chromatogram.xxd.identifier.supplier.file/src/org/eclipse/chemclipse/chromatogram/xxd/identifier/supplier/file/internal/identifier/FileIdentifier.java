@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -66,7 +66,6 @@ public class FileIdentifier {
 
 	public IMassSpectra runIdentification(List<IScanMSD> massSpectraList, ILibraryIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Running mass spectra identification", 100);
 		/*
 		 * Pre-filter the mass spectra to identify.
 		 */
@@ -91,10 +90,9 @@ public class FileIdentifier {
 		 * Load the mass spectra database only if the raw file or its content has changed.
 		 */
 		List<String> files = extractFiles(fileIdentifierSettings.getMassSpectraFiles());
-		Map<String, IMassSpectra> databases = databasesCache.getDatabases(files, subMonitor.split(10));
-		subMonitor.setWorkRemaining(databases.size() * 100);
+		Map<String, IMassSpectra> databases = databasesCache.getDatabases(files, monitor);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
-			compareMassSpectraAgainstDatabase(massSpectra.getList(), database.getValue().getList(), fileIdentifierSettings, identifier, database.getKey(), subMonitor.split(100, SubMonitor.SUPPRESS_NONE));
+			compareMassSpectraAgainstDatabase(massSpectra.getList(), database.getValue().getList(), fileIdentifierSettings, identifier, database.getKey(), monitor);
 		}
 		//
 		return massSpectra;
@@ -112,7 +110,6 @@ public class FileIdentifier {
 	 */
 	public IPeakIdentificationResults runPeakIdentification(List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, IProcessingInfo<?> processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Running mass spectra identification", 100);
 		/*
 		 * Pre-filter the mass spectra to identify.
 		 */
@@ -138,10 +135,9 @@ public class FileIdentifier {
 		 * Load the mass spectra database only if the raw file or its content has changed.
 		 */
 		List<String> files = extractFiles(peakIdentifierSettings.getMassSpectraFiles());
-		Map<String, IMassSpectra> databases = databasesCache.getDatabases(files, subMonitor.split(10));
-		subMonitor.setWorkRemaining(databases.size() * 100);
+		Map<String, IMassSpectra> databases = databasesCache.getDatabases(files, monitor);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
-			comparePeaksAgainstDatabase(peaksToIdentify, database.getValue().getList(), peakIdentifierSettings, identifier, database.getKey(), subMonitor.split(100, SubMonitor.SUPPRESS_NONE));
+			comparePeaksAgainstDatabase(peaksToIdentify, database.getValue().getList(), peakIdentifierSettings, identifier, database.getKey(), monitor);
 		}
 		//
 		return identificationResults;
@@ -259,14 +255,6 @@ public class FileIdentifier {
 		return matched;
 	}
 
-	private static boolean isValidTarget(IComparisonResult comparisonResult, float minMatchFactor, float minReverseMatchFactor) {
-
-		if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
-			return true;
-		}
-		return false;
-	}
-
 	private static final class FindMatchingSpectras extends RecursiveTask<Map<IComparisonResult, IScanMSD>> {
 
 		private static final long serialVersionUID = 1L;
@@ -331,6 +319,14 @@ public class FileIdentifier {
 				}
 			}
 			return results;
+		}
+
+		private static boolean isValidTarget(IComparisonResult comparisonResult, float minMatchFactor, float minReverseMatchFactor) {
+
+			if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
+				return true;
+			}
+			return false;
 		}
 	}
 }

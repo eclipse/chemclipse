@@ -40,12 +40,11 @@ public class ChromatogramIdentifier extends AbstractChromatogramIdentifier {
 
 		IProcessingInfo<?> processingInfo = validate(chromatogramSelection, chromatogramIdentifierSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(chromatogramIdentifierSettings instanceof IdentifierSettings) {
+			if(chromatogramIdentifierSettings instanceof IdentifierSettings settings) {
 				try {
 					/*
 					 * Settings
 					 */
-					IdentifierSettings settings = (IdentifierSettings)chromatogramIdentifierSettings;
 					boolean useNormalize = settings.isUseNormalizedScan();
 					CalculationType calculationType = settings.getCalculationType();
 					boolean usePeaksInsteadOfScans = settings.isUsePeaksInsteadOfScans();
