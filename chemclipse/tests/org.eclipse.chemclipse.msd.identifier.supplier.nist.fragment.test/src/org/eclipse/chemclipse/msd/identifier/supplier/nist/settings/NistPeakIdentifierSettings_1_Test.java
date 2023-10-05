@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -37,25 +37,25 @@ public class NistPeakIdentifierSettings_1_Test extends TestCase {
 
 	public void testGetNumberOfTargets_2() {
 
-		settings.setNumberOfTargets(1);
+		settings.setNumberOfTargets((byte)1);
 		assertEquals(1, settings.getNumberOfTargets());
 	}
 
 	public void testGetNumberOfTargets_3() {
 
-		settings.setNumberOfTargets(100);
+		settings.setNumberOfTargets((byte)100);
 		assertEquals(100, settings.getNumberOfTargets());
 	}
 
 	public void testGetNumberOfTargets_4() {
 
-		settings.setNumberOfTargets(0);
+		settings.setNumberOfTargets((byte)0);
 		assertEquals(15, settings.getNumberOfTargets());
 	}
 
 	public void testGetNumberOfTargets_5() {
 
-		settings.setNumberOfTargets(101);
+		settings.setNumberOfTargets((byte)101);
 		assertEquals(15, settings.getNumberOfTargets());
 	}
 }

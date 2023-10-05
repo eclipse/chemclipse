@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,22 +7,21 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Christoph Läubrich - initial API and implementation
- * Matthias Mailänder - odd number including zero (for window sizes)
+ * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings.validation;
 
-import org.eclipse.chemclipse.support.settings.LongSettingsProperty.Validation;
+import org.eclipse.chemclipse.support.settings.ByteSettingsProperty.Validation;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
-public class EvenOddValidatorLong implements IValidator<Object> {
+public class EvenOddValidatorByte implements IValidator<Object> {
 
 	private Validation validation;
 	private String fieldName;
 
-	public EvenOddValidatorLong(String fieldName, Validation validation) {
+	public EvenOddValidatorByte(String fieldName, Validation validation) {
 
 		this.fieldName = fieldName;
 		this.validation = validation;
@@ -32,21 +31,21 @@ public class EvenOddValidatorLong implements IValidator<Object> {
 	public IStatus validate(Object value) {
 
 		if(value instanceof Number number) {
-			long longValue = number.longValue();
+			byte byteValue = number.byteValue();
 			if(validation == Validation.ODD_NUMBER_INCLUDING_ZERO) {
-				if(longValue == 0) {
+				if(byteValue == 0) {
 					return ValidationStatus.ok();
 				}
-				if(longValue % 2 == 0) {
+				if(byteValue % 2 == 0) {
 					return ValidationStatus.error(fieldName + " must be odd or zero.");
 				}
 			}
 			if(validation == Validation.ODD_NUMBER) {
-				if(longValue % 2 == 0) {
+				if(byteValue % 2 == 0) {
 					return ValidationStatus.error(fieldName + " must be odd.");
 				}
 			} else if(validation == Validation.EVEN_NUMBER) {
-				if(longValue % 2 != 0) {
+				if(byteValue % 2 != 0) {
 					return ValidationStatus.error(fieldName + " must be even.");
 				}
 			}

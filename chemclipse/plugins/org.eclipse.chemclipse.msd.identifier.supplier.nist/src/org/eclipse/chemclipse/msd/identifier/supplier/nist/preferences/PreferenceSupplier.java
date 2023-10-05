@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,7 +41,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_LIMIT_MATCH_FACTOR = "limitMatchFactor";
 	public static final float DEF_LIMIT_MATCH_FACTOR = 80.0f;
 	public static final String P_NUMBER_OF_TARGETS = "numberOfTargets";
-	public static final int DEF_NUMBER_OF_TARGETS = 15;
+	public static final byte DEF_NUMBER_OF_TARGETS = 15;
 	public static final String P_USE_OPTIMIZED_MASS_SPECTRUM = "useOptimizedMassSpectrum";
 	public static final boolean DEF_USE_OPTIMIZED_MASS_SPECTRUM = true;
 	public static final String P_MAC_WINE_BINARY = "macWineBinary";
@@ -177,7 +177,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		PeakIdentifierSettings settings = new PeakIdentifierSettings();
 		settings.setNistFolder(PreferenceSupplier.getNistInstallationFolder());
 		settings.setLimitMatchFactor(preferences.getFloat(P_LIMIT_MATCH_FACTOR, DEF_LIMIT_MATCH_FACTOR));
-		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
+		settings.setNumberOfTargets((byte)preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
 		settings.setUseOptimizedMassSpectrum(preferences.getBoolean(P_USE_OPTIMIZED_MASS_SPECTRUM, DEF_USE_OPTIMIZED_MASS_SPECTRUM));
 		settings.setTimeoutInMinutes(preferences.getInt(P_TIMEOUT_IN_MINUTES, DEF_TIMEOUT_IN_MINUTES));
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
@@ -193,7 +193,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		ScanIdentifierSettings settings = new ScanIdentifierSettings();
 		settings.setNistFolder(PreferenceSupplier.getNistInstallationFolder());
 		settings.setLimitMatchFactor(preferences.getFloat(P_LIMIT_MATCH_FACTOR, DEF_LIMIT_MATCH_FACTOR));
-		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
+		settings.setNumberOfTargets((byte)preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
 		settings.setUseOptimizedMassSpectrum(preferences.getBoolean(P_USE_OPTIMIZED_MASS_SPECTRUM, DEF_USE_OPTIMIZED_MASS_SPECTRUM));
 		settings.setTimeoutInMinutes(preferences.getInt(P_TIMEOUT_IN_MINUTES, DEF_TIMEOUT_IN_MINUTES));
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));

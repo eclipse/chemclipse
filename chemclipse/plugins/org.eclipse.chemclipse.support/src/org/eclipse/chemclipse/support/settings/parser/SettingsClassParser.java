@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.support.l10n.TranslationSupport;
+import org.eclipse.chemclipse.support.settings.ByteSettingsProperty;
 import org.eclipse.chemclipse.support.settings.ComboSettingsProperty;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
@@ -28,12 +29,15 @@ import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.LabelProperty;
 import org.eclipse.chemclipse.support.settings.LongSettingsProperty;
+import org.eclipse.chemclipse.support.settings.ShortSettingsProperty;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 import org.eclipse.chemclipse.support.settings.ValidatorSettingsProperty;
+import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorByte;
 import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorInteger;
 import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorLong;
+import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorShort;
 import org.eclipse.chemclipse.support.settings.validation.MinMaxValidator;
 import org.eclipse.chemclipse.support.settings.validation.RegularExpressionValidator;
 import org.eclipse.core.databinding.validation.IValidator;
@@ -133,6 +137,12 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Float.class));
 							} else if(annotation instanceof DoubleSettingsProperty settingsProperty) {
 								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Double.class));
+							} else if(annotation instanceof ShortSettingsProperty settingsProperty) {
+								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Short.class));
+								inputValue.addValidator(new EvenOddValidatorShort(property.getName(), settingsProperty.validation()));
+							} else if(annotation instanceof ByteSettingsProperty settingsProperty) {
+								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Byte.class));
+								inputValue.addValidator(new EvenOddValidatorByte(property.getName(), settingsProperty.validation()));
 							} else if(annotation instanceof StringSettingsProperty settingsProperty) {
 								String regExp = settingsProperty.regExp();
 								if(regExp != null && !regExp.isEmpty()) {

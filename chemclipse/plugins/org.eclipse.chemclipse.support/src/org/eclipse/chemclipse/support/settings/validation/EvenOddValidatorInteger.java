@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,8 +31,8 @@ public class EvenOddValidatorInteger implements IValidator<Object> {
 	@Override
 	public IStatus validate(Object value) {
 
-		if(value instanceof Number) {
-			int intValue = ((Number)value).intValue();
+		if(value instanceof Number number) {
+			int intValue = number.intValue();
 			if(validation == Validation.ODD_NUMBER_INCLUDING_ZERO) {
 				if(intValue == 0) {
 					return ValidationStatus.ok();
