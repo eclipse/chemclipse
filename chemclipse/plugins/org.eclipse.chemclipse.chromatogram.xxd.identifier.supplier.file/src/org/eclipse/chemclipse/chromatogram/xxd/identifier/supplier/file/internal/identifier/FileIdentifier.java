@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -259,14 +259,6 @@ public class FileIdentifier {
 		return matched;
 	}
 
-	private static boolean isValidTarget(IComparisonResult comparisonResult, float minMatchFactor, float minReverseMatchFactor) {
-
-		if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
-			return true;
-		}
-		return false;
-	}
-
 	private static final class FindMatchingSpectras extends RecursiveTask<Map<IComparisonResult, IScanMSD>> {
 
 		private static final long serialVersionUID = 1L;
@@ -331,6 +323,14 @@ public class FileIdentifier {
 				}
 			}
 			return results;
+		}
+
+		private static boolean isValidTarget(IComparisonResult comparisonResult, float minMatchFactor, float minReverseMatchFactor) {
+
+			if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
+				return true;
+			}
+			return false;
 		}
 	}
 }
