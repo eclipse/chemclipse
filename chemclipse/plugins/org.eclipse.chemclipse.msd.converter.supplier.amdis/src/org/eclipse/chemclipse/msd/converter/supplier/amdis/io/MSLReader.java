@@ -86,7 +86,7 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 
 		List<String> massSpectraData = getMassSpectraData(file);
 		//
-		IMassSpectra massSpectra = extractMassSpectra(massSpectraData);
+		IMassSpectra massSpectra = extractMassSpectra(massSpectraData, monitor);
 		massSpectra.setConverterId(CONVERTER_ID);
 		massSpectra.setName(file.getName());
 		/*
@@ -300,7 +300,7 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	 * @param massSpectraData
 	 * @return IMassSpectra
 	 */
-	private IMassSpectra extractMassSpectra(List<String> massSpectraData) {
+	private IMassSpectra extractMassSpectra(List<String> massSpectraData, IProgressMonitor monitor) {
 
 		IMassSpectra massSpectra = new MassSpectra();
 		String referenceIdentifierMarker = org.eclipse.chemclipse.msd.converter.preferences.PreferenceSupplier.getReferenceIdentifierMarker();
@@ -309,8 +309,10 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 		 * Iterates through the saved mass spectrum text data and converts it to
 		 * a mass spectrum.
 		 */
+		monitor.beginTask("Extract mass spectra", massSpectraData.size());
 		for(String massSpectrumData : massSpectraData) {
 			addMassSpectrum(massSpectra, massSpectrumData, referenceIdentifierMarker, referenceIdentifierPrefix);
+			monitor.worked(1);
 		}
 		return massSpectra;
 	}
