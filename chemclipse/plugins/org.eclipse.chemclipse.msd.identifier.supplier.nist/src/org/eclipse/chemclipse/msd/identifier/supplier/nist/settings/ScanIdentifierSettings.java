@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class ScanIdentifierSettings extends AbstractScanSearchSettings {
 
-	@JsonProperty(value = "NIST Folder (MSSEARCH)", defaultValue = "")
+	@JsonProperty(value = "NIST Folder (MSSEARCH)", defaultValue = "", required = true)
 	@JsonPropertyDescription("Select the NIST-DB folder, called MSSEARCH.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, onlyDirectory = true)
 	private File nistFolder = null;

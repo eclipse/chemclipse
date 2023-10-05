@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -36,6 +36,8 @@ public class InputValidator implements IValidator<Object> {
 
 		String message = null;
 		if(value == null) {
+			message = ERROR;
+		} else if(value instanceof String text && text.isEmpty()) {
 			message = ERROR;
 		} else {
 			Class<?> rawType = inputValue.getRawType();
