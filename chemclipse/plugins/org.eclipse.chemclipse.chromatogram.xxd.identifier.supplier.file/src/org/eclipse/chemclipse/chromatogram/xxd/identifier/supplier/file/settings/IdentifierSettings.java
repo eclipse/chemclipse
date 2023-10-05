@@ -50,7 +50,7 @@ public class IdentifierSettings extends ChromatogramIdentifierAdapterSettings im
 	@JsonPropertyDescription(value = "Run an identification if no target exists with a Match Factor >= the given limit.")
 	@FloatSettingsProperty(minValue = IIdentifierSettings.MIN_LIMIT_MATCH_FACTOR, maxValue = IIdentifierSettings.MAX_LIMIT_MATCH_FACTOR)
 	private float limitMatchFactor = IIdentifierSettings.DEF_LIMIT_MATCH_FACTOR;
-	@JsonProperty(value = "Library File", defaultValue = "")
+	@JsonProperty(value = "Library File", defaultValue = "", required = true)
 	@JsonPropertyDescription("Select the library file.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, extensionNames = {"AMDIS (*.msl)"}, validExtensions = {"*.msl;*.MSL"}, onlyDirectory = false)
 	private File libraryFile;
@@ -151,6 +151,7 @@ public class IdentifierSettings extends ChromatogramIdentifierAdapterSettings im
 		this.massSpectrumComparatorId = massSpectrumComparatorId;
 	}
 
+	@Override
 	@JsonIgnore
 	public IMassSpectrumComparator getMassSpectrumComparator() {
 
@@ -160,6 +161,7 @@ public class IdentifierSettings extends ChromatogramIdentifierAdapterSettings im
 		return comparator;
 	}
 
+	@Override
 	public void setMassSpectrumComparator(IMassSpectrumComparator comparator) {
 
 		IMassSpectrumComparisonSupplier supplier = comparator.getMassSpectrumComparisonSupplier();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 @SystemSettings(SystemSettingsStrategy.NONE)
 public class NistProcessSettings {
 
-	@JsonProperty(value = "NIST Folder (MSSEARCH)", defaultValue = "")
+	@JsonProperty(value = "NIST Folder (MSSEARCH)", defaultValue = "", required = true)
 	@JsonPropertyDescription("Select the NIST-DB folder, called MSSEARCH.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, onlyDirectory = true)
 	private File nistFolder = null;

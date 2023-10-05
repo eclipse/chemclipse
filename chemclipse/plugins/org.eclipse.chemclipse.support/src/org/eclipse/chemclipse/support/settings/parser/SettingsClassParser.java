@@ -38,12 +38,14 @@ import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorByte;
 import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorInteger;
 import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorLong;
 import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorShort;
+import org.eclipse.chemclipse.support.settings.validation.InputValidator;
 import org.eclipse.chemclipse.support.settings.validation.MinMaxValidator;
 import org.eclipse.chemclipse.support.settings.validation.RegularExpressionValidator;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.e4.core.services.translation.TranslationService;
 import org.osgi.framework.FrameworkUtil;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
@@ -124,6 +126,11 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 						 */
 						Iterable<Annotation> annotations = annotatedField.getAllAnnotations().annotations();
 						for(Annotation annotation : annotations) {
+							if(annotation instanceof JsonProperty jsonProperty) {
+								if(jsonProperty.required()) {
+									inputValue.addValidator(new InputValidator(inputValue));
+								}
+							}
 							if(annotation instanceof LabelProperty labelProperty) {
 								inputValue.setLabel(labelProperty.value());
 								inputValue.setTooltip(labelProperty.tooltip());

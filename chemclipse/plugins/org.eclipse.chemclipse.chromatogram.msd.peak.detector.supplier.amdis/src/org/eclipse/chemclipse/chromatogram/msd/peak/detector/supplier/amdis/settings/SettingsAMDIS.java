@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,11 +32,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class SettingsAMDIS extends AbstractProcessSettings {
 
-	@JsonProperty(value = "AMDIS Folder (AMDIS32)", defaultValue = "")
+	@JsonProperty(value = "AMDIS Folder (AMDIS32)", defaultValue = "", required = true)
 	@JsonPropertyDescription("Select the AMDIS folder, called AMDIS32.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, onlyDirectory = true)
 	private File amdisFolder = null;
-	@JsonProperty(value = "Data Folder (tmp)", defaultValue = "")
+	@JsonProperty(value = "Data Folder (tmp)", defaultValue = "", required = true)
 	@JsonPropertyDescription("Select the data folder, normally called tmp.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, onlyDirectory = true)
 	private File tmpFolder = null;
