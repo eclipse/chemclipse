@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - propagate result of methods to the user, add label selection support
  * Matthias Mailänder - display selected wavelengths, audit trail
@@ -291,9 +291,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	public void updateToolbar() {
 
-		ProcessorToolbarUI processorToolbarUI = processorToolbarControl.get();
-		if(processorToolbarUI.isVisible()) {
-			processorToolbarUI.updateToolbar(getDataCategory());
+		if(!isDisposed()) {
+			ProcessorToolbarUI processorToolbarUI = processorToolbarControl.get();
+			if(processorToolbarUI.isVisible()) {
+				processorToolbarUI.updateToolbar(getDataCategory());
+			}
 		}
 	}
 

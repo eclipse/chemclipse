@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.model.quantitation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.chemclipse.model.core.ISignal;
 
@@ -184,18 +185,7 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 	@Override
 	public int hashCode() {
 
-		final int prime = 31;
-		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(area);
-		result = prime * result + (int)(temp ^ (temp >>> 32));
-		result = prime * result + ((calibrationMethod == null) ? 0 : calibrationMethod.hashCode());
-		result = prime * result + ((chemicalClass == null) ? 0 : chemicalClass.hashCode());
-		temp = Double.doubleToLongBits(concentration);
-		result = prime * result + (int)(temp ^ (temp >>> 32));
-		result = prime * result + ((concentrationUnit == null) ? 0 : concentrationUnit.hashCode());
-		result = prime * result + (usedCrossZero ? 1231 : 1237);
-		return result;
+		return Objects.hash(area, calibrationMethod, chemicalClass, concentration, concentrationUnit, group, name, signals, usedCrossZero);
 	}
 
 	@Override
@@ -208,54 +198,12 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 		if(getClass() != obj.getClass())
 			return false;
 		AbstractQuantitationEntry other = (AbstractQuantitationEntry)obj;
-		if(Double.doubleToLongBits(area) != Double.doubleToLongBits(other.area))
-			return false;
-		if(calibrationMethod == null) {
-			if(other.calibrationMethod != null)
-				return false;
-		} else if(!calibrationMethod.equals(other.calibrationMethod))
-			return false;
-		if(chemicalClass == null) {
-			if(other.chemicalClass != null)
-				return false;
-		} else if(!chemicalClass.equals(other.chemicalClass))
-			return false;
-		if(Double.doubleToLongBits(concentration) != Double.doubleToLongBits(other.concentration))
-			return false;
-		if(concentrationUnit == null) {
-			if(other.concentrationUnit != null)
-				return false;
-		} else if(!concentrationUnit.equals(other.concentrationUnit))
-			return false;
-		if(usedCrossZero != other.usedCrossZero)
-			return false;
-		return true;
+		return Double.doubleToLongBits(area) == Double.doubleToLongBits(other.area) && Objects.equals(calibrationMethod, other.calibrationMethod) && Objects.equals(chemicalClass, other.chemicalClass) && Double.doubleToLongBits(concentration) == Double.doubleToLongBits(other.concentration) && Objects.equals(concentrationUnit, other.concentrationUnit) && Objects.equals(group, other.group) && Objects.equals(name, other.name) && Objects.equals(signals, other.signals) && usedCrossZero == other.usedCrossZero;
 	}
 
 	@Override
 	public String toString() {
 
-		StringBuilder builder = new StringBuilder();
-		builder.append(getClass().getName());
-		builder.append("[");
-		builder.append("name=" + name);
-		builder.append(",");
-		builder.append("group=" + group);
-		builder.append(",");
-		builder.append("chemicalClass=" + chemicalClass);
-		builder.append(",");
-		builder.append("concentration=" + concentration);
-		builder.append(",");
-		builder.append("concentrationUnit=" + concentrationUnit);
-		builder.append(",");
-		builder.append("area=" + area);
-		builder.append(",");
-		builder.append("calibrationMethod=" + calibrationMethod);
-		builder.append(",");
-		builder.append("usedCrossZero=" + usedCrossZero);
-		builder.append(",");
-		builder.append("description=" + description);
-		builder.append("]");
-		return builder.toString();
+		return "AbstractQuantitationEntry [signals=" + signals + ", name=" + name + ", group=" + group + ", chemicalClass=" + chemicalClass + ", concentration=" + concentration + ", concentrationUnit=" + concentrationUnit + ", area=" + area + ", calibrationMethod=" + calibrationMethod + ", usedCrossZero=" + usedCrossZero + ", description=" + description + ", quantitationFlag=" + quantitationFlag + "]";
 	}
 }
