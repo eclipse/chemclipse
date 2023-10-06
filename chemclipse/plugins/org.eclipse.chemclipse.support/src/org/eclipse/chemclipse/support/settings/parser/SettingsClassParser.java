@@ -34,11 +34,11 @@ import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 import org.eclipse.chemclipse.support.settings.ValidatorSettingsProperty;
+import org.eclipse.chemclipse.support.settings.validation.EmptyStringValidator;
 import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorByte;
 import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorInteger;
 import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorLong;
 import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorShort;
-import org.eclipse.chemclipse.support.settings.validation.InputValidator;
 import org.eclipse.chemclipse.support.settings.validation.MinMaxValidator;
 import org.eclipse.chemclipse.support.settings.validation.RegularExpressionValidator;
 import org.eclipse.core.databinding.validation.IValidator;
@@ -128,7 +128,7 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 						for(Annotation annotation : annotations) {
 							if(annotation instanceof JsonProperty jsonProperty) {
 								if(jsonProperty.required()) {
-									inputValue.addValidator(new InputValidator(inputValue));
+									inputValue.addValidator(new EmptyStringValidator());
 								}
 							}
 							if(annotation instanceof LabelProperty labelProperty) {
