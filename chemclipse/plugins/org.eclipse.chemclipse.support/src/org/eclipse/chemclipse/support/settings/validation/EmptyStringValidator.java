@@ -19,19 +19,15 @@ public class EmptyStringValidator implements IValidator<Object> {
 
 	private static final String ERROR = "Please enter a value.";
 
-	public EmptyStringValidator() {
-
-	}
-
 	@Override
 	public IStatus validate(Object value) {
 
 		if(value == null) {
 			return ValidationStatus.error(ERROR);
-		}
-		if(value instanceof String text && text.isEmpty()) {
+		} else if(value instanceof String text && text.isEmpty()) {
 			return ValidationStatus.error(ERROR);
 		}
+		//
 		return ValidationStatus.ok();
 	}
 }
