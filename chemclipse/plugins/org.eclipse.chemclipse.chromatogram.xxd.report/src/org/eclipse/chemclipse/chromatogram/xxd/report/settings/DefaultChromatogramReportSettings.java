@@ -26,7 +26,7 @@ public class DefaultChromatogramReportSettings extends AbstractChromatogramRepor
 	}
 
 	/**
-	 * Method that check if systemsettings are available, this is used in conjunction with the SystemSettings annotation but can also be called by user code
+	 * Method that check if system settings are available, this is used in conjunction with the SystemSettings annotation but can also be called by user code
 	 * 
 	 * @return
 	 */
