@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public abstract class AbstractChromatogramReportSettings extends AbstractProcessSettings implements IChromatogramReportSettings {
 
-	@JsonProperty(value = "Export Folder", defaultValue = "")
+	@JsonProperty(value = "Export Folder", defaultValue = "", required = true)
 	@FileSettingProperty(onlyDirectory = true)
 	private File exportFolder;
 	@JsonProperty(value = "Append", defaultValue = "false")
