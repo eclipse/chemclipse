@@ -37,8 +37,6 @@ public class InputValidator implements IValidator<Object> {
 		String message = null;
 		if(value == null) {
 			message = ERROR;
-		} else if(value instanceof String text && text.isEmpty()) {
-			message = ERROR;
 		} else {
 			Class<?> rawType = inputValue.getRawType();
 			if(rawType != null) {
@@ -65,7 +63,7 @@ public class InputValidator implements IValidator<Object> {
 				}
 			} else if(rawType == File.class) {
 				FileSettingProperty property = inputValue.getFileSettingProperty();
-				if(property != null && !(property.dialogType() == DialogType.SAVE_DIALOG)) {
+				if(property != null && property.dialogType() != DialogType.SAVE_DIALOG) {
 					if(value != null && !value.isEmpty() && !new File(value).exists()) {
 						return "Location does not exits, please choose a valid location";
 					}
