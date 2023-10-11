@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - allow chromatogram to be marked as dirty, support for analysis segments
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
@@ -35,6 +35,19 @@ public interface IChromatogram<T extends IPeak> extends SegmentedMeasurement, IM
 	int MAX_SCANINTERVAL = 3600000; // 1min = 1000ms * 60 (-> 1sec) * 60 (-> 1min)
 	float MIN_SCANS_PER_SECOND = 0.1f;
 	float MAX_SCANS_PER_SECOND = 20.0f;
+
+	boolean isFinalized();
+
+	/**
+	 * Set the status of the chromatogram.
+	 * It's not possible to overwrite finalized chromatograms
+	 * by clicking on save. Simply, the converter id
+	 * is set to "", so that the software asks how to save
+	 * the chromatogram.
+	 * 
+	 * @param finalized
+	 */
+	void setFinalized(boolean finalized);
 
 	/**
 	 * The converter sets its id if the chromatogram is writable by the

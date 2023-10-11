@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - use getScans() everywhere to access the scan datastructure, modcount support, analysis segment support
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
@@ -52,6 +52,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	private static final long serialVersionUID = -2540103992883061431L;
 	private static final Logger logger = Logger.getLogger(AbstractChromatogram.class);
 	//
+	private boolean finalized = false;
 	private String converterId = "";
 	private File file = null; // The file object of the chromatogram.
 	private int scanDelay = 4500;
@@ -133,9 +134,21 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	}
 
 	@Override
+	public boolean isFinalized() {
+
+		return finalized;
+	}
+
+	@Override
+	public void setFinalized(boolean finalized) {
+
+		this.finalized = finalized;
+	}
+
+	@Override
 	public String getConverterId() {
 
-		return converterId;
+		return finalized ? "" : converterId;
 	}
 
 	@Override
