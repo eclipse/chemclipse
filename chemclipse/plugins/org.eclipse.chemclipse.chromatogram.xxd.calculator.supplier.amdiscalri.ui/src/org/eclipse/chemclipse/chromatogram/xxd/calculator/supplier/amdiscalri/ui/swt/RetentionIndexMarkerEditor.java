@@ -29,9 +29,9 @@ import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.RetentionIndexTableViewerUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.IChangeListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
@@ -241,7 +241,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 		RetentionTimeShifterUI retentionTimeShifterUI = new RetentionTimeShifterUI(parent, SWT.NONE);
 		retentionTimeShifterUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		retentionTimeShifterUI.setUpdateListener(new IUpdateListener() {
+		retentionTimeShifterUI.setUpdateListener(new IUpdateListenerUI() {
 
 			@Override
 			public void update(Display display) {
@@ -264,7 +264,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 		gridData.grabExcessVerticalSpace = true;
 		table.setLayoutData(gridData);
 		//
-		retentionIndexListUI.setUpdateListener(new IUpdateListener() {
+		retentionIndexListUI.setUpdateListener(new IUpdateListenerUI() {
 
 			@Override
 			public void update(Display display) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
  * Matthias Mailänder - add dirty handling
  *******************************************************************************/
@@ -16,13 +16,10 @@ package org.eclipse.chemclipse.msd.model.core;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.updates.IUpdateListener;
+import org.eclipse.chemclipse.support.updates.IUpdateListener;
 
 /**
  * This class stores a list of mass spectra.
- * 
- * @author eselmeister
- * @author <a href="mailto:alexanderkerner24@gmail.com">Alexander Kerner</a>
  */
 public interface IMassSpectra extends IUpdateListener {
 

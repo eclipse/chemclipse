@@ -74,6 +74,8 @@ public class PreferenceConstants {
 	public static final int MAX_DEVIATION_RETENTION_TIME = Integer.MAX_VALUE;
 	public static final float MIN_DEVIATION_RETENTION_INDEX = 0.0f;
 	public static final float MAX_DEVIATION_RETENTION_INDEX = Float.MAX_VALUE;
+	public static final float MIN_MATCH_QUALITY = 0.0f;
+	public static final float MAX_MATCH_QUALITY = 100.0f;
 	//
 	public static final int MIN_MODULO_AUTO_MIRROR = 2;
 	public static final int MAX_MODULO_AUTO_MIRROR = 100;
@@ -441,6 +443,15 @@ public class PreferenceConstants {
 	public static final float DEF_RETENTION_INDEX_DEVIATION_ABS_OK = 20.0f;
 	public static final String P_RETENTION_INDEX_DEVIATION_ABS_WARN = "retentionIndexDeviationAbsoluteWARN";
 	public static final float DEF_RETENTION_INDEX_DEVIATION_ABS_WARN = 40.0f;
+	//
+	public static final String P_SHOW_DIALOG_DELETE_TARGETS = "showDialogDeleteTargets";
+	public static final boolean DEF_SHOW_DIALOG_DELETE_TARGETS = true;
+	public static final String P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL = "addUnknownAfterDeleteTargetsAll";
+	public static final boolean DEF_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL = false;
+	public static final String P_MATCH_QUALITY_UNKNOWN_TARGET = "matchQualityUnknownTarget";
+	public static final float DEF_MATCH_QUALITY_UNKNOWN_TARGET = 80.0f;
+	public static final String P_VERIFY_UNKNOWN_TARGET = "verifyUnknownTarget";
+	public static final boolean DEF_VERIFY_UNKNOWN_TARGET = false;
 	/*
 	 * Time Ranges
 	 */

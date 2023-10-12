@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.calibration;
 
@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
+import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -349,7 +350,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 
 		RetentionIndexUI retentionIndexUI = new RetentionIndexUI(parent, SWT.NONE);
 		retentionIndexUI.setLayoutData(new GridData(GridData.FILL_BOTH));
-		retentionIndexUI.setUpdateListener(new IUpdateListener() {
+		retentionIndexUI.setUpdateListener(new IUpdateListenerUI() {
 
 			@Override
 			public void update(Display display) {

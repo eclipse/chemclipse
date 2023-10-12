@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -26,8 +26,8 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.swt.ui.components.DataMapSupportUI;
-import org.eclipse.chemclipse.swt.ui.components.IHeaderListener;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
@@ -160,7 +160,7 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 
 		DataMapSupportUI headerMapSupportUI = new DataMapSupportUI(parent, SWT.NONE);
 		headerMapSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		headerMapSupportUI.setHeaderListener(new IHeaderListener() {
+		headerMapSupportUI.setUpdateListener(new IUpdateListener() {
 
 			@Override
 			public void update() {

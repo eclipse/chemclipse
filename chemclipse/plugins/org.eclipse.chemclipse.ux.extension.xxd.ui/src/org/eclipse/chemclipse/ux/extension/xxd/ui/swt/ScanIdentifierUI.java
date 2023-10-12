@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupport;
@@ -30,8 +31,8 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.MassSpectrumIdentifierRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.WaveSpectrumIdentifierRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -55,16 +56,16 @@ public class ScanIdentifierUI extends Composite {
 	private static final Logger logger = Logger.getLogger(ScanIdentifierUI.class);
 	private static final String KEY_MENU_DATA = "keyMenuData";
 	//
-	private Button button;
+	private AtomicReference<Button> buttonExecute = new AtomicReference<>();
 	private Menu menuMSD = null;
 	private Menu menuWSD = null;
 	//
 	private List<IScan> scans = new ArrayList<>();
-	private IUpdateListener updateListener = null;
+	private IUpdateListenerUI updateListener = null;
 	//
 	private List<IMassSpectrumIdentifierSupplier> identifierSuppliersMSD = getIdentifierSuppliersMSD();
 	private IMassSpectrumIdentifierSupplier massSpectrumIdentifierSupplier;
-	List<IWaveSpectrumIdentifierSupplier> identifierSuppliersWSD = getIdentifierSuppliersWSD();
+	private List<IWaveSpectrumIdentifierSupplier> identifierSuppliersWSD = getIdentifierSuppliersWSD();
 	private IWaveSpectrumIdentifierSupplier waveSpectrumIdentifierSupplier;
 	//
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -103,7 +104,7 @@ public class ScanIdentifierUI extends Composite {
 	public void setEnabled(boolean enabled) {
 
 		super.setEnabled(enabled);
-		button.setEnabled(enabled);
+		buttonExecute.get().setEnabled(enabled);
 	}
 
 	public void setInput(IScan scan) {
@@ -118,7 +119,7 @@ public class ScanIdentifierUI extends Composite {
 		updateMenu();
 	}
 
-	public void setUpdateListener(IUpdateListener updateListener) {
+	public void setUpdateListener(IUpdateListenerUI updateListener) {
 
 		this.updateListener = updateListener;
 	}
@@ -126,6 +127,29 @@ public class ScanIdentifierUI extends Composite {
 	public void updateIdentifier() {
 
 		updateMenu();
+	}
+
+	public void runIdentification(Display display) {
+
+		Menu menu = buttonExecute.get().getMenu();
+		if(menu != null) {
+			//
+			DataType dataType = (DataType)menu.getData(KEY_MENU_DATA);
+			List<IScanMSD> scansMSD = new ArrayList<>();
+			List<IScanWSD> scansWSD = new ArrayList<>();
+			//
+			for(IScan scan : scans) {
+				if(scan instanceof IScanMSD scanMSD && DataType.MSD.equals(dataType)) {
+					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+					IScanMSD massSpectrum = (optimizedMassSpectrum != null) ? optimizedMassSpectrum : scanMSD;
+					scansMSD.add(massSpectrum);
+				} else if(scan instanceof IScanWSD scanWSD && DataType.WSD.equals(dataType)) {
+					scansWSD.add(scanWSD);
+				}
+			}
+			//
+			runIdentification(display, scansMSD, scansWSD, true);
+		}
 	}
 
 	@Override
@@ -151,7 +175,7 @@ public class ScanIdentifierUI extends Composite {
 		gridLayout.marginWidth = 0;
 		composite.setLayout(gridLayout);
 		//
-		button = createButton(composite);
+		createButtonExecute(composite);
 		//
 		initialize();
 	}
@@ -161,7 +185,7 @@ public class ScanIdentifierUI extends Composite {
 		setEnabled(false);
 	}
 
-	private Button createButton(Composite parent) {
+	private void createButtonExecute(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -176,7 +200,7 @@ public class ScanIdentifierUI extends Composite {
 			}
 		});
 		//
-		return button;
+		buttonExecute.set(button);
 	}
 
 	private void updateMenu() {
@@ -194,9 +218,9 @@ public class ScanIdentifierUI extends Composite {
 				 */
 				activateDefaultIdentifierMSD(identifierSuppliersMSD);
 				if(menuMSD == null) {
-					menuMSD = createMenuIdentifierMSD(button, identifierSuppliersMSD);
+					menuMSD = createMenuIdentifierMSD(buttonExecute.get(), identifierSuppliersMSD);
 				}
-				button.setMenu(menuMSD);
+				buttonExecute.get().setMenu(menuMSD);
 				setEnabled(true);
 			} else if(scan instanceof IScanWSD) {
 				/*
@@ -204,9 +228,9 @@ public class ScanIdentifierUI extends Composite {
 				 */
 				activateDefaultIdentifierWSD(identifierSuppliersWSD);
 				if(menuWSD == null) {
-					menuWSD = createMenuIdentifierWSD(button, identifierSuppliersWSD);
+					menuWSD = createMenuIdentifierWSD(buttonExecute.get(), identifierSuppliersWSD);
 				}
-				button.setMenu(menuWSD);
+				buttonExecute.get().setMenu(menuWSD);
 				setEnabled(true);
 			}
 		}
@@ -237,7 +261,7 @@ public class ScanIdentifierUI extends Composite {
 		 * Set the tooltip.
 		 */
 		if(massSpectrumIdentifierSupplier != null) {
-			button.setToolTipText(massSpectrumIdentifierSupplier.getIdentifierName());
+			buttonExecute.get().setToolTipText(massSpectrumIdentifierSupplier.getIdentifierName());
 		}
 	}
 
@@ -268,7 +292,7 @@ public class ScanIdentifierUI extends Composite {
 		 * Set the tooltip.
 		 */
 		if(waveSpectrumIdentifierSupplier != null) {
-			button.setToolTipText(waveSpectrumIdentifierSupplier.getIdentifierName());
+			buttonExecute.get().setToolTipText(waveSpectrumIdentifierSupplier.getIdentifierName());
 		}
 	}
 
@@ -342,29 +366,6 @@ public class ScanIdentifierUI extends Composite {
 		Collections.sort(identifierSuppliers, (s1, s2) -> s1.getIdentifierName().compareTo(s2.getIdentifierName()));
 		//
 		return identifierSuppliers;
-	}
-
-	private void runIdentification(Display display) {
-
-		Menu menu = button.getMenu();
-		if(menu != null) {
-			//
-			DataType dataType = (DataType)menu.getData(KEY_MENU_DATA);
-			List<IScanMSD> scansMSD = new ArrayList<>();
-			List<IScanWSD> scansWSD = new ArrayList<>();
-			//
-			for(IScan scan : scans) {
-				if(scan instanceof IScanMSD scanMSD && DataType.MSD.equals(dataType)) {
-					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
-					IScanMSD massSpectrum = (optimizedMassSpectrum != null) ? optimizedMassSpectrum : scanMSD;
-					scansMSD.add(massSpectrum);
-				} else if(scan instanceof IScanWSD scanWSD && DataType.WSD.equals(dataType)) {
-					scansWSD.add(scanWSD);
-				}
-			}
-			//
-			runIdentification(display, scansMSD, scansWSD, true);
-		}
 	}
 
 	/**

@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
+import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -42,7 +42,7 @@ public class RetentionTimeShifterUI extends Composite {
 	private AtomicReference<Button> buttonControl = new AtomicReference<>();
 	//
 	private Listener listener;
-	private IUpdateListener updateListener;
+	private IUpdateListenerUI updateListener;
 	//
 	private List<IRetentionIndexEntry> settings = new ArrayList<>();
 
@@ -60,7 +60,7 @@ public class RetentionTimeShifterUI extends Composite {
 		buttonControl.get().addListener(SWT.KeyUp, listener);
 	}
 
-	public void setUpdateListener(IUpdateListener updateListener) {
+	public void setUpdateListener(IUpdateListenerUI updateListener) {
 
 		this.updateListener = updateListener;
 	}

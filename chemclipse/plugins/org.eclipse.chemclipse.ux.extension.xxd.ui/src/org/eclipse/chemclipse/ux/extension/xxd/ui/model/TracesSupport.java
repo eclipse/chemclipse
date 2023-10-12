@@ -33,33 +33,36 @@ public class TracesSupport {
 
 	private static final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
-	public static void copyTracesToClipboard(Display display, Object scan) {
+	public static String getTraces(Object scan) {
 
-		String traces = null;
+		String traces;
 		int maxCopyTraces = getNumberOfTraces();
 		boolean sortTraces = isSortTraces();
-		IScan scanInstance = null;
 		//
 		if(scan instanceof IScanMSD scanMSD) {
 			traces = ScanSupport.extractTracesText(scanMSD, maxCopyTraces, sortTraces);
-			scanInstance = scanMSD;
 		} else if(scan instanceof IScanWSD scanWSD) {
 			traces = WavelengthSupport.extractTracesText(scanWSD, maxCopyTraces, sortTraces);
-			scanInstance = scanWSD;
 		} else if(scan instanceof IScanISD scanISD) {
 			traces = WavenumberSupport.extractTracesText(scanISD, maxCopyTraces, sortTraces);
-			scanInstance = scanISD;
+		} else {
+			traces = "";
 		}
-		/*
-		 * Copy to clipboard
-		 */
-		if(traces != null) {
+		//
+		return traces;
+	}
+
+	public static void copyTracesToClipboard(Display display, Object scan) {
+
+		String traces = getTraces(scan);
+		if(!traces.isEmpty()) {
 			TracesExportOption tracesExportOption = TracesSupport.getTracesExportOption();
 			switch(tracesExportOption) {
 				case NAMED_TRACE:
 					/*
 					 * Styrene | 104 103 ...
 					 */
+					IScan scanInstance = getScanInstance(scan);
 					ILibraryInformation libraryInformation = IIdentificationTarget.getLibraryInformation(scanInstance);
 					if(libraryInformation != null) {
 						traces = libraryInformation.getName() + " | " + traces;
@@ -73,7 +76,9 @@ public class TracesSupport {
 					 */
 					break;
 			}
-			//
+			/*
+			 * Clipboard
+			 */
 			TextTransfer textTransfer = TextTransfer.getInstance();
 			Object[] data = new Object[]{traces};
 			Transfer[] dataTypes = new Transfer[]{textTransfer};
@@ -81,6 +86,21 @@ public class TracesSupport {
 			clipboard.setContents(data, dataTypes);
 			clipboard.dispose();
 		}
+	}
+
+	private static IScan getScanInstance(Object scan) {
+
+		IScan scanInstance = null;
+		//
+		if(scan instanceof IScanMSD scanMSD) {
+			scanInstance = scanMSD;
+		} else if(scan instanceof IScanWSD scanWSD) {
+			scanInstance = scanWSD;
+		} else if(scan instanceof IScanISD scanISD) {
+			scanInstance = scanISD;
+		}
+		//
+		return scanInstance;
 	}
 
 	private static int getNumberOfTraces() {

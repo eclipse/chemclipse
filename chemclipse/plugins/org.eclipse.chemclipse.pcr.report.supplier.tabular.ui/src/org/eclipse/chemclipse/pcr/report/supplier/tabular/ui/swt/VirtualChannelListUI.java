@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.report.supplier.tabular.ui.swt;
 
-import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.ui.internal.provider.VirtualChannelLabelProvider;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.ui.internal.provider.VirtualChannelTableComparator;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.swt.widgets.Composite;
 
 public class VirtualChannelListUI extends ExtendedTableViewer {

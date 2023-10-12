@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.xxd.classification.ui.swt;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.xxd.classification.ui.provider.ClassificationRuleEditingSupport;
 import org.eclipse.chemclipse.xxd.classification.ui.provider.ClassificationRuleFilter;
 import org.eclipse.chemclipse.xxd.classification.ui.provider.ClassificationRuleLabelProvider;

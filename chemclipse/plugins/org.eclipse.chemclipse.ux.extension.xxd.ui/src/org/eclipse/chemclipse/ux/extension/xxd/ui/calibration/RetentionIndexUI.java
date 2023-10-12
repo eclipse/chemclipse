@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.calibration;
 
@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -44,7 +45,7 @@ public class RetentionIndexUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<CalibrationEditUI> toolbarEdit = new AtomicReference<>();
 	private AtomicReference<RetentionIndexTableViewerUI> retentionIndexListUI = new AtomicReference<>();
 	//
-	private IUpdateListener updateListener = null;
+	private IUpdateListenerUI updateListener = null;
 	private ISeparationColumnIndices separationColumnIndices = null;
 	//
 	private IEventBroker eventBroker = Activator.getDefault().getEventBroker();
@@ -55,7 +56,7 @@ public class RetentionIndexUI extends Composite implements IExtendedPartUI {
 		createControl();
 	}
 
-	public void setUpdateListener(IUpdateListener updateListener) {
+	public void setUpdateListener(IUpdateListenerUI updateListener) {
 
 		this.updateListener = updateListener;
 	}
@@ -222,7 +223,7 @@ public class RetentionIndexUI extends Composite implements IExtendedPartUI {
 		RetentionIndexTableViewerUI tableViewer = new RetentionIndexTableViewerUI(composite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		tableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		tableViewer.setUpdateListener(new IUpdateListener() {
+		tableViewer.setUpdateListener(new IUpdateListenerUI() {
 
 			@Override
 			public void update(Display display) {

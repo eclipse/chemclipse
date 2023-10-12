@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.identifier.template.TargetTemplate;
 import org.eclipse.chemclipse.model.identifier.template.TargetTemplates;
-import org.eclipse.chemclipse.model.updates.IUpdateListener;
+import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;

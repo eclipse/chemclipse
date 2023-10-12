@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
+import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -46,7 +46,7 @@ public class ScanFilterUI extends Composite {
 	private Button button;
 	//
 	private IScan scan = null;
-	private IUpdateListener updateListener = null;
+	private IUpdateListenerUI updateListener = null;
 
 	public ScanFilterUI(Composite parent, int style) {
 
@@ -63,7 +63,7 @@ public class ScanFilterUI extends Composite {
 		button.setEnabled(enabled);
 	}
 
-	public void setUpdateListener(IUpdateListener updateListener) {
+	public void setUpdateListener(IUpdateListenerUI updateListener) {
 
 		this.updateListener = updateListener;
 	}

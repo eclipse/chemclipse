@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -59,6 +59,12 @@ public class PreferencePageTargets extends FieldEditorPreferencePage implements 
 		addField(new FloatFieldEditor(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_REL_WARN, "Warn Deviation [%]", PreferenceConstants.MIN_DEVIATION_RELATIVE, PreferenceConstants.MAX_DEVIATION_RELATIVE, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_ABS_OK, "Allowed Deviation [abs]", PreferenceConstants.MIN_DEVIATION_RETENTION_INDEX, PreferenceConstants.MAX_DEVIATION_RETENTION_INDEX, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_ABS_WARN, "Warn Deviation [abs]", PreferenceConstants.MIN_DEVIATION_RETENTION_INDEX, PreferenceConstants.MAX_DEVIATION_RETENTION_INDEX, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DIALOG_DELETE_TARGETS, "Targets Delete (Show Dialog)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL, "Delete All (Unknown Target Add)", getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceConstants.P_MATCH_QUALITY_UNKNOWN_TARGET, "Match Quality (Unknown Target)", PreferenceConstants.MIN_MATCH_QUALITY, PreferenceConstants.MAX_MATCH_QUALITY, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_VERIFY_UNKNOWN_TARGET, "Verify (Unknown Target)", getFieldEditorParent()));
 	}
 
 	@Override

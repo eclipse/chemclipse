@@ -23,9 +23,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.cas.CasSupport;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.support.CalculationType;
@@ -48,6 +51,7 @@ import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
@@ -55,11 +59,11 @@ import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ClassifierDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.InternalStandardDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeletePeaksOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteScanTargetsOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
@@ -72,6 +76,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.Inter
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -88,6 +93,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
@@ -97,6 +103,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakScanListUI.class);
 	//
+	private static final String IDENTIFIER_UNKNOWN = "Manual Identification";
 	private static final String MENU_CATEGORY = "Peaks/Scans";
 	private static final String DESCRIPTION_PEAKS = "Number Peaks:";
 	private static final String DESCRIPTION_SCANS = "Scans:";
@@ -113,7 +120,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private Button buttonComparison;
 	private Button buttonMerge;
 	private Button buttonDelete;
-	private ScanIdentifierUI scanIdentifierUI;
+	private AtomicReference<ScanIdentifierUI> scanIdentifierControl = new AtomicReference<>();
 	private Button buttonTableEdit;
 	private AtomicReference<PeakScanListUI> tableViewer = new AtomicReference<>();
 	//
@@ -237,7 +244,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		buttonComparison.setEnabled(false);
 		buttonMerge.setEnabled(false);
 		buttonDelete.setEnabled(false);
-		scanIdentifierUI.setEnabled(false);
+		scanIdentifierControl.get().setEnabled(false);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, HelpContext.PEAK_SCAN_LIST);
 	}
 
@@ -255,7 +262,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		buttonComparison = createButtonComparison(composite);
 		buttonMerge = createButtonMerge(composite);
 		buttonDelete = createButtonDelete(composite);
-		scanIdentifierUI = createScanIdentifierUI(composite);
+		createScanIdentifierUI(composite);
 		createButtonReset(composite);
 		buttonSave = createButtonSave(composite);
 		createButtonHelp(composite);
@@ -304,6 +311,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		PeakScanListUI peakScanListUI = new PeakScanListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		Table table = peakScanListUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
 		table.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -434,32 +442,25 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
 
 				if(e.keyCode == SWT.DEL) {
-					/*
-					 * DEL
-					 */
 					deletePeaksOrIdentifications(display);
-				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_I && (e.stateMask & SWT.MOD1) == SWT.MOD1) {
-					if((e.stateMask & SWT.MOD3) == SWT.MOD3) {
-						/*
-						 * CTRL + ALT + i
-						 */
-						setPeaksActiveForAnalysis(false);
-					} else {
-						/*
-						 * CTRL + i
-						 */
-						setPeaksActiveForAnalysis(true);
+				} else if((e.stateMask & SWT.MOD1) == SWT.MOD1) {
+					if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_I) {
+						if((e.stateMask & SWT.MOD3) == SWT.MOD3) {
+							setPeaksActiveForAnalysis(false); // CTRL + ALT + i
+						} else {
+							setPeaksActiveForAnalysis(true); // CTRL + i
+						}
+					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_S) {
+						modifyInternalStandards(display); // CTRL + s
+					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_G) {
+						modifyClassifier(display); // CTRL + g
+					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_D) {
+						deleteTargetsAll(e.display); // CTRL + d
+					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_U) {
+						// addTargetsUnknown(e.display); // CTRL + u
+					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_Q) {
+						scanIdentifierControl.get().runIdentification(e.display); // CTRL + q
 					}
-				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_S && (e.stateMask & SWT.MOD1) == SWT.MOD1) {
-					/*
-					 * CTRL + s
-					 */
-					modifyInternalStandards(display);
-				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_D && (e.stateMask & SWT.MOD1) == SWT.MOD1) {
-					/*
-					 * CTRL + d
-					 */
-					modifyClassifier(display);
 				} else {
 					propagateSelection(display);
 				}
@@ -593,6 +594,79 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		}
 	}
 
+	private void deleteTargetsAll(Display display) {
+
+		boolean process = true;
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DIALOG_DELETE_TARGETS)) {
+			process = openQuestion(display.getActiveShell(), "Do you want to delete all targets?");
+		}
+		/*
+		 * Delete Targets
+		 */
+		if(process) {
+			for(Object object : tableViewer.get().getStructuredSelection().toList()) {
+				if(object instanceof ITargetSupplier targetSupplier) {
+					targetSupplier.getTargets().clear();
+					if(preferenceStore.getBoolean(PreferenceConstants.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL)) {
+						IScan scan = getScan(object);
+						if(scan != null) {
+							IIdentificationTarget identificationTarget = getTargetUnknown(display, scan);
+							targetSupplier.getTargets().add(identificationTarget);
+						}
+					}
+				}
+			}
+			/*
+			 * Send update.
+			 */
+			tableViewer.get().refresh();
+			UpdateNotifierUI.update(display, chromatogramSelection);
+		}
+	}
+
+	/**
+	 * May return null.
+	 * 
+	 * @return IScan
+	 */
+	private IScan getScan(Object object) {
+
+		IScan scan = null;
+		//
+		if(object instanceof IPeak peak) {
+			IPeakModel peakModel = peak.getPeakModel();
+			scan = peakModel.getPeakMaximum();
+		} else if(object instanceof IScan scanx) {
+			scan = scanx;
+		}
+		//
+		return scan;
+	}
+
+	private IIdentificationTarget getTargetUnknown(Display display, IScan scan) {
+
+		float matchFactor = preferenceStore.getFloat(PreferenceConstants.P_MATCH_QUALITY_UNKNOWN_TARGET);
+		IIdentificationTarget identificationTarget = IIdentificationTarget.createDefaultTarget(getUnknownTargetName(scan), CasSupport.CAS_DEFAULT, IDENTIFIER_UNKNOWN, matchFactor);
+		identificationTarget.setVerified(preferenceStore.getBoolean(PreferenceConstants.P_VERIFY_UNKNOWN_TARGET));
+		//
+		return identificationTarget;
+	}
+
+	private String getUnknownTargetName(IScan scan) {
+
+		String traces = TracesSupport.getTraces(scan);
+		if(!traces.isEmpty()) {
+			return "Unknown [" + traces + "]";
+		} else {
+			return "Unknown";
+		}
+	}
+
+	private boolean openQuestion(Shell shell, String text) {
+
+		return MessageDialog.openQuestion(shell, "Targets", text);
+	}
+
 	@SuppressWarnings("unchecked")
 	private void propagateSelection(Display display) {
 
@@ -604,7 +678,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		buttonComparison.setEnabled(false);
 		buttonMerge.setEnabled(false);
 		buttonDelete.setEnabled(false);
-		scanIdentifierUI.setEnabled(false); // setInput enables/disables the control.
+		scanIdentifierControl.get().setEnabled(false); // setInput enables/disables the control.
 		//
 		if(!selection.isEmpty()) {
 			buttonDelete.setEnabled(true);
@@ -632,7 +706,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					}
 				}
 				//
-				scanIdentifierUI.setInput(scansIdentify);
+				scanIdentifierControl.get().setInput(scansIdentify);
 				//
 				chromatogramSelection.setSelectedPeaks(selectedPeaks);
 				chromatogramSelection.setSelectedIdentifiedScans(selectedIdentifiedScans);
@@ -653,7 +727,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					}
 					//
 					IScan scan = peak.getPeakModel().getPeakMaximum();
-					scanIdentifierUI.setInput(scan);
+					scanIdentifierControl.get().setInput(scan);
 					chromatogramSelection.setSelectedPeak(peak);
 					List<IScan> selectedIdentifiedScans = new ArrayList<>();
 					chromatogramSelection.setSelectedIdentifiedScans(selectedIdentifiedScans);
@@ -670,7 +744,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					 */
 					IIdentificationTarget identificationTarget = IIdentificationTarget.getIdentificationTarget(scan);
 					//
-					scanIdentifierUI.setInput(scan);
+					scanIdentifierControl.get().setInput(scan);
 					chromatogramSelection.setSelectedScan(scan);
 					chromatogramSelection.setSelectedIdentifiedScan(scan);
 					chromatogramSelection.setSelectedPeaks(new ArrayList<IPeak>());
@@ -783,10 +857,10 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		return button;
 	}
 
-	private ScanIdentifierUI createScanIdentifierUI(Composite parent) {
+	private void createScanIdentifierUI(Composite parent) {
 
 		ScanIdentifierUI scanIdentifierUI = new ScanIdentifierUI(parent, SWT.NONE);
-		scanIdentifierUI.setUpdateListener(new IUpdateListener() {
+		scanIdentifierUI.setUpdateListener(new IUpdateListenerUI() {
 
 			@Override
 			public void update(Display display) {
@@ -798,7 +872,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			}
 		});
 		//
-		return scanIdentifierUI;
+		scanIdentifierControl.set(scanIdentifierUI);
 	}
 
 	private CalculationType getCalculationTypeMerge() {

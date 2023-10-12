@@ -163,6 +163,11 @@ public interface IIdentificationTarget extends ITarget {
 
 	static IIdentificationTarget createDefaultTarget(String name, String casNumber, String identifier) {
 
+		return createDefaultTarget(name, casNumber, identifier, ComparisonResult.FACTOR_BEST_MATCH);
+	}
+
+	static IIdentificationTarget createDefaultTarget(String name, String casNumber, String identifier, float matchFactor) {
+
 		ILibraryInformation libraryInformation = new LibraryInformation();
 		libraryInformation.setName(name);
 		libraryInformation.setCasNumber(casNumber);
@@ -170,7 +175,7 @@ public interface IIdentificationTarget extends ITarget {
 		libraryInformation.setContributor("");
 		libraryInformation.setReferenceIdentifier("");
 		//
-		IComparisonResult comparisonResult = ComparisonResult.COMPARISON_RESULT_BEST_MATCH;
+		IComparisonResult comparisonResult = new ComparisonResult(matchFactor, matchFactor, matchFactor, matchFactor);
 		IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 		identificationTarget.setIdentifier(identifier);
 		//

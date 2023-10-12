@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.swt.ui.components;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -36,7 +37,7 @@ public class DataMapSupportUI extends Composite {
 	private Text textValue;
 	private Button buttonAdd;
 	//
-	private IHeaderListener headerListener;
+	private IUpdateListener updateListener;
 	private IMeasurementInfo measurementInfo;
 
 	public DataMapSupportUI(Composite parent, int style) {
@@ -52,9 +53,9 @@ public class DataMapSupportUI extends Composite {
 		buttonAdd.setEnabled(false);
 	}
 
-	public void setHeaderListener(IHeaderListener headerListener) {
+	public void setUpdateListener(IUpdateListener updateListener) {
 
-		this.headerListener = headerListener;
+		this.updateListener = updateListener;
 	}
 
 	public void setInput(IMeasurementInfo measurementInfo) {
@@ -180,8 +181,8 @@ public class DataMapSupportUI extends Composite {
 	private void fireUpdate() {
 
 		if(measurementInfo != null) {
-			if(headerListener != null) {
-				headerListener.update();
+			if(updateListener != null) {
+				updateListener.update();
 			}
 		}
 	}

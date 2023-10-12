@@ -22,6 +22,7 @@ Export-Package: org.eclipse.chemclipse.support.comparator,
  org.eclipse.chemclipse.support.settings.serialization,
  org.eclipse.chemclipse.support.settings.validation,
  org.eclipse.chemclipse.support.text,
+ org.eclipse.chemclipse.support.updates,
  org.eclipse.chemclipse.support.util,
  org.eclipse.chemclipse.support.validators
 Import-Package: com.fasterxml.jackson.annotation;version="2.5.0",

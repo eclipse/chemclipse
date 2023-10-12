@@ -22,10 +22,8 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
@@ -35,24 +33,24 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
+import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.services.IScanIdentifierService;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ChromatogramUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.SubtractScanWizard;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -79,11 +77,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedScanChartUI.class);
-	/*
-	 * The event broker should be set, but it
-	 * could be null if no events shall be fired.
-	 */
-	private IEventBroker eventBroker;
 	//
 	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();
 	private Button buttonToolbarInfo;
@@ -110,7 +103,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	//
 	private Button buttonSubtractOption;
 	private ScanFilterUI scanFilterUI;
-	private ScanIdentifierUI scanIdentifierUI;
+	private AtomicReference<ScanIdentifierUI> scanIdentifierControl = new AtomicReference<>();
 	private ScanWebIdentifierUI scanWebIdentifierUI; // show database link
 	//
 	private IScan scan;
@@ -127,11 +120,6 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		createControl();
 	}
 
-	public void setEventBroker(IEventBroker eventBroker) {
-
-		this.eventBroker = eventBroker;
-	}
-
 	private String getLastTopic(List<String> topics) {
 
 		Collections.reverse(topics);
@@ -143,6 +131,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 				return topic;
 			}
 		}
+		//
 		return "";
 	}
 
@@ -206,7 +195,8 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 								setSubtractModus(display, false, false);
 								updateInfoLabels();
 							}
-							fireUpdateChromatogramSelection(display, scanSource);
+							//
+							ChromatogramUpdateSupport.fireUpdateChromatogramSelection(display, scanSource);
 							updateScan(scanSource);
 						}
 					}
@@ -229,7 +219,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		this.scan = scan;
 		//
 		scanFilterUI.setInput(scan);
-		scanIdentifierUI.setInput(scan);
+		scanIdentifierControl.get().setInput(scan);
 		scanWebIdentifierUI.setInput(scan);
 		toolbarInfo.get().setText(scanDataSupport.getScanLabel(scan));
 		setDetectorSignalType(scan);
@@ -312,8 +302,8 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		buttonToolbarTypes = createButtonToggleToolbar(composite, toolbarTypes, IMAGE_TYPES, TOOLTIP_TYPES);
 		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
-		scanIdentifierUI = createScanIdentifierUI(composite);
 		buttonCopyTraces = createButtonCopyTracesClipboard(composite);
+		createScanIdentifierUI(composite);
 		scanWebIdentifierUI = createScanWebIdentifierUI(composite);
 		createResetButton(composite);
 		buttonSave = createSaveButton(composite);
@@ -390,6 +380,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		CLabel label = new CLabel(parent, SWT.CENTER);
 		label.setForeground(Colors.RED);
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
 		return label;
 	}
 
@@ -456,7 +447,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 		ScanFilterUI scanFilterUI = new ScanFilterUI(parent, SWT.NONE);
 		scanFilterUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		scanFilterUI.setUpdateListener(new IUpdateListener() {
+		scanFilterUI.setUpdateListener(new IUpdateListenerUI() {
 
 			@Override
 			public void update(Display display) {
@@ -467,10 +458,10 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		return scanFilterUI;
 	}
 
-	private ScanIdentifierUI createScanIdentifierUI(Composite parent) {
+	private void createScanIdentifierUI(Composite parent) {
 
 		ScanIdentifierUI scanIdentifierUI = new ScanIdentifierUI(parent, SWT.NONE);
-		scanIdentifierUI.setUpdateListener(new IUpdateListener() {
+		scanIdentifierUI.setUpdateListener(new IUpdateListenerUI() {
 
 			@Override
 			public void update(Display display) {
@@ -478,11 +469,11 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 				updateScan(scan);
 				UpdateNotifierUI.update(display, scan);
 				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Scan Chart identification has been performed.");
-				fireUpdateChromatogramSelection(display, scan);
+				ChromatogramUpdateSupport.fireUpdateChromatogramSelection(display, scan);
 			}
 		});
 		//
-		return scanIdentifierUI;
+		scanIdentifierControl.set(scanIdentifierUI);
 	}
 
 	private void subtractScanMSD(IScanMSD scanSource, IScanMSD scanSubtract) {
@@ -628,7 +619,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		buttonChartGrid.setEnabled(true);
 		boolean enabled = isMassSpectrum();
 		//
-		scanIdentifierUI.setEnabled(enabled || isWaveSpectrum());
+		scanIdentifierControl.get().setEnabled(enabled || isWaveSpectrum());
 		if(!enabled) {
 			scanWebIdentifierUI.setEnabled(false);
 		}
@@ -689,7 +680,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 			public void apply(Display display) {
 
 				updateScan(scan);
-				scanIdentifierUI.updateIdentifier();
+				scanIdentifierControl.get().updateIdentifier();
 			}
 		};
 		//
@@ -858,45 +849,5 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		//
 		combo.setItems(items);
 		combo.select(index);
-	}
-
-	private void fireUpdateChromatogramSelection(Display display, IScan scan) {
-
-		display.asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-
-				if(eventBroker != null) {
-					DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-					List<Object> objects = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
-					if(objects != null && !objects.isEmpty()) {
-						Object object = objects.get(0);
-						if(object instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
-							if(scan != null) {
-								/*
-								 * We assume that the subtraction takes place in the same
-								 * chromatogram. It could happen, that one scan is selected
-								 * and set to edit modus and afterwards another chromatogram
-								 * is selected. This could lead to misleading behavior.
-								 * But it's unclear how to solve it hear. This is currently
-								 * the best way to prevent unwanted behavior. The scan chart shows
-								 * data from scans and peaks.
-								 */
-								IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-								int retentionTime = scan.getRetentionTime();
-								int scanNumber = chromatogram.getScanNumber(retentionTime);
-								IScan scanReference = chromatogram.getScan(scanNumber);
-								if(scan == scanReference) {
-									chromatogramSelection.setSelectedScan(scan);
-								}
-								chromatogramSelection.getChromatogram().setDirty(true);
-								chromatogramSelection.update(false);
-							}
-						}
-					}
-				}
-			}
-		});
 	}
 }

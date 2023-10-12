@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add NMR datatype, remove obsolete constants, extract init into static methods
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
@@ -196,6 +196,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_REL_WARN, PreferenceConstants.DEF_RETENTION_INDEX_DEVIATION_REL_WARN);
 		store.setDefault(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_ABS_OK, PreferenceConstants.DEF_RETENTION_INDEX_DEVIATION_ABS_OK);
 		store.setDefault(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_ABS_WARN, PreferenceConstants.DEF_RETENTION_INDEX_DEVIATION_ABS_WARN);
+		store.setDefault(PreferenceConstants.P_SHOW_DIALOG_DELETE_TARGETS, PreferenceConstants.DEF_SHOW_DIALOG_DELETE_TARGETS);
+		store.setDefault(PreferenceConstants.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL, PreferenceConstants.DEF_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL);
+		store.setDefault(PreferenceConstants.P_MATCH_QUALITY_UNKNOWN_TARGET, PreferenceConstants.DEF_MATCH_QUALITY_UNKNOWN_TARGET);
+		store.setDefault(PreferenceConstants.P_VERIFY_UNKNOWN_TARGET, PreferenceConstants.DEF_VERIFY_UNKNOWN_TARGET);
 		//
 		initializeChromatogramDefaults(store);
 		/*

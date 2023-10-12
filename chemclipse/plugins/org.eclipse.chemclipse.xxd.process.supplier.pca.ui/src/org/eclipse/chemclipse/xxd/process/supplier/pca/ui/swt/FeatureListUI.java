@@ -14,9 +14,9 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.FeatureDataMatrix;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.provider.FeatureComparator;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.provider.FeatureEditingSupport;
