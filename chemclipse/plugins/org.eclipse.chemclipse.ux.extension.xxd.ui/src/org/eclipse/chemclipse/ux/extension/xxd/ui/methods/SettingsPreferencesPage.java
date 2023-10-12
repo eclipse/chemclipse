@@ -99,7 +99,12 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		//
 		Listener validationListener = createValidationListener();
 		SelectionListener selectionListener = createSelectionListener(validationListener);
-		addButtonSettings(composite, validationListener, selectionListener);
+		//
+		Composite bottomComposite = new Composite(composite, SWT.NONE);
+		bottomComposite.setLayout(new GridLayout(2, true));
+		bottomComposite.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL));
+		addButtonResetDefaults(bottomComposite);
+		addButtonSettings(bottomComposite, validationListener, selectionListener);
 		//
 		return composite;
 	}
@@ -237,5 +242,20 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		//
 		selectionListener.widgetSelected(null);
 		settingsUI.getControl().addChangeListener(validationListener);
+	}
+
+	private void addButtonResetDefaults(Composite parent) {
+
+		Button buttonResetDefaults = new Button(parent, SWT.PUSH);
+		buttonResetDefaults.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, true, false));
+		buttonResetDefaults.setText(ExtensionMessages.resetDefaults);
+		buttonResetDefaults.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				settingsUI.getControl().restoreDefaults();
+			}
+		});
 	}
 }

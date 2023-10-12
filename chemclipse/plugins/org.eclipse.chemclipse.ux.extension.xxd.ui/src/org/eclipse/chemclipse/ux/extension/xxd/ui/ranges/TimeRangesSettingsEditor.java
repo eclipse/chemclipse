@@ -456,4 +456,10 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		toolbarShiftControl.get().setInput(settings.values());
 		timeRangesControl.get().setInput(settings.values());
 	}
+
+	@Override
+	public void restoreDefaults() {
+
+		settings.clear();
+	}
 }

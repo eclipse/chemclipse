@@ -401,4 +401,10 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 		listUI.setInput(settings.values());
 	}
+
+	@Override
+	public void restoreDefaults() {
+
+		listUI.clear();
+	}
 }

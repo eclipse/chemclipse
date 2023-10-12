@@ -74,6 +74,47 @@ public class WidgetItem {
 		return inputValue;
 	}
 
+	public void restoreDefaults() {
+
+		if(control instanceof Text text) {
+			text.setText((String)inputValue.getDefaultValue());
+		} else if(control instanceof Button button) {
+			button.setSelection(Boolean.valueOf((String)inputValue.getDefaultValue()));
+		} else if(control instanceof Combo combo) {
+			Object enumValue = getEnumFrom(inputValue.getDefaultValue(), inputValue.getRawType());
+			if(enumValue instanceof ILabel labelledEnum) {
+				setSelection(combo, labelledEnum.label());
+			} else {
+				setSelection(combo, enumValue.toString());
+			}
+		}
+	}
+
+	private static Object getEnumFrom(Object defaultValue, Class<?> rawType) {
+
+		if(rawType.isEnum()) {
+			for(Object constant : rawType.getEnumConstants()) {
+				if(constant.toString().equals(defaultValue)) {
+					return constant;
+				}
+			}
+		}
+		return defaultValue;
+	}
+
+	private void setSelection(Combo combo, String selection) {
+
+		String[] items = combo.getItems();
+		int selectedIndex = -1;
+		for(int i = 0; i < items.length; i++) {
+			if(items[i].equals(selection)) {
+				selectedIndex = i;
+				break;
+			}
+		}
+		combo.select(selectedIndex);
+	}
+
 	public ControlDecoration getControlDecoration() {
 
 		return controlDecoration;

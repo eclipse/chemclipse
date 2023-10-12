@@ -65,6 +65,11 @@ public class SettingsUI<T> extends Composite {
 		return control;
 	}
 
+	public void update(IProcessorPreferences<T> preferences) {
+
+		loadSettingsUIProvider(preferences);
+	}
+
 	private SettingsUIProvider<T> loadSettingsUIProvider(IProcessorPreferences<T> preferences) {
 
 		try {
@@ -196,6 +201,14 @@ public class SettingsUI<T> extends Composite {
 			}
 			//
 			return preferences.getSerialization().toString(values);
+		}
+
+		@Override
+		public void restoreDefaults() {
+
+			for(WidgetItem widgetItem : widgetItems) {
+				widgetItem.restoreDefaults();
+			}
 		}
 
 		@Override

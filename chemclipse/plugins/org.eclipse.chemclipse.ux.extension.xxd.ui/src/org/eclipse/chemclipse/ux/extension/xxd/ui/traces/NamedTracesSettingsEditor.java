@@ -463,4 +463,10 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 		this.control = composite;
 	}
+
+	@Override
+	public void restoreDefaults() {
+
+		settings.clear();
+	}
 }

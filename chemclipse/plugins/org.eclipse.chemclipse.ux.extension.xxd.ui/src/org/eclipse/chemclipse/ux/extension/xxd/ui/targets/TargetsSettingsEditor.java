@@ -496,4 +496,10 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 
 		targetTemplateListControl.get().setInput(settings.values());
 	}
+
+	@Override
+	public void restoreDefaults() {
+
+		settings.clear();
+	}
 }
