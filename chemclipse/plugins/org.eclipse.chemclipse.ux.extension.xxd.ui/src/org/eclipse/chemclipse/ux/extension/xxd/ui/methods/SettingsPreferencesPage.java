@@ -216,7 +216,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		} else {
 			Button buttonDontAskAgain = new Button(parent, SWT.CHECK);
 			buttonDontAskAgain.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false));
-			buttonDontAskAgain.setText("Remember my decision and don't ask again.");
+			buttonDontAskAgain.setText(ExtensionMessages.rememberDecision);
 			buttonDontAskAgain.addSelectionListener(new SelectionAdapter() {
 
 				@Override
