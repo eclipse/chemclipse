@@ -220,6 +220,7 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Named Trace", "Create a new named trace.", "Hydrocarbons | 57 71 85", new NamedTraceInputValidator(settings.keySet()));
@@ -245,6 +246,7 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
@@ -279,6 +281,7 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Named Traces", "Do you want to delete the selected named traces?")) {
@@ -304,6 +307,7 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Named Traces", "Do you want to delete all named traces?")) {
@@ -324,6 +328,7 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
@@ -353,6 +358,7 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
@@ -445,8 +451,8 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 		if(MessageDialog.openQuestion(shell, NamedTraces.DESCRIPTION, MESSAGE_REMOVE)) {
 			IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
 			for(Object object : structuredSelection.toArray()) {
-				if(object instanceof NamedTrace) {
-					settings.remove((NamedTrace)object);
+				if(object instanceof NamedTrace namedTrace) {
+					settings.remove(namedTrace);
 				}
 			}
 			setTableViewerInput();

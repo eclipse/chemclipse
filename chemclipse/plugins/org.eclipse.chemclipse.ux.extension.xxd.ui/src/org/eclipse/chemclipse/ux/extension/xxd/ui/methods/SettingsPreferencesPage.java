@@ -194,7 +194,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 
 	private SelectionListener createSelectionListener(Listener validationListener) {
 
-		SelectionListener selectionListener = new SelectionAdapter() {
+		return new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -204,8 +204,6 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 				isUseSystemDefaults = buttonDefault.getSelection();
 			}
 		};
-		//
-		return selectionListener;
 	}
 
 	private void addButtonSettings(Composite parent, Listener validationListener, SelectionListener selectionListener) {
@@ -227,7 +225,8 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 					isDontAskAgain = buttonDontAskAgain.getSelection();
 				}
 			});
-			buttonDontAskAgain.setSelection(isDontAskAgain = !(preferences.getDialogBehaviour() == DialogBehavior.SHOW));
+			isDontAskAgain = preferences.getDialogBehaviour() != DialogBehavior.SHOW;
+			buttonDontAskAgain.setSelection(isDontAskAgain);
 		}
 		//
 		if(preferences.isUseSystemDefaults() && !preferences.requiresUserSettings()) {

@@ -90,7 +90,7 @@ public class SettingsUI<T> extends Composite {
 			 */
 			logger.error("Can't get user-settings for processor " + preferences.getSupplier().getId() + " with settingsclass " + preferences.getSupplier().getSettingsClass());
 		}
-		return new DefaultSettingsUIProvider<T>();
+		return new DefaultSettingsUIProvider<>();
 	}
 
 	private static final class DefaultSettingsUIProvider<T> implements SettingsUIProvider<T> {

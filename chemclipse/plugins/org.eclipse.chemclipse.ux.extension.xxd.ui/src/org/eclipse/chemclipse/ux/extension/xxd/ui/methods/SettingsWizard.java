@@ -23,8 +23,8 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences.DialogBehavior;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.processing.supplier.NodeProcessorPreferences;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -159,7 +159,7 @@ public class SettingsWizard extends Wizard {
 	 */
 	public static <T> IProcessorPreferences<T> getWorkspacePreferences(IProcessSupplier<T> supplier) {
 
-		return new NodeProcessorPreferences<T>(supplier, getStorage().node(supplier.getId()));
+		return new NodeProcessorPreferences<>(supplier, getStorage().node(supplier.getId()));
 	}
 
 	private static IEclipsePreferences preferences;
