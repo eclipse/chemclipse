@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.IRatingSupplier;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -56,6 +57,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String RETENTION_TIME = ExtensionMessages.retentionTime;
 	public static final String RETENTION_INDEX = ExtensionMessages.retentionIndex;
 	public static final String REFERENCE_ID = ExtensionMessages.referenceID;
+	public static final String INLIB_FACTOR = ExtensionMessages.inLibFactor;
 	//
 	public static final int INDEX_RATING = 1;
 	public static final int INDEX_NAME = 2;
@@ -89,12 +91,14 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 			CONTRIBUTOR, //
 			REFERENCE_ID, //
 			RETENTION_TIME, //
-			RETENTION_INDEX //
+			RETENTION_INDEX, //
+			INLIB_FACTOR //
 	};
 	//
 	public static final int[] BOUNDS = { //
 			30, //
 			30, //
+			100, //
 			100, //
 			100, //
 			100, //
@@ -186,13 +190,33 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 			 * Rating
 			 */
 			if(element instanceof IIdentificationTarget identificationTarget) {
-				float rating = identificationTarget.getComparisonResult().getRating();
-				if(rating >= IComparisonResult.RATING_LIMIT_UP) {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP, IApplicationImageProvider.SIZE_16x16);
-				} else if(rating >= IComparisonResult.RATING_LIMIT_EQUAL) {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_EQUAL, IApplicationImageProvider.SIZE_16x16);
-				} else {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN, IApplicationImageProvider.SIZE_16x16);
+				IComparisonResult comparisonResult = identificationTarget.getComparisonResult();
+				IRatingSupplier ratingSupplier = comparisonResult.getRatingSupplier();
+				//
+				String fileName;
+				switch(ratingSupplier.getStatus()) {
+					case VERY_GOOD:
+						fileName = IApplicationImage.IMAGE_RATING_VERY_GOOD;
+						break;
+					case GOOD:
+						fileName = IApplicationImage.IMAGE_RATING_GOOD;
+						break;
+					case AVERAGE:
+						fileName = IApplicationImage.IMAGE_RATING_AVERAGE;
+						break;
+					case BAD:
+						fileName = IApplicationImage.IMAGE_RATING_BAD;
+						break;
+					case VERY_BAD:
+						fileName = IApplicationImage.IMAGE_RATING_VERY_BAD;
+						break;
+					default:
+						fileName = "";
+						break;
+				}
+				//
+				if(!fileName.isEmpty()) {
+					return ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImage.SIZE_16x16);
 				}
 			}
 		} else if(columnIndex == INDEX_NAME) {
@@ -261,7 +285,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 					text = decimalFormat.format(libraryInformation.getExactMass());
 					break;
 				case 15: // Advise
-					text = comparisonResult.getAdvise();
+					text = comparisonResult.getRatingSupplier().getAdvise();
 					break;
 				case 16: // Identifier
 					text = identificationTarget.getIdentifier();
@@ -289,6 +313,9 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 					break;
 				case 24:
 					text = getRetentionIndexText(libraryInformation, null);
+					break;
+				case 25:
+					text = decimalFormat.format(comparisonResult.getInLibFactor());
 					break;
 				default:
 					text = "n.v.";

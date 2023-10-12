@@ -83,6 +83,6 @@ public class ScanWriter {
 		ILibraryInformation libraryInformation = new LibraryInformation();
 		libraryInformation.setName("Scan " + Integer.toString(scanNumber));
 		//
-		return new IdentificationTarget(libraryInformation, ComparisonResult.createBestMatchComparisonResult());
+		return new IdentificationTarget(libraryInformation,ComparisonResult.COMPARISON_RESULT_BEST_MATCH);
 	}
 }

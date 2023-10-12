@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -7,7 +7,7 @@
  * available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
  * Christoph Läubrich - getPenalty and Matchfactors should be accessed by getters and not direct field access
  *******************************************************************************/
@@ -15,33 +15,49 @@ package org.eclipse.chemclipse.model.identifier;
 
 public abstract class AbstractComparisonResult implements IComparisonResult {
 
-	/**
-	 * Renew the UUID on change.
-	 */
 	private static final long serialVersionUID = 1295884624032029498L;
 	//
 	private boolean isMatch = false;
-	private float matchFactor;
-	private float matchFactorDirect;
-	private float reverseMatchFactor;
-	private float reverseMatchFactorDirect;
-	private float probability;
-	private float penalty;
-	private String advise;
+	private float matchFactor = 0.0f;
+	private float matchFactorDirect = 0.0f;
+	private float reverseMatchFactor = 0.0f;
+	private float reverseMatchFactorDirect = 0.0f;
+	private float probability = 0.0f;
+	private float inLibFactor = 0.0f;
+	private float penalty = 0.0f;
+	/*
+	 * It's not planned to allow setting a specific
+	 * rating due to the reason, that the values of
+	 * the target/comparison result are saved e.g.
+	 * in the Open Chromatography Binary (*.ocb), but
+	 * the rating supplier with its algorithm is not.
+	 * Hence, when loading a file again, the default
+	 * rating supplier calculates the score and might
+	 * lead to an inconsistent status.
+	 */
+	private IRatingSupplier ratingSupplier = new RatingSupplier(this);
+
+	public AbstractComparisonResult(float matchFactor) {
+
+		this(matchFactor, matchFactor, matchFactor, matchFactor);
+	}
 
 	public AbstractComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect) {
+
 		this(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, MAX_ALLOWED_PROBABILITY);
 	}
 
 	public AbstractComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect, float probability) {
-		this.probability = probability;
+
 		this.matchFactor = matchFactor;
 		this.reverseMatchFactor = reverseMatchFactor;
 		this.matchFactorDirect = matchFactorDirect;
 		this.reverseMatchFactorDirect = reverseMatchFactorDirect;
+		setProbability(probability);
 	}
 
 	public AbstractComparisonResult(IComparisonResult comparisonResult) {
+
 		this(comparisonResult.getMatchFactor(), comparisonResult.getReverseMatchFactor(), comparisonResult.getMatchFactorDirect(), comparisonResult.getReverseMatchFactorDirect());
 	}
 
@@ -142,54 +158,27 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	}
 
 	@Override
-	public void adjustMatchFactor(float penalty) {
-
-		setPenalty(penalty);
-	}
-
-	@Override
-	public void adjustReverseMatchFactor(float penalty) {
-
-		setPenalty(penalty);
-	}
-
-	@Override
 	public float getProbability() {
 
 		return probability;
 	}
 
 	@Override
-	public String getAdvise() {
+	public float getInLibFactor() {
 
-		if(advise == null) {
-			if(getMatchFactor() >= MAX_LIMIT_MATCH_FACTOR && getReverseMatchFactor() <= MIN_LIMIT_REVERSE_MATCH_FACTOR) {
-				advise = ADVISE_INCOMPLETE;
-			} else if(getMatchFactor() <= MIN_LIMIT_MATCH_FACTOR && getReverseMatchFactor() >= MAX_LIMIT_REVERSE_MATCH_FACTOR) {
-				advise = ADVISE_IMPURITIES;
-			} else {
-				advise = "";
-			}
-		}
-		return advise;
+		return inLibFactor;
 	}
 
 	@Override
-	public float getRating() {
+	public void setInLibFactor(float inLibFactor) {
 
-		float rating = (getMatchFactorNotAdjusted() + getReverseMatchFactorNotAdjusted()) / 2.0f;
-		/*
-		 * Shall the probability be used too?
-		 */
-		if(getMatchFactorDirectNotAdjusted() > 0.0f) {
-			rating = (rating + getMatchFactorDirectNotAdjusted()) / 2.0f;
-		}
-		//
-		if(getReverseMatchFactorDirectNotAdjusted() > 0.0f) {
-			rating = (rating + getReverseMatchFactorDirectNotAdjusted()) / 2.0f;
-		}
-		//
-		return rating;
+		this.inLibFactor = inLibFactor;
+	}
+
+	@Override
+	public IRatingSupplier getRatingSupplier() {
+
+		return ratingSupplier;
 	}
 
 	public static float getAdjustedValue(float value, float penalty) {
@@ -198,24 +187,25 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 		if(result < 0) {
 			return 0;
 		}
+		//
 		return result;
 	}
 
 	@Override
-	public int compareTo(IComparisonResult o) {
+	public int compareTo(IComparisonResult comparisonResult) {
 
-		int result = Boolean.compare(this.isMatch(), o.isMatch());
+		int result = Boolean.compare(this.isMatch(), comparisonResult.isMatch());
 		if(result == 0) {
-			result = Float.compare(this.getMatchFactor(), o.getMatchFactor());
+			result = Float.compare(this.getMatchFactor(), comparisonResult.getMatchFactor());
 		}
 		if(result == 0) {
-			result = Float.compare(this.getReverseMatchFactor(), o.getReverseMatchFactor());
+			result = Float.compare(this.getReverseMatchFactor(), comparisonResult.getReverseMatchFactor());
 		}
 		if(result == 0) {
-			result = Float.compare(this.getMatchFactorDirect(), o.getMatchFactorDirect());
+			result = Float.compare(this.getMatchFactorDirect(), comparisonResult.getMatchFactorDirect());
 		}
 		if(result == 0) {
-			result = Float.compare(this.getReverseMatchFactorDirect(), o.getReverseMatchFactorDirect());
+			result = Float.compare(this.getReverseMatchFactorDirect(), comparisonResult.getReverseMatchFactorDirect());
 		}
 		return result;
 	}
@@ -238,5 +228,14 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	protected void setReverseMatchFactorDirect(float reverseMatchFactorDirect) {
 
 		this.reverseMatchFactorDirect = reverseMatchFactorDirect;
+	}
+
+	private void setProbability(float probability) {
+
+		if(probability >= MIN_ALLOWED_PROBABILITY && probability <= MAX_ALLOWED_PROBABILITY) {
+			this.probability = probability;
+		} else {
+			this.probability = 0.0f;
+		}
 	}
 }

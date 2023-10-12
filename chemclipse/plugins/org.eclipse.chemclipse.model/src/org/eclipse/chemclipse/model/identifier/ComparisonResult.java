@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  *
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -7,33 +7,34 @@
  * available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-public class ComparisonResult extends AbstractComparisonResult implements IComparisonResult {
+public class ComparisonResult extends AbstractComparisonResult {
 
-	/**
-	 * Renew the UUID on change.
-	 */
 	private static final long serialVersionUID = 6897854010927446632L;
-	private static ComparisonResult COMPARISON_RESULT_NO_MATCH = null;
+	//
+	public static final IComparisonResult COMPARISON_RESULT_NO_MATCH = new ComparisonResultFinal(FACTOR_NO_MATCH, false);
+	public static final IComparisonResult COMPARISON_RESULT_BEST_MATCH = new ComparisonResultFinal(FACTOR_BEST_MATCH, true);
 
-	/**
-	 * Constructs the result.
-	 *
-	 * @param matchQuality
-	 * @param reverseMatchQuality
-	 */
+	public ComparisonResult(float matchFactor) {
+
+		super(matchFactor);
+	}
+
 	public ComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect) {
+
 		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
 	}
 
 	public ComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect, float probability) {
+
 		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
 	}
 
 	public ComparisonResult(IComparisonResult comparisonResult) {
+
 		super(comparisonResult);
 	}
 
@@ -44,34 +45,9 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 		return this;
 	}
 
-	public static ComparisonResult createNoMatchComparisonResult() {
-
-		if(COMPARISON_RESULT_NO_MATCH == null) {
-			COMPARISON_RESULT_NO_MATCH = new ComparisonResult(FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH).setMatch(false);
-		}
-		return COMPARISON_RESULT_NO_MATCH;
-	}
-
-	public static ComparisonResult createBestMatchComparisonResult() {
-
-		return new ComparisonResult(FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH).setMatch(true);
-	}
-
 	@Override
 	public String toString() {
 
-		StringBuilder builder = new StringBuilder();
-		builder.append("ComparisonResult [MF=");
-		builder.append(getMatchFactor());
-		builder.append(", MFD=");
-		builder.append(getMatchFactorDirect());
-		builder.append(", RMF=");
-		builder.append(getReverseMatchFactor());
-		builder.append(", RMFD=");
-		builder.append(getReverseMatchFactorDirect());
-		builder.append(", probability=");
-		builder.append(getProbability());
-		builder.append("]");
-		return builder.toString();
+		return "ComparisonResult [getPenalty()=" + getPenalty() + ", isMatch()=" + isMatch() + ", getMatchFactor()=" + getMatchFactor() + ", getMatchFactorDirect()=" + getMatchFactorDirect() + ", getReverseMatchFactor()=" + getReverseMatchFactor() + ", getReverseMatchFactorDirect()=" + getReverseMatchFactorDirect() + ", getProbability()=" + getProbability() + "]";
 	}
 }

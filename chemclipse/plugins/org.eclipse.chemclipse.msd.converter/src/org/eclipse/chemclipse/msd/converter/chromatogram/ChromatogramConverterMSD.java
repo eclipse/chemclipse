@@ -6,7 +6,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - Adjust to new API
  *******************************************************************************/
@@ -151,7 +151,7 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 						if(scan != null && scan instanceof IScanMSD scanMSD) {
 							ILibraryInformation libraryInformation = new LibraryInformation();
 							libraryInformationSupport.extractNameAndReferenceIdentifier(target.getValue(), libraryInformation, referenceIdentifierMarker, referenceIdentifierPrefix);
-							IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+							IComparisonResult comparisonResult = ComparisonResult.COMPARISON_RESULT_BEST_MATCH;
 							IIdentificationTarget scanTargetMSD = new IdentificationTarget(libraryInformation, comparisonResult);
 							scanMSD.getTargets().add(scanTargetMSD);
 						}

@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - prefix images with bundle name
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.ui.icons.core;
@@ -293,6 +293,12 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_ARROW_DOWN = "arrow_down.gif";
 	String IMAGE_ARROW_UP = "arrow_up.gif";
 	String IMAGE_ARROW_EQUAL = "arrow_equal.gif";
+	//
+	String IMAGE_RATING_VERY_GOOD = "ratingVeryGood.gif";
+	String IMAGE_RATING_GOOD = "ratingGood.gif";
+	String IMAGE_RATING_AVERAGE = "ratingAverage.gif";
+	String IMAGE_RATING_BAD = "ratingBad.gif";
+	String IMAGE_RATING_VERY_BAD = "ratingVeryBad.gif";
 	//
 	String IMAGE_ARROW_FORWARD = "arrowForward.gif";
 	String IMAGE_ARROW_BACKWARD = "arrowBackward.gif";

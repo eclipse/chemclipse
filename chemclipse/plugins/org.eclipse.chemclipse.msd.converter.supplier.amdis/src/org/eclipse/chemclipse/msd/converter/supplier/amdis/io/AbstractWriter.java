@@ -183,7 +183,7 @@ public abstract class AbstractWriter {
 			 * Library MS
 			 */
 			try {
-				identificationTarget = new IdentificationTarget(libraryMassSpectrum.getLibraryInformation(), ComparisonResult.createNoMatchComparisonResult());
+				identificationTarget = new IdentificationTarget(libraryMassSpectrum.getLibraryInformation(), ComparisonResult.COMPARISON_RESULT_NO_MATCH);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 			}

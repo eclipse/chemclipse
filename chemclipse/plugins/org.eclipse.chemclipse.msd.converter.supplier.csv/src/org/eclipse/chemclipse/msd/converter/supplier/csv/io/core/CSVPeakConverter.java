@@ -239,7 +239,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 
 		ILibraryInformation libraryInformation = new LibraryInformation();
 		libraryInformation.setName(name);
-		IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+		IComparisonResult comparisonResult = ComparisonResult.COMPARISON_RESULT_BEST_MATCH;
 		IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 		peak.getTargets().add(identificationTarget);
 	}

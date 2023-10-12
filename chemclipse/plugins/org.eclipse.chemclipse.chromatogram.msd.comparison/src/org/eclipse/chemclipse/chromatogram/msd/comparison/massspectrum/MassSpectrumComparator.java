@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum;
@@ -68,20 +68,20 @@ public class MassSpectrumComparator {
 	//
 	private static ComparatorCache comparatorCache;
 	private static IProcessingInfo<IComparisonResult> processingInfoComparisonSkip;
-	private static final float NO_MATCH = 0.0f;
 	/*
 	 * Initialize all values.
 	 */
 	static {
 		comparatorCache = new ComparatorCache();
 		processingInfoComparisonSkip = new ProcessingInfo<>();
-		processingInfoComparisonSkip.setProcessingResult(new ComparisonResult(NO_MATCH, NO_MATCH, NO_MATCH, NO_MATCH));
+		processingInfoComparisonSkip.setProcessingResult(ComparisonResult.COMPARISON_RESULT_NO_MATCH);
 	}
 
 	/**
 	 * This class has only static methods.
 	 */
 	private MassSpectrumComparator() {
+
 	}
 
 	/**

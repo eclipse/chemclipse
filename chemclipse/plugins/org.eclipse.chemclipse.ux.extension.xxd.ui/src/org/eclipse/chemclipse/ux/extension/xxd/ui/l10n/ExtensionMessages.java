@@ -165,6 +165,7 @@ public class ExtensionMessages extends NLS {
 	public static String matchFactorDirect;
 	public static String reverseMatchFactorDirect;
 	public static String probability;
+	public static String inLibFactor;
 	public static String molWeight;
 	public static String excactMass;
 	public static String miscellaneous;

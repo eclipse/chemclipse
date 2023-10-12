@@ -7,7 +7,7 @@
  * available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add default delegate methods
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
@@ -170,7 +170,7 @@ public interface IIdentificationTarget extends ITarget {
 		libraryInformation.setContributor("");
 		libraryInformation.setReferenceIdentifier("");
 		//
-		IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+		IComparisonResult comparisonResult = ComparisonResult.COMPARISON_RESULT_BEST_MATCH;
 		IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 		identificationTarget.setIdentifier(identifier);
 		//

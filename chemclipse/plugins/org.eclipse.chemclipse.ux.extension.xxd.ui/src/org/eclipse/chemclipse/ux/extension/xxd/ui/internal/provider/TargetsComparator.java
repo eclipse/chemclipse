@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
@@ -39,7 +39,7 @@ public class TargetsComparator extends AbstractRecordTableComparator implements 
 					}
 					break;
 				case 1: // Rating
-					sortOrder = Float.compare(comparisonResult2.getRating(), comparisonResult1.getRating());
+					sortOrder = Float.compare(comparisonResult2.getRatingSupplier().getScore(), comparisonResult1.getRatingSupplier().getScore());
 					if(sortOrder == 0) {
 						sortOrder = getAdditionalSortOrder(comparisonResult1, comparisonResult2);
 					}
@@ -84,10 +84,10 @@ public class TargetsComparator extends AbstractRecordTableComparator implements 
 					sortOrder = Double.compare(libraryInformation2.getExactMass(), libraryInformation1.getExactMass());
 					break;
 				case 15: // Advise
-					String advise2 = comparisonResult2.getAdvise();
-					String advise1 = comparisonResult1.getAdvise();
+					String advise2 = comparisonResult2.getRatingSupplier().getAdvise();
+					String advise1 = comparisonResult1.getRatingSupplier().getAdvise();
 					if(advise2 != null && advise1 != null) {
-						sortOrder = comparisonResult2.getAdvise().compareTo(comparisonResult1.getAdvise());
+						sortOrder = advise2.compareTo(advise1);
 					}
 					break;
 				case 16: // Identifier
@@ -116,6 +116,9 @@ public class TargetsComparator extends AbstractRecordTableComparator implements 
 					break;
 				case 24:
 					sortOrder = Float.compare(libraryInformation2.getRetentionIndex(), libraryInformation1.getRetentionIndex());
+					break;
+				case 25:
+					sortOrder = Float.compare(comparisonResult2.getInLibFactor(), comparisonResult1.getInLibFactor());
 					break;
 				default:
 					sortOrder = 0;

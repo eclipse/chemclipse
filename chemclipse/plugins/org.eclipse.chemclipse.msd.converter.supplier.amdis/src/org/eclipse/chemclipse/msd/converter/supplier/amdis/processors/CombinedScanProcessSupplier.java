@@ -101,7 +101,7 @@ public class CombinedScanProcessSupplier implements IProcessTypeSupplier {
 					ILibraryInformation libraryInformation = new LibraryInformation();
 					libraryInformation.setName(chromatogramSelectionMSD.getChromatogram().getName());
 					libraryInformation.setComments(builder.toString());
-					IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, ComparisonResult.createBestMatchComparisonResult());
+					IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation,ComparisonResult.COMPARISON_RESULT_BEST_MATCH);
 					combinedMassSpectrum.getTargets().add(identificationTarget);
 					/*
 					 * Export as *.msl file.

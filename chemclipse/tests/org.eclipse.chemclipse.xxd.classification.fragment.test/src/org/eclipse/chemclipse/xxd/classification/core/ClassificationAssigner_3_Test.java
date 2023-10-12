@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -257,7 +257,7 @@ public class ClassificationAssigner_3_Test extends TestCase {
 		libraryInformation.setName(NAME);
 		libraryInformation.setCasNumber(CAS);
 		libraryInformation.setReferenceIdentifier(REFERENCE_ID);
-		IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+		IComparisonResult comparisonResult = ComparisonResult.COMPARISON_RESULT_BEST_MATCH;
 		return new IdentificationTarget(libraryInformation, comparisonResult);
 	}
 

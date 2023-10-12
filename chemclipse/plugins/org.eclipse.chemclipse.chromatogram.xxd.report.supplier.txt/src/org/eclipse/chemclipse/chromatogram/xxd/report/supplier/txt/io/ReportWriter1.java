@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.io;
 
@@ -545,7 +545,7 @@ public class ReportWriter1 {
 			printWriter.print(DELIMITER);
 			printWriter.print(decimalFormat.format(comparisonResult.getProbability()));
 			printWriter.print(DELIMITER);
-			printWriter.print(comparisonResult.getAdvise());
+			printWriter.print(comparisonResult.getRatingSupplier().getAdvise());
 			printWriter.print(DELIMITER);
 			printWriter.print(identificationTarget.getIdentifier());
 			printWriter.print(DELIMITER);

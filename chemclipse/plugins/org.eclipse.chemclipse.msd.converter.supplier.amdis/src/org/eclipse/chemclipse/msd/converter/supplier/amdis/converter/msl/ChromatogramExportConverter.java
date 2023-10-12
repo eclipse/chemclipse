@@ -71,7 +71,7 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 				//
 				ILibraryInformation libraryInformation = new LibraryInformation();
 				libraryInformation.setName(chromatogramSelectionMSD.getChromatogram().getName());
-				IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, ComparisonResult.createBestMatchComparisonResult());
+				IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation,ComparisonResult.COMPARISON_RESULT_BEST_MATCH);
 				combinedMassSpectrum.getTargets().add(identificationTarget);
 				/*
 				 * Export as *.msl file.

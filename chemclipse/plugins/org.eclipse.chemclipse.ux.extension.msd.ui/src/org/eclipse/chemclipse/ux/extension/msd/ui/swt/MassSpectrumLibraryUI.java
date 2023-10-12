@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.swt;
 
@@ -74,7 +74,7 @@ public class MassSpectrumLibraryUI extends Composite {
 	public MassSpectrumLibraryUI(Composite parent, int style) {
 
 		super(parent, style);
-		comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+		comparisonResult = ComparisonResult.COMPARISON_RESULT_BEST_MATCH;
 		createControl();
 	}
 
