@@ -194,6 +194,12 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 			//
 			return enableEditProfiles;
 		}
+
+		@Override
+		public void restoreDefaults() {
+
+			throw new UnsupportedOperationException();
+		}
 	}
 
 	@Override

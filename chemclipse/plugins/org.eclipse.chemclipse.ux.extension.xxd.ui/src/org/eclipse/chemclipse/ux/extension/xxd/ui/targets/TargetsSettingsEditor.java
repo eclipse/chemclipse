@@ -228,6 +228,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Target", "You can create a new target here.", "Styrene | 100-42-5 | comment | contributor | referenceId", new TargetTemplateInputValidator(settings.keySet()));
@@ -253,6 +254,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)targetTemplateListControl.get().getSelection();
@@ -290,6 +292,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Templates", "Do you want to delete the selected target templates?")) {
@@ -315,6 +318,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Templates", "Do you want to delete all target templates?")) {
@@ -335,6 +339,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MASS_SPECTRUM_LIBRARY, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
@@ -387,6 +392,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
@@ -416,6 +422,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
@@ -450,6 +457,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				settings.save();
@@ -487,5 +495,11 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 	private void setTableViewerInput() {
 
 		targetTemplateListControl.get().setInput(settings.values());
+	}
+
+	@Override
+	public void restoreDefaults() {
+
+		settings.clear();
 	}
 }

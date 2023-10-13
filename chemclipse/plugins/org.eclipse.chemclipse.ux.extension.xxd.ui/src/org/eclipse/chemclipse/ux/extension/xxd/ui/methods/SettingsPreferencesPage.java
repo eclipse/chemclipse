@@ -99,7 +99,12 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		//
 		Listener validationListener = createValidationListener();
 		SelectionListener selectionListener = createSelectionListener(validationListener);
-		addButtonSettings(composite, validationListener, selectionListener);
+		//
+		Composite bottomComposite = new Composite(composite, SWT.NONE);
+		bottomComposite.setLayout(new GridLayout(2, true));
+		bottomComposite.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL));
+		addButtonResetDefaults(bottomComposite);
+		addButtonSettings(bottomComposite, validationListener, selectionListener);
 		//
 		return composite;
 	}
@@ -194,7 +199,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 
 	private SelectionListener createSelectionListener(Listener validationListener) {
 
-		SelectionListener selectionListener = new SelectionAdapter() {
+		return new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -204,8 +209,6 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 				isUseSystemDefaults = buttonDefault.getSelection();
 			}
 		};
-		//
-		return selectionListener;
 	}
 
 	private void addButtonSettings(Composite parent, Listener validationListener, SelectionListener selectionListener) {
@@ -218,7 +221,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		} else {
 			Button buttonDontAskAgain = new Button(parent, SWT.CHECK);
 			buttonDontAskAgain.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false));
-			buttonDontAskAgain.setText("Remember my decision and don't ask again.");
+			buttonDontAskAgain.setText(ExtensionMessages.rememberDecision);
 			buttonDontAskAgain.addSelectionListener(new SelectionAdapter() {
 
 				@Override
@@ -227,7 +230,8 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 					isDontAskAgain = buttonDontAskAgain.getSelection();
 				}
 			});
-			buttonDontAskAgain.setSelection(isDontAskAgain = !(preferences.getDialogBehaviour() == DialogBehavior.SHOW));
+			isDontAskAgain = preferences.getDialogBehaviour() != DialogBehavior.SHOW;
+			buttonDontAskAgain.setSelection(isDontAskAgain);
 		}
 		//
 		if(preferences.isUseSystemDefaults() && !preferences.requiresUserSettings()) {
@@ -238,5 +242,20 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		//
 		selectionListener.widgetSelected(null);
 		settingsUI.getControl().addChangeListener(validationListener);
+	}
+
+	private void addButtonResetDefaults(Composite parent) {
+
+		Button buttonResetDefaults = new Button(parent, SWT.PUSH);
+		buttonResetDefaults.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, true, false));
+		buttonResetDefaults.setText(ExtensionMessages.resetDefaults);
+		buttonResetDefaults.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				settingsUI.getControl().restoreDefaults();
+			}
+		});
 	}
 }

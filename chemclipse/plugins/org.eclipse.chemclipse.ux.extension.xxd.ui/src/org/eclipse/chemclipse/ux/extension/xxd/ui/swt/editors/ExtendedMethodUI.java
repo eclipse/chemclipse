@@ -324,9 +324,9 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 		}
 		//
 		structuredViewer.refresh();
-		if(structuredViewer instanceof TreeViewer) {
+		if(structuredViewer instanceof TreeViewer treeViewer) {
 			if(expand) {
-				((TreeViewer)structuredViewer).expandToLevel(1);
+				treeViewer.expandToLevel(1);
 			}
 		}
 		//

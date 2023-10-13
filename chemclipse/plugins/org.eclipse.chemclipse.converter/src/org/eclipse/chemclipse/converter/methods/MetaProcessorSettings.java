@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -62,7 +62,7 @@ public class MetaProcessorSettings {
 		 * .metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.chemclipse.processing.supplier.IProcessSupplier.prefs
 		 */
 		String processEntryIdentifier = getProcessEntryIdentifier(processEntry);
-		IProcessorPreferences<T> metaProcessorPreferences = new IProcessorPreferences<T>() {
+		return new IProcessorPreferences<T>() {
 
 			@Override
 			public DialogBehavior getDialogBehaviour() {
@@ -119,8 +119,6 @@ public class MetaProcessorSettings {
 				return settingsMap.getOrDefault(processEntryIdentifier, processorPreferences.getUserSettingsAsString());
 			}
 		};
-		//
-		return metaProcessorPreferences;
 	}
 
 	/**

@@ -268,6 +268,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				InputDialog dialog = new InputDialog(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getCreateMessage(), timeRangeLabels.getCreateInitialValue(), new TimeRangeInputValidator(settings.keySet(), timeRangeLabels));
@@ -293,6 +294,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)timeRangesControl.get().getSelection();
@@ -327,6 +329,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getDeleteMessage())) {
@@ -352,6 +355,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getClearMessage())) {
@@ -372,6 +376,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
@@ -401,6 +406,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
@@ -435,6 +441,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				settings.save();
@@ -448,5 +455,11 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 		toolbarShiftControl.get().setInput(settings.values());
 		timeRangesControl.get().setInput(settings.values());
+	}
+
+	@Override
+	public void restoreDefaults() {
+
+		settings.clear();
 	}
 }
