@@ -586,7 +586,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 						if((e.stateMask & SWT.MOD3) == SWT.MOD3) {
 							verifyTargets(false, display); // CTRL + ALT + i
 						} else {
-							verifyTargets(true, display); // CTRL + ALT + i
+							verifyTargets(true, display); // CTRL + i
 						}
 					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_D) {
 						deleteTargetsAll(e.display); // CTRL + d

@@ -71,6 +71,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMergePeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
 import org.eclipse.core.commands.ExecutionException;
@@ -108,20 +109,18 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private static final String DESCRIPTION_PEAKS = "Number Peaks:";
 	private static final String DESCRIPTION_SCANS = "Scans:";
 	//
-	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	//
 	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();
-	private Button buttonToolbarInfo;
+	private AtomicReference<Button> buttonToolbarInfo = new AtomicReference<>();
 	private AtomicReference<InformationUI> toolbarInfoTop = new AtomicReference<>();
 	private AtomicReference<InformationUI> toolbarInfoBottom = new AtomicReference<>();
-	private Button buttonToolbarSearch;
+	private AtomicReference<Button> buttonToolbarSearch = new AtomicReference<>();
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
-	private Button buttonSave;
-	private Button buttonComparison;
-	private Button buttonMerge;
-	private Button buttonDelete;
+	private AtomicReference<Button> buttonSave = new AtomicReference<>();
+	private AtomicReference<Button> buttonComparison = new AtomicReference<>();
+	private AtomicReference<Button> buttonMerge = new AtomicReference<>();
+	private AtomicReference<Button> buttonDelete = new AtomicReference<>();
 	private AtomicReference<ScanIdentifierUI> scanIdentifierControl = new AtomicReference<>();
-	private Button buttonTableEdit;
+	private AtomicReference<Button> buttonTableEdit = new AtomicReference<>();
 	private AtomicReference<PeakScanListUI> tableViewer = new AtomicReference<>();
 	//
 	@SuppressWarnings("rawtypes")
@@ -132,9 +131,11 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private boolean showScansInRange;
 	private boolean showPeaksInRange;
 	private boolean moveRetentionTimeOnPeakSelection;
-	private InteractionMode interactionMode = InteractionMode.SOURCE;
 	private int currentModCount;
+	private InteractionMode interactionMode = InteractionMode.SOURCE;
 	private RetentionTimeRange lastRange;
+	//
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ExtendedPeakScanListUI(Composite parent, int style) {
 
@@ -171,7 +172,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 		updateFromPreferences();
 		updateLabel();
-		buttonSave.setEnabled(false);
+		buttonSave.get().setEnabled(false);
 		//
 		if(chromatogramSelection == null) {
 			tableViewer.get().clear();
@@ -182,7 +183,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			tableViewer.get().setInput(chromatogramSelection, showPeaks, showPeaksInRange, showScans, showScansInRange);
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
-				buttonSave.setEnabled(true);
+				buttonSave.get().setEnabled(true);
 			}
 			if(interactionMode == InteractionMode.SINK || interactionMode == InteractionMode.BIDIRECTIONAL) {
 				updateSelection();
@@ -236,14 +237,14 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private void initialize() {
 
-		enableToolbar(toolbarInfoTop, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
-		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH, false);
-		enableToolbar(toolbarInfoBottom, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarInfoTop, buttonToolbarInfo.get(), IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarSearch, buttonToolbarSearch.get(), IMAGE_SEARCH, TOOLTIP_SEARCH, false);
+		enableToolbar(toolbarInfoBottom, buttonToolbarInfo.get(), IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
 		//
-		enableEdit(tableViewer, buttonTableEdit, IMAGE_EDIT_ENTRY, false);
-		buttonComparison.setEnabled(false);
-		buttonMerge.setEnabled(false);
-		buttonDelete.setEnabled(false);
+		enableEdit(tableViewer, buttonTableEdit.get(), IMAGE_EDIT_ENTRY, false);
+		buttonComparison.get().setEnabled(false);
+		buttonMerge.get().setEnabled(false);
+		buttonDelete.get().setEnabled(false);
 		scanIdentifierControl.get().setEnabled(false);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, HelpContext.PEAK_SCAN_LIST);
 	}
@@ -256,19 +257,34 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(11, false));
 		//
-		buttonToolbarInfo = createButtonToggleToolbar(composite, Arrays.asList(toolbarInfoTop, toolbarInfoBottom), IMAGE_INFO, TOOLTIP_INFO);
-		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
-		buttonTableEdit = createButtonToggleEditTable(composite, tableViewer, IMAGE_EDIT_ENTRY);
-		buttonComparison = createButtonComparison(composite);
-		buttonMerge = createButtonMerge(composite);
-		buttonDelete = createButtonDelete(composite);
+		createButtonInfo(composite);
+		createButtonSearch(composite);
+		createButtonEdit(composite);
+		createButtonComparison(composite);
+		createButtonMerge(composite);
+		createButtonDelete(composite);
 		createScanIdentifierUI(composite);
 		createButtonReset(composite);
-		buttonSave = createButtonSave(composite);
+		createButtonSave(composite);
 		createButtonHelp(composite);
 		createButtonSettings(composite);
 		//
 		toolbarMain.set(composite);
+	}
+
+	private void createButtonInfo(Composite parent) {
+
+		buttonToolbarInfo.set(createButtonToggleToolbar(parent, Arrays.asList(toolbarInfoTop, toolbarInfoBottom), IMAGE_INFO, TOOLTIP_INFO));
+	}
+
+	private void createButtonSearch(Composite parent) {
+
+		buttonToolbarSearch.set(createButtonToggleToolbar(parent, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH));
+	}
+
+	private void createButtonEdit(Composite parent) {
+
+		buttonTableEdit.set(createButtonToggleEditTable(parent, tableViewer, IMAGE_EDIT_ENTRY));
 	}
 
 	private void createToolbarInfoTop(Composite parent) {
@@ -457,7 +473,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_D) {
 						deleteTargetsAll(e.display); // CTRL + d
 					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_U) {
-						// addTargetsUnknown(e.display); // CTRL + u
+						addTargetsUnknown(e.display); // CTRL + u
 					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_Q) {
 						scanIdentifierControl.get().runIdentification(e.display); // CTRL + q
 					}
@@ -643,6 +659,22 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		return scan;
 	}
 
+	private void addTargetsUnknown(Display display) {
+
+		for(Object object : tableViewer.get().getStructuredSelection().toList()) {
+			IScan scan = getScan(object);
+			if(scan instanceof ITargetSupplier targetSupplier) {
+				IIdentificationTarget identificationTarget = getTargetUnknown(display, scan);
+				if(identificationTarget != null) {
+					targetSupplier.getTargets().add(identificationTarget);
+				}
+			}
+		}
+		//
+		chromatogramSelection.getChromatogram().setDirty(true);
+		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peaks/Scans unknown targets have been set.");
+	}
+
 	private IIdentificationTarget getTargetUnknown(Display display, IScan scan) {
 
 		float matchFactor = preferenceStore.getFloat(PreferenceConstants.P_MATCH_QUALITY_UNKNOWN_TARGET);
@@ -675,20 +707,20 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		}
 		//
 		IStructuredSelection selection = tableViewer.get().getStructuredSelection();
-		buttonComparison.setEnabled(false);
-		buttonMerge.setEnabled(false);
-		buttonDelete.setEnabled(false);
+		buttonComparison.get().setEnabled(false);
+		buttonMerge.get().setEnabled(false);
+		buttonDelete.get().setEnabled(false);
 		scanIdentifierControl.get().setEnabled(false); // setInput enables/disables the control.
 		//
 		if(!selection.isEmpty()) {
-			buttonDelete.setEnabled(true);
+			buttonDelete.get().setEnabled(true);
 			List<?> list = selection.toList();
 			if(list.size() > 1) {
 				/*
 				 * Add in the future to select/display more than one peak.
 				 */
-				buttonComparison.setEnabled(list.size() == 2);
-				buttonMerge.setEnabled(getSelectedPeaksMSD().size() >= 2);
+				buttonComparison.get().setEnabled(list.size() == 2);
+				buttonMerge.get().setEnabled(getSelectedPeaksMSD().size() >= 2);
 				/*
 				 * Selection Events
 				 */
@@ -765,7 +797,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		updateLabel();
 	}
 
-	private Button createButtonComparison(Composite parent) {
+	private void createButtonComparison(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Compare two selected scans/peaks.");
@@ -788,10 +820,10 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			}
 		});
 		//
-		return button;
+		buttonComparison.set(button);
 	}
 
-	private Button createButtonMerge(Composite parent) {
+	private void createButtonMerge(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Merge the selected peaks into a new peak.");
@@ -836,10 +868,10 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			}
 		});
 		//
-		return button;
+		buttonMerge.set(button);
 	}
 
-	private Button createButtonDelete(Composite parent) {
+	private void createButtonDelete(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Delete the selected peaks.");
@@ -854,7 +886,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			}
 		});
 		//
-		return button;
+		buttonDelete.set(button);
 	}
 
 	private void createScanIdentifierUI(Composite parent) {
@@ -918,7 +950,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		});
 	}
 
-	private Button createButtonSave(Composite parent) {
+	private void createButtonSave(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Save the peak/scan list.");
@@ -972,7 +1004,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				}
 			}
 		});
-		return button;
+		//
+		buttonSave.set(button);
 	}
 
 	private void createButtonSettings(Composite parent) {
@@ -981,6 +1014,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				PreferencePageSystem.class, //
 				PreferencePageMergePeaks.class, //
 				PreferencePageScans.class, //
+				PreferencePageTargets.class, //
 				PreferencePageLists.class //
 		), new ISettingsHandler() {
 
@@ -1163,8 +1197,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			@Override
 			public void setToolbarInfoVisible(boolean visible) {
 
-				enableToolbar(toolbarInfoTop, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, visible);
-				enableToolbar(toolbarInfoBottom, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, visible);
+				enableToolbar(toolbarInfoTop, buttonToolbarInfo.get(), IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, visible);
+				enableToolbar(toolbarInfoBottom, buttonToolbarInfo.get(), IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, visible);
 			}
 
 			@Override
