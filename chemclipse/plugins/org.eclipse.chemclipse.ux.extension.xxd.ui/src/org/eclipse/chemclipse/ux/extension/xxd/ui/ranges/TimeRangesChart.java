@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip Wenig - initial API and implementation
+ * Lorenz Gerber - Time Range Label Cycling
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
@@ -46,6 +47,7 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 	private TimeRange timeRange = null;
 	private TimeRanges timeRanges = null;
 	private TimeRangeLabels timeRangeLabels = new TimeRangeLabels();
+	private String timeRangeLabelCycling = null;
 	//
 	private ITimeRangeUpdateListener timeRangeUpdateListener = null;
 	private ITimeRangePeakListener timeRangePeakListener = null;
@@ -102,6 +104,11 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 
 		this.timeRange = timeRange;
 		fireUpdateTimeRange(timeRange);
+	}
+
+	public void setTimeRangeLabelCycling(String cycling) {
+
+		this.timeRangeLabelCycling = cycling;
 	}
 
 	@Override
@@ -275,6 +282,16 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 				 * Add a new TimeRange
 				 */
 				if(timeRanges != null && !getBaseChart().getSeriesIds().isEmpty()) {
+					if(timeRangeLabelCycling != null) {
+						int testCounter = 0;
+						boolean exists = true;
+						while(exists == true) {
+							testCounter += 1;
+							String testLabel = new StringBuilder("Range (" + timeRangeLabelCycling + ") " + testCounter).toString();
+							exists = timeRanges.keySet().stream().anyMatch(x -> x.equals(testLabel));
+						}
+						timeRangeLabels = new TimeRangeLabels(timeRangeLabelCycling, new StringBuilder("Range (" + timeRangeLabelCycling + ") " + testCounter).toString());
+					}
 					TimeRangeDialog timeRangeDialog = new TimeRangeDialog(event.display.getActiveShell(), timeRangeLabels, new IInputValidator() {
 
 						@Override
