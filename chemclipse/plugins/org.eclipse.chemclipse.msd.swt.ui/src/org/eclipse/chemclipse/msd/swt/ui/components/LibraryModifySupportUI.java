@@ -441,4 +441,11 @@ public class LibraryModifySupportUI extends Composite {
 		buttonSelectLibrary.setEnabled(enabled);
 		buttonMergeLibrary.setEnabled(enabled);
 	}
+
+	@Override
+	public void dispose() {
+
+		massSpectra = null;
+		massSpectrumListUI.dispose();
+	}
 }

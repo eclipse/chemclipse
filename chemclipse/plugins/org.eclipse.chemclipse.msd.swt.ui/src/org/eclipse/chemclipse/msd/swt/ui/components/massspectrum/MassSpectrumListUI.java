@@ -276,4 +276,9 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 
 		return ((getTable().getStyle() & SWT.VIRTUAL) == SWT.VIRTUAL);
 	}
+
+	public void dispose() {
+
+		massSpectra = null;
+	}
 }

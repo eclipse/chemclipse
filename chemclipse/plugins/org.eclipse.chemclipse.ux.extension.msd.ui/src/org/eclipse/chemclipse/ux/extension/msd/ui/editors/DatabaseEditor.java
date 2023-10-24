@@ -289,6 +289,8 @@ public class DatabaseEditor implements IChemClipseEditor {
 	@PreDestroy
 	private void preDestroy() {
 
+		massSpectrumLibraryUI.dispose();
+		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE_SELECTION, null);
 		/*
 		 * Remove the editor from the listed parts.
 		 */
