@@ -180,10 +180,9 @@ public class DatabaseEditor implements IChemClipseEditor {
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IMassSpectra) {
+			if(object instanceof IMassSpectra newMassSpectra) {
 				if(object == massSpectra) {
-					IMassSpectra massSpectra = (IMassSpectra)object;
-					dirtyable.setDirty(massSpectra.isDirty());
+					dirtyable.setDirty(newMassSpectra.isDirty());
 				}
 			}
 		}
@@ -238,7 +237,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 			/*
 			 * No fork, otherwise it might crash when loading the data takes too long.
 			 */
-			boolean fork = (batch) ? false : true;
+			boolean fork = !batch;
 			dialog.run(fork, false, runnable);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
@@ -275,11 +274,11 @@ public class DatabaseEditor implements IChemClipseEditor {
 				File file = new File((String)map.get(EditorSupport.MAP_FILE));
 				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
 				importMassSpectra(file, batch);
-			} else if(object instanceof String) {
+			} else if(object instanceof String text) {
 				/*
 				 * Legacy ... Deprecated
 				 */
-				File file = new File((String)object);
+				File file = new File(text);
 				importMassSpectra(file, true);
 			}
 		} catch(Exception e) {
