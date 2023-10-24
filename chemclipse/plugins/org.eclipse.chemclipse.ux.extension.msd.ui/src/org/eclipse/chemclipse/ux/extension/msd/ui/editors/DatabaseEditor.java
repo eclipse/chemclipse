@@ -303,10 +303,6 @@ public class DatabaseEditor implements IChemClipseEditor {
 			part.setVisible(false);
 			partStack.getChildren().remove(part);
 		}
-		/*
-		 * Run the garbage collector.
-		 */
-		System.gc();
 	}
 
 	private EventHandler registerEventHandler(IEventBroker eventBroker, String topic, String[] properties) {
