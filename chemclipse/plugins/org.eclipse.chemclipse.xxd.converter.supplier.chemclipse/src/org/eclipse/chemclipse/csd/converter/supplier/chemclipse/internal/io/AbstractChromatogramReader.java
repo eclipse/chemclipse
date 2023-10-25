@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,10 +35,10 @@ public abstract class AbstractChromatogramReader extends AbstractChromatogramCSD
 	 */
 	public DataInputStream getDataInputStream(Object object, String entryName) throws IOException {
 
-		if(object instanceof ZipFile) {
-			return getDataInputStream((ZipFile)object, entryName);
-		} else if(object instanceof ZipInputStream) {
-			return getDataInputStream((ZipInputStream)object, entryName);
+		if(object instanceof ZipFile zipFile) {
+			return getDataInputStream(zipFile, entryName);
+		} else if(object instanceof ZipInputStream zipInputStream) {
+			return getDataInputStream(zipInputStream, entryName);
 		} else {
 			return null;
 		}
