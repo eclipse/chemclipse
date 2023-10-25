@@ -390,4 +390,12 @@ public class MassSpectrumLibraryUI extends Composite {
 
 		updateLabel();
 	}
+
+	@Override
+	public void dispose() {
+
+		libraryModifySupportUI.dispose();
+		massSpectrumListUI.dispose();
+		libraryModifySupportUI.dispose();
+	}
 }
