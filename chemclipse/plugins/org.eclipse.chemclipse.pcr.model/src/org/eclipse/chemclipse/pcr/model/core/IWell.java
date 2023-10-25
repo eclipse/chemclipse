@@ -48,6 +48,8 @@ public interface IWell extends Comparable<IWell>, IMeasurement {
 
 	Position getPosition();
 
+	void setPosition(Position position);
+
 	Map<Integer, IChannel> getChannels();
 
 	String getSampleId();
