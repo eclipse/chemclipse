@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.ux.extension.ui.swt;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -120,8 +121,9 @@ public enum DataExplorerTreeRoot {
 
 		List<File> rootFiles = new ArrayList<>();
 		for(File root : roots) {
-			if((!PreferenceSupplier.showNetworkShares()) && isWindowsNetworkDriveRoot(root))
+			if((!PreferenceSupplier.showNetworkShares()) && isWindowsNetworkDriveRoot(root)) {
 				continue;
+			}
 			rootFiles.add(root);
 		}
 		return rootFiles.toArray(new File[rootFiles.size()]);
@@ -143,8 +145,11 @@ public enum DataExplorerTreeRoot {
 			process.getOutputStream().close();
 			int exitCode = process.waitFor();
 			return exitCode == 0;
-		} catch(Exception e) {
+		} catch(IOException e) {
 			logger.error("Failed to detect network drive status for " + driveLetter, e);
+		} catch(InterruptedException e) {
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		return false;
 	}
