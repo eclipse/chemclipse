@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.converter.ui.converterPreferencePage"
+            class="org.eclipse.chemclipse.xxd.converter.supplier.ocx.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences.converterPreferencePage"
+            name="Open Chromatography Converter">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences.converterPreferencePage"
+            class="org.eclipse.chemclipse.xxd.converter.supplier.ocx.ui.preferences.PreferencePageOCB"
+            id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences.converterPreferencePageOCB"
+            name="Measurement Data (*.ocb)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences.converterPreferencePage"
+            class="org.eclipse.chemclipse.xxd.converter.supplier.ocx.ui.preferences.PreferencePageOCM"
+            id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences.converterPreferencePageOCM"
+            name="Process Method Data (*.ocm)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences.converterPreferencePage"
+            class="org.eclipse.chemclipse.xxd.converter.supplier.ocx.ui.preferences.PreferencePageOCQ"
+            id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences.converterPreferencePageOCQ"
+            name="Quantitation Data (*.ocq)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences.converterPreferencePage"
+            class="org.eclipse.chemclipse.xxd.converter.supplier.ocx.ui.preferences.PreferencePageOCS"
+            id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui.preferences.converterPreferencePageOCS"
+            name="Sequence Data (*.ocs)">
+      </page>
+   </extension>  
+</plugin>
