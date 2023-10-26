@@ -150,17 +150,18 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 
 	private void createColorCompensationButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.TOGGLE);
 		button.setToolTipText("Toggle Color Compensation");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImageProvider.SIZE_16x16, colorCompensation));
+		button.setSelection(colorCompensation);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				colorCompensation = !colorCompensation;
-				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImageProvider.SIZE_16x16, colorCompensation));
+				button.setSelection(colorCompensation);
 				updateChart();
 			}
 		});
