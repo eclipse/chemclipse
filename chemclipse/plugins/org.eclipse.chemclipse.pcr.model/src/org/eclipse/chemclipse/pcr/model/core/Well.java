@@ -53,6 +53,12 @@ public class Well extends AbstractMeasurement implements IWell {
 	}
 
 	@Override
+	public void setPosition(Position position) {
+
+		this.position = position;
+	}
+
+	@Override
 	public IChannel getActiveChannel() {
 
 		return activeChannel;

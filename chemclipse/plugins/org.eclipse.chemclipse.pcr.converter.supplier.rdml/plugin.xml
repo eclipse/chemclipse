@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.pcr.converter.plateSupplier">
+      <PlateSupplier
+            description="Reads Real-time PCR Data Markup Language (RDML) qPCR experiments."
+            exportConverter="org.eclipse.chemclipse.pcr.converter.supplier.rdml.core.PCRExportConverter"
+            fileExtension=".rdml"
+            fileName=""
+            filterName="qPCR experiments (*.rdml)"
+            id="org.eclipse.chemclipse.pcr.converter.supplier.rdml"
+            importConverter="org.eclipse.chemclipse.pcr.converter.supplier.rdml.core.PCRImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.pcr.converter.supplier.rdml.core.MagicNumberMatcher"
+            isExportable="false"
+            isImportable="true">
+      </PlateSupplier>
+   </extension>
+</plugin>

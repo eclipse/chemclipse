@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.chemclipse.pcr.converter.supplier.rdml.feature"
+      label="RDML Converter"
+      version="0.9.0.qualifier"
+      provider-name="ChemClipse"
+      plugin="org.eclipse.chemclipse.feature.branding"
+      license-feature="org.eclipse.license"
+      license-feature-version="1.0.0.qualifier">
+
+   <description url="http://www.chemclipse.net/">
+      This is the Real-Time PCR Data Markup Language qPCR converter.
+   </description>
+
+   <copyright url="http://www.chemclipse.net/">
+      Copyright (c) 2023 Lablicate GmbH.
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <discovery label="RDML" url="http://rdml.org/"/>
+   </url>
+
+   <plugin
+         id="org.eclipse.chemclipse.pcr.converter.supplier.rdml"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
