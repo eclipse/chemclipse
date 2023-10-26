@@ -60,7 +60,6 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 	private static final Logger logger = Logger.getLogger(PCRExportConverter.class);
 	//
 	private static final String DESCRIPTION = "PCR CSV Export";
-	private static final CSVFormat csvFormat = CSVFormat.RFC4180.withDelimiter(PreferenceSupplier.getDelimiter().getCharacter());
 	//
 	private DecimalFormat decimalFormat = new DecimalFormat("00" + PreferenceSupplier.getDecimalSeparator().getCharacter() + "00");
 
@@ -68,6 +67,8 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 	public IProcessingInfo<File> convert(File file, IPlate plate, IProgressMonitor monitor) {
 
 		decimalFormat.applyPattern("#,##0.00");
+		CSVFormat csvFormat = CSVFormat.RFC4180.builder() //
+				.setDelimiter(PreferenceSupplier.getDelimiter().getCharacter()).build();
 		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		if(plate != null) {
 			try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(file, false), csvFormat)) {

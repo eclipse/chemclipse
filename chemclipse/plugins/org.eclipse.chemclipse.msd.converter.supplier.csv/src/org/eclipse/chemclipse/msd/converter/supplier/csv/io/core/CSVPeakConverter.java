@@ -168,7 +168,8 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 
 	public static void writePeaks(IPeaks<? extends IPeak> peaks, Writer writer, boolean writeHeader) throws IOException {
 
-		try (CSVPrinter csv = new CSVPrinter(writer, CSVFormat.EXCEL.withNullString("").withQuoteMode(QuoteMode.ALL))) {
+		CSVFormat csvFormat = CSVFormat.EXCEL.builder().setNullString("").setQuoteMode(QuoteMode.ALL).build();
+		try (CSVPrinter csv = new CSVPrinter(writer, csvFormat)) {
 			if(writeHeader) {
 				csv.printRecord(Arrays.asList(HEADERS));
 			}
@@ -214,7 +215,8 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 	public static IPeaks<IPeak> readPeaks(Reader reader) throws IOException, ParseException {
 
 		Peaks result = new Peaks();
-		try (CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader(HEADERS).withSkipHeaderRecord())) {
+		CSVFormat csvFormat = CSVFormat.EXCEL.builder().setHeader(HEADERS).setSkipHeaderRecord(true).build();
+		try (CSVParser parser = new CSVParser(reader, csvFormat)) {
 			NumberFormat nf;
 			synchronized(NUMBER_FORMAT) {
 				nf = (NumberFormat)NUMBER_FORMAT.clone();
