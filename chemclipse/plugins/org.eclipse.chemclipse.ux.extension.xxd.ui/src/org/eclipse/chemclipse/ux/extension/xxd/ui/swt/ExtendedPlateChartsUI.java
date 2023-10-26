@@ -63,7 +63,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 	private IPlate plate = null;
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private boolean colorCompensation = true;
+	private boolean colorCompensation;
 
 	@Inject
 	public ExtendedPlateChartsUI(Composite parent, int style) {
@@ -78,6 +78,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		updateLabel();
 		updateComboChannels();
 		updateChartData();
+		colorCompensation = !plate.getWells().first().getActiveChannel().getColorCompensatedFluorescence().isEmpty();
 	}
 
 	private void updateLabel() {
