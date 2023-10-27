@@ -16,4 +16,8 @@ import org.eclipse.chemclipse.pcr.converter.supplier.rdml.PathResolver;
 public class TestPathHelper extends PathResolver {
 
 	public static final String TESTFILE_RAW_5 = "testdata/test_5_raw_data.rdml";
+	//
+	public static final String EXAMPLE_1_1 = "testdata/example_1_1.rdml";
+	public static final String EXAMPLE_1_2 = "testdata/example_1_2.rdml";
+	public static final String EXAMPLE_1_3 = "testdata/example_1_3.rdml";
 }
