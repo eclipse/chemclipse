@@ -73,8 +73,8 @@ public class DisplayUtils {
 	public static Display getDisplay(Widget widget) {
 
 		Display display = null;
-		if(widget instanceof Control) {
-			display = ((Control)widget).getDisplay();
+		if(widget instanceof Control control) {
+			display = control.getDisplay();
 		} else {
 			display = getDisplay();
 		}
