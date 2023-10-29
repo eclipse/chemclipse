@@ -9,7 +9,7 @@
  * Contributors:
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.pcr.converter.supplier.rdml.internal.v13.model;
+package org.eclipse.chemclipse.pcr.converter.supplier.rdml.internal.v12.model;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
