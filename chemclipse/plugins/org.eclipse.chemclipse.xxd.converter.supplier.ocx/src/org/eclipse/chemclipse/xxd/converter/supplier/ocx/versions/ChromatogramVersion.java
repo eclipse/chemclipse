@@ -27,7 +27,8 @@ public enum ChromatogramVersion implements IFormatVersion, ILabel {
 	V_1300(IFormat.CHROMATOGRAM_VERSION_1300, "Dalton v1"), //
 	V_1301(IFormat.CHROMATOGRAM_VERSION_1301, "Dalton v2"), //
 	V_1400(IFormat.CHROMATOGRAM_VERSION_1400, "Lawrence"), //
-	V_1500(IFormat.CHROMATOGRAM_VERSION_1500, "McLafferty"); //
+	V_1500(IFormat.CHROMATOGRAM_VERSION_1500, "McLafferty v1"), //
+	V_1501(IFormat.CHROMATOGRAM_VERSION_1501, "McLafferty v2"); //
 
 	private String version = "";
 	private String release = "";

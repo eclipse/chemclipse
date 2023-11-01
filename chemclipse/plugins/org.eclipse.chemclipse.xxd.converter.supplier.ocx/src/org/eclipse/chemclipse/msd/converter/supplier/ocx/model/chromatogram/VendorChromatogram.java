@@ -18,6 +18,7 @@ public class VendorChromatogram extends AbstractChromatogramMSD implements IVend
 	private static final long serialVersionUID = -1437009331484533414L;
 
 	public VendorChromatogram() {
+
 		super();
 	}
 

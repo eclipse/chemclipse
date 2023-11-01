@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add new format
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support;
@@ -45,12 +45,13 @@ public interface IFormat {
 	String CHROMATOGRAM_VERSION_1005 = "1.0.0.5"; // Version 1.0.0, Release 5
 	String CHROMATOGRAM_VERSION_1006 = "1.0.0.6"; // Version 1.0.0, Release 6
 	String CHROMATOGRAM_VERSION_1007 = "1.0.0.7"; // Version 1.0.0, Release 7
-	String CHROMATOGRAM_VERSION_1100 = "1.1.0.0"; // Version 1.1.0, Release 1 (Diels)
-	String CHROMATOGRAM_VERSION_1300 = "1.3.0.0"; // Version 1.3.0, Release 1 (Dalton)
-	String CHROMATOGRAM_VERSION_1301 = "1.3.0.1"; // Version 1.3.0, Release 2
-	String CHROMATOGRAM_VERSION_1400 = "1.4.0.0"; // Version 1.4.0, Release 1 (Lawrence)
-	String CHROMATOGRAM_VERSION_1500 = "1.5.0.0"; // Version 1.5.0, Release 1 (McLafferty)
-	String CHROMATOGRAM_VERSION_LATEST = CHROMATOGRAM_VERSION_1500;
+	String CHROMATOGRAM_VERSION_1100 = "1.1.0.0"; // Version 1.1.0, Release 0 (Diels)
+	String CHROMATOGRAM_VERSION_1300 = "1.3.0.0"; // Version 1.3.0, Release 0 (Dalton)
+	String CHROMATOGRAM_VERSION_1301 = "1.3.0.1"; // Version 1.3.0, Release 1
+	String CHROMATOGRAM_VERSION_1400 = "1.4.0.0"; // Version 1.4.0, Release 0 (Lawrence)
+	String CHROMATOGRAM_VERSION_1500 = "1.5.0.0"; // Version 1.5.0, Release 0 (McLafferty)
+	String CHROMATOGRAM_VERSION_1501 = "1.5.0.1"; // Version 1.5.0, Release 1 (McLafferty)
+	String CHROMATOGRAM_VERSION_LATEST = CHROMATOGRAM_VERSION_1501;
 	/*
 	 * Method (*.ocm)
 	 */

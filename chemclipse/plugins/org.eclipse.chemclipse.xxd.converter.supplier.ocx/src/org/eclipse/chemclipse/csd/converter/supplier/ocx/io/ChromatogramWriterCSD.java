@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - update latest version
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.converter.supplier.ocx.io;
@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.Chromatogra
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramWriter_1301;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramWriter_1400;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramWriter_1500;
+import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramWriter_1501;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
@@ -82,8 +83,10 @@ public class ChromatogramWriterCSD extends AbstractChromatogramWriter implements
 			chromatogramWriter = new ChromatogramWriter_1301();
 		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1400)) {
 			chromatogramWriter = new ChromatogramWriter_1400();
-		} else {
+		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1500)) {
 			chromatogramWriter = new ChromatogramWriter_1500();
+		} else {
+			chromatogramWriter = new ChromatogramWriter_1501();
 		}
 		/*
 		 * Monitor Message

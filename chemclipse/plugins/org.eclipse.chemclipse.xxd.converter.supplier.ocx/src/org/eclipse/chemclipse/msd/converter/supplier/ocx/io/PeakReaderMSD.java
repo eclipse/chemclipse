@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.ocx.io;
 
@@ -38,6 +38,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_1301;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_1400;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_1500;
+import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_1501;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.ReaderHelper;
@@ -95,6 +96,8 @@ public class PeakReaderMSD implements IPeakReader {
 			peakReader = new PeakReader_1400();
 		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1500)) {
 			peakReader = new PeakReader_1500();
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1501)) {
+			peakReader = new PeakReader_1501();
 		}
 		//
 		if(peakReader != null) {

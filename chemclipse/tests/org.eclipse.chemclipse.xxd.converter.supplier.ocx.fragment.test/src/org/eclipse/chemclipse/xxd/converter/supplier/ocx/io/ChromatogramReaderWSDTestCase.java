@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.ocx.io;
@@ -31,7 +31,6 @@ public class ChromatogramReaderWSDTestCase extends TestCase {
 	protected File fileImport;
 	private static final String EXTENSION_POINT_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void setUp() throws Exception {
 
@@ -39,7 +38,7 @@ public class ChromatogramReaderWSDTestCase extends TestCase {
 		fileImport = new File(this.pathImport);
 		IProcessingInfo<IChromatogramWSD> processingInfo = ChromatogramConverterWSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
 		try {
-			chromatogram = processingInfo.getProcessingResult(IChromatogramWSD.class);
+			chromatogram = processingInfo.getProcessingResult();
 		} catch(TypeCastException e) {
 			chromatogram = null;
 		}

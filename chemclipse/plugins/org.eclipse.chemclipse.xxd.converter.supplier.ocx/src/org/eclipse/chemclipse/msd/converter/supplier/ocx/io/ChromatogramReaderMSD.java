@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add new version
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.ocx.io;
@@ -44,6 +44,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.Chromatogra
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.ChromatogramReader_1301;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.ChromatogramReader_1400;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.ChromatogramReader_1500;
+import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.ChromatogramReader_1501;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.IVendorScan;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.VendorChromatogram;
@@ -213,6 +214,8 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 			chromatogramReader = new ChromatogramReader_1400();
 		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1500)) {
 			chromatogramReader = new ChromatogramReader_1500();
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1501)) {
+			chromatogramReader = new ChromatogramReader_1501();
 		}
 		//
 		return chromatogramReader;

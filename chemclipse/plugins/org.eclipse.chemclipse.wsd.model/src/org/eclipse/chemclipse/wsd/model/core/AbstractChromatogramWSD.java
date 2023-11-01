@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - update to reflect changes in {@link INoiseCalculator} API
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core;

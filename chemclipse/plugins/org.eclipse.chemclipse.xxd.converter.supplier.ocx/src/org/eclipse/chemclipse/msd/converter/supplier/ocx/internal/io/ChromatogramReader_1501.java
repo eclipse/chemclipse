@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - adjust to API Changes
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io;
@@ -18,11 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
@@ -46,19 +42,6 @@ import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
-import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
-import org.eclipse.chemclipse.model.identifier.ChromatogramComparisonResult;
-import org.eclipse.chemclipse.model.identifier.ChromatogramLibraryInformation;
-import org.eclipse.chemclipse.model.identifier.ComparisonResult;
-import org.eclipse.chemclipse.model.identifier.IChromatogramLibraryInformation;
-import org.eclipse.chemclipse.model.identifier.IComparisonResult;
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
-import org.eclipse.chemclipse.model.identifier.LibraryInformation;
-import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
-import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
-import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
@@ -66,8 +49,6 @@ import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.InternalStandard;
 import org.eclipse.chemclipse.model.quantitation.QuantitationFlag;
-import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
-import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.io.ChromatogramReaderMSD;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.io.IChromatogramMSDZipReader;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.io.IReaderProxy;
@@ -99,6 +80,8 @@ import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.io.ChromatogramReaderWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.io.AbstractIO_1501;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.io.ReaderIO_1501;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
@@ -111,10 +94,11 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ChromatogramReader_1500 extends AbstractChromatogramReader implements IChromatogramMSDZipReader {
+public class ChromatogramReader_1501 extends AbstractChromatogramReader implements IChromatogramMSDZipReader {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramReader_1500.class);
-	private IReaderProxy readerProxy = new ReaderProxy_1500();
+	private static final Logger logger = Logger.getLogger(ChromatogramReader_1501.class);
+	private ReaderIO_1501 reader1501 = new ReaderIO_1501();
+	private IReaderProxy readerProxy = new ReaderProxy_1501();
 
 	@Override
 	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -208,7 +192,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 			readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS_MSD), closeStream, chromatogram);
 			readArea(getDataInputStream(object, directoryPrefix + IFormat.FILE_AREA_MSD), closeStream, chromatogram);
 			subMonitor.worked(20);
-			readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_MSD), closeStream, chromatogram);
+			reader1501.readIdentificationTargets(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_MSD), closeStream, chromatogram);
 			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_MSD), closeStream, chromatogram);
 			subMonitor.worked(20);
 			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_MSD), closeStream, chromatogram);
@@ -320,7 +304,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 			int timeSegmentId = dataInputStream.readInt(); // Time Segment Id
 			int cycleNumber = dataInputStream.readInt(); // Cycle Number
 			//
-			IVendorScanProxy massSpectrum = new VendorScanProxy(file, offset, IFormat.CHROMATOGRAM_VERSION_1500, ionTransitionSettings);
+			IVendorScanProxy massSpectrum = new VendorScanProxy(file, offset, AbstractIO_1501.VERSION, ionTransitionSettings);
 			massSpectrum.setRetentionTime(retentionTime);
 			massSpectrum.setNumberOfIons(numberOfIons);
 			massSpectrum.setTotalSignal(totalSignal);
@@ -459,7 +443,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 		/*
 		 * Identification Results
 		 */
-		readPeakIdentificationTargets(dataInputStream, peak);
+		reader1501.readIdentificationTargets(dataInputStream, false, peak);
 		/*
 		 * Quantitation Results
 		 */
@@ -528,140 +512,10 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 		return integrationEntries;
 	}
 
-	private void readPeakIdentificationTargets(DataInputStream dataInputStream, IPeakMSD peak) throws IOException {
-
-		int numberOfPeakTargets = dataInputStream.readInt(); // Number Peak Targets
-		for(int i = 1; i <= numberOfPeakTargets; i++) {
-			//
-			String identifier = readString(dataInputStream); // Identifier
-			boolean manuallyVerified = dataInputStream.readBoolean();
-			//
-			int retentionTime = dataInputStream.readInt();
-			float retentionIndex = dataInputStream.readFloat();
-			String casNumber = readString(dataInputStream); // CAS-Number
-			String comments = readString(dataInputStream); // Comments
-			String referenceIdentifier = readString(dataInputStream);
-			String miscellaneous = readString(dataInputStream); // Miscellaneous
-			String database = readString(dataInputStream);
-			String contributor = readString(dataInputStream);
-			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
-			int numberOfSynonyms = dataInputStream.readInt();
-			for(int j = 0; j < numberOfSynonyms; j++) {
-				synonyms.add(readString(dataInputStream));
-			}
-			String formula = readString(dataInputStream); // Formula
-			String smiles = readString(dataInputStream); // SMILES
-			String inChI = readString(dataInputStream); // InChI
-			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			String moleculeStructure = readString(dataInputStream);
-			float matchFactor = dataInputStream.readFloat(); // Match Factor
-			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
-			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
-			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
-			float probability = dataInputStream.readFloat(); // Probability
-			boolean isMatch = dataInputStream.readBoolean();
-			//
-			IPeakLibraryInformation libraryInformation = new PeakLibraryInformation();
-			libraryInformation.setRetentionTime(retentionTime);
-			libraryInformation.setRetentionIndex(retentionIndex);
-			libraryInformation.setCasNumber(casNumber);
-			libraryInformation.setComments(comments);
-			libraryInformation.setReferenceIdentifier(referenceIdentifier);
-			libraryInformation.setMiscellaneous(miscellaneous);
-			libraryInformation.setDatabase(database);
-			libraryInformation.setContributor(contributor);
-			libraryInformation.setName(name);
-			libraryInformation.setSynonyms(synonyms);
-			libraryInformation.setFormula(formula);
-			libraryInformation.setSmiles(smiles);
-			libraryInformation.setInChI(inChI);
-			libraryInformation.setMolWeight(molWeight);
-			libraryInformation.setMoleculeStructure(moleculeStructure);
-			//
-			IComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
-			comparisonResult.setMatch(isMatch);
-			//
-			try {
-				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
-				identificationEntry.setIdentifier(identifier);
-				identificationEntry.setVerified(manuallyVerified);
-				peak.getTargets().add(identificationEntry);
-			} catch(ReferenceMustNotBeNullException e) {
-				logger.warn(e);
-			}
-		}
-	}
-
 	@Override
 	public String readString(DataInputStream dataInputStream) throws IOException {
 
 		return IFileHelper.readString(dataInputStream);
-	}
-
-	private void readMassSpectrumIdentificationTargets(DataInputStream dataInputStream, IScanMSD massSpectrum) throws IOException {
-
-		int numberOfMassSpectrumTargets = dataInputStream.readInt(); // Number Mass Spectrum Targets
-		for(int i = 1; i <= numberOfMassSpectrumTargets; i++) {
-			//
-			String identifier = readString(dataInputStream); // Identifier
-			boolean manuallyVerified = dataInputStream.readBoolean();
-			//
-			int retentionTime = dataInputStream.readInt();
-			float retentionIndex = dataInputStream.readFloat();
-			String casNumber = readString(dataInputStream); // CAS-Number
-			String comments = readString(dataInputStream); // Comments
-			String referenceIdentifier = readString(dataInputStream);
-			String miscellaneous = readString(dataInputStream); // Miscellaneous
-			String database = readString(dataInputStream);
-			String contributor = readString(dataInputStream);
-			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
-			int numberOfSynonyms = dataInputStream.readInt();
-			for(int j = 0; j < numberOfSynonyms; j++) {
-				synonyms.add(readString(dataInputStream));
-			}
-			String formula = readString(dataInputStream); // Formula
-			String smiles = readString(dataInputStream); // SMILES
-			String inChI = readString(dataInputStream); // InChI
-			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			String moleculeStructure = readString(dataInputStream);
-			float matchFactor = dataInputStream.readFloat(); // Match Factor
-			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
-			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
-			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
-			float probability = dataInputStream.readFloat(); // Probability
-			boolean isMatch = dataInputStream.readBoolean();
-			//
-			ILibraryInformation libraryInformation = new LibraryInformation();
-			libraryInformation.setRetentionTime(retentionTime);
-			libraryInformation.setRetentionIndex(retentionIndex);
-			libraryInformation.setCasNumber(casNumber);
-			libraryInformation.setComments(comments);
-			libraryInformation.setReferenceIdentifier(referenceIdentifier);
-			libraryInformation.setMiscellaneous(miscellaneous);
-			libraryInformation.setDatabase(database);
-			libraryInformation.setContributor(contributor);
-			libraryInformation.setName(name);
-			libraryInformation.setSynonyms(synonyms);
-			libraryInformation.setFormula(formula);
-			libraryInformation.setSmiles(smiles);
-			libraryInformation.setInChI(inChI);
-			libraryInformation.setMolWeight(molWeight);
-			libraryInformation.setMoleculeStructure(moleculeStructure);
-			//
-			IComparisonResult comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
-			comparisonResult.setMatch(isMatch);
-			//
-			try {
-				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
-				identificationEntry.setIdentifier(identifier);
-				identificationEntry.setVerified(manuallyVerified);
-				massSpectrum.getTargets().add(identificationEntry);
-			} catch(ReferenceMustNotBeNullException e) {
-				logger.warn(e);
-			}
-		}
 	}
 
 	private void readPeakQuantitationEntries(DataInputStream dataInputStream, IPeakMSD peak) throws IOException {
@@ -678,6 +532,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 			boolean usedCrossZero = dataInputStream.readBoolean(); // Used Cross Zero
 			String description = readString(dataInputStream); // Description
 			QuantitationFlag quantitationFlag = getQuantitationFlag(readString(dataInputStream)); // Flag
+			String group = readString(dataInputStream);
 			/*
 			 * Signals
 			 */
@@ -687,7 +542,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 				signals.add(dataInputStream.readDouble());
 			}
 			//
-			IQuantitationEntry quantitationEntry = new QuantitationEntry(name, concentration, concentrationUnit, area);
+			IQuantitationEntry quantitationEntry = new QuantitationEntry(name, group, concentration, concentrationUnit, area);
 			quantitationEntry.setSignals(signals);
 			quantitationEntry.setChemicalClass(chemicalClass);
 			quantitationEntry.setCalibrationMethod(calibrationMethod);
@@ -722,75 +577,6 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 		}
 	}
 
-	private void readIdentification(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram) throws IOException {
-
-		int numberOfTargets = dataInputStream.readInt(); // Number of Targets
-		for(int i = 1; i <= numberOfTargets; i++) {
-			//
-			String identifier = readString(dataInputStream); // Identifier
-			boolean manuallyVerified = dataInputStream.readBoolean();
-			//
-			int retentionTime = dataInputStream.readInt();
-			float retentionIndex = dataInputStream.readFloat();
-			String casNumber = readString(dataInputStream); // CAS-Number
-			String comments = readString(dataInputStream); // Comments
-			String referenceIdentifier = readString(dataInputStream);
-			String miscellaneous = readString(dataInputStream); // Miscellaneous
-			String database = readString(dataInputStream);
-			String contributor = readString(dataInputStream);
-			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
-			int numberOfSynonyms = dataInputStream.readInt();
-			for(int j = 0; j < numberOfSynonyms; j++) {
-				synonyms.add(readString(dataInputStream));
-			}
-			String formula = readString(dataInputStream); // Formula
-			String smiles = readString(dataInputStream); // SMILES
-			String inChI = readString(dataInputStream); // InChI
-			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			String moleculeStructure = readString(dataInputStream);
-			float matchFactor = dataInputStream.readFloat(); // Match Factor
-			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
-			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
-			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
-			float probability = dataInputStream.readFloat(); // Probability
-			boolean isMatch = dataInputStream.readBoolean();
-			//
-			IChromatogramLibraryInformation libraryInformation = new ChromatogramLibraryInformation();
-			libraryInformation.setRetentionTime(retentionTime);
-			libraryInformation.setRetentionIndex(retentionIndex);
-			libraryInformation.setCasNumber(casNumber);
-			libraryInformation.setComments(comments);
-			libraryInformation.setReferenceIdentifier(referenceIdentifier);
-			libraryInformation.setMiscellaneous(miscellaneous);
-			libraryInformation.setDatabase(database);
-			libraryInformation.setContributor(contributor);
-			libraryInformation.setName(name);
-			libraryInformation.setSynonyms(synonyms);
-			libraryInformation.setFormula(formula);
-			libraryInformation.setSmiles(smiles);
-			libraryInformation.setInChI(inChI);
-			libraryInformation.setMolWeight(molWeight);
-			libraryInformation.setMoleculeStructure(moleculeStructure);
-			//
-			IComparisonResult comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
-			comparisonResult.setMatch(isMatch);
-			//
-			try {
-				IIdentificationTarget identificationEntry = new IdentificationTarget(libraryInformation, comparisonResult);
-				identificationEntry.setIdentifier(identifier);
-				identificationEntry.setVerified(manuallyVerified);
-				chromatogram.getTargets().add(identificationEntry);
-			} catch(ReferenceMustNotBeNullException e) {
-				logger.warn(e);
-			}
-		}
-		//
-		if(closeStream) {
-			dataInputStream.close();
-		}
-	}
-
 	private void readHistory(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram) throws IOException {
 
 		IEditHistory editHistory = chromatogram.getEditHistory();
@@ -811,6 +597,9 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 
 	private void readMiscellaneous(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram) throws IOException {
 
+		/*
+		 * Header
+		 */
 		int numberOfEntries = dataInputStream.readInt();
 		for(int i = 0; i < numberOfEntries; i++) {
 			String key = readString(dataInputStream);
@@ -818,38 +607,13 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 			chromatogram.putHeaderData(key, value);
 		}
 		/*
-		 * Peak/Scan Target Label Visibility
+		 * Miscellaneous
 		 */
-		readTargetDisplaySettings(dataInputStream, chromatogram);
+		reader1501.readTargetDisplaySettings(dataInputStream, chromatogram);
+		chromatogram.setFinalized(dataInputStream.readBoolean());
 		//
 		if(closeStream) {
 			dataInputStream.close();
-		}
-	}
-
-	private void readTargetDisplaySettings(DataInputStream dataInputStream, ITargetDisplaySettings targetDisplaySettings) throws IOException {
-
-		targetDisplaySettings.setShowPeakLabels(dataInputStream.readBoolean());
-		targetDisplaySettings.setShowScanLabels(dataInputStream.readBoolean());
-		targetDisplaySettings.setCollisionDetectionDepth(dataInputStream.readInt());
-		targetDisplaySettings.setRotation(dataInputStream.readInt());
-		targetDisplaySettings.setLibraryField(readLibraryField(dataInputStream));
-		Map<String, Boolean> visibilityMap = new HashMap<>();
-		int size = dataInputStream.readInt();
-		for(int i = 0; i < size; i++) {
-			String key = readString(dataInputStream);
-			boolean value = dataInputStream.readBoolean();
-			visibilityMap.put(key, value);
-		}
-		targetDisplaySettings.putAll(visibilityMap);
-	}
-
-	private LibraryField readLibraryField(DataInputStream dataInputStream) {
-
-		try {
-			return LibraryField.valueOf(readString(dataInputStream));
-		} catch(Exception e) {
-			return LibraryField.NAME;
 		}
 	}
 
@@ -913,7 +677,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 		/*
 		 * Identification Results
 		 */
-		readMassSpectrumIdentificationTargets(dataInputStream, massSpectrum);
+		reader1501.readIdentificationTargets(dataInputStream, false, massSpectrum);
 	}
 
 	private IVendorIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException, AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
@@ -962,12 +726,9 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 			separationColumnIndices.put(retentionIndexEntry);
 		}
 		//
-		String name = readString(dataInputStream);
-		String length = readString(dataInputStream);
-		String diameter = readString(dataInputStream);
-		String phase = readString(dataInputStream);
-		ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
-		separationColumn.copyFrom(SeparationColumnFactory.getSeparationColumn(name, length, diameter, phase));
+		ISeparationColumn separationColumnSource = reader1501.readSeparationColumn(dataInputStream);
+		ISeparationColumn separationColumnSink = separationColumnIndices.getSeparationColumn();
+		separationColumnSource.copyFrom(separationColumnSink);
 		//
 		if(closeStream) {
 			dataInputStream.close();
@@ -1039,7 +800,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 		//
 		dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
 		String version = readString(dataInputStream);
-		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1500)) {
+		if(version.equals(ReaderIO_1501.VERSION)) {
 			isValid = true;
 		}
 		//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Michael Chang.
+ * Copyright (c) 2015, 2023 Michael Chang.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.Chromatogra
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.ChromatogramReader_1301;
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.ChromatogramReader_1400;
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.ChromatogramReader_1500;
+import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.ChromatogramReader_1501;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.ReaderHelper;
@@ -134,6 +135,8 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 			chromatogramReader = new ChromatogramReader_1400();
 		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1500)) {
 			chromatogramReader = new ChromatogramReader_1500();
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1501)) {
+			chromatogramReader = new ChromatogramReader_1501();
 		}
 		//
 		return chromatogramReader;

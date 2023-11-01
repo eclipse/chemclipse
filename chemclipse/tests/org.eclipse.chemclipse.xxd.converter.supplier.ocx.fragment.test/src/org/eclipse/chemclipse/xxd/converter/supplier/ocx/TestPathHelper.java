@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.ocx;
 
@@ -41,6 +41,7 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1301 = "testData/files/import/Chromatogram1-1301.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1400 = "testData/files/import/Chromatogram1-1400.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1500 = "testData/files/import/Chromatogram1-1500.ocb";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1501 = "testData/files/import/Chromatogram1-1501.ocb";
 	//
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_0701 = "testData/files/import/Chromatogram2-0701.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_0801 = "testData/files/import/Chromatogram2-0801.ocb";
@@ -61,6 +62,7 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1301 = "testData/files/import/Chromatogram2-1301.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1400 = "testData/files/import/Chromatogram2-1400.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1500 = "testData/files/import/Chromatogram2-1500.ocb";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1501 = "testData/files/import/Chromatogram2-1501.ocb";
 	/*
 	 * IMPORT FID
 	 */
@@ -76,9 +78,11 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1301 = "testData/files/import/Chromatogram3-1301.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1400 = "testData/files/import/Chromatogram3-1400.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1500 = "testData/files/import/Chromatogram3-1500.ocb";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1501 = "testData/files/import/Chromatogram3-1501.ocb";
 	/*
 	 * Import WSD
 	 */
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_4_DAD_1501 = "testData/files/import/Chromatogram4-1501.ocb";
 	/*
 	 * EXPORT
 	 */
