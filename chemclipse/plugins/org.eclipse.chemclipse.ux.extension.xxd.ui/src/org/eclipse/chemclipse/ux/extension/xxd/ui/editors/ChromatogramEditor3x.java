@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - changes for PartSupport
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
@@ -18,21 +18,21 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
+import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -40,7 +40,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IURIEditorInput;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
@@ -48,15 +50,15 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 
 	/*
 	 * This is the editor id from the plugin.xml "org.eclipse.ui.editors" extension point.
+	 * Currently, only the *.ocb format is supported.
 	 */
 	private static final String EDITOR_ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.editors.chromatogramEditor3x";
+	private static final String SUPPLIER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
 	//
 	private ChromatogramEditor chromatogramEditor;
+	private MPart part;
+	private IPartListener2 partListener = null;
 	//
-	private final EPartService partService = Activator.getDefault().getPartService();
-	private final EModelService modelService = Activator.getDefault().getModelService();
-	private final MApplication application = Activator.getDefault().getApplication();
-	private final MPart part = PartSupport.get3xEditorPart(EDITOR_ID, partService, modelService, application);
 	private final MDirtyable dirtyable = new MDirtyable() {
 
 		private boolean value = false;
@@ -80,13 +82,6 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		parent.setLayout(new FillLayout());
 		DataType dataType = getDataType();
 		if(dataType != null) {
-			/*
-			 * Probably add
-			 * E4ProcessSupplierContext processSupplierContext
-			 * instead of
-			 * new ProcessTypeSupport()
-			 * here.
-			 */
 			chromatogramEditor = new ChromatogramEditor(dataType, parent, part, dirtyable, DisplayUtils.getShell(), new ProcessTypeSupport(), Activator.getDefault().getEclipseContext());
 		} else {
 			Label label = new Label(parent, SWT.NONE);
@@ -112,12 +107,21 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		} else {
 			throw new PartInitException("The file couldn't be loaded.");
 		}
+		/*
+		 * Using the PartSupport works, but leads to strange behavior when loading multiple files.
+		 * PartSupport.get3xEditorPart(EDITOR_ID, partService, modelService, application);
+		 */
+		part = MBasicFactory.INSTANCE.createPart();
+		part.setElementId(EDITOR_ID);
 		part.setLabel(ExtensionMessages.chromatogram);
 		Map<String, Object> map = new HashMap<>();
 		map.put(EditorSupport.MAP_FILE, file.getAbsolutePath());
 		map.put(EditorSupport.MAP_BATCH, false);
 		part.setObject(map);
 		part.setTooltip(ExtensionMessages.chromatogramFromProjectExplorer);
+		//
+		partListener = createPartListener();
+		getSite().getPage().addPartListener(partListener);
 	}
 
 	@Override
@@ -156,38 +160,6 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		}
 	}
 
-	private DataType getDataType() {
-
-		DataType dataType = null;
-		//
-		Object object = part.getObject();
-		if(object instanceof Map<?, ?> map) {
-			String path = (String)map.get(EditorSupport.MAP_FILE);
-			File file = new File(path);
-			//
-			if(isMatch(file, new SupplierFileIdentifier(DataType.MSD))) {
-				dataType = DataType.MSD;
-			} else if(isMatch(file, new SupplierFileIdentifier(DataType.CSD))) {
-				dataType = DataType.CSD;
-			} else if(isMatch(file, new SupplierFileIdentifier(DataType.WSD))) {
-				dataType = DataType.WSD;
-			}
-		}
-		//
-		return dataType;
-	}
-
-	private boolean isMatch(File file, ISupplierFileIdentifier supplierFileIdentifier) {
-
-		boolean isMatch = false;
-		if(supplierFileIdentifier != null && file != null && file.exists()) {
-			if(supplierFileIdentifier.isSupplierFile(file) && supplierFileIdentifier.isMatchMagicNumber(file) && supplierFileIdentifier.isMatchContent(file)) {
-				isMatch = true;
-			}
-		}
-		return isMatch;
-	}
-
 	@Override
 	public boolean saveAs() {
 
@@ -202,5 +174,101 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		} else {
 			return null;
 		}
+	}
+
+	private IPartListener2 createPartListener() {
+
+		return new IPartListener2() {
+
+			@Override
+			public void partBroughtToTop(IWorkbenchPartReference partRef) {
+
+				if(isActivatePart(partRef)) {
+					IChromatogramSelection<?, ?> chromatogramSelection = getChromatogramSelection();
+					if(chromatogramSelection != null) {
+						UpdateNotifierUI.update(getSite().getShell().getDisplay(), chromatogramSelection);
+					}
+				}
+			}
+
+			@Override
+			public void partClosed(IWorkbenchPartReference partRef) {
+
+				if(isActivatePart(partRef)) {
+					/*
+					 * Remove
+					 */
+					if(partListener != null) {
+						getSite().getPage().removePartListener(partListener);
+						partListener = null;
+					}
+					UpdateNotifierUI.update(getSite().getShell().getDisplay(), IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE, "ChromatogramEditor3x Close");
+				}
+			}
+		};
+	}
+
+	private boolean isActivatePart(IWorkbenchPartReference partRef) {
+
+		IWorkbenchPartReference partThis = getSite().getPage().getReference(getSite().getPart());
+		return partThis == partRef;
+	}
+
+	private DataType getDataType() {
+
+		DataType dataType = null;
+		//
+		Object object = part.getObject();
+		if(object instanceof Map<?, ?> map) {
+			String path = (String)map.get(EditorSupport.MAP_FILE);
+			File file = new File(path);
+			/*
+			 * Check the data format.
+			 */
+			if(isMatch(file, getSupplierFileIdentifier(DataType.MSD))) {
+				dataType = DataType.MSD;
+			} else if(isMatch(file, getSupplierFileIdentifier(DataType.CSD))) {
+				dataType = DataType.CSD;
+			} else if(isMatch(file, getSupplierFileIdentifier(DataType.WSD))) {
+				dataType = DataType.WSD;
+			}
+		}
+		//
+		return dataType;
+	}
+
+	private SupplierFileIdentifier getSupplierFileIdentifier(DataType dataType) {
+
+		SupplierFileIdentifier supplierFileIdentifier = new SupplierFileIdentifier(dataType);
+		ISupplier supplierSupported = null;
+		/*
+		 * Fetch and set the *.ocb specific supplier.
+		 */
+		for(ISupplier supplier : supplierFileIdentifier.getSupplier()) {
+			if(SUPPLIER_ID.equals(supplier.getId())) {
+				supplierSupported = supplier;
+			}
+		}
+		//
+		if(supplierSupported != null) {
+			supplierFileIdentifier.getSupplier().clear();
+			supplierFileIdentifier.getSupplier().add(supplierSupported);
+		}
+		//
+		return supplierFileIdentifier;
+	}
+
+	private boolean isMatch(File file, ISupplierFileIdentifier supplierFileIdentifier) {
+
+		boolean isMatch = false;
+		if(supplierFileIdentifier != null && file != null && file.exists()) {
+			if(supplierFileIdentifier.isSupplierFile(file) && supplierFileIdentifier.isMatchMagicNumber(file)) {
+				if(supplierFileIdentifier.isMatchContent(file)) {
+					isMatch = true;
+				}
+			}
+		}
+		//
+		return isMatch;
 	}
 }
