@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.baseline;
 
@@ -55,6 +55,19 @@ public class BaselineModel implements IBaselineModel {
 		} else {
 			this.interpolate = false;
 		}
+	}
+
+	/**
+	 * Copies the content from the given baseline.
+	 * Use this method with care, as no deep copy is created.
+	 * 
+	 * @param baselineModel
+	 */
+	public void copyFrom(BaselineModel baselineModel) {
+
+		this.baselineSegments = baselineModel.baselineSegments;
+		this.defaultBackgroundAbundance = baselineModel.defaultBackgroundAbundance;
+		this.interpolate = baselineModel.interpolate;
 	}
 
 	@Override
