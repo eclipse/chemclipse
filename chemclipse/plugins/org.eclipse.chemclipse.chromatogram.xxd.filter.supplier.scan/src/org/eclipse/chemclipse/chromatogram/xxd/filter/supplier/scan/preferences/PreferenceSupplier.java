@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.preferences;
 
@@ -46,6 +46,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final double DEF_SCAN_SELECTOR_VALUE = 1000.0d;
 	public static final String P_MERGE_SCANS = "mergeScans";
 	public static final boolean DEF_MERGE_SCANS = true;
+	public static final String P_CLIP_SCAN_NUMBER_PATTERN = "clipScanNumberPattern";
+	public static final String DEF_CLIP_SCAN_NUMBER_PATTERN = "1";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -77,6 +79,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_SCAN_SELECTOR_OPTION, DEF_SCAN_SELECTOR_OPTION);
 		defaultValues.put(P_SCAN_SELECTOR_VALUE, Double.toString(DEF_SCAN_SELECTOR_VALUE));
 		defaultValues.put(P_MERGE_SCANS, Boolean.toString(DEF_MERGE_SCANS));
+		defaultValues.put(P_CLIP_SCAN_NUMBER_PATTERN, DEF_CLIP_SCAN_NUMBER_PATTERN);
 		return defaultValues;
 	}
 
@@ -93,17 +96,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static FilterSettingsRemover getRemoverFilterSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		FilterSettingsRemover filterSettings = new FilterSettingsRemover();
-		filterSettings.setScanRemoverPattern(preferences.get(P_REMOVER_PATTERN, DEF_REMOVER_PATTERN));
+		filterSettings.setScanRemoverPattern(INSTANCE().get(P_REMOVER_PATTERN, DEF_REMOVER_PATTERN));
+		//
 		return filterSettings;
 	}
 
 	public static FilterSettingsDuplicator getDuplicatorFilterSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		FilterSettingsDuplicator settings = new FilterSettingsDuplicator();
-		settings.setMergeScans(preferences.getBoolean(P_MERGE_SCANS, DEF_MERGE_SCANS));
+		settings.setMergeScans(INSTANCE().getBoolean(P_MERGE_SCANS, DEF_MERGE_SCANS));
 		//
 		return settings;
 	}
@@ -132,22 +134,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return new FilterSettingsRetentionIndexSelector();
 	}
 
-	/**
-	 * Returns the scan remover pattern.
-	 * 
-	 * @return String
-	 */
 	public static String getScanRemoverPattern() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_REMOVER_PATTERN, DEF_REMOVER_PATTERN);
+		return INSTANCE().get(P_REMOVER_PATTERN, DEF_REMOVER_PATTERN);
+	}
+
+	public static String getScanNumberPattern() {
+
+		return INSTANCE().get(P_CLIP_SCAN_NUMBER_PATTERN, DEF_CLIP_SCAN_NUMBER_PATTERN);
 	}
 
 	private static ScanSelectorOption getScanSelectorOption() {
 
 		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			return ScanSelectorOption.valueOf(preferences.get(P_SCAN_SELECTOR_OPTION, DEF_SCAN_SELECTOR_OPTION));
+			return ScanSelectorOption.valueOf(INSTANCE().get(P_SCAN_SELECTOR_OPTION, DEF_SCAN_SELECTOR_OPTION));
 		} catch(Exception e) {
 			return ScanSelectorOption.RETENTION_TIME_MS;
 		}
@@ -155,7 +155,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static double getScanSelectorValue() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getDouble(P_SCAN_SELECTOR_VALUE, DEF_SCAN_SELECTOR_VALUE);
+		return INSTANCE().getDouble(P_SCAN_SELECTOR_VALUE, DEF_SCAN_SELECTOR_VALUE);
 	}
 }

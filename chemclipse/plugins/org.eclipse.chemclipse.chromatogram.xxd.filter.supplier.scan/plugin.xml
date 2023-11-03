@@ -11,6 +11,13 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover">
       </ChromatogramFilterSupplier>
       <ChromatogramFilterSupplier
+            description="This filter enables to remove a series of scans by scan number."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core.FilterScanClipper"
+            filterName="Scan Clipper"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsScanClipper"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanclipper">
+      </ChromatogramFilterSupplier>      
+      <ChromatogramFilterSupplier
             description="This filters removes empty scans."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core.FilterCleaner"
             filterName="Scan Cleaner (Remove Empty)"
