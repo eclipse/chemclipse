@@ -25,6 +25,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.LineStyle;
+import org.eclipse.swtchart.Resources;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
 public class PreferenceConstants {
@@ -228,7 +229,7 @@ public class PreferenceConstants {
 	 * Scans
 	 */
 	public static final String P_SCAN_LABEL_FONT_NAME = "scanLabelFontName";
-	public static final String DEF_SCAN_LABEL_FONT_NAME = "Tahoma";
+	public static final String DEF_SCAN_LABEL_FONT_NAME = Resources.DEFAULT_FONT_NAME;
 	public static final String P_SCAN_LABEL_FONT_SIZE = "scanLabelFontSize";
 	public static final String P_SCAN_LABEL_FONT_STYLE = "scanLabelFontStyle";
 	public static final int DEF_SCAN_LABEL_FONT_STYLE = SWT.NORMAL;
@@ -498,7 +499,7 @@ public class PreferenceConstants {
 	public static final String P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE = "showChromatogramSelectedScanMarkerType";
 	public static final String DEF_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE = PlotSymbolType.CROSS.toString();
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME = "chromatogramPeakLabelFontName";
-	public static final String DEF_CHROMATOGRAM_PEAK_LABEL_FONT_NAME = "Tahoma";
+	public static final String DEF_CHROMATOGRAM_PEAK_LABEL_FONT_NAME = Resources.DEFAULT_FONT_NAME;
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE = "chromatogramPeakLabelFontSize";
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE = "chromatogramPeakLabelFontStyle";
 	public static final int DEF_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE = SWT.NORMAL;
@@ -535,7 +536,7 @@ public class PreferenceConstants {
 	//
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = "chromatogramScanLabelSymbolSize";
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = "chromatogramScanLabelFontName";
-	public static final String DEF_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = "Tahoma";
+	public static final String DEF_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = Resources.DEFAULT_FONT_NAME;
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE = "chromatogramScanLabelFontSize";
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = "chromatogramScanLabelFontStyle";
 	public static final int DEF_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = SWT.NORMAL;
@@ -626,7 +627,7 @@ public class PreferenceConstants {
 	public static final String P_COLOR_X_AXIS_MILLISECONDS_DARKTHEME = "colorXAxisMillisecondsDarkTheme";
 	public static final String DEF_COLOR_X_AXIS_MILLISECONDS_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_X_AXIS_MILLISECONDS = "fontNameXAxisMilliseconds";
-	public static final String DEF_FONT_NAME_X_AXIS_MILLISECONDS = "Tahoma";
+	public static final String DEF_FONT_NAME_X_AXIS_MILLISECONDS = Resources.DEFAULT_FONT_NAME;
 	public static final String P_FONT_SIZE_X_AXIS_MILLISECONDS = "fontSizeXAxisMilliseconds";
 	public static final String P_FONT_STYLE_X_AXIS_MILLISECONDS = "fontStyleXAxisMilliseconds";
 	public static final int DEF_FONT_STYLE_X_AXIS_MILLISECONDS = SWT.BOLD;
@@ -650,7 +651,7 @@ public class PreferenceConstants {
 	public static final String P_COLOR_X_AXIS_RETENTION_INDEX_DARKTHEME = "colorXAxisRetentionIndexDarkTheme";
 	public static final String DEF_COLOR_X_AXIS_RETENTION_INDEX_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_X_AXIS_RETENTION_INDEX = "fontNameXAxisRetentionIndex";
-	public static final String DEF_FONT_NAME_X_AXIS_RETENTION_INDEX = "Tahoma";
+	public static final String DEF_FONT_NAME_X_AXIS_RETENTION_INDEX = Resources.DEFAULT_FONT_NAME;
 	public static final String P_FONT_SIZE_X_AXIS_RETENTION_INDEX = "fontSizeXAxisRetentionIndex";
 	public static final String P_FONT_STYLE_X_AXIS_RETENTION_INDEX = "fontStyleXAxisRetentionIndex";
 	public static final int DEF_FONT_STYLE_X_AXIS_RETENTION_INDEX = SWT.BOLD;
@@ -674,7 +675,7 @@ public class PreferenceConstants {
 	public static final String P_COLOR_X_AXIS_SECONDS_DARKTHEME = "colorXAxisSecondsDarkTheme";
 	public static final String DEF_COLOR_X_AXIS_SECONDS_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_X_AXIS_SECONDS = "fontNameXAxisSeconds";
-	public static final String DEF_FONT_NAME_X_AXIS_SECONDS = "Tahoma";
+	public static final String DEF_FONT_NAME_X_AXIS_SECONDS = Resources.DEFAULT_FONT_NAME;
 	public static final String P_FONT_SIZE_X_AXIS_SECONDS = "fontSizeXAxisSeconds";
 	public static final String P_FONT_STYLE_X_AXIS_SECONDS = "fontStyleXAxisSeconds";
 	public static final int DEF_FONT_STYLE_X_AXIS_SECONDS = SWT.BOLD;
@@ -698,7 +699,7 @@ public class PreferenceConstants {
 	public static final String P_COLOR_X_AXIS_MINUTES_DARKTHEME = "colorXAxisMinutesDarkTheme";
 	public static final String DEF_COLOR_X_AXIS_MINUTES_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_X_AXIS_MINUTES = "fontNameXAxisMinutes";
-	public static final String DEF_FONT_NAME_X_AXIS_MINUTES = "Tahoma";
+	public static final String DEF_FONT_NAME_X_AXIS_MINUTES = Resources.DEFAULT_FONT_NAME;
 	public static final String P_FONT_SIZE_X_AXIS_MINUTES = "fontSizeXAxisMinutes";
 	public static final String P_FONT_STYLE_X_AXIS_MINUTES = "fontStyleXAxisMinutes";
 	public static final int DEF_FONT_STYLE_X_AXIS_MINUTES = SWT.BOLD;
@@ -726,7 +727,7 @@ public class PreferenceConstants {
 	public static final String P_COLOR_X_AXIS_SCANS_DARKTHEME = "colorXAxisScansDarkTheme";
 	public static final String DEF_COLOR_X_AXIS_SCANS_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_X_AXIS_SCANS = "fontNameXAxisScans";
-	public static final String DEF_FONT_NAME_X_AXIS_SCANS = "Tahoma";
+	public static final String DEF_FONT_NAME_X_AXIS_SCANS = Resources.DEFAULT_FONT_NAME;
 	public static final String P_FONT_SIZE_X_AXIS_SCANS = "fontSizeXAxisScans";
 	public static final String P_FONT_STYLE_X_AXIS_SCANS = "fontStyleXAxisScans";
 	public static final int DEF_FONT_STYLE_X_AXIS_SCANS = SWT.BOLD;
@@ -750,7 +751,7 @@ public class PreferenceConstants {
 	public static final String P_COLOR_Y_AXIS_INTENSITY_DARKTHEME = "colorYAxisIntensityDarkTheme";
 	public static final String DEF_COLOR_Y_AXIS_INTENSITY_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_Y_AXIS_INTENSITY = "fontNameYAxisIntensity";
-	public static final String DEF_FONT_NAME_Y_AXIS_INTENSITY = "Tahoma";
+	public static final String DEF_FONT_NAME_Y_AXIS_INTENSITY = Resources.DEFAULT_FONT_NAME;
 	public static final String P_FONT_SIZE_Y_AXIS_INTENSITY = "fontSizeYAxisIntensity";
 	public static final String P_FONT_STYLE_Y_AXIS_INTENSITY = "fontStyleYAxisIntensity";
 	public static final int DEF_FONT_STYLE_Y_AXIS_INTENSITY = SWT.BOLD;
@@ -774,7 +775,7 @@ public class PreferenceConstants {
 	public static final String P_COLOR_Y_AXIS_RELATIVE_INTENSITY_DARKTHEME = "colorYAxisRelativeIntensityDarkTheme";
 	public static final String DEF_COLOR_Y_AXIS_RELATIVE_INTENSITY_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY = "fontNameYAxisRelativeIntensity";
-	public static final String DEF_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY = "Tahoma";
+	public static final String DEF_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY = Resources.DEFAULT_FONT_NAME;
 	public static final String P_FONT_SIZE_Y_AXIS_RELATIVE_INTENSITY = "fontSizeYAxisRelativeIntensity";
 	public static final String P_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY = "fontStyleYAxisRelativeIntensity";
 	public static final int DEF_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY = SWT.BOLD;
