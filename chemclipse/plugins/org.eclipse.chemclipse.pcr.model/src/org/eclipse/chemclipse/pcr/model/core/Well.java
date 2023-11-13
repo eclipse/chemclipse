@@ -40,6 +40,7 @@ public class Well extends AbstractMeasurement implements IWell {
 		addProtectedKey(TARGET_NAME);
 		addProtectedKey(CROSSING_POINT);
 		addProtectedKey(SAMPLE_SUBSET);
+		addProtectedKey(SAMPLE_TYPE);
 	}
 
 	@Override
@@ -135,9 +136,41 @@ public class Well extends AbstractMeasurement implements IWell {
 	}
 
 	@Override
+	public SampleType getSampleType() {
+
+		String sampleType = getHeaderDataOrDefault(SAMPLE_TYPE, "").trim();
+		if(sampleType.isEmpty() || sampleType.isBlank()) {
+			return SampleType.UNKNOWN;
+		}
+		return SampleType.valueOf(sampleType);
+	}
+
+	@Override
+	public void setSampleType(SampleType sampleType) {
+
+		putHeaderData(SAMPLE_TYPE, getSampleType().toString());
+	}
+
+	@Override
 	public String getTargetName() {
 
 		return getHeaderDataOrDefault(TARGET_NAME, "").trim();
+	}
+
+	@Override
+	public TargetType getTargetType() {
+
+		String targetType = getHeaderDataOrDefault(TARGET_TYPE, "").trim();
+		if(targetType.isEmpty() || targetType.isBlank()) {
+			return TargetType.TARGET_OF_INTEREST;
+		}
+		return TargetType.valueOf(targetType);
+	}
+
+	@Override
+	public void setTargetType(TargetType targetType) {
+
+		putHeaderData(TARGET_TYPE, getTargetType().toString());
 	}
 
 	@Override
@@ -223,6 +256,7 @@ public class Well extends AbstractMeasurement implements IWell {
 		well.putHeaderData(TARGET_NAME, getTargetName());
 		well.putHeaderData(CROSSING_POINT, String.valueOf(getCrossingPoint()));
 		well.putHeaderData(SAMPLE_SUBSET, getSampleSubset());
+		well.putHeaderData(SAMPLE_TYPE, getSampleType().toString());
 		return well;
 	}
 }
