@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,14 +44,14 @@ public class PeakType implements EventHandler {
 		String peakType = PEAK_TYPE_NONE;
 		//
 		if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
-			if(property instanceof IPeakMSD) {
-				peakSelection = (IPeakMSD)property;
+			if(property instanceof IPeakMSD peakMSD) {
+				peakSelection = peakMSD;
 				peakType = PEAK_TYPE_MSD;
-			} else if(property instanceof IPeakCSD) {
-				peakSelection = (IPeakCSD)property;
+			} else if(property instanceof IPeakCSD peakCSD) {
+				peakSelection = peakCSD;
 				peakType = PEAK_TYPE_CSD;
-			} else if(property instanceof IPeakWSD) {
-				peakSelection = (IPeakWSD)property;
+			} else if(property instanceof IPeakWSD peakWSD) {
+				peakSelection = peakWSD;
 				peakType = PEAK_TYPE_WSD;
 			} else {
 				peakSelection = null;
@@ -83,12 +83,12 @@ public class PeakType implements EventHandler {
 		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(PEAK_SELECTION);
 		//
-		IPeak peak = null;
-		if(object != null && object instanceof IPeak) {
-			peak = (IPeak)object;
+		IPeak selectedPeak = null;
+		if(object instanceof IPeak peak) {
+			selectedPeak = peak;
 		}
 		//
-		return peak;
+		return selectedPeak;
 	}
 
 	/**
@@ -101,12 +101,12 @@ public class PeakType implements EventHandler {
 		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(PEAK_SELECTION);
 		//
-		IPeakMSD peakMSD = null;
-		if(object != null && object instanceof IPeakMSD) {
-			peakMSD = (IPeakMSD)object;
+		IPeakMSD peakSelectedMSD = null;
+		if(object instanceof IPeakMSD peakMSD) {
+			peakSelectedMSD = peakMSD;
 		}
 		//
-		return peakMSD;
+		return peakSelectedMSD;
 	}
 
 	/**
@@ -119,12 +119,12 @@ public class PeakType implements EventHandler {
 		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(PEAK_SELECTION);
 		//
-		IPeakCSD peakCSD = null;
-		if(object != null && object instanceof IPeakCSD) {
-			peakCSD = (IPeakCSD)object;
+		IPeakCSD selectedPeakCSD = null;
+		if(object instanceof IPeakCSD peakCSD) {
+			selectedPeakCSD = peakCSD;
 		}
 		//
-		return peakCSD;
+		return selectedPeakCSD;
 	}
 
 	/**
@@ -137,11 +137,11 @@ public class PeakType implements EventHandler {
 		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(PEAK_SELECTION);
 		//
-		IPeakWSD peakWSD = null;
-		if(object != null && object instanceof IPeakWSD) {
-			peakWSD = (IPeakWSD)object;
+		IPeakWSD selectedPeakWSD = null;
+		if(object instanceof IPeakWSD peakWSD) {
+			selectedPeakWSD = peakWSD;
 		}
 		//
-		return peakWSD;
+		return selectedPeakWSD;
 	}
 }

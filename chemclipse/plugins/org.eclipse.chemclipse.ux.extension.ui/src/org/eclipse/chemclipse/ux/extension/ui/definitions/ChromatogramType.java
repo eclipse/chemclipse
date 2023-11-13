@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -77,12 +77,12 @@ public class ChromatogramType implements EventHandler {
 		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
 		//
-		IChromatogramSelection<?, ?> chromatogramSelection = null;
-		if(object != null && object instanceof IChromatogramSelection) {
-			chromatogramSelection = (IChromatogramSelection<?, ?>)object;
+		IChromatogramSelection<?, ?> currentChromatogramSelection = null;
+		if(object instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
+			currentChromatogramSelection = chromatogramSelection;
 		}
 		//
-		return chromatogramSelection;
+		return currentChromatogramSelection;
 	}
 
 	/**
@@ -95,12 +95,12 @@ public class ChromatogramType implements EventHandler {
 		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
 		//
-		IChromatogramSelectionMSD chromatogramSelectionMSD = null;
-		if(object != null && object instanceof IChromatogramSelectionMSD) {
-			chromatogramSelectionMSD = (IChromatogramSelectionMSD)object;
+		IChromatogramSelectionMSD currentChromatogramSelectionMSD = null;
+		if(object instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
+			currentChromatogramSelectionMSD = chromatogramSelectionMSD;
 		}
 		//
-		return chromatogramSelectionMSD;
+		return currentChromatogramSelectionMSD;
 	}
 
 	/**
@@ -113,12 +113,12 @@ public class ChromatogramType implements EventHandler {
 		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
 		//
-		IChromatogramSelectionCSD chromatogramSelectionCSD = null;
-		if(object != null && object instanceof IChromatogramSelectionCSD) {
-			chromatogramSelectionCSD = (IChromatogramSelectionCSD)object;
+		IChromatogramSelectionCSD currentChromatogramSelectionCSD = null;
+		if(object instanceof IChromatogramSelectionCSD chromatogramSelectionCSD) {
+			currentChromatogramSelectionCSD = chromatogramSelectionCSD;
 		}
 		//
-		return chromatogramSelectionCSD;
+		return currentChromatogramSelectionCSD;
 	}
 
 	/**
@@ -131,11 +131,11 @@ public class ChromatogramType implements EventHandler {
 		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
 		//
-		IChromatogramSelectionWSD chromatogramSelectionWSD = null;
-		if(object != null && object instanceof IChromatogramSelectionWSD) {
-			chromatogramSelectionWSD = (IChromatogramSelectionWSD)object;
+		IChromatogramSelectionWSD currentChromatogramSelectionWSD = null;
+		if(object instanceof IChromatogramSelectionWSD chromatogramSelectionWSD) {
+			currentChromatogramSelectionWSD = chromatogramSelectionWSD;
 		}
 		//
-		return chromatogramSelectionWSD;
+		return currentChromatogramSelectionWSD;
 	}
 }
