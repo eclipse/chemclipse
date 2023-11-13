@@ -178,7 +178,7 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 	private void updateInfo() {
 
 		if(plate != null) {
-			labelDataInfo.setText("Number of Wells: " + plate.getWells().size());
+			labelDataInfo.setText("Wells: " + plate.getWells().size());
 		} else {
 			labelDataInfo.setText("");
 		}
