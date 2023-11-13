@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.ui.l10n.Messages;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
@@ -51,6 +52,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -66,7 +68,7 @@ import org.eclipse.swt.widgets.TabItem;
 
 public class MultiDataExplorerTreeUI {
 
-	private static final String TAB_KEY_SUFFIX = "selectedTab";
+	private static final String TAB_KEY_SUFFIX = "selectedTab"; //$NON-NLS-1$
 	//
 	private final TabFolder tabFolder;
 	private final DataExplorerTreeUI[] dataExplorerTreeUIs;
@@ -132,7 +134,7 @@ public class MultiDataExplorerTreeUI {
 				try {
 					persistentPreferenceStore.save();
 				} catch(IOException e) {
-					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), "Storing preferences failed", e));
+					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), Messages.storingPreferencesFailed, e));
 				}
 			}
 		}
@@ -248,7 +250,7 @@ public class MultiDataExplorerTreeUI {
 	private void addUserLocationButton(Composite parent, DataExplorerTreeUI treeUI) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Select User Location");
+		button.setText(Messages.selectUserLocation);
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImageProvider.SIZE_16x16));
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -257,7 +259,7 @@ public class MultiDataExplorerTreeUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				DirectoryDialog directoryDialog = new DirectoryDialog(e.display.getActiveShell(), SWT.READ_ONLY);
-				directoryDialog.setText("Select a directory.");
+				directoryDialog.setText(Messages.selectDirectory);
 				String pathname = directoryDialog.open();
 				if(pathname != null) {
 					File directory = new File(pathname);
@@ -308,7 +310,7 @@ public class MultiDataExplorerTreeUI {
 						}
 					}
 				}
-				contextMenu.add(new Action("Scan for file and folder updates", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_REFRESH, IApplicationImageProvider.SIZE_16x16)) {
+				contextMenu.add(new Action(Messages.scanForFilesystemUpdates, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_REFRESH, IApplicationImageProvider.SIZE_16x16)) {
 
 					@Override
 					public void run() {
@@ -318,7 +320,7 @@ public class MultiDataExplorerTreeUI {
 				});
 				//
 				for(ISupplier activeFileSupplier : supplierSet) {
-					contextMenu.add(new Action("Open as: " + activeFileSupplier.getFilterName(), ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImageProvider.SIZE_16x16)) {
+					contextMenu.add(new Action(NLS.bind(Messages.openAs, activeFileSupplier.getFilterName()), ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImageProvider.SIZE_16x16)) {
 
 						@Override
 						public void run() {
@@ -349,7 +351,7 @@ public class MultiDataExplorerTreeUI {
 				}
 				//
 				if(selection.length == 1 && selection[0] instanceof File file && file.isDirectory()) {
-					contextMenu.add(new Action("Open all contained measurements in this folder", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER, IApplicationImageProvider.SIZE_16x16)) {
+					contextMenu.add(new Action(Messages.openAllContainedMeasurements, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER, IApplicationImageProvider.SIZE_16x16)) {
 
 						@Override
 						public void run() {
@@ -388,8 +390,8 @@ public class MultiDataExplorerTreeUI {
 	private void addBatchOpenButton(Composite parent, DataExplorerTreeUI treeUI) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Open Selected Measurements");
-		button.setToolTipText("Try to open all selected files. Handle with care.");
+		button.setText(Messages.openSelectedMeasurements);
+		button.setToolTipText(Messages.tryToOpenAllSelectedFiles);
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImageProvider.SIZE_16x16));
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.addSelectionListener(new SelectionAdapter() {

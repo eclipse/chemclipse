@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.ApplicationSettings;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.UserManagement;
+import org.eclipse.chemclipse.ux.extension.ui.l10n.Messages;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -31,11 +32,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
  */
 public enum DataExplorerTreeRoot {
 
-	NONE(""), //
-	DRIVES("Drives"), //
-	HOME("Home"), //
-	WORKSPACE("Workspace"), //
-	USER_LOCATION("User Location");
+	NONE(""), // //$NON-NLS-1$
+	DRIVES(Messages.drives), //
+	HOME(Messages.home), //
+	WORKSPACE(Messages.workspace), //
+	USER_LOCATION(Messages.userLocation);
 
 	private static final Logger logger = Logger.getLogger(DataExplorerTreeRoot.class);
 	//
@@ -65,7 +66,7 @@ public enum DataExplorerTreeRoot {
 				return PreferenceConstants.P_SELECTED_USER_LOCATION_PATH;
 			case NONE:
 			default:
-				return "selected" + name() + "Path";
+				return "selected" + name() + "Path"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -139,14 +140,14 @@ public enum DataExplorerTreeRoot {
 			return false;
 		}
 		String driveLetter = path.substring(0, 2);
-		List<String> cmd = Arrays.asList("cmd", "/c", "net", "use", driveLetter);
+		List<String> cmd = Arrays.asList("cmd", "/c", "net", "use", driveLetter); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		try {
 			Process process = new ProcessBuilder(cmd).redirectErrorStream(true).start();
 			process.getOutputStream().close();
 			int exitCode = process.waitFor();
 			return exitCode == 0;
 		} catch(IOException e) {
-			logger.error("Failed to detect network drive status for " + driveLetter, e);
+			logger.error("Failed to detect network drive status for " + driveLetter, e); //$NON-NLS-1$
 		} catch(InterruptedException e) {
 			logger.error(e);
 			Thread.currentThread().interrupt();
