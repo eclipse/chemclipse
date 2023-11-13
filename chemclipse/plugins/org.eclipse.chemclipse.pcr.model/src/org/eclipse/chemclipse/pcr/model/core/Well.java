@@ -136,12 +136,6 @@ public class Well extends AbstractMeasurement implements IWell {
 	}
 
 	@Override
-	public String getTargetName() {
-
-		return getHeaderDataOrDefault(TARGET_NAME, "").trim();
-	}
-
-	@Override
 	public SampleType getSampleType() {
 
 		String sampleType = getHeaderDataOrDefault(SAMPLE_TYPE, "").trim();
@@ -155,6 +149,28 @@ public class Well extends AbstractMeasurement implements IWell {
 	public void setSampleType(SampleType sampleType) {
 
 		putHeaderData(SAMPLE_TYPE, getSampleType().toString());
+	}
+
+	@Override
+	public String getTargetName() {
+
+		return getHeaderDataOrDefault(TARGET_NAME, "").trim();
+	}
+
+	@Override
+	public TargetType getTargetType() {
+
+		String targetType = getHeaderDataOrDefault(TARGET_TYPE, "").trim();
+		if(targetType.isEmpty() || targetType.isBlank()) {
+			return TargetType.TARGET_OF_INTEREST;
+		}
+		return TargetType.valueOf(targetType);
+	}
+
+	@Override
+	public void setTargetType(TargetType targetType) {
+
+		putHeaderData(TARGET_TYPE, getTargetType().toString());
 	}
 
 	@Override
