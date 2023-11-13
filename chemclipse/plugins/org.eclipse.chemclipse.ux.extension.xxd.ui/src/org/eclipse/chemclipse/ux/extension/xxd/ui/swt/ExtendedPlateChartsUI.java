@@ -78,7 +78,8 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		updateLabel();
 		updateComboChannels();
 		updateChartData();
-		colorCompensation = !plate.getWells().first().getActiveChannel().getColorCompensatedFluorescence().isEmpty();
+		colorCompensation = !plate.getWells().stream().allMatch(w -> w.getActiveChannel() != null //
+				&& !w.getActiveChannel().getColorCompensatedFluorescence().isEmpty());
 	}
 
 	private void updateLabel() {
