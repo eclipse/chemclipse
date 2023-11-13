@@ -21,6 +21,7 @@ public interface IWell extends Comparable<IWell>, IMeasurement {
 	String TARGET_NAME = "Target Name";
 	String CROSSING_POINT = "Crossing Point";
 	String SAMPLE_SUBSET = "Sample Subset";
+	String SAMPLE_TYPE = "Sample Type";
 
 	String getLabel();
 
@@ -55,6 +56,10 @@ public interface IWell extends Comparable<IWell>, IMeasurement {
 	String getSampleId();
 
 	String getSampleSubset();
+
+	SampleType getSampleType();
+
+	void setSampleType(SampleType sampleType);
 
 	String getTargetName();
 
