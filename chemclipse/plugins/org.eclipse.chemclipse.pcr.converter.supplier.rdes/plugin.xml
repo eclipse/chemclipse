@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.pcr.converter.plateSupplier">
+      <PlateSupplier
+            description="Writes Real-time PCR Data Essential Spreadsheet Format (RDES) qPCR experiments."
+            exportConverter="org.eclipse.chemclipse.pcr.converter.supplier.rdes.core.PCRExportConverter"
+            fileExtension=".tsv"
+            fileName=""
+            filterName="RDES (*.tsv)"
+            id="org.eclipse.chemclipse.pcr.converter.supplier.rdes"
+            importConverter="org.eclipse.chemclipse.pcr.converter.supplier.rdes.core.PCRImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.pcr.converter.supplier.rdes.core.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </PlateSupplier>
+   </extension>
+</plugin>

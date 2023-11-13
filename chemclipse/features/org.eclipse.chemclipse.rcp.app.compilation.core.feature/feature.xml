@@ -304,4 +304,8 @@
          id="org.eclipse.chemclipse.pcr.converter.supplier.rdml.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.pcr.converter.supplier.rdes.feature"
+         version="0.0.0"/>
+
 </feature>
