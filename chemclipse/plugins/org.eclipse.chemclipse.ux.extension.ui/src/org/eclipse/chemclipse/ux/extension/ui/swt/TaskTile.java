@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
 import org.eclipse.core.runtime.IStatus;
@@ -26,7 +27,6 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -263,9 +263,7 @@ public class TaskTile extends Composite {
 			fontSize = 18;
 		}
 		//
-		Font font = new Font(getDisplay(), "Arial", fontSize, SWT.BOLD); //$NON-NLS-1$
-		textSection.setFont(font);
-		font.dispose();
+		textSection.setFont(Fonts.getCachedFont(getDisplay(), "Arial", fontSize, SWT.BOLD)); //$NON-NLS-1$
 	}
 
 	public void updateFromDefinition() {

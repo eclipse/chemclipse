@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,7 +23,7 @@ import org.eclipse.swt.graphics.Point;
 
 public class Fonts {
 
-	private static Map<String, Font> fonts = new HashMap<String, Font>();
+	private static Map<String, Font> fonts = new HashMap<>();
 
 	/**
 	 * Don't dispose the font as a cached version is used.
@@ -40,9 +40,7 @@ public class Fonts {
 		String fontId = name + height + style;
 		if(!fonts.containsKey(fontId)) {
 			Font font = new Font(display, name, height, style);
-			if(font != null) {
-				fonts.put(fontId, font);
-			}
+			fonts.put(fontId, font);
 		}
 		//
 		return fonts.containsKey(fontId) ? fonts.get(fontId) : DisplayUtils.getDisplay().getSystemFont();

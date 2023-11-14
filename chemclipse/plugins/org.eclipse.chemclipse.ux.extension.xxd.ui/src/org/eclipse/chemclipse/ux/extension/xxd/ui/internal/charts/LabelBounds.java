@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -21,11 +22,13 @@ import org.eclipse.swt.graphics.Path;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Region;
 import org.eclipse.swt.graphics.Transform;
+import org.eclipse.swtchart.Resources;
 
 public class LabelBounds {
 
-	public static final boolean DEBUG_LOG = false;
 	public static final boolean DEBUG_FENCES = false;
+	//
+	private static final Logger logger = Logger.getLogger(LabelBounds.class);
 	//
 	private final float[] pointArray = new float[10];
 	private final int[] transformedPoints = new int[10];
@@ -160,9 +163,7 @@ public class LabelBounds {
 			float b = (x2 * y1 - x1 * y2) / dx;
 			w = Math.min((other.getLeftY() - b) / m, getRightX());
 		}
-		if(DEBUG_LOG) {
-			System.out.println("w=" + w + " rx=" + getRightX() + ", olx=" + other.getLeftX());
-		}
+		logger.info("w=" + w + " rx=" + getRightX() + ", olx=" + other.getLeftX());
 		return w - other.getLeftX();
 	}
 
@@ -182,19 +183,17 @@ public class LabelBounds {
 			float b = (x2 * y1 - x1 * y2) / dx;
 			h = Math.min(Math.max(m * x + b, getTopY()), getBottomY());
 		}
-		if(DEBUG_LOG) {
-			System.out.println("h=" + h + ", by = " + getBottomY());
-		}
+		logger.info("h=" + h + ", by = " + getBottomY());
 		return getBottomY() - h + (other.getCy() - getCy());
 	}
 
 	public void paintBounds() {
 
 		gc.setTransform(null);
-		Color old_fg = gc.getForeground();
-		Font old_font = gc.getFont();
+		Color oldForeground = gc.getForeground();
+		Font oldFont = gc.getFont();
 		try {
-			Font font = new Font(gc.getDevice(), PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_NAME, 8, PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
+			Font font = Resources.getFont(PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_NAME, 8, PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
 			gc.setFont(font);
 			gc.setLineStyle(SWT.LINE_DASH);
 			gc.drawPolygon(transformedPoints);
@@ -216,7 +215,7 @@ public class LabelBounds {
 					float m = (y2 - y1) / dx;
 					float b = (x2 * y1 - x1 * y2) / dx;
 					float y = m * x + b;
-					System.out.println("f(" + x + ")=" + y);
+					logger.info("f(" + x + ")=" + y);
 					if(sx == x) {
 						path.moveTo(x, y);
 					} else {
@@ -251,8 +250,8 @@ public class LabelBounds {
 			}
 			font.dispose();
 		} finally {
-			gc.setFont(old_font);
-			gc.setForeground(old_fg);
+			gc.setFont(oldFont);
+			gc.setForeground(oldForeground);
 		}
 	}
 
