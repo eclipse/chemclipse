@@ -194,7 +194,7 @@ public class LabelBounds {
 		Color old_fg = gc.getForeground();
 		Font old_font = gc.getFont();
 		try {
-			Font font = new Font(gc.getDevice(), PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_NAME, 8, PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
+			Font font = Resources.getFont(PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_NAME, 8, PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
 			gc.setFont(font);
 			gc.setLineStyle(SWT.LINE_DASH);
 			gc.drawPolygon(transformedPoints);
