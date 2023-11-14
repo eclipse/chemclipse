@@ -15,5 +15,5 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public interface IChromatogramEditor extends IChemClipseEditor {
 
-	IChromatogramSelection<?, ?>getChromatogramSelection();
+	IChromatogramSelection<?, ?> getChromatogramSelection();
 }

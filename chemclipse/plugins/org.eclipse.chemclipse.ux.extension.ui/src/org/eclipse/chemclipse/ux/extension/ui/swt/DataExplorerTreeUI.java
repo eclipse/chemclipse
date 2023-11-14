@@ -21,6 +21,7 @@ import java.util.function.Function;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.ui.l10n.Messages;
 import org.eclipse.chemclipse.ux.extension.ui.listener.DataExplorerDragListener;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
@@ -131,7 +132,7 @@ public class DataExplorerTreeUI {
 				try {
 					persistentPreferenceStore.save();
 				} catch(IOException e) {
-					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), "Storing the preferences failed.", e));
+					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), Messages.storingPreferencesFailed, e));
 				}
 			}
 		}

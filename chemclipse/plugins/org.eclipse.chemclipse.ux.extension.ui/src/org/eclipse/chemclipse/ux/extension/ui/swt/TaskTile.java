@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -63,7 +63,7 @@ public class TaskTile extends Composite {
 			/*
 			 * Warn and create default colors.
 			 */
-			logger.warn("The task tile requires at least 4 colors (active, inactive, title, description).");
+			logger.warn("The task tile requires at least 4 colors (active, inactive, title, description)."); //$NON-NLS-1$
 			Color colorActive = TaskTileContainer.DEFAULT_COLOR_ACTIVE;
 			Color colorInactive = TaskTileContainer.DEFAULT_COLOR_INACTIVE;
 			Color colorTitle = TaskTileContainer.DEFAULT_COLOR_TITLE;
@@ -101,7 +101,7 @@ public class TaskTile extends Composite {
 		}
 		//
 		textSection.setText(section);
-		textDesciption.setText(description == null ? "" : description);
+		textDesciption.setText(description == null ? "" : description); //$NON-NLS-1$
 	}
 
 	public void setActive() {
@@ -139,7 +139,7 @@ public class TaskTile extends Composite {
 	private Label addTextSection(Composite parent) {
 
 		Label label = new Label(parent, SWT.NONE);
-		label.setText("");
+		label.setText(""); //$NON-NLS-1$
 		label.setLayoutData(getGridData(SWT.BEGINNING, SWT.END, 1));
 		label.setForeground(colors[2]);
 		addControlListener(label);
@@ -149,7 +149,7 @@ public class TaskTile extends Composite {
 	private Label addTextDescription(Composite parent) {
 
 		Label label = new Label(parent, SWT.CENTER | SWT.WRAP);
-		label.setText("");
+		label.setText(""); //$NON-NLS-1$
 		label.setLayoutData(getGridData(SWT.CENTER, SWT.BEGINNING, 2));
 		label.setForeground(colors[3]);
 		addControlListener(label);
@@ -234,7 +234,7 @@ public class TaskTile extends Composite {
 			try {
 				definitionConsumer.accept(definition);
 			} catch(RuntimeException e) {
-				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, "TaskTile", "invoke of consumer failed", e));
+				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, "TaskTile", "invoke of consumer failed", e)); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}
@@ -263,7 +263,7 @@ public class TaskTile extends Composite {
 			fontSize = 18;
 		}
 		//
-		Font font = new Font(getDisplay(), "Arial", fontSize, SWT.BOLD);
+		Font font = new Font(getDisplay(), "Arial", fontSize, SWT.BOLD); //$NON-NLS-1$
 		textSection.setFont(font);
 		font.dispose();
 	}
