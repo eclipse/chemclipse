@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
-import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -42,7 +41,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
@@ -58,7 +56,6 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 	//
 	private Button buttonToolbarInfo;
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
-	private Combo comboChannels;
 	private AtomicReference<ChartPCR> chartControl = new AtomicReference<>();
 	private IPlate plate = null;
 	//
@@ -76,7 +73,6 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 
 		this.plate = plate;
 		updateLabel();
-		updateComboChannels();
 		updateChartData();
 		colorCompensation = !plate.getWells().stream().allMatch(w -> w.getActiveChannel() != null //
 				&& !w.getActiveChannel().getColorCompensatedFluorescence().isEmpty());
@@ -85,17 +81,6 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 	private void updateLabel() {
 
 		toolbarInfo.get().setText(plate != null ? plate.getName() : "--");
-	}
-
-	private void updateComboChannels() {
-
-		if(plate != null) {
-			List<String> activeChannels = plate.getActiveChannels();
-			comboChannels.setItems(plate.getActiveChannels().toArray(new String[activeChannels.size()]));
-			comboChannels.select(plate.getActiveChannel());
-		} else {
-			comboChannels.setItems("");
-		}
 	}
 
 	private void updateChartData() {
@@ -131,7 +116,6 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		composite.setLayout(new GridLayout(7, false));
 		//
 		createToolbarInfo(composite);
-		comboChannels = createComboChannels(composite);
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
@@ -195,22 +179,6 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		toolbarInfo.set(informationUI);
 	}
 
-	private Combo createComboChannels(Composite parent) {
-
-		Combo combo = EnhancedCombo.create(parent, SWT.READ_ONLY);
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				updateChart();
-			}
-		});
-		//
-		return combo;
-	}
-
 	private void createChart(Composite parent) {
 
 		ChartPCR chart = new ChartPCR(parent, SWT.NONE);
@@ -238,7 +206,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 			//
 			for(IWell well : plate.getWells()) {
 				try {
-					int channelNumber = comboChannels.getSelectionIndex();
+					int channelNumber = plate.getActiveChannel();
 					IChannel channel = well.getChannels().get(channelNumber);
 					Color color = getWellColor(well, colorCodes);
 					ILineSeriesData lineSeriesData = getLineSeriesData(plate, well, channel, color);
