@@ -100,6 +100,7 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 				String activeSubset = combo.getText();
 				if(plate != null) {
 					plate.setActiveSubset(activeSubset);
+					fireUpdate(e.widget.getDisplay(), plate);
 					fireUpdate(e.widget.getDisplay(), pcrPlate.getSelectedWell());
 					pcrPlate.refresh();
 				}
