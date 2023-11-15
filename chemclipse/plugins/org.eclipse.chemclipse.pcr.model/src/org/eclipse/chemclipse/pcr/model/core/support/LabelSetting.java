@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,14 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core.support;
 
+import org.eclipse.chemclipse.pcr.model.l10n.Messages;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum LabelSetting implements ILabel {
-	SAMPLENAME("Sample ID"), //
-	COORDINATE("Coordinate"), //
-	COORDINATE_SAMPLENAME("Coordinate + Sample ID"); //
+	SAMPLENAME(Messages.sampleID), //
+	COORDINATE(Messages.coordinate), //
+	COORDINATE_SAMPLENAME(Messages.sampleCoordinate); //
 
-	private String label = "";
+	private String label = ""; //$NON-NLS-1$
 
 	private LabelSetting(String label) {
 

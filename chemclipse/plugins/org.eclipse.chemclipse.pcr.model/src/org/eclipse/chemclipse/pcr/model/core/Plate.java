@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.model.core.AbstractMeasurementInfo;
+import org.eclipse.chemclipse.pcr.model.l10n.Messages;
 
 public class Plate extends AbstractMeasurementInfo implements IPlate {
 
@@ -74,8 +75,8 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 		//
 		List<String> sampleSubsets = new ArrayList<>(subsets);
 		Collections.sort(sampleSubsets);
-		if(sampleSubsets.isEmpty() || !sampleSubsets.get(0).equals(ALL_SUBSETS)) {
-			sampleSubsets.set(0, ALL_SUBSETS); // All subsets
+		if(sampleSubsets.isEmpty() || !sampleSubsets.get(0).equals(Messages.allSubsets)) {
+			sampleSubsets.set(0, Messages.allSubsets); // All subsets
 		}
 		//
 		return sampleSubsets;
@@ -84,7 +85,7 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 	@Override
 	public void setActiveSubset(String activeSubset) {
 
-		activeSubset = (ALL_SUBSETS.equals(activeSubset)) ? "" : activeSubset;
+		activeSubset = (Messages.allSubsets.equals(activeSubset)) ? "" : activeSubset;
 		//
 		for(IWell well : wells) {
 			well.setActiveSubset(activeSubset);

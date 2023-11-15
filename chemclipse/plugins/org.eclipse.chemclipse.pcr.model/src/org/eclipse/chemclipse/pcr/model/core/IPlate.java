@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,12 +19,10 @@ import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 
 public interface IPlate extends IMeasurementInfo {
 
-	String ALL_SUBSETS = "All Subsets";
-	//
-	String NAME = "name";
-	String DATE = "Date";
-	String NOISEBAND = "Noiseband";
-	String THRESHOLD = "Threshold";
+	String NAME = "name"; //$NON-NLS-1$
+	String DATE = "Date"; //$NON-NLS-1$
+	String NOISEBAND = "Noiseband"; //$NON-NLS-1$
+	String THRESHOLD = "Threshold"; //$NON-NLS-1$
 
 	List<String> getActiveChannels();
 

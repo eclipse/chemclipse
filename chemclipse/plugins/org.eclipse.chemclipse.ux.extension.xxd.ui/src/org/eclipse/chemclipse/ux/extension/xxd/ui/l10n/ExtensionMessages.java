@@ -37,6 +37,7 @@ public class ExtensionMessages extends NLS {
 	public static String editDisabled;
 	public static String deleteReferences;
 	public static String shallDeleteReferences;
+	public static String channelSpecification;
 	public static String chromatogramEditor;
 	public static String saveChromatogram;
 	public static String chromatogram;
@@ -109,6 +110,7 @@ public class ExtensionMessages extends NLS {
 	public static String areaTotal;
 	public static String startRetentionTime;
 	public static String stopRetentionTime;
+	public static String wells;
 	public static String width;
 	public static String scanNumberAtPeakMax;
 	public static String signalToNoise;
@@ -152,6 +154,7 @@ public class ExtensionMessages extends NLS {
 	public static String dataFile;
 	public static String advice;
 	public static String vial;
+	public static String subsetSelection;
 	public static String substance;
 	public static String multiplier;
 	public static String injectionVolume;
@@ -258,6 +261,7 @@ public class ExtensionMessages extends NLS {
 	public static String noSystemOptionsAvailable;
 	public static String rememberDecision;
 	public static String resetDefaults;
+	public static String resetPlate;
 	public static String useSpecificOptions;
 	public static String processorOffersNoOptions;
 	public static String editProcessorOptions;
