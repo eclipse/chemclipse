@@ -205,6 +205,9 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			//
 			for(IWell well : plate.getWells()) {
+				if(!well.isActiveSubset()) {
+					continue;
+				}
 				try {
 					int channelNumber = plate.getActiveChannel();
 					IChannel channel = well.getChannels().get(channelNumber);
