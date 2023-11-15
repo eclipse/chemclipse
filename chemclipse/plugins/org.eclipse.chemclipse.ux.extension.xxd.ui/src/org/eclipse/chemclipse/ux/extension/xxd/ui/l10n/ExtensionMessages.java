@@ -309,6 +309,10 @@ public class ExtensionMessages extends NLS {
 	public static String openDataTypeFiles;
 	public static String processorQuickAccess;
 	public static String selectProcessorToolbarItems;
+	public static String cycle;
+	public static String exportFailed;
+	public static String fluorescence;
+	public static String pcrExport;
 	//
 	static {
 		NLS.initializeMessages("org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.messages", ExtensionMessages.class); //$NON-NLS-1$

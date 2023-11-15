@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.xxd.process.ui.menu.IMenuIcon;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -53,7 +54,7 @@ import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 
 public class ChartPCR extends LineChart {
 
-	private static final String MENU_ICON = "org.eclipse.chemclipse.xxd.process.ui.menu.icon";
+	private static final String MENU_ICON = "org.eclipse.chemclipse.xxd.process.ui.menu.icon"; //$NON-NLS-1$
 	private static final Logger logger = Logger.getLogger(ChartPCR.class);
 	//
 	private IPlate plate;
@@ -101,8 +102,8 @@ public class ChartPCR extends LineChart {
 	private void setPrimaryAxisSet(IChartSettings chartSettings) {
 
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
-		primaryAxisSettingsX.setTitle("Cycle");
-		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0"), new DecimalFormatSymbols(Locale.ENGLISH)));
+		primaryAxisSettingsX.setTitle(ExtensionMessages.cycle);
+		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0"), new DecimalFormatSymbols(Locale.ENGLISH))); //$NON-NLS-1$
 		if(PreferencesSupport.isDarkTheme()) {
 			primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		} else {
@@ -112,8 +113,8 @@ public class ChartPCR extends LineChart {
 		primaryAxisSettingsX.setVisible(true);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
-		primaryAxisSettingsY.setTitle("Fluorescence");
-		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
+		primaryAxisSettingsY.setTitle(ExtensionMessages.fluorescence);
+		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH))); //$NON-NLS-1$
 		if(PreferencesSupport.isDarkTheme()) {
 			primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		} else {
@@ -148,11 +149,11 @@ public class ChartPCR extends LineChart {
 					IConfigurationElement[] config = registry.getConfigurationElementsFor(MENU_ICON);
 					try {
 						for(IConfigurationElement element : config) {
-							final String id = element.getAttribute("id");
+							final String id = element.getAttribute("id"); //$NON-NLS-1$
 							if(!(supplier.getId().equals(id))) {
 								continue;
 							}
-							final Object object = element.createExecutableExtension("class");
+							final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 							if(object instanceof IMenuIcon menuIcon) {
 								return menuIcon.getImage();
 							}
@@ -176,9 +177,9 @@ public class ChartPCR extends LineChart {
 						return;
 					}
 					FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
-					fileDialog.setText("PCR Export");
-					fileDialog.setFileName(plate.getName() + "." + supplier.getFileExtension());
-					fileDialog.setFilterExtensions(new String[]{"*" + supplier.getFileExtension()});
+					fileDialog.setText(ExtensionMessages.pcrExport);
+					fileDialog.setFileName(plate.getName() + "." + supplier.getFileExtension()); //$NON-NLS-1$
+					fileDialog.setFilterExtensions(new String[]{"*" + supplier.getFileExtension()}); //$NON-NLS-1$
 					fileDialog.setFilterNames(new String[]{supplier.getFilterName()});
 					String pathname = fileDialog.open();
 					if(pathname != null) {
@@ -196,7 +197,7 @@ public class ChartPCR extends LineChart {
 							});
 						} catch(InvocationTargetException e) {
 							IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-							processingInfo.addErrorMessage("PCR Export", "Export failed", e.getCause());
+							processingInfo.addErrorMessage(ExtensionMessages.pcrExport, ExtensionMessages.exportFailed, e.getCause());
 							ProcessingInfoPartSupport.getInstance().update(processingInfo);
 						} catch(InterruptedException e) {
 							Thread.currentThread().interrupt();
