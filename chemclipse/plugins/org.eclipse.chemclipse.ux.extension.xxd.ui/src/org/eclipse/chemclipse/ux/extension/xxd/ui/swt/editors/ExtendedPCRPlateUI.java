@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
@@ -135,7 +136,7 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Reset the plate");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -201,7 +202,7 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 			comboSubsets.setItems(subsets.toArray(new String[subsets.size()]));
 			setComboSelection(subsets, comboSubsets, selectionIndex);
 		} else {
-			comboSubsets.setItems(new String[]{""});
+			comboSubsets.setItems("");
 		}
 	}
 
@@ -213,7 +214,7 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 			comboChannels.setItems(channels.toArray(new String[channels.size()]));
 			setComboSelection(channels, comboChannels, selectionIndex);
 		} else {
-			comboChannels.setItems(new String[]{""});
+			comboChannels.setItems("");
 		}
 	}
 
@@ -222,7 +223,7 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 		/*
 		 * Set the last selection.
 		 */
-		if(items.size() > 0) {
+		if(!items.isEmpty()) {
 			if(selectionIndex < 0) {
 				combo.select(0);
 			} else {
