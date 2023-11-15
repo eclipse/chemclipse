@@ -35,8 +35,10 @@ public class ExtensionMessages extends NLS {
 	public static String removeLibraryFromSearch;
 	public static String editEnabled;
 	public static String editDisabled;
+	public static String defaultLineColor;
 	public static String deleteReferences;
 	public static String shallDeleteReferences;
+	public static String channelSpecification;
 	public static String chromatogramEditor;
 	public static String saveChromatogram;
 	public static String chromatogram;
@@ -44,6 +46,7 @@ public class ExtensionMessages extends NLS {
 	public static String chromatogramEditorTSD;
 	public static String chromatogramEditorISD;
 	public static String quantitationEditor;
+	public static String edit;
 	public static String editorNMR;
 	public static String editorXIR;
 	public static String sequenceEditor;
@@ -55,9 +58,13 @@ public class ExtensionMessages extends NLS {
 	public static String instruments;
 	public static String instrument;
 	public static String createNewInstrument;
+	public static String editSelectedColorCode;
 	public static String editSelectedInstrument;
+	public static String removeSelectedColorCodes;
 	public static String removeSelectedInstrument;
+	public static String reallyDeleteSelectedCode;
 	public static String reallyDeleteSelectedInstrument;
+	public static String remove;
 	public static String removeAllInstruments;
 	public static String reallyDeleteAllInstrument;
 	public static String importInstrumentList;
@@ -80,6 +87,7 @@ public class ExtensionMessages extends NLS {
 	public static String nameMustBeSpecified;
 	public static String nameMustNotContain;
 	public static String color;
+	public static String colorCodes;
 	public static String identifier;
 	public static String description;
 	public static String area;
@@ -109,6 +117,7 @@ public class ExtensionMessages extends NLS {
 	public static String areaTotal;
 	public static String startRetentionTime;
 	public static String stopRetentionTime;
+	public static String wells;
 	public static String width;
 	public static String scanNumberAtPeakMax;
 	public static String signalToNoise;
@@ -152,6 +161,7 @@ public class ExtensionMessages extends NLS {
 	public static String dataFile;
 	public static String advice;
 	public static String vial;
+	public static String subsetSelection;
 	public static String substance;
 	public static String multiplier;
 	public static String injectionVolume;
@@ -176,6 +186,7 @@ public class ExtensionMessages extends NLS {
 	public static String formula;
 	public static String contributor;
 	public static String referenceID;
+	public static String referenceLabel;
 	public static String startTimeMin;
 	public static String centerTimeMin;
 	public static String stopTimeMin;
@@ -258,6 +269,7 @@ public class ExtensionMessages extends NLS {
 	public static String noSystemOptionsAvailable;
 	public static String rememberDecision;
 	public static String resetDefaults;
+	public static String resetPlate;
 	public static String useSpecificOptions;
 	public static String processorOffersNoOptions;
 	public static String editProcessorOptions;
@@ -276,7 +288,10 @@ public class ExtensionMessages extends NLS {
 	public static String generic;
 	public static String na;
 	public static String mandatory;
+	public static String add;
+	public static String addColorCode;
 	public static String additional;
+	public static String addRemoveColorCodes;
 	public static String chromatogramIntensityYAxis;
 	public static String title;
 	public static String format;
@@ -309,6 +324,11 @@ public class ExtensionMessages extends NLS {
 	public static String openDataTypeFiles;
 	public static String processorQuickAccess;
 	public static String selectProcessorToolbarItems;
+	public static String cycle;
+	public static String exportFailed;
+	public static String fluorescence;
+	public static String pcrExport;
+	public static String plateChart;
 	//
 	static {
 		NLS.initializeMessages("org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.messages", ExtensionMessages.class); //$NON-NLS-1$
