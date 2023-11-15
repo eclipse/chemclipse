@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,8 +12,26 @@
 package org.eclipse.chemclipse.tsd.model.core;
 
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 
 public abstract class AbstractChromatogramTSD extends AbstractChromatogram<IChromatogramPeakTSD> implements IChromatogramTSD {
 
 	private static final long serialVersionUID = 7761066909104550509L;
+	private IChromatogram<?> chromatogram = null;
+
+	public AbstractChromatogramTSD() {
+
+		this(null);
+	}
+
+	public AbstractChromatogramTSD(IChromatogram<?> chromatogram) {
+
+		this.chromatogram = chromatogram;
+	}
+
+	@Override
+	public IChromatogram<?> getChromatogram() {
+
+		return chromatogram;
+	}
 }

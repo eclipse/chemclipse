@@ -15,6 +15,13 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 
 public interface IChromatogramTSD extends IChromatogram<IChromatogramPeakTSD> {
 
+	/**
+	 * This could be null or a GC-MS, GCxGC, HPLC-DAD chromatogram.
+	 * 
+	 * @return {@link IChromatogram}
+	 */
+	IChromatogram<?> getChromatogram();
+
 	String getLabelAxisX();
 
 	String getLabelAxisY();

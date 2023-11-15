@@ -19,15 +19,24 @@ import org.osgi.util.tracker.ServiceTracker;
 public class Activator implements BundleActivator {
 
 	private static Activator plugin;
+	private static BundleContext context;
+	//
 	private ServiceTracker<IConverterServiceTSD, IConverterServiceTSD> converterServiceTracker = null;
+
+	public static BundleContext getContext() {
+
+		return context;
+	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
-	public void start(BundleContext context) throws Exception {
+	public void start(BundleContext bundleContext) throws Exception {
 
 		plugin = this;
+		Activator.context = bundleContext;
+		//
 		converterServiceTracker = new ServiceTracker<>(context, IConverterServiceTSD.class, null);
 		converterServiceTracker.open();
 	}
@@ -39,7 +48,9 @@ public class Activator implements BundleActivator {
 	public void stop(BundleContext bundleContext) throws Exception {
 
 		converterServiceTracker.close();
+		//
 		plugin = null;
+		Activator.context = null;
 	}
 
 	public static Activator getDefault() {
