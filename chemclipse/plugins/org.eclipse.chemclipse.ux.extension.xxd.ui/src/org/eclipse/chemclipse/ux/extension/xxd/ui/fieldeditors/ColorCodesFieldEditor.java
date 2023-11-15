@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ColorCodeDialog;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCode;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCodes;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ColorCodeTableUI;
@@ -67,7 +68,7 @@ public class ColorCodesFieldEditor extends FieldEditor {
 	private void createLabelSection(Composite parent) {
 
 		Label label = new Label(parent, SWT.LEFT);
-		label.setText("Add/Remove Color Codes");
+		label.setText(ExtensionMessages.addRemoveColorCodes);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.horizontalSpan = NUMBER_COLUMNS;
@@ -107,8 +108,8 @@ public class ColorCodesFieldEditor extends FieldEditor {
 	private Button createButtonAdd(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Add");
-		button.setToolTipText("Add a color code.");
+		button.setText(ExtensionMessages.add);
+		button.setToolTipText(ExtensionMessages.addColorCode);
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -130,8 +131,8 @@ public class ColorCodesFieldEditor extends FieldEditor {
 	private Button createButtonEdit(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Edit");
-		button.setToolTipText("Edit the selected color code.");
+		button.setText(ExtensionMessages.edit);
+		button.setToolTipText(ExtensionMessages.editSelectedColorCode);
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -157,13 +158,13 @@ public class ColorCodesFieldEditor extends FieldEditor {
 	private Button createButtonRemove(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Remove");
-		button.setToolTipText("Remove the selected color codes.");
+		button.setText(ExtensionMessages.remove);
+		button.setToolTipText(ExtensionMessages.removeSelectedColorCodes);
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Color Codes", "Do you want to delete the selected color codes?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), ExtensionMessages.colorCodes, ExtensionMessages.reallyDeleteSelectedCode)) {
 					List<String> removeKeys = new ArrayList<>();
 					IStructuredSelection structuredSelection = (IStructuredSelection)colorCodeTableUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {
