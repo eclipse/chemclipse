@@ -233,8 +233,32 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 				}
 			}
 			//
+			addLine(lineSeriesDataList, IPlate.NOISEBAND);
+			addLine(lineSeriesDataList, IPlate.THRESHOLD);
 			chartControl.get().addSeriesData(lineSeriesDataList);
 		}
+	}
+
+	private void addLine(List<ILineSeriesData> lineSeriesDataList, String type) {
+
+		if(plate == null) {
+			return;
+		}
+		String headerData = plate.getHeaderData(type);
+		if(headerData == null || headerData.isEmpty()) {
+			return;
+		}
+		double maxY = Double.parseDouble(headerData);
+		double[] array = new double[45];
+		Arrays.fill(array, maxY);
+		ISeriesData seriesData = new SeriesData(array, type);
+		LineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+		lineSeriesSettings.setEnableArea(false);
+		lineSeriesSettings.setLineWidth(3);
+		lineSeriesSettings.setSymbolType(PlotSymbolType.NONE);
+		lineSeriesSettings.setLineColor(getDisplay().getSystemColor(SWT.COLOR_RED));
+		lineSeriesDataList.add(lineSeriesData);
 	}
 
 	private Color getWellColor(IWell well, ColorCodes colorCodes) {
