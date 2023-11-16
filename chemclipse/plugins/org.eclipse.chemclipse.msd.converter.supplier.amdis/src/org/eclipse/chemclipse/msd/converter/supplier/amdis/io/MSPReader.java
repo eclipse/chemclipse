@@ -39,6 +39,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.VendorLibraryMa
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
@@ -68,6 +69,13 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 	private static final Pattern retentionIndexPattern = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern dataPattern = Pattern.compile("(.*)(Num Peaks:)(\\s*)(\\d*)(.*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 	private static final Pattern ionPattern = Pattern.compile("([+]?\\d+\\.?\\d*)([\t ,;:]+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)");
+	private static final Pattern precursorTypePattern = Pattern.compile("(Precursor_type:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern precursorMassPattern = Pattern.compile("(PrecursorMZ:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern instrumentPattern = Pattern.compile("(Instrument:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern collisionEnergyPattern = Pattern.compile("(Collision_energy:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern exactMassPattern = Pattern.compile("(ExactMass:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ionModePattern = Pattern.compile("(Ion_mode:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern spectrumTypePattern = Pattern.compile("(Spectrum_type:)(.*)", Pattern.CASE_INSENSITIVE);
 	//
 	private static final String RETENTION_INDICES_DELIMITER = ", ";
 
@@ -242,6 +250,31 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 		massSpectrum.setRelativeRetentionTime(relativeRetentionTime);
 		String retentionIndices = extractContentAsString(massSpectrumData, retentionIndexPattern, 2);
 		extractRetentionIndices(massSpectrum, retentionIndices, RETENTION_INDICES_DELIMITER);
+		//
+		String instrument = extractContentAsString(massSpectrumData, instrumentPattern, 2);
+		massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_INSTRUMENT_NAME, instrument);
+		//
+		String ionMode = extractContentAsString(massSpectrumData, ionModePattern, 2);
+		if(ionMode.equals("POSITIVE")) {
+			massSpectrum.setPolarity("+");
+		} else if(ionMode.equals("NEGATIVE")) {
+			massSpectrum.setPolarity("-");
+		}
+		/*
+		 * MS/MS
+		 */
+		String spectrumType = extractContentAsString(massSpectrumData, spectrumTypePattern, 2);
+		if(spectrumType.equals("MS2")) {
+			massSpectrum.setMassSpectrometer((short)2);
+		}
+		String precursorType = extractContentAsString(massSpectrumData, precursorTypePattern, 2);
+		massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_PRECURSOR_TYPE, precursorType);
+		double precursorMZ = extractContentAsDouble(massSpectrumData, precursorMassPattern);
+		massSpectrum.setPrecursorIon(precursorMZ);
+		double exactMass = extractContentAsDouble(massSpectrumData, exactMassPattern);
+		massSpectrum.setNeutralMass(exactMass);
+		String collisionEnergy = extractContentAsString(massSpectrumData, collisionEnergyPattern, 2);
+		massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_COLLISION_ENERGY, collisionEnergy);
 		/*
 		 * Extracts all ions and stored them.
 		 */

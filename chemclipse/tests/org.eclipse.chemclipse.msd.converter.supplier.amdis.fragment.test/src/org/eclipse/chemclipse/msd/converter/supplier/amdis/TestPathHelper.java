@@ -46,6 +46,7 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_LIB_4_MSP = "testData/files/import/msp/Lib4.MSP";
 	public static final String TESTFILE_IMPORT_SYNONYMS = "testData/files/import/msp/Synonyms.MSP";
 	public static final String TESTFILE_IMPORT_GOLMDB_TEST_MSP = "testData/files/import/msp/GolmDB-Test.MSP";
+	public static final String TESTFILE_IMPORT_MASSBANK_TEST_MSP = "testData/files/import/msp/MassBank.msp";
 	/*
 	 * IMPORT ELU
 	 */

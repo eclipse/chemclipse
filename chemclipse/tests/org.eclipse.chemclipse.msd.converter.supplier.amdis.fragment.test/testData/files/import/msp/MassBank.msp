@@ -1,0 +1,27 @@
+Name: Pyrophen
+Synon: N-[(1S)-1-(4-methoxy-6-oxopyran-2-yl)-2-phenylethyl]acetamide
+DB#: MSBNK-AAFC-AC000854
+InChIKey: VFMQMACUYWGDOJ-AWEZNQCLSA-N
+InChI: InChI=1S/C16H17NO4/c1-11(18)17-14(8-12-6-4-3-5-7-12)15-9-13(20-2)10-16(19)21-15/h3-7,9-10,14H,8H2,1-2H3,(H,17,18)/t14-/m0/s1
+SMILES: CC(=O)N[C@@H](CC1=CC=CC=C1)C2=CC(=CC(=O)O2)OC
+Precursor_type: [M+H]+
+Spectrum_type: MS2
+PrecursorMZ: 288.1225
+Instrument_type: LC-ESI-ITFT
+Instrument: Q-Exactive Orbitrap Thermo Scientific
+Ion_mode: POSITIVE
+Collision_energy: 30(NCE)
+Formula: C16H17NO4
+MW: 287
+ExactMass: 287.11575
+Comments: Parent=288.1225
+Splash: splash10-004j-1940000000-b1bd14eb30f6afd2739e
+Num Peaks: 8
+91.0542 245
+125.0233 999
+154.0499 80
+155.0577 355
+185.0961 349
+200.107 45
+229.0859 142
+246.1125 734
