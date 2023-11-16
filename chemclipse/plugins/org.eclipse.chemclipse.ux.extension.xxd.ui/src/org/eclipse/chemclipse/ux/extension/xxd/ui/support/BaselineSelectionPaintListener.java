@@ -19,7 +19,7 @@ import org.eclipse.swtchart.ICustomPaintListener;
 
 public class BaselineSelectionPaintListener implements ICustomPaintListener {
 
-	private final static int VERTICAL_MARKER_SIZE = 10;
+	private static final int VERTICAL_MARKER_SIZE = 10;
 	//
 	private int x1;
 	private int y1;

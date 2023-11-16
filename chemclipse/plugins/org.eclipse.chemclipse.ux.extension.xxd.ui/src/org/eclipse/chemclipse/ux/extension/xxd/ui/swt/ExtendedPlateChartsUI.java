@@ -43,6 +43,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.SeriesData;
@@ -55,6 +56,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 	private static final Logger logger = Logger.getLogger(ExtendedPlateChartsUI.class);
 	//
 	private Button buttonToolbarInfo;
+	private Button colorCompensationButton;
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private AtomicReference<ChartPCR> chartControl = new AtomicReference<>();
 	private IPlate plate = null;
@@ -74,8 +76,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		this.plate = plate;
 		updateLabel();
 		updateChartData();
-		colorCompensation = !plate.getWells().stream().allMatch(w -> w.getActiveChannel() != null //
-				&& !w.getActiveChannel().getColorCompensatedFluorescence().isEmpty());
+		updateColorCompensation();
 	}
 
 	private void updateLabel() {
@@ -91,6 +92,16 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		} else {
 			chartControl.get().deleteSeries();
 		}
+	}
+
+	private void updateColorCompensation() {
+
+		if(plate == null) {
+			return;
+		}
+		colorCompensation = plate.getWells().stream().anyMatch(w -> w.getChannels().values() //
+				.stream().anyMatch(c -> !c.getColorCompensatedFluorescence().isEmpty()));
+		colorCompensationButton.setSelection(colorCompensation);
 	}
 
 	private void createControl() {
@@ -120,7 +131,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
-		createColorCompensationButton(composite);
+		colorCompensationButton = createColorCompensationButton(composite);
 		createSettingsButton(composite);
 	}
 
@@ -152,7 +163,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		});
 	}
 
-	private void createColorCompensationButton(Composite parent) {
+	private Button createColorCompensationButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.TOGGLE);
 		button.setToolTipText("Toggle Color Compensation");
@@ -169,6 +180,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 				updateChart();
 			}
 		});
+		return button;
 	}
 
 	private void createToolbarInfo(Composite parent) {
@@ -221,8 +233,32 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 				}
 			}
 			//
+			addLine(lineSeriesDataList, IPlate.NOISEBAND);
+			addLine(lineSeriesDataList, IPlate.THRESHOLD);
 			chartControl.get().addSeriesData(lineSeriesDataList);
 		}
+	}
+
+	private void addLine(List<ILineSeriesData> lineSeriesDataList, String type) {
+
+		if(plate == null) {
+			return;
+		}
+		String headerData = plate.getHeaderData(type);
+		if(headerData == null || headerData.isEmpty()) {
+			return;
+		}
+		double maxY = Double.parseDouble(headerData);
+		double[] array = new double[45];
+		Arrays.fill(array, maxY);
+		ISeriesData seriesData = new SeriesData(array, type);
+		LineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+		lineSeriesSettings.setEnableArea(false);
+		lineSeriesSettings.setLineWidth(3);
+		lineSeriesSettings.setSymbolType(PlotSymbolType.NONE);
+		lineSeriesSettings.setLineColor(getDisplay().getSystemColor(SWT.COLOR_RED));
+		lineSeriesDataList.add(lineSeriesData);
 	}
 
 	private Color getWellColor(IWell well, ColorCodes colorCodes) {
