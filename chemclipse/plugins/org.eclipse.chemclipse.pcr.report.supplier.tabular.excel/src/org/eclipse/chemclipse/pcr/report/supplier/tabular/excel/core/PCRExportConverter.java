@@ -173,11 +173,11 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 				String sampleSubset = dataMap.getOrDefault(IWell.SAMPLE_SUBSET, "");
 				if(isSubsetMatch(sampleSubset, targetSubset)) {
 					XSSFRow data = sheet.createRow(sheet.getLastRowNum() + 1);
-					String sampleNumber = dataMap.getOrDefault(IWell.SAMPLE_ID, "");
+					String sampleName = well.getSampleName();
 					String request = "";
 					if(separator != null && !separator.isEmpty()) {
-						String[] sampleSplit = sampleNumber.split(separator);
-						sampleNumber = sampleSplit[0];
+						String[] sampleSplit = sampleName.split(separator);
+						sampleName = sampleSplit[0];
 						if(sampleSplit.length > 1) {
 							request = sampleSplit[1];
 						}
@@ -186,7 +186,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 					positionCell.setCellValue(position.getRow() + position.getColumn());
 					positionCell.setCellStyle(style);
 					XSSFCell sampleNumberCell = data.createCell(1);
-					sampleNumberCell.setCellValue(sampleNumber);
+					sampleNumberCell.setCellValue(sampleName);
 					sampleNumberCell.setCellStyle(style);
 					XSSFCell requestCell = data.createCell(2);
 					requestCell.setCellValue(request);

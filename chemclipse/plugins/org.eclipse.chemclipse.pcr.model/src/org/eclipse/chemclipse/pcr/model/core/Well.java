@@ -34,7 +34,6 @@ public class Well extends AbstractMeasurement implements IWell {
 
 	public Well() {
 
-		addProtectedKey(SAMPLE_ID);
 		addProtectedKey(TARGET_NAME);
 		addProtectedKey(SAMPLE_SUBSET);
 		addProtectedKey(SAMPLE_TYPE);
@@ -46,7 +45,7 @@ public class Well extends AbstractMeasurement implements IWell {
 		if(isEmptyMeasurement()) {
 			return getPosition().toString();
 		} else {
-			return getPosition().toString() + ": " + getSampleId();
+			return getPosition().toString() + ": " + getSampleName();
 		}
 	}
 
@@ -121,12 +120,6 @@ public class Well extends AbstractMeasurement implements IWell {
 	}
 
 	@Override
-	public String getSampleId() {
-
-		return getHeaderDataOrDefault(SAMPLE_ID, "").trim();
-	}
-
-	@Override
 	public String getSampleSubset() {
 
 		return getHeaderDataOrDefault(SAMPLE_SUBSET, "").trim();
@@ -173,7 +166,7 @@ public class Well extends AbstractMeasurement implements IWell {
 	@Override
 	public boolean isEmptyMeasurement() {
 
-		return ("".equals(getSampleId().trim()) || "_".equals(getSampleId().trim()));
+		return ("".equals(getSampleName().trim()) || "_".equals(getSampleName().trim()));
 	}
 
 	@Override
@@ -236,7 +229,6 @@ public class Well extends AbstractMeasurement implements IWell {
 		for(Entry<Integer, IChannel> set : channels.entrySet()) {
 			well.getChannels().put(set.getKey(), set.getValue().makeDeepCopy());
 		}
-		well.putHeaderData(SAMPLE_ID, getSampleId());
 		well.putHeaderData(TARGET_NAME, getTargetName());
 		well.putHeaderData(SAMPLE_SUBSET, getSampleSubset());
 		well.putHeaderData(SAMPLE_TYPE, getSampleType().toString());

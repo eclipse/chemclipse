@@ -56,6 +56,7 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	private String sampleWeightUnit;
 	private String barcodeType;
 	private String barcode;
+	private String sampleName;
 	private String sampleGroup;
 	private String shortInfo;
 	private String miscInfoSeparated;
@@ -294,6 +295,21 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	public void setDetailedInfo(String detailedInfo) {
 
 		this.detailedInfo = detailedInfo;
+	}
+
+	@Override
+	public String getSampleName() {
+
+		if(sampleName != null) {
+			return sampleName;
+		}
+		return measurement.getSampleName();
+	}
+
+	@Override
+	public void setSampleName(String sampleName) {
+
+		this.sampleName = sampleName;
 	}
 
 	@Override

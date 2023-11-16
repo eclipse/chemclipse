@@ -41,7 +41,7 @@ public class ChromatogramImportConverterMyoDta104_ITest extends TestCase {
 	@Test
 	public void testSample() {
 
-		assertEquals("Horse Myoglobin", chromatogram.getDataName());
+		assertEquals("Horse Myoglobin", chromatogram.getSampleName());
 	}
 
 	@Test

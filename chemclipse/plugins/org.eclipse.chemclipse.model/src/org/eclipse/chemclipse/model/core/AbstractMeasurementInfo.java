@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 
-	private static final long serialVersionUID = 4247159773898302230L;
+	private static final long serialVersionUID = 4247159773898302231L;
 	private static final Logger logger = Logger.getLogger(AbstractMeasurementInfo.class);
 	//
 	private static final String OPERATOR = "Operator";
@@ -36,6 +36,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	private static final String MISC_INFO_SEPARATED = "Misc Info Separated";
 	private static final String SHORT_INFO = "Short Info";
 	private static final String DETAILED_INFO = "Detailed Info";
+	private static final String SAMPLE_NAME = "Sample Name";
 	private static final String SAMPLE_GROUP = "Sample Group";
 	private static final String BARCODE = "Barcode";
 	private static final String BARCODE_TYPE = "Barcode Type";
@@ -56,6 +57,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 		headerMap.put(MISC_INFO_SEPARATED, "");
 		headerMap.put(SHORT_INFO, "");
 		headerMap.put(DETAILED_INFO, "");
+		headerMap.put(SAMPLE_NAME, "");
 		headerMap.put(SAMPLE_GROUP, "");
 		headerMap.put(BARCODE, "");
 		headerMap.put(BARCODE_TYPE, "");
@@ -228,6 +230,22 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 			putHeaderData(DETAILED_INFO, detailedInfo);
 		} else {
 			putHeaderData(DETAILED_INFO, "");
+		}
+	}
+
+	@Override
+	public String getSampleName() {
+
+		return getHeaderData(SAMPLE_NAME);
+	}
+
+	@Override
+	public void setSampleName(String sampleName) {
+
+		if(sampleName != null) {
+			putHeaderData(SAMPLE_NAME, sampleName);
+		} else {
+			putHeaderData(SAMPLE_NAME, "");
 		}
 	}
 

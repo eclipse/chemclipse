@@ -96,7 +96,7 @@ public class PCRReaderVersion13 implements IPCRReader {
 					IdReferencesType sample = react.getSample();
 					IWell well = new Well();
 					well.setPosition(calculateCoordinate(w + 1, pcrFormatType));
-					well.putHeaderData(IWell.SAMPLE_ID, sample.getId());
+					well.setSampleName(sample.getId());
 					Channel channel = createChannel(rdml);
 					for(DataType data : react.getData()) {
 						for(DpAmpCurveType adp : data.getAdp()) {
@@ -104,7 +104,7 @@ public class PCRReaderVersion13 implements IPCRReader {
 						}
 					}
 					well.getChannels().put(0, channel);
-					well.putHeaderData(IWell.SAMPLE_SUBSET, "Default");
+					well.putHeaderData(IWell.SAMPLE_SUBSET, "Default"); // TODO: should be optional
 					vendorPlate.getWells().add(well);
 					w++;
 				}

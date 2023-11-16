@@ -122,7 +122,7 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 			SampleListType sampleList = mzML.getSampleList();
 			if(sampleList != null) {
 				for(SampleType sample : sampleList.getSample()) {
-					chromatogram.setDataName(sample.getName());
+					chromatogram.setSampleName(sample.getName());
 				}
 			}
 			for(InstrumentConfigurationType instrument : mzML.getInstrumentConfigurationList().getInstrumentConfiguration()) {

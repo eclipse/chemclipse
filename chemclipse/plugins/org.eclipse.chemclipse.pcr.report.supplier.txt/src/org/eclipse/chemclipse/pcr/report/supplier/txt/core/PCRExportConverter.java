@@ -140,7 +140,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 				if(isSubsetMatch(sampleSubset, targetSubset)) {
 					printWriter.print(position.getRow() + position.getColumn());
 					printWriter.print(TAB);
-					printWriter.print(well.getSampleId());
+					printWriter.print(well.getSampleName());
 					printWriter.print(TAB);
 					printWriter.print(well.getSampleSubset());
 					printWriter.print(TAB);

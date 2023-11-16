@@ -143,7 +143,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 					continue;
 				}
 				Pattern pattern = Pattern.compile(virtualChannel.getSample(), Pattern.CASE_INSENSITIVE);
-				Matcher matcher = pattern.matcher(well.getSampleId());
+				Matcher matcher = pattern.matcher(well.getSampleName());
 				if(!matcher.find()) {
 					continue;
 				}
@@ -176,7 +176,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 							continue;
 						}
 						Pattern pattern = Pattern.compile(wellMapping.getSample(), Pattern.CASE_INSENSITIVE);
-						Matcher matcher = pattern.matcher(well.getSampleId());
+						Matcher matcher = pattern.matcher(well.getSampleName());
 						if(!matcher.find()) {
 							continue;
 						}
@@ -202,7 +202,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 							targetChannel.setCrossingPoint(virtualCrossingPoint);
 						}
 						if(well.getChannels().containsKey(target - 1)) {
-							logger.warn("Channel " + target + " for " + well.getSampleId() + " is already defined. Skipping.");
+							logger.warn("Channel " + target + " for " + well.getSampleName() + " is already defined. Skipping.");
 						}
 						well.getChannels().putIfAbsent(target - 1, targetChannel);
 					}
@@ -224,7 +224,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 						continue;
 					}
 					Pattern pattern = Pattern.compile(wellMapping.getSample(), Pattern.CASE_INSENSITIVE);
-					Matcher matcher = pattern.matcher(well.getSampleId());
+					Matcher matcher = pattern.matcher(well.getSampleName());
 					if(!matcher.find()) {
 						continue;
 					}

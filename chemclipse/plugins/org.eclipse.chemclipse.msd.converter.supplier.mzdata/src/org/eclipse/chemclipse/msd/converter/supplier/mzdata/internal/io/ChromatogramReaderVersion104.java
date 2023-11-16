@@ -72,7 +72,7 @@ public class ChromatogramReaderVersion104 extends AbstractChromatogramReader imp
 			chromatogram = new VendorChromatogram();
 			//
 			AdminType admin = mzData.getDescription().getAdmin();
-			chromatogram.setDataName(admin.getSampleName());
+			chromatogram.setSampleName(admin.getSampleName());
 			for(PersonType contact : admin.getContact()) {
 				String contactDetails = String.join(", ", contact.getName(), contact.getInstitution(), contact.getContactInfo());
 				if(chromatogram.getOperator().isEmpty()) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -197,7 +197,7 @@ public class PCRPlate extends Composite {
 				StringBuilder builder = new StringBuilder();
 				String sampleSubset = well.getSampleSubset();
 				String targetName = well.getTargetName();
-				builder.append(well.getSampleId());
+				builder.append(well.getSampleName());
 				if(!well.isEmptyMeasurement()) {
 					builder.append(" | ");
 					builder.append(sampleSubset.equals("") ? "--" : sampleSubset);
