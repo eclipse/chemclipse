@@ -20,8 +20,8 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v104.model.
 
 public class ReaderVersion104 {
 
-	public final static String NODE_MZ_DATA = "mzData";
-	public final static String NODE_SPECTRUM_LIST = "spectrumList";
+	public static final String NODE_MZ_DATA = "mzData";
+	public static final String NODE_SPECTRUM_LIST = "spectrumList";
 
 	private ReaderVersion104() {
 
