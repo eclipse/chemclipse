@@ -19,13 +19,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractMeasurement;
 
 public class Well extends AbstractMeasurement implements IWell {
 
 	private static final long serialVersionUID = -5674593451119855940L;
-	private static final Logger logger = Logger.getLogger(Well.class);
 	//
 	private static final String ALL_SUBSETS_SELECTED = "";
 	//
@@ -38,7 +36,6 @@ public class Well extends AbstractMeasurement implements IWell {
 
 		addProtectedKey(SAMPLE_ID);
 		addProtectedKey(TARGET_NAME);
-		addProtectedKey(CROSSING_POINT);
 		addProtectedKey(SAMPLE_SUBSET);
 		addProtectedKey(SAMPLE_TYPE);
 	}
@@ -174,19 +171,6 @@ public class Well extends AbstractMeasurement implements IWell {
 	}
 
 	@Override
-	public double getCrossingPoint() {
-
-		String value = getHeaderDataOrDefault(CROSSING_POINT, "0");
-		double result = 0.0d;
-		try {
-			result = Double.parseDouble(value);
-		} catch(NumberFormatException e) {
-			logger.warn(e);
-		}
-		return result;
-	}
-
-	@Override
 	public boolean isEmptyMeasurement() {
 
 		return ("".equals(getSampleId().trim()) || "_".equals(getSampleId().trim()));
@@ -254,7 +238,6 @@ public class Well extends AbstractMeasurement implements IWell {
 		}
 		well.putHeaderData(SAMPLE_ID, getSampleId());
 		well.putHeaderData(TARGET_NAME, getTargetName());
-		well.putHeaderData(CROSSING_POINT, String.valueOf(getCrossingPoint()));
 		well.putHeaderData(SAMPLE_SUBSET, getSampleSubset());
 		well.putHeaderData(SAMPLE_TYPE, getSampleType().toString());
 		return well;
