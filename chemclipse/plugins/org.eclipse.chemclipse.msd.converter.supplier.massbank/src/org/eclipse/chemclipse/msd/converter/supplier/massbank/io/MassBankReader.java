@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - allow reading from a stream instead of reading directly from a file, adding some extra information to the library, improve parsing
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.massbank.io;
@@ -215,7 +215,7 @@ public class MassBankReader extends AbstractMassSpectraReader implements IMassSp
 				massSpectrum.setPrecursorType(value);
 			} else if("BASE_PEAK".equals(tag)) {
 				try {
-					massSpectrum.setPrecursorBasepeak(Double.parseDouble(value));
+					massSpectrum.setPrecursorBasePeak(Double.parseDouble(value));
 				} catch(RuntimeException e) {
 					// can't use then...
 				}

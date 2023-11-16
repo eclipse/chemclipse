@@ -15,20 +15,17 @@ import java.util.Set;
 
 public interface IRegularLibraryMassSpectrum extends IRegularMassSpectrum, ILibraryMassSpectrum {
 
-	public static final String PROPERTY_PRECURSOR_TYPE = "Precursor Type";
+	public static final String PROPERTY_PRECURSOR_TYPE = "Precursor Type"; // [M+H]+, [M-H]-, ...
+	public static final String PROPERTY_COLLISION_ENERGY = "Collision Energy"; // 30
+	public static final String PROPERTY_INSTRUMENT_NAME = "Instrument Name"; // Agilent QTOF 6530
+
+	String getPrecursorType();
 
 	void setPrecursorType(String precursorType);
 
-	/**
-	 * TODO - it's not fully implemented yet!
-	 * ----
-	 * If the precursor type e.g. '[M+H]+' is available in the properties,
-	 * the neutral mass will be calculated. Otherwise, this method returns
-	 * the value of the given precursor ion.
-	 * 
-	 * @return double
-	 */
-	double getNeutralMass(double precursorIon);
+	double getNeutralMass();
+
+	void setNeutralMass(double neutralMass);
 
 	/**
 	 * Returns the polarity (+) or (-) if the precursor type is set.

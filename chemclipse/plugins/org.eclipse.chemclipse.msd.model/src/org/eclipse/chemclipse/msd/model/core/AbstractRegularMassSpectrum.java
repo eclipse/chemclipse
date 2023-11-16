@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
@@ -23,22 +23,15 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  * index.<br/>
  * Opposite to this a combined mass spectrum {@link
  * AbstractCombinedMassSpectrum} represents a mass spectrum range.
- *
- * @author eselmeister
- * @author <a href="mailto:alexander.kerner@openchrom.net">Alexander Kerner</a>
  */
 public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implements IRegularMassSpectrum {
 
-	/**
-	 * Renew the serialVersionUID any time you have changed some fields or
-	 * methods.
-	 */
 	private static final long serialVersionUID = 6001414280468244074L;
-	// TODO: enums?
+	//
 	private short massSpectrometer;
 	private short massSpectrumType;
 	private double precursorIon;
-	private double precursorBasepeak = Double.NaN;
+	private double precursorBasePeak;
 
 	/**
 	 * By default:
@@ -148,20 +141,20 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 	}
 
 	@Override
-	public AbstractRegularMassSpectrum setPrecursorIon(double precursorIon) {
+	public void setPrecursorIon(double precursorIon) {
 
 		this.precursorIon = precursorIon;
-		return this;
 	}
 
 	@Override
 	public double getPrecursorBasePeak() {
 
-		return precursorBasepeak;
+		return precursorBasePeak;
 	}
 
-	public void setPrecursorBasepeak(double precursorBasepeak) {
+	@Override
+	public void setPrecursorBasePeak(double precursorBasePeak) {
 
-		this.precursorBasepeak = precursorBasepeak;
+		this.precursorBasePeak = precursorBasePeak;
 	}
 }

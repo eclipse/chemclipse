@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - refactored MS/MS support
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.sirius.io;
 
@@ -91,12 +92,12 @@ public class SiriusReader extends AbstractMassSpectraReader implements IMassSpec
 			if(line.startsWith(PARENTMASS)) {
 				String value = line.split(PARENTMASS)[1].trim();
 				Double parentMass = Double.parseDouble(value);
-				massSpectrum.setPrecursorBasepeak(parentMass);
+				massSpectrum.setPrecursorBasePeak(parentMass);
 			}
 			if(line.startsWith(PRECURSORMZ)) {
 				String value = line.split(PRECURSORMZ)[1].trim();
 				Double precursor = Double.parseDouble(value);
-				massSpectrum.setPrecursorBasepeak(precursor);
+				massSpectrum.setPrecursorBasePeak(precursor);
 			}
 			if(line.startsWith(INCHI)) {
 				String value = line.split(INCHI)[1].trim();

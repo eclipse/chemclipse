@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,19 +7,15 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
 /**
  * More informations about the class structure of mass spectra are stored in {@link IScanMSD}.
- * 
- * @author eselmeister
- * @author <a href="mailto:alexander.kerner@openchrom.net">Alexander
- *         Kerner</a>
  */
-public interface IRegularMassSpectrum extends IFragmentedIonScan {
+public interface IRegularMassSpectrum extends IScanMSD {
 
 	/**
 	 * Returns the mass spectrometer number that recorded the mass spectrum.
@@ -60,4 +56,12 @@ public interface IRegularMassSpectrum extends IFragmentedIonScan {
 	 * @param short
 	 */
 	void setMassSpectrumType(short massSpectrumType);
+
+	double getPrecursorIon();
+
+	void setPrecursorIon(double precursorIon);
+
+	double getPrecursorBasePeak();
+
+	void setPrecursorBasePeak(double precursorBasePeak);
 }

@@ -17,8 +17,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -32,10 +30,9 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	 */
 	private static final long serialVersionUID = -3521383640386911035L;
 	//
-	private static final Pattern PATTERN_ELEMENT = Pattern.compile("([+-]\\w*)");
-	//
 	private ILibraryInformation libraryInformation;
 	private String precursorType;
+	private double neutralMass = 0.0d;
 	private Map<String, String> properties = null; // Initialization on demand
 
 	/**
@@ -77,65 +74,15 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	}
 
 	@Override
-	public double getNeutralMass(double precursorIon) {
+	public double getNeutralMass() {
 
-		if(properties != null) {
-			/*
-			 * [M+H]+
-			 * [M-H]-
-			 * ...
-			 * [M-H-CO2-C14H23O2]-
-			 * [M+H-C36H64O10-C12H20O10]+
-			 * [M+H-C8H10N4O3]+
-			 * [M+H-C8H18O2]+
-			 * [M+H-C12H9NS]+
-			 * [M+H-C23H38O21-C15H24O2]+
-			 * [M-H-C18H32O18-CO]-
-			 * [M+H-CH3N-C2H2O]+
-			 * [M+H-CH5NO2-CH2O2]+
-			 * [M-H-C12H18]-
-			 */
-			String precursorType = getProperty(PROPERTY_PRECURSOR_TYPE);
-			if(!precursorType.isEmpty()) {
-				String[] parts = precursorType.split("]");
-				if(parts.length == 2) {
-					double adjustByMass = 0;
-					String chemicalIonization = parts[0].trim().replace("[M", "");
-					Matcher matcher = PATTERN_ELEMENT.matcher(chemicalIonization);
-					while(matcher.find()) {
-						/*
-						 * H, ...
-						 */
-						String formula = matcher.group();
-						boolean add;
-						if(formula.startsWith("+")) {
-							add = false; // subtract to get the neutral mass
-						} else {
-							add = true; // add to get the neutral mass
-						}
-						formula = formula.substring(1, formula.length());
-						/*
-						 * TODO - formula calculator
-						 */
-						double mass = 0;
-						if(formula.equals("H")) {
-							mass = 1.00794d;
-						} else if(formula.equals("Na")) {
-							mass = 22.98976928d;
-						} else if(formula.equals("NH4")) {
-							mass = 18.03846d;
-						} else if(formula.equals("H2O")) {
-							mass = 18.01528d;
-						}
-						adjustByMass += add ? mass : -mass;
-					}
-					//
-					return precursorIon + adjustByMass;
-				}
-			}
-		}
-		//
-		return precursorIon;
+		return neutralMass;
+	}
+
+	@Override
+	public void setNeutralMass(double neutralMass) {
+
+		this.neutralMass = neutralMass;
 	}
 
 	@Override

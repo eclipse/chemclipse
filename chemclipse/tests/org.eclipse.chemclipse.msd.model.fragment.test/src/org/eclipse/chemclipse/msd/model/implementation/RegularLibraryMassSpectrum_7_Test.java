@@ -25,6 +25,10 @@ public class RegularLibraryMassSpectrum_7_Test extends TestCase {
 		super.setUp();
 		massSpectrum = new RegularLibraryMassSpectrum();
 		massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_PRECURSOR_TYPE, "[M+Na]+");
+		massSpectrum.setPrecursorIon(728.3822d);
+		massSpectrum.setNeutralMass(705.39243072d);
+		massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_COLLISION_ENERGY, "30");
+		massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_INSTRUMENT_NAME, "Agilent QTOF 6530");
 	}
 
 	@Override
@@ -41,21 +45,36 @@ public class RegularLibraryMassSpectrum_7_Test extends TestCase {
 
 	public void test2() {
 
-		assertEquals(705.39243072d, massSpectrum.getNeutralMass(728.3822d));
+		assertEquals(728.3822d, massSpectrum.getPrecursorIon());
 	}
 
 	public void test3() {
 
-		assertEquals("+", massSpectrum.getPolarity());
+		assertEquals(705.39243072d, massSpectrum.getNeutralMass());
 	}
 
 	public void test4() {
 
-		assertEquals(1, massSpectrum.getPropertyKeySet().size());
+		assertEquals("+", massSpectrum.getPolarity());
 	}
 
 	public void test5() {
 
+		assertEquals(3, massSpectrum.getPropertyKeySet().size());
+	}
+
+	public void test6() {
+
 		assertEquals("[M+Na]+", massSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_PRECURSOR_TYPE));
+	}
+
+	public void test7() {
+
+		assertEquals("30", massSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_COLLISION_ENERGY));
+	}
+
+	public void test8() {
+
+		assertEquals("Agilent QTOF 6530", massSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_INSTRUMENT_NAME));
 	}
 }
