@@ -28,8 +28,8 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 
 	private static final long serialVersionUID = 6001414280468244074L;
 	//
-	private short massSpectrometer;
-	private short massSpectrumType;
+	private short massSpectrometer; // TODO: enum?
+	private short massSpectrumType; // TODO: enum?
 	private double precursorIon;
 	private double precursorBasePeak;
 
