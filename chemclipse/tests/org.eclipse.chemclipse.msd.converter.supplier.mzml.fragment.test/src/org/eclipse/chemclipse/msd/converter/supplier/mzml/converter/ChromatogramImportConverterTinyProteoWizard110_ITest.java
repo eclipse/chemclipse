@@ -49,7 +49,7 @@ public class ChromatogramImportConverterTinyProteoWizard110_ITest extends TestCa
 	@Test
 	public void testSample() {
 
-		assertEquals("Sample 1", chromatogram.getDataName());
+		assertEquals("Sample 1", chromatogram.getSampleName());
 	}
 
 	@Test

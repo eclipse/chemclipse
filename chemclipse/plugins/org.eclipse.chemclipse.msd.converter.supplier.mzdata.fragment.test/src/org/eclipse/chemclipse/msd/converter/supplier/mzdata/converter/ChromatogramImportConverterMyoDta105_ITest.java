@@ -41,7 +41,7 @@ public class ChromatogramImportConverterMyoDta105_ITest extends TestCase {
 	@Test
 	public void testSample() {
 
-		assertEquals("myo 7/22 1/50", chromatogram.getDataName());
+		assertEquals("myo 7/22 1/50", chromatogram.getSampleName());
 	}
 
 	@Test

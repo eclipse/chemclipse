@@ -74,6 +74,10 @@ public interface IMeasurementInfo extends Serializable {
 
 	void setDetailedInfo(String detailedInfo);
 
+	String getSampleName();
+
+	void setSampleName(String sampleName);
+
 	String getSampleGroup();
 
 	void setSampleGroup(String sampleGroup);

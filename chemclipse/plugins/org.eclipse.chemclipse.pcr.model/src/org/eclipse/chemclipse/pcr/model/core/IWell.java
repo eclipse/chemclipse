@@ -17,7 +17,6 @@ import org.eclipse.chemclipse.model.core.IMeasurement;
 
 public interface IWell extends Comparable<IWell>, IMeasurement {
 
-	String SAMPLE_ID = "Sample ID";
 	String TARGET_NAME = "Target Name";
 	String TARGET_TYPE = "Target Type";
 	String SAMPLE_SUBSET = "Sample Subset";
@@ -52,8 +51,6 @@ public interface IWell extends Comparable<IWell>, IMeasurement {
 	void setPosition(Position position);
 
 	Map<Integer, IChannel> getChannels();
-
-	String getSampleId();
 
 	String getSampleSubset();
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,9 +20,9 @@ public class WellComparator implements Comparator<IWell> {
 	@Override
 	public int compare(IWell firstWell, IWell secondWell) {
 
-		if(firstWell.getSampleId().equals(secondWell.getSampleId())) {
+		if(firstWell.getSampleName().equals(secondWell.getSampleName())) {
 			return firstWell.getPosition().compareTo(secondWell.getPosition());
 		}
-		return firstWell.getSampleId().compareTo(secondWell.getSampleId());
+		return firstWell.getSampleName().compareTo(secondWell.getSampleName());
 	}
 }

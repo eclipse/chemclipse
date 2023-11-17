@@ -75,7 +75,7 @@ public class PCRWriter {
 		for(IWell well : plate.getWells()) {
 			printWriter.print(well.getPosition().toString());
 			printWriter.print(DELIMITER);
-			printWriter.print(well.getSampleId());
+			printWriter.print(well.getSampleName());
 			printWriter.print(DELIMITER);
 			printWriter.print(writeSampleType(well.getSampleType()));
 			printWriter.print(DELIMITER);
