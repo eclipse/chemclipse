@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,6 +40,7 @@ public class ChromatogramDataSupport_3_Test extends TestCase {
 	private void setData(IChromatogram<?> chromatogram) {
 
 		chromatogram.setFile(new File("This"));
+		chromatogram.setSampleName("sample");
 		chromatogram.setDataName("is");
 		chromatogram.setSampleGroup("a");
 		chromatogram.setShortInfo("test.");
@@ -133,5 +134,10 @@ public class ChromatogramDataSupport_3_Test extends TestCase {
 	public void test18() {
 
 		assertEquals("test. [WSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.SHORT_INFO, -1, true));
+	}
+
+	public void test19() {
+
+		assertEquals("sample", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.SAMPLE_NAME, -1, false));
 	}
 }

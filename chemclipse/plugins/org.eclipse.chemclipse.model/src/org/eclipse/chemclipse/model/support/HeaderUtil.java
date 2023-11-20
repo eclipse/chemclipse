@@ -24,6 +24,9 @@ public class HeaderUtil {
 			case NAME:
 				chromatogramName = validate(chromatogram.getName());
 				break;
+			case SAMPLE_NAME:
+				chromatogramName = validate(chromatogram.getSampleName());
+				break;
 			case DATA_NAME:
 				chromatogramName = validate(chromatogram.getDataName());
 				break;
