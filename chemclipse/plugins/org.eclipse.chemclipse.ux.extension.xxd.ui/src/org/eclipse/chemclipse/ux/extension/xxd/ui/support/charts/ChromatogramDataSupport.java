@@ -337,6 +337,9 @@ public class ChromatogramDataSupport {
 			case NAME:
 				description = chromatogram.getName();
 				break;
+			case SAMPLE_NAME:
+				description = chromatogram.getSampleName();
+				break;
 			case DATA_NAME:
 				description = chromatogram.getDataName();
 				break;

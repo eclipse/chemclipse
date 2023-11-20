@@ -18,6 +18,7 @@ public enum HeaderField implements ILabel {
 	DEFAULT("Default"), //
 	NAME("Name"), //
 	DATA_NAME("Data Name"), //
+	SAMPLE_NAME("Sample Name"), //
 	SAMPLE_GROUP("Sample Group"), //
 	SHORT_INFO("Short Info"), //
 	MISC_INFO("Misc Info");

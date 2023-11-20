@@ -145,6 +145,7 @@ public class ChromatogramReferencesUI extends Composite {
 		return Collections.emptyList();
 	}
 
+	@Override
 	public void update() {
 
 		List<IChromatogramSelection<?, ?>> chromatogramMasterAndReferences = new ArrayList<>();
@@ -462,6 +463,9 @@ public class ChromatogramReferencesUI extends Composite {
 			switch(headerField) {
 				case DATA_NAME:
 					chromatogram.setDataName(name);
+					break;
+				case SAMPLE_NAME:
+					chromatogram.setSampleName(name);
 					break;
 				case SAMPLE_GROUP:
 					chromatogram.setSampleGroup(name);
