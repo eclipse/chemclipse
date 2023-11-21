@@ -18,6 +18,7 @@ public enum TypeTSD implements ILabel {
 	GC_IMS("GC-IMS"), //
 	HPLC_DAD("HPLC-DAD"), //
 	GC_MS("GC-MS"), //
+	HPLC_RAMAN("HPLC-Raman"), //
 	GCxGC_FID("GCxGC-FID"), //
 	GCxGC_MS("GCxGC-MS"); //
 

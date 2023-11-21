@@ -15,7 +15,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -35,6 +38,10 @@ import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWS
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
+import org.eclipse.chemclipse.xir.converter.chromatogram.ChromatogramConverterISD;
+import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
+import org.eclipse.chemclipse.xir.model.core.IScanISD;
+import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramAdapterConverter extends AbstractImportConverter {
@@ -58,6 +65,9 @@ public class ChromatogramAdapterConverter extends AbstractImportConverter {
 				break;
 			case HPLC_DAD:
 				chromatogramTSD = adaptWSD(file, monitor);
+				break;
+			case HPLC_RAMAN:
+				chromatogramTSD = adaptISD(file, monitor);
 				break;
 			default:
 				break;
@@ -191,5 +201,70 @@ public class ChromatogramAdapterConverter extends AbstractImportConverter {
 		chromatogram.addScans(scans);
 		//
 		return chromatogram;
+	}
+
+	private IChromatogramTSD adaptISD(File file, IProgressMonitor monitor) {
+
+		IProcessingInfo<IChromatogramISD> processingInfo = ChromatogramConverterISD.getInstance().convert(file, monitor);
+		IChromatogramISD chromatogramISD = processingInfo.getProcessingResult();
+		/*
+		 * Determine the trace range
+		 */
+		int min;
+		int max;
+		//
+		if(PreferenceSupplier.isUseAdapterFixedRangeISD()) {
+			min = PreferenceSupplier.getAdapterMinTraceISD();
+			max = PreferenceSupplier.getAdapterMaxTraceISD();
+		} else {
+			min = Integer.MAX_VALUE;
+			max = Integer.MIN_VALUE;
+			for(IScan scan : chromatogramISD.getScans()) {
+				if(scan instanceof IScanISD scanISD) {
+					if(scanISD.getProcessedSignals().size() >= 2) {
+						min = (int)Math.min(min, Math.round(scanISD.getProcessedSignals().first().getWavenumber()));
+						max = (int)Math.max(max, Math.round(scanISD.getProcessedSignals().last().getWavenumber()));
+					}
+				}
+			}
+		}
+		/*
+		 * Extract the data
+		 */
+		List<IScan> scans = new ArrayList<>();
+		int size = max - min + 1;
+		if(size > 1) {
+			for(IScan scan : chromatogramISD.getScans()) {
+				if(scan instanceof IScanISD scanISD) {
+					Map<Integer, Float> intensities = getIntensitiesISD(scanISD);
+					float[] signals = new float[size];
+					for(int i = 0; i < size; i++) {
+						signals[i] = intensities.getOrDefault(i + min, 0.0f);
+					}
+					scans.add(new ScanTSD(scan.getRetentionTime(), signals));
+				}
+			}
+		}
+		//
+		IChromatogramTSD chromatogram = new ChromatogramAdapterISD(chromatogramISD);
+		chromatogram.setFile(file);
+		chromatogram.addScans(scans);
+		//
+		return chromatogram;
+	}
+
+	private Map<Integer, Float> getIntensitiesISD(IScanISD scanISD) {
+
+		Map<Integer, Float> intensities = new HashMap<>();
+		//
+		Iterator<ISignalXIR> iterator = scanISD.getProcessedSignals().iterator();
+		while(iterator.hasNext()) {
+			ISignalXIR signalXIR = iterator.next();
+			int wavenumber = (int)Math.round(signalXIR.getWavenumber());
+			float intensity = (float)signalXIR.getIntensity() + intensities.getOrDefault(wavenumber, 0.0f);
+			intensities.put(wavenumber, intensity);
+		}
+		//
+		return intensities;
 	}
 }

@@ -26,6 +26,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int MAX_TRACE_MSD = 2000;
 	public static final int MIN_TRACE_WSD = 200;
 	public static final int MAX_TRACE_WSD = 800;
+	public static final int MIN_TRACE_ISD = 1;
+	public static final int MAX_TRACE_ISD = 2000;
 	//
 	public static final String P_USE_ADAPTER_MSD = "useAdapterMSD";
 	public static final boolean DEF_USE_ADAPTER_MSD = true;
@@ -44,6 +46,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int DEF_ADAPTER_MIN_TRACE_WSD = 200;
 	public static final String P_ADAPTER_MAX_TRACE_WSD = "adapterMaxTraceWSD";
 	public static final int DEF_ADAPTER_MAX_TRACE_WSD = 600;
+	//
+	public static final String P_USE_ADAPTER_ISD = "useAdapterISD";
+	public static final boolean DEF_USE_ADAPTER_ISD = true;
+	public static final String P_USE_ADAPTER_FIXED_RANGE_ISD = "useAdapterFixedRangeISD";
+	public static final boolean DEF_USE_ADAPTER_FIXED_RANGE_ISD = false;
+	public static final String P_ADAPTER_MIN_TRACE_ISD = "adapterMinTraceISD";
+	public static final int DEF_ADAPTER_MIN_TRACE_ISD = 18;
+	public static final String P_ADAPTER_MAX_TRACE_ISD = "adapterMaxTraceISD";
+	public static final int DEF_ADAPTER_MAX_TRACE_ISD = 600;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -79,6 +90,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_USE_ADAPTER_FIXED_RANGE_WSD, Boolean.toString(DEF_USE_ADAPTER_FIXED_RANGE_WSD));
 		defaultValues.put(P_ADAPTER_MIN_TRACE_WSD, Integer.toString(DEF_ADAPTER_MIN_TRACE_WSD));
 		defaultValues.put(P_ADAPTER_MAX_TRACE_WSD, Integer.toString(DEF_ADAPTER_MAX_TRACE_WSD));
+		defaultValues.put(P_USE_ADAPTER_ISD, Boolean.toString(DEF_USE_ADAPTER_ISD));
+		defaultValues.put(P_USE_ADAPTER_FIXED_RANGE_ISD, Boolean.toString(DEF_USE_ADAPTER_FIXED_RANGE_ISD));
+		defaultValues.put(P_ADAPTER_MIN_TRACE_ISD, Integer.toString(DEF_ADAPTER_MIN_TRACE_ISD));
+		defaultValues.put(P_ADAPTER_MAX_TRACE_ISD, Integer.toString(DEF_ADAPTER_MAX_TRACE_ISD));
 		return defaultValues;
 	}
 
@@ -126,5 +141,25 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static int getAdapterMaxTraceWSD() {
 
 		return INSTANCE().getInteger(P_ADAPTER_MAX_TRACE_WSD, DEF_ADAPTER_MAX_TRACE_WSD);
+	}
+
+	public static boolean isUseAdapterISD() {
+
+		return INSTANCE().getBoolean(P_USE_ADAPTER_ISD, DEF_USE_ADAPTER_ISD);
+	}
+
+	public static boolean isUseAdapterFixedRangeISD() {
+
+		return INSTANCE().getBoolean(P_USE_ADAPTER_FIXED_RANGE_ISD, DEF_USE_ADAPTER_FIXED_RANGE_ISD);
+	}
+
+	public static int getAdapterMinTraceISD() {
+
+		return INSTANCE().getInteger(P_ADAPTER_MIN_TRACE_ISD, DEF_ADAPTER_MIN_TRACE_ISD);
+	}
+
+	public static int getAdapterMaxTraceISD() {
+
+		return INSTANCE().getInteger(P_ADAPTER_MAX_TRACE_ISD, DEF_ADAPTER_MAX_TRACE_ISD);
 	}
 }
