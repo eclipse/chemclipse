@@ -9,7 +9,7 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.wsd.model.core.interpolation;
+package org.eclipse.chemclipse.model.interpolation;
 
 import java.util.HashMap;
 import java.util.Map;

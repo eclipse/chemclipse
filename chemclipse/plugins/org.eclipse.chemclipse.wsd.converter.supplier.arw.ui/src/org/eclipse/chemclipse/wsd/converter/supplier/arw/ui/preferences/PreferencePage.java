@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.converter.supplier.arw.ui.preferences;
 
+import org.eclipse.chemclipse.model.interpolation.RasterizeCalculator;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
 import org.eclipse.chemclipse.wsd.converter.supplier.arw.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.wsd.converter.supplier.arw.ui.Activator;
-import org.eclipse.chemclipse.wsd.model.core.interpolation.RasterizeCalculator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;

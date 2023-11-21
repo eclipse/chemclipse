@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.interpolation.RasterizeCalculator;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;

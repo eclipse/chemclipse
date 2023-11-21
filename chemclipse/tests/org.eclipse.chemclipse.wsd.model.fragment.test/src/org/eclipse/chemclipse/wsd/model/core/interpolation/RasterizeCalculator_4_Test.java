@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.wsd.model.core.interpolation;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.chemclipse.model.interpolation.RasterizeCalculator;
+
 import junit.framework.TestCase;
 
 public class RasterizeCalculator_4_Test extends TestCase {
