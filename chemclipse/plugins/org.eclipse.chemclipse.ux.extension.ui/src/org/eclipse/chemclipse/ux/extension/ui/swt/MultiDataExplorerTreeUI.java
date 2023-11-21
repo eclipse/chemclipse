@@ -333,7 +333,9 @@ public class MultiDataExplorerTreeUI {
 										if(identifier instanceof ISupplierFileEditorSupport supplierFileEditorSupport) {
 											for(ISupplier supplier : entry.getValue()) {
 												if(activeFileSupplier.getId().equals(supplier.getId())) {
-													openEditorWithSupplier(file, supplierFileEditorSupport, supplier);
+													if(openEditorWithSupplier(file, supplierFileEditorSupport, supplier)) {
+														return;
+													}
 												}
 											}
 										}
