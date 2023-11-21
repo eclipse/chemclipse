@@ -19,4 +19,5 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.xir.model.core,
  org.eclipse.chemclipse.xir.model.core.selection,
  org.eclipse.chemclipse.xir.model.implementation,
+ org.eclipse.chemclipse.xir.model.interpolation,
  org.eclipse.chemclipse.xir.model.support
