@@ -126,11 +126,13 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 	//
-	private boolean showScans;
-	private boolean showPeaks;
-	private boolean showScansInRange;
-	private boolean showPeaksInRange;
-	private boolean moveRetentionTimeOnPeakSelection;
+	private boolean showScans = true;
+	private boolean showPeaks = true;
+	private boolean showScansInRange = true;
+	private boolean showPeaksInRange = true;
+	private boolean showPeakProfilesSelectionAll = true;
+	private boolean moveRetentionTimeOnPeakSelection = true;
+	//
 	private int currentModCount;
 	private InteractionMode interactionMode = InteractionMode.SOURCE;
 	private RetentionTimeRange lastRange;
@@ -476,6 +478,9 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						addTargetsUnknown(e.display); // CTRL + u
 					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_Q) {
 						scanIdentifierControl.get().runIdentification(e.display); // CTRL + q
+					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_A) {
+						if(showPeakProfilesSelectionAll)
+							propagateSelection(display);
 					}
 				} else {
 					propagateSelection(display);
@@ -1172,6 +1177,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			showScans = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_LIST);
 			showScansInRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE);
 			moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
+			showPeakProfilesSelectionAll = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK_PROFILES_SELECTION_ALL);
 		}
 	}
 

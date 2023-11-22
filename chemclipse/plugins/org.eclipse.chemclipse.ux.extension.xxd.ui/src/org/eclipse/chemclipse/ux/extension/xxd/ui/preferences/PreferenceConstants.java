@@ -882,6 +882,8 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_SCANS_IN_LIST = true;
 	public static final String P_SHOW_SCANS_IN_SELECTED_RANGE = "showScansInSelectedRange";
 	public static final boolean DEF_SHOW_SCANS_IN_SELECTED_RANGE = true;
+	public static final String P_SHOW_PEAK_PROFILES_SELECTION_ALL = "showPeakProfilesSelectionAll";
+	public static final boolean DEF_SHOW_PEAK_PROFILES_SELECTION_ALL = true;
 	/*
 	 * Baseline
 	 */
