@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.ImportConverterMspTestCase;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.Polarity;
 import org.junit.Test;
 
 public class MassBankMS2ImportConverter_ITest extends ImportConverterMspTestCase {
@@ -51,7 +52,7 @@ public class MassBankMS2ImportConverter_ITest extends ImportConverterMspTestCase
 			assertEquals(288.1225d, regularLibraryMassSpectrum.getPrecursorIon());
 			assertEquals(287.11575d, regularLibraryMassSpectrum.getNeutralMass());
 			assertEquals("30(NCE)", regularLibraryMassSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_COLLISION_ENERGY));
-			assertEquals("+", regularLibraryMassSpectrum.getPolarity());
+			assertEquals(Polarity.POSITIVE, regularLibraryMassSpectrum.getPolarity());
 			assertEquals("[M+H]+", regularLibraryMassSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_PRECURSOR_TYPE));
 			assertEquals("Q-Exactive Orbitrap Thermo Scientific", regularLibraryMassSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_INSTRUMENT_NAME));
 		}

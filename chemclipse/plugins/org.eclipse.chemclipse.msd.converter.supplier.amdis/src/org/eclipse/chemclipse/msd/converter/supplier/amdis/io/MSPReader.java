@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.Preferenc
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.Polarity;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
@@ -256,9 +257,9 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 		//
 		String ionMode = extractContentAsString(massSpectrumData, ionModePattern, 2);
 		if(ionMode.equals("POSITIVE")) {
-			massSpectrum.setPolarity("+");
+			massSpectrum.setPolarity(Polarity.POSITIVE);
 		} else if(ionMode.equals("NEGATIVE")) {
-			massSpectrum.setPolarity("-");
+			massSpectrum.setPolarity(Polarity.NEGATIVE);
 		}
 		/*
 		 * MS/MS
