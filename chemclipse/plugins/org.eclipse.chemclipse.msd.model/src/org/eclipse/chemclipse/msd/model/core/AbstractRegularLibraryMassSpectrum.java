@@ -32,7 +32,7 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	//
 	private ILibraryInformation libraryInformation;
 	private String precursorType;
-	private String polarity; // TODO enum?
+	private Polarity polarity;
 	private double neutralMass = 0.0d;
 	private Map<String, String> properties = null; // Initialization on demand
 
@@ -87,7 +87,7 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	}
 
 	@Override
-	public String getPolarity() {
+	public Polarity getPolarity() {
 
 		if(polarity != null) {
 			return polarity;
@@ -95,17 +95,16 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 		if(properties != null) {
 			String precursorType = getProperty(PROPERTY_PRECURSOR_TYPE);
 			if(precursorType.contains("]+")) {
-				return "+";
+				return Polarity.POSITIVE;
 			} else if(precursorType.contains("]-")) {
-				return "-";
+				return Polarity.NEGATIVE;
 			}
 		}
-		//
-		return "";
+		return Polarity.NONE;
 	}
 
 	@Override
-	public void setPolarity(String polarity) {
+	public void setPolarity(Polarity polarity) {
 
 		this.polarity = polarity;
 	}

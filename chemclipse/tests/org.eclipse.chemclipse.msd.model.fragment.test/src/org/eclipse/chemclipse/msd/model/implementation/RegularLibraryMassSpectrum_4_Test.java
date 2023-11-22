@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.msd.model.implementation;
 
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.Polarity;
 
 import junit.framework.TestCase;
 
@@ -52,7 +53,7 @@ public class RegularLibraryMassSpectrum_4_Test extends TestCase {
 
 	public void test4() {
 
-		assertEquals("", massSpectrum.getPolarity());
+		assertEquals(Polarity.NONE, massSpectrum.getPolarity());
 	}
 
 	public void test5() {

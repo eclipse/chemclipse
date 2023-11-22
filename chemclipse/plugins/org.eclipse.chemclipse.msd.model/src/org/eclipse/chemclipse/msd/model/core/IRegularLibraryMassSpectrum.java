@@ -27,19 +27,9 @@ public interface IRegularLibraryMassSpectrum extends IRegularMassSpectrum, ILibr
 
 	void setNeutralMass(double neutralMass);
 
-	/**
-	 * Returns the polarity if set.
-	 * 
-	 * Otherwise returns the polarity (+) or (-)
-	 * if the precursor type is set.
-	 * 
-	 * If none is available "" will be returned.
-	 * 
-	 * @return String
-	 */
-	String getPolarity();
+	Polarity getPolarity();
 
-	void setPolarity(String polarity);
+	void setPolarity(Polarity polarity);
 
 	Set<String> getPropertyKeySet();
 
