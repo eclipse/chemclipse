@@ -64,6 +64,7 @@ public class PreferencePageTargets extends FieldEditorPreferencePage implements 
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DIALOG_DELETE_TARGETS, "Targets Delete (Show Dialog)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL, "Delete All (Unknown Target Add)", getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceConstants.P_MATCH_QUALITY_UNKNOWN_TARGET, "Match Quality (Unknown Target)", PreferenceConstants.MIN_MATCH_QUALITY, PreferenceConstants.MAX_MATCH_QUALITY, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_UNKNOWN_TARGET_ADD_RETENTION_INDEX, "Add Retention Index (Unknown Target)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_VERIFY_UNKNOWN_TARGET, "Verify (Unknown Target)", getFieldEditorParent()));
 	}
 

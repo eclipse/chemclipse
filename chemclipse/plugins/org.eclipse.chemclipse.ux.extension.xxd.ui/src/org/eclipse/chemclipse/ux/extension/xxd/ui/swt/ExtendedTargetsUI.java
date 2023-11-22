@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.model.cas.CasSupport;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -48,13 +47,13 @@ import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargetsList;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ChromatogramUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.IdentificationTargetSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
@@ -82,7 +81,6 @@ import org.eclipse.ui.PlatformUI;
 
 public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
-	private static final String IDENTIFIER_UNKNOWN = "Manual Identification";
 	private static final String MENU_CATEGORY_TARGETS = "Targets";
 	private static final int INDEX_CHROMATOGRAM = 1;
 	//
@@ -781,20 +779,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void addTargetUnknown(Display display) {
 
-		float matchFactor = preferenceStore.getFloat(PreferenceConstants.P_MATCH_QUALITY_UNKNOWN_TARGET);
-		IIdentificationTarget identificationTarget = IIdentificationTarget.createDefaultTarget(getUnknownTargetName(), CasSupport.CAS_DEFAULT, IDENTIFIER_UNKNOWN, matchFactor);
-		identificationTarget.setVerified(preferenceStore.getBoolean(PreferenceConstants.P_VERIFY_UNKNOWN_TARGET));
+		IIdentificationTarget identificationTarget = IdentificationTargetSupport.getTargetUnknown(getScan());
 		addTarget(display, identificationTarget);
-	}
-
-	private String getUnknownTargetName() {
-
-		String traces = TracesSupport.getTraces(getScan());
-		if(!traces.isEmpty()) {
-			return "Unknown [" + traces + "]";
-		} else {
-			return "Unknown";
-		}
 	}
 
 	private void setChromatogramDirty() {

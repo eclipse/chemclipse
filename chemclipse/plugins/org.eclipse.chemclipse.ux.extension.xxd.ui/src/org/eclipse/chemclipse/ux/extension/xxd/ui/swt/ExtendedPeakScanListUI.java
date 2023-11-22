@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.cas.CasSupport;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -63,7 +62,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ClassifierDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.InternalStandardDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeletePeaksOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteScanTargetsOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
@@ -72,6 +70,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageList
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMergePeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.IdentificationTargetSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
 import org.eclipse.core.commands.ExecutionException;
@@ -104,7 +103,6 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakScanListUI.class);
 	//
-	private static final String IDENTIFIER_UNKNOWN = "Manual Identification";
 	private static final String MENU_CATEGORY = "Peaks/Scans";
 	private static final String DESCRIPTION_PEAKS = "Number Peaks:";
 	private static final String DESCRIPTION_SCANS = "Scans:";
@@ -631,7 +629,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					if(preferenceStore.getBoolean(PreferenceConstants.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL)) {
 						IScan scan = getScan(object);
 						if(scan != null) {
-							IIdentificationTarget identificationTarget = getTargetUnknown(display, scan);
+							IIdentificationTarget identificationTarget = IdentificationTargetSupport.getTargetUnknown(scan);
 							targetSupplier.getTargets().add(identificationTarget);
 						}
 					}
@@ -669,7 +667,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		for(Object object : tableViewer.get().getStructuredSelection().toList()) {
 			IScan scan = getScan(object);
 			if(scan instanceof ITargetSupplier targetSupplier) {
-				IIdentificationTarget identificationTarget = getTargetUnknown(display, scan);
+				IIdentificationTarget identificationTarget = IdentificationTargetSupport.getTargetUnknown(scan);
 				if(identificationTarget != null) {
 					targetSupplier.getTargets().add(identificationTarget);
 				}
@@ -678,25 +676,6 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		//
 		chromatogramSelection.getChromatogram().setDirty(true);
 		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peaks/Scans unknown targets have been set.");
-	}
-
-	private IIdentificationTarget getTargetUnknown(Display display, IScan scan) {
-
-		float matchFactor = preferenceStore.getFloat(PreferenceConstants.P_MATCH_QUALITY_UNKNOWN_TARGET);
-		IIdentificationTarget identificationTarget = IIdentificationTarget.createDefaultTarget(getUnknownTargetName(scan), CasSupport.CAS_DEFAULT, IDENTIFIER_UNKNOWN, matchFactor);
-		identificationTarget.setVerified(preferenceStore.getBoolean(PreferenceConstants.P_VERIFY_UNKNOWN_TARGET));
-		//
-		return identificationTarget;
-	}
-
-	private String getUnknownTargetName(IScan scan) {
-
-		String traces = TracesSupport.getTraces(scan);
-		if(!traces.isEmpty()) {
-			return "Unknown [" + traces + "]";
-		} else {
-			return "Unknown";
-		}
 	}
 
 	private boolean openQuestion(Shell shell, String text) {

@@ -451,6 +451,8 @@ public class PreferenceConstants {
 	public static final boolean DEF_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL = false;
 	public static final String P_MATCH_QUALITY_UNKNOWN_TARGET = "matchQualityUnknownTarget";
 	public static final float DEF_MATCH_QUALITY_UNKNOWN_TARGET = 80.0f;
+	public static final String P_UNKNOWN_TARGET_ADD_RETENTION_INDEX = "unknownTargetAddRetentionIndex";
+	public static final boolean DEF_UNKNOWN_TARGET_ADD_RETENTION_INDEX = true;
 	public static final String P_VERIFY_UNKNOWN_TARGET = "verifyUnknownTarget";
 	public static final boolean DEF_VERIFY_UNKNOWN_TARGET = false;
 	/*

@@ -199,6 +199,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_DIALOG_DELETE_TARGETS, PreferenceConstants.DEF_SHOW_DIALOG_DELETE_TARGETS);
 		store.setDefault(PreferenceConstants.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL, PreferenceConstants.DEF_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL);
 		store.setDefault(PreferenceConstants.P_MATCH_QUALITY_UNKNOWN_TARGET, PreferenceConstants.DEF_MATCH_QUALITY_UNKNOWN_TARGET);
+		store.setDefault(PreferenceConstants.P_UNKNOWN_TARGET_ADD_RETENTION_INDEX, PreferenceConstants.DEF_UNKNOWN_TARGET_ADD_RETENTION_INDEX);
 		store.setDefault(PreferenceConstants.P_VERIFY_UNKNOWN_TARGET, PreferenceConstants.DEF_VERIFY_UNKNOWN_TARGET);
 		//
 		initializeChromatogramDefaults(store);
