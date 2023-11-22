@@ -72,6 +72,7 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 	private static final Pattern ionPattern = Pattern.compile("([+]?\\d+\\.?\\d*)([\t ,;:]+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)");
 	private static final Pattern precursorTypePattern = Pattern.compile("(Precursor_type:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern precursorMassPattern = Pattern.compile("(PrecursorMZ:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern instrumentTypePattern = Pattern.compile("(Instrument_type:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern instrumentPattern = Pattern.compile("(Instrument:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern collisionEnergyPattern = Pattern.compile("(Collision_energy:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern exactMassPattern = Pattern.compile("(ExactMass:)(.*)", Pattern.CASE_INSENSITIVE);
@@ -254,6 +255,9 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 		//
 		String instrument = extractContentAsString(massSpectrumData, instrumentPattern, 2);
 		massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_INSTRUMENT_NAME, instrument);
+		//
+		String instrumentType = extractContentAsString(massSpectrumData, instrumentTypePattern, 2);
+		massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_INSTRUMENT_TYPE, instrumentType);
 		//
 		String ionMode = extractContentAsString(massSpectrumData, ionModePattern, 2);
 		if(ionMode.equals("POSITIVE")) {

@@ -54,6 +54,7 @@ public class MassBankMS2ImportConverter_ITest extends ImportConverterMspTestCase
 			assertEquals("30(NCE)", regularLibraryMassSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_COLLISION_ENERGY));
 			assertEquals(Polarity.POSITIVE, regularLibraryMassSpectrum.getPolarity());
 			assertEquals("[M+H]+", regularLibraryMassSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_PRECURSOR_TYPE));
+			assertEquals("LC-ESI-ITFT", regularLibraryMassSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_INSTRUMENT_TYPE));
 			assertEquals("Q-Exactive Orbitrap Thermo Scientific", regularLibraryMassSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_INSTRUMENT_NAME));
 		}
 	}
