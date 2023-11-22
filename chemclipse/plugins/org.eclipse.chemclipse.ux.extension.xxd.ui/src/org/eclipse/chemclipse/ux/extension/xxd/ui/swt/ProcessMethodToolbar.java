@@ -235,6 +235,51 @@ public class ProcessMethodToolbar extends ToolBar {
 		}
 	}
 
+	/**
+	 * Delete the selected entries.
+	 * A message dialog is shown before deleting the entries.
+	 * 
+	 * @param shell
+	 */
+	public void deleteSelectedProcessEntries(Shell shell) {
+
+		if(MessageDialog.openQuestion(shell, "Delete Process Entries", "Would you like to delete the selected processors?")) {
+			/*
+			 * Collect
+			 */
+			List<IProcessEntry> entriesToBeRemoved = new ArrayList<>();
+			for(Object object : structuredViewer.getStructuredSelection().toArray()) {
+				ListProcessEntryContainer container = MethodSupport.getContainer(object);
+				if(container != null) {
+					if(object instanceof IProcessEntry processEntry) {
+						entriesToBeRemoved.add(processEntry);
+					}
+				}
+			}
+			/*
+			 * Remove
+			 */
+			for(IProcessEntry processEntry : entriesToBeRemoved) {
+				ListProcessEntryContainer container = MethodSupport.getContainer(processEntry);
+				if(container != null) {
+					container.removeProcessEntry(processEntry);
+				}
+			}
+			//
+			fireUpdate();
+			select(Collections.emptyList());
+		}
+	}
+
+	public void deleteAllProcessEntries(Shell shell) {
+
+		if(MessageDialog.openQuestion(shell, "Delete Process Entries", "Would you like to delete all processors?")) {
+			processMethod.removeAllProcessEntries();
+			fireUpdate();
+			select(Collections.emptyList());
+		}
+	}
+
 	private boolean isEditable(ProcessMethod processMethod) {
 
 		return !readOnly && processMethod != null && !processMethod.isFinal() && !processMethod.isReadOnly();
@@ -374,19 +419,10 @@ public class ProcessMethodToolbar extends ToolBar {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(toolBar.getShell(), "Delete Process Methods", "Would you like to delete the selected processors?")) {
-					for(Object object : structuredViewer.getStructuredSelection().toArray()) {
-						ListProcessEntryContainer container = MethodSupport.getContainer(object);
-						if(container != null) {
-							container.removeProcessEntry((IProcessEntry)object);
-						}
-					}
-					//
-					fireUpdate();
-					select(Collections.emptyList());
-				}
+				deleteSelectedProcessEntries(toolBar.getShell());
 			}
 		});
+		//
 		return item;
 	}
 
@@ -400,11 +436,7 @@ public class ProcessMethodToolbar extends ToolBar {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(toolBar.getShell(), "Delete Process Methods", "Would you like to delete all processors?")) {
-					processMethod.removeAllProcessEntries();
-					fireUpdate();
-					select(Collections.emptyList());
-				}
+				deleteAllProcessEntries(toolBar.getShell());
 			}
 		});
 		return item;
@@ -446,28 +478,13 @@ public class ProcessMethodToolbar extends ToolBar {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
 		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Move the process methods up.");
+		item.setToolTipText("Move the selected process entries up.");
 		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IStructuredSelection selection = structuredViewer.getStructuredSelection();
-				Iterator<?> iterator = selection.iterator();
-				while(iterator.hasNext()) {
-					Object object = iterator.next();
-					ListProcessEntryContainer container = MethodSupport.getContainer(object);
-					if(container != null) {
-						List<IProcessEntry> entries = container.getEntries();
-						int index = entries.indexOf(object);
-						if(index > 0) {
-							Collections.swap(entries, index, index - 1);
-						}
-					}
-				}
-				//
-				fireUpdate();
-				structuredViewer.setSelection(selection);
+				moveProcessEntriesUp();
 			}
 		});
 		//
@@ -478,28 +495,13 @@ public class ProcessMethodToolbar extends ToolBar {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
 		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Move the process methods down.");
+		item.setToolTipText("Move the selected process entries down.");
 		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IStructuredSelection selection = structuredViewer.getStructuredSelection();
-				Iterator<?> iterator = selection.iterator();
-				while(iterator.hasNext()) {
-					Object object = iterator.next();
-					ListProcessEntryContainer container = MethodSupport.getContainer(object);
-					if(container != null) {
-						List<IProcessEntry> entries = container.getEntries();
-						int index = entries.indexOf(object);
-						if(index > -1 && index < entries.size() - 1) {
-							Collections.swap(entries, index, index + 1);
-						}
-					}
-				}
-				//
-				fireUpdate();
-				structuredViewer.setSelection(selection);
+				moveProcessEntriesDown();
 			}
 		});
 		//
@@ -612,6 +614,66 @@ public class ProcessMethodToolbar extends ToolBar {
 		if(firstElement != null) {
 			structuredViewer.reveal(firstElement);
 		}
+	}
+
+	private void moveProcessEntriesUp() {
+
+		IStructuredSelection selection = structuredViewer.getStructuredSelection();
+		/*
+		 * Prevent that the entries are mixed up when
+		 * reaching the beginning of the list.
+		 */
+		int offset = 0;
+		Iterator<?> iterator = selection.iterator();
+		while(iterator.hasNext()) {
+			Object object = iterator.next();
+			ListProcessEntryContainer container = MethodSupport.getContainer(object);
+			if(container != null) {
+				List<IProcessEntry> entries = container.getEntries();
+				int index = entries.indexOf(object);
+				if(index > 0) {
+					int newIndex = index - 1;
+					if(newIndex >= offset) {
+						Collections.swap(entries, index, newIndex);
+					}
+				}
+			}
+			offset++;
+		}
+		//
+		fireUpdate();
+		structuredViewer.setSelection(selection);
+	}
+
+	private void moveProcessEntriesDown() {
+
+		IStructuredSelection selection = structuredViewer.getStructuredSelection();
+		int numberEntries = selection.size();
+		/*
+		 * Prevent that the entries are mixed up when
+		 * reaching the end of the list.
+		 */
+		int offset = 0;
+		Iterator<?> iterator = selection.iterator();
+		while(iterator.hasNext()) {
+			Object object = iterator.next();
+			ListProcessEntryContainer container = MethodSupport.getContainer(object);
+			if(container != null) {
+				List<IProcessEntry> entries = container.getEntries();
+				int index = entries.indexOf(object);
+				if(index > -1 && index < entries.size() - 1) {
+					int newIndex = index + offset + 1;
+					int maxIndex = entries.size() - numberEntries + offset + 1;
+					if(newIndex < maxIndex) {
+						Collections.swap(entries, index, newIndex);
+					}
+				}
+			}
+			offset++;
+		}
+		//
+		fireUpdate();
+		structuredViewer.setSelection(selection);
 	}
 
 	private void fireUpdate() {

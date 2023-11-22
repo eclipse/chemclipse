@@ -43,12 +43,15 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 
 public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 
@@ -62,9 +65,9 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 	private final BiFunction<IProcessEntry, IProcessSupplierContext, IProcessorPreferences<?>> preferencesSupplier;
 	//
 	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();
-	private Button buttonToolbarHeader;
+	private AtomicReference<Button> buttonToolbarHeader = new AtomicReference<>();
 	private AtomicReference<ProcessMethodHeader> toolbarHeader = new AtomicReference<>();
-	private Button buttonToolbarProfile;
+	private AtomicReference<Button> buttonToolbarProfile = new AtomicReference<>();
 	private AtomicReference<ProcessMethodProfiles> toolbarProfile = new AtomicReference<>();
 	private AtomicReference<MethodTreeViewer> treeViewer = new AtomicReference<>();
 	private AtomicReference<ProcessMethodToolbar> toolbarButtons = new AtomicReference<>();
@@ -138,8 +141,8 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 
 	private void initialize() {
 
-		enableToolbar(toolbarHeader, buttonToolbarHeader, IMAGE_HEADER, TOOLTIP_HEADER, false);
-		enableToolbar(toolbarProfile, buttonToolbarProfile, IMAGE_PROFILE, TOOLTIP_PROFILE, true);
+		enableToolbar(toolbarHeader, buttonToolbarHeader.get(), IMAGE_HEADER, TOOLTIP_HEADER, false);
+		enableToolbar(toolbarProfile, buttonToolbarProfile.get(), IMAGE_PROFILE, TOOLTIP_PROFILE, true);
 		toolbarButtons.get().updateTableButtons();
 	}
 
@@ -150,7 +153,7 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 
 	public void setToolbarProfileVisible(boolean visible) {
 
-		enableToolbar(toolbarProfile, buttonToolbarProfile, IMAGE_PROFILE, TOOLTIP_PROFILE, visible);
+		enableToolbar(toolbarProfile, buttonToolbarProfile.get(), IMAGE_PROFILE, TOOLTIP_PROFILE, visible);
 	}
 
 	public void setToolbarProfileEnableEdit(boolean enabledEdit) {
@@ -160,7 +163,7 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 
 	public void setToolbarHeaderVisible(boolean visible) {
 
-		enableToolbar(toolbarHeader, buttonToolbarHeader, IMAGE_HEADER, TOOLTIP_HEADER, visible);
+		enableToolbar(toolbarHeader, buttonToolbarHeader.get(), IMAGE_HEADER, TOOLTIP_HEADER, visible);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -171,11 +174,23 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		//
-		buttonToolbarHeader = createButtonToggleToolbar(composite, toolbarHeader, IMAGE_HEADER, TOOLTIP_HEADER);
-		buttonToolbarProfile = createButtonToggleToolbar(composite, toolbarProfile, IMAGE_PROFILE, TOOLTIP_PROFILE);
+		createButtonToggleHeader(composite);
+		createButtonToggleProfile(composite);
 		createSettingsButton(composite);
 		//
 		toolbarMain.set(composite);
+	}
+
+	private void createButtonToggleHeader(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarHeader, IMAGE_HEADER, TOOLTIP_HEADER);
+		buttonToolbarHeader.set(button);
+	}
+
+	private void createButtonToggleProfile(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarProfile, IMAGE_PROFILE, TOOLTIP_PROFILE);
+		buttonToolbarProfile.set(button);
 	}
 
 	private void createSettingsButton(Composite parent) {
@@ -242,7 +257,7 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 
 	private void createTreeViewer(Composite parent) {
 
-		MethodTreeViewer methodTreeViewer = new MethodTreeViewer(parent, SWT.BORDER);
+		MethodTreeViewer methodTreeViewer = new MethodTreeViewer(parent, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
 		methodTreeViewer.createControl(processingSupport, preferencesSupplier, toolbarButtons, false);
 		methodTreeViewer.setUpdateListener(new IUpdateListener() {
 
@@ -251,6 +266,26 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 
 				updateProcessMethod();
 				setMethodDirty(true);
+			}
+		});
+		//
+		methodTreeViewer.getTree().addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				ProcessMethodToolbar processMethodToolbar = toolbarButtons.get();
+				if(processMethodToolbar != null) {
+					if(e.keyCode == SWT.DEL) {
+						processMethodToolbar.deleteSelectedProcessEntries(e.display.getActiveShell());
+					} else {
+						if(e.stateMask == SWT.MOD1) {
+							if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_D) {
+								processMethodToolbar.deleteAllProcessEntries(e.display.getActiveShell());
+							}
+						}
+					}
+				}
 			}
 		});
 		//
