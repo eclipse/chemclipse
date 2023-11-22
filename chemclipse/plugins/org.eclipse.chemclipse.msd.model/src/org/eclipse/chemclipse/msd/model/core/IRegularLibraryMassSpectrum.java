@@ -18,6 +18,7 @@ public interface IRegularLibraryMassSpectrum extends IRegularMassSpectrum, ILibr
 	public static final String PROPERTY_PRECURSOR_TYPE = "Precursor Type"; // [M+H]+, [M-H]-, ...
 	public static final String PROPERTY_COLLISION_ENERGY = "Collision Energy"; // 30
 	public static final String PROPERTY_INSTRUMENT_NAME = "Instrument Name"; // Agilent QTOF 6530
+	public static final String PROPERTY_INSTRUMENT_TYPE = "Instrument Type"; // LC-ESI-QTOF
 
 	String getPrecursorType();
 
