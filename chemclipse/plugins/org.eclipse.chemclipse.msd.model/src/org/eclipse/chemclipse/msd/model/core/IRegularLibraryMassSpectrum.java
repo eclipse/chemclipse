@@ -20,6 +20,7 @@ public interface IRegularLibraryMassSpectrum extends IRegularMassSpectrum, ILibr
 	public static final String PROPERTY_INSTRUMENT_NAME = "Instrument Name"; // Agilent QTOF 6530
 	public static final String PROPERTY_INSTRUMENT_TYPE = "Instrument Type"; // LC-ESI-QTOF
 	public static final String PROPERTY_IONIZATION_MODE = "Ionization Mode"; // APCI
+	public static final String PROPERTY_FRAGMENTATION_METHOD = "Fragmentation Method"; // CID
 
 	String getPrecursorType();
 
