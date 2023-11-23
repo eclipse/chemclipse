@@ -7,3 +7,6 @@ org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum
 	NeutralMass
 	Polarity
 	Properties
+	
+org.eclipse.chemclipse.model.identifier.ILibraryInformation
+	CompoundClass
