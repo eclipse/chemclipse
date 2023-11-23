@@ -21,13 +21,16 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.massbank.model.VendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.Polarity;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -49,7 +52,10 @@ public class MassBankReader extends AbstractMassSpectraReader implements IMassSp
 	private static final String CHEMICAL_EXACT_MASS = "CH$EXACT_MASS";
 	private static final String CHEMICAL_SMILES = "CH$SMILES";
 	private static final String CHEMICAL_INCHI = "CH$IUPAC";
+	private static final String INSTRUMENT = "AC$INSTRUMENT";
+	private static final String INSTRUMENT_TYPE = "AC$INSTRUMENT_TYPE";
 	private static final String MASS_SPECTROMETRY = "AC$MASS_SPECTROMETRY";
+	private static final String CHROMATOGRAPHY = "AC$CHROMATOGRAPHY";
 	private static final String MASSSPECTRUM_FOCUSED_ION = "MS$FOCUSED_ION";
 	private static final Logger logger = Logger.getLogger(MassBankReader.class);
 
@@ -107,8 +113,17 @@ public class MassBankReader extends AbstractMassSpectraReader implements IMassSp
 					case CHEMICAL_INCHI:
 						libraryInformation.setInChI(value);
 						break;
+					case INSTRUMENT:
+						massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_INSTRUMENT_NAME, value);
+						break;
+					case INSTRUMENT_TYPE:
+						massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_INSTRUMENT_TYPE, value);
+						break;
 					case MASS_SPECTROMETRY:
 						parseMassSpectrometrySubTag(value.trim(), massSpectrum);
+						break;
+					case CHROMATOGRAPHY:
+						parseChromatographySubTag(value.trim(), massSpectrum);
 						break;
 					case CHEMICAL_LINK:
 						parseLinkSubTag(value, massSpectrum);
@@ -117,14 +132,14 @@ public class MassBankReader extends AbstractMassSpectraReader implements IMassSp
 						parseFocusedIonSubTag(value.trim(), massSpectrum);
 						break;
 					case CHEMICAL_COMPOUND_CLASS:
-						libraryInformation.addClassifier(value);
+						libraryInformation.setCompoundClass(value);
 						break;
 					case AUTHORS:
 						libraryInformation.setContributor(value);
 						break;
 					case CHEMICAL_EXACT_MASS:
 						try {
-							libraryInformation.setMolWeight(Double.parseDouble(value));
+							libraryInformation.setExactMass(Double.parseDouble(value));
 						} catch(NumberFormatException e) {
 							// ignore then...
 						}
@@ -235,7 +250,51 @@ public class MassBankReader extends AbstractMassSpectraReader implements IMassSp
 				} catch(RuntimeException e) {
 					// can't use then...
 				}
+			} else if("ION_MODE".equals(tag)) {
+				if(value.equals("POSITIVE")) {
+					massSpectrum.setPolarity(Polarity.POSITIVE);
+				} else if(value.substring(2).equals("NEGATIVE")) {
+					massSpectrum.setPolarity(Polarity.NEGATIVE);
+				}
+			} else if("IONIZATION".equals(tag)) {
+				massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_IONIZATION_MODE, value);
+			} else if("COLLISION_ENERGY".equals(tag)) {
+				massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_COLLISION_ENERGY, value);
+			} else if("FRAGMENTATION_METHOD".equals(tag)) {
+				massSpectrum.putProperty(IRegularLibraryMassSpectrum.PROPERTY_FRAGMENTATION_METHOD, value);
 			}
 		}
+	}
+
+	private static void parseChromatographySubTag(String subtag, VendorLibraryMassSpectrum massSpectrum) {
+
+		String[] split = subtag.split(SUB_TAG_DELIMITER, 2);
+		if(split.length == 2) {
+			String tag = split[0].trim();
+			String value = split[1].trim();
+			if("COLUMN_NAME".equals(tag)) {
+				massSpectrum.getChromatography().setColumnName(value);
+			} else if("FLOW_GRADIENT".equals(tag)) {
+				massSpectrum.getChromatography().setFlowGradient(value);
+			} else if("FLOW_RATE".equals(tag)) {
+				massSpectrum.getChromatography().setFlowRate(value);
+			} else if("RETENTION_TIME".equals(tag)) {
+				if(value.endsWith("s")) {
+					double retentionTime = parseNumber(value) * IChromatogramOverview.SECOND_CORRELATION_FACTOR;
+					massSpectrum.setRetentionTime((int)Math.round(retentionTime));
+				} else if(value.endsWith("min")) {
+					double retentionTime = parseNumber(value) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
+					massSpectrum.setRetentionTime((int)Math.round(retentionTime));
+				}
+			} else if("SOLVENT".equals(tag)) {
+				massSpectrum.getChromatography().setSolvent(value);
+			}
+		}
+	}
+
+	private static double parseNumber(String text) {
+
+		String digits = text.replaceAll("[^0-9.]", "");
+		return Double.parseDouble(digits);
 	}
 }
