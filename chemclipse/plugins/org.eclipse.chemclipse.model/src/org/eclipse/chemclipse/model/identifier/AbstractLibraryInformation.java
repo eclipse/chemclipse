@@ -94,6 +94,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 			columnIndexMarker.setRetentionIndex(libraryInformation.getRetentionIndex());
 			flavorMarkers.addAll(libraryInformation.getFlavorMarkers());
 			moleculeStructure = libraryInformation.getMoleculeStructure();
+			compoundClass = libraryInformation.getCompoundClass();
 		}
 	}
 
