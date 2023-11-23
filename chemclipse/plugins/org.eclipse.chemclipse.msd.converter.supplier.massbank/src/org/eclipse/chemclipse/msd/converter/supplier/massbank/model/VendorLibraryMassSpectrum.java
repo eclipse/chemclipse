@@ -24,11 +24,21 @@ public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectru
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = -7294423367073178233L;
+	private static final long serialVersionUID = -7294423367073178234L;
 	private static final Logger logger = Logger.getLogger(VendorLibraryMassSpectrum.class);
+	//
+	private Chromatography chromatography = new Chromatography();
 
-	// -------------------------------------------IAmdisMassSpectrum
-	// -------------------------------IMassSpectrumCloneable
+	public Chromatography getChromatography() {
+
+		return chromatography;
+	}
+
+	public void setChromatography(Chromatography chromatography) {
+
+		this.chromatography = chromatography;
+	}
+
 	@Override
 	public VendorLibraryMassSpectrum makeDeepCopy() throws CloneNotSupportedException {
 
@@ -60,5 +70,4 @@ public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectru
 
 		return makeDeepCopy();
 	}
-	// -------------------------------IMassSpectrumCloneable
 }
