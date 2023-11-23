@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2022 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -245,4 +245,8 @@ public interface ILibraryInformation extends IClassifier, Serializable {
 	String getMoleculeStructure();
 
 	void setMoleculeStructure(String moleculeStructure);
+
+	String getCompoundClass();
+
+	void setCompoundClass(String compoundClass);
 }

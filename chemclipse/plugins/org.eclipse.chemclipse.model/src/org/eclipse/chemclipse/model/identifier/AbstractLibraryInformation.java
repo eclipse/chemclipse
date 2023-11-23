@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2022 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -50,6 +50,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private final Set<IColumnIndexMarker> columnIndexMarkers = new LinkedHashSet<>();
 	private final Set<IFlavorMarker> flavorMarkers = new HashSet<>();
 	private String moleculeStructure = "";
+	private String compoundClass = "";
 	/*
 	 * Default Column Position Marker
 	 */
@@ -453,6 +454,18 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	public void setMoleculeStructure(String moleculeStructure) {
 
 		this.moleculeStructure = moleculeStructure;
+	}
+
+	@Override
+	public String getCompoundClass() {
+
+		return compoundClass;
+	}
+
+	@Override
+	public void setCompoundClass(String compoundClass) {
+
+		this.compoundClass = compoundClass;
 	}
 
 	private boolean isDefaultColumnIndexMarker(IColumnIndexMarker columnIndexMarker) {
