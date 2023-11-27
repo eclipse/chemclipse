@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Matthias Mailänder - add inclusive/exclusive mode
+ * Lorenz Gerber - MarkedWavelenghts based on int array
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core.support;
 
@@ -22,6 +23,12 @@ public class MarkedWavelengths extends AbstractMarkedWavelengths implements IMar
 
 	public MarkedWavelengths() {
 
+	}
+
+	public MarkedWavelengths(int[] wavelengthList, MarkedTraceModus markedTraceModus) {
+
+		super(wavelengthList);
+		this.markedTraceModus = markedTraceModus;
 	}
 
 	public MarkedWavelengths(MarkedTraceModus markedTraceModus) {

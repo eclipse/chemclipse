@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Lorenz Gerber - marked wavelengths based on int array
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core.support;
 
@@ -23,6 +24,16 @@ public abstract class AbstractMarkedWavelengths implements IMarkedWavelengths {
 	public AbstractMarkedWavelengths() {
 
 		markedWavelengths = new HashSet<>();
+	}
+
+	protected AbstractMarkedWavelengths(int[] wavelengthsList) {
+
+		markedWavelengths = new HashSet<>();
+		if(wavelengthsList != null) {
+			for(int wavelength : wavelengthsList) {
+				markedWavelengths.add(new MarkedWavelength(wavelength));
+			}
+		}
 	}
 
 	protected AbstractMarkedWavelengths(Collection<? extends Number> wavelengths) {
