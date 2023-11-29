@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Matthias Mailänder - new API and re-implementation
+ * Lorenz Gerber - added wavelength entries
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.l10n;
 
@@ -51,6 +52,7 @@ public class SupportMessages extends NLS {
 	public static String remove;
 	public static String removeAllFilesFromList;
 	public static String removeTICbeforeAddingIonValues;
+	public static String removeTICbeforeAddingWavelengthValues;
 	public static String searchAvailableProcessorItems;
 	public static String selectAll;
 	public static String selectEntriesinList;
@@ -66,6 +68,10 @@ public class SupportMessages extends NLS {
 	public static String columns;
 	public static String resetColumnOrder;
 	public static String resetColumnWidth;
+	public static String wavelengths;
+	public static String wavelengthValueAlreadyExists;
+	public static String standardWavelengthRanges;
+	public static String enterWavelength;
 	//
 	static {
 		NLS.initializeMessages("org.eclipse.chemclipse.support.ui.l10n.messages", SupportMessages.class); //$NON-NLS-1$
