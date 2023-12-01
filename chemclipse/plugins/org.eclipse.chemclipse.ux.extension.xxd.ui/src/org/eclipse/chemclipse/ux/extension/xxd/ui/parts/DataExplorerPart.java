@@ -17,7 +17,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.DataExplorerUI;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -37,12 +36,7 @@ public class DataExplorerPart {
 	@PostConstruct
 	public void init(Composite parent, MPart part, IEclipseContext context) {
 
-		// Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
-		DisplayUtils.getDisplay().asyncExec(() -> {
-			dataExplorerUI = new DataExplorerUI(parent, preferenceStore, context, supplierFileIdentifier);
-			dataExplorerUI.getControl().redraw();
-			dataExplorerUI.getControl().requestLayout();
-		});
+		dataExplorerUI = new DataExplorerUI(parent, preferenceStore, context, supplierFileIdentifier);
 	}
 
 	public DataExplorerUI getDataExplorerUI() {
@@ -53,8 +47,6 @@ public class DataExplorerPart {
 	@Focus
 	public void focus() {
 
-		if(dataExplorerUI != null) {
-			dataExplorerUI.setFocus();
-		}
+		dataExplorerUI.setFocus();
 	}
 }
