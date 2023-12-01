@@ -20,6 +20,7 @@ import java.util.function.Function;
 
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.l10n.Messages;
 import org.eclipse.chemclipse.ux.extension.ui.listener.DataExplorerDragListener;
@@ -153,7 +154,8 @@ public class DataExplorerTreeUI {
 
 	private void setInput(TreeViewer treeViewer) {
 
-		treeViewer.setInput(dataExplorerTreeRoot.getRootContent());
+		// Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
+		DisplayUtils.getDisplay().asyncExec(() -> treeViewer.setInput(dataExplorerTreeRoot.getRootContent()));
 	}
 
 	private int getNumberOfChildDirectories(File directory) {

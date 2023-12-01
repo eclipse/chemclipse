@@ -296,8 +296,8 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof File) {
-					return getName((File)element);
+				if(element instanceof File file) {
+					return getName(file);
 				}
 				return "-";
 			}
@@ -314,8 +314,8 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof File) {
-					return getPath((File)element);
+				if(element instanceof File file) {
+					return getPath(file);
 				}
 				return "-";
 			}
