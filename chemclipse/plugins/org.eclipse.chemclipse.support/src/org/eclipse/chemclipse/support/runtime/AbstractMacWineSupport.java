@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,8 @@ public abstract class AbstractMacWineSupport extends AbstractWineRuntimeSupport 
 	 * @param macWineBinary
 	 *            (e.g. "/Applications/Wine.app")
 	 */
-	public AbstractMacWineSupport(String application, String parameter, String macWineBinary) throws FileNotFoundException {
+	protected AbstractMacWineSupport(String application, String parameter, String macWineBinary) throws FileNotFoundException {
+
 		super(application, parameter);
 		this.macWineBinary = macWineBinary;
 	}
