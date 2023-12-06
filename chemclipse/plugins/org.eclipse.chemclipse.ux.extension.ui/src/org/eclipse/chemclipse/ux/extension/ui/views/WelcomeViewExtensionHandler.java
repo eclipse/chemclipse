@@ -314,15 +314,18 @@ public class WelcomeViewExtensionHandler {
 					if(image == null) {
 						MPerspective perspectiveModel = perspectiveSupport.getPerspectiveModel(configurationElement.getAttribute(ATTRIBUTE_PERSPECTIVE_ID));
 						if(perspectiveModel != null) {
-							String iconURI = perspectiveModel.getIconURI();
+							URI iconURI = null;
+							try {
+								iconURI = new URI(perspectiveModel.getIconURI());
+							} catch(URISyntaxException e) {
+								logger.warn(e);
+							}
 							if(iconURI != null) {
-								try {
-									try (InputStream stream = new URL(iconURI).openStream()) {
-										image = new Image(shell.getDisplay(), stream);
-										images.put(configurationElement, image);
-									}
-								} catch(Exception e) {
-									// can't load icon then
+								try (InputStream stream = iconURI.toURL().openStream()) {
+									image = new Image(shell.getDisplay(), stream);
+									images.put(configurationElement, image);
+								} catch(IOException e) {
+									logger.warn(e);
 								}
 							}
 						}

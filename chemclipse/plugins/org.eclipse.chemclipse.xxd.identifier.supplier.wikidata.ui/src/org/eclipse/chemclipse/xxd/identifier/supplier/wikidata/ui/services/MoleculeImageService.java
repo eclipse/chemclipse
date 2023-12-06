@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.ui.services;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -72,44 +74,46 @@ public class MoleculeImageService implements IMoleculeImageService {
 	@Override
 	public Image create(Display display, ILibraryInformation libraryInformation, int width, int height) {
 
-		String url = null;
+		String uri = null;
 		String smiles = libraryInformation.getSmiles().trim();
 		if(!smiles.isEmpty()) {
-			url = QueryStructuralFormula.fromSMILES(smiles);
+			uri = QueryStructuralFormula.fromSMILES(smiles);
 		}
-		if(url == null) {
+		if(uri == null) {
 			String cas = libraryInformation.getCasNumber().trim();
 			if(!cas.isEmpty()) {
-				url = QueryStructuralFormula.fromCAS(cas);
+				uri = QueryStructuralFormula.fromCAS(cas);
 			}
 		}
-		if(url == null) {
+		if(uri == null) {
 			String inchi = libraryInformation.getInChI().trim();
 			if(!inchi.isEmpty()) {
-				url = QueryStructuralFormula.fromInChI(inchi);
+				uri = QueryStructuralFormula.fromInChI(inchi);
 			}
 		}
-		if(url == null) {
+		if(uri == null) {
 			String inchiKey = libraryInformation.getInChIKey().trim();
 			if(!inchiKey.isEmpty()) {
-				url = QueryStructuralFormula.fromInChIKey(inchiKey);
+				uri = QueryStructuralFormula.fromInChIKey(inchiKey);
 			}
 		}
-		if(url == null) {
+		if(uri == null) {
 			String name = libraryInformation.getName().trim();
 			if(!name.isEmpty()) {
-				url = QueryStructuralFormula.fromName(name);
+				uri = QueryStructuralFormula.fromName(name);
 			}
 		}
-		if(url != null) {
-			url = url.replace("wiki/Special:FilePath", "w/index.php?title=Special:Redirect/file");
-			url = url + "&width=" + width + "&height=" + height;
+		if(uri != null) {
+			uri = uri.replace("wiki/Special:FilePath", "w/index.php?title=Special:Redirect/file");
+			uri = uri + "&width=" + width + "&height=" + height;
 			ImageData data = null;
 			try {
-				url = resolveRedirects(url);
-				data = new ImageData(new URL(url).openStream());
+				uri = resolveRedirects(uri);
+				data = new ImageData(new URI(uri).toURL().openStream());
 				data.type = SWT.IMAGE_PNG;
 			} catch(IOException e) {
+				logger.warn(e);
+			} catch(URISyntaxException e) {
 				logger.warn(e);
 			}
 			return new Image(display, data);
@@ -123,16 +127,16 @@ public class MoleculeImageService implements IMoleculeImageService {
 		return PreferencePage.class;
 	}
 
-	private String resolveRedirects(String unresolvedURL) throws IOException {
+	private String resolveRedirects(String unresolvedURI) throws IOException, URISyntaxException {
 
-		URL url = new URL(unresolvedURL);
+		URL url = new URI(unresolvedURI).toURL();
 		HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 		connection.setInstanceFollowRedirects(false);
 		connection.connect();
 		int responseCode = connection.getResponseCode();
 		if(responseCode == HttpURLConnection.HTTP_MOVED_PERM || responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
 			String location = connection.getHeaderField("Location");
-			URL newUrl = new URL(location);
+			URL newUrl = new URI(location).toURL();
 			connection = (HttpURLConnection)newUrl.openConnection();
 			connection.connect();
 		}

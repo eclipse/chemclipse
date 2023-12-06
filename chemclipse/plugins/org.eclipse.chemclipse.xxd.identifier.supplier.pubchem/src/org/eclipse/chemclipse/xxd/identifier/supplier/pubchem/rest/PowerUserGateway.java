@@ -13,7 +13,8 @@ package org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.rest;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,13 +61,15 @@ public class PowerUserGateway {
 	public static String getCanonicalSMILES(ILibraryInformation libraryInformation) {
 
 		String smiles = null;
-		String url = getBestCompound(libraryInformation) + "/property/CanonicalSMILES/TXT";
+		String uri = getBestCompound(libraryInformation) + "/property/CanonicalSMILES/TXT";
 		try {
-			smiles = IOUtils.toString(new URL(url), StandardCharsets.UTF_8);
+			smiles = IOUtils.toString(new URI(uri).toURL(), StandardCharsets.UTF_8);
 			smiles = smiles.trim();
 		} catch(FileNotFoundException e) {
 			// 404
 		} catch(IOException e) {
+			logger.warn(e);
+		} catch(URISyntaxException e) {
 			logger.warn(e);
 		}
 		return smiles;
@@ -75,9 +78,9 @@ public class PowerUserGateway {
 	public static List<Integer> getCIDS(ILibraryInformation libraryInformation) {
 
 		List<Integer> cids = new ArrayList<>();
-		String url = getBestCompound(libraryInformation) + "/cids/TXT";
+		String uri = getBestCompound(libraryInformation) + "/cids/TXT";
 		try {
-			String output = IOUtils.toString(new URL(url), StandardCharsets.UTF_8);
+			String output = IOUtils.toString(new URI(uri).toURL(), StandardCharsets.UTF_8);
 			String[] lines = output.split(System.lineSeparator());
 			for(String line : lines) {
 				cids.add(Integer.parseInt(line));
@@ -85,6 +88,8 @@ public class PowerUserGateway {
 		} catch(FileNotFoundException e) {
 			// 404
 		} catch(IOException e) {
+			logger.warn(e);
+		} catch(URISyntaxException e) {
 			logger.warn(e);
 		}
 		return cids;

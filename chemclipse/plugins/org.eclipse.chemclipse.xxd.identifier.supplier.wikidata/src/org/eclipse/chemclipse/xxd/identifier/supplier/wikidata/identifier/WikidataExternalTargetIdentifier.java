@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.identifier;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.targets.ITargetIdentifierSupplier;
@@ -52,21 +54,23 @@ public class WikidataExternalTargetIdentifier implements ITargetIdentifierSuppli
 	@Override
 	public URL getURL(ILibraryInformation libraryInformation) {
 
-		String url = null;
+		String uri = null;
 		String cas = libraryInformation.getCasNumber().trim();
 		if(cas != null && !cas.isEmpty() && !CasSupport.CAS_DEFAULT.equals(cas)) {
-			url = QueryEntity.fromCAS(cas);
+			uri = QueryEntity.fromCAS(cas);
 		}
-		if(url == null) {
+		if(uri == null) {
 			String name = libraryInformation.getName().trim();
 			if(!name.isEmpty()) {
-				url = QueryEntity.fromName(name);
+				uri = QueryEntity.fromName(name);
 			}
 		}
-		if(url != null) {
+		if(uri != null) {
 			try {
-				return new URL(url);
+				return new URI(uri).toURL();
 			} catch(MalformedURLException e) {
+				logger.warn(e);
+			} catch(URISyntaxException e) {
 				logger.warn(e);
 			}
 		}

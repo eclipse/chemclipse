@@ -13,7 +13,8 @@ package org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.ui.services;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -72,16 +73,18 @@ public class MoleculeImageService implements IMoleculeImageService {
 	@Override
 	public Image create(Display display, ILibraryInformation libraryInformation, int width, int height) {
 
-		String url = PowerUserGateway.getBestCompound(libraryInformation);
+		String uri = PowerUserGateway.getBestCompound(libraryInformation);
 		try {
 			String size = "?image_size=" + width + "x" + height;
-			url = url + "/PNG" + size;
-			ImageData data = new ImageData(new URL(url).openStream());
+			uri = uri + "/PNG" + size;
+			ImageData data = new ImageData(new URI(uri).toURL().openStream());
 			data.type = SWT.IMAGE_PNG;
 			return new Image(display, data);
 		} catch(FileNotFoundException e) {
 			return null; // 404
 		} catch(IOException e) {
+			logger.warn(e);
+		} catch(URISyntaxException e) {
 			logger.warn(e);
 		}
 		return null;
