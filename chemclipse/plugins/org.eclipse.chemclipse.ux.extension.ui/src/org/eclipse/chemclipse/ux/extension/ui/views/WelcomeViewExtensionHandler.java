@@ -14,7 +14,8 @@ package org.eclipse.chemclipse.ux.extension.ui.views;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,6 +30,7 @@ import java.util.function.Predicate;
 
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveChooserDialog;
 import org.eclipse.chemclipse.support.ui.workbench.PerspectiveSupport;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
@@ -65,6 +67,8 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class WelcomeViewExtensionHandler {
 
+	private static final Logger logger = Logger.getLogger(WelcomeViewExtensionHandler.class);
+	//
 	public static final String PREFERENCE_MIN_TILES = "WelcomeViewExtensionHandler.minTiles";
 	public static final String PREFERENCE_MAX_TILES = "WelcomeViewExtensionHandler.maxTiles";
 	public static final String PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE = "WelcomeViewExtensionHandler.changePerspective";
@@ -186,8 +190,7 @@ public class WelcomeViewExtensionHandler {
 
 	private String getExtensionId(TileDefinition extension) {
 
-		if(extension instanceof ConfigurationElementTileDefinition) {
-			ConfigurationElementTileDefinition elementTileDefinition = (ConfigurationElementTileDefinition)extension;
+		if(extension instanceof ConfigurationElementTileDefinition elementTileDefinition) {
 			return elementTileDefinition.element.getContributor().getName() + "#" + elementTileDefinition.element.getAttribute(ATTRIBUTE_SECTION);
 		} else if(extension != null) {
 			return extension.getClass().getName();
@@ -211,7 +214,6 @@ public class WelcomeViewExtensionHandler {
 					if(!removedTiles.contains(getExtensionId(defaultExtension))) {
 						iterator.remove();
 						used.add(defaultExtension);
-						continue;
 					}
 				}
 			} else {
@@ -235,12 +237,12 @@ public class WelcomeViewExtensionHandler {
 		}
 		preferenceStore.setValue(PREFERENCE_ADDED, serializeSet(addedTiles));
 		preferenceStore.setValue(PREFERENCE_REMOVED, serializeSet(removedTiles));
-		if(preferenceStore instanceof IPersistentPreferenceStore) {
-			IPersistentPreferenceStore store = (IPersistentPreferenceStore)preferenceStore;
+		if(preferenceStore instanceof IPersistentPreferenceStore store) {
 			if(store.needsSaving()) {
 				try {
 					store.save();
 				} catch(IOException e) {
+					logger.warn(e);
 				}
 			}
 		}
@@ -299,8 +301,8 @@ public class WelcomeViewExtensionHandler {
 				if(labelProvider != null) {
 					return labelProvider.getText(element);
 				}
-				if(element instanceof TileDefinition) {
-					return ((TileDefinition)element).getTitle();
+				if(element instanceof TileDefinition tileDefinition) {
+					return tileDefinition.getTitle();
 				}
 				return super.getText(element);
 			}
@@ -308,8 +310,8 @@ public class WelcomeViewExtensionHandler {
 			@Override
 			public Image getImage(Object element) {
 
-				if(element instanceof ConfigurationElementTileDefinition) {
-					IConfigurationElement configurationElement = ((ConfigurationElementTileDefinition)element).element;
+				if(element instanceof ConfigurationElementTileDefinition configurationElementTileDefinition) {
+					IConfigurationElement configurationElement = configurationElementTileDefinition.element;
 					Image image = images.get(configurationElement);
 					if(image == null) {
 						MPerspective perspectiveModel = perspectiveSupport.getPerspectiveModel(configurationElement.getAttribute(ATTRIBUTE_PERSPECTIVE_ID));
@@ -371,8 +373,8 @@ public class WelcomeViewExtensionHandler {
 		List<TileDefinition> usedExtensions = new ArrayList<>();
 		for(TaskTile tile : tileContainer.getTiles()) {
 			TileDefinition definition = tile.getDefinition();
-			if(definition instanceof ExtensionTileDefinition) {
-				TileDefinition extension = ((ExtensionTileDefinition)definition).delegate;
+			if(definition instanceof ExtensionTileDefinition extensionTileDefinition) {
+				TileDefinition extension = extensionTileDefinition.delegate;
 				if(extension != null) {
 					usedExtensions.add(extension);
 				}
@@ -456,8 +458,8 @@ public class WelcomeViewExtensionHandler {
 		@Override
 		public boolean equals(Object obj) {
 
-			if(obj instanceof ConfigurationElementTileDefinition) {
-				return element.equals(((ConfigurationElementTileDefinition)obj).element);
+			if(obj instanceof ConfigurationElementTileDefinition configurationElementTileDefinition) {
+				return element.equals(configurationElementTileDefinition.element);
 			}
 			return false;
 		}
@@ -547,23 +549,21 @@ public class WelcomeViewExtensionHandler {
 				String preferredPerspective = delegate.getPreferredPerspective();
 				if(preferredPerspective != null && !preferredPerspective.isEmpty()) {
 					if(!perspectiveSupport.getActivePerspectiveId().startsWith(preferredPerspective)) {
-						if(preferredPerspective != null) {
-							MPerspective perspectiveModel = perspectiveSupport.getPerspectiveModel(preferredPerspective);
-							if(perspectiveModel != null) {
-								boolean changePerspectiveAutomatically = (delegate instanceof ConfigurationElementTileDefinition) || preferenceStore.getBoolean(PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE);
-								if(!changePerspectiveAutomatically) {
-									/*
-									 * Ask the user for changing the perspective.
-									 */
-									PerspectiveChooserDialog dialog = new PerspectiveChooserDialog(shell, "Change Perspective?", "Perspectives offer the best user experience and special views to optimize the workflow. This task is associated with the " + perspectiveModel.getLabel() + " perspective do you like to change? ", preferenceStore, PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE);
-									changePerspectiveAutomatically = (dialog.open() == Window.OK);
-								}
+						MPerspective perspectiveModel = perspectiveSupport.getPerspectiveModel(preferredPerspective);
+						if(perspectiveModel != null) {
+							boolean changePerspectiveAutomatically = (delegate instanceof ConfigurationElementTileDefinition) || preferenceStore.getBoolean(PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE);
+							if(!changePerspectiveAutomatically) {
 								/*
-								 * Change perspective?
+								 * Ask the user for changing the perspective.
 								 */
-								if(changePerspectiveAutomatically) {
-									perspectiveSupport.changePerspective(preferredPerspective);
-								}
+								PerspectiveChooserDialog dialog = new PerspectiveChooserDialog(shell, "Change Perspective?", "Perspectives offer the best user experience and special views to optimize the workflow. This task is associated with the " + perspectiveModel.getLabel() + " perspective do you like to change? ", preferenceStore, PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE);
+								changePerspectiveAutomatically = (dialog.open() == Window.OK);
+							}
+							/*
+							 * Change perspective?
+							 */
+							if(changePerspectiveAutomatically) {
+								perspectiveSupport.changePerspective(preferredPerspective);
 							}
 						}
 					}
@@ -579,8 +579,8 @@ public class WelcomeViewExtensionHandler {
 
 			if(delegate != null) {
 				Object invoke = ContextInjectionFactory.invoke(delegate, CanExecute.class, context, Boolean.TRUE);
-				if(invoke instanceof Boolean) {
-					return ((Boolean)invoke).booleanValue();
+				if(invoke instanceof Boolean invokeBoolean) {
+					return invokeBoolean.booleanValue();
 				}
 				return true;
 			}
