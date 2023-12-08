@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.runtime.AbstractLinuxWineSupport;
@@ -24,6 +25,7 @@ public class LinuxWineSupport extends AbstractLinuxWineSupport implements IExten
 	private final INistSupport nistSupport;
 
 	public LinuxWineSupport(File applicationFolder, String parameter) throws FileNotFoundException {
+
 		super(PreferenceSupplier.getNistExecutable(applicationFolder).getAbsolutePath(), parameter);
 		nistSupport = new NistSupport(this);
 	}
@@ -53,50 +55,35 @@ public class LinuxWineSupport extends AbstractLinuxWineSupport implements IExten
 	@Override
 	public Process executeKillCommand() throws IOException {
 
-		Runtime runtime = Runtime.getRuntime();
-		Process process = runtime.exec(getKillCommand());
-		return process;
+		return getKillCommand().start();
 	}
 
 	@Override
 	public Process executeOpenCommand() throws IOException {
 
-		Runtime runtime = Runtime.getRuntime();
-		Process process = runtime.exec(getOpenCommand());
-		return process;
+		return getOpenCommand().start();
 	}
 
-	private String getKillCommand() {
+	private ProcessBuilder getKillCommand() {
 
-		/*
-		 * "pkill -f nist"
-		 */
-		String command = "";
 		if(isValidApplicationExecutable()) {
-			StringBuilder builder = new StringBuilder();
-			builder.append("pkill -f");
-			builder.append(" ");
-			builder.append("nist");
-			command = builder.toString();
+			/*
+			 * "pkill -f nist"
+			 */
+			return new ProcessBuilder("pkill", "-f", "nist");
 		}
-		return command;
+		return new ProcessBuilder();
 	}
 
-	private String getOpenCommand() {
+	private ProcessBuilder getOpenCommand() {
 
 		/*
 		 * "env WINEPREFIX=/home/eselmeister/.wine wine start C:\\programme\\nist\\MSSEARCH\\nistms.exe"
 		 */
-		StringBuilder builder = new StringBuilder();
-		/*
-		 * LINUX, UNIX
-		 */
-		builder.append("env WINEPREFIX=");
-		builder.append(getWineEnvironment());
-		builder.append(" ");
-		builder.append("wine start");
-		builder.append(" ");
-		builder.append(getWineApplication().replace("$.exe", ".exe")); // run the GUI version
-		return builder.toString();
+		String nistms = getWineApplication().replace("$.exe", ".exe"); // run the GUI version
+		ProcessBuilder processBuilder = new ProcessBuilder("wine", "start", nistms);
+		Map<String, String> environment = processBuilder.environment();
+		environment.put("WINEPREFIX", getWineEnvironment());
+		return processBuilder;
 	}
 }

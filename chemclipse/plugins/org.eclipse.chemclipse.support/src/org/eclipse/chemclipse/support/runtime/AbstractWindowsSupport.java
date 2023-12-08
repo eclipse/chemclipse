@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,26 +22,22 @@ public abstract class AbstractWindowsSupport extends AbstractRuntimeSupport impl
 	 * @param application
 	 * @param parameter
 	 */
-	public AbstractWindowsSupport(String application, String parameter) throws FileNotFoundException {
+	protected AbstractWindowsSupport(String application, String parameter) throws FileNotFoundException {
+
 		super(application, parameter);
 	}
 
 	@Override
 	public Process executeRunCommand() throws IOException {
 
-		Runtime runtime = Runtime.getRuntime();
-		return runtime.exec(getRunCommand());
+		return getRunCommand().start();
 	}
 
-	private String getRunCommand() {
+	private ProcessBuilder getRunCommand() {
 
 		/*
 		 * Returns e.g.: "C:\Programs\NIST\MSSEARCH\nistms$.exe /INSTRUMENT /PAR=2
 		 */
-		StringBuilder builder = new StringBuilder();
-		builder.append(getApplication());
-		builder.append(" ");
-		builder.append(getParameter());
-		return builder.toString();
+		return new ProcessBuilder(getApplication(), getParameter());
 	}
 }

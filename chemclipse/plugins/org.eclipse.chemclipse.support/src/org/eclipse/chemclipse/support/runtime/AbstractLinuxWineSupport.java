@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.support.runtime;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 
 public abstract class AbstractLinuxWineSupport extends AbstractWineRuntimeSupport implements IWineRuntimeSupport {
 
@@ -23,7 +24,7 @@ public abstract class AbstractLinuxWineSupport extends AbstractWineRuntimeSuppor
 	 * @param application
 	 * @param parameter
 	 */
-	public AbstractLinuxWineSupport(String application, String parameter) throws FileNotFoundException {
+	protected AbstractLinuxWineSupport(String application, String parameter) throws FileNotFoundException {
 
 		super(application, parameter);
 	}
@@ -31,27 +32,17 @@ public abstract class AbstractLinuxWineSupport extends AbstractWineRuntimeSuppor
 	@Override
 	public Process executeRunCommand() throws IOException {
 
-		Runtime runtime = Runtime.getRuntime();
-		return runtime.exec(getRunCommand());
+		return getRunCommand().start();
 	}
 
-	private String getRunCommand() {
+	private ProcessBuilder getRunCommand() {
 
 		/*
-		 * "env WINEPREFIX=/home/eselmeister/.wine wine start C:\\programme\\nist\\MSSEARCH\\nistms$.exe /INSTRUMENT /PAR=2"
+		 * "env WINEPREFIX=/home/chemclipse/.wine wine start C:\\programme\\nist\\MSSEARCH\\nistms$.exe /INSTRUMENT /PAR=2"
 		 */
-		StringBuilder builder = new StringBuilder();
-		/*
-		 * LINUX, UNIX
-		 */
-		builder.append("env WINEPREFIX=");
-		builder.append(getWineEnvironment());
-		builder.append(" ");
-		builder.append("wine start");
-		builder.append(" ");
-		builder.append(getWineApplication());
-		builder.append(" ");
-		builder.append(getParameter());
-		return builder.toString();
+		ProcessBuilder processBuilder = new ProcessBuilder("wine", "start", getWineApplication(), getParameter());
+		Map<String, String> environment = processBuilder.environment();
+		environment.put("WINEPREFIX", getWineEnvironment());
+		return processBuilder;
 	}
 }

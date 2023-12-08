@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.run
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 
 import org.eclipse.chemclipse.support.runtime.AbstractLinuxWineSupport;
 
@@ -21,6 +22,7 @@ public class LinuxWineSupport extends AbstractLinuxWineSupport implements IExten
 	private IAmdisSupport amdisSupport;
 
 	public LinuxWineSupport(String application, String parameter) throws FileNotFoundException {
+
 		super(application, parameter);
 		amdisSupport = new AmdisSupport(this);
 	}
@@ -29,7 +31,7 @@ public class LinuxWineSupport extends AbstractLinuxWineSupport implements IExten
 	public int getSleepMillisecondsBeforeExecuteRunCommand() {
 
 		/*
-		 * I've recognized that the e.g. NIST-DB sometimes don't start.
+		 * Sometimes NIST-DB doesn't start.
 		 * Does a sleep time preventing this?
 		 */
 		return 4000;
@@ -50,50 +52,29 @@ public class LinuxWineSupport extends AbstractLinuxWineSupport implements IExten
 	@Override
 	public Process executeKillCommand() throws IOException {
 
-		Runtime runtime = Runtime.getRuntime();
-		Process process = runtime.exec(getKillCommand());
-		return process;
+		return getKillCommand().start();
 	}
 
 	@Override
 	public Process executeOpenCommand() throws IOException {
 
-		Runtime runtime = Runtime.getRuntime();
-		Process process = runtime.exec(getOpenCommand());
-		return process;
+		return getOpenCommand().start();
 	}
 
-	private String getKillCommand() {
+	private ProcessBuilder getKillCommand() {
 
-		/*
-		 * "pkill -f AMDIS"
-		 */
-		String command = "";
-		if(isValidApplicationExecutable()) {
-			StringBuilder builder = new StringBuilder();
-			builder.append("pkill -f");
-			builder.append(" ");
-			builder.append("AMDIS");
-			command = builder.toString();
-		}
-		return command;
+		return new ProcessBuilder("pkill", "-f", "AMDIS");
 	}
 
-	private String getOpenCommand() {
+	private ProcessBuilder getOpenCommand() {
 
 		/*
-		 * "env WINEPREFIX=/home/eselmeister/.wine wine start C:\\programme\\nist\\AMDIS32-271\\AMDIS32$.exe"
+		 * "env WINEPREFIX=/home/chemclipse/.wine wine start C:\\programme\\nist\\AMDIS32-271\\AMDIS32$.exe"
 		 */
-		StringBuilder builder = new StringBuilder();
-		/*
-		 * LINUX, UNIX
-		 */
-		builder.append("env WINEPREFIX=");
-		builder.append(getWineEnvironment());
-		builder.append(" ");
-		builder.append("wine start");
-		builder.append(" ");
-		builder.append(getWineApplication().replace("AMDIS32$.exe", "AMDIS_32.exe")); // run the GUI version
-		return builder.toString();
+		String amdis = getWineApplication().replace("AMDIS32$.exe", "AMDIS_32.exe"); // run the GUI version
+		ProcessBuilder processBuilder = new ProcessBuilder("wine", "start", amdis);
+		Map<String, String> environment = processBuilder.environment();
+		environment.put("WINEPREFIX", getWineEnvironment());
+		return processBuilder;
 	}
 }
