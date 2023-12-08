@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.identifier;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -60,8 +62,10 @@ public class PubChemExternalTargetIdentifier implements ITargetIdentifierSupplie
 		int cid = cids.get(0);
 		URL url = null;
 		try {
-			url = new URL(PREFIX + cid);
+			url = new URI(PREFIX + cid).toURL();
 		} catch(MalformedURLException e) {
+			logger.warn(e);
+		} catch(URISyntaxException e) {
 			logger.warn(e);
 		}
 		return url;

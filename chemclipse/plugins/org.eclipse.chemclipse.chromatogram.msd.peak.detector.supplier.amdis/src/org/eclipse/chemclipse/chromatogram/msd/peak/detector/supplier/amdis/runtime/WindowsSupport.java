@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,6 +21,7 @@ public class WindowsSupport extends AbstractWindowsSupport implements IExtendedR
 	private IAmdisSupport amdisSupport;
 
 	public WindowsSupport(String application, String parameter) throws FileNotFoundException {
+
 		super(application, parameter);
 		amdisSupport = new AmdisSupport(this);
 	}
@@ -40,36 +41,32 @@ public class WindowsSupport extends AbstractWindowsSupport implements IExtendedR
 	@Override
 	public Process executeOpenCommand() throws IOException {
 
-		Runtime runtime = Runtime.getRuntime();
-		return runtime.exec(getOpenCommand());
+		return getOpenCommand().start();
 	}
 
 	@Override
 	public Process executeKillCommand() throws IOException {
 
-		Runtime runtime = Runtime.getRuntime();
-		return runtime.exec(getKillCommand());
+		return getKillCommand().start();
 	}
 
-	private String getOpenCommand() {
+	private ProcessBuilder getOpenCommand() {
 
 		/*
 		 * Returns e.g.: "C:\Programs\NIST\AMDIS32\AMDIS32$.exe
 		 */
-		StringBuilder builder = new StringBuilder();
-		builder.append(getApplication().replace("AMDIS32$.exe", "AMDIS_32.exe")); // run the GUI version
-		return builder.toString();
+		String amdis = getApplication().replace("AMDIS32$.exe", "AMDIS_32.exe"); // run the GUI version
+		return new ProcessBuilder(amdis);
 	}
 
-	private String getKillCommand() {
+	private ProcessBuilder getKillCommand() {
 
-		String command = "";
 		if(isValidApplicationExecutable()) {
 			/*
 			 * taskkill kills the e.g. AMDIS application.
 			 */
-			command = "taskkill /f /IM AMDIS_32.exe";
+			return new ProcessBuilder("taskkill", "/f", "/IM", "AMDIS_32.exe");
 		}
-		return command;
+		return new ProcessBuilder();
 	}
 }

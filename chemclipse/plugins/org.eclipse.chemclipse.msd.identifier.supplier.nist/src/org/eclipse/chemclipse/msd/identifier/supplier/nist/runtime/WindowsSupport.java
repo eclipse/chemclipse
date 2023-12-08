@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,6 +24,7 @@ public class WindowsSupport extends AbstractWindowsSupport implements IExtendedR
 	private final INistSupport nistSupport;
 
 	public WindowsSupport(File applicationFolder, String parameter) throws FileNotFoundException {
+
 		super(PreferenceSupplier.getNistExecutable(applicationFolder).getAbsolutePath(), parameter);
 		nistSupport = new NistSupport(this);
 	}
@@ -43,26 +44,23 @@ public class WindowsSupport extends AbstractWindowsSupport implements IExtendedR
 	@Override
 	public Process executeOpenCommand() throws IOException {
 
-		Runtime runtime = Runtime.getRuntime();
-		return runtime.exec(getApplication());
+		return new ProcessBuilder(getApplication()).start();
 	}
 
 	@Override
 	public Process executeKillCommand() throws IOException {
 
-		Runtime runtime = Runtime.getRuntime();
-		return runtime.exec(getKillCommand());
+		return getKillCommand().start();
 	}
 
-	private String getKillCommand() {
+	private ProcessBuilder getKillCommand() {
 
-		String command = "";
 		if(isValidApplicationExecutable()) {
 			/*
 			 * taskkill only kills the NIST-DB application.
 			 */
-			command = "taskkill /IM nistms.exe";
+			return new ProcessBuilder("taskkill", "/IM", "nistms.exe");
 		}
-		return command;
+		return new ProcessBuilder();
 	}
 }
