@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add generics, remove obsolete methods
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core;
@@ -39,11 +39,10 @@ public class HighPassScanFilter extends AbstractMassSpectrumFilter {
 		}
 		IProcessingInfo<IMassSpectrumFilterResult> processingInfo = validate(massSpectra, filterSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(filterSettings instanceof HighPassFilterSettings) {
+			if(filterSettings instanceof HighPassFilterSettings settings) {
 				/*
 				 * Filter
 				 */
-				HighPassFilterSettings settings = (HighPassFilterSettings)filterSettings;
 				int number = settings.getNumberHighest();
 				for(IScanMSD massSpectrum : massSpectra) {
 					XPassFilter.applyHighPass(massSpectrum, number);
