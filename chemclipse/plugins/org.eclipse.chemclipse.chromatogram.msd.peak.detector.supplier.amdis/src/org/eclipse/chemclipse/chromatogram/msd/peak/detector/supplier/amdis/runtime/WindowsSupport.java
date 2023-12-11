@@ -7,12 +7,13 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.runtime;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import org.eclipse.chemclipse.support.runtime.AbstractWindowsSupport;
 
@@ -20,9 +21,9 @@ public class WindowsSupport extends AbstractWindowsSupport implements IExtendedR
 
 	private IAmdisSupport amdisSupport;
 
-	public WindowsSupport(String application, String parameter) throws FileNotFoundException {
+	public WindowsSupport(String application, List<String> parameters) throws FileNotFoundException {
 
-		super(application, parameter);
+		super(application, parameters);
 		amdisSupport = new AmdisSupport(this);
 	}
 

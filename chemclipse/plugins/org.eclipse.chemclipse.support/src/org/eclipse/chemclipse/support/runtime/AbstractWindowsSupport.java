@@ -7,12 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.runtime;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 public abstract class AbstractWindowsSupport extends AbstractRuntimeSupport implements IRuntimeSupport {
 
@@ -22,9 +23,9 @@ public abstract class AbstractWindowsSupport extends AbstractRuntimeSupport impl
 	 * @param application
 	 * @param parameter
 	 */
-	protected AbstractWindowsSupport(String application, String parameter) throws FileNotFoundException {
+	protected AbstractWindowsSupport(String application, List<String> parameters) throws FileNotFoundException {
 
-		super(application, parameter);
+		super(application, parameters);
 	}
 
 	@Override
@@ -38,6 +39,6 @@ public abstract class AbstractWindowsSupport extends AbstractRuntimeSupport impl
 		/*
 		 * Returns e.g.: "C:\Programs\NIST\MSSEARCH\nistms$.exe /INSTRUMENT /PAR=2
 		 */
-		return new ProcessBuilder(getApplication(), getParameter());
+		return new ProcessBuilder().command(getCommand());
 	}
 }

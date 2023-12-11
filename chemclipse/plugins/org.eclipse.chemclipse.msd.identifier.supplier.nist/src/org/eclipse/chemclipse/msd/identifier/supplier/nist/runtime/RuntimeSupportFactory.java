@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,13 +7,15 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - using a path instead of a string
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 
@@ -43,14 +45,17 @@ public class RuntimeSupportFactory {
 	public static IExtendedRuntimeSupport getRuntimeSupport(File applicationFolder, boolean batchModus) throws FileNotFoundException {
 
 		IExtendedRuntimeSupport runtimeSupport;
-		String parameter = batchModus ? INistSupport.PARAMETER_BACKGROUND : INistSupport.PARAMETER_FOREGROUND;
-		//
+		List<String> parameters = new ArrayList<>();
+		parameters.add(INistSupport.INSTRUMENT);
+		if(batchModus) {
+			parameters.add(INistSupport.PAR2);
+		}
 		if(OperatingSystemUtils.isWindows()) {
-			runtimeSupport = new WindowsSupport(applicationFolder, parameter);
+			runtimeSupport = new WindowsSupport(applicationFolder, parameters);
 		} else if(OperatingSystemUtils.isMac()) {
-			runtimeSupport = new MacWineSupport(applicationFolder, parameter);
+			runtimeSupport = new MacWineSupport(applicationFolder, parameters);
 		} else {
-			runtimeSupport = new LinuxWineSupport(applicationFolder, parameter);
+			runtimeSupport = new LinuxWineSupport(applicationFolder, parameters);
 		}
 		return runtimeSupport;
 	}

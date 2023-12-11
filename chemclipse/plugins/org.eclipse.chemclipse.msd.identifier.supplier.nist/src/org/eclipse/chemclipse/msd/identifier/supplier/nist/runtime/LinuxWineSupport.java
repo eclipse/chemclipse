@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - using a path instead of a string
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
@@ -24,9 +25,9 @@ public class LinuxWineSupport extends AbstractLinuxWineSupport implements IExten
 
 	private final INistSupport nistSupport;
 
-	public LinuxWineSupport(File applicationFolder, String parameter) throws FileNotFoundException {
+	public LinuxWineSupport(File applicationFolder, List<String> parameters) throws FileNotFoundException {
 
-		super(PreferenceSupplier.getNistExecutable(applicationFolder).getAbsolutePath(), parameter);
+		super(PreferenceSupplier.getNistExecutable(applicationFolder).getAbsolutePath(), parameters);
 		nistSupport = new NistSupport(this);
 	}
 
