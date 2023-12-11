@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,9 +7,11 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
+
+import java.util.List;
 
 import org.eclipse.chemclipse.support.runtime.IRuntimeSupport;
 
@@ -30,7 +32,7 @@ public interface IExtendedRuntimeSupport extends IRuntimeSupport {
 	 */
 	default boolean isBatchModus() {
 
-		String parameter = getParameter();
+		List<String> parameter = getParameters();
 		if(parameter != null) {
 			return parameter.contains(INistSupport.PAR2);
 		}

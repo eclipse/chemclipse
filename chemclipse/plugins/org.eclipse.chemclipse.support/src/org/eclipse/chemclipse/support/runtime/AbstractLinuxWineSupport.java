@@ -7,12 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.runtime;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractLinuxWineSupport extends AbstractWineRuntimeSupport implements IWineRuntimeSupport {
@@ -24,7 +26,7 @@ public abstract class AbstractLinuxWineSupport extends AbstractWineRuntimeSuppor
 	 * @param application
 	 * @param parameter
 	 */
-	protected AbstractLinuxWineSupport(String application, String parameter) throws FileNotFoundException {
+	protected AbstractLinuxWineSupport(String application, List<String> parameter) throws FileNotFoundException {
 
 		super(application, parameter);
 	}
@@ -40,7 +42,12 @@ public abstract class AbstractLinuxWineSupport extends AbstractWineRuntimeSuppor
 		/*
 		 * "env WINEPREFIX=/home/chemclipse/.wine wine start C:\\programme\\nist\\MSSEARCH\\nistms$.exe /INSTRUMENT /PAR=2"
 		 */
-		ProcessBuilder processBuilder = new ProcessBuilder("wine", "start", getWineApplication(), getParameter());
+		List<String> commands = new ArrayList<>();
+		commands.add("wine");
+		commands.add("start");
+		commands.add(getWineApplication());
+		commands.addAll(getParameters());
+		ProcessBuilder processBuilder = new ProcessBuilder(commands);
 		Map<String, String> environment = processBuilder.environment();
 		environment.put("WINEPREFIX", getWineEnvironment());
 		return processBuilder;

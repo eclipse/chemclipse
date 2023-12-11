@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,21 +7,23 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.runtime;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 public abstract class AbstractRuntimeSupport implements IRuntimeSupport {
 
 	private String application = "";
 	private String path = "";
 	private String executable = "";
-	private String parameter = "";
+	private List<String> parameters = null;
 
-	public AbstractRuntimeSupport(String application, String parameter) throws FileNotFoundException {
+	protected AbstractRuntimeSupport(String application, List<String> parameters) throws FileNotFoundException {
+
 		/*
 		 * Application
 		 */
@@ -40,9 +42,16 @@ public abstract class AbstractRuntimeSupport implements IRuntimeSupport {
 		/*
 		 * Parameter
 		 */
-		if(parameter != null) {
-			this.parameter = parameter;
+		if(parameters != null) {
+			this.parameters = parameters;
 		}
+	}
+
+	public List<String> getCommand() {
+
+		List<String> command = parameters;
+		command.add(0, getApplication());
+		return command;
 	}
 
 	@Override
@@ -52,9 +61,9 @@ public abstract class AbstractRuntimeSupport implements IRuntimeSupport {
 	}
 
 	@Override
-	public String getParameter() {
+	public List<String> getParameters() {
 
-		return parameter;
+		return parameters;
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,11 +7,13 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.runtime;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 
@@ -20,16 +22,18 @@ public class RuntimeSupportFactory {
 	public static IExtendedRuntimeSupport getRuntimeSupport(String application, String chromatogram) throws FileNotFoundException {
 
 		IExtendedRuntimeSupport runtimeSupport;
-		String parameter = chromatogram + " " + IAmdisSupport.PARAMETER;
+		List<String> parameters = new ArrayList<>();
+		parameters.add(chromatogram);
+		parameters.add(IAmdisSupport.PARAMETER);
 		if(OperatingSystemUtils.isWindows()) {
-			runtimeSupport = new WindowsSupport(application, parameter);
+			runtimeSupport = new WindowsSupport(application, parameters);
 		} else if(OperatingSystemUtils.isMac()) {
-			runtimeSupport = new MacWineSupport(application, parameter);
+			runtimeSupport = new MacWineSupport(application, parameters);
 		} else {
 			/*
 			 * wine AMDIS32\$.exe C:\\tmp\\C2.CDF /S
 			 */
-			runtimeSupport = new LinuxWineSupport(application, parameter);
+			runtimeSupport = new LinuxWineSupport(application, parameters);
 		}
 		return runtimeSupport;
 	}

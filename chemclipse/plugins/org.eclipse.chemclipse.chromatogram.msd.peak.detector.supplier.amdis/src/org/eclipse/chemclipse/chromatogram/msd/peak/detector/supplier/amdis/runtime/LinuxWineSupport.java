@@ -7,12 +7,13 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.runtime;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.support.runtime.AbstractLinuxWineSupport;
@@ -21,9 +22,9 @@ public class LinuxWineSupport extends AbstractLinuxWineSupport implements IExten
 
 	private IAmdisSupport amdisSupport;
 
-	public LinuxWineSupport(String application, String parameter) throws FileNotFoundException {
+	public LinuxWineSupport(String application, List<String> parameters) throws FileNotFoundException {
 
-		super(application, parameter);
+		super(application, parameters);
 		amdisSupport = new AmdisSupport(this);
 	}
 

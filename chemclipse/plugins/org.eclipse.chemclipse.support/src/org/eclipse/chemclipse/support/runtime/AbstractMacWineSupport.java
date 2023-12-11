@@ -7,12 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.runtime;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 public abstract class AbstractMacWineSupport extends AbstractWineRuntimeSupport implements IWineRuntimeSupport {
 
@@ -27,9 +28,9 @@ public abstract class AbstractMacWineSupport extends AbstractWineRuntimeSupport 
 	 * @param macWineBinary
 	 *            (e.g. "/Applications/Wine.app")
 	 */
-	protected AbstractMacWineSupport(String application, String parameter, String macWineBinary) throws FileNotFoundException {
+	protected AbstractMacWineSupport(String application, List<String> parameters, String macWineBinary) throws FileNotFoundException {
 
-		super(application, parameter);
+		super(application, parameters);
 		this.macWineBinary = macWineBinary;
 	}
 

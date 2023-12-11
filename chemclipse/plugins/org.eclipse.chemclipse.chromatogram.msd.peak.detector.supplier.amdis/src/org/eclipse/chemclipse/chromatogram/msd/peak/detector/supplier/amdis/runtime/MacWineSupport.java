@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,11 +7,12 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.runtime;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.runtime.AbstractMacWineSupport;
@@ -20,8 +21,9 @@ public class MacWineSupport extends AbstractMacWineSupport implements IExtendedR
 
 	private IAmdisSupport amdisSupport;
 
-	public MacWineSupport(String application, String parameter) throws FileNotFoundException {
-		super(application, parameter, PreferenceSupplier.getMacWineBinary());
+	public MacWineSupport(String application, List<String> parameters) throws FileNotFoundException {
+
+		super(application, parameters, PreferenceSupplier.getMacWineBinary());
 		amdisSupport = new AmdisSupport(this);
 	}
 

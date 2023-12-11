@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
 
@@ -15,9 +15,7 @@ import java.io.File;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.TestPathHelper;
 
-import junit.framework.TestCase;
-
-public class LinuxWineSupport_DRIVE_1_ITest extends TestCase {
+public class LinuxWineSupport_DRIVE_1_ITest extends AbstractBackgroundTestCase {
 
 	private IExtendedRuntimeSupport runtimeSupport;
 	private String nistApplicationPath;
@@ -31,7 +29,7 @@ public class LinuxWineSupport_DRIVE_1_ITest extends TestCase {
 		nistApplication = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_WINE_DRIVE_NIST_APPLICATION);
 		testfileNistApplication = new File(nistApplication);
 		nistApplicationPath = testfileNistApplication.getParent();
-		runtimeSupport = new LinuxWineSupport(testfileNistApplication.getParentFile(), INistSupport.PARAMETER_BACKGROUND);
+		runtimeSupport = new LinuxWineSupport(testfileNistApplication.getParentFile(), parameterBackground);
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,11 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.runtime;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface IRuntimeSupport {
 
@@ -52,9 +53,9 @@ public interface IRuntimeSupport {
 	 * Returns the parameter.
 	 * E.g. /INSTRUMENT /PAR=2
 	 * 
-	 * @return String
+	 * @return List<String>
 	 */
-	String getParameter();
+	List<String> getParameters();
 
 	/**
 	 * Return the path of the application exe.<br/>
@@ -64,6 +65,8 @@ public interface IRuntimeSupport {
 	 * @return
 	 */
 	String getApplicationPath();
+
+	List<String> getCommand();
 
 	/**
 	 * "nistms$.exe"
