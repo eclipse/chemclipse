@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,11 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.dialogs;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -63,9 +66,8 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 	/*
 	 * The SWT elements
 	 */
-	private TableViewer tableViewer;
-	private PerspectiveSwitcherViewerFilter perspectiveSwitcherViewerFilter;
-	private Text text;
+	private AtomicReference<TableViewer> tableViewerControl = new AtomicReference<>();
+	private AtomicReference<Text> textControl = new AtomicReference<>();
 	/*
 	 * Context and services
 	 */
@@ -85,11 +87,10 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 	@Inject
 	@Preference(nodePath = "org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveSwitcherDialog")
 	private IEclipsePreferences preferences;
-	/*
-	 * 
-	 */
-	private List<MPerspective> perspectives;
-	private MPerspective selectedPerspective;
+	//
+	private PerspectiveSwitcherViewerFilter perspectiveSwitcherViewerFilter = new PerspectiveSwitcherViewerFilter();
+	private List<MPerspective> perspectives = new ArrayList<>();
+	private MPerspective selectedPerspective = null;
 
 	@Inject
 	public PerspectiveSwitcherDialog(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
@@ -98,31 +99,24 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 		setShellStyle(getShellStyle() | SWT.SHEET);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
-	 */
 	protected void configureShell(Shell shell) {
 
 		super.configureShell(shell);
 		shell.setText("Select Perspective");
-		perspectives = modelService.findElements(application, null, MPerspective.class, null);
+		//
+		initialize();
 	}
 
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 
 		/*
-		 * Set the selected perspective.
+		 * Set the perspective selection.
 		 */
-		Table table = tableViewer.getTable();
-		int index = table.getSelectionIndex();
-		if(index >= 0) {
-			TableItem item = table.getItem(index);
-			if(item.getData() instanceof MPerspective perspective) {
-				selectedPerspective = perspective;
-			}
+		if(tableViewerControl.get().getStructuredSelection().getFirstElement() instanceof MPerspective perspective) {
+			selectedPerspective = perspective;
 		}
+		//
 		validateSelection();
 	}
 
@@ -162,6 +156,13 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 		switchPerspective();
 	}
 
+	private void initialize() {
+
+		perspectives.addAll(modelService.findElements(application, null, MPerspective.class, null));
+		Collections.sort(perspectives, (p1, p2) -> p1.getLabel().compareTo(p2.getLabel()));
+		perspectiveSwitcherViewerFilter.setCaseInsensitive(true);
+	}
+
 	private void switchPerspective() {
 
 		if(selectedPerspective != null) {
@@ -186,29 +187,33 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 	 */
 	private void createPerspectivesSearchTextField(Composite parent) {
 
-		text = new Text(parent, SWT.SINGLE | SWT.BORDER | SWT.SEARCH | SWT.ICON_CANCEL);
+		Text text = new Text(parent, SWT.SINGLE | SWT.BORDER | SWT.SEARCH | SWT.ICON_CANCEL);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.setText("");
+		//
 		text.addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 
 				perspectiveSwitcherViewerFilter.setSearchPattern(text.getText());
-				tableViewer.refresh();
+				tableViewerControl.get().refresh();
 				validateSelection();
 			}
 		});
+		//
 		text.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
 
 				perspectiveSwitcherViewerFilter.setSearchPattern(text.getText());
-				tableViewer.refresh();
+				tableViewerControl.get().refresh();
 				validateSelection();
 			}
 		});
+		//
+		textControl.set(text);
 	}
 
 	/**
@@ -218,7 +223,7 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 	 */
 	private void createPerspectivesList(Composite parent) {
 
-		tableViewer = new TableViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
+		TableViewer tableViewer = new TableViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.widthHint = LIST_WIDTH;
 		gridData.heightHint = LIST_HEIGHT;
@@ -230,8 +235,6 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 		tableViewer.setLabelProvider(ContextInjectionFactory.make(PerspectiveSwitcherLabelProvider.class, eclipseContext));
 		tableViewer.setContentProvider(new PerspectiveSwitcherContentProvider());
 		tableViewer.setInput(perspectives);
-		perspectiveSwitcherViewerFilter = new PerspectiveSwitcherViewerFilter();
-		perspectiveSwitcherViewerFilter.setCaseInsensitive(true);
 		tableViewer.addFilter(perspectiveSwitcherViewerFilter);
 		tableViewer.addSelectionChangedListener(this);
 		/*
@@ -244,6 +247,8 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 				okPressed();
 			}
 		});
+		//
+		tableViewerControl.set(tableViewer);
 	}
 
 	/**
@@ -259,7 +264,7 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 		 * Check if an item has been selected and if it
 		 * is an instance of MPerspective.
 		 */
-		Table table = tableViewer.getTable();
+		Table table = tableViewerControl.get().getTable();
 		int index = table.getSelectionIndex();
 		if(index >= 0) {
 			TableItem item = table.getItem(index);

@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - fix bug with local perspectives
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.provider;
@@ -57,6 +57,7 @@ public class PerspectiveSwitcherLabelProvider extends LabelProvider implements I
 				logger.warn(e);
 			}
 		}
+		//
 		return iconImage;
 	}
 
@@ -73,6 +74,7 @@ public class PerspectiveSwitcherLabelProvider extends LabelProvider implements I
 				iconImage.dispose();
 			}
 		}
+		//
 		imageMap.clear();
 	}
 
@@ -85,7 +87,7 @@ public class PerspectiveSwitcherLabelProvider extends LabelProvider implements I
 		String text = "";
 		if(element instanceof MPerspective perspective) {
 			switch(columnIndex) {
-				case 0: // Perspective Label
+				case 0:
 					text = perspective.getLabel();
 					if(text == null || text.equals("")) {
 						text = "Nameless perspective";
@@ -98,6 +100,7 @@ public class PerspectiveSwitcherLabelProvider extends LabelProvider implements I
 					text = "n.v.";
 			}
 		}
+		//
 		return text;
 	}
 }
