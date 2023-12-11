@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-public interface IRatingSupplier {
+import java.io.Serializable;
+
+public interface IRatingSupplier extends Serializable {
 
 	/**
 	 * Returns an advice, e.g. "The spectrum is of low quality".
