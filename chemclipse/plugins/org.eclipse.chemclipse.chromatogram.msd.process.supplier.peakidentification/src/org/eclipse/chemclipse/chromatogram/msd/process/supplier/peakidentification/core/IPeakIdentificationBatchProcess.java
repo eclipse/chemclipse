@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.core;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.report.IPeakIdentificationBatchProcessReport;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -25,5 +26,5 @@ public interface IPeakIdentificationBatchProcess {
 	 * @param monitor
 	 * @return {@link IProcessingMessage}
 	 */
-	IProcessingInfo<?> execute(IPeakIdentificationBatchJob peakIdentificationBatchJob, IProgressMonitor monitor);
+	IProcessingInfo<IPeakIdentificationBatchProcessReport> execute(IPeakIdentificationBatchJob peakIdentificationBatchJob, IProgressMonitor monitor);
 }

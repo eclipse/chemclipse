@@ -129,7 +129,6 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 		}
 	}
 
-	@SuppressWarnings({"deprecation"})
 	private void parseTargetMassLib(IChromatogramMSD chromatogramMSD, File directory) {
 
 		if(PreferenceSupplier.isParseTargetDataMassLib()) {
@@ -143,9 +142,8 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 				String referenceIdentifierPrefix = PreferenceSupplier.getReferenceIdentifierPrefix();
 				//
 				try {
-					IProcessingInfo<?> processingInfo = massLibConverter.parseTargets(file);
-					@SuppressWarnings("unchecked")
-					Map<Integer, String> targets = processingInfo.getProcessingResult(Map.class);
+					IProcessingInfo<Map<Integer, String>> processingInfo = massLibConverter.parseTargets(file);
+					Map<Integer, String> targets = processingInfo.getProcessingResult();
 					for(Map.Entry<Integer, String> target : targets.entrySet()) {
 						IScan scan = chromatogramMSD.getScan(target.getKey());
 						if(scan != null && scan instanceof IScanMSD scanMSD) {

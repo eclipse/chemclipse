@@ -22,10 +22,10 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.runt
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IOnsiteSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsAMDIS;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.support.PeakProcessorSupport;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -37,7 +37,6 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class AmdisIdentifier {
 
-	@SuppressWarnings({"unchecked"})
 	public IProcessingResult<Void> calulateAndSetDeconvolutedPeaks(IChromatogramSelectionMSD chromatogramSelection, SettingsAMDIS settingsAMDIS, IProgressMonitor monitor) throws InterruptedException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
@@ -76,13 +75,13 @@ public class AmdisIdentifier {
 		 */
 		try {
 			AMDISParser parser = new AMDISParser(fileChromatogram);
-			IProcessingResult<IPeaks<?>> amdisPeaks = executeAMDIS(fileChromatogram, settingsAMDIS, parser, subMonitor.split(80));
+			IProcessingResult<IPeaks<IPeakMSD>> amdisPeaks = executeAMDIS(fileChromatogram, settingsAMDIS, parser, subMonitor.split(80));
 			result.addMessages(amdisPeaks);
 			if(result.hasErrorMessages()) {
 				return result;
 			}
 			//
-			IPeaks<IPeak> peaks = (IPeaks<IPeak>)amdisPeaks.getProcessingResult();
+			IPeaks<IPeakMSD> peaks = amdisPeaks.getProcessingResult();
 			if(peaks == null) {
 				result.addErrorMessage(PreferenceSupplier.IDENTIFIER, "Parsing peaks does not return a result");
 				return result;
@@ -97,7 +96,7 @@ public class AmdisIdentifier {
 		return result;
 	}
 
-	private IProcessingResult<IPeaks<?>> executeAMDIS(File fileChromatogram, SettingsAMDIS settingsAMDIS, AMDISParser parser, IProgressMonitor monitor) throws InterruptedException {
+	private IProcessingResult<IPeaks<IPeakMSD>> executeAMDIS(File fileChromatogram, SettingsAMDIS settingsAMDIS, AMDISParser parser, IProgressMonitor monitor) throws InterruptedException {
 
 		IExtendedRuntimeSupport runtimeSupport;
 		String amdisApplication = settingsAMDIS.getAmdisFolder().getAbsolutePath() + File.separator + PreferenceSupplier.AMDIS_EXECUTABLE;

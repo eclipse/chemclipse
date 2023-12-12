@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IChromatogramIdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.identifier.IChromatogramIdentificationResult;
 import org.eclipse.chemclipse.model.identifier.core.Identifier;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -54,9 +55,9 @@ public class ChromatogramIdentifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo<?> identify(IChromatogramSelectionMSD chromatogramSelection, IChromatogramIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IChromatogramIdentificationResult> identify(IChromatogramSelectionMSD chromatogramSelection, IChromatogramIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo;
+		IProcessingInfo<IChromatogramIdentificationResult> processingInfo;
 		IChromatogramIdentifier chromatogramIdentifier = getChromatogramIdentifier(identifierId);
 		if(chromatogramIdentifier != null) {
 			processingInfo = chromatogramIdentifier.identify(chromatogramSelection, identifierSettings, monitor);
@@ -74,9 +75,9 @@ public class ChromatogramIdentifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo<?> identify(IChromatogramSelectionMSD chromatogramSelection, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IChromatogramIdentificationResult> identify(IChromatogramSelectionMSD chromatogramSelection, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo;
+		IProcessingInfo<IChromatogramIdentificationResult> processingInfo;
 		IChromatogramIdentifier chromatogramIdentifier = getChromatogramIdentifier(identifierId);
 		if(chromatogramIdentifier != null) {
 			processingInfo = chromatogramIdentifier.identify(chromatogramSelection, monitor);
@@ -163,9 +164,9 @@ public class ChromatogramIdentifier {
 		return null;
 	}
 
-	private static IProcessingInfo<?> getNoIdentifierAvailableProcessingInfo() {
+	private static IProcessingInfo<IChromatogramIdentificationResult> getNoIdentifierAvailableProcessingInfo() {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IChromatogramIdentificationResult> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Chromatogram Identifier", NO_IDENTIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

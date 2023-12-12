@@ -34,13 +34,13 @@ import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
-import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.VendorIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
+import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
@@ -61,12 +61,12 @@ public class PeakReader_0701 extends AbstractZipReader implements IPeakReader {
 	private static final Logger logger = Logger.getLogger(PeakReader_0701.class);
 
 	@Override
-	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws IOException {
+	public IProcessingInfo<IPeaks<IPeakMSD>> read(File file, IProgressMonitor monitor) throws IOException {
 
 		ZipFile zipFile = new ZipFile(file);
-		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = new ProcessingInfo<>();
 		try {
-			IPeaks<?> peaks = readPeaksFromZipFile(zipFile, monitor);
+			IPeaks<IPeakMSD> peaks = readPeaksFromZipFile(zipFile, monitor);
 			processingInfo.setProcessingResult(peaks);
 		} finally {
 			zipFile.close();
@@ -74,9 +74,9 @@ public class PeakReader_0701 extends AbstractZipReader implements IPeakReader {
 		return processingInfo;
 	}
 
-	private IPeaks<?> readPeaksFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
+	private IPeaks<IPeakMSD> readPeaksFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
 
-		IPeaks<?> peaks = new Peaks();
+		IPeaks<IPeakMSD> peaks = new PeaksMSD();
 		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_PEAKS);
 		//
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks

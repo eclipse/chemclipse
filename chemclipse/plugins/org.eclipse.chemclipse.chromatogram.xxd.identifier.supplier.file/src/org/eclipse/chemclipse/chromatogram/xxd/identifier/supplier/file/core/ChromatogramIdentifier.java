@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.internal
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.identifier.IChromatogramIdentificationResult;
 import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.model.support.LimitSupport;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -36,9 +37,9 @@ public class ChromatogramIdentifier extends AbstractChromatogramIdentifier {
 	private static final String DESCRIPTION = "Library File (MS)";
 
 	@Override
-	public IProcessingInfo<?> identify(IChromatogramSelectionMSD chromatogramSelection, IChromatogramIdentifierSettings chromatogramIdentifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramIdentificationResult> identify(IChromatogramSelectionMSD chromatogramSelection, IChromatogramIdentifierSettings chromatogramIdentifierSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo = validate(chromatogramSelection, chromatogramIdentifierSettings);
+		IProcessingInfo<IChromatogramIdentificationResult> processingInfo = validate(chromatogramSelection, chromatogramIdentifierSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			if(chromatogramIdentifierSettings instanceof IdentifierSettings settings) {
 				try {
@@ -72,7 +73,7 @@ public class ChromatogramIdentifier extends AbstractChromatogramIdentifier {
 	}
 
 	@Override
-	public IProcessingInfo<?> identify(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramIdentificationResult> identify(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		IdentifierSettings identifierSettings = PreferenceSupplier.getIdentifierSettings();
 		return identify(chromatogramSelection, identifierSettings, monitor);

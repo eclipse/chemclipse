@@ -118,7 +118,7 @@ public class ChartNMR extends LineChart {
 									@Override
 									public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-										IProcessingInfo<?> export = ScanConverterNMR.export(file, measurementSupplier.get(), supplier.getId(), monitor);
+										IProcessingInfo<Void> export = ScanConverterNMR.export(file, measurementSupplier.get(), supplier.getId(), monitor);
 										ProcessingInfoPartSupport.getInstance().update(export);
 									}
 								});

@@ -37,7 +37,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Samples;
 
 public class PeakRetentionIndexExtractor extends AbstractClassifierDescriptionExtractor {
 
-	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, int retentionIndexWindow, DescriptionOption descriptionOption, ValueOption valueOption) {
+	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<IPeak>> peaks, int retentionIndexWindow, DescriptionOption descriptionOption, ValueOption valueOption) {
 
 		List<Sample> samplesList = new ArrayList<>();
 		peaks.keySet().forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));

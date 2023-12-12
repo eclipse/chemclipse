@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.pref
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IProcessSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.ModelPeakOption;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
@@ -42,11 +41,10 @@ public class PeakProcessorSupport {
 	public static final String DETECTOR_DESCRIPTION = "AMDIS (Extern)";
 	public static final String PEAK_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.peak.elu";
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void extractEluFileAndSetPeaks(IChromatogramSelectionMSD chromatogramSelection, File file, IProcessSettings processSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<IPeaks<?>> processingInfo = PeakConverterMSD.convert(file, PEAK_CONVERTER_ID, monitor);
-		IPeaks peaks = processingInfo.getProcessingResult();
+		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = PeakConverterMSD.convert(file, PEAK_CONVERTER_ID, monitor);
+		IPeaks<IPeakMSD> peaks = processingInfo.getProcessingResult();
 		insertPeaks(chromatogramSelection, peaks.getPeaks(), processSettings, monitor);
 	}
 
@@ -59,7 +57,7 @@ public class PeakProcessorSupport {
 	 * @param monitor
 	 * @return
 	 */
-	public static IProcessingResult<Void> insertPeaks(IChromatogramSelectionMSD chromatogramSelection, List<IPeak> peaks, IProcessSettings processSettings, IProgressMonitor monitor) {
+	public static IProcessingResult<Void> insertPeaks(IChromatogramSelectionMSD chromatogramSelection, List<IPeakMSD> peaks, IProcessSettings processSettings, IProgressMonitor monitor) {
 
 		DefaultProcessingResult<Void> result = new DefaultProcessingResult<>();
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
@@ -68,70 +66,68 @@ public class PeakProcessorSupport {
 		ModelPeakOption modelPeakOption = processSettings.getModelPeakOption();
 		String modelPeakMarker = "MP" + modelPeakOption.value();
 		//
-		for(IPeak peak : peaks) {
-			if(peak instanceof IPeakMSD peakMSD) {
-				String header = peak.getTemporaryData();
-				try {
-					IPeakModelMSD peakModelMSD = peakMSD.getPeakModel();
-					//
-					int startScan = peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN) instanceof Integer ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN) : 0;
-					int stopScan = peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_STOP_SCAN) instanceof Integer ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_STOP_SCAN) : 0;
-					int maxScan = peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_MAX_SCAN) instanceof Integer ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_MAX_SCAN) : 0;
+		for(IPeakMSD peak : peaks) {
+			String header = peak.getTemporaryData();
+			try {
+				IPeakModelMSD peakModelMSD = peak.getPeakModel();
+				//
+				int startScan = peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN) instanceof Integer ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN) : 0;
+				int stopScan = peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_STOP_SCAN) instanceof Integer ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_STOP_SCAN) : 0;
+				int maxScan = peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_MAX_SCAN) instanceof Integer ? (int)peakModelMSD.getTemporarilyInfo(IPeakReader.TEMP_INFO_MAX_SCAN) : 0;
+				/*
+				 * There seems to be an offset of 1 scan.
+				 * Why? No clue ...
+				 */
+				startScan++;
+				stopScan++;
+				maxScan++;
+				/*
+				 * Add only peaks above the given minSignalToNoiseRatio and within the
+				 * chromatogram selection.
+				 */
+				IChromatogramPeakMSD chromatogramPeakMSD = new ChromatogramPeakMSD(peakModelMSD, chromatogram);
+				chromatogramPeakMSD.setDetectorDescription(DETECTOR_DESCRIPTION);
+				if(isValidPeak(chromatogramPeakMSD, startRetentionTime, stopRetentionTime, processSettings)) {
 					/*
-					 * There seems to be an offset of 1 scan.
-					 * Why? No clue ...
+					 * Pre-check
 					 */
-					startScan++;
-					stopScan++;
-					maxScan++;
+					if(startScan > 0 && stopScan > startScan && maxScan > startScan) {
+						List<Integer> retentionTimes = new ArrayList<>();
+						for(int scan = startScan; scan <= stopScan; scan++) {
+							retentionTimes.add(chromatogram.getScan(scan).getRetentionTime());
+						}
+						/*
+						 * Adjust the peak retention times if possible.
+						 */
+						chromatogramPeakMSD.getPeakModel().replaceRetentionTimes(retentionTimes);
+					}
 					/*
-					 * Add only peaks above the given minSignalToNoiseRatio and within the
-					 * chromatogram selection.
+					 * Post-check
 					 */
-					IChromatogramPeakMSD chromatogramPeakMSD = new ChromatogramPeakMSD(peakModelMSD, chromatogram);
-					chromatogramPeakMSD.setDetectorDescription(DETECTOR_DESCRIPTION);
-					if(isValidPeak(chromatogramPeakMSD, startRetentionTime, stopRetentionTime, processSettings)) {
-						/*
-						 * Pre-check
-						 */
-						if(startScan > 0 && stopScan > startScan && maxScan > startScan) {
-							List<Integer> retentionTimes = new ArrayList<>();
-							for(int scan = startScan; scan <= stopScan; scan++) {
-								retentionTimes.add(chromatogram.getScan(scan).getRetentionTime());
-							}
-							/*
-							 * Adjust the peak retention times if possible.
-							 */
-							chromatogramPeakMSD.getPeakModel().replaceRetentionTimes(retentionTimes);
+					if(!ModelPeakOption.ALL.equals(modelPeakOption)) {
+						if(header == null || !header.contains(modelPeakMarker)) {
+							chromatogramPeakMSD = null;
 						}
-						/*
-						 * Post-check
-						 */
-						if(!ModelPeakOption.ALL.equals(modelPeakOption)) {
-							if(header == null || !header.contains(modelPeakMarker)) {
-								chromatogramPeakMSD = null;
-							}
-						}
-						/*
-						 * Add the peak
-						 */
-						if(chromatogramPeakMSD != null) {
-							chromatogram.addPeak(chromatogramPeakMSD);
-							logger.info("Add Peak (ELU): " + header);
-						} else {
-							String message = "Skip Peak (ELU): " + header;
-							logger.info(message);
-							result.addInfoMessage(PreferenceSupplier.IDENTIFIER, message);
-						}
+					}
+					/*
+					 * Add the peak
+					 */
+					if(chromatogramPeakMSD != null) {
+						chromatogram.addPeak(chromatogramPeakMSD);
+						logger.info("Add Peak (ELU): " + header);
 					} else {
-						String message = "Invalid Peak (ELU): " + header;
+						String message = "Skip Peak (ELU): " + header;
 						logger.info(message);
 						result.addInfoMessage(PreferenceSupplier.IDENTIFIER, message);
 					}
-				} catch(Exception e) {
-					logger.warn(e);
-					result.addWarnMessage(PreferenceSupplier.IDENTIFIER, "Peak Error (ELU): " + header);
+				} else {
+					String message = "Invalid Peak (ELU): " + header;
+					logger.info(message);
+					result.addInfoMessage(PreferenceSupplier.IDENTIFIER, message);
 				}
+			} catch(Exception e) {
+				logger.warn(e);
+				result.addWarnMessage(PreferenceSupplier.IDENTIFIER, "Peak Error (ELU): " + header);
 			}
 		}
 		return result;

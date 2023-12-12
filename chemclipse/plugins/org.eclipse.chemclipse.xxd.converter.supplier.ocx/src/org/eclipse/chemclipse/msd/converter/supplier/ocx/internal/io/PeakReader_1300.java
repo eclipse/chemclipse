@@ -43,7 +43,6 @@ import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
-import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
@@ -57,6 +56,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
@@ -80,12 +80,12 @@ public class PeakReader_1300 extends AbstractZipReader implements IPeakReader {
 	private static final Logger logger = Logger.getLogger(PeakReader_1300.class);
 
 	@Override
-	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws IOException {
+	public IProcessingInfo<IPeaks<IPeakMSD>> read(File file, IProgressMonitor monitor) throws IOException {
 
 		ZipFile zipFile = new ZipFile(file);
-		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = new ProcessingInfo<>();
 		try {
-			IPeaks<?> peaks = readPeaksFromZipFile(zipFile, monitor);
+			IPeaks<IPeakMSD> peaks = readPeaksFromZipFile(zipFile, monitor);
 			processingInfo.setProcessingResult(peaks);
 		} finally {
 			zipFile.close();
@@ -93,9 +93,9 @@ public class PeakReader_1300 extends AbstractZipReader implements IPeakReader {
 		return processingInfo;
 	}
 
-	private IPeaks<?> readPeaksFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
+	private IPeaks<IPeakMSD> readPeaksFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
 
-		IPeaks<?> peaks = new Peaks();
+		IPeaks<IPeakMSD> peaks = new PeaksMSD();
 		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_PEAKS_MSD);
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Peaks", numberOfPeaks);
@@ -188,7 +188,7 @@ public class PeakReader_1300 extends AbstractZipReader implements IPeakReader {
 
 	private List<IInternalStandard> readInternalStandards(DataInputStream dataInputStream) throws IOException {
 
-		List<IInternalStandard> internalStandards = new ArrayList<IInternalStandard>();
+		List<IInternalStandard> internalStandards = new ArrayList<>();
 		int numberOfInternalStandards = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfInternalStandards; i++) {
 			String name = readString(dataInputStream);
@@ -283,7 +283,7 @@ public class PeakReader_1300 extends AbstractZipReader implements IPeakReader {
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			Set<String> synonyms = new HashSet<>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
@@ -365,7 +365,7 @@ public class PeakReader_1300 extends AbstractZipReader implements IPeakReader {
 
 	private List<IIntegrationEntry> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
 
-		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 		int numberOfIntegrationEntries = dataInputStream.readInt(); // Number Integration Entries
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double ion = dataInputStream.readDouble(); // m/z
@@ -393,7 +393,7 @@ public class PeakReader_1300 extends AbstractZipReader implements IPeakReader {
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			Set<String> synonyms = new HashSet<>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));

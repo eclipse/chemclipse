@@ -337,7 +337,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 			String converterId = massSpectra.getConverterId();
 			if(converterId != null && !converterId.equals("")) {
 				monitor.subTask("Save Mass Spectra");
-				IProcessingInfo<?> processingInfo = DatabaseConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
+				IProcessingInfo<File> processingInfo = DatabaseConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
 				try {
 					/*
 					 * If no failures have occurred, set the dirty status to

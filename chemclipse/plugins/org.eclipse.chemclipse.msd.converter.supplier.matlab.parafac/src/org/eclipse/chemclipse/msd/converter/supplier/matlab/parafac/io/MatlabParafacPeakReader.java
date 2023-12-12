@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,12 +20,13 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
-import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.ParseStatus;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.PeakSupport;
 import org.eclipse.chemclipse.msd.model.core.IPeakIon;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.PeakIon;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -41,9 +42,9 @@ public class MatlabParafacPeakReader implements IPeakReader {
 	private ParseStatus parseStatus;
 
 	@Override
-	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws IOException {
+	public IProcessingInfo<IPeaks<IPeakMSD>> read(File file, IProgressMonitor monitor) throws IOException {
 
-		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = new ProcessingInfo<>();
 		validateContent(file, processingInfo);
 		readPeaks(file, processingInfo);
 		return processingInfo;
@@ -62,51 +63,51 @@ public class MatlabParafacPeakReader implements IPeakReader {
 		}
 	}
 
-	private void readPeaks(File file, IProcessingInfo<IPeaks<?>> processingInfo) throws IOException, IllegalArgumentException {
+	private void readPeaks(File file, IProcessingInfo<IPeaks<IPeakMSD>> processingInfo) throws IOException, IllegalArgumentException {
 
-		FileReader fileReader = new FileReader(file);
-		BufferedReader bufferedReader = new BufferedReader(fileReader);
-		String line;
-		IPeaks<?> peaks = new Peaks();
-		PeakSupport peakSupport = null;
-		/*
-		 * Parse each line the file
-		 */
-		while((line = bufferedReader.readLine()) != null) {
-			/*
-			 * If the line is empty, continue
-			 */
-			if(line.equals("")) {
-				continue;
-			}
-			/*
-			 * Start a peak start.
-			 */
-			if(line.equals(IConstants.PEAK_IDENTIFIER)) {
+		try (FileReader fileReader = new FileReader(file)) {
+			try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+				String line;
+				IPeaks<IPeakMSD> peaks = new PeaksMSD();
+				PeakSupport peakSupport = null;
 				/*
-				 * Add an existing peak and switch to the next.
+				 * Parse each line the file
 				 */
-				if(peakSupport != null) {
-					addPeak(peaks, peakSupport, processingInfo, file);
+				while((line = bufferedReader.readLine()) != null) {
+					/*
+					 * If the line is empty, continue
+					 */
+					if(line.equals("")) {
+						continue;
+					}
+					/*
+					 * Start a peak start.
+					 */
+					if(line.equals(IConstants.PEAK_IDENTIFIER)) {
+						/*
+						 * Add an existing peak and switch to the next.
+						 */
+						if(peakSupport != null) {
+							addPeak(peaks, peakSupport, processingInfo, file);
+						}
+						peakSupport = new PeakSupport();
+						parseStatus = ParseStatus.DESCRIPTION;
+					}
+					parseLine(line, peakSupport, processingInfo);
 				}
-				peakSupport = new PeakSupport();
-				parseStatus = ParseStatus.DESCRIPTION;
+				/*
+				 * Don't forget to add the last peak.
+				 */
+				addPeak(peaks, peakSupport, processingInfo, file);
+				processingInfo.setProcessingResult(peaks);
+				/*
+				 * Close the streams
+				 */
 			}
-			parseLine(line, peakSupport, processingInfo);
 		}
-		/*
-		 * Don't forget to add the last peak.
-		 */
-		addPeak(peaks, peakSupport, processingInfo, file);
-		processingInfo.setProcessingResult(peaks);
-		/*
-		 * Close the streams
-		 */
-		bufferedReader.close();
-		fileReader.close();
 	}
 
-	private void addPeak(IPeaks<?> peaks, PeakSupport peakSupport, IProcessingInfo<?> processingInfo, File file) {
+	private void addPeak(IPeaks<IPeakMSD> peaks, PeakSupport peakSupport, IProcessingInfo<?> processingInfo, File file) {
 
 		IProcessingMessage processingMessage;
 		try {

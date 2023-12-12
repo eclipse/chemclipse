@@ -197,7 +197,7 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 				 * Try to save the mass spectrum.
 				 */
 				monitor.subTask("Save Mass Spectrum");
-				IProcessingInfo<?> processingInfo = DatabaseConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
+				IProcessingInfo<File> processingInfo = DatabaseConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
 				try {
 					/*
 					 * If no failures have occurred, set the dirty status to

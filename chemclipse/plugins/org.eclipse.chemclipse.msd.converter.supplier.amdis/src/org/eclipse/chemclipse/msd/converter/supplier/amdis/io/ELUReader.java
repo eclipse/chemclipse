@@ -30,13 +30,13 @@ import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
-import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IPeakIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
+import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.PeakIon;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
@@ -67,10 +67,10 @@ public class ELUReader implements IPeakReader {
 	private static final String CARRIAGE_RETURN = "\r";
 
 	@Override
-	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws IOException {
+	public IProcessingInfo<IPeaks<IPeakMSD>> read(File file, IProgressMonitor monitor) throws IOException {
 
 		Charset charset = PreferenceSupplier.getCharsetImportELU();
-		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = new ProcessingInfo<>();
 		String content = FileUtils.readFileToString(file, charset);
 		int numberOfHits = getNumberOfHits(content);
 		if(numberOfHits <= 0) {
@@ -209,12 +209,12 @@ public class ELUReader implements IPeakReader {
 	 * @param scanInterval
 	 * @return {@link IProcessingInfo}
 	 */
-	private void extractAmdisPeaks(String content, int scanInterval, IProcessingInfo<IPeaks<?>> processingInfo) {
+	private void extractAmdisPeaks(String content, int scanInterval, IProcessingInfo<IPeaks<IPeakMSD>> processingInfo) {
 
 		if(scanInterval <= 0) {
 			processingInfo.addErrorMessage("AMDIS ELU Parser", "There seems to be no peak in the file. The scan interval is <= 0.");
 		} else {
-			IPeaks<?> peaks = new Peaks();
+			IPeaks<IPeakMSD> peaks = new PeaksMSD();
 			Matcher matcher = PEAK_DATA_PATTERN.matcher(content);
 			while(matcher.find()) {
 				/*

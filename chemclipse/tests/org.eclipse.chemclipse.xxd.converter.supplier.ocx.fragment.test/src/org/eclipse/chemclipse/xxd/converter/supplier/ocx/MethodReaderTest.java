@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -76,7 +76,7 @@ public class MethodReaderTest {
 		}
 	}
 
-	private void checkResult(String filename, IProcessingInfo<?> convert, String context) {
+	private void checkResult(String filename, IProcessingInfo<IProcessMethod> convert, String context) {
 
 		assertNotNull("[" + context + "] IProcessingInfo was null for " + filename, convert);
 		assertFalse("[" + context + "] has errors (" + convert.getMessages() + ")", convert.hasErrorMessages());
@@ -115,7 +115,7 @@ public class MethodReaderTest {
 		checkResult("ChromIdentMethod.ocm", convert, "nested");
 		IProcessMethod result = convert.getProcessingResult();
 		assertEquals(3, result.getNumberOfEntries());
-		ProcessEntryContainer next = (ProcessEntryContainer)result.iterator().next();
+		ProcessEntryContainer next = result.iterator().next();
 		assertEquals(1, next.getNumberOfEntries());
 	}
 

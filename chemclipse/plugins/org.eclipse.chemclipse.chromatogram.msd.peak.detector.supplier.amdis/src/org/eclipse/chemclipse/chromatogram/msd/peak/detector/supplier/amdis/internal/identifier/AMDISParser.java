@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.pref
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.support.PeakProcessorSupport;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
@@ -44,9 +45,9 @@ public class AMDISParser {
 		resFile = getFile(fileChromatogram, "RES");
 	}
 
-	public IProcessingResult<IPeaks<?>> parse(IProgressMonitor monitor) throws InterruptedException {
+	public IProcessingResult<IPeaks<IPeakMSD>> parse(IProgressMonitor monitor) throws InterruptedException {
 
-		DefaultProcessingResult<IPeaks<?>> result = new DefaultProcessingResult<>();
+		DefaultProcessingResult<IPeaks<IPeakMSD>> result = new DefaultProcessingResult<>();
 		try {
 			SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
 			if(!waitForFile(eluFile, WAIT_TIMEOUT_ELU, TimeUnit.SECONDS, subMonitor.split(10, SubMonitor.SUPPRESS_NONE))) {
@@ -55,7 +56,7 @@ public class AMDISParser {
 			if(!waitForFileComplete(eluFile, WAIT_TIMEOUT_COMPLETE, TimeUnit.MINUTES, subMonitor.split(10, SubMonitor.SUPPRESS_NONE))) {
 				throw new InterruptedException("AMDIS does not finished writing file within the time bounds");
 			}
-			IProcessingInfo<IPeaks<?>> peaksResult = PeakConverterMSD.convert(eluFile, PeakProcessorSupport.PEAK_CONVERTER_ID, subMonitor.split(70));
+			IProcessingInfo<IPeaks<IPeakMSD>> peaksResult = PeakConverterMSD.convert(eluFile, PeakProcessorSupport.PEAK_CONVERTER_ID, subMonitor.split(70));
 			if(peaksResult == null) {
 				result.addErrorMessage(PreferenceSupplier.IDENTIFIER, "PeakParser returned no result");
 				return result;

@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
@@ -57,9 +58,10 @@ public class MSPExportConverter_1_ITest extends TestCase {
 		super.tearDown();
 	}
 
+	@Test
 	public void testExport_1() {
 
-		IProcessingInfo<?> processingInfo = exportConverter.convert(null, massSpectrum, false, new NullProgressMonitor());
+		IProcessingInfo<File> processingInfo = exportConverter.convert(null, massSpectrum, false, new NullProgressMonitor());
 		try {
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(TypeCastException e) {
@@ -67,10 +69,11 @@ public class MSPExportConverter_1_ITest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testExport_2() {
 
 		massSpectrum = null;
-		IProcessingInfo<?> processingInfo = exportConverter.convert(exportFile, massSpectrum, false, new NullProgressMonitor());
+		IProcessingInfo<File> processingInfo = exportConverter.convert(exportFile, massSpectrum, false, new NullProgressMonitor());
 		try {
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(TypeCastException e) {
@@ -78,10 +81,11 @@ public class MSPExportConverter_1_ITest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testExport_3() {
 
 		massSpectra = null;
-		IProcessingInfo<?> processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
+		IProcessingInfo<File> processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
 		try {
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(TypeCastException e) {
@@ -89,11 +93,12 @@ public class MSPExportConverter_1_ITest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testExport_4() {
 
 		try {
 			exportFile.setWritable(false);
-			IProcessingInfo<?> processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
+			IProcessingInfo<File> processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
 			try {
 				assertTrue(processingInfo.hasErrorMessages());
 			} catch(TypeCastException e) {
