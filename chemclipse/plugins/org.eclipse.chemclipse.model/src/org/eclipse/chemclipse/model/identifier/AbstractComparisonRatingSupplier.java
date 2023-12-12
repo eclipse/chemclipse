@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.model.identifier;
 
 public abstract class AbstractComparisonRatingSupplier implements IRatingSupplier {
 
+	private static final long serialVersionUID = -4927422343294543420L;
+	//
 	private static final float RATING_VERY_GOOD = 90.0f;
 	private static final float RATING_GOOD = 80.0f;
 	private static final float RATING_AVERAGE = 70.0f;

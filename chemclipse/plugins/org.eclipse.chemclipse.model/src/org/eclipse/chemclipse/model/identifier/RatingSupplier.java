@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.model.identifier;
 
 public class RatingSupplier extends AbstractComparisonRatingSupplier {
 
+	private static final long serialVersionUID = 80242122334050614L;
+	//
 	private static final String ADVISE_INCOMPLETE = "Incomplete Target (Bad Conditions)";
 	private static final String ADVISE_IMPURITIES = "Convoluted Target (Impurities)";
 	//
