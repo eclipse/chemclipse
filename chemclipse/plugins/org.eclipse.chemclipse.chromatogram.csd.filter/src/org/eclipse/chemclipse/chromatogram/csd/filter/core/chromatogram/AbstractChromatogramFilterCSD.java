@@ -41,9 +41,9 @@ public abstract class AbstractChromatogramFilterCSD implements IChromatogramFilt
 	 * @param chromatogramSelection
 	 * @return {@link IProcessingInfo}
 	 */
-	private IProcessingInfo<?> validateChromatogramSelection(IChromatogramSelectionCSD chromatogramSelection) {
+	private IProcessingInfo<IChromatogramFilterResult> validateChromatogramSelection(IChromatogramSelectionCSD chromatogramSelection) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		if(chromatogramSelection == null) {
 			processingInfo.addErrorMessage(ICategories.CHROMATOGRAM_FILTER, Messages.invalidChromatogramSelection);
 		} else {
@@ -60,9 +60,9 @@ public abstract class AbstractChromatogramFilterCSD implements IChromatogramFilt
 	 * @param chromatogramFilterSettings
 	 * @return {@link IProcessingInfo}
 	 */
-	private IProcessingInfo<?> validateFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
+	private IProcessingInfo<IChromatogramFilterResult> validateFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		if(chromatogramFilterSettings == null) {
 			processingInfo.addErrorMessage(ICategories.CHROMATOGRAM_FILTER, Messages.invalidFilterSettings);
 		}

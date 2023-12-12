@@ -70,11 +70,11 @@ public class PeakDetectorWSDProcessTypeSupplier implements IProcessTypeSupplier 
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IPeakDetectorSettingsWSD processSettings, IMessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			if(chromatogramSelection instanceof IChromatogramSelectionWSD chromatogramSelectionCSD) {
+			if(chromatogramSelection instanceof IChromatogramSelectionWSD chromatogramSelectionWSD) {
 				if(processSettings instanceof IPeakDetectorSettingsWSD) {
-					messageConsumer.addMessages(PeakDetectorWSD.detect(chromatogramSelectionCSD, processSettings, supplier.getId(), monitor));
+					messageConsumer.addMessages(PeakDetectorWSD.detect(chromatogramSelectionWSD, processSettings, supplier.getId(), monitor));
 				} else {
-					messageConsumer.addMessages(PeakDetectorWSD.detect(chromatogramSelectionCSD, supplier.getId(), monitor));
+					messageConsumer.addMessages(PeakDetectorWSD.detect(chromatogramSelectionWSD, supplier.getId(), monitor));
 				}
 			} else {
 				messageConsumer.addWarnMessage(getDescription(), "Only WSD Chromatogram supported, skipp processing");

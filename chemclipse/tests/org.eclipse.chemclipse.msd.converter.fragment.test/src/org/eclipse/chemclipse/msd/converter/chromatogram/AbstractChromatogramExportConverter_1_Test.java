@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -50,7 +50,7 @@ public class AbstractChromatogramExportConverter_1_Test extends TestCase {
 	public void testFileNotFoundException_1() {
 
 		File file = null;
-		IProcessingInfo<?> processingInfo = ec.convert(file, null, new NullProgressMonitor());
+		IProcessingInfo<File> processingInfo = ec.convert(file, null, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
@@ -60,7 +60,7 @@ public class AbstractChromatogramExportConverter_1_Test extends TestCase {
 		try {
 			file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_EXPORT_CHROMATOGRAM_NOT_WRITEABLE));
 			file.setWritable(false);
-			IProcessingInfo<?> processingInfo = ec.convert(file, null, new NullProgressMonitor());
+			IProcessingInfo<File> processingInfo = ec.convert(file, null, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(IOException e) {
 			assertTrue("IOException", false);

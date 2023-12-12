@@ -16,6 +16,7 @@ import java.io.File;
 
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -26,7 +27,7 @@ import junit.framework.TestCase;
 @Ignore
 public class PeakReaderMSDTestCase extends TestCase {
 
-	protected IPeaks<?> peaks;
+	protected IPeaks<IPeakMSD> peaks;
 	protected String pathImport;
 	protected File fileImport;
 	private static final String EXTENSION_POINT_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.peaks";
@@ -36,7 +37,7 @@ public class PeakReaderMSDTestCase extends TestCase {
 
 		super.setUp();
 		fileImport = new File(this.pathImport);
-		IProcessingInfo<IPeaks<?>> processingInfo = PeakConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = PeakConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
 		try {
 			peaks = processingInfo.getProcessingResult();
 		} catch(TypeCastException e) {

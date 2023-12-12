@@ -53,7 +53,6 @@ import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
-import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.peak.IPeakExportConverter;
 import org.eclipse.chemclipse.msd.converter.peak.IPeakImportConverter;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -61,6 +60,7 @@ import org.eclipse.chemclipse.msd.model.core.IIonProvider;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
+import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
@@ -153,14 +153,14 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 
 	// import
 	@Override
-	public IProcessingInfo<IPeaks<?>> convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IPeaks<IPeakMSD>> convert(File file, IProgressMonitor monitor) {
 
 		try {
 			try (FileInputStream stream = new FileInputStream(file)) {
 				return new ProcessingInfo<>(readPeaks(new InputStreamReader(stream, CHARSET)));
 			}
 		} catch(ParseException | IOException e) {
-			ProcessingInfo<IPeaks<?>> error = new ProcessingInfo<>();
+			ProcessingInfo<IPeaks<IPeakMSD>> error = new ProcessingInfo<>();
 			error.addErrorMessage(NAME, "Import failed", e);
 			return error;
 		}
@@ -212,9 +212,9 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 		}
 	}
 
-	public static IPeaks<IPeak> readPeaks(Reader reader) throws IOException, ParseException {
+	public static IPeaks<IPeakMSD> readPeaks(Reader reader) throws IOException, ParseException {
 
-		Peaks result = new Peaks();
+		PeaksMSD result = new PeaksMSD();
 		CSVFormat csvFormat = CSVFormat.EXCEL.builder().setHeader(HEADERS).setSkipHeaderRecord(true).build();
 		try (CSVParser parser = new CSVParser(reader, csvFormat)) {
 			NumberFormat nf;

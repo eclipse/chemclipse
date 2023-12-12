@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.PathResolver;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
@@ -32,6 +31,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
@@ -56,21 +56,21 @@ public class ELUImportConverter_2_ITest extends TestCase {
 		super.tearDown();
 	}
 
-	@SuppressWarnings("unchecked")
+	@Test
 	public void testRead_1() {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		preferences.putBoolean(PreferenceSupplier.P_EXCLUDE_UNCERTAIN_IONS, true);
 		try {
-			IProcessingInfo<IPeaks<?>> processingInfo = reader.read(file, new NullProgressMonitor());
-			List<IPeak> peaks = (List<IPeak>)processingInfo.getProcessingResult().getPeaks();
-			IPeakMSD peak1 = (IPeakMSD)peaks.get(0);
+			IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = reader.read(file, new NullProgressMonitor());
+			List<IPeakMSD> peaks = processingInfo.getProcessingResult().getPeaks();
+			IPeakMSD peak1 = peaks.get(0);
 			IPeakMassSpectrum peakMassSpectrum1 = peak1.getPeakModel().getPeakMassSpectrum();
 			List<IIon> ions1 = peakMassSpectrum1.getIons();
-			IPeakMSD peak2 = (IPeakMSD)peaks.get(1);
+			IPeakMSD peak2 = peaks.get(1);
 			IPeakMassSpectrum peakMassSpectrum2 = peak2.getPeakModel().getPeakMassSpectrum();
 			List<IIon> ions2 = peakMassSpectrum2.getIons();
-			IPeakMSD peak3 = (IPeakMSD)peaks.get(2);
+			IPeakMSD peak3 = peaks.get(2);
 			IPeakMassSpectrum peakMassSpectrum3 = peak3.getPeakModel().getPeakMassSpectrum();
 			List<IIon> ions3 = peakMassSpectrum3.getIons();
 			IIon ion10 = ions1.get(0);

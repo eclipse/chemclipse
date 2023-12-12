@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import javax.annotation.PostConstruct;
 
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -46,7 +47,7 @@ public class PeakListEditor {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-					IProcessingInfo<IPeaks<?>> convert = PeakConverterMSD.convert(file, supplier.getId(), monitor);
+					IProcessingInfo<IPeaks<IPeakMSD>> convert = PeakConverterMSD.convert(file, supplier.getId(), monitor);
 					Display.getDefault().asyncExec(new Runnable() {
 
 						@Override

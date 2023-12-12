@@ -18,17 +18,18 @@ import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.PathResolver;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.ELUReader;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
 public class ELUReader_2_ITest extends TestCase {
 
 	private ELUReader reader;
-	private File file;
-	private IProcessingInfo<?> processingInfo;
+	private IProcessingInfo<IPeaks<IPeakMSD>> processingInfo;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -36,7 +37,7 @@ public class ELUReader_2_ITest extends TestCase {
 		super.setUp();
 		reader = new ELUReader();
 		String pathname = PathResolver.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_PEAKS_1_ELU);
-		file = new File(pathname);
+		File file = new File(pathname);
 		processingInfo = reader.read(file, new NullProgressMonitor());
 	}
 
@@ -47,10 +48,11 @@ public class ELUReader_2_ITest extends TestCase {
 		super.tearDown();
 	}
 
+	@Test
 	public void testRead_1() {
 
 		try {
-			IPeaks<?> peaks = (IPeaks<?>)processingInfo.getProcessingResult();
+			IPeaks<IPeakMSD> peaks = processingInfo.getProcessingResult();
 			assertEquals(1132, peaks.getPeaks().size());
 		} catch(TypeCastException e) {
 			assertTrue(false);

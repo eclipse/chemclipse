@@ -121,7 +121,7 @@ public class ChromatogramProcedure implements Procedure<ChromatogramProcedureSet
 			File tempFile = File.createTempFile(chromatogram.getName(), ".ocb");
 			tempFile.deleteOnExit();
 			//
-			IProcessingInfo<?> convert = exporter.convert(tempFile, chromatogram, subMonitor.split(50));
+			IProcessingInfo<File> convert = exporter.convert(tempFile, chromatogram, subMonitor.split(50));
 			if(convert.hasErrorMessages()) {
 				context.addMessages(convert);
 				return null;

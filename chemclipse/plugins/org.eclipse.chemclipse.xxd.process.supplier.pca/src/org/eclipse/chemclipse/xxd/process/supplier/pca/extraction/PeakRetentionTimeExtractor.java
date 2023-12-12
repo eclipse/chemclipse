@@ -37,16 +37,14 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Samples;
 
 public class PeakRetentionTimeExtractor extends AbstractClassifierDescriptionExtractor {
 
-	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, int retentionTimeWindow, DescriptionOption descriptionOption, ValueOption valueOption) {
+	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<IPeak>> peaks, int retentionTimeWindow, DescriptionOption descriptionOption, ValueOption valueOption) {
 
 		List<Sample> samplesList = new ArrayList<>();
 		peaks.keySet().forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));
 		Samples samples = new Samples(samplesList);
 		//
 		Map<String, IPeaks<?>> peakMap = new LinkedHashMap<>();
-		peaks.forEach((dataInputEntry, peaksInput) -> {
-			peakMap.put(dataInputEntry.getSampleName(), peaksInput);
-		});
+		peaks.forEach((dataInputEntry, peaksInput) -> peakMap.put(dataInputEntry.getSampleName(), peaksInput));
 		//
 		Map<String, SortedMap<Integer, IPeak>> extractPeaks = exctractPcaPeakMap(peakMap, retentionTimeWindow);
 		List<Integer> extractedRetentionTimes = calculateCondensedRetentionTimes(extractPeaks);

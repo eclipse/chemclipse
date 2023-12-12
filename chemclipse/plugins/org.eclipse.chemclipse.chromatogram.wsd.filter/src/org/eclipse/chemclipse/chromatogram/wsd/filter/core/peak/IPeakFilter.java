@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.wsd.filter.core.peak;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.filter.result.IPeakFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
@@ -29,7 +30,7 @@ public interface IPeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<?> applyFilter(IPeakWSD peak, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
+	IProcessingInfo<IPeakFilterResult> applyFilter(IPeakWSD peak, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected peak.
@@ -38,7 +39,7 @@ public interface IPeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<?> applyFilter(IPeakWSD peak, IProgressMonitor monitor);
+	IProcessingInfo<IPeakFilterResult> applyFilter(IPeakWSD peak, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected peaks using the settings.
@@ -48,7 +49,7 @@ public interface IPeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<?> applyFilter(List<IPeakWSD> peaks, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
+	IProcessingInfo<IPeakFilterResult> applyFilter(List<IPeakWSD> peaks, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected peaks.
@@ -57,7 +58,7 @@ public interface IPeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<?> applyFilter(List<IPeakWSD> peaks, IProgressMonitor monitor);
+	IProcessingInfo<IPeakFilterResult> applyFilter(List<IPeakWSD> peaks, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected peaks in the chromatogram selection using the settings.
@@ -67,7 +68,7 @@ public interface IPeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<?> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
+	IProcessingInfo<IPeakFilterResult> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, IProgressMonitor monitor);
 
 	/**
 	 * Applies the filter to the selected peaks in the chromatogram selection.
@@ -76,7 +77,7 @@ public interface IPeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<?> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor);
+	IProcessingInfo<IPeakFilterResult> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor);
 
 	/**
 	 * Validates the peak and the settings.
@@ -85,7 +86,7 @@ public interface IPeakFilter {
 	 * @param peakFilterSettings
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<?> validate(IPeakWSD peak, IPeakFilterSettings peakFilterSettings);
+	IProcessingInfo<IPeakFilterResult> validate(IPeakWSD peak, IPeakFilterSettings peakFilterSettings);
 
 	/**
 	 * Validates the peak and the settings.
@@ -94,7 +95,7 @@ public interface IPeakFilter {
 	 * @param peakFilterSettings
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<?> validate(List<IPeakWSD> peaks, IPeakFilterSettings peakFilterSettings);
+	IProcessingInfo<IPeakFilterResult> validate(List<IPeakWSD> peaks, IPeakFilterSettings peakFilterSettings);
 
 	/**
 	 * Validates the chromatogram selection and the settings.
@@ -103,5 +104,5 @@ public interface IPeakFilter {
 	 * @param peakFilterSettings
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<?> validate(IChromatogramSelectionWSD chromatogramSelection, IPeakFilterSettings peakFilterSettings);
+	IProcessingInfo<IPeakFilterResult> validate(IChromatogramSelectionWSD chromatogramSelection, IPeakFilterSettings peakFilterSettings);
 }

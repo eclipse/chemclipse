@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakImportConverter;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorELU;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.ELUReader;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
@@ -36,10 +37,10 @@ public class ELUPeakImportConverter extends AbstractPeakImportConverter {
 	private static final Logger logger = Logger.getLogger(ELUPeakImportConverter.class);
 
 	@Override
-	public IProcessingInfo<IPeaks<?>> convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IPeaks<IPeakMSD>> convert(File file, IProgressMonitor monitor) {
 
 		IProcessingMessage processingMessage;
-		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = new ProcessingInfo<>();
 		try {
 			super.validate(file);
 			file = SpecificationValidatorELU.validateSpecification(file);

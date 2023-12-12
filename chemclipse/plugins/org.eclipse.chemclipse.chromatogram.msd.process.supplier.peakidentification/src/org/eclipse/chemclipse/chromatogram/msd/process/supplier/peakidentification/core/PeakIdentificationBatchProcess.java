@@ -68,7 +68,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		for(IPeakInputEntry inputEntry : peakIdentificationBatchJob.getPeakInputEntries()) {
 			try {
 				peakInputFile = new File(inputEntry.getInputFile());
-				IProcessingInfo<IPeaks<?>> processingPeakImportConverterInfo = loadPeaksFromFile(peakInputFile, monitor);
+				IProcessingInfo<IPeaks<IPeakMSD>> processingPeakImportConverterInfo = loadPeaksFromFile(peakInputFile, monitor);
 				processingInfo.addMessages(processingPeakImportConverterInfo);
 				try {
 					peakImports = processingPeakImportConverterInfo.getProcessingResult();
@@ -104,7 +104,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		return processingInfo;
 	}
 
-	private IProcessingInfo<IPeaks<?>> loadPeaksFromFile(File peakInputFile, IProgressMonitor monitor) {
+	private IProcessingInfo<IPeaks<IPeakMSD>> loadPeaksFromFile(File peakInputFile, IProgressMonitor monitor) {
 
 		return PeakConverterMSD.convert(peakInputFile, monitor);
 	}

@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.extraction.ExtractionSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.extraction.PeakExtractionSupport;
@@ -45,12 +46,12 @@ public class PcaExtractionPeaks implements IExtractionData {
 		this.extractionSettings = extractionSettings;
 	}
 
-	private Map<IDataInputEntry, IPeaks<?>> extractPeaks(List<IDataInputEntry> peakInputFiles, IProgressMonitor monitor) {
+	private Map<IDataInputEntry, IPeaks<IPeak>> extractPeaks(List<IDataInputEntry> peakInputFiles, IProgressMonitor monitor) {
 
-		Map<IDataInputEntry, IPeaks<?>> peakMap = new LinkedHashMap<>();
+		Map<IDataInputEntry, IPeaks<IPeak>> peakMap = new LinkedHashMap<>();
 		for(IDataInputEntry peakFile : peakInputFiles) {
 			try {
-				IPeaks<?> peaks = extractPeaks(peakFile, monitor);
+				IPeaks<IPeak> peaks = extractPeaks(peakFile, monitor);
 				if(!peaks.isEmpty()) {
 					peakMap.put(peakFile, peaks);
 				} else {
@@ -67,21 +68,21 @@ public class PcaExtractionPeaks implements IExtractionData {
 	public Samples process(IProgressMonitor monitor) {
 
 		PeakExtractionSupport peakExtractionSupport = new PeakExtractionSupport();
-		Map<IDataInputEntry, IPeaks<?>> peakMap = extractPeaks(dataInputEntries, monitor);
+		Map<IDataInputEntry, IPeaks<IPeak>> peakMap = extractPeaks(dataInputEntries, monitor);
 		return peakExtractionSupport.extractPeakData(peakMap, extractionSettings);
 	}
 
-	private IPeaks<?> extractPeaks(IDataInputEntry peakFile, IProgressMonitor monitor) {
+	private IPeaks<IPeak> extractPeaks(IDataInputEntry peakFile, IProgressMonitor monitor) {
 
-		IPeaks<?> peaks = new Peaks();
+		IPeaks<IPeak> peaks = new Peaks();
 		File file = new File(peakFile.getInputFile());
 		//
-		IProcessingInfo<?> processingInfo = PeakConverterMSD.convert(file, monitor);
+		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = PeakConverterMSD.convert(file, monitor);
 		if(processingInfo.getProcessingResult() != null) {
 			/*
 			 * MSD
 			 */
-			IPeaks<?> result = (IPeaks<?>)processingInfo.getProcessingResult();
+			IPeaks<IPeakMSD> result = processingInfo.getProcessingResult();
 			for(IPeak peak : result.getPeaks()) {
 				peaks.addPeak(peak);
 			}

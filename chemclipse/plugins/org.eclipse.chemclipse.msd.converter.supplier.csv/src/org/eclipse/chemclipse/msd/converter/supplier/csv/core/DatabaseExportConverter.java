@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Matthias Mailänder.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -49,7 +49,7 @@ public class DatabaseExportConverter extends AbstractDatabaseExportConverter {
 		 * Checks that file and mass spectrum are not null.
 		 */
 		file = SpecificationValidator.validateSpecification(file, "csv");
-		IProcessingInfo<?> processingInfoValidate = validate(file, massSpectrum);
+		IProcessingInfo<File> processingInfoValidate = validate(file, massSpectrum);
 		if(processingInfoValidate.hasErrorMessages()) {
 			processingInfo.addMessages(processingInfoValidate);
 		} else {
@@ -107,17 +107,17 @@ public class DatabaseExportConverter extends AbstractDatabaseExportConverter {
 		return processingInfo;
 	}
 
-	private IProcessingInfo<?> validate(File file, IScanMSD massSpectrum) {
+	private IProcessingInfo<File> validate(File file, IScanMSD massSpectrum) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(super.validate(file));
 		processingInfo.addMessages(super.validate(massSpectrum));
 		return processingInfo;
 	}
 
-	private IProcessingInfo<?> validate(File file, IMassSpectra massSpectra) {
+	private IProcessingInfo<File> validate(File file, IMassSpectra massSpectra) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(super.validate(file));
 		processingInfo.addMessages(super.validate(massSpectra));
 		return processingInfo;

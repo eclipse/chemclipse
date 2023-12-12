@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.wsd.filter.core.peak;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.filter.result.IPeakFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -58,9 +59,9 @@ public class PeakFilter {
 	 * @param filterId
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo<?> applyFilter(IPeakWSD peak, IPeakFilterSettings peakFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IPeakFilterResult> applyFilter(IPeakWSD peak, IPeakFilterSettings peakFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo;
+		IProcessingInfo<IPeakFilterResult> processingInfo;
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(peak, peakFilterSettings, monitor);
@@ -80,9 +81,9 @@ public class PeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo<?> applyFilter(IPeakWSD peak, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IPeakFilterResult> applyFilter(IPeakWSD peak, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo;
+		IProcessingInfo<IPeakFilterResult> processingInfo;
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(peak, monitor);
@@ -104,9 +105,9 @@ public class PeakFilter {
 	 * @param filterId
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo<?> applyFilter(List<IPeakWSD> peaks, IPeakFilterSettings peakFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IPeakFilterResult> applyFilter(List<IPeakWSD> peaks, IPeakFilterSettings peakFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo;
+		IProcessingInfo<IPeakFilterResult> processingInfo;
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(peaks, peakFilterSettings, monitor);
@@ -127,9 +128,9 @@ public class PeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo<?> applyFilter(List<IPeakWSD> peaks, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IPeakFilterResult> applyFilter(List<IPeakWSD> peaks, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo;
+		IProcessingInfo<IPeakFilterResult> processingInfo;
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(peaks, monitor);
@@ -150,9 +151,9 @@ public class PeakFilter {
 	 * @param filterId
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo<?> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IPeakFilterResult> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo;
+		IProcessingInfo<IPeakFilterResult> processingInfo;
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(chromatogramSelection, peakFilterSettings, monitor);
@@ -172,9 +173,9 @@ public class PeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo<?> applyFilter(IChromatogramSelectionWSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IPeakFilterResult> applyFilter(IChromatogramSelectionWSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo;
+		IProcessingInfo<IPeakFilterResult> processingInfo;
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(chromatogramSelection, monitor);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,9 +14,11 @@ package org.eclipse.chemclipse.msd.converter.chromatogram;
 import java.io.File;
 import java.io.IOException;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.msd.converter.TestPathHelper;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
@@ -47,20 +49,22 @@ public class AbstractChromatogramImportConverter_1_Test extends TestCase {
 		super.tearDown();
 	}
 
+	@Test
 	public void testFileNotFoundException_1() {
 
 		File file = new File("");
-		IProcessingInfo<?> processingInfo = ic.convert(file, new NullProgressMonitor());
+		IProcessingInfo<IChromatogram<?>> processingInfo = ic.convert(file, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
+	@Test
 	public void testFileIsNotReadableException_1() {
 
 		File file = null;
 		try {
 			file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_NOT_READABLE));
 			file.setReadable(false);
-			IProcessingInfo<?> processingInfo = ic.convert(file, new NullProgressMonitor());
+			IProcessingInfo<IChromatogram<?>> processingInfo = ic.convert(file, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(IOException e) {
 			assertTrue("IOException", false);
@@ -71,12 +75,13 @@ public class AbstractChromatogramImportConverter_1_Test extends TestCase {
 		}
 	}
 
+	@Test
 	public void testFileIsEmptyException_1() {
 
 		File file = null;
 		try {
 			file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_EMPTY));
-			IProcessingInfo<?> processingInfo = ic.convert(file, new NullProgressMonitor());
+			IProcessingInfo<IChromatogram<?>> processingInfo = ic.convert(file, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(IOException e) {
 			assertTrue("IOException", false);

@@ -12,11 +12,8 @@
 package org.eclipse.chemclipse.msd.converter.supplier.ocx.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_0701;
@@ -39,6 +36,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_1400;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_1500;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_1501;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.ReaderHelper;
@@ -47,9 +45,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class PeakReaderMSD implements IPeakReader {
 
 	@Override
-	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IProcessingInfo<IPeaks<IPeakMSD>> read(File file, IProgressMonitor monitor) throws IOException {
 
-		IProcessingInfo<IPeaks<?>> processingInfo = null;
+		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = null;
 		ReaderHelper readerHelper = new ReaderHelper();
 		String version = readerHelper.getVersion(file);
 		/*

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.peak;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -69,9 +70,8 @@ public class PeakConverterMSDProcessTypeSupplier implements IProcessTypeSupplier
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, PeakExportSettings processSettings, ProcessExecutionContext context) {
 
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-			if(chromatogram instanceof IChromatogramMSD) {
-				IChromatogramMSD msd = (IChromatogramMSD)chromatogram;
-				IProcessingInfo<?> info = converter.convert(processSettings.getExportFile(supplier.getFileExtension(), chromatogram), msd.toPeaks(msd.getName(), chromatogramSelection), false, context.getProgressMonitor());
+			if(chromatogram instanceof IChromatogramMSD msd) {
+				IProcessingInfo<File> info = converter.convert(processSettings.getExportFile(supplier.getFileExtension(), chromatogram), msd.toPeaks(msd.getName(), chromatogramSelection), false, context.getProgressMonitor());
 				context.addMessages(info);
 			} else {
 				context.addWarnMessage(getName(), "Can only export MSD Data, skipping...");

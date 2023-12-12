@@ -38,7 +38,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Samples;
 
 public class PeakTargetExtractor extends AbstractClassifierDescriptionExtractor {
 
-	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, DescriptionOption descriptionOption, ValueOption valueOption) {
+	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<IPeak>> peaks, DescriptionOption descriptionOption, ValueOption valueOption) {
 
 		List<Sample> samplesList = new ArrayList<>();
 		peaks.keySet().forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));
@@ -50,7 +50,7 @@ public class PeakTargetExtractor extends AbstractClassifierDescriptionExtractor 
 		});
 		//
 		Set<String> targets = extractPeakTargets(peaks.values());
-		Map<String, SortedMap<String, IPeak>> extractPeaks = exctractPcaPeakMap(peakMap, targets);
+		Map<String, SortedMap<String, IPeak>> extractPeaks = exctractPcaPeakMap(peakMap);
 		samples.getVariables().addAll(Target.create(targets));
 		//
 		setExtractData(extractPeaks, samples, valueOption);
@@ -59,7 +59,7 @@ public class PeakTargetExtractor extends AbstractClassifierDescriptionExtractor 
 		return samples;
 	}
 
-	private Set<String> extractPeakTargets(Collection<IPeaks<?>> peaksCollection) {
+	private Set<String> extractPeakTargets(Collection<IPeaks<IPeak>> peaksCollection) {
 
 		Set<String> targets = new HashSet<>();
 		//
@@ -75,7 +75,7 @@ public class PeakTargetExtractor extends AbstractClassifierDescriptionExtractor 
 		return targets;
 	}
 
-	private Map<String, SortedMap<String, IPeak>> exctractPcaPeakMap(Map<String, IPeaks<?>> peakMap, Set<String> targets) {
+	private Map<String, SortedMap<String, IPeak>> exctractPcaPeakMap(Map<String, IPeaks<?>> peakMap) {
 
 		Map<String, SortedMap<String, IPeak>> pcaPeaks = new LinkedHashMap<>();
 		//

@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
@@ -37,8 +38,8 @@ public class MSPImportConverter_1_ITest extends TestCase {
 		super.setUp();
 		File importFile = new File(PathResolver.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_LIB_1_MSP));
 		IDatabaseImportConverter importConverter = new MSPDatabaseImportConverter();
-		IProcessingInfo<?> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
-		massSpectra = (IMassSpectra)processingInfo.getProcessingResult();
+		IProcessingInfo<IMassSpectra> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		massSpectra = processingInfo.getProcessingResult();
 	}
 
 	@Override
@@ -48,11 +49,13 @@ public class MSPImportConverter_1_ITest extends TestCase {
 		super.tearDown();
 	}
 
+	@Test
 	public void test_1() {
 
 		assertEquals(5, massSpectra.size());
 	}
 
+	@Test
 	public void test_2() throws AbundanceLimitExceededException, IonLimitExceededException {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
@@ -66,6 +69,7 @@ public class MSPImportConverter_1_ITest extends TestCase {
 		assertEquals(1.00000e+00f, massSpectrum.getIon(40).getAbundance());
 	}
 
+	@Test
 	public void test_3() throws AbundanceLimitExceededException, IonLimitExceededException {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(2);
@@ -78,6 +82,7 @@ public class MSPImportConverter_1_ITest extends TestCase {
 		assertEquals(7.40074e-03f, massSpectrum.getIon(29).getAbundance());
 	}
 
+	@Test
 	public void test_4() throws AbundanceLimitExceededException, IonLimitExceededException {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(3);
@@ -89,6 +94,7 @@ public class MSPImportConverter_1_ITest extends TestCase {
 		assertEquals(1.00000e+00f, massSpectrum.getIon(32).getAbundance());
 	}
 
+	@Test
 	public void test_5() throws AbundanceLimitExceededException, IonLimitExceededException {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(4);
@@ -112,6 +118,7 @@ public class MSPImportConverter_1_ITest extends TestCase {
 		assertEquals(5.00050e-03f, massSpectrum.getIon(31).getAbundance());
 	}
 
+	@Test
 	public void test_6() throws AbundanceLimitExceededException, IonLimitExceededException {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(5);

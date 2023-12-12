@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,15 +16,17 @@ import java.io.File;
 
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.TestPathHelper;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
 public class MatlabParafacPeakImportConverter_7_ITest extends TestCase {
 
-	private IPeaks<?> peaks;
-	private IProcessingInfo<IPeaks<?>> processingInfo;
+	private IPeaks<IPeakMSD> peaks;
+	private IProcessingInfo<IPeaks<IPeakMSD>> processingInfo;
 	private MatlabParafacPeakImportConverter converter;
 
 	@Override
@@ -43,6 +45,7 @@ public class MatlabParafacPeakImportConverter_7_ITest extends TestCase {
 		super.tearDown();
 	}
 
+	@Test
 	public void testImport_1() {
 
 		assertEquals(3, peaks.getPeaks().size());

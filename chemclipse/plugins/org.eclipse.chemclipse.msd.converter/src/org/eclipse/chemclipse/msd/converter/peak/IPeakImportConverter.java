@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IImportConverter;
 import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -28,5 +29,5 @@ public interface IPeakImportConverter extends IImportConverter {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	IProcessingInfo<IPeaks<?>> convert(File file, IProgressMonitor monitor);
+	IProcessingInfo<IPeaks<IPeakMSD>> convert(File file, IProgressMonitor monitor);
 }
