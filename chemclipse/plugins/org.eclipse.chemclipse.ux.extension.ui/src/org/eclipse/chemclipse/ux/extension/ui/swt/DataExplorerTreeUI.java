@@ -43,6 +43,8 @@ public class DataExplorerTreeUI {
 
 	private final TreeViewer treeViewer;
 	private final DataExplorerTreeRoot dataExplorerTreeRoot;
+	private IPreferenceStore preferenceStore = null;
+	private String preferenceKey = null;
 
 	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot dataExplorerTreeRoot, Collection<? extends ISupplierFileIdentifier> identifier) {
 
@@ -77,13 +79,17 @@ public class DataExplorerTreeUI {
 
 	public void expandLastDirectoryPath(IPreferenceStore preferenceStore, String preferenceKey) {
 
+		this.preferenceStore = preferenceStore;
+		this.preferenceKey = preferenceKey;
+		//
 		File lastFile = new File(preferenceStore.getString(preferenceKey));
 		if(lastFile.exists()) {
-			// expand level
+			/*
+			 * Expand Level
+			 */
 			treeViewer.expandToLevel(lastFile, 1);
-			// select to scroll into view
 			treeViewer.setSelection(new StructuredSelection(lastFile), true);
-			// clear selection for unselected default view scrolled to last position
+			//
 			Display.getDefault().asyncExec(new Runnable() {
 
 				@Override
@@ -103,8 +109,8 @@ public class DataExplorerTreeUI {
 
 	public void saveLastDirectoryPath(IPreferenceStore preferenceStore, String preferenceKey) {
 
-		File file = (File)treeViewer.getStructuredSelection().getFirstElement();
-		if(file != null) {
+		Object object = treeViewer.getStructuredSelection().getFirstElement();
+		if(object instanceof File file) {
 			File directoryPath = null;
 			if(file.isFile()) {
 				/*
@@ -154,8 +160,20 @@ public class DataExplorerTreeUI {
 
 	private void setInput(TreeViewer treeViewer) {
 
-		// Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
-		DisplayUtils.getDisplay().asyncExec(() -> treeViewer.setInput(dataExplorerTreeRoot.getRootContent()));
+		/*
+		 * Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
+		 */
+		DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				treeViewer.setInput(dataExplorerTreeRoot.getRootContent());
+				if(preferenceStore != null && preferenceKey != null) {
+					expandLastDirectoryPath(preferenceStore, preferenceKey);
+				}
+			}
+		});
 	}
 
 	private int getNumberOfChildDirectories(File directory) {
@@ -168,6 +186,7 @@ public class DataExplorerTreeUI {
 				}
 			}
 		}
+		//
 		return counter;
 	}
 }

@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - performance optimization and cleanup, refactor handling of Suppliers
  * Matthias Mailänder - right-click refresh option
  *******************************************************************************/
@@ -47,7 +47,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI implements IExtended
 	private IEclipseContext context;
 	private ISupplierFileIdentifier supplierFileIdentifier;
 	//
-	IPreferenceStore preferenceStore;
+	private IPreferenceStore preferenceStore;
 
 	public DataExplorerUI(Composite parent, IPreferenceStore preferenceStore, IEclipseContext context, ISupplierFileIdentifier supplierFileIdentifier) {
 

@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - Move custom made toolbar to the native toolbar with E4Handlers
  * Philip Wenig - modularization
  *******************************************************************************/
