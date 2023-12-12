@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,10 +29,12 @@ public class IdentificationTarget extends AbstractIdentificationTarget implement
 	private IScan libraryScan;
 
 	public IdentificationTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
+
 		this(libraryInformation, comparisonResult, null);
 	}
 
 	public IdentificationTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult, String identifier) throws ReferenceMustNotBeNullException {
+
 		super(libraryInformation, comparisonResult);
 		if(identifier != null) {
 			setIdentifier(identifier);
@@ -56,5 +58,11 @@ public class IdentificationTarget extends AbstractIdentificationTarget implement
 			return adapter.cast(libraryScan);
 		}
 		return null;
+	}
+
+	@Override
+	public IIdentificationTarget makeDeepCopy() {
+
+		return new IdentificationTarget(getLibraryInformation(), getComparisonResult(), getIdentifier());
 	}
 }

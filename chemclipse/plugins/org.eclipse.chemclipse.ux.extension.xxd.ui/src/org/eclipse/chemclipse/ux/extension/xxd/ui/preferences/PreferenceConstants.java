@@ -445,8 +445,6 @@ public class PreferenceConstants {
 	public static final String P_RETENTION_INDEX_DEVIATION_ABS_WARN = "retentionIndexDeviationAbsoluteWARN";
 	public static final float DEF_RETENTION_INDEX_DEVIATION_ABS_WARN = 40.0f;
 	//
-	public static final String P_SHOW_DIALOG_DELETE_TARGETS = "showDialogDeleteTargets";
-	public static final boolean DEF_SHOW_DIALOG_DELETE_TARGETS = true;
 	public static final String P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL = "addUnknownAfterDeleteTargetsAll";
 	public static final boolean DEF_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL = false;
 	public static final String P_MATCH_QUALITY_UNKNOWN_TARGET = "matchQualityUnknownTarget";

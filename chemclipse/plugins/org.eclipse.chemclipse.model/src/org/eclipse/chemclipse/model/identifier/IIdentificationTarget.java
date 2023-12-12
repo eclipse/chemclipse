@@ -223,4 +223,6 @@ public interface IIdentificationTarget extends ITarget {
 	 * @param verified
 	 */
 	void setVerified(boolean verified);
+
+	IIdentificationTarget makeDeepCopy();
 }

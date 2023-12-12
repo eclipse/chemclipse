@@ -64,6 +64,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeletePeaksOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteScanTargetsOperation;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteTargetsOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
@@ -76,7 +77,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.Inter
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -93,7 +93,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
@@ -477,8 +476,9 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_Q) {
 						scanIdentifierControl.get().runIdentification(e.display); // CTRL + q
 					} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_A) {
-						if(showPeakProfilesSelectionAll)
+						if(showPeakProfilesSelectionAll) {
 							propagateSelection(display);
+						}
 					}
 				} else {
 					propagateSelection(display);
@@ -613,25 +613,24 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void deleteTargetsAll(Display display) {
 
-		boolean process = true;
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DIALOG_DELETE_TARGETS)) {
-			process = openQuestion(display.getActiveShell(), "Do you want to delete all targets?");
-		}
-		/*
-		 * Delete Targets
-		 */
-		if(process) {
-			for(Object object : tableViewer.get().getStructuredSelection().toList()) {
-				if(object instanceof ITargetSupplier targetSupplier) {
-					targetSupplier.getTargets().clear();
-					if(preferenceStore.getBoolean(PreferenceConstants.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL)) {
-						IScan scan = getScan(object);
-						if(scan != null) {
-							IIdentificationTarget identificationTarget = IdentificationTargetSupport.getTargetUnknown(scan);
-							targetSupplier.getTargets().add(identificationTarget);
-						}
+		for(Object object : tableViewer.get().getStructuredSelection().toList()) {
+			if(object instanceof ITargetSupplier targetSupplier) {
+				Set<IIdentificationTarget> targetsToDelete = targetSupplier.getTargets();
+				DeleteTargetsOperation deleteTargetsOperation = new DeleteTargetsOperation(display, chromatogramSelection, targetSupplier, targetsToDelete);
+				deleteTargetsOperation.addContext(UndoContextFactory.getUndoContext());
+				try {
+					getOperationHistory().execute(deleteTargetsOperation, null, null);
+				} catch(ExecutionException e) {
+					logger.warn(e);
+				}
+				if(preferenceStore.getBoolean(PreferenceConstants.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL)) {
+					IScan scan = getScan(object);
+					if(scan != null) {
+						IIdentificationTarget identificationTarget = IdentificationTargetSupport.getTargetUnknown(scan);
+						targetSupplier.getTargets().add(identificationTarget);
 					}
 				}
 			}
@@ -676,11 +675,6 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		//
 		chromatogramSelection.getChromatogram().setDirty(true);
 		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peaks/Scans unknown targets have been set.");
-	}
-
-	private boolean openQuestion(Shell shell, String text) {
-
-		return MessageDialog.openQuestion(shell, "Targets", text);
 	}
 
 	@SuppressWarnings("unchecked")

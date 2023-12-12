@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
@@ -30,6 +31,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.updates.ITargetUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.rcp.app.undo.UndoContextFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -47,6 +49,7 @@ import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteTargetsOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
@@ -58,7 +61,9 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDat
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.targets.ComboTarget;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -71,7 +76,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
@@ -103,6 +107,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	//
 	private Object objectCacheChromatogram = null; // IChromatogram
 	private Object objectCacheOther = null; // IScan, IPeak, ITargetSupplier
+	private IChromatogramSelection<IPeak, ?> chromatogramSelection;
 	//
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
@@ -136,8 +141,9 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		updateTargets(getDisplay());
 	}
 
-	public void updateChromatogram(IChromatogramSelection<?, ?> chromatogramSelection) {
+	public void updateChromatogram(IChromatogramSelection<IPeak, ?> chromatogramSelection) {
 
+		this.chromatogramSelection = chromatogramSelection;
 		if(chromatogramSelection != null) {
 			/*
 			 * Update Peak/Scan
@@ -283,11 +289,6 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		});
 		//
 		scanIdentifierControl.set(scanIdentifierUI);
-	}
-
-	private boolean openQuestion(Shell shell, String text) {
-
-		return MessageDialog.openQuestion(shell, MENU_CATEGORY_TARGETS, text);
 	}
 
 	private void createButtonSettings(Composite parent) {
@@ -720,43 +721,44 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void deleteTargetsSelected(Display display) {
 
-		boolean process = true;
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DIALOG_DELETE_TARGETS)) {
-			process = openQuestion(display.getActiveShell(), "Do you want to delete the selected targets?");
-		}
-		/*
-		 * Delete Targets
-		 */
-		if(process) {
-			AtomicReference<TargetsListUI> targetList = getActiveTargetList();
-			List<?> selection = targetList.get().getStructuredSelection().toList();
-			if(getObject() instanceof ITargetSupplier targetSupplier) {
-				targetSupplier.getTargets().removeAll(selection);
-				updateTargetsModify(display);
+		AtomicReference<TargetsListUI> targetList = getActiveTargetList();
+		List<IIdentificationTarget> selection = targetList.get().getStructuredSelection().toList();
+		if(getObject() instanceof ITargetSupplier targetSupplier) {
+			DeleteTargetsOperation deleteTargetsOperation = new DeleteTargetsOperation(display, chromatogramSelection, targetSupplier, selection);
+			deleteTargetsOperation.addContext(UndoContextFactory.getUndoContext());
+			try {
+				getOperationHistory().execute(deleteTargetsOperation, null, null);
+			} catch(ExecutionException e) {
+				logger.warn(e);
 			}
+			updateTargetsModify(display);
 		}
 	}
 
 	private void deleteTargetsAll(Display display) {
 
-		boolean process = true;
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DIALOG_DELETE_TARGETS)) {
-			process = openQuestion(display.getActiveShell(), "Do you want to delete all targets?");
-		}
-		/*
-		 * Delete Targets
-		 */
-		if(process) {
-			if(getObject() instanceof ITargetSupplier targetSupplier) {
-				targetSupplier.getTargets().clear();
-				updateTargetsModify(display);
-				if(preferenceStore.getBoolean(PreferenceConstants.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL)) {
-					addTargetUnknown(display);
-				}
+		if(getObject() instanceof ITargetSupplier targetSupplier) {
+			Set<IIdentificationTarget> targetsToDelete = targetSupplier.getTargets();
+			DeleteTargetsOperation deleteTargetsOperation = new DeleteTargetsOperation(display, chromatogramSelection, targetSupplier, targetsToDelete);
+			deleteTargetsOperation.addContext(UndoContextFactory.getUndoContext());
+			try {
+				getOperationHistory().execute(deleteTargetsOperation, null, null);
+			} catch(ExecutionException e) {
+				logger.warn(e);
+			}
+			updateTargetsModify(display);
+			if(preferenceStore.getBoolean(PreferenceConstants.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL)) {
+				addTargetUnknown(display);
 			}
 		}
+	}
+
+	private IOperationHistory getOperationHistory() {
+
+		return OperationHistoryFactory.getOperationHistory();
 	}
 
 	private void updateTargetsModify(Display display) {
@@ -848,6 +850,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		return isChromatogramActive() ? targetListChromatogram : targetListOther;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void updateOnFocus() {
 
 		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
@@ -856,7 +859,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		if(!objects.isEmpty()) {
 			Object object = objects.get(0);
 			if(object instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
-				updateChromatogram(chromatogramSelection);
+				updateChromatogram((IChromatogramSelection<IPeak, ?>)chromatogramSelection);
 			} else {
 				updateOther(object);
 			}

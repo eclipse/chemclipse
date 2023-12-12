@@ -282,8 +282,11 @@ public class ExtensionMessages extends NLS {
 	public static String namedTrace;
 	public static String unknown;
 	public static String deletePeaks;
+	public static String deleteTargets;
 	public static String peaksDeleted;
 	public static String peaksUndeleted;
+	public static String targetsDeleted;
+	public static String targetsRestored;
 	public static String deleteScanTargets;
 	public static String generic;
 	public static String na;

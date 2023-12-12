@@ -15,6 +15,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedTargetsUI;
@@ -46,6 +47,7 @@ public class TargetsPart extends AbstractPart<ExtendedTargetsUI> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected boolean updateData(List<Object> objects, String topic) {
 
@@ -58,7 +60,7 @@ public class TargetsPart extends AbstractPart<ExtendedTargetsUI> {
 				Object object = objects.get(0);
 				if(isChromatogramTopic(topic)) {
 					if(object instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
-						getControl().updateChromatogram(chromatogramSelection);
+						getControl().updateChromatogram((IChromatogramSelection<IPeak, ?>)chromatogramSelection);
 						return true;
 					}
 				} else if(isScanTopic(topic) || isPeakTopic(topic) || isIdentificationTopic(topic)) {
