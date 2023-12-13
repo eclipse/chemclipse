@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.updates.IUpdateListener;
@@ -167,7 +168,6 @@ public class ProcessMethodToolbar extends ToolBar {
 		buttonModifySettings.setEnabled(writeable && preferencesSupplier != null);
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void copyToClipboard(Display display) {
 
 		Clipboard clipboard = new Clipboard(display);
@@ -176,10 +176,10 @@ public class ProcessMethodToolbar extends ToolBar {
 		//
 		List<Object> objects = new ArrayList<>();
 		Object input = structuredViewer.getInput();
-		if(input instanceof ProcessMethod) {
-			objects.addAll(((ProcessMethod)input).getEntries());
+		if(input instanceof ProcessMethod processMethod) {
+			objects.addAll(processMethod.getEntries());
 		} else if(input instanceof List) {
-			objects.addAll((List)input);
+			objects.addAll((List<?>)input);
 		}
 		/*
 		 * Header
@@ -194,8 +194,7 @@ public class ProcessMethodToolbar extends ToolBar {
 		 * Data
 		 */
 		for(Object object : objects) {
-			if(object instanceof IProcessEntry) {
-				IProcessEntry processEntry = (IProcessEntry)object;
+			if(object instanceof IProcessEntry processEntry) {
 				builder.append(processEntry.getName());
 				builder.append("\t");
 				builder.append(processEntry.getDescription());
@@ -301,7 +300,7 @@ public class ProcessMethodToolbar extends ToolBar {
 	private ToolItem createAddButton(ToolBar toolBar) {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.DROP_DOWN);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Add a process method.");
 		final Menu menu = new Menu(toolBar.getShell(), SWT.POP_UP);
 		//
@@ -369,12 +368,12 @@ public class ProcessMethodToolbar extends ToolBar {
 					Map<IProcessSupplierContext, String> contextList = new LinkedHashMap<>();
 					Object element = structuredViewer.getStructuredSelection().getFirstElement();
 					ProcessEntry selectedEntry = null;
-					if(element instanceof ProcessEntry) {
-						selectedEntry = (ProcessEntry)element;
+					if(element instanceof ProcessEntry processEntry) {
+						selectedEntry = processEntry;
 						String id = selectedEntry.getProcessorId();
 						IProcessSupplier<?> supplier = processingSupport.getSupplier(id);
-						if(supplier instanceof IProcessSupplierContext) {
-							contextList.put((IProcessSupplierContext)supplier, supplier.getName());
+						if(supplier instanceof IProcessSupplierContext processSupplierContext) {
+							contextList.put(processSupplierContext, supplier.getName());
 						}
 					}
 					//
@@ -412,7 +411,7 @@ public class ProcessMethodToolbar extends ToolBar {
 	private ToolItem createRemoveButton(ToolBar toolBar) {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Remove the selected process methods.");
 		item.addSelectionListener(new SelectionAdapter() {
 
@@ -429,7 +428,7 @@ public class ProcessMethodToolbar extends ToolBar {
 	private ToolItem createRemoveAllButton(ToolBar toolBar) {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Remove all process methods.");
 		item.addSelectionListener(new SelectionAdapter() {
 
@@ -445,7 +444,7 @@ public class ProcessMethodToolbar extends ToolBar {
 	private ToolItem createCopyButton(ToolBar toolBar) {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Copy a process method.");
 		item.addSelectionListener(new SelectionAdapter() {
 
@@ -477,7 +476,7 @@ public class ProcessMethodToolbar extends ToolBar {
 	private ToolItem createMoveUpButton(ToolBar toolBar) {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Move the selected process entries up.");
 		item.addSelectionListener(new SelectionAdapter() {
 
@@ -494,7 +493,7 @@ public class ProcessMethodToolbar extends ToolBar {
 	private ToolItem createMoveDownButton(ToolBar toolBar) {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Move the selected process entries down.");
 		item.addSelectionListener(new SelectionAdapter() {
 
@@ -511,7 +510,7 @@ public class ProcessMethodToolbar extends ToolBar {
 	private ToolItem createClipboardButton(ToolBar toolBar) {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY_CLIPBOARD, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY_CLIPBOARD, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Copy method to clipboard.");
 		item.addSelectionListener(new SelectionAdapter() {
 
@@ -528,7 +527,7 @@ public class ProcessMethodToolbar extends ToolBar {
 	private ToolItem createModifyDescriptionButton(ToolBar toolBar) {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Modify the process method description.");
 		item.addSelectionListener(new SelectionAdapter() {
 
@@ -537,11 +536,10 @@ public class ProcessMethodToolbar extends ToolBar {
 
 				if(processMethod != null) {
 					Object object = structuredViewer.getStructuredSelection().getFirstElement();
-					if(object instanceof ProcessEntry) {
+					if(object instanceof ProcessEntry processEntry) {
 						/*
 						 * Ask the user for a specific description.
 						 */
-						ProcessEntry processEntry = (ProcessEntry)object;
 						InputDialog inputDialog = new InputDialog(e.display.getActiveShell(), "Description", "Set a specific process entry description.", processEntry.getDescription(), new IInputValidator() {
 
 							@Override
@@ -570,7 +568,7 @@ public class ProcessMethodToolbar extends ToolBar {
 	private ToolItem createModifySettingsButton(ToolBar toolBar) {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Modify the process method settings.");
 		item.addSelectionListener(new SelectionAdapter() {
 
@@ -579,8 +577,7 @@ public class ProcessMethodToolbar extends ToolBar {
 
 				if(processMethod != null) {
 					Object object = structuredViewer.getStructuredSelection().getFirstElement();
-					if(object instanceof IProcessEntry) {
-						IProcessEntry processEntry = (IProcessEntry)object;
+					if(object instanceof IProcessEntry processEntry) {
 						modifyProcessEntry(toolBar.getShell(), processEntry, IProcessEntry.getContext(processEntry, processingSupport), true);
 						fireUpdate();
 					}
@@ -595,9 +592,7 @@ public class ProcessMethodToolbar extends ToolBar {
 
 		if(method != null) {
 			List<IProcessEntry> copied = new ArrayList<>();
-			method.forEach(entry -> {
-				copied.add(processMethod.addProcessEntry(entry));
-			});
+			method.forEach(entry -> copied.add(processMethod.addProcessEntry(entry)));
 			//
 			fireUpdate();
 			select(copied);

@@ -60,9 +60,8 @@ public class JSONSerialization implements SettingsSerialization {
 		}
 		//
 		if(object != null) {
-			@SuppressWarnings("unchecked")
-			Map<String, Object> map = createMapper().convertValue(object, HashMap.class);
-			for(Map.Entry<String, Object> entry : map.entrySet()) {
+			Map<?, ?> map = createMapper().convertValue(object, HashMap.class);
+			for(Entry<?, ?> entry : map.entrySet()) {
 				for(InputValue inputValue : inputValues) {
 					if(inputValue.getName().equals(entry.getKey())) {
 						Object value = entry.getValue();

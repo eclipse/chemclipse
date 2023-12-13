@@ -43,19 +43,17 @@ public class ChannelSpecificationLabelProvider extends AbstractChemClipseLabelPr
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof Map.Entry) {
-			Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
+		if(element instanceof Map.Entry<?, ?> entry) {
 			switch(columnIndex) {
 				case 0:
-					text = entry.getKey();
+					text = (String)entry.getKey();
 					break;
 				case 1:
-					text = entry.getValue();
+					text = (String)entry.getValue();
 					break;
 			}
 		}

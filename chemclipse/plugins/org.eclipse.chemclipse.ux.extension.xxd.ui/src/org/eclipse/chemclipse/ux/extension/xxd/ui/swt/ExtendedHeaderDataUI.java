@@ -284,10 +284,8 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 				Set<String> keysNotRemoved = new HashSet<>();
 				while(iterator.hasNext()) {
 					Object mapObject = iterator.next();
-					if(mapObject instanceof Map.Entry) {
-						@SuppressWarnings("unchecked")
-						Map.Entry<String, String> entry = (Map.Entry<String, String>)mapObject;
-						String key = entry.getKey();
+					if(mapObject instanceof Map.Entry<?, ?> entry) {
+						String key = (String)entry.getKey();
 						try {
 							measurementInfo.removeHeaderData(key);
 						} catch(InvalidHeaderModificationException e) {

@@ -166,12 +166,10 @@ public class PlateEditorPCR implements IChemClipseEditor {
 
 		IPlate plate = null;
 		Object object = part.getObject();
-		if(object instanceof Map) {
+		if(object instanceof Map<?, ?> map) {
 			/*
 			 * Map
 			 */
-			@SuppressWarnings("unchecked")
-			Map<String, Object> map = (Map<String, Object>)object;
 			File file = new File((String)map.get(EditorSupport.MAP_FILE));
 			boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
 			plate = loadPlate(file, batch);

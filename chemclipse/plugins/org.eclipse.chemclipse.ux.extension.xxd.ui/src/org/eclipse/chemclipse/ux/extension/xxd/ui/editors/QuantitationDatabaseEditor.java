@@ -164,12 +164,7 @@ public class QuantitationDatabaseEditor implements IQuantitationDatabaseEditor {
 
 		IQuantitationDatabase quantitationDatabase = null;
 		Object object = part.getObject();
-		if(object instanceof Map) {
-			/*
-			 * Map
-			 */
-			@SuppressWarnings("unchecked")
-			Map<String, Object> map = (Map<String, Object>)object;
+		if(object instanceof Map<?, ?> map) {
 			File file = new File((String)map.get(EditorSupport.MAP_FILE));
 			boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
 			quantitationDatabase = loadQuantitationDatabase(file, batch);

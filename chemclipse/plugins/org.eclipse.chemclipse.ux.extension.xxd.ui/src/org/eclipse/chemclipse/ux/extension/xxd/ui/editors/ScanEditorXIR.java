@@ -144,12 +144,10 @@ public class ScanEditorXIR implements IScanEditorXIR {
 		//
 		try {
 			Object object = part.getObject();
-			if(object instanceof Map) {
+			if(object instanceof Map<?, ?> map) {
 				/*
 				 * String
 				 */
-				@SuppressWarnings("unchecked")
-				Map<String, Object> map = (Map<String, Object>)object;
 				File file = new File((String)map.get(EditorSupport.MAP_FILE));
 				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
 				scanXIR = loadScan(file, batch);
