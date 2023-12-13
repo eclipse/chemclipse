@@ -120,10 +120,10 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 		chromatogramReader = getChromatogramReader(version);
 		//
 		if(chromatogramReader != null) {
-			if(object instanceof ZipInputStream) {
-				chromatogramCSD = chromatogramReader.read((ZipInputStream)object, directoryPrefix, monitor);
-			} else if(object instanceof ZipFile) {
-				chromatogramCSD = chromatogramReader.read((ZipFile)object, directoryPrefix, monitor);
+			if(object instanceof ZipInputStream zipInputStream) {
+				chromatogramCSD = chromatogramReader.read(zipInputStream, directoryPrefix, monitor);
+			} else if(object instanceof ZipFile zipFile) {
+				chromatogramCSD = chromatogramReader.read(zipFile, directoryPrefix, monitor);
 			}
 		}
 		//
@@ -166,7 +166,7 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 	}
 
 	@SuppressWarnings("unchecked")
-	private IChromatogramCSD createChromatogramFIDFromMSD(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	private IChromatogramCSD createChromatogramFIDFromMSD(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramCSD chromatogramFID = null;
 		/*

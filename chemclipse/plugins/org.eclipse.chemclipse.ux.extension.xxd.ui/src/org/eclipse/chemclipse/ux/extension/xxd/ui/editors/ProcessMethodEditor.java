@@ -129,9 +129,7 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 
 		currentProcessMethod = null;
 		Object object = part.getObject();
-		if(object instanceof Map) {
-			@SuppressWarnings("unchecked")
-			Map<String, Object> map = (Map<String, Object>)object;
+		if(object instanceof Map<?, ?> map) {
 			processMethodFile = new File((String)map.get(EditorSupport.MAP_FILE));
 			currentProcessMethod = Adapters.adapt(processMethodFile, IProcessMethod.class);
 		} else {

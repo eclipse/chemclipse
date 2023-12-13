@@ -237,7 +237,6 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 		});
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void deleteHeaderEntries(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
@@ -245,13 +244,12 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 		messageBox.setMessage("Would you like to delete the selected data entries?");
 		if(messageBox.open() == SWT.YES) {
 			if(well != null) {
-				Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+				Iterator<?> iterator = tableViewer.get().getStructuredSelection().iterator();
 				Set<String> keysNotRemoved = new HashSet<>();
 				while(iterator.hasNext()) {
 					Object mapObject = iterator.next();
-					if(mapObject instanceof Map.Entry) {
-						Map.Entry<String, String> entry = (Map.Entry<String, String>)mapObject;
-						String key = entry.getKey();
+					if(mapObject instanceof Map.Entry<?, ?> entry) {
+						String key = (String)entry.getKey();
 						try {
 							well.removeHeaderData(key);
 						} catch(InvalidHeaderModificationException e) {
@@ -262,7 +260,7 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 				/*
 				 * Show a message if certain keys couldn't be removed.
 				 */
-				if(keysNotRemoved.size() > 0) {
+				if(!keysNotRemoved.isEmpty()) {
 					MessageDialog.openWarning(DisplayUtils.getShell(), HEADER_ENTRY, "The following keys can't be removed: " + keysNotRemoved);
 				}
 				//

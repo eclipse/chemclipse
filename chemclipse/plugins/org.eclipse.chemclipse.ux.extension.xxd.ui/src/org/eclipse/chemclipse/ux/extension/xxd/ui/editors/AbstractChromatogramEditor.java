@@ -354,12 +354,10 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		IChromatogramSelection<?, ?> chromatogramSelection = null;
 		try {
 			Object object = part.getObject();
-			if(object instanceof Map) {
+			if(object instanceof Map<?, ?> map) {
 				/*
 				 * Map
 				 */
-				@SuppressWarnings("unchecked")
-				Map<String, Object> map = (Map<String, Object>)object;
 				File file = new File((String)map.get(EditorSupport.MAP_FILE));
 				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
 				chromatogramSelection = loadChromatogramSelection(file, batch);

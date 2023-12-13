@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,19 +41,17 @@ public class KeyValueLabelProvider extends AbstractChemClipseLabelProvider {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof Map.Entry) {
-			Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
+		if(element instanceof Map.Entry<?, ?> entry) {
 			switch(columnIndex) {
 				case 0:
-					text = entry.getKey();
+					text = (String)entry.getKey();
 					break;
 				case 1:
-					text = entry.getValue();
+					text = (String)entry.getValue();
 					break;
 			}
 		}

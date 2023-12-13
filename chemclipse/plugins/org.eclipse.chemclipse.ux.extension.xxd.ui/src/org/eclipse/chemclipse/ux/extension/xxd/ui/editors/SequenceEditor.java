@@ -117,17 +117,15 @@ public class SequenceEditor {
 		extendedSequenceListUI.update(loadSequence());
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	private synchronized ISequence<? extends ISequenceRecord> loadSequence() {
 
 		ISequence<? extends ISequenceRecord> sequence = null;
 		try {
 			Object object = part.getObject();
-			if(object instanceof Map) {
+			if(object instanceof Map<?, ?> map) {
 				/*
 				 * Map
 				 */
-				Map<String, Object> map = (Map<String, Object>)object;
 				File file = new File((String)map.get(EditorSupport.MAP_FILE));
 				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
 				sequence = loadSequence(file, batch);
@@ -135,8 +133,8 @@ public class SequenceEditor {
 				/*
 				 * Already available.
 				 */
-				if(object instanceof ISequence) {
-					sequence = (ISequence)object;
+				if(object instanceof ISequence<?> storedSequence) {
+					sequence = storedSequence;
 				}
 				sequenceFile = null;
 			}

@@ -237,20 +237,18 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 			 * The GUI will take care itself of this action.
 			 */
 			Object object = part.getObject();
-			if(object instanceof Map) {
+			if(object instanceof Map<?, ?> map) {
 				/*
 				 * String
 				 */
-				@SuppressWarnings("unchecked")
-				Map<String, Object> map = (Map<String, Object>)object;
 				File file = new File((String)map.get(EditorSupport.MAP_FILE));
 				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
 				importMassSpectrum(file, batch);
-			} else if(object instanceof String) {
+			} else if(object instanceof String path) {
 				/*
 				 * Legacy ... Deprecated
 				 */
-				File file = new File((String)object);
+				File file = new File(path);
 				importMassSpectrum(file, true);
 			}
 		} catch(Exception e) {

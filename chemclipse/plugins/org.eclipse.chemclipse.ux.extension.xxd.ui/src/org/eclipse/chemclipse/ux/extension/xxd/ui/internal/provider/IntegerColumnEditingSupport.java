@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,6 +27,7 @@ public class IntegerColumnEditingSupport<T> extends EditingSupport {
 	private final BiConsumer<T, Integer> updateFunction;
 
 	public IntegerColumnEditingSupport(ColumnViewer viewer, Function<T, Integer> extractorFunction, BiConsumer<T, Integer> updateFunction) {
+
 		super(viewer);
 		this.extractorFunction = extractorFunction;
 		this.updateFunction = updateFunction;
@@ -41,8 +42,8 @@ public class IntegerColumnEditingSupport<T> extends EditingSupport {
 	@SuppressWarnings("unchecked")
 	private T getEditObject(Object object) {
 
-		if(object instanceof TreeNode) {
-			object = ((TreeNode)object).getValue();
+		if(object instanceof TreeNode treenode) {
+			object = treenode.getValue();
 		}
 		return (T)object;
 	}

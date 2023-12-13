@@ -179,12 +179,10 @@ public class ScanEditorNMR implements IScanEditorNMR {
 	private synchronized void loadScan() {
 
 		Object object = part.getObject();
-		if(object instanceof Map) {
+		if(object instanceof Map<?, ?> map) {
 			/*
 			 * String
 			 */
-			@SuppressWarnings("unchecked")
-			Map<String, Object> map = (Map<String, Object>)object;
 			File file = new File((String)map.get(EditorSupport.MAP_FILE));
 			ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 			try {
@@ -363,16 +361,15 @@ public class ScanEditorNMR implements IScanEditorNMR {
 			}
 		}
 
-		@SuppressWarnings({"rawtypes", "unchecked"})
 		private void copySignals(IComplexSignalMeasurement<?> from, IComplexSignalMeasurement<?> to) {
 
-			if(to instanceof FilteredFIDMeasurement<?>) {
-				if(from instanceof FIDMeasurement) {
-					((FilteredFIDMeasurement)to).setSignals(from.getSignals());
+			if(to instanceof FilteredFIDMeasurement<?> filteredFIDMeasurement) {
+				if(from instanceof FIDMeasurement measurement) {
+					filteredFIDMeasurement.setSignals(measurement.getSignals());
 				}
-			} else if(to instanceof FilteredSpectrumMeasurement<?>) {
-				if(from instanceof SpectrumMeasurement) {
-					((FilteredSpectrumMeasurement)to).setSignals(from.getSignals());
+			} else if(to instanceof FilteredSpectrumMeasurement<?> filteredSpectrumMeasurement) {
+				if(from instanceof SpectrumMeasurement spectrumMeasurement) {
+					filteredSpectrumMeasurement.setSignals(spectrumMeasurement.getSignals());
 				}
 			}
 		}

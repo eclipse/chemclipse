@@ -100,9 +100,7 @@ public class OverviewSupport {
 				 */
 				IProcessingInfo<?> processingInfo = ScanConverterNMR.convert(file, new NullProgressMonitor());
 				Object data = processingInfo.getProcessingResult();
-				if(data instanceof List<?>) {
-					@SuppressWarnings({"unchecked", "rawtypes"})
-					List<Object> list = (List)data;
+				if(data instanceof List<?> list) {
 					if(!list.isEmpty()) {
 						/*
 						 * IComplexSignalMeasurement<?>

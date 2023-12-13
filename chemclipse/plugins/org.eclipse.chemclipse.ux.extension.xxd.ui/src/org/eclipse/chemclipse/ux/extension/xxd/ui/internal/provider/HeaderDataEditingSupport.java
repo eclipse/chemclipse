@@ -51,12 +51,10 @@ public class HeaderDataEditingSupport extends EditingSupport {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof Map.Entry) {
-			Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
+		if(element instanceof Map.Entry<?, ?> entry) {
 			if(column.equals(HeaderDataLabelProvider.VALUE)) {
 				return entry.getValue();
 			}
@@ -64,19 +62,17 @@ public class HeaderDataEditingSupport extends EditingSupport {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof Map.Entry) {
+		if(element instanceof Map.Entry<?, ?> entry) {
 			IMeasurementInfo measurementInfo = tableViewer.getMeasurementInfo();
 			if(measurementInfo != null) {
 				/*
 				 * Modify the value.
 				 */
-				Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
 				if(column.equals(HeaderDataLabelProvider.VALUE)) {
-					measurementInfo.putHeaderData(entry.getKey(), (String)value);
+					measurementInfo.putHeaderData((String)entry.getKey(), (String)value);
 				}
 				/*
 				 * Note:

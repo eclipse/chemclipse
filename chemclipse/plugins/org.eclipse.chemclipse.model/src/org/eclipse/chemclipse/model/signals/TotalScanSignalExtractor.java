@@ -29,6 +29,7 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	 * @throws ChromatogramIsNullException
 	 */
 	public TotalScanSignalExtractor(IChromatogram<? extends IPeak> chromatogram) throws ChromatogramIsNullException {
+
 		if(chromatogram == null) {
 			throw new ChromatogramIsNullException();
 		}
@@ -41,16 +42,16 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	 * @param chromatogramOverview
 	 * @throws ChromatogramIsNullException
 	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	public TotalScanSignalExtractor(IChromatogramOverview chromatogramOverview) throws ChromatogramIsNullException {
+
 		if(chromatogramOverview == null) {
 			throw new ChromatogramIsNullException();
 		}
 		/*
 		 * Cast to chromatogram.
 		 */
-		if(chromatogramOverview instanceof IChromatogram) {
-			this.chromatogram = (IChromatogram)chromatogramOverview;
+		if(chromatogramOverview instanceof IChromatogram<?> genericChromatogram) {
+			this.chromatogram = genericChromatogram;
 		} else {
 			throw new ChromatogramIsNullException("Chromatogram Overview can't be casted to IChromatogram.");
 		}
@@ -156,13 +157,11 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	}
 
 	@Override
-	
 	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		return getTotalScanSignals(chromatogramSelection, true);
 	}
 
-	
 	@Override
 	public ITotalScanSignals getTotalScanSignals(IChromatogram<?> chromatogram, boolean validatePositive, boolean condenseCycleNumberScans) {
 
@@ -182,14 +181,12 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	}
 
 	@Override
-	
 	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?> chromatogramSelection, boolean validatePositive) {
 
 		return getTotalScanSignals(chromatogramSelection, validatePositive, false);
 	}
 
 	@Override
-	
 	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection<?, ?> chromatogramSelection, boolean validatePositive, boolean condenseCycleNumberScans) {
 
 		/*
