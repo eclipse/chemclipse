@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.peak.PeakListUI;
@@ -46,7 +47,7 @@ public class ResultsPage implements IMultiEditorPage {
 	@Override
 	public void setFocus() {
 
-		IPeaks<?> peaks = selectionUpdateListener.getPeaks();
+		IPeaks<IPeak> peaks = selectionUpdateListener.getPeaks();
 		if(peaks != null) {
 			update(peaks);
 		}
@@ -66,7 +67,7 @@ public class ResultsPage implements IMultiEditorPage {
 		}
 	}
 
-	public void update(IPeaks<?> peaks) {
+	public void update(IPeaks<IPeak> peaks) {
 
 		if(editorPart.getActivePage() == getPageIndex() && peaks != null) {
 			peakListUI.update(peaks);
@@ -127,7 +128,7 @@ public class ResultsPage implements IMultiEditorPage {
 	public static class SelectionUpdateListener {
 
 		private static ResultsPage parentWidget;
-		private static IPeaks<?> evaluatedPeaks = null;
+		private static IPeaks<IPeak> evaluatedPeaks = null;
 
 		public void setParent(IMultiEditorPage parent) {
 
@@ -136,7 +137,7 @@ public class ResultsPage implements IMultiEditorPage {
 			}
 		}
 
-		public void update(IPeaks<?> peaks) {
+		public void update(IPeaks<IPeak> peaks) {
 
 			evaluatedPeaks = peaks;
 			if(parentWidget != null) {
@@ -151,7 +152,7 @@ public class ResultsPage implements IMultiEditorPage {
 			}
 		}
 
-		public IPeaks<?> getPeaks() {
+		public IPeaks<IPeak> getPeaks() {
 
 			return evaluatedPeaks;
 		}

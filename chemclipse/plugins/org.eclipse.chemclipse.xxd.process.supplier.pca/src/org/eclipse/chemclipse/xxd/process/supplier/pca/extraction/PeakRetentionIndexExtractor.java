@@ -43,7 +43,7 @@ public class PeakRetentionIndexExtractor extends AbstractClassifierDescriptionEx
 		peaks.keySet().forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));
 		Samples samples = new Samples(samplesList);
 		//
-		Map<String, IPeaks<?>> peakMap = new LinkedHashMap<>();
+		Map<String, IPeaks<IPeak>> peakMap = new LinkedHashMap<>();
 		peaks.forEach((dataInputEntry, peaksInput) -> peakMap.put(dataInputEntry.getSampleName(), peaksInput));
 		//
 		Map<String, SortedMap<Integer, IPeak>> extractPeaks = exctractPcaPeakMap(peakMap, retentionIndexWindow);
@@ -67,15 +67,15 @@ public class PeakRetentionIndexExtractor extends AbstractClassifierDescriptionEx
 		return new ArrayList<>(rententionIndices);
 	}
 
-	private Map<String, SortedMap<Integer, IPeak>> exctractPcaPeakMap(Map<String, IPeaks<?>> peakMap, int retentionIndexWindow) {
+	private Map<String, SortedMap<Integer, IPeak>> exctractPcaPeakMap(Map<String, IPeaks<IPeak>> peakMap, int retentionIndexWindow) {
 
 		Map<String, TreeMap<Integer, IPeak>> pcaPeakRetentionIndex = new LinkedHashMap<>();
 		Map<String, SortedMap<Integer, IPeak>> pcaPeakCondenseRetentionIndex = new LinkedHashMap<>();
 		int totalCountPeak = 0;
 		//
-		for(Map.Entry<String, IPeaks<?>> peakEnry : peakMap.entrySet()) {
+		for(Map.Entry<String, IPeaks<IPeak>> peakEnry : peakMap.entrySet()) {
 			String name = peakEnry.getKey();
-			IPeaks<?> peaks = peakEnry.getValue();
+			IPeaks<IPeak> peaks = peakEnry.getValue();
 			TreeMap<Integer, IPeak> peakTree = new TreeMap<>();
 			for(IPeak peak : peaks.getPeaks()) {
 				int retentionIndex = Math.round(peak.getPeakModel().getPeakMaximum().getRetentionIndex());

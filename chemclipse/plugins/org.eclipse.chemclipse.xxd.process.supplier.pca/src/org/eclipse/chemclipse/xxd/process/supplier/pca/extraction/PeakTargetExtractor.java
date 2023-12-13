@@ -44,7 +44,7 @@ public class PeakTargetExtractor extends AbstractClassifierDescriptionExtractor 
 		peaks.keySet().forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));
 		Samples samples = new Samples(samplesList);
 		//
-		Map<String, IPeaks<?>> peakMap = new LinkedHashMap<>();
+		Map<String, IPeaks<IPeak>> peakMap = new LinkedHashMap<>();
 		peaks.forEach((dataInputEntry, peaksInput) -> {
 			peakMap.put(dataInputEntry.getSampleName(), peaksInput);
 		});
@@ -75,13 +75,13 @@ public class PeakTargetExtractor extends AbstractClassifierDescriptionExtractor 
 		return targets;
 	}
 
-	private Map<String, SortedMap<String, IPeak>> exctractPcaPeakMap(Map<String, IPeaks<?>> peakMap) {
+	private Map<String, SortedMap<String, IPeak>> exctractPcaPeakMap(Map<String, IPeaks<IPeak>> peakMap) {
 
 		Map<String, SortedMap<String, IPeak>> pcaPeaks = new LinkedHashMap<>();
 		//
-		for(Map.Entry<String, IPeaks<?>> peakEnry : peakMap.entrySet()) {
+		for(Map.Entry<String, IPeaks<IPeak>> peakEnry : peakMap.entrySet()) {
 			String name = peakEnry.getKey();
-			IPeaks<?> peaks = peakEnry.getValue();
+			IPeaks<IPeak> peaks = peakEnry.getValue();
 			TreeMap<String, IPeak> peakTree = new TreeMap<>();
 			//
 			for(IPeak peak : peaks.getPeaks()) {

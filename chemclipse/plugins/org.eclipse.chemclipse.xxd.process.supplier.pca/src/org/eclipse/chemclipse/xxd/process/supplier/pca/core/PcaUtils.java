@@ -186,7 +186,7 @@ public class PcaUtils {
 	 * @param rightRetentionTimeBound
 	 * @return all peaks which has peak maximum {@link IPeakModel#getPeakMaximum()} between {@code leftRetentionTimeBound} and {@code rightRetentionTimeBound}
 	 */
-	public static List<IPeak> getPeaks(IPeaks<?> peaks, int leftRetentionTimeBound, int rightRetentionTimeBound) {
+	public static List<IPeak> getPeaks(IPeaks<IPeak> peaks, int leftRetentionTimeBound, int rightRetentionTimeBound) {
 
 		List<IPeak> peakInInterval = new ArrayList<>();
 		for(IPeak peak : peaks.getPeaks()) {

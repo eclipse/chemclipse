@@ -53,7 +53,6 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		IProcessingInfo<?> peakIdentificationProcessingInfo;
 		IProcessingMessage processingMessage;
 		File peakInputFile;
-		IPeaks<?> peakImports;
 		List<IPeakMSD> peaks = new ArrayList<>();
 		IPeakIdentificationBatchProcessReport batchProcessReport = new PeakIdentificationBatchProcessReport();
 		/*
@@ -71,11 +70,9 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 				IProcessingInfo<IPeaks<IPeakMSD>> processingPeakImportConverterInfo = loadPeaksFromFile(peakInputFile, monitor);
 				processingInfo.addMessages(processingPeakImportConverterInfo);
 				try {
-					peakImports = processingPeakImportConverterInfo.getProcessingResult();
-					for(IPeak peak : peakImports.getPeaks()) {
-						if(peak instanceof IPeakMSD peakMSD) {
-							peaks.add(peakMSD);
-						}
+					IPeaks<IPeakMSD> peakImports = processingPeakImportConverterInfo.getProcessingResult();
+					for(IPeakMSD peak : peakImports.getPeaks()) {
+						peaks.add(peak);
 					}
 				} catch(Exception e) {
 					logger.warn(e);
@@ -127,7 +124,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		/*
 		 * Add the peaks to the report.
 		 */
-		IPeaks<?> reportPeaks = batchProcessReport.getPeaks();
+		IPeaks<IPeak> reportPeaks = batchProcessReport.getPeaks();
 		for(IPeakMSD peak : peaks) {
 			reportPeaks.addPeak(peak);
 		}
