@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
@@ -27,7 +28,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakScanList
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakScanListTableComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
 public class PeakScanListUI extends ExtendedTableViewer {
@@ -73,7 +73,7 @@ public class PeakScanListUI extends ExtendedTableViewer {
 		}
 	}
 
-	public void setInput(IPeaks<?> peaks) {
+	public void setInput(IPeaks<IPeak> peaks) {
 
 		labelProvider.setChromatogramPeakArea(0);
 		tableComparator.setChromatogramPeakArea(0);
@@ -97,7 +97,7 @@ public class PeakScanListUI extends ExtendedTableViewer {
 		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
 		setComparator(tableComparator);
-		setFilters(new ViewerFilter[]{listFilter});
+		setFilters(listFilter);
 		setEditingSupport();
 	}
 

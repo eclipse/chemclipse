@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,17 +26,11 @@ import junit.framework.TestCase;
 
 public class MatlabParafacPeakExportConverter_1_ITest extends TestCase {
 
-	private IProcessingInfo<?> processingInfo;
-	private Object object;
-	private MatlabParafacPeakImportConverter importConverter;
-	private MatlabParafacPeakExportConverter exportConverter;
 	private IPeaks<IPeakMSD> peaks;
 	private IPeakMSD peak;
-	private IPeakMassSpectrum peakMassSpectrum;
 	private IExtractedIonSignal extractedIonSignal;
 	private IPeakModelMSD peakModel;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void setUp() throws Exception {
 
@@ -44,35 +38,26 @@ public class MatlabParafacPeakExportConverter_1_ITest extends TestCase {
 		/*
 		 * Import
 		 */
-		importConverter = new MatlabParafacPeakImportConverter();
+		MatlabParafacPeakImportConverter importConverter = new MatlabParafacPeakImportConverter();
 		File importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_MATLAB_PEAKS));
-		processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
-		object = processingInfo.getProcessingResult();
-		if(object instanceof IPeaks) {
-			peaks = (IPeaks<IPeakMSD>)object;
-		}
+		IProcessingInfo<IPeaks<IPeakMSD>> importProcessingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		peaks = importProcessingInfo.getProcessingResult();
 		/*
 		 * Export
 		 */
-		exportConverter = new MatlabParafacPeakExportConverter();
+		MatlabParafacPeakExportConverter exportConverter = new MatlabParafacPeakExportConverter();
 		File exportFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_EXPORT_FOLDER) + File.separator + TestPathHelper.TESTFILE_EXPORT_MATLAB_PEAKS);
-		processingInfo = exportConverter.convert(exportFile, peaks, false, new NullProgressMonitor());
-		object = processingInfo.getProcessingResult();
-		if(object instanceof File) {
-			exportFile = (File)object;
-		}
+		IProcessingInfo<File> exportProcessingInfo = exportConverter.convert(exportFile, peaks, false, new NullProgressMonitor());
+		exportFile = exportProcessingInfo.getProcessingResult();
 		/*
 		 * Re-Import
 		 */
 		importConverter = new MatlabParafacPeakImportConverter();
 		File reimportFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_EXPORT_FOLDER) + File.separator + TestPathHelper.TESTFILE_EXPORT_MATLAB_PEAKS);
-		processingInfo = importConverter.convert(reimportFile, new NullProgressMonitor());
-		object = processingInfo.getProcessingResult();
-		if(object instanceof IPeaks) {
-			peaks = (IPeaks<IPeakMSD>)object;
-		}
+		importProcessingInfo = importConverter.convert(reimportFile, new NullProgressMonitor());
+		peaks = importProcessingInfo.getProcessingResult();
 		peak = peaks.getPeaks().get(1);
-		peakMassSpectrum = peak.getExtractedMassSpectrum();
+		IPeakMassSpectrum peakMassSpectrum = peak.getExtractedMassSpectrum();
 		extractedIonSignal = peakMassSpectrum.getExtractedIonSignal();
 		peakModel = peak.getPeakModel();
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,10 +20,7 @@ public abstract class AbstractPeaks<T extends IPeak> implements IPeaks<T> {
 
 	private final List<T> peaks;
 
-	/**
-	 * Initialize mass spectra and create a new internal mass spectra list.
-	 */
-	public AbstractPeaks(Class<T> type) {
+	protected AbstractPeaks(Class<T> type) {
 
 		peaks = Collections.checkedList(new ArrayList<>(), type);
 	}

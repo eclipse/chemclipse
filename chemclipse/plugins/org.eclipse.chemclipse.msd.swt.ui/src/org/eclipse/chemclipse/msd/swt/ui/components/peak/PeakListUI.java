@@ -19,6 +19,7 @@ import java.util.Set;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -84,7 +85,7 @@ public class PeakListUI {
 		tableViewer.getControl().setFocus();
 	}
 
-	public void update(IPeaks<?> peaks) {
+	public void update(IPeaks<IPeak> peaks) {
 
 		if(peaks != null) {
 			if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {

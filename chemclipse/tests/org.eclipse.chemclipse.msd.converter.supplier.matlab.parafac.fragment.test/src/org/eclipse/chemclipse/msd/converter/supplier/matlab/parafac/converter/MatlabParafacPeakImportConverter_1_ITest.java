@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,29 +26,21 @@ import junit.framework.TestCase;
 
 public class MatlabParafacPeakImportConverter_1_ITest extends TestCase {
 
-	private IProcessingInfo<?> processingInfo;
-	private Object object;
-	private MatlabParafacPeakImportConverter converter;
 	private IPeaks<IPeakMSD> peaks;
 	private IPeakMSD peak;
-	private IPeakMassSpectrum peakMassSpectrum;
 	private IExtractedIonSignal extractedIonSignal;
 	private IPeakModelMSD peakModel;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		converter = new MatlabParafacPeakImportConverter();
+		MatlabParafacPeakImportConverter converter = new MatlabParafacPeakImportConverter();
 		File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_MATLAB_PEAKS));
-		processingInfo = converter.convert(file, new NullProgressMonitor());
-		object = processingInfo.getProcessingResult();
-		if(object instanceof IPeaks) {
-			peaks = (IPeaks<IPeakMSD>)object;
-		}
+		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = converter.convert(file, new NullProgressMonitor());
+		peaks = processingInfo.getProcessingResult();
 		peak = peaks.getPeaks().get(0);
-		peakMassSpectrum = peak.getExtractedMassSpectrum();
+		IPeakMassSpectrum peakMassSpectrum = peak.getExtractedMassSpectrum();
 		extractedIonSignal = peakMassSpectrum.getExtractedIonSignal();
 		peakModel = peak.getPeakModel();
 	}

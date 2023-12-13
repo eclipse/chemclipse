@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,19 +12,19 @@
 package org.eclipse.chemclipse.msd.model.implementation;
 
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
 
 public class ChromatogramPeaks_3_Test extends ChromatogramPeaksTestCase {
 
-	private IPeaks<?> peaks;
+	private IPeaks<IPeakMSD> peaks;
 	private IPeakMSD peak;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		peaks = new Peaks();
+		peaks = new PeaksMSD();
 		peaks.addPeak(getPeak1());
 		peaks.addPeak(getPeak2());
 		peaks.addPeak(getPeak3());
@@ -46,10 +46,10 @@ public class ChromatogramPeaks_3_Test extends ChromatogramPeaksTestCase {
 		peaks.removePeak(getPeak1());
 		assertEquals(2, peaks.getPeaks().size());
 		// Peak 2
-		peak = (IPeakMSD)peaks.getPeak(1);
+		peak = peaks.getPeak(1);
 		assertTrue(peak.equals(getPeak2()));
 		// Peak 3
-		peak = (IPeakMSD)peaks.getPeak(2);
+		peak = peaks.getPeak(2);
 		assertTrue(peak.equals(getPeak3()));
 	}
 
@@ -58,10 +58,10 @@ public class ChromatogramPeaks_3_Test extends ChromatogramPeaksTestCase {
 		peaks.removePeak(getPeak2());
 		assertEquals(2, peaks.getPeaks().size());
 		// Peak 1
-		peak = (IPeakMSD)peaks.getPeak(1);
+		peak = peaks.getPeak(1);
 		assertTrue(peak.equals(getPeak1()));
 		// Peak 3
-		peak = (IPeakMSD)peaks.getPeak(2);
+		peak = peaks.getPeak(2);
 		assertTrue(peak.equals(getPeak3()));
 	}
 
@@ -70,10 +70,10 @@ public class ChromatogramPeaks_3_Test extends ChromatogramPeaksTestCase {
 		peaks.removePeak(getPeak3());
 		assertEquals(2, peaks.getPeaks().size());
 		// Peak 1
-		peak = (IPeakMSD)peaks.getPeak(1);
+		peak = peaks.getPeak(1);
 		assertTrue(peak.equals(getPeak1()));
 		// Peak 2
-		peak = (IPeakMSD)peaks.getPeak(2);
+		peak = peaks.getPeak(2);
 		assertTrue(peak.equals(getPeak2()));
 	}
 }

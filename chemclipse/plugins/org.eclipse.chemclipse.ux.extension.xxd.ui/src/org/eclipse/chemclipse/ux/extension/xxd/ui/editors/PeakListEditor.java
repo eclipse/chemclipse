@@ -53,7 +53,7 @@ public class PeakListEditor {
 						@Override
 						public void run() {
 
-							IPeaks<?> result = convert.getProcessingResult();
+							IPeaks<IPeakMSD> result = convert.getProcessingResult();
 							if(convert.hasErrorMessages() || result == null) {
 								ProcessingInfoPartSupport.getInstance().update(convert);
 							} else {

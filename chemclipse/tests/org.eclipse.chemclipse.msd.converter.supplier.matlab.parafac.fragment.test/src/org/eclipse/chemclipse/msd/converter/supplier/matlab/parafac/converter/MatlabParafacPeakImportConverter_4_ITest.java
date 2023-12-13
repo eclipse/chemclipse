@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.TestPathHelper;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -21,7 +23,6 @@ import junit.framework.TestCase;
 
 public class MatlabParafacPeakImportConverter_4_ITest extends TestCase {
 
-	private IProcessingInfo<?> processingInfo;
 	private MatlabParafacPeakImportConverter converter;
 
 	@Override
@@ -41,7 +42,7 @@ public class MatlabParafacPeakImportConverter_4_ITest extends TestCase {
 
 		try {
 			File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_EMPTY));
-			processingInfo = converter.convert(file, new NullProgressMonitor());
+			converter.convert(file, new NullProgressMonitor());
 		} catch(Exception e) {
 			assertTrue(true);
 		}
@@ -51,7 +52,7 @@ public class MatlabParafacPeakImportConverter_4_ITest extends TestCase {
 
 		File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_NOT_READABLE));
 		file.setReadable(false);
-		processingInfo = converter.convert(file, new NullProgressMonitor());
+		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = converter.convert(file, new NullProgressMonitor());
 		assertNull(processingInfo.getProcessingResult());
 		file.setReadable(true);
 	}
@@ -60,7 +61,7 @@ public class MatlabParafacPeakImportConverter_4_ITest extends TestCase {
 
 		try {
 			File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_PEAKS));
-			processingInfo = converter.convert(file, new NullProgressMonitor());
+			converter.convert(file, new NullProgressMonitor());
 		} catch(Exception e) {
 			assertTrue(true);
 		}
@@ -70,7 +71,7 @@ public class MatlabParafacPeakImportConverter_4_ITest extends TestCase {
 
 		try {
 			File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_PEAKS_EXTENSION));
-			processingInfo = converter.convert(file, new NullProgressMonitor());
+			converter.convert(file, new NullProgressMonitor());
 		} catch(Exception e) {
 			assertTrue(true);
 		}

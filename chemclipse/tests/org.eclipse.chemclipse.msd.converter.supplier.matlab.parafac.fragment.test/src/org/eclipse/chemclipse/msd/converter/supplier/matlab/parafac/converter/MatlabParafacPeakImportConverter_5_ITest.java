@@ -24,17 +24,15 @@ import junit.framework.TestCase;
 
 public class MatlabParafacPeakImportConverter_5_ITest extends TestCase {
 
-	private IPeaks<?> peaks;
-	private IProcessingInfo<IPeaks<IPeakMSD>> processingInfo;
-	private MatlabParafacPeakImportConverter converter;
+	private IPeaks<IPeakMSD> peaks;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		converter = new MatlabParafacPeakImportConverter();
+		MatlabParafacPeakImportConverter converter = new MatlabParafacPeakImportConverter();
 		File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_PARAFAC_TEST_1));
-		processingInfo = converter.convert(file, new NullProgressMonitor());
+		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = converter.convert(file, new NullProgressMonitor());
 		peaks = processingInfo.getProcessingResult();
 	}
 

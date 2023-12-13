@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,18 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.implementation.Peaks;
+import org.eclipse.chemclipse.model.implementation.ChromatogramPeaks;
 
 public class ChromatogramPeaks_1_Test extends ChromatogramPeaksTestCase {
 
-	private IPeaks<?> peaks;
+	private IPeaks<IChromatogramPeak> peaks;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		peaks = new Peaks();
+		peaks = new ChromatogramPeaks();
 	}
 
 	@Override

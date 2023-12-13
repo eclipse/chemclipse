@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -23,13 +22,11 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
 public class PeakWriterMSP extends AbstractWriter {
 
-	public void write(File file, IPeaks<?> peaks, boolean append) throws IOException {
+	public void write(File file, IPeaks<? extends IPeakMSD> peaks, boolean append) throws IOException {
 
 		try (FileWriter fileWriter = new FileWriter(file, append)) {
-			for(IPeak peak : peaks.getPeaks()) {
-				if(peak instanceof IPeakMSD peakMSD) {
-					writePeak(fileWriter, peakMSD);
-				}
+			for(IPeakMSD peak : peaks.getPeaks()) {
+				writePeak(fileWriter, peak);
 			}
 		}
 	}
