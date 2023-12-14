@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ import org.osgi.service.component.annotations.Component;
 public class ScanMassspectrumFilterProcessTypeSupplier extends AbstractMassspectrumFilterProcessTypeSupplier {
 
 	public ScanMassspectrumFilterProcessTypeSupplier() {
+
 		super("Scan Massspectrum Filter", "mzfilter.msd.scan.", new Function<IChromatogramSelection<?, ?>, List<IScanMSD>>() {
 
 			@Override
@@ -37,8 +38,8 @@ public class ScanMassspectrumFilterProcessTypeSupplier extends AbstractMassspect
 				int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
 				for(int scanIndex = startScan; scanIndex <= stopScan; scanIndex++) {
 					IScan scan = chromatogram.getScan(scanIndex);
-					if(scan instanceof IScanMSD) {
-						massspectras.add((IScanMSD)scan);
+					if(scan instanceof IScanMSD scanMSD) {
+						massspectras.add(scanMSD);
 					}
 				}
 				return massspectras;

@@ -58,6 +58,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * GUI blocks needed to manipulate various types of preferences. Each field
 	 * editor knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 
 		/*
@@ -144,13 +145,12 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 						Profiles.loadProfile(name);
 						setProfileName(name);
 						IPreferencePageContainer preferencePageContainer = getContainer();
-						if(preferencePageContainer instanceof PreferenceDialog) {
+						if(preferencePageContainer instanceof PreferenceDialog preferenceDialog) {
 							/*
 							 * Refresh all preference pages.
 							 * Close the current dialog and re-open it to load all
 							 * values correctly.
 							 */
-							PreferenceDialog preferenceDialog = (PreferenceDialog)preferencePageContainer;
 							preferenceDialog.close();
 							preferenceDialog = PreferencesUtil.createPreferenceDialogOn(null, null, null, null);
 							preferenceDialog.open();
@@ -249,6 +249,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * @see
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

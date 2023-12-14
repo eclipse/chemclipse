@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,7 +21,8 @@ public class BaselineDetectorSupport implements IBaselineDetectorSupport {
 	private List<IBaselineDetectorSupplier> suppliers;
 
 	public BaselineDetectorSupport() {
-		suppliers = new ArrayList<IBaselineDetectorSupplier>();
+
+		suppliers = new ArrayList<>();
 	}
 
 	/**
@@ -41,7 +42,7 @@ public class BaselineDetectorSupport implements IBaselineDetectorSupport {
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		areDetectorsStored();
-		List<String> availableDetectors = new ArrayList<String>();
+		List<String> availableDetectors = new ArrayList<>();
 		for(IBaselineDetectorSupplier supplier : suppliers) {
 			availableDetectors.add(supplier.getId());
 		}
@@ -101,7 +102,7 @@ public class BaselineDetectorSupport implements IBaselineDetectorSupport {
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * converter filter names.<br/>
 		 */
-		ArrayList<String> detectorNames = new ArrayList<String>();
+		ArrayList<String> detectorNames = new ArrayList<>();
 		for(IBaselineDetectorSupplier supplier : suppliers) {
 			detectorNames.add(supplier.getDetectorName());
 		}
@@ -111,7 +112,7 @@ public class BaselineDetectorSupport implements IBaselineDetectorSupport {
 	// -------------------------------------private methods
 	private void areDetectorsStored() throws NoBaselineDetectorAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoBaselineDetectorAvailableException();
 		}
 	}

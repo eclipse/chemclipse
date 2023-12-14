@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,10 +16,6 @@ import org.eclipse.chemclipse.processing.core.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
 public class ProcessingInfoContentProvider implements IStructuredContentProvider {
 
 	@Override
@@ -38,8 +34,7 @@ public class ProcessingInfoContentProvider implements IStructuredContentProvider
 		/*
 		 * Processing messages
 		 */
-		if(inputElement instanceof IMessageProvider) {
-			IMessageProvider processingInfo = (IMessageProvider)inputElement;
+		if(inputElement instanceof IMessageProvider processingInfo) {
 			return processingInfo.getMessages().toArray();
 		} else {
 			return null;

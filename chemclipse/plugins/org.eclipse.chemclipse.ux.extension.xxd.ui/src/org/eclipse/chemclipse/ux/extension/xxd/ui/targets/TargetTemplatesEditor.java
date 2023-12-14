@@ -92,8 +92,7 @@ public class TargetTemplatesEditor extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = targetTemplateListUI.getStructuredSelection().getFirstElement();
-				if(object instanceof TargetTemplate) {
-					TargetTemplate targetTemplate = (TargetTemplate)object;
+				if(object instanceof TargetTemplate targetTemplate) {
 					String[] items = targetTemplatesUI.getItems();
 					exitloop:
 					for(int i = 0; i < items.length; i++) {
@@ -124,8 +123,7 @@ public class TargetTemplatesEditor extends Composite {
 							 */
 							List<TargetTemplate> deleteItems = new ArrayList<>();
 							for(Object object : targetTemplateListUI.getStructuredSelection().toList()) {
-								if(object instanceof TargetTemplate) {
-									TargetTemplate targetTemplate = (TargetTemplate)object;
+								if(object instanceof TargetTemplate targetTemplate) {
 									deleteItems.add(targetTemplate);
 								}
 							}

@@ -32,13 +32,13 @@ public class PeakQuantifierISTD extends AbstractPeakQuantifier implements IPeakQ
 	@Override
 	public IProcessingInfo<?> quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
-		return calculatorISTD.quantify(peaks, peakQuantifierSettings, monitor);
+		return calculatorISTD.quantify(peaks);
 	}
 
 	@Override
 	public IProcessingInfo<?> quantify(IPeak peak, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
-		List<IPeak> peaks = new ArrayList<IPeak>();
+		List<IPeak> peaks = new ArrayList<>();
 		peaks.add(peak);
 		return quantify(peaks, peakQuantifierSettings, monitor);
 	}
@@ -46,7 +46,7 @@ public class PeakQuantifierISTD extends AbstractPeakQuantifier implements IPeakQ
 	@Override
 	public IProcessingInfo<?> quantify(IPeak peak, IProgressMonitor monitor) {
 
-		List<IPeak> peaks = new ArrayList<IPeak>();
+		List<IPeak> peaks = new ArrayList<>();
 		peaks.add(peak);
 		PeakQuantifierSettings peakQuantifierSettings = PreferenceSupplier.getPeakQuantifierSettings();
 		return quantify(peaks, peakQuantifierSettings, monitor);
@@ -59,13 +59,13 @@ public class PeakQuantifierISTD extends AbstractPeakQuantifier implements IPeakQ
 		return quantify(peaks, peakQuantifierSettings, monitor);
 	}
 
-	public IProcessingInfo<?> quantifySelectedPeak(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantifySelectedPeak(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		return calculatorISTD.quantifySelectedPeak(chromatogramSelection, monitor);
+		return calculatorISTD.quantifySelectedPeak(chromatogramSelection);
 	}
 
-	public IProcessingInfo<?> quantifyAllPeaks(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantifyAllPeaks(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		return calculatorISTD.quantifyAllPeaks(chromatogramSelection, monitor);
+		return calculatorISTD.quantifyAllPeaks(chromatogramSelection);
 	}
 }

@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -236,8 +237,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IAxisSettings) {
-					IAxisSettings axisSettings = (IAxisSettings)element;
+				if(element instanceof IAxisSettings axisSettings) {
 					return axisSettings.getLabel();
 				}
 				return null;
@@ -307,8 +307,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IAxisSettings) {
-					IAxisSettings axisSettings = (IAxisSettings)element;
+				if(element instanceof IAxisSettings axisSettings) {
 					return axisSettings.getLabel();
 				}
 				return null;
@@ -347,7 +346,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Shift the data in XY direction.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -381,7 +380,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 					 * Settings
 					 */
 					Object object = button.getData(KEY_MIRROR_MODUS);
-					DisplayModus displayModus = object instanceof DisplayModus ? (DisplayModus)object : DisplayModus.NORMAL;
+					DisplayModus displayModus = object instanceof DisplayModus dp ? dp : DisplayModus.NORMAL;
 					IChartSettings chartSettings = scrollableChart.getChartSettings();
 					//
 					if(DisplayModus.NORMAL.equals(displayModus)) {
@@ -437,8 +436,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof MappedSeriesSettings) {
-					MappedSeriesSettings mappedSeriesSettings = (MappedSeriesSettings)element;
+				if(element instanceof MappedSeriesSettings mappedSeriesSettings) {
 					ISeriesSettings seriesSettings = mappedSeriesSettings.getSeriesSettings();
 					if(seriesSettings != null) {
 						return seriesSettings.getDescription();
@@ -460,8 +458,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof MappedSeriesSettings) {
-					MappedSeriesSettings mappedSeriesSettings = (MappedSeriesSettings)object;
+				if(object instanceof MappedSeriesSettings mappedSeriesSettings) {
 					if(baseChart != null) {
 						String identifier = mappedSeriesSettings.getIdentifier();
 						baseChart.resetSeriesSettings();
@@ -481,7 +478,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 		Button button = new Button(parent, SWT.TOGGLE);
 		button.setToolTipText(""); // Will be set dynamically
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_MIRROR, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_MIRROR, IApplicationImageProvider.SIZE_16x16));
 		button.setData(KEY_MIRROR_MODUS, DisplayModus.NORMAL);
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -504,7 +501,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Move Left");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -527,7 +524,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Move Right");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -550,7 +547,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Move Up");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -573,7 +570,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Move Down");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -678,7 +675,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 		buttonMirrorSeries.setData(KEY_MIRROR_MODUS, displayModus);
 		enableButton(buttonMirrorSeries, IMAGE_MIRROR, TOOLTIP_MIRROR, DisplayModus.MIRROR.equals(displayModus));
 		//
-		boolean active = mirroredSeries.size() > 0;
+		boolean active = !mirroredSeries.isEmpty();
 		buttonAutoMirror.setData(KEY_MIRROR_MODUS, active ? DisplayModus.MIRROR : DisplayModus.NORMAL);
 		enableButton(buttonAutoMirror, IMAGE_MIRROR, TOOLTIP_MIRROR, active);
 	}
@@ -792,8 +789,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 
 		String id = BaseChart.SELECTED_SERIES_NONE;
 		Object object = comboViewerSelect.getStructuredSelection().getFirstElement();
-		if(object instanceof MappedSeriesSettings) {
-			MappedSeriesSettings mappedSeriesSettings = (MappedSeriesSettings)object;
+		if(object instanceof MappedSeriesSettings mappedSeriesSettings) {
 			id = mappedSeriesSettings.getIdentifier();
 		}
 		//

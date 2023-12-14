@@ -106,8 +106,7 @@ public class RulerDetailsUI extends Composite {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IAxisSettings) {
-					IAxisSettings axisSettings = (IAxisSettings)element;
+				if(element instanceof IAxisSettings axisSettings) {
 					return axisSettings.getLabel();
 				}
 				return null;
@@ -143,8 +142,7 @@ public class RulerDetailsUI extends Composite {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IAxisSettings) {
-					IAxisSettings axisSettings = (IAxisSettings)element;
+				if(element instanceof IAxisSettings axisSettings) {
 					return axisSettings.getLabel();
 				}
 				return null;

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.quantitation.core.AbstractPeakQuantitationCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.quantitation.settings.IPeakQuantifierSettings;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
@@ -32,13 +31,12 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalculator {
 
-	public IProcessingInfo<?> quantifySelectedPeak(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<Void> quantifySelectedPeak(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<Void> processingInfo = new ProcessingInfo<>();
 		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		List<? extends IPeak> internalStandardPeaks = getInternalStandardPeaks(chromatogram);
 		IPeak peakToQuantify = chromatogramSelection.getSelectedPeak();
@@ -48,9 +46,9 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 		return processingInfo;
 	}
 
-	public IProcessingInfo<?> quantifyAllPeaks(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<Void> quantifyAllPeaks(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<Void> processingInfo = new ProcessingInfo<>();
 		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		List<? extends IPeak> internalStandardPeaks = getInternalStandardPeaks(chromatogram);
 		List<? extends IPeak> peaksToQuantify = getPeaksToQuantify(chromatogramSelection);
@@ -62,15 +60,15 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 		return processingInfo;
 	}
 
-	public IProcessingInfo<?> quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<Void> quantify(List<IPeak> peaks) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<Void> processingInfo = new ProcessingInfo<>();
 		/*
 		 * Collect the internal standards.
 		 */
 		List<IPeak> internalStandardPeaks = new ArrayList<>();
 		for(IPeak peak : peaks) {
-			if(peak.getInternalStandards().size() > 0) {
+			if(!peak.getInternalStandards().isEmpty()) {
 				internalStandardPeaks.add(peak);
 			}
 		}
@@ -117,26 +115,24 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 	private List<? extends IPeak> getInternalStandardPeaks(IChromatogram<?> chromatogram) {
 
 		if(chromatogram != null) {
-			if(chromatogram instanceof IChromatogramMSD) {
+			if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 				/*
 				 * MSD
 				 */
-				List<IChromatogramPeakMSD> internalStandardPeaks = new ArrayList<IChromatogramPeakMSD>();
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+				List<IChromatogramPeakMSD> internalStandardPeaks = new ArrayList<>();
 				for(IChromatogramPeakMSD peak : chromatogramMSD.getPeaks()) {
-					if(peak.getInternalStandards().size() > 0) {
+					if(!peak.getInternalStandards().isEmpty()) {
 						internalStandardPeaks.add(peak);
 					}
 				}
 				return internalStandardPeaks;
-			} else if(chromatogram instanceof IChromatogramCSD) {
+			} else if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 				/*
 				 * CSD
 				 */
-				List<IChromatogramPeakCSD> internalStandardPeaks = new ArrayList<IChromatogramPeakCSD>();
-				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+				List<IChromatogramPeakCSD> internalStandardPeaks = new ArrayList<>();
 				for(IChromatogramPeakCSD peak : chromatogramCSD.getPeaks()) {
-					if(peak.getInternalStandards().size() > 0) {
+					if(!peak.getInternalStandards().isEmpty()) {
 						internalStandardPeaks.add(peak);
 					}
 				}
@@ -146,25 +142,23 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 		/*
 		 * No peak was found.
 		 */
-		return new ArrayList<IPeak>();
+		return new ArrayList<>();
 	}
 
 	private List<IPeak> getPeaksToQuantify(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		List<IPeak> peaksToQuantify = new ArrayList<IPeak>();
-		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+		List<IPeak> peaksToQuantify = new ArrayList<>();
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 			/*
 			 * MSD
 			 */
-			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			for(IChromatogramPeakMSD peak : chromatogramSelectionMSD.getChromatogram().getPeaks(chromatogramSelectionMSD)) {
 				peaksToQuantify.add(peak);
 			}
-		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD chromatogramSelectionCSD) {
 			/*
 			 * CSD
 			 */
-			IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
 			for(IChromatogramPeakCSD peak : chromatogramSelectionCSD.getChromatogram().getPeaks(chromatogramSelectionCSD)) {
 				peaksToQuantify.add(peak);
 			}

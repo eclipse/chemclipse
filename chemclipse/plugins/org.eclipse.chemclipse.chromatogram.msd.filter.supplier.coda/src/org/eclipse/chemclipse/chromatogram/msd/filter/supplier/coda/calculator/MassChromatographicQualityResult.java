@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -75,7 +75,7 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 		assert (chromatogramSelection != null) : "The chromatogram selection must not be null.";
 		assert (chromatogramSelection.getChromatogram() != null) : "The chromatogram must not be null.";
 		assert (excludedIons != null) : "The excluded ions must not be null.";
-		List<Float> mcqs = new ArrayList<Float>();
+		List<Float> mcqs = new ArrayList<>();
 		float mcq;
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		try {
@@ -108,7 +108,7 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 		/*
 		 * Avoid a null pointer or a division by zero exception.
 		 */
-		if(mcqs == null || mcqs.size() < 1) {
+		if(mcqs == null || mcqs.isEmpty()) {
 			return 0.0f;
 		}
 		/*

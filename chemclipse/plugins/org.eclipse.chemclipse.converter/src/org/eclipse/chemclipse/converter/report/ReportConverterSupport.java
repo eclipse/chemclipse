@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,6 +23,7 @@ public class ReportConverterSupport implements IReportConverterSupport {
 	private List<IReportSupplier> suppliers;
 
 	public ReportConverterSupport() {
+
 		suppliers = new ArrayList<IReportSupplier>();
 	}
 
@@ -184,7 +185,7 @@ public class ReportConverterSupport implements IReportConverterSupport {
 	 */
 	private void areConvertersStored() throws NoConverterAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoConverterAvailableException();
 		}
 	}

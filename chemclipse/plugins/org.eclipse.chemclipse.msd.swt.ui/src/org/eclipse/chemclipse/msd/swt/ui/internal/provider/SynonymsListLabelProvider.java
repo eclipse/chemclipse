@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,13 +13,14 @@ package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-
 import org.eclipse.swt.graphics.Image;
 
 public class SynonymsListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public SynonymsListLabelProvider() {
+
 		super("0.0##");
 	}
 
@@ -37,8 +38,7 @@ public class SynonymsListLabelProvider extends AbstractChemClipseLabelProvider {
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof String) {
-			String synonym = (String)element;
+		if(element instanceof String synonym) {
 			switch(columnIndex) {
 				case 0: // Synonym
 					text = synonym;
@@ -50,8 +50,9 @@ public class SynonymsListLabelProvider extends AbstractChemClipseLabelProvider {
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImageProvider.SIZE_16x16);
 	}
 }

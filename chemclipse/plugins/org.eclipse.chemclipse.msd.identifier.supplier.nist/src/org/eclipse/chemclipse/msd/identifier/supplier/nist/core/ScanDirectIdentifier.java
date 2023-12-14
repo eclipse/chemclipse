@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -38,9 +38,8 @@ public class ScanDirectIdentifier extends AbstractMassSpectrumIdentifier {
 			identifierSettings = PreferenceSupplier.getScanDirectIdentifierSettings();
 		}
 		//
-		if(identifierSettings instanceof ScanDirectIdentifierSettings) {
+		if(identifierSettings instanceof ScanDirectIdentifierSettings scanDirectIdentifierSettings) {
 			try {
-				ScanDirectIdentifierSettings scanDirectIdentifierSettings = (ScanDirectIdentifierSettings)identifierSettings;
 				Identifier identifier = new Identifier();
 				IMassSpectra massSpectra = identifier.runMassSpectrumIdentification(massSpectrumList, scanDirectIdentifierSettings, monitor);
 				processingInfo.setProcessingResult(massSpectra);

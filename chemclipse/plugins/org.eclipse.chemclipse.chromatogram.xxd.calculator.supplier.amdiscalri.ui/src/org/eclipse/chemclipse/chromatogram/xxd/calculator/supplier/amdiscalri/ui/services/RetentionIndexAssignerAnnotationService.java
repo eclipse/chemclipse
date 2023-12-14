@@ -35,8 +35,8 @@ public class RetentionIndexAssignerAnnotationService extends RetentionIndexAssig
 		gridData.heightHint = 250;
 		editor.setLayoutData(gridData);
 		//
-		if(currentSelection instanceof String) {
-			editor.load((String)currentSelection);
+		if(currentSelection instanceof String text) {
+			editor.load(text);
 		}
 		//
 		return editor;

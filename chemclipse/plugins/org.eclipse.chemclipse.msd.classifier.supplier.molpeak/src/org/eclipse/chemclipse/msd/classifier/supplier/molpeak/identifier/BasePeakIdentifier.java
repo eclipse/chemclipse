@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -120,7 +120,7 @@ public class BasePeakIdentifier {
 				 * Identification
 				 */
 				IScanMSD massSpectrum = peak.getExtractedMassSpectrum();
-				String name = getIdentification(massSpectrum, settings, i);
+				String name = getIdentification(massSpectrum);
 				/*
 				 * Add the peak target
 				 */
@@ -180,7 +180,7 @@ public class BasePeakIdentifier {
 				/*
 				 * Identification
 				 */
-				String name = getIdentification(massSpectrum, settings, i);
+				String name = getIdentification(massSpectrum);
 				IComparisonResult comparisonResult = getComparisonResult(settings);
 				IIdentificationTarget massSpectrumTarget = targetBuilder.getMassSpectrumTarget(massSpectrum, comparisonResult, IDENTIFIER);
 				setLibraryInformationFields(massSpectrumTarget.getLibraryInformation(), name);
@@ -228,7 +228,7 @@ public class BasePeakIdentifier {
 	 * @param monitor
 	 * @return {@link IMassSpectra}
 	 */
-	public IMassSpectra getMassSpectra(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
+	public IMassSpectra getMassSpectra(IIdentificationTarget identificationTarget) {
 
 		IMassSpectra massSpectra = new MassSpectra();
 		if(identificationTarget != null) {
@@ -252,8 +252,7 @@ public class BasePeakIdentifier {
 							/*
 							 * Search for Guaiacyl
 							 */
-							if(reference instanceof ILibraryMassSpectrum) {
-								ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)reference;
+							if(reference instanceof ILibraryMassSpectrum libraryMassSpectrum) {
 								String nameReference = libraryMassSpectrum.getLibraryInformation().getName();
 								if(nameReference.equals(nameTarget)) {
 									identifiedMassSpectra.add(reference);
@@ -313,7 +312,7 @@ public class BasePeakIdentifier {
 		libraryInformation.setCasNumber("");
 	}
 
-	private String getIdentification(IScanMSD massSpectrum, IBasePeakSettings settings, int index) {
+	private String getIdentification(IScanMSD massSpectrum) {
 
 		int basePeak = (int)massSpectrum.getBasePeak();
 		if(SYRINGYL_BASE.contains(basePeak)) {

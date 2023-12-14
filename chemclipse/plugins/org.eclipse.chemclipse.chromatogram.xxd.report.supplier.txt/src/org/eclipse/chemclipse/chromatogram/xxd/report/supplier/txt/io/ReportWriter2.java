@@ -388,8 +388,7 @@ public class ReportWriter2 {
 	private float getPurity(IPeak peak) {
 
 		float purity = 1.0f;
-		if(peak instanceof IChromatogramPeakMSD) {
-			IChromatogramPeakMSD peakMSD = (IChromatogramPeakMSD)peak;
+		if(peak instanceof IChromatogramPeakMSD peakMSD) {
 			purity = peakMSD.getPurity();
 		}
 		//
@@ -435,8 +434,7 @@ public class ReportWriter2 {
 	private float getRetentionIndex(IPeakModel peakModel) {
 
 		float retentionIndex = 0.0f;
-		if(peakModel instanceof IPeakModelMSD) {
-			IPeakModelMSD peakModelMSD = (IPeakModelMSD)peakModel;
+		if(peakModel instanceof IPeakModelMSD peakModelMSD) {
 			retentionIndex = peakModelMSD.getPeakMassSpectrum().getRetentionIndex();
 		}
 		//

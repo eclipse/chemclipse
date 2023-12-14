@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.settings.PeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.IBaselineSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.IIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.ISettingStatus;
@@ -51,13 +50,12 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		validatePeak(peak);
 		validateSettings(peakIntegrationSettings);
 		boolean useAreaConstraint = true;
-		if(peakIntegrationSettings instanceof PeakIntegrationSettings) {
-			useAreaConstraint = ((PeakIntegrationSettings)peakIntegrationSettings).isUseAreaConstraint();
+		if(peakIntegrationSettings instanceof PeakIntegrationSettings settings) {
+			useAreaConstraint = settings.isUseAreaConstraint();
 		}
 		ISettingStatus settingStatus;
 		PeakIntegrationResult result = null;
-		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
-		List<IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getMarkedTraces(), useAreaConstraint);
+		List<IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, peakIntegrationSettings.getMarkedTraces(), useAreaConstraint);
 		peak.setIntegratedArea(integrationEntries, IPeakMaxPeakIntegrator.INTEGRATOR_DESCRIPTION);
 		/*
 		 * Get the peak area if the peak should be reported.
@@ -182,14 +180,14 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 	 * 
 	 * @return List<IIntegrationEntry>
 	 */
-	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, IBaselineSupport baselineSupport, IMarkedTraces<IMarkedTrace> markedTraces, boolean useAreaConstraint) {
+	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, IMarkedTraces<IMarkedTrace> markedTraces, boolean useAreaConstraint) {
 
-		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 		IIntegrationEntry integrationEntry;
 		//
 		IPeakModel peakModel = peak.getPeakModel();
 		IScan scan = peakModel.getPeakMaximum();
-		double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, useAreaConstraint);
+		double integratedAreaTIC = calculateTICPeakArea(peak, useAreaConstraint);
 		Set<Integer> selectedIonsNominal = markedTraces.getTraces();
 		/*
 		 * Use the selected ions if:<br/> the size is greater 0
@@ -197,8 +195,8 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		 * ions does not contain IIon.TIC_Ion, which means,
 		 * the TIC signal should be integrated.
 		 */
-		if(selectedIonsNominal.size() > 0 && !selectedIonsNominal.contains(AbstractIon.getIon(IIon.TIC_ION)) && scan instanceof IScanMSD) {
-			IIonPercentages ionPercentages = new IonPercentages((IScanMSD)scan);
+		if(!selectedIonsNominal.isEmpty() && !selectedIonsNominal.contains(AbstractIon.getIon(IIon.TIC_ION)) && scan instanceof IScanMSD scanMSD) {
+			IIonPercentages ionPercentages = new IonPercentages(scanMSD);
 			/*
 			 * Calculate the percentage integrated area for each selected ion.
 			 */
@@ -221,16 +219,15 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 	 * @param peak
 	 * @return double
 	 */
-	private double calculateTICPeakArea(IPeak peak, IBaselineSupport baselineSupport, boolean useAreaConstraint) {
+	private double calculateTICPeakArea(IPeak peak, boolean useAreaConstraint) {
 
-		double integratedArea = 0.0d;
 		IPeakModel peakModel = peak.getPeakModel();
 		/*
 		 * Integrates the max scan of the peak model.
 		 * There is currently no option to support the settings like "baseline hold".
 		 * In case it is needed, please have a look at the Integrator Trapezoid.
 		 */
-		integratedArea = peakModel.getPeakMaximum().getTotalSignal();
+		double integratedArea = peakModel.getPeakMaximum().getTotalSignal();
 		/*
 		 * We had a check before, that the area must not be < 1.
 		 * Especially when handling HPLC-DAD files, it could be lower than 1.
@@ -264,15 +261,12 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		 */
 		float purity = 0.0f;
 		float sn = 0.0f;
-		if(peak instanceof IChromatogramPeakMSD) {
-			IChromatogramPeakMSD chromatogramPeak = (IChromatogramPeakMSD)peak;
+		if(peak instanceof IChromatogramPeakMSD chromatogramPeak) {
 			purity = chromatogramPeak.getPurity();
 			sn = chromatogramPeak.getSignalToNoiseRatio();
-		} else if(peak instanceof IChromatogramPeakCSD) {
-			IChromatogramPeakCSD chromatogramPeak = (IChromatogramPeakCSD)peak;
+		} else if(peak instanceof IChromatogramPeakCSD chromatogramPeak) {
 			sn = chromatogramPeak.getSignalToNoiseRatio();
-		} else if(peak instanceof IChromatogramPeakWSD) {
-			IChromatogramPeakWSD chromatogramPeak = (IChromatogramPeakWSD)peak;
+		} else if(peak instanceof IChromatogramPeakWSD chromatogramPeak) {
 			purity = chromatogramPeak.getPurity();
 			sn = chromatogramPeak.getSignalToNoiseRatio();
 		}
@@ -324,7 +318,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 
 		Set<Integer> result;
 		if(markedTraces == null) {
-			result = new HashSet<Integer>();
+			result = new HashSet<>();
 		} else {
 			result = markedTraces.getTraces();
 		}

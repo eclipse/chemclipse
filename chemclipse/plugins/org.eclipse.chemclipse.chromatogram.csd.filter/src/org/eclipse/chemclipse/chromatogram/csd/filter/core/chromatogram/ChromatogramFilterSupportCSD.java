@@ -45,7 +45,7 @@ public class ChromatogramFilterSupportCSD implements IChromatogramFilterSupportC
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		areChromatogramFiltersStored();
-		List<String> availableFilters = new ArrayList<String>();
+		List<String> availableFilters = new ArrayList<>();
 		for(IChromatogramFilterSupplierCSD supplier : suppliers) {
 			availableFilters.add(supplier.getId());
 		}
@@ -80,7 +80,7 @@ public class ChromatogramFilterSupportCSD implements IChromatogramFilterSupportC
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * converter filter names.<br/>
 		 */
-		ArrayList<String> filterNames = new ArrayList<String>();
+		ArrayList<String> filterNames = new ArrayList<>();
 		for(IChromatogramFilterSupplierCSD supplier : suppliers) {
 			filterNames.add(supplier.getFilterName());
 		}
@@ -115,7 +115,7 @@ public class ChromatogramFilterSupportCSD implements IChromatogramFilterSupportC
 	// -------------------------------------private methods
 	private void areChromatogramFiltersStored() throws NoChromatogramFilterSupplierAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoChromatogramFilterSupplierAvailableException();
 		}
 	}

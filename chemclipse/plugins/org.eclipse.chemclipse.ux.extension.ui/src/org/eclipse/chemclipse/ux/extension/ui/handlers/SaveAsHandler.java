@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -48,8 +48,7 @@ public class SaveAsHandler {
 				/*
 				 * Save the data as ...
 				 */
-				if(object instanceof IChemClipseEditor) {
-					IChemClipseEditor editor = (IChemClipseEditor)object;
+				if(object instanceof IChemClipseEditor editor) {
 					editor.saveAs();
 				} else {
 					ParameterizedCommand command = commandService.createCommand("org.eclipse.ui.file.saveAs", null); // $NON-NLS-1$

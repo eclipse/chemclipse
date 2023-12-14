@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,8 +34,8 @@ public class WaveSpectrumIdentifierUnknown extends AbstractWaveSpectrumIdentifie
 	public IProcessingInfo<WaveSpectra> identify(List<IScanWSD> waveSpectraList, IWaveSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {
 
 		WaveSpectrumUnknownSettings unknownSettings;
-		if(identifierSettings instanceof WaveSpectrumUnknownSettings) {
-			unknownSettings = (WaveSpectrumUnknownSettings)identifierSettings;
+		if(identifierSettings instanceof WaveSpectrumUnknownSettings settings) {
+			unknownSettings = settings;
 		} else {
 			unknownSettings = PreferenceSupplier.getWaveSpectrumUnknownSettings();
 		}

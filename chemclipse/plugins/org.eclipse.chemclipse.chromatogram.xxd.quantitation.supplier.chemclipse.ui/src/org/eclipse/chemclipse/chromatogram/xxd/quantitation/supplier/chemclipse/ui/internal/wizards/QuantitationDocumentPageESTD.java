@@ -146,7 +146,7 @@ public class QuantitationDocumentPageESTD extends WizardPage {
 	private Combo createComboTargetNames(Composite parent) {
 
 		Combo combo = EnhancedCombo.create(parent, SWT.NONE);
-		if(peakTargetNames.size() > 0) {
+		if(!peakTargetNames.isEmpty()) {
 			combo.setItems(peakTargetNames.toArray(new String[peakTargetNames.size()]));
 		}
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);

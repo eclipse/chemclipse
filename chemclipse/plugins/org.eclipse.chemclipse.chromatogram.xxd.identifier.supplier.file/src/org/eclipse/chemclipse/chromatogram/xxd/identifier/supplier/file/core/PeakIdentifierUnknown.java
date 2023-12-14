@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,7 +43,7 @@ public class PeakIdentifierUnknown implements IPeakIdentifierMSD<IPeakIdentifica
 			identifierSettings = PreferenceSupplier.getPeakUnknownSettingsMSD();
 		}
 		//
-		IUnknownSettings unknownSettings = (identifierSettings instanceof IUnknownSettings) ? (IUnknownSettings)identifierSettings : null;
+		IUnknownSettings unknownSettings = identifierSettings instanceof IUnknownSettings settings ? settings : null;
 		return runIdentification(peaks, unknownSettings);
 	}
 
@@ -54,7 +54,7 @@ public class PeakIdentifierUnknown implements IPeakIdentifierMSD<IPeakIdentifica
 			identifierSettings = PreferenceSupplier.getPeakUnknownSettingsCSD();
 		}
 		//
-		IUnknownSettings unknownSettings = (identifierSettings instanceof IUnknownSettings) ? (IUnknownSettings)identifierSettings : null;
+		IUnknownSettings unknownSettings = identifierSettings instanceof IUnknownSettings settings ? settings : null;
 		return runIdentification(peaks, unknownSettings);
 	}
 
@@ -65,7 +65,7 @@ public class PeakIdentifierUnknown implements IPeakIdentifierMSD<IPeakIdentifica
 			identifierSettings = PreferenceSupplier.getPeakUnknownSettingsWSD();
 		}
 		//
-		IUnknownSettings unknownSettings = (identifierSettings instanceof IUnknownSettings) ? (IUnknownSettings)identifierSettings : null;
+		IUnknownSettings unknownSettings = identifierSettings instanceof IUnknownSettings settings ? settings : null;
 		return runIdentification(peaks, unknownSettings);
 	}
 

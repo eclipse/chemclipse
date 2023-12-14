@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,8 @@ public abstract class AbstractChromatogramReportSupport implements IChromatogram
 	private List<IChromatogramReportSupplier> suppliers;
 
 	public AbstractChromatogramReportSupport() {
-		suppliers = new ArrayList<IChromatogramReportSupplier>();
+
+		suppliers = new ArrayList<>();
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public abstract class AbstractChromatogramReportSupport implements IChromatogram
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * report names.<br/>
 		 */
-		ArrayList<String> filterNames = new ArrayList<String>();
+		ArrayList<String> filterNames = new ArrayList<>();
 		for(IChromatogramReportSupplier supplier : suppliers) {
 			filterNames.add(supplier.getReportName());
 		}
@@ -145,7 +146,7 @@ public abstract class AbstractChromatogramReportSupport implements IChromatogram
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		areReportSuppliersStored();
-		List<String> availableProcessors = new ArrayList<String>();
+		List<String> availableProcessors = new ArrayList<>();
 		for(IChromatogramReportSupplier supplier : suppliers) {
 			availableProcessors.add(supplier.getId());
 		}
@@ -160,7 +161,7 @@ public abstract class AbstractChromatogramReportSupport implements IChromatogram
 	 */
 	private void areReportSuppliersStored() throws NoReportSupplierAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoReportSupplierAvailableException();
 		}
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,8 +40,7 @@ public class VirtualChannelValidator extends ValueParserSupport implements IVali
 		String message = null;
 		if(value == null) {
 			message = ERROR_ENTRY;
-		} else if(value instanceof String) {
-			String text = ((String)value).trim();
+		} else if(value instanceof String text) {
 			if(text.contains(SEPARATOR_TOKEN)) {
 				message = ERROR_TOKEN;
 			} else if("".equals(text.trim())) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -19,6 +19,7 @@ public abstract class AbstractIdentificationResults implements IIdentificationRe
 	private List<IIdentificationResult> results;
 
 	public AbstractIdentificationResults() {
+
 		results = new ArrayList<IIdentificationResult>();
 	}
 
@@ -47,7 +48,7 @@ public abstract class AbstractIdentificationResults implements IIdentificationRe
 		/*
 		 * If the list is empty.
 		 */
-		if(results.size() == 0) {
+		if(results.isEmpty()) {
 			return result;
 		}
 		if(index >= 0 && index < results.size()) {

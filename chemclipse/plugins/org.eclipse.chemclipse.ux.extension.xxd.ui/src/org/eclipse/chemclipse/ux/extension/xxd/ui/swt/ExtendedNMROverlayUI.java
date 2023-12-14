@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -52,9 +52,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
+import org.eclipse.swtchart.extensions.linecharts.ICompressionSupport;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
-import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
 public class ExtendedNMROverlayUI extends Composite implements PropertyChangeListener, IExtendedPartUI {
@@ -85,6 +85,7 @@ public class ExtendedNMROverlayUI extends Composite implements PropertyChangeLis
 		createControl();
 	}
 
+	@Override
 	public void update() {
 
 		Map<IScanEditorNMR, OverlayDataNMRSelection> oldEditors = dataNMREditors.get();
@@ -234,33 +235,31 @@ public class ExtendedNMROverlayUI extends Composite implements PropertyChangeLis
 		chartNMR.deleteSeries();
 		colorSchemeNormal.reset();
 		Collection<OverlayDataNMRSelection> spectras = dataNMREditors.get().values();
-		if(spectras.size() > 0) {
+		if(!spectras.isEmpty()) {
 			//
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			int i = 1;
 			Color color = colorSchemeNormal.getColor();
 			//
 			double yOffset = 0;
 			for(OverlayDataNMRSelection selection : spectras) {
 				IComplexSignalMeasurement<?> measurement = selection.getMeasurement();
-				if(measurement instanceof SpectrumMeasurement) {
-					ILineSeriesData lineSeriesData = getLineSeriesData((SpectrumMeasurement)measurement, "NMR_" + i++, measurement.getDataName(), yOffset);
-					if(lineSeriesData != null) {
-						ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
-						lineSeriesSettings.setLineColor(color);
-						lineSeriesSettings.setEnableArea(false);
-						selection.setColor(color);
-						//
-						lineSeriesDataList.add(lineSeriesData);
-						color = colorSchemeNormal.getNextColor();
-						if(mode == Mode.STACKED) {
-							yOffset = getMax(lineSeriesData.getSeriesData()) * 1.1d;
-						}
+				if(measurement instanceof SpectrumMeasurement spectrumMeasurement) {
+					ILineSeriesData lineSeriesData = getLineSeriesData(spectrumMeasurement, "NMR_" + i++, measurement.getDataName(), yOffset);
+					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+					lineSeriesSettings.setLineColor(color);
+					lineSeriesSettings.setEnableArea(false);
+					selection.setColor(color);
+					//
+					lineSeriesDataList.add(lineSeriesData);
+					color = colorSchemeNormal.getNextColor();
+					if(mode == Mode.STACKED) {
+						yOffset = getMax(lineSeriesData.getSeriesData()) * 1.1d;
 					}
 				}
 			}
 			//
-			chartNMR.addSeriesData(lineSeriesDataList, LineChart.MEDIUM_COMPRESSION);
+			chartNMR.addSeriesData(lineSeriesDataList, ICompressionSupport.MEDIUM_COMPRESSION);
 		}
 	}
 
@@ -332,8 +331,8 @@ public class ExtendedNMROverlayUI extends Composite implements PropertyChangeLis
 
 			List<SpectrumMeasurement> specras = new ArrayList<>();
 			for(IComplexSignalMeasurement<?> m : editor.getScanSelection().getMeasurements()) {
-				if(m instanceof SpectrumMeasurement) {
-					specras.add((SpectrumMeasurement)m);
+				if(m instanceof SpectrumMeasurement spectrumMeasurement) {
+					specras.add(spectrumMeasurement);
 				}
 			}
 			return specras.toArray(new IComplexSignalMeasurement<?>[0]);

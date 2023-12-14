@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,9 +22,7 @@ public class ProcessingInfoTableComparator extends AbstractRecordTableComparator
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IProcessingMessage && e2 instanceof IProcessingMessage) {
-			IProcessingMessage message1 = (IProcessingMessage)e1;
-			IProcessingMessage message2 = (IProcessingMessage)e2;
+		if(e1 instanceof IProcessingMessage message1 && e2 instanceof IProcessingMessage message2) {
 			switch(getPropertyIndex()) {
 				case 0: // Message Type
 					sortOrder = message2.getMessageType().compareTo(message1.getMessageType());

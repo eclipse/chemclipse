@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -147,7 +148,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Previous");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -174,11 +175,10 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof TimeRange) {
-					TimeRange timeRange = (TimeRange)element;
-					return timeRange.getIdentifier();
-				} else if(element instanceof String) {
-					return (String)element;
+				if(element instanceof TimeRange selectedTimeRange) {
+					return selectedTimeRange.getIdentifier();
+				} else if(element instanceof String text) {
+					return text;
 				}
 				return null;
 			}
@@ -196,8 +196,8 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof TimeRange) {
-					timeRange = (TimeRange)object;
+				if(object instanceof TimeRange selectedTimeRange) {
+					timeRange = selectedTimeRange;
 					updateTimeRange(timeRange, true);
 				} else {
 					timeRange = null; // NO_SELECTION
@@ -214,7 +214,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Next");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -252,7 +252,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Add");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -291,7 +291,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Delete");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -299,8 +299,8 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getDeleteMessage())) {
 					Object object = comboViewer.getStructuredSelection().getFirstElement();
-					if(object instanceof TimeRange) {
-						timeRanges.remove((TimeRange)object);
+					if(object instanceof TimeRange selectedTimeRange) {
+						timeRanges.remove(selectedTimeRange);
 						updateComboViewer();
 						updateTimeRange(timeRange, true);
 					}
@@ -364,7 +364,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 			 */
 			List<TimeRange> timeRangesSorted = new ArrayList<>(timeRanges.values());
 			Collections.sort(timeRangesSorted, new TimeRangeComparator());
-			List<Object> timeRangesInput = new ArrayList<Object>();
+			List<Object> timeRangesInput = new ArrayList<>();
 			timeRangesInput.add(NO_SELECTION); // "No Selection"
 			timeRangesInput.addAll(timeRangesSorted);
 			//

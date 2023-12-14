@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -175,8 +176,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof ColorMap) {
-					ColorMap colorMap = (ColorMap)element;
+				if(element instanceof ColorMap colorMap) {
 					return colorMap.getPredefinedColorMap().name();
 				}
 				return null;
@@ -193,8 +193,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof ColorMap) {
-					ColorMap colorMap = (ColorMap)object;
+				if(object instanceof ColorMap colorMap) {
 					intensityGraphFigure.setColorMap(colorMap);
 					intensityGraphFigure.repaint();
 				}
@@ -257,7 +256,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Reset the heatmap settings.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override

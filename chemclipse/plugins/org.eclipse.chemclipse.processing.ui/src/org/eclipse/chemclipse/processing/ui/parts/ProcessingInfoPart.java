@@ -35,7 +35,6 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -59,7 +58,7 @@ public class ProcessingInfoPart {
 	private void createControl() {
 
 		parent.setLayout(new FillLayout());
-		processingInfoUI = new ProcessingInfoUI(parent, SWT.NONE);
+		processingInfoUI = new ProcessingInfoUI(parent);
 		TableViewer tableViewer = processingInfoUI.getTableViewer();
 		/*
 		 * Copy and Paste of the table content.

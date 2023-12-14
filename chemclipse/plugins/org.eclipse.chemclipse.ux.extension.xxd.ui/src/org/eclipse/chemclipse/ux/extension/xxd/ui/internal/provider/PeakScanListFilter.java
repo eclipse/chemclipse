@@ -59,8 +59,7 @@ public class PeakScanListFilter extends ViewerFilter {
 			return true;
 		}
 		for(ITarget target : peak.getTargets()) {
-			if(target instanceof IIdentificationTarget) {
-				IIdentificationTarget identificationTarget = (IIdentificationTarget)target;
+			if(target instanceof IIdentificationTarget identificationTarget) {
 				if(libraryInformationSupport.containsSearchText(identificationTarget.getLibraryInformation(), searchText, caseSensitive)) {
 					return true;
 				}
@@ -95,7 +94,7 @@ public class PeakScanListFilter extends ViewerFilter {
 			quantifierDescription = quantifierDescription.toLowerCase();
 		}
 		//
-		if(!isMatch && containsText(classifiers, searchText, caseSensitive)) {
+		if(containsText(classifiers, searchText, caseSensitive)) {
 			isMatch = true;
 		}
 		//

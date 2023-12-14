@@ -76,9 +76,9 @@ public class ChromatogramConverterWSDProcessTypeSupplier implements IProcessType
 			}
 			if(exportFolder.exists() || exportFolder.mkdirs()) {
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-				if(chromatogram instanceof IChromatogramWSD) {
+				if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
 					File file = processSettings.getExportFile(supplier.getFileExtension(), chromatogram);
-					IProcessingInfo<File> info = ChromatogramConverterWSD.getInstance().convert(file, (IChromatogramWSD)chromatogram, supplier.getId(), monitor);
+					IProcessingInfo<File> info = ChromatogramConverterWSD.getInstance().convert(file, chromatogramWSD, supplier.getId(), monitor);
 					messageConsumer.addMessages(info);
 					if(info != null && info.getProcessingResult() != null) {
 						File result = info.getProcessingResult();

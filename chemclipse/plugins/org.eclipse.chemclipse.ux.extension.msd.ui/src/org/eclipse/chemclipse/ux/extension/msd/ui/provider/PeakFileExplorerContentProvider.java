@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,7 @@ public class PeakFileExplorerContentProvider extends FileExplorerContentProvider
 	@Override
 	public File[] getFiles(File parentFile) {
 
-		List<File> files = new ArrayList<File>();
+		List<File> files = new ArrayList<>();
 		if(parentFile.isDirectory() && parentFile.canRead()) {
 			/*
 			 * I have found no method to monitor file system changes outside the
@@ -66,7 +66,7 @@ public class PeakFileExplorerContentProvider extends FileExplorerContentProvider
 	@Override
 	public boolean hasChildren(File parentFile) {
 
-		ArrayList<File> files = new ArrayList<File>();
+		ArrayList<File> files = new ArrayList<>();
 		if(parentFile.isDirectory() && parentFile.canRead()) {
 			/*
 			 * Check if the parent file is a chromatogram.
@@ -81,7 +81,7 @@ public class PeakFileExplorerContentProvider extends FileExplorerContentProvider
 							files.add(file);
 						}
 					}
-					return (files.size() > 0) ? true : false;
+					return !files.isEmpty();
 				} else {
 					return false;
 				}

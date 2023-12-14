@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,7 @@ public class SampleQuantTextEditingSupport extends EditingSupport {
 	private TableViewer tableViewer;
 
 	public SampleQuantTextEditingSupport(TableViewer tableViewer) {
+
 		super(tableViewer);
 		this.tableViewer = tableViewer;
 		cellEditor = new TextCellEditor(tableViewer.getTable());
@@ -43,8 +44,7 @@ public class SampleQuantTextEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof ISampleQuantSubstance) {
-			ISampleQuantSubstance sampleQuantSubstance = (ISampleQuantSubstance)element;
+		if(element instanceof ISampleQuantSubstance sampleQuantSubstance) {
 			return Double.toString(sampleQuantSubstance.getMinMatchQuality());
 		}
 		return "";
@@ -53,8 +53,7 @@ public class SampleQuantTextEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof ISampleQuantSubstance) {
-			ISampleQuantSubstance sampleQuantSubstance = (ISampleQuantSubstance)element;
+		if(element instanceof ISampleQuantSubstance sampleQuantSubstance) {
 			sampleQuantSubstance.setMinMatchQuality(Double.valueOf(value.toString()));
 			tableViewer.refresh();
 		}

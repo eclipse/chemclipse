@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,6 +35,7 @@ public class TileSelectionDialog extends Dialog {
 	private TileDefinition selectedElement;
 
 	public TileSelectionDialog(Shell parentShell, TileDefinition[] elements, CellLabelProvider labelProvider) {
+
 		super(parentShell);
 		this.elements = elements;
 		this.labelProvider = labelProvider;
@@ -59,10 +60,10 @@ public class TileSelectionDialog extends Dialog {
 			public void selectionChanged(SelectionChangedEvent event) {
 
 				ISelection selection = event.getSelection();
-				if(selection instanceof IStructuredSelection) {
-					Object selected = ((IStructuredSelection)selection).getFirstElement();
-					if(selected instanceof TileDefinition) {
-						selectedElement = (TileDefinition)selected;
+				if(selection instanceof IStructuredSelection structuredSelection) {
+					Object selected = structuredSelection.getFirstElement();
+					if(selected instanceof TileDefinition tileDefinition) {
+						selectedElement = tileDefinition;
 					} else {
 						selectedElement = null;
 					}

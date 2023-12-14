@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.quantitation.core.AbstractPeakQuantitationCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.quantitation.settings.IPeakQuantifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.quantitation.supplier.chemclipse.io.DatabaseSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
@@ -27,7 +26,6 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalculator {
 
@@ -39,12 +37,12 @@ public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalc
 	 * @param monitor
 	 * @return
 	 */
-	public IProcessingInfo<?> quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<Void> quantify(List<IPeak> peaks) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<Void> processingInfo = new ProcessingInfo<>();
 		DatabaseSupport databaseSupport = new DatabaseSupport();
 		IQuantitationDatabase quantitationDatabase = databaseSupport.load();
-		if(quantitationDatabase != null && quantitationDatabase.size() > 0) {
+		if(quantitationDatabase != null && !quantitationDatabase.isEmpty()) {
 			QuantitationCalculatorMSD calculator = new QuantitationCalculatorMSD();
 			for(IPeak peakMSD : peaks) {
 				/*
@@ -67,7 +65,7 @@ public class PeakQuantitationCalculatorESTD extends AbstractPeakQuantitationCalc
 
 		String quantitationStratregy = PreferenceSupplier.getQuantitationStrategy();
 		//
-		Set<IQuantitationCompound> filteredQuantitationCompounds = new HashSet<IQuantitationCompound>();
+		Set<IQuantitationCompound> filteredQuantitationCompounds = new HashSet<>();
 		for(IQuantitationCompound quantitationCompound : quantitationCompounds) {
 			/*
 			 * Add the compound if it matches certain conditions:

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,6 +24,7 @@ public class QuantDBConverterSupport implements IQuantDBConverterSupport {
 	private List<ISupplier> suppliers;
 
 	public QuantDBConverterSupport() {
+
 		suppliers = new ArrayList<ISupplier>();
 	}
 
@@ -177,7 +178,7 @@ public class QuantDBConverterSupport implements IQuantDBConverterSupport {
 	 */
 	private void areConvertersStored() throws NoConverterAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoConverterAvailableException();
 		}
 	}

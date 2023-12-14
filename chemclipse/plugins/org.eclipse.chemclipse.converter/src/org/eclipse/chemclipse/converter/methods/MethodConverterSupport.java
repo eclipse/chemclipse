@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,8 @@ public class MethodConverterSupport implements IMethodConverterSupport {
 	private List<ISupplier> suppliers;
 
 	public MethodConverterSupport() {
-		suppliers = new ArrayList<ISupplier>();
+
+		suppliers = new ArrayList<>();
 	}
 
 	@Override
@@ -84,7 +85,7 @@ public class MethodConverterSupport implements IMethodConverterSupport {
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		areConvertersStored();
-		ArrayList<String> extensions = new ArrayList<String>();
+		ArrayList<String> extensions = new ArrayList<>();
 		for(ISupplier supplier : suppliers) {
 			extensions.add(supplier.getFileExtension());
 		}
@@ -102,7 +103,7 @@ public class MethodConverterSupport implements IMethodConverterSupport {
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * converter filter names.<br/>
 		 */
-		ArrayList<String> filterNames = new ArrayList<String>();
+		ArrayList<String> filterNames = new ArrayList<>();
 		for(ISupplier supplier : suppliers) {
 			filterNames.add(supplier.getFilterName());
 		}
@@ -116,7 +117,7 @@ public class MethodConverterSupport implements IMethodConverterSupport {
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		areConvertersStored();
-		List<String> availableConverters = new ArrayList<String>();
+		List<String> availableConverters = new ArrayList<>();
 		String fileName = file.getName();
 		for(ISupplier supplier : suppliers) {
 			/*
@@ -185,7 +186,7 @@ public class MethodConverterSupport implements IMethodConverterSupport {
 	 */
 	private void areConvertersStored() throws NoConverterAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoConverterAvailableException();
 		}
 	}

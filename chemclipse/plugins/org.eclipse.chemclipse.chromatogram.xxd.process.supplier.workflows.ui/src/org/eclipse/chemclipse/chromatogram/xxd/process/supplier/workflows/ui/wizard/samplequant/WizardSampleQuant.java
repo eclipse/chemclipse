@@ -36,8 +36,6 @@ public class WizardSampleQuant extends AbstractFileWizard {
 	private final ISampleQuantWizardElements wizardElements = new SampleQuantWizardElements();
 	//
 	private InputEntriesWizardPage pageInputEntries;
-	private PageReportDataSelection pageReportDataSelection;
-	private PageDataVerification pageDataVerification;
 
 	public WizardSampleQuant() {
 
@@ -55,8 +53,8 @@ public class WizardSampleQuant extends AbstractFileWizard {
 		inputWizardSettings.setTitle("Open Chromatogram (MSD) Files");
 		inputWizardSettings.setDescription("Select a chromatogram/chromatograms file to open.");
 		pageInputEntries = new InputEntriesWizardPage(inputWizardSettings);
-		pageReportDataSelection = new PageReportDataSelection(wizardElements);
-		pageDataVerification = new PageDataVerification(wizardElements);
+		PageReportDataSelection pageReportDataSelection = new PageReportDataSelection(wizardElements);
+		PageDataVerification pageDataVerification = new PageDataVerification(wizardElements);
 		//
 		addPage(pageInputEntries);
 		addPage(pageReportDataSelection);
@@ -84,7 +82,7 @@ public class WizardSampleQuant extends AbstractFileWizard {
 	@Override
 	public boolean canFinish() {
 
-		boolean canFinish = (wizardElements.getSelectedChromatograms().size() > 0) ? true : false;
+		boolean canFinish = !wizardElements.getSelectedChromatograms().isEmpty();
 		if(canFinish) {
 			canFinish = wizardElements.isDataVerified();
 		}

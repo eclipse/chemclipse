@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,12 +33,13 @@ public class Activator extends AbstractActivatorUI {
 	 * Instance
 	 */
 	private static Activator plugin;
-	private List<EventHandler> registeredEventHandler = new ArrayList<EventHandler>();
+	private List<EventHandler> registeredEventHandler = new ArrayList<>();
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 
 		super.start(context);
@@ -51,6 +52,7 @@ public class Activator extends AbstractActivatorUI {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 
 		IEventBroker eventBroker = getEventBroker(context);
@@ -86,12 +88,12 @@ public class Activator extends AbstractActivatorUI {
 
 		EventHandler eventHandler = new EventHandler() {
 
+			@Override
 			public void handleEvent(Event event) {
 
 				try {
 					Object object = event.getProperty(property);
-					if(object instanceof File) {
-						File file = (File)object;
+					if(object instanceof File file) {
 						if(file.exists()) {
 							String library = file.getAbsolutePath();
 							List<String> libraries = PreferenceSupplier.getMassSpectraFiles();

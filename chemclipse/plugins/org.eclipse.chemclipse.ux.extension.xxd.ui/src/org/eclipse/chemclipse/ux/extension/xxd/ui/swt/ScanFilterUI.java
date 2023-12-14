@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
@@ -85,7 +86,7 @@ public class ScanFilterUI extends Composite {
 		IMassSpectrumFilterSupport massSpectrumFilterSupport = MassSpectrumFilter.getMassSpectrumFilterSupport();
 		Collection<IMassSpectrumFilterSupplier> suppliers = massSpectrumFilterSupport.getSuppliers();
 		comboViewer.setInput(suppliers);
-		if(suppliers.size() > 0) {
+		if(!suppliers.isEmpty()) {
 			comboViewer.getCombo().select(0);
 		}
 	}
@@ -100,8 +101,7 @@ public class ScanFilterUI extends Composite {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IMassSpectrumFilterSupplier) {
-					IMassSpectrumFilterSupplier supplier = (IMassSpectrumFilterSupplier)element;
+				if(element instanceof IMassSpectrumFilterSupplier supplier) {
 					return supplier.getFilterName();
 				}
 				return null;
@@ -122,7 +122,7 @@ public class ScanFilterUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Filter the currently selected scan.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -132,13 +132,11 @@ public class ScanFilterUI extends Composite {
 				 * Filter
 				 */
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof IMassSpectrumFilterSupplier) {
-					IMassSpectrumFilterSupplier supplier = (IMassSpectrumFilterSupplier)object;
-					if(scan instanceof IScanMSD) {
+				if(object instanceof IMassSpectrumFilterSupplier supplier) {
+					if(scan instanceof IScanMSD scanMSD) {
 						/*
 						 * Get or create an optimized scan.
 						 */
-						IScanMSD scanMSD = (IScanMSD)scan;
 						IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 						if(optimizedMassSpectrum == null) {
 							try {

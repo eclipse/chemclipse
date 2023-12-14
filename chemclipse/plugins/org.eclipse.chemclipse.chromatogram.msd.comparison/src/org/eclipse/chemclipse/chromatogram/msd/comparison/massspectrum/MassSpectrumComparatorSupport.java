@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,7 +32,8 @@ public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSup
 	private final List<IMassSpectrumComparisonSupplier> suppliers;
 
 	public MassSpectrumComparatorSupport() {
-		suppliers = new ArrayList<IMassSpectrumComparisonSupplier>();
+
+		suppliers = new ArrayList<>();
 	}
 
 	/**
@@ -103,7 +104,7 @@ public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSup
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		areComparatorsStored();
-		List<String> availableComparators = new ArrayList<String>();
+		List<String> availableComparators = new ArrayList<>();
 		for(IMassSpectrumComparisonSupplier supplier : suppliers) {
 			availableComparators.add(supplier.getId());
 		}
@@ -121,7 +122,7 @@ public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSup
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * comparator filter names.<br/>
 		 */
-		ArrayList<String> comparatorNames = new ArrayList<String>();
+		ArrayList<String> comparatorNames = new ArrayList<>();
 		for(IMassSpectrumComparisonSupplier supplier : suppliers) {
 			comparatorNames.add(supplier.getComparatorName());
 		}
@@ -137,7 +138,7 @@ public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSup
 	 */
 	private void areComparatorsStored() throws NoMassSpectrumComparatorAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoMassSpectrumComparatorAvailableException();
 		}
 	}

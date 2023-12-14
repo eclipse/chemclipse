@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,8 @@ public class NoiseCalculatorSupport implements INoiseCalculatorSupport {
 	private final List<INoiseCalculatorSupplier> suppliers;
 
 	public NoiseCalculatorSupport() {
-		suppliers = new ArrayList<INoiseCalculatorSupplier>();
+
+		suppliers = new ArrayList<>();
 	}
 
 	/**
@@ -43,7 +44,7 @@ public class NoiseCalculatorSupport implements INoiseCalculatorSupport {
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		areCalculatorsStored();
-		List<String> availableDetectors = new ArrayList<String>();
+		List<String> availableDetectors = new ArrayList<>();
 		for(INoiseCalculatorSupplier supplier : suppliers) {
 			availableDetectors.add(supplier.getId());
 		}
@@ -103,7 +104,7 @@ public class NoiseCalculatorSupport implements INoiseCalculatorSupport {
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * converter filter names.<br/>
 		 */
-		ArrayList<String> detectorNames = new ArrayList<String>();
+		ArrayList<String> detectorNames = new ArrayList<>();
 		for(INoiseCalculatorSupplier supplier : suppliers) {
 			detectorNames.add(supplier.getCalculatorName());
 		}
@@ -113,7 +114,7 @@ public class NoiseCalculatorSupport implements INoiseCalculatorSupport {
 	// -------------------------------------private methods
 	private void areCalculatorsStored() throws NoNoiseCalculatorAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoNoiseCalculatorAvailableException();
 		}
 	}

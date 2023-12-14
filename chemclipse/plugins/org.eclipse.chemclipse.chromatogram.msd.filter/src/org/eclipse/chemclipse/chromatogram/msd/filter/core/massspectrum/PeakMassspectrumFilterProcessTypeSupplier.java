@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ import org.osgi.service.component.annotations.Component;
 public class PeakMassspectrumFilterProcessTypeSupplier extends AbstractMassspectrumFilterProcessTypeSupplier {
 
 	public PeakMassspectrumFilterProcessTypeSupplier() {
+
 		super("Peak Massspectrum Filter", "mzfilter.msd.peak.", new Function<IChromatogramSelection<?, ?>, List<IScanMSD>>() {
 
 			@Override
@@ -33,8 +34,8 @@ public class PeakMassspectrumFilterProcessTypeSupplier extends AbstractMassspect
 				List<IScanMSD> massspectras = new ArrayList<>();
 				List<?> peaks = chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection);
 				for(Object object : peaks) {
-					if(object instanceof IPeakMSD) {
-						massspectras.add(((IPeakMSD)object).getExtractedMassSpectrum());
+					if(object instanceof IPeakMSD peakMSD) {
+						massspectras.add(peakMSD.getExtractedMassSpectrum());
 					}
 				}
 				return massspectras;

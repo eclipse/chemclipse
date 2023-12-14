@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.converter.io.support;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -30,18 +29,18 @@ public abstract class AbstractArrayReader implements IArrayReader {
 	private int length;
 	private Map<Byte, String> charMap = new HashMap<>();
 
-	public AbstractArrayReader(byte[] data) {
+	protected AbstractArrayReader(byte[] data) {
 
 		initialize(data);
 	}
 
-	public AbstractArrayReader(File file) throws FileNotFoundException, IOException {
+	protected AbstractArrayReader(File file) throws IOException {
 
 		byte[] data = getByteArrayFromFile(file);
 		initialize(data);
 	}
 
-	private byte[] getByteArrayFromFile(File file) throws FileNotFoundException, IOException {
+	private byte[] getByteArrayFromFile(File file) throws IOException {
 
 		int length = (int)file.length();
 		byte[] data = new byte[length];

@@ -77,8 +77,8 @@ public class ChromatogramSourceCombo extends Composite {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof String) {
-					return (String)element;
+				if(element instanceof String text) {
+					return text;
 				}
 				return null;
 			}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -150,12 +150,10 @@ public class UIStatusLineLogger implements IStatusLineMessageListener {
 	private IActionBars getActionBars(IWorkbenchPartSite workbenchPartSite) throws StatusLineManagerException {
 
 		IActionBars actionBars;
-		if(workbenchPartSite instanceof IViewSite) {
-			IViewSite viewSite = (IViewSite)workbenchPartSite;
+		if(workbenchPartSite instanceof IViewSite viewSite) {
 			actionBars = viewSite.getActionBars();
 			return actionBars;
-		} else if(workbenchPartSite instanceof IEditorSite) {
-			IEditorSite editorSite = (IEditorSite)workbenchPartSite;
+		} else if(workbenchPartSite instanceof IEditorSite editorSite) {
 			actionBars = editorSite.getActionBars();
 			return actionBars;
 		} else {

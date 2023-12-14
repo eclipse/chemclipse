@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,6 +30,7 @@ public class AnalysisSegmentColumnDefinition implements ColumnDefinitionProvider
 	private final Runnable updateListener;
 
 	public AnalysisSegmentColumnDefinition(Runnable updateListener) {
+
 		this.updateListener = updateListener;
 	}
 
@@ -42,8 +43,8 @@ public class AnalysisSegmentColumnDefinition implements ColumnDefinitionProvider
 			@Override
 			public void accept(IAnalysisSegment segment, Integer value) {
 
-				if(segment instanceof AnalysisSegment) {
-					((AnalysisSegment)segment).setStartScan(value);
+				if(segment instanceof AnalysisSegment analysisSegment) {
+					analysisSegment.setStartScan(value);
 					updateListener.run();
 				}
 			}
@@ -53,8 +54,8 @@ public class AnalysisSegmentColumnDefinition implements ColumnDefinitionProvider
 			@Override
 			public void accept(IAnalysisSegment segment, Integer value) {
 
-				if(segment instanceof AnalysisSegment) {
-					((AnalysisSegment)segment).setStopScan(value);
+				if(segment instanceof AnalysisSegment analysisSegment) {
+					analysisSegment.setStopScan(value);
 					updateListener.run();
 				}
 			}
@@ -85,6 +86,7 @@ public class AnalysisSegmentColumnDefinition implements ColumnDefinitionProvider
 		private final Class<X> type;
 
 		public AnalysisSegmentColumnLabelProvider(Class<X> type, Function<X, Object> converter) {
+
 			this.type = type;
 			this.converter = converter;
 		}
@@ -92,8 +94,8 @@ public class AnalysisSegmentColumnDefinition implements ColumnDefinitionProvider
 		@Override
 		public String getText(Object element) {
 
-			if(element instanceof TreeNode) {
-				element = ((TreeNode)element).getValue();
+			if(element instanceof TreeNode treeNode) {
+				element = treeNode.getValue();
 			}
 			if(type.isInstance(element)) {
 				return String.valueOf(converter.apply(type.cast(element)));

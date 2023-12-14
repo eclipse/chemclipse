@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -85,8 +85,7 @@ public class PerspectiveChooserDialog extends Dialog {
 			 * Check if the user would like to see the message again.
 			 */
 			preferenceStore.setValue(preferenceKey, changePerspectiveAutomatically.getSelection());
-			if(preferenceStore instanceof IPersistentPreferenceStore) {
-				IPersistentPreferenceStore store = (IPersistentPreferenceStore)preferenceStore;
+			if(preferenceStore instanceof IPersistentPreferenceStore store) {
 				if(store.needsSaving()) {
 					try {
 						store.save();

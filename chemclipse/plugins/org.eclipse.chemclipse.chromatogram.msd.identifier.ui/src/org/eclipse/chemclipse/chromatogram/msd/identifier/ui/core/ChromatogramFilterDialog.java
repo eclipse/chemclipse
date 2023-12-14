@@ -102,8 +102,7 @@ public class ChromatogramFilterDialog extends Dialog {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IMassSpectrumIdentifierSupplier) {
-					IMassSpectrumIdentifierSupplier massSpectrumIdentifierSupplier = (IMassSpectrumIdentifierSupplier)element;
+				if(element instanceof IMassSpectrumIdentifierSupplier massSpectrumIdentifierSupplier) {
 					return massSpectrumIdentifierSupplier.getIdentifierName();
 				}
 				return null;
@@ -120,8 +119,8 @@ public class ChromatogramFilterDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof IMassSpectrumIdentifierSupplier) {
-					massSpectrumIdentifierSupplier = (IMassSpectrumIdentifierSupplier)object;
+				if(object instanceof IMassSpectrumIdentifierSupplier supplier) {
+					massSpectrumIdentifierSupplier = supplier;
 				}
 			}
 		});

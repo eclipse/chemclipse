@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -81,8 +81,7 @@ public class SampleQuantProcessor {
 			for(ISampleQuantSubstance sampleQuantSubstance : sampleQuantSubstances) {
 				int maxScan = sampleQuantSubstance.getMaxScan();
 				IScan scan = chromatogramMSD.getScan(maxScan);
-				if(scan instanceof IScanMSD) {
-					IScanMSD scanMSD = (IScanMSD)scan;
+				if(scan instanceof IScanMSD scanMSD) {
 					scansToIdentify.add(scanMSD);
 				}
 			}
@@ -230,8 +229,8 @@ public class SampleQuantProcessor {
 		IProcessingInfo<?> processingInfo = ReportConverter.convert(fileImport, extensionPointId, new NullProgressMonitor());
 		try {
 			Object object = processingInfo.getProcessingResult();
-			if(object instanceof IReportRowModel) {
-				reportRowModel = (IReportRowModel)object;
+			if(object instanceof IReportRowModel extractedReportRowModel) {
+				reportRowModel = extractedReportRowModel;
 			}
 		} catch(TypeCastException e) {
 			// fail silently

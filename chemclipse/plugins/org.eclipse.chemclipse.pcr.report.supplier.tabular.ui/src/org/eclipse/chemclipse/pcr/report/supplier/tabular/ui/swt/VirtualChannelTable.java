@@ -231,10 +231,9 @@ public class VirtualChannelTable extends Composite implements IChangeListener, I
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)tableViewer.get().getSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof VirtualChannel) {
+				if(object instanceof VirtualChannel channel) {
 					VirtualChannels modified = new VirtualChannels();
 					modified.addAll(virtualChannels);
-					VirtualChannel channel = (VirtualChannel)object;
 					modified.remove(channel);
 					InputDialog dialog = new InputDialog(e.display.getActiveShell(), DIALOG_TITLE, MESSAGE_EDIT, virtualChannels.extractSetting(channel), new VirtualChannelInputValidator(modified));
 					if(IDialogConstants.OK_ID == dialog.open()) {

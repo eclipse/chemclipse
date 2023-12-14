@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.model.baseline.IChromatogramBaseline;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
@@ -89,8 +90,8 @@ public class ChromatogramBaselinesUI extends Composite {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof String) {
-					return (String)element;
+				if(element instanceof String text) {
+					return text;
 				}
 				return null;
 			}
@@ -105,8 +106,7 @@ public class ChromatogramBaselinesUI extends Composite {
 
 				if(chromatogram != null) {
 					Object object = comboViewer.getStructuredSelection().getFirstElement();
-					if(object instanceof String) {
-						String baselineId = (String)object;
+					if(object instanceof String baselineId) {
 						chromatogram.setActiveBaseline(baselineId);
 						fireUpdate();
 					}
@@ -122,7 +122,7 @@ public class ChromatogramBaselinesUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Add a new baseline.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -164,7 +164,7 @@ public class ChromatogramBaselinesUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Remove the baseline.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -172,8 +172,7 @@ public class ChromatogramBaselinesUI extends Composite {
 
 				if(chromatogram != null) {
 					Object object = comboViewer.getStructuredSelection().getFirstElement();
-					if(object instanceof String) {
-						String activeBaselineId = (String)object;
+					if(object instanceof String activeBaselineId) {
 						if(!activeBaselineId.equals(IChromatogramBaseline.DEFAULT_BASELINE_ID)) {
 							if(MessageDialog.openConfirm(e.display.getActiveShell(), "Delete Baseline", "Do you want to delete the selected baseline?")) {
 								chromatogram.removeBaseline(activeBaselineId);

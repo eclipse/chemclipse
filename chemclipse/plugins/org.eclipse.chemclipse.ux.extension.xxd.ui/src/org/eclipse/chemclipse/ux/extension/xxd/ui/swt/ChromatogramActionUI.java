@@ -134,8 +134,7 @@ public class ChromatogramActionUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof ChromatogramEditorActionExtension) {
-					ChromatogramEditorActionExtension extension = (ChromatogramEditorActionExtension)object;
+				if(object instanceof ChromatogramEditorActionExtension extension) {
 					combo.setToolTipText(extension.getDescription());
 					buttonChromatogramAction.setEnabled(true);
 					String id = extension.getUniqueId();

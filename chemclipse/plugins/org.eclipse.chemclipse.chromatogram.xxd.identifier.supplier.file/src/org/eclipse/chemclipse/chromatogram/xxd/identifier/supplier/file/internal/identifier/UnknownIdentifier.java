@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,12 +38,12 @@ public class UnknownIdentifier {
 
 		for(IPeak peak : peaks) {
 			if(LimitSupport.doIdentify(peak.getTargets(), limitMatchFactor)) {
-				if(peak instanceof IPeakMSD) {
-					TARGETBUILDER_MSD.setPeakTargetUnknown((IPeakMSD)peak, IDENTIFIER, targetUnknownSettings);
-				} else if(peak instanceof IPeakCSD) {
-					TARGETBUILDER_CSD.setPeakTargetUnknown((IPeakCSD)peak, IDENTIFIER, targetUnknownSettings);
-				} else if(peak instanceof IPeakWSD) {
-					TARGETBUILDER_WSD.setPeakTargetUnknown((IPeakWSD)peak, IDENTIFIER, targetUnknownSettings);
+				if(peak instanceof IPeakMSD peakMSD) {
+					TARGETBUILDER_MSD.setPeakTargetUnknown(peakMSD, IDENTIFIER, targetUnknownSettings);
+				} else if(peak instanceof IPeakCSD peakCSD) {
+					TARGETBUILDER_CSD.setPeakTargetUnknown(peakCSD, IDENTIFIER, targetUnknownSettings);
+				} else if(peak instanceof IPeakWSD peakWSD) {
+					TARGETBUILDER_WSD.setPeakTargetUnknown(peakWSD, IDENTIFIER, targetUnknownSettings);
 				}
 			}
 		}
@@ -53,10 +53,10 @@ public class UnknownIdentifier {
 
 		for(IScan scan : spectraList) {
 			if(LimitSupport.doIdentify(scan.getTargets(), limitMatchFactor)) {
-				if(scan instanceof IScanMSD) {
-					TARGETBUILDER_MSD.setMassSpectrumTargetUnknown((IScanMSD)scan, IDENTIFIER, targetUnknownSettings);
-				} else if(scan instanceof IScanWSD) {
-					TARGETBUILDER_WSD.setWaveSpectrumTargetUnknown((IScanWSD)scan, IDENTIFIER, targetUnknownSettings);
+				if(scan instanceof IScanMSD scanMSD) {
+					TARGETBUILDER_MSD.setMassSpectrumTargetUnknown(scanMSD, IDENTIFIER, targetUnknownSettings);
+				} else if(scan instanceof IScanWSD scanWSD) {
+					TARGETBUILDER_WSD.setWaveSpectrumTargetUnknown(scanWSD, IDENTIFIER, targetUnknownSettings);
 				}
 			}
 		}

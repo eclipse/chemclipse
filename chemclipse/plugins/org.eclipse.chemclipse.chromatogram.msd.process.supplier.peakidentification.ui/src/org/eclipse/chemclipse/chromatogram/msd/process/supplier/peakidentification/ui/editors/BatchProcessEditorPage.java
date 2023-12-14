@@ -673,8 +673,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		String file = path.toFile().getParent();
 		String containerName = file.replace(workspace, "");
 		IResource resource = root.findMember(new Path("/" + containerName));
-		if(resource != null && resource.exists() && (resource instanceof IContainer)) {
-			IContainer container = (IContainer)resource;
+		if(resource != null && resource.exists() && (resource instanceof IContainer container)) {
 			try {
 				container.refreshLocal(1, new NullProgressMonitor());
 			} catch(CoreException e) {

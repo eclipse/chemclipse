@@ -38,6 +38,7 @@ import org.eclipse.chemclipse.assets.core.AssetType;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.settings.ApplicationSettings;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
@@ -108,8 +109,8 @@ public class AssetInstallPage extends WizardPage {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof AssetItem) {
-					return ((AssetItem)element).getAssetType().label();
+				if(element instanceof AssetItem assetItem) {
+					return assetItem.getAssetType().label();
 				}
 				return super.getText(element);
 			}
@@ -117,14 +118,14 @@ public class AssetInstallPage extends WizardPage {
 			@Override
 			public Image getImage(Object element) {
 
-				if(element instanceof AssetItem) {
-					switch(((AssetItem)element).getAssetType()) {
+				if(element instanceof AssetItem assetItem) {
+					switch(assetItem.getAssetType()) {
 						case CONFIGURATION:
-							return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PREPROCESSING, IApplicationImage.SIZE_16x16);
+							return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PREPROCESSING, IApplicationImageProvider.SIZE_16x16);
 						case METHOD:
-							return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16);
+							return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImageProvider.SIZE_16x16);
 						case PLUGIN:
-							return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PLUGINS, IApplicationImage.SIZE_16x16);
+							return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PLUGINS, IApplicationImageProvider.SIZE_16x16);
 						default:
 							break;
 					}
@@ -153,7 +154,7 @@ public class AssetInstallPage extends WizardPage {
 		toolBarManager.add(actionDeleteAssets);
 		//
 		tableViewer.addSelectionChangedListener(e -> actionDeleteAsset.setEnabled(!e.getSelection().isEmpty()));
-		tableViewer.addSelectionChangedListener(e -> actionDeleteAssets.setEnabled(assets.size() > 0));
+		tableViewer.addSelectionChangedListener(e -> actionDeleteAssets.setEnabled(!assets.isEmpty()));
 		//
 		top(toolBarManager.createControl(parent));
 		//
@@ -162,7 +163,7 @@ public class AssetInstallPage extends WizardPage {
 
 	private Action createActionAddAsset() {
 
-		Action action = new Action("Add New Asset", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16)) {
+		return new Action("Add New Asset", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_IMPORT, IApplicationImageProvider.SIZE_16x16)) {
 
 			@Override
 			public void run() {
@@ -202,13 +203,11 @@ public class AssetInstallPage extends WizardPage {
 				}
 			}
 		};
-		//
-		return action;
 	}
 
 	private Action createActionAddAssets() {
 
-		Action action = new Action("Add New Assets (ZIP)", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ZIP_FILE, IApplicationImage.SIZE_16x16)) {
+		return new Action("Add New Assets (ZIP)", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ZIP_FILE, IApplicationImageProvider.SIZE_16x16)) {
 
 			@Override
 			public void run() {
@@ -277,13 +276,13 @@ public class AssetInstallPage extends WizardPage {
 							/*
 							 * Add items to the table viewer.
 							 */
-							if(assetItems.size() > 0) {
+							if(!assetItems.isEmpty()) {
 								tableViewer.add(assetItems.toArray());
 							}
 							/*
 							 * Something went wrong with some entries.
 							 */
-							if(messages.size() > 0) {
+							if(!messages.isEmpty()) {
 								StringBuilder builder = new StringBuilder();
 								for(String message : messages) {
 									builder.append(message);
@@ -300,8 +299,6 @@ public class AssetInstallPage extends WizardPage {
 				}
 			}
 		};
-		//
-		return action;
 	}
 
 	/**
@@ -442,7 +439,7 @@ public class AssetInstallPage extends WizardPage {
 
 	private Action createActionDeleteAsset() {
 
-		Action action = new Action("Delete Selected Assets", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16)) {
+		return new Action("Delete Selected Assets", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16)) {
 
 			@Override
 			public void run() {
@@ -453,26 +450,23 @@ public class AssetInstallPage extends WizardPage {
 					 */
 					List<AssetItem> assetItems = new ArrayList<>();
 					for(Object item : tableViewer.getStructuredSelection().toArray()) {
-						if(item instanceof AssetItem) {
-							AssetItem assetItem = (AssetItem)item;
+						if(item instanceof AssetItem assetItem) {
 							assetItems.add(assetItem);
 							deleteAsset(assetItem);
 						}
 					}
 					//
-					if(assetItems.size() > 0) {
+					if(!assetItems.isEmpty()) {
 						tableViewer.remove(assetItems.toArray());
 					}
 				}
 			}
 		};
-		//
-		return action;
 	}
 
 	private Action createActionDeleteAssets() {
 
-		Action action = new Action("Delete All Assets", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16)) {
+		return new Action("Delete All Assets", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImageProvider.SIZE_16x16)) {
 
 			@Override
 			public void run() {
@@ -492,24 +486,21 @@ public class AssetInstallPage extends WizardPage {
 						items.addAll((List<?>)object);
 						//
 						for(Object item : items) {
-							if(item instanceof AssetItem) {
-								AssetItem assetItem = (AssetItem)item;
+							if(item instanceof AssetItem assetItem) {
 								assetItems.add(assetItem);
-								deleteAsset((AssetItem)item);
+								deleteAsset(assetItem);
 							}
 						}
 					}
 					/*
 					 * Clear
 					 */
-					if(assetItems.size() > 0) {
+					if(!assetItems.isEmpty()) {
 						tableViewer.remove(assetItems.toArray());
 					}
 				}
 			}
 		};
-		//
-		return action;
 	}
 
 	private void updateInput() {

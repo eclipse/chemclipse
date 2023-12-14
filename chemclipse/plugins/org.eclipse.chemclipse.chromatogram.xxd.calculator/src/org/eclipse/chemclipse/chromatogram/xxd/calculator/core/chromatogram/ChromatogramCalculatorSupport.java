@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,6 +24,7 @@ public class ChromatogramCalculatorSupport implements IChromatogramCalculatorSup
 	 * Creates a new suppliers list.
 	 */
 	public ChromatogramCalculatorSupport() {
+
 		suppliers = new ArrayList<IChromatogramCalculatorSupplier>();
 	}
 
@@ -114,7 +115,7 @@ public class ChromatogramCalculatorSupport implements IChromatogramCalculatorSup
 	// -------------------------------------private methods
 	private void areChromatogramCalculatorsStored() throws NoChromatogramCalculatorSupplierAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoChromatogramCalculatorSupplierAvailableException();
 		}
 	}

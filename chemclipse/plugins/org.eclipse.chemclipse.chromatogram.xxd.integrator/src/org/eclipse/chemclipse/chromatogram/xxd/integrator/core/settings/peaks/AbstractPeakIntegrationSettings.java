@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,7 +40,7 @@ public abstract class AbstractPeakIntegrationSettings extends AbstractIntegratio
 
 		areaSupport = new AreaSupport();
 		integratorSupport = new IntegrationSupport();
-		reportDeciders = new ArrayList<IReportDecider>();
+		reportDeciders = new ArrayList<>();
 		/*
 		 * The report decider support decisions about integrating or not
 		 * integrating a peak.
@@ -54,17 +54,16 @@ public abstract class AbstractPeakIntegrationSettings extends AbstractIntegratio
 
 		boolean report = report(peak);
 		int startRetentionTime = 0;
-		if(peak instanceof IPeakMSD) {
-			startRetentionTime = ((IPeakMSD)peak).getPeakModel().getStartRetentionTime();
-		} else if(peak instanceof IPeakCSD) {
-			startRetentionTime = ((IPeakCSD)peak).getPeakModel().getStartRetentionTime();
-		} else if(peak instanceof IPeakWSD) {
-			startRetentionTime = ((IPeakWSD)peak).getPeakModel().getStartRetentionTime();
+		if(peak instanceof IPeakMSD peakMSD) {
+			startRetentionTime = peakMSD.getPeakModel().getStartRetentionTime();
+		} else if(peak instanceof IPeakCSD peakCSD) {
+			startRetentionTime = peakCSD.getPeakModel().getStartRetentionTime();
+		} else if(peak instanceof IPeakWSD peakWSD) {
+			startRetentionTime = peakWSD.getPeakModel().getStartRetentionTime();
 		}
 		//
 		boolean sumOn = getAreaSupport().isAreaSumOn(startRetentionTime);
-		ISettingStatus status = new SettingStatus(report, sumOn);
-		return status;
+		return new SettingStatus(report, sumOn);
 	}
 
 	@Override

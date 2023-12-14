@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 public abstract class AbstractMassSpectrumComparator implements IMassSpectrumComparator {
 
 	private static final String DESCRIPTION = "MassSpectrum Comparator";
-	private final static Logger logger = Logger.getLogger(AbstractMassSpectrumComparator.class);
+	private static final Logger logger = Logger.getLogger(AbstractMassSpectrumComparator.class);
 	//
 	private IMassSpectrumComparisonSupplier massSpectrumComparisonSupplier;
 
@@ -35,7 +35,7 @@ public abstract class AbstractMassSpectrumComparator implements IMassSpectrumCom
 			logger.error(msg);
 			processingInfo.addErrorMessage(DESCRIPTION, msg);
 		} else {
-			if(unknown.getIons().size() == 0) {
+			if(unknown.getIons().isEmpty()) {
 				msg = "There is no ion in the unknown mass spectum.";
 				logger.error(msg);
 				processingInfo.addErrorMessage(DESCRIPTION, msg);
@@ -46,7 +46,7 @@ public abstract class AbstractMassSpectrumComparator implements IMassSpectrumCom
 			logger.error(msg);
 			processingInfo.addErrorMessage(DESCRIPTION, msg);
 		} else {
-			if(reference.getIons().size() == 0) {
+			if(reference.getIons().isEmpty()) {
 				msg = "There is no ion in the reference mass spectum.";
 				logger.error(msg);
 				processingInfo.addErrorMessage(DESCRIPTION, msg);

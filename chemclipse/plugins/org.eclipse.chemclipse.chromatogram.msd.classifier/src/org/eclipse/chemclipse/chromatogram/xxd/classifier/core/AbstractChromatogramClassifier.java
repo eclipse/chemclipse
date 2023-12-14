@@ -26,7 +26,7 @@ public abstract class AbstractChromatogramClassifier implements IChromatogramCla
 	private static final String CLASSIFIER = Messages.classifier;
 	private final DataType[] dataTypes;
 
-	public AbstractChromatogramClassifier(DataType... dataTypes) {
+	protected AbstractChromatogramClassifier(DataType... dataTypes) {
 
 		this.dataTypes = dataTypes;
 	}

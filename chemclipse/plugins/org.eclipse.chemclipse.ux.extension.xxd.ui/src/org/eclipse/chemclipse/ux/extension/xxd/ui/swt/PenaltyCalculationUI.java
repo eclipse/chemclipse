@@ -167,8 +167,8 @@ public class PenaltyCalculationUI extends Composite {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof PenaltyCalculation) {
-					return ((PenaltyCalculation)element).label();
+				if(element instanceof PenaltyCalculation penaltyCalculation) {
+					return penaltyCalculation.label();
 				}
 				return null;
 			}
@@ -282,8 +282,8 @@ public class PenaltyCalculationUI extends Composite {
 	private PenaltyCalculation getPenaltySelection() {
 
 		Object object = comboViewerPenaltyCalculation.getStructuredSelection().getFirstElement();
-		if(object instanceof PenaltyCalculation) {
-			return (PenaltyCalculation)object;
+		if(object instanceof PenaltyCalculation penaltyCalculation) {
+			return penaltyCalculation;
 		}
 		//
 		return PenaltyCalculation.NONE;

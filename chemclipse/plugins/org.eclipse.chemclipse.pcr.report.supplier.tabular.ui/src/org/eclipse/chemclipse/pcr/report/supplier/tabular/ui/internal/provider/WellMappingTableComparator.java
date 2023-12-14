@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,9 +22,7 @@ public class WellMappingTableComparator extends AbstractRecordTableComparator im
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof WellMapping && e2 instanceof WellMapping) {
-			WellMapping mapping1 = (WellMapping)e1;
-			WellMapping mapping2 = (WellMapping)e2;
+		if(e1 instanceof WellMapping mapping1 && e2 instanceof WellMapping mapping2) {
 			switch(getPropertyIndex()) {
 				case 0:
 					sortOrder = mapping1.getSubset().compareTo(mapping2.getSubset());

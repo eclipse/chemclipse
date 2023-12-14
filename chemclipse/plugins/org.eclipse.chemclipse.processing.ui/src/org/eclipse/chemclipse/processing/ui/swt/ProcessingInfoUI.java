@@ -13,9 +13,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.swt;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.processing.core.IMessageProvider;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoContentProvider;
@@ -59,11 +56,11 @@ public class ProcessingInfoUI {
 	private ProcessingInfoTableComparator processingInfoTableComparator;
 	private Clipboard clipboard;
 	private String[] titles = {"Type", "Description", "Message", "Date", "Proposed Solution"};
-	private int bounds[] = {100, 100, 100, 100, 100};
+	private int[] bounds = {100, 100, 100, 100, 100};
 	//
 	private static final String DELIMITER = "\t";
 
-	public ProcessingInfoUI(Composite parent, int style) {
+	public ProcessingInfoUI(Composite parent) {
 
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout());
@@ -74,10 +71,9 @@ public class ProcessingInfoUI {
 			clipboard.dispose();
 		}
 		clipboard = new Clipboard(Display.getDefault());
-		Map<Long, String> substances = new HashMap<Long, String>();
 		tableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		createColumns(tableViewer);
-		setTableProvider(substances);
+		setTableProvider();
 		parent.addDisposeListener(new DisposeListener() {
 
 			@Override
@@ -120,11 +116,9 @@ public class ProcessingInfoUI {
 			public void selectionChanged(SelectionChangedEvent event) {
 
 				ISelection selection = event.getSelection();
-				if(selection instanceof IStructuredSelection) {
-					IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+				if(selection instanceof IStructuredSelection structuredSelection) {
 					Object element = structuredSelection.getFirstElement();
-					if(element instanceof IProcessingMessage) {
-						IProcessingMessage message = (IProcessingMessage)element;
+					if(element instanceof IProcessingMessage message) {
 						String details = message.getDetails();
 						if(details != null) {
 							infoTextControl.setText(details);
@@ -208,7 +202,7 @@ public class ProcessingInfoUI {
 		clipboard.setContents(data, dataTypes);
 	}
 
-	private void setTableProvider(Map<Long, String> substances) {
+	private void setTableProvider() {
 
 		/*
 		 * Set the provider.

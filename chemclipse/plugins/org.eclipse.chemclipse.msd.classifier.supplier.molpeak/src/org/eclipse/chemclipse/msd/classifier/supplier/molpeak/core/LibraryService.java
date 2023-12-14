@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,7 @@ public class LibraryService extends AbstractLibraryService implements ILibrarySe
 	private final BasePeakIdentifier basePeakIdentifier;
 
 	public LibraryService() {
+
 		basePeakIdentifier = new BasePeakIdentifier();
 	}
 
@@ -38,7 +39,7 @@ public class LibraryService extends AbstractLibraryService implements ILibrarySe
 		try {
 			monitor.subTask("Base Peak Identifier - get reference mass spectrum");
 			validateIdentificationTarget(identificationTarget);
-			IMassSpectra massSpectra = basePeakIdentifier.getMassSpectra(identificationTarget, monitor);
+			IMassSpectra massSpectra = basePeakIdentifier.getMassSpectra(identificationTarget);
 			processingInfo.setProcessingResult(massSpectra);
 		} catch(ValueMustNotBeNullException e) {
 			processingInfo.addErrorMessage("Base Peak Identifier", "The identification target is not available.");
