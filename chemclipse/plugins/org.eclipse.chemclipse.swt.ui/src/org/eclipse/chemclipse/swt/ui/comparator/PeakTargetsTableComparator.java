@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -24,12 +24,10 @@ public class PeakTargetsTableComparator extends AbstractRecordTableComparator im
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IIdentificationTarget && e2 instanceof IIdentificationTarget) {
-			IIdentificationTarget identificationTarget1 = (IIdentificationTarget)e1;
+		if(e1 instanceof IIdentificationTarget identificationTarget1 && e2 instanceof IIdentificationTarget identificationTarget2) {
 			ILibraryInformation libraryInformation1 = identificationTarget1.getLibraryInformation();
 			IComparisonResult comparisonResult1 = identificationTarget1.getComparisonResult();
 			//
-			IIdentificationTarget identificationTarget2 = (IIdentificationTarget)e2;
 			ILibraryInformation libraryInformation2 = identificationTarget2.getLibraryInformation();
 			IComparisonResult comparisonResult2 = identificationTarget2.getComparisonResult();
 			//

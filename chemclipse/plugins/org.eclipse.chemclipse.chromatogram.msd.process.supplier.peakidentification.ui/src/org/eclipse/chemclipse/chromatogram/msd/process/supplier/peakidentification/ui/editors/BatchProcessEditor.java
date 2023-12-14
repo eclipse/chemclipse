@@ -133,8 +133,8 @@ public class BatchProcessEditor extends MultiPageEditorPart {
 		String fileName = input.getName();
 		fileName = fileName.substring(0, fileName.length() - 4);
 		setPartName(fileName);
-		if(input instanceof IFileEditorInput) {
-			editorBatchProcessJobFile = ((IFileEditorInput)input).getFile();
+		if(input instanceof IFileEditorInput fileEditorInput) {
+			editorBatchProcessJobFile = fileEditorInput.getFile();
 			Display display = Display.getCurrent();
 			BatchJobImportRunnable runnable = new BatchJobImportRunnable(editorBatchProcessJobFile.getLocation().toFile());
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
@@ -146,6 +146,7 @@ public class BatchProcessEditor extends MultiPageEditorPart {
 				logger.warn(e.getCause());
 			} catch(InterruptedException e) {
 				logger.warn(e);
+				Thread.currentThread().interrupt();
 			}
 		} else {
 			throw new PartInitException("The file could't be loaded.");
@@ -202,6 +203,7 @@ public class BatchProcessEditor extends MultiPageEditorPart {
 				logger.warn(e.getCause());
 			} catch(InterruptedException e) {
 				logger.warn(e);
+				Thread.currentThread().interrupt();
 			}
 		}
 	}

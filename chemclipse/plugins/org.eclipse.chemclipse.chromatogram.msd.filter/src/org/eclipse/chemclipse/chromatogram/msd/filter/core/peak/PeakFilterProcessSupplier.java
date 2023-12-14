@@ -66,8 +66,7 @@ public class PeakFilterProcessSupplier implements IProcessTypeSupplier {
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IPeakFilterSettings processSettings, IMessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 				if(processSettings instanceof IPeakFilterSettings) {
 					messageConsumer.addMessages(PeakFilter.applyFilter(chromatogramSelectionMSD, processSettings, getId(), monitor));
 				} else {

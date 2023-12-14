@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2021 Lablicate GmbH.
+ * Copyright (c) 2010, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -40,9 +40,8 @@ public class ScanIdentifier extends AbstractMassSpectrumIdentifier {
 			identifierSettings = PreferenceSupplier.getScanIdentifierSettings();
 		}
 		//
-		if(identifierSettings instanceof ScanIdentifierSettings) {
+		if(identifierSettings instanceof ScanIdentifierSettings scanIdentifierSettings) {
 			try {
-				ScanIdentifierSettings scanIdentifierSettings = (ScanIdentifierSettings)identifierSettings;
 				/*
 				 * Pre-filter
 				 */

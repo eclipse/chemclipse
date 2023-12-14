@@ -292,8 +292,7 @@ public class TimeRangesEditor extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = timeRangesListUI.getStructuredSelection().getFirstElement();
-				if(object instanceof TimeRange) {
-					TimeRange timeRange = (TimeRange)object;
+				if(object instanceof TimeRange timeRange) {
 					timeRangesUI.select(timeRange);
 				}
 			}
@@ -317,8 +316,7 @@ public class TimeRangesEditor extends Composite {
 							 */
 							List<TimeRange> deleteItems = new ArrayList<>();
 							for(Object object : timeRangesListUI.getStructuredSelection().toList()) {
-								if(object instanceof TimeRange) {
-									TimeRange timeRange = (TimeRange)object;
+								if(object instanceof TimeRange timeRange) {
 									deleteItems.add(timeRange);
 								}
 							}

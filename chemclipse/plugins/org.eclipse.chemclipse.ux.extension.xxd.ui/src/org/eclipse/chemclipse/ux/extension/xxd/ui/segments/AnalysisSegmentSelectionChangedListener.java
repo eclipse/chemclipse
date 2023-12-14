@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -40,10 +40,10 @@ public class AnalysisSegmentSelectionChangedListener<X> implements ISelectionCha
 	public void selectionChanged(SelectionChangedEvent event) {
 
 		ISelection selection = event.getSelection();
-		if(selection instanceof IStructuredSelection) {
-			Object element = ((IStructuredSelection)selection).getFirstElement();
-			if(element instanceof TreeNode) {
-				element = ((TreeNode)element).getValue();
+		if(selection instanceof IStructuredSelection structuredSelection) {
+			Object element = structuredSelection.getFirstElement();
+			if(element instanceof TreeNode treeNode) {
+				element = treeNode.getValue();
 			}
 			IScan scan = Adapters.adapt(element, IScan.class);
 			if(scan != null) {

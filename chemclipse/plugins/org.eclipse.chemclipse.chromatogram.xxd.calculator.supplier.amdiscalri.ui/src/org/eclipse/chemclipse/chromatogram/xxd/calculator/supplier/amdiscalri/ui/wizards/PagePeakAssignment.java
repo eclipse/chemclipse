@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTableRetentionIndexViewerUI;
@@ -130,7 +131,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 				peakTableViewerUI.setInput(peaks);
 				peakTableViewerUI.getTable().setSelection(0);
 				//
-				if(peaks.size() > 0) {
+				if(!peaks.isEmpty()) {
 					IPeak peak = peaks.get(0);
 					Set<IIdentificationTarget> targets = peak.getTargets();
 					targetsViewerUI.setInput(targets);
@@ -250,7 +251,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Auto Assign Standards");
 		button.setToolTipText("Automatically assign the selected index range.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImageProvider.SIZE_16x16));
 		//
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
@@ -320,7 +321,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 	private void createTargetSpinnerField(Composite parent) {
 
 		buttonPrevious = new Button(parent, SWT.PUSH);
-		buttonPrevious.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PREVIOUS, IApplicationImage.SIZE_16x16));
+		buttonPrevious.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PREVIOUS, IApplicationImageProvider.SIZE_16x16));
 		buttonPrevious.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -337,7 +338,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		textCurrentIndexName.setLayoutData(gridData);
 		//
 		buttonNext = new Button(parent, SWT.PUSH);
-		buttonNext.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_NEXT, IApplicationImage.SIZE_16x16));
+		buttonNext.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_NEXT, IApplicationImageProvider.SIZE_16x16));
 		buttonNext.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -355,7 +356,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		gridData.horizontalSpan = 3;
 		buttonAdd.setLayoutData(gridData);
 		buttonAdd.setText("Replace peak targets by selected index");
-		buttonAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ADD, IApplicationImage.SIZE_16x16));
+		buttonAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ADD, IApplicationImageProvider.SIZE_16x16));
 		buttonAdd.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -380,11 +381,11 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		}
 		//
 		try {
-			float FACTOR = 100.0f;
+			float factor = 100.0f;
 			IPeakLibraryInformation libraryInformation = new PeakLibraryInformation();
 			libraryInformation.setName(name);
 			libraryInformation.setDatabase(databaseName); // Important, otherwise LibraryService fails.
-			IPeakComparisonResult comparisonResult = new PeakComparisonResult(FACTOR, FACTOR, FACTOR, FACTOR, FACTOR);
+			IPeakComparisonResult comparisonResult = new PeakComparisonResult(factor, factor, factor, factor, factor);
 			IIdentificationTarget peakTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 			peakTarget.setIdentifier(AlkaneIdentifier.IDENTIFIER);
 			peak.getTargets().add(peakTarget);
@@ -445,8 +446,8 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		Table table = peakTableViewerUI.getTable();
 		int index = table.getSelectionIndex();
 		Object object = peakTableViewerUI.getElementAt(index);
-		if(object instanceof IPeak) {
-			return (IPeak)object;
+		if(object instanceof IPeak peak) {
+			return peak;
 		} else {
 			return null;
 		}
@@ -491,15 +492,14 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 	private List<IIdentificationTarget> getPeakTargetList(Table table, int[] indices) {
 
-		List<IIdentificationTarget> targetList = new ArrayList<IIdentificationTarget>();
+		List<IIdentificationTarget> targetList = new ArrayList<>();
 		for(int index : indices) {
 			/*
 			 * Get the selected item.
 			 */
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
-			if(object instanceof IIdentificationTarget) {
-				IIdentificationTarget target = (IIdentificationTarget)object;
+			if(object instanceof IIdentificationTarget target) {
 				targetList.add(target);
 			}
 		}
@@ -534,14 +534,12 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		/*
 		 * Start index
 		 */
-		if(message == null) {
-			String startIndexName = wizardElements.getStartIndexName();
-			if(startIndexName.equals("")) {
-				message = "Please select a start index.";
-			} else {
-				if(getComboIndex(startIndexName) == -1) {
-					message = "The select start index is not valid.";
-				}
+		String startIndexName = wizardElements.getStartIndexName();
+		if(startIndexName.equals("")) {
+			message = "Please select a start index.";
+		} else {
+			if(getComboIndex(startIndexName) == -1) {
+				message = "The select start index is not valid.";
 			}
 		}
 		/*

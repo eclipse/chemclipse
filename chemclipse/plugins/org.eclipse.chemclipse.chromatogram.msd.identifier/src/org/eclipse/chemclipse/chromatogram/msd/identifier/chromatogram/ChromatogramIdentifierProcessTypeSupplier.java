@@ -66,8 +66,7 @@ public class ChromatogramIdentifierProcessTypeSupplier implements IProcessTypeSu
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramIdentifierSettings processSettings, IMessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 				if(processSettings == null) {
 					messageConsumer.addMessages(ChromatogramIdentifier.identify(chromatogramSelectionMSD, getId(), monitor));
 				} else {

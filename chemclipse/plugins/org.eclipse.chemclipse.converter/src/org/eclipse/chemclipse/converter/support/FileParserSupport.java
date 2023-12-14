@@ -34,7 +34,7 @@ public class FileParserSupport {
 		Set<String> filePrefixes = new HashSet<>();
 		filePrefixes.add(filePrefix);
 		List<File> files = match(directory, filePrefixes, fileExtension);
-		return files.size() > 0 ? files.get(0) : null;
+		return !files.isEmpty() ? files.get(0) : null;
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class FileParserSupport {
 	public static File matchFile(File directory, Set<String> filePrefixes, String fileExtension) {
 
 		List<File> files = match(directory, filePrefixes, fileExtension);
-		return files.size() > 0 ? files.get(0) : null;
+		return !files.isEmpty() ? files.get(0) : null;
 	}
 
 	/**

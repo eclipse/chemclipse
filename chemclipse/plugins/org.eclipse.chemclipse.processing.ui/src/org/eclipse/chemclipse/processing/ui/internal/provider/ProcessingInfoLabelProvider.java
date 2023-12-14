@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,21 +24,20 @@ public class ProcessingInfoLabelProvider extends LabelProvider implements ITable
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
-			if(element instanceof IProcessingMessage) {
-				IProcessingMessage message = (IProcessingMessage)element;
+			if(element instanceof IProcessingMessage message) {
 				Image image;
 				switch(message.getMessageType()) {
 					case ERROR:
-						image = getImage(element, Activator.ICON_ERROR);
+						image = getImage(Activator.ICON_ERROR);
 						break;
 					case WARN:
-						image = getImage(element, Activator.ICON_WARN);
+						image = getImage(Activator.ICON_WARN);
 						break;
 					case INFO:
-						image = getImage(element, Activator.ICON_VALID); // INFO is blue, VALID is green
+						image = getImage(Activator.ICON_VALID); // INFO is blue, VALID is green
 						break;
 					default:
-						image = getImage(element, Activator.ICON_UNKNOWN);
+						image = getImage(Activator.ICON_UNKNOWN);
 				}
 				return image;
 			}
@@ -52,8 +51,7 @@ public class ProcessingInfoLabelProvider extends LabelProvider implements ITable
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IProcessingMessage) {
-			IProcessingMessage message = (IProcessingMessage)element;
+		if(element instanceof IProcessingMessage message) {
 			switch(columnIndex) {
 				case 0: // Message Type
 					text = message.getMessageType().toString();
@@ -77,7 +75,7 @@ public class ProcessingInfoLabelProvider extends LabelProvider implements ITable
 		return text;
 	}
 
-	public Image getImage(Object element, String key) {
+	public Image getImage(String key) {
 
 		ImageRegistry imageRegistry = Activator.getDefault().getImageRegistry();
 		if(imageRegistry != null) {

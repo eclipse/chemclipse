@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.swt.SampleQuantTableViewerUI;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -27,6 +28,7 @@ public class SampleQuantLabelProvider extends LabelProvider implements ITableLab
 	private DecimalFormat decimalFormat;
 
 	public SampleQuantLabelProvider() {
+
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
@@ -34,24 +36,22 @@ public class SampleQuantLabelProvider extends LabelProvider implements ITableLab
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
-			return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
+			return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImageProvider.SIZE_16x16);
 		} else if(columnIndex == SampleQuantTableViewerUI.INDEX_TYPE) {
-			if(element instanceof ISampleQuantSubstance) {
-				ISampleQuantSubstance sampleQuantSubstance = (ISampleQuantSubstance)element;
+			if(element instanceof ISampleQuantSubstance sampleQuantSubstance) {
 				if(sampleQuantSubstance.getType().equals(ISampleQuantSubstance.TYPE_ISTD)) {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAMPLE_ISTD, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAMPLE_ISTD, IApplicationImageProvider.SIZE_16x16);
 				} else {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAMPLE, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAMPLE, IApplicationImageProvider.SIZE_16x16);
 				}
 			}
 		} else if(columnIndex == SampleQuantTableViewerUI.INDEX_OK) {
-			if(element instanceof ISampleQuantSubstance) {
-				ISampleQuantSubstance sampleQuantSubstance = (ISampleQuantSubstance)element;
+			if(element instanceof ISampleQuantSubstance sampleQuantSubstance) {
 				if(!sampleQuantSubstance.getType().equals(ISampleQuantSubstance.TYPE_ISTD)) {
 					if(sampleQuantSubstance.isValidated()) {
-						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16);
+						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImageProvider.SIZE_16x16);
 					} else {
-						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16);
+						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImageProvider.SIZE_16x16);
 					}
 				}
 			}
@@ -63,8 +63,7 @@ public class SampleQuantLabelProvider extends LabelProvider implements ITableLab
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof ISampleQuantSubstance) {
-			ISampleQuantSubstance sampleQuantSubstance = (ISampleQuantSubstance)element;
+		if(element instanceof ISampleQuantSubstance sampleQuantSubstance) {
 			switch(columnIndex) {
 				case 0:
 					text = Integer.toString(sampleQuantSubstance.getId());

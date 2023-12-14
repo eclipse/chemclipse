@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,9 +23,9 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 
 	private final List<ISupplier> suppliers;
 
-	public AbstractConverterSupport() {
+	protected AbstractConverterSupport() {
 
-		suppliers = new ArrayList<ISupplier>();
+		suppliers = new ArrayList<>();
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 		 * stored in a directory, the directory extension will be listed.<br/>
 		 * Otherwise the fileExtension will be listed.
 		 */
-		ArrayList<String> extensions = new ArrayList<String>();
+		ArrayList<String> extensions = new ArrayList<>();
 		for(ISupplier supplier : suppliers) {
 			if(supplier.getDirectoryExtension().equals("")) {
 				FileExtensionCompiler fileExtensionCompiler = new FileExtensionCompiler(supplier.getFileExtension(), true);
@@ -128,7 +128,7 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 		 * Otherwise the fileExtension will be listed.
 		 */
 		FileExtensionCompiler fileExtensionCompiler;
-		ArrayList<String> extensions = new ArrayList<String>();
+		ArrayList<String> extensions = new ArrayList<>();
 		for(ISupplier supplier : suppliers) {
 			if(supplier.isExportable()) {
 				/*
@@ -176,7 +176,7 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * converter filter names.<br/>
 		 */
-		ArrayList<String> filterNames = new ArrayList<String>();
+		ArrayList<String> filterNames = new ArrayList<>();
 		for(ISupplier supplier : suppliers) {
 			filterNames.add(supplier.getFilterName());
 		}
@@ -194,7 +194,7 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * converter filter names.<br/>
 		 */
-		ArrayList<String> filterNames = new ArrayList<String>();
+		ArrayList<String> filterNames = new ArrayList<>();
 		for(ISupplier supplier : suppliers) {
 			if(supplier.isExportable()) {
 				filterNames.add(supplier.getFilterName());

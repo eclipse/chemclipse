@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,10 +26,9 @@ public class SelectionHandler implements ISelectionChangedListener {
 	public void selectionChanged(SelectionChangedEvent event) {
 
 		ISelection selection = event.getSelection();
-		if(selection instanceof IStructuredSelection) {
-			Object element = ((IStructuredSelection)selection).getFirstElement();
-			if(element instanceof ICombinedMassSpectrum) {
-				ICombinedMassSpectrum combinedMassSpectrum = (ICombinedMassSpectrum)element;
+		if(selection instanceof IStructuredSelection structuredSelection) {
+			Object element = structuredSelection.getFirstElement();
+			if(element instanceof ICombinedMassSpectrum combinedMassSpectrum) {
 				UpdateNotifierUI.update(Display.getDefault(), combinedMassSpectrum);
 			}
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
@@ -45,9 +46,7 @@ public class ChromatogramListLabelProvider extends AbstractChemClipseLabelProvid
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IChromatogramInputEntry) {
-			IChromatogramInputEntry entry = (IChromatogramInputEntry)element;
-			//
+		if(element instanceof IChromatogramInputEntry entry) {
 			switch(columnIndex) {
 				case 0:
 					text = entry.getName();
@@ -63,7 +62,6 @@ public class ChromatogramListLabelProvider extends AbstractChemClipseLabelProvid
 	@Override
 	public Image getImage(Object element) {
 
-		Image image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16);
-		return image;
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImageProvider.SIZE_16x16);
 	}
 }

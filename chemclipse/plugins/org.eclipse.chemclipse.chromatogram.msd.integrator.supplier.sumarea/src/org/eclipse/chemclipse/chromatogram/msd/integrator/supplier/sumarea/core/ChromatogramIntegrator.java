@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,9 +29,7 @@ public class ChromatogramIntegrator extends AbstractChromatogramIntegrator<IChro
 
 		IProcessingInfo<IChromatogramIntegrationResults> processingInfo = super.validate(chromatogramSelection, chromatogramIntegrationSettings);
 		if(!processingInfo.hasErrorMessages()) {
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD && chromatogramIntegrationSettings instanceof ChromatogramIntegrationSettings) {
-				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-				ChromatogramIntegrationSettings settings = (ChromatogramIntegrationSettings)chromatogramIntegrationSettings;
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD && chromatogramIntegrationSettings instanceof ChromatogramIntegrationSettings settings) {
 				ChromatogramIntegratorSupport chromatogramIntegratorSupport = new ChromatogramIntegratorSupport();
 				IChromatogramIntegrationResults chromatogramIntegrationResults = chromatogramIntegratorSupport.calculateChromatogramIntegrationResults(chromatogramSelectionMSD, settings, monitor);
 				processingInfo.setProcessingResult(chromatogramIntegrationResults);

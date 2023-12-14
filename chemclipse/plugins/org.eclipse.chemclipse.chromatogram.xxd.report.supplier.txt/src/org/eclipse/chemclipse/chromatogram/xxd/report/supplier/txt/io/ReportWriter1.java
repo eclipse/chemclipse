@@ -271,8 +271,8 @@ public class ReportWriter1 {
 
 		IPeakModel peakModel = peak.getPeakModel();
 		IChromatogramPeak chromatogramPeak = null;
-		if(peak instanceof IChromatogramPeak) {
-			chromatogramPeak = (IChromatogramPeak)peak;
+		if(peak instanceof IChromatogramPeak reportedPeak) {
+			chromatogramPeak = reportedPeak;
 		}
 		//
 		printWriter.print("[" + number + "]");
@@ -310,8 +310,7 @@ public class ReportWriter1 {
 		 * Print the highest traces values (m/z abundance or wavelength intensity)
 		 */
 		String highestTraces;
-		if(peakModel instanceof IPeakModelMSD) {
-			IPeakModelMSD peakModelMSD = (IPeakModelMSD)peakModel;
+		if(peakModel instanceof IPeakModelMSD peakModelMSD) {
 			highestTraces = extractHighestIons(peakModelMSD);
 		} else {
 			highestTraces = NO_VALUE;

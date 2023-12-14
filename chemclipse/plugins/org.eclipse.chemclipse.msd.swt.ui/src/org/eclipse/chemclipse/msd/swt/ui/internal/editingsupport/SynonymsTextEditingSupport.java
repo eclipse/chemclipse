@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ public class SynonymsTextEditingSupport extends EditingSupport {
 	private TableViewer tableViewer;
 
 	public SynonymsTextEditingSupport(TableViewer tableViewer) {
+
 		super(tableViewer);
 		this.tableViewer = tableViewer;
 		cellEditor = new TextCellEditor(tableViewer.getTable());
@@ -42,8 +43,8 @@ public class SynonymsTextEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof String) {
-			return (String)element;
+		if(element instanceof String text) {
+			return text;
 		}
 		return null;
 	}
@@ -52,7 +53,7 @@ public class SynonymsTextEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 
 		if(element instanceof String) {
-			element = value.toString();
+			// TODO
 			tableViewer.refresh();
 		}
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,8 +41,7 @@ public class TraceValidator implements IValidator<Object> {
 		if(value == null) {
 			message = ERROR;
 		} else {
-			if(value instanceof String) {
-				String text = (String)value;
+			if(value instanceof String text) {
 				String[] values = text.split(NamedTraceListUtil.SEPARATOR_TRACE);
 				exitloop:
 				for(String val : values) {

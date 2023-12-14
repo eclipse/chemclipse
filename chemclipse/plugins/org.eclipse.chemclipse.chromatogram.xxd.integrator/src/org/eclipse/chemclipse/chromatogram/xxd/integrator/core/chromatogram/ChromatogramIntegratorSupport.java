@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,9 +16,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.NoIntegratorAvailableException;
 
-/**
- * @author eselmeister
- */
 public class ChromatogramIntegratorSupport implements IChromatogramIntegratorSupport {
 
 	List<IChromatogramIntegratorSupplier> suppliers;
@@ -27,7 +24,8 @@ public class ChromatogramIntegratorSupport implements IChromatogramIntegratorSup
 	 * Creates a new suppliers list.
 	 */
 	public ChromatogramIntegratorSupport() {
-		suppliers = new ArrayList<IChromatogramIntegratorSupplier>();
+
+		suppliers = new ArrayList<>();
 	}
 
 	/**
@@ -47,7 +45,7 @@ public class ChromatogramIntegratorSupport implements IChromatogramIntegratorSup
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		arePeakIntegratorsStored();
-		List<String> availableIntegrators = new ArrayList<String>();
+		List<String> availableIntegrators = new ArrayList<>();
 		for(IChromatogramIntegratorSupplier supplier : suppliers) {
 			availableIntegrators.add(supplier.getId());
 		}
@@ -117,7 +115,7 @@ public class ChromatogramIntegratorSupport implements IChromatogramIntegratorSup
 	// -------------------------------------private methods
 	private void arePeakIntegratorsStored() throws NoIntegratorAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoIntegratorAvailableException();
 		}
 	}

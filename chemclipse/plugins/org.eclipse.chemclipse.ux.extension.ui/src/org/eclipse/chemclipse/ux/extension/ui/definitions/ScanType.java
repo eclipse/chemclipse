@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,14 +44,14 @@ public class ScanType implements EventHandler {
 		String scanType = SCAN_TYPE_NONE;
 		//
 		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
-			if(property instanceof IScanMSD) {
-				scanSelection = (IScanMSD)property;
+			if(property instanceof IScanMSD scanMSD) {
+				scanSelection = scanMSD;
 				scanType = SCAN_TYPE_MSD;
-			} else if(property instanceof IScanCSD) {
-				scanSelection = (IScanCSD)property;
+			} else if(property instanceof IScanCSD scanCSD) {
+				scanSelection = scanCSD;
 				scanType = SCAN_TYPE_CSD;
-			} else if(property instanceof IScanWSD) {
-				scanSelection = (IScanWSD)property;
+			} else if(property instanceof IScanWSD scanWSD) {
+				scanSelection = scanWSD;
 				scanType = SCAN_TYPE_WSD;
 			} else {
 				scanSelection = null;
@@ -84,8 +84,8 @@ public class ScanType implements EventHandler {
 		Object object = eclipseContext.get(SCAN_SELECTION);
 		//
 		IScan scan = null;
-		if(object != null && object instanceof IScan) {
-			scan = (IScan)object;
+		if(object != null && object instanceof IScan selectedScan) {
+			scan = selectedScan;
 		}
 		//
 		return scan;
@@ -102,8 +102,8 @@ public class ScanType implements EventHandler {
 		Object object = eclipseContext.get(SCAN_SELECTION);
 		//
 		IScanMSD scanMSD = null;
-		if(object != null && object instanceof IScanMSD) {
-			scanMSD = (IScanMSD)object;
+		if(object != null && object instanceof IScanMSD selectedScanMSD) {
+			scanMSD = selectedScanMSD;
 		}
 		//
 		return scanMSD;
@@ -120,8 +120,8 @@ public class ScanType implements EventHandler {
 		Object object = eclipseContext.get(SCAN_SELECTION);
 		//
 		IScanCSD scanCSD = null;
-		if(object != null && object instanceof IScanCSD) {
-			scanCSD = (IScanCSD)object;
+		if(object != null && object instanceof IScanCSD selectedScanCSD) {
+			scanCSD = selectedScanCSD;
 		}
 		//
 		return scanCSD;
@@ -138,8 +138,8 @@ public class ScanType implements EventHandler {
 		Object object = eclipseContext.get(SCAN_SELECTION);
 		//
 		IScanWSD scanWSD = null;
-		if(object != null && object instanceof IScanWSD) {
-			scanWSD = (IScanWSD)object;
+		if(object != null && object instanceof IScanWSD selectedScanWSD) {
+			scanWSD = selectedScanWSD;
 		}
 		//
 		return scanWSD;

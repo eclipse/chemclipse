@@ -71,8 +71,7 @@ public class PeakDetectorMSDProcessTypeSupplier implements IProcessTypeSupplier 
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IPeakDetectorSettingsMSD processSettings, IMessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 				if(processSettings instanceof IPeakDetectorSettingsMSD) {
 					messageConsumer.addMessages(PeakDetectorMSD.detect(chromatogramSelectionMSD, processSettings, supplier.getId(), monitor));
 				} else {

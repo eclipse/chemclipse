@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.updates.IUpdateListener;
@@ -98,8 +99,8 @@ public class ProcessMethodProfiles extends Composite {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof String) {
-					return (String)element;
+				if(element instanceof String text) {
+					return text;
 				}
 				return null;
 			}
@@ -134,7 +135,7 @@ public class ProcessMethodProfiles extends Composite {
 		Button button = new Button(composite, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Add a new profile.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		//
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -189,7 +190,7 @@ public class ProcessMethodProfiles extends Composite {
 		Button button = new Button(composite, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Delete the profile.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		//
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -219,8 +220,8 @@ public class ProcessMethodProfiles extends Composite {
 	private String getActiveProfile() {
 
 		Object object = comboViewerProfiles.getStructuredSelection().getFirstElement();
-		if(object instanceof String) {
-			return (String)object;
+		if(object instanceof String text) {
+			return text;
 		}
 		//
 		return ProcessEntryContainer.DEFAULT_PROFILE;

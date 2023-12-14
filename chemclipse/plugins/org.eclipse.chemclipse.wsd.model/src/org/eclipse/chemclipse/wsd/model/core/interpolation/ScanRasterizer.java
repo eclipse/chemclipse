@@ -30,8 +30,7 @@ public class ScanRasterizer {
 
 		if(chromatogramWSD != null) {
 			for(IScan scan : chromatogramWSD.getScans()) {
-				if(scan instanceof IScanWSD) {
-					IScanWSD scanWSD = (IScanWSD)scan;
+				if(scan instanceof IScanWSD scanWSD) {
 					normalize(scanWSD, steps);
 				}
 			}

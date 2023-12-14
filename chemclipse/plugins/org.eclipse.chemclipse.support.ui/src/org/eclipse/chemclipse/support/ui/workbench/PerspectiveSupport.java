@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -68,7 +68,7 @@ public class PerspectiveSupport {
 	private MPerspective getActiveMPerspective() {
 
 		List<MPerspectiveStack> perspectiveStacks = eModelService.findElements(mApplication, null, MPerspectiveStack.class, null);
-		if(perspectiveStacks.size() > 0) {
+		if(!perspectiveStacks.isEmpty()) {
 			MPerspectiveStack perspectiveStack = perspectiveStacks.get(0);
 			return perspectiveStack.getSelectedElement();
 		}

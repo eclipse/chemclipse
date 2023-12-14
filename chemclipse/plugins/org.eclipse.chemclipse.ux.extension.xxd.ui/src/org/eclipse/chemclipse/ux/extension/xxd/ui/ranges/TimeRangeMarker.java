@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -102,7 +102,7 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 				 */
 				Range rangeX = xAxis.getRange();
 				IPlotArea plotArea = baseChart.getPlotArea();
-				Point rectangle = (plotArea instanceof Scrollable) ? ((Scrollable)plotArea).getSize() : plotArea.getSize();
+				Point rectangle = plotArea instanceof Scrollable scrollable ? scrollable.getSize() : plotArea.getSize();
 				Color colorArea = isSelected ? colorAreaSelected : colorAreaNormal;
 				Color colorLabel = isSelected ? colorLabelSelected : colorLabelNormal;
 				//

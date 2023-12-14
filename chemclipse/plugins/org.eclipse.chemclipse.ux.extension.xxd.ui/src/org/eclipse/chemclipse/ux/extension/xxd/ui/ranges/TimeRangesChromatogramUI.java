@@ -190,8 +190,7 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 		if(timeRangesUI != null) {
 			timeRangesUI.setVisible(visible);
 			Object layoutData = timeRangesUI.getLayoutData();
-			if(layoutData instanceof GridData) {
-				GridData gridData = (GridData)layoutData;
+			if(layoutData instanceof GridData gridData) {
 				gridData.exclude = !visible;
 			}
 			Composite parent = timeRangesUI.getParent();

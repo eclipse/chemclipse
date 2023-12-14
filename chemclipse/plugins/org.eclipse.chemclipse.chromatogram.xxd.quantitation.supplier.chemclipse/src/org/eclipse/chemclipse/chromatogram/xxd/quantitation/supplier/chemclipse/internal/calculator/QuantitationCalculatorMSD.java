@@ -44,7 +44,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	@Override
 	public List<IQuantitationEntry> calculateQuantitationResults(IPeak peak, Set<IQuantitationCompound> quantitationCompounds, IProcessingInfo<?> processingInfo) {
 
-		List<IQuantitationEntry> quantitationEntries = new ArrayList<IQuantitationEntry>();
+		List<IQuantitationEntry> quantitationEntries = new ArrayList<>();
 		for(IQuantitationCompound quantitationCompound : quantitationCompounds) {
 			try {
 				List<IQuantitationEntry> quantitationEntriesPeak = calculateQuantitationResults(peak, quantitationCompound);
@@ -91,8 +91,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 			IQuantitationSignals quantitationSignals = quantitationCompound.getQuantitationSignals();
 			List<Double> selectedQuantitationIons = quantitationSignals.getSelectedSignals();
 			if(integrationQuantitationSupport.validateXIC(selectedQuantitationIons)) {
-				if(peak instanceof IPeakMSD) {
-					IPeakMSD peakMSD = (IPeakMSD)peak;
+				if(peak instanceof IPeakMSD peakMSD) {
 					return getQuantitationEntriesXIC(quantitationCompound, peakMSD, selectedQuantitationIons, integrationQuantitationSupport);
 				} else {
 					throw new EvaluationException("The peak is not of type peakMSD.");
@@ -113,7 +112,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	 */
 	private List<IQuantitationEntry> getQuantitationEntriesTIC(IQuantitationCompound quantitationCompound, IPeak peak) {
 
-		List<IQuantitationEntry> quantitationEntries = new ArrayList<IQuantitationEntry>();
+		List<IQuantitationEntry> quantitationEntries = new ArrayList<>();
 		double integratedArea = peak.getIntegratedArea();
 		double signal = ISignal.TOTAL_INTENSITY;
 		IQuantitationEntry quantitationEntry = getQuantitationEntry(signal, quantitationCompound, integratedArea);
@@ -132,7 +131,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 	 */
 	private List<IQuantitationEntry> getQuantitationEntriesXIC(IQuantitationCompound quantitationCompound, IPeakMSD peak, List<Double> selectedQuantitationIons, QuantitationSupport integrationQuantitationSupport) {
 
-		List<IQuantitationEntry> quantitationEntries = new ArrayList<IQuantitationEntry>();
+		List<IQuantitationEntry> quantitationEntries = new ArrayList<>();
 		//
 		IScanMSD massSpectrum = peak.getExtractedMassSpectrum();
 		IExtractedIonSignal extractedIonSignal = massSpectrum.getExtractedIonSignal();

@@ -121,7 +121,7 @@ public class PeakQuantitationsExtractor {
 
 		String quantifier = "";
 		if(peak != null) {
-			quantifier = peak.getInternalStandards().size() > 0 ? "ISTD" : "";
+			quantifier = !peak.getInternalStandards().isEmpty() ? "ISTD" : "";
 		}
 		return quantifier;
 	}

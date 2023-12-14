@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,12 +25,10 @@ public class BasePeakResultsContentProvider implements IStructuredContentProvide
 		if(inputElement instanceof IMeasurementResult) {
 			IMeasurementResult<?> measurementResult = (IMeasurementResult<?>)inputElement;
 			Object object = measurementResult.getResult();
-			if(object instanceof ILigninRatios) {
-				ILigninRatios ligninRatios = (ILigninRatios)object;
+			if(object instanceof ILigninRatios ligninRatios) {
 				return ligninRatios.getResults().entrySet().toArray();
 			}
-		} else if(inputElement instanceof ILigninRatios) {
-			ILigninRatios ligninRatios = (ILigninRatios)inputElement;
+		} else if(inputElement instanceof ILigninRatios ligninRatios) {
 			return ligninRatios.getResults().entrySet().toArray();
 		}
 		//

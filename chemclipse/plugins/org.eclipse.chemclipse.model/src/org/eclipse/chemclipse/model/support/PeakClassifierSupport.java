@@ -29,8 +29,8 @@ public class PeakClassifierSupport {
 	 */
 	public static String getClassifier(Object object) {
 
-		if(object instanceof IPeak) {
-			List<String> classifier = new ArrayList<>(((IPeak)object).getClassifier());
+		if(object instanceof IPeak peak) {
+			List<String> classifier = new ArrayList<>(peak.getClassifier());
 			Collections.sort(classifier);
 			return StringUtils.join(classifier, " | ");
 		}

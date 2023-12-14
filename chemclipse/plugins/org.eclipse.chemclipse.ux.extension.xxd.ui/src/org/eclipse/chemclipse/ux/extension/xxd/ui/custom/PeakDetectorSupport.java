@@ -93,9 +93,8 @@ public class PeakDetectorSupport {
 				/*
 				 * Try to create a peak.
 				 */
-				if(chromatogram instanceof IChromatogramMSD) {
-					IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-					if(traces.size() > 0) {
+				if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
+					if(!traces.isEmpty()) {
 						/**
 						 * Must be called with 'exclude' mode, so given ions will be 'excluded' from AbstractScan#removeIons.
 						 */
@@ -104,8 +103,7 @@ public class PeakDetectorSupport {
 						peak = PeakBuilderMSD.createPeak(chromatogramMSD, scanRange, includeBackground);
 					}
 					peak.setDetectorDescription(DETECTOR_DESCRIPTION);
-				} else if(chromatogram instanceof IChromatogramCSD) {
-					IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+				} else if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 					peak = PeakBuilderCSD.createPeak(chromatogramCSD, scanRange, includeBackground);
 					peak.setDetectorDescription(DETECTOR_DESCRIPTION);
 				} else if(chromatogram instanceof IChromatogramWSD) {
@@ -139,9 +137,8 @@ public class PeakDetectorSupport {
 				/*
 				 * Try to create a peak.
 				 */
-				if(chromatogram instanceof IChromatogramMSD) {
-					IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-					if(traces.size() > 0) {
+				if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
+					if(!traces.isEmpty()) {
 						/**
 						 * Must be called with 'exclude' mode, so given ions will be 'excluded' from AbstractScan#removeIons.
 						 */
@@ -150,8 +147,7 @@ public class PeakDetectorSupport {
 						peak = PeakBuilderMSD.createPeak(chromatogramMSD, scanRange, startIntensity, stopIntensity);
 					}
 					peak.setDetectorDescription(DETECTOR_DESCRIPTION);
-				} else if(chromatogram instanceof IChromatogramCSD) {
-					IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+				} else if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 					peak = PeakBuilderCSD.createPeak(chromatogramCSD, scanRange, startIntensity, stopIntensity);
 					peak.setDetectorDescription(DETECTOR_DESCRIPTION);
 				} else if(chromatogram instanceof IChromatogramWSD) {
@@ -231,8 +227,7 @@ public class PeakDetectorSupport {
 
 		float scanSignal = 0.0f;
 		IScan scan = chromatogram.getScan(scanNumber);
-		if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
+		if(scan instanceof IScanMSD scanMSD) {
 			IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
 			for(int trace : traces) {
 				scanSignal += extractedIonSignal.getAbundance(trace);

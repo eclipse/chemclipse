@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -78,8 +78,7 @@ public class PeakDetectorSupport {
 	 */
 	private static void setDetectorSettings(IPeakDetectorSettingsMSD peakDetectorSettings) {
 
-		if(peakDetectorSettings instanceof PeakDetectorSettings) {
-			PeakDetectorSettings backfoldingPeakDetectorSettings = (PeakDetectorSettings)peakDetectorSettings;
+		if(peakDetectorSettings instanceof PeakDetectorSettings backfoldingPeakDetectorSettings) {
 			/*
 			 * The threshold value depends on the actual calculation.<br/> The
 			 * threshold defines the slope sensitivity.

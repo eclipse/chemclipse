@@ -31,8 +31,7 @@ public class SelectViewContentProvider implements IStructuredContentProvider {
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if(inputElement instanceof List<?>) {
-			List<?> parts = (List<?>)inputElement;
+		if(inputElement instanceof List<?> parts) {
 			return parts.toArray();
 		} else {
 			return null;

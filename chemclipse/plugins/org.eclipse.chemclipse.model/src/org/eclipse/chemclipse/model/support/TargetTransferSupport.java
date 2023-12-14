@@ -38,8 +38,8 @@ public class TargetTransferSupport {
 	 */
 	public String transferPeakTargets(List<? extends IPeak> peaksSource, List<? extends IPeak> peaksSink, int retentionTimeDelta, boolean useBestTargetOnly) {
 
-		if(peaksSource.size() > 0) {
-			if(peaksSink.size() > 0) {
+		if(!peaksSource.isEmpty()) {
+			if(!peaksSink.isEmpty()) {
 				for(IPeak peakSink : peaksSink) {
 					for(IPeak peakSource : peaksSource) {
 						int retentionTimePeakSink = peakSink.getPeakModel().getRetentionTimeAtPeakMaximum();
@@ -71,7 +71,7 @@ public class TargetTransferSupport {
 
 	public String transferScanTargets(List<IScan> scansSource, IChromatogram<?> chromatogramSink, boolean useBestTargetOnly) {
 
-		if(scansSource.size() > 0) {
+		if(!scansSource.isEmpty()) {
 			for(IScan scanSource : scansSource) {
 				int scanNumber = chromatogramSink.getScanNumber(scanSource.getRetentionTime());
 				if(scanNumber > 0) {

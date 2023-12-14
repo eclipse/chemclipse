@@ -235,10 +235,9 @@ public class ChannelMappingTable extends Composite implements IChangeListener, I
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)tableViewer.get().getSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof ChannelMapping) {
+				if(object instanceof ChannelMapping mapping) {
 					ChannelMappings modified = new ChannelMappings();
 					modified.addAll(channelMappings);
-					ChannelMapping mapping = (ChannelMapping)object;
 					modified.remove(mapping);
 					InputDialog dialog = new InputDialog(e.display.getActiveShell(), DIALOG_TITLE, MESSAGE_EDIT, channelMappings.extractSetting(mapping), new ChannelMappingInputValidator(modified));
 					if(IDialogConstants.OK_ID == dialog.open()) {

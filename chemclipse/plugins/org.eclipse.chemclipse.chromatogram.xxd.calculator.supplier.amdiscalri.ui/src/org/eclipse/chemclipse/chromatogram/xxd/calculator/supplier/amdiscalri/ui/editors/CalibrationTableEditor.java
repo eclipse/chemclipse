@@ -133,8 +133,7 @@ public class CalibrationTableEditor extends FieldEditor {
 		for(int i = 0; i < tableItems.length; i++) {
 			Object object = tableItems[i].getData();
 			String file = "";
-			if(object instanceof CalibrationFile) {
-				CalibrationFile calibrationFile = (CalibrationFile)object;
+			if(object instanceof CalibrationFile calibrationFile) {
 				file = calibrationFile.getFile().getAbsolutePath();
 			}
 			items[i] = file;
@@ -273,11 +272,9 @@ public class CalibrationTableEditor extends FieldEditor {
 			exitloop:
 			for(TableItem tableItem : tableItems) {
 				Object object = tableItem.getData();
-				if(object instanceof CalibrationFile) {
-					if(((CalibrationFile)object).equals(calibrationFile)) {
-						calibrationFile = null;
-						break exitloop;
-					}
+				if(object instanceof CalibrationFile newCalibrationFile && newCalibrationFile.equals(calibrationFile)) {
+					calibrationFile = null;
+					break exitloop;
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -62,7 +62,7 @@ public class ChromatogramIntegratorSupport {
 			 */
 			IMarkedIons selectedIons = getSelectedIons(chromatogramIntegrationSettings);
 			Set<Integer> selectedIonsNominal = selectedIons.getIonsNominal();
-			if(selectedIonsNominal.size() == 0 || selectedIonsNominal.contains(0)) {
+			if(selectedIonsNominal.isEmpty() || selectedIonsNominal.contains(0)) {
 				integrateAll = true;
 			}
 			/*
@@ -73,8 +73,8 @@ public class ChromatogramIntegratorSupport {
 			/*
 			 * Chromatogram Integration Entries
 			 */
-			List<IIntegrationEntry> chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
-			List<IIntegrationEntry> backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
+			List<IIntegrationEntry> chromatogramIntegrationEntries = new ArrayList<>();
+			List<IIntegrationEntry> backgroundIntegrationEntries = new ArrayList<>();
 			/*
 			 * TODO Optimize
 			 */
@@ -122,15 +122,13 @@ public class ChromatogramIntegratorSupport {
 	private IIntegrationEntry calculateChromatogramIonArea(int ion, ISumareaIntegrator chromatogramIntegrator, IChromatogramSelectionMSD chromatogramSelection) {
 
 		double chromatogramArea = chromatogramIntegrator.integrate(chromatogramSelection, ion);
-		IIntegrationEntry chromatogramIntegrationEntry = new IntegrationEntry(ion, chromatogramArea);
-		return chromatogramIntegrationEntry;
+		return new IntegrationEntry(ion, chromatogramArea);
 	}
 
 	private IIntegrationEntry calculateBackgroundIonArea(int ion, ISumareaIntegrator backgroundIntegrator, IChromatogramSelectionMSD chromatogramSelection) {
 
 		double backgroundArea = backgroundIntegrator.integrate(chromatogramSelection, ion);
-		IIntegrationEntry backgroundIntegrationEntry = new IntegrationEntry(ion, backgroundArea);
-		return backgroundIntegrationEntry;
+		return new IntegrationEntry(ion, backgroundArea);
 	}
 
 	private IMarkedIons getSelectedIons(ChromatogramIntegrationSettings chromatogramIntegrationSettings) {

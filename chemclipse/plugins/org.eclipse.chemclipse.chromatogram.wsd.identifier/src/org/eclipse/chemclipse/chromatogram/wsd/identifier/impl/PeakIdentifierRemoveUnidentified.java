@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,8 +34,7 @@ public class PeakIdentifierRemoveUnidentified<T> extends AbstractPeakIdentifierW
 		 */
 		try {
 			for(IPeakWSD peak : peaks) {
-				if(peak instanceof IChromatogramPeakWSD) {
-					IChromatogramPeakWSD chromatogramPeakWSD = (IChromatogramPeakWSD)peak;
+				if(peak instanceof IChromatogramPeakWSD chromatogramPeakWSD) {
 					IChromatogramWSD chromatogramWSD = chromatogramPeakWSD.getChromatogram();
 					if(chromatogramWSD != null) {
 						if(chromatogramPeakWSD.getTargets().isEmpty()) {

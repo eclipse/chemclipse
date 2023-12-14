@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificat
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakInputEntry;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.PeakInputEntry;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.wizards.BatchProcessWizardDialog;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.wizards.PeakInputFilesWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,12 +38,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakInputEntry;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.PeakInputEntry;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.wizards.BatchProcessWizardDialog;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.wizards.PeakInputFilesWizard;
-
 /**
  * @author Dr. Philip Wenig
  * 
@@ -53,6 +52,7 @@ public class PeakInputFilesPage implements IMultiEditorPage {
 	private static final String FILES = "Input Files: ";
 
 	public PeakInputFilesPage(BatchProcessEditor editorPart, Composite container) {
+
 		createPage(editorPart, container);
 	}
 
@@ -209,7 +209,7 @@ public class PeakInputFilesPage implements IMultiEditorPage {
 					 * Get the list of selected chromatograms.
 					 */
 					List<String> selectedPeakFiles = inputWizard.getSelectedPeakFiles();
-					if(selectedPeakFiles.size() > 0) {
+					if(!selectedPeakFiles.isEmpty()) {
 						/*
 						 * If it contains at least 1 element, add it to the input files list.
 						 */

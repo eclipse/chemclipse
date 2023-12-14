@@ -171,7 +171,7 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		return processingInfoTotal;
 	}
 
-	private IProcessingInfo<?> baselineProcess(ITotalScanSignals totalScanSignals, IBaselineDetectorSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	private IProcessingInfo<Void> baselineProcess(ITotalScanSignals totalScanSignals, IBaselineDetectorSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		if(chromatogramFilterSettings == null) {
 			return setBaseline(totalScanSignals, monitor);
@@ -180,9 +180,9 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		}
 	}
 
-	protected abstract IProcessingInfo<?> setBaseline(ITotalScanSignals totalScanSignals, IProgressMonitor monitor);
+	protected abstract IProcessingInfo<Void> setBaseline(ITotalScanSignals totalScanSignals, IProgressMonitor monitor);
 
-	protected abstract IProcessingInfo<?> setBaseline(ITotalScanSignals totalScanSignals, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
+	protected abstract IProcessingInfo<Void> setBaseline(ITotalScanSignals totalScanSignals, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
 
 	private void applyBaseline(ITotalScanSignals totalIonSignals, IBaselineModel baselineModel) {
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -43,7 +43,7 @@ public class TargetReference implements ITargetReference {
 
 	public static String createID(TargetReferenceType type, int retentionTime) {
 
-		String retentionTimeMinutes = FORMAT.format(retentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR);
+		String retentionTimeMinutes = FORMAT.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 		return createID(type, retentionTimeMinutes);
 	}
 
@@ -108,7 +108,7 @@ public class TargetReference implements ITargetReference {
 		List<TargetReference> targetReferences = new ArrayList<>();
 		for(IScan scan : scans) {
 			if(scan != null && !scan.getTargets().isEmpty()) {
-				String retentionTimeMinutes = FORMAT.format(scan.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+				String retentionTimeMinutes = FORMAT.format(scan.getRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 				TargetReference targetReference = new TargetReference(scan, TargetReferenceType.SCAN, retentionTimeMinutes, scan.getRetentionIndex());
 				targetReferences.add(targetReference);
 				if(!targetDisplaySettings.isMapped(targetReference)) {
@@ -124,9 +124,9 @@ public class TargetReference implements ITargetReference {
 		List<TargetReference> targetReferences = new ArrayList<>();
 		for(IPeak peak : peaks) {
 			Set<IIdentificationTarget> targets = peak.getTargets();
-			if(peak != null && (targets.size() > 0 || peak.getClassifier().size() > 0)) {
+			if(!targets.isEmpty() || !peak.getClassifier().isEmpty()) {
 				IPeakModel peakModel = peak.getPeakModel();
-				String retentionTimeMinutes = FORMAT.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+				String retentionTimeMinutes = FORMAT.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 				float retentionIndex = peakModel.getPeakMaximum().getRetentionIndex();
 				TargetReference targetReference = new TargetReference(peak, TargetReferenceType.PEAK, retentionTimeMinutes, retentionIndex);
 				targetReferences.add(targetReference);
@@ -150,7 +150,7 @@ public class TargetReference implements ITargetReference {
 			return always -> true;
 		}
 		//
-		Predicate<ITargetReference> typePredicate = new Predicate<ITargetReference>() {
+		return new Predicate<ITargetReference>() {
 
 			@Override
 			public boolean test(ITargetReference targetReference) {
@@ -165,7 +165,5 @@ public class TargetReference implements ITargetReference {
 				return false;
 			}
 		};
-		//
-		return typePredicate;
 	}
 }

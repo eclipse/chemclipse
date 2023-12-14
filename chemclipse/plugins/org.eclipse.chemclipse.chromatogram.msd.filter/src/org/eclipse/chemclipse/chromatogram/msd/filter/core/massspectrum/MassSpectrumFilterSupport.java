@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.exceptions.NoMassSpectrumF
 
 public class MassSpectrumFilterSupport implements IMassSpectrumFilterSupport {
 
-	private List<IMassSpectrumFilterSupplier> suppliers = new ArrayList<IMassSpectrumFilterSupplier>();
+	private List<IMassSpectrumFilterSupplier> suppliers = new ArrayList<>();
 
 	/**
 	 * Adds a {@link IMassSpectrumFilterSupplier} to the {@link IMassSpectrumFilterSupport}.
@@ -39,7 +39,7 @@ public class MassSpectrumFilterSupport implements IMassSpectrumFilterSupport {
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		areMassSpectrumFiltersStored();
-		List<String> availableFilters = new ArrayList<String>();
+		List<String> availableFilters = new ArrayList<>();
 		for(IMassSpectrumFilterSupplier supplier : suppliers) {
 			availableFilters.add(supplier.getId());
 		}
@@ -74,7 +74,7 @@ public class MassSpectrumFilterSupport implements IMassSpectrumFilterSupport {
 		 * If the ArrayList is not empty, return the registered mass spectrum
 		 * filter names.<br/>
 		 */
-		ArrayList<String> filterNames = new ArrayList<String>();
+		ArrayList<String> filterNames = new ArrayList<>();
 		for(IMassSpectrumFilterSupplier supplier : suppliers) {
 			filterNames.add(supplier.getFilterName());
 		}
@@ -114,7 +114,7 @@ public class MassSpectrumFilterSupport implements IMassSpectrumFilterSupport {
 
 	private void areMassSpectrumFiltersStored() throws NoMassSpectrumFilterSupplierAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoMassSpectrumFilterSupplierAvailableException();
 		}
 	}

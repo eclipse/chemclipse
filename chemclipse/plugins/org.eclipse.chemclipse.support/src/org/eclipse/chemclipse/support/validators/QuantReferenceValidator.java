@@ -28,8 +28,8 @@ public class QuantReferenceValidator implements IValidator<Object> {
 		if(value == null) {
 			message = ERROR;
 		} else {
-			if(value instanceof String) {
-				name = ((String)value).trim();
+			if(value instanceof String text) {
+				name = text.trim();
 				if(name.isEmpty()) {
 					message = ERROR;
 				}

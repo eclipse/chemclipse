@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -92,8 +92,7 @@ public class PeakQuantifier {
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
 		if(peakQuantifier != null) {
 			processingInfo = peakQuantifier.quantify(peak, monitor);
-			if(!processingInfo.hasErrorMessages() && peak instanceof IChromatogramPeak) {
-				IChromatogramPeak chromatogramPeak = (IChromatogramPeak)peak;
+			if(!processingInfo.hasErrorMessages() && peak instanceof IChromatogramPeak chromatogramPeak) {
 				chromatogramPeak.getChromatogram().setDirty(true);
 			}
 		} else {
@@ -118,8 +117,7 @@ public class PeakQuantifier {
 		if(peakQuantifier != null) {
 			processingInfo = peakQuantifier.quantify(peaks, peakQuantifierSettings, monitor);
 			Optional<IPeak> peak = peaks.stream().findFirst();
-			if(!processingInfo.hasErrorMessages() && peak.isPresent() && peak.get() instanceof IChromatogramPeak) {
-				IChromatogramPeak chromatogramPeak = (IChromatogramPeak)peak.get();
+			if(!processingInfo.hasErrorMessages() && peak.isPresent() && peak.get() instanceof IChromatogramPeak chromatogramPeak) {
 				chromatogramPeak.getChromatogram().setDirty(true);
 			}
 		} else {
@@ -143,8 +141,7 @@ public class PeakQuantifier {
 		if(peakQuantifier != null) {
 			processingInfo = peakQuantifier.quantify(peaks, monitor);
 			Optional<IPeak> peak = peaks.stream().findFirst();
-			if(!processingInfo.hasErrorMessages() && peak.isPresent() && peak.get() instanceof IChromatogramPeak) {
-				IChromatogramPeak chromatogramPeak = (IChromatogramPeak)peak.get();
+			if(!processingInfo.hasErrorMessages() && peak.isPresent() && peak.get() instanceof IChromatogramPeak chromatogramPeak) {
 				chromatogramPeak.getChromatogram().setDirty(true);
 			}
 		} else {

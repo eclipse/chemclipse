@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,11 +25,7 @@ public class PeakQuantitationListTableComparator extends AbstractRecordTableComp
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof PeakQuantitation && e2 instanceof PeakQuantitation) {
-			//
-			PeakQuantitation peakQuantitation1 = (PeakQuantitation)e1;
-			PeakQuantitation peakQuantitation2 = (PeakQuantitation)e2;
-			//
+		if(e1 instanceof PeakQuantitation peakQuantitation1 && e2 instanceof PeakQuantitation peakQuantitation2) {
 			int indexColumn = getPropertyIndex();
 			switch(indexColumn) {
 				case 0:

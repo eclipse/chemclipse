@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -22,9 +22,7 @@ public class SampleQuantTableComparator extends AbstractRecordTableComparator im
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof ISampleQuantSubstance && e2 instanceof ISampleQuantSubstance) {
-			ISampleQuantSubstance sampleQuantSubstance1 = (ISampleQuantSubstance)e1;
-			ISampleQuantSubstance sampleQuantSubstance2 = (ISampleQuantSubstance)e2;
+		if(e1 instanceof ISampleQuantSubstance sampleQuantSubstance1 && e2 instanceof ISampleQuantSubstance sampleQuantSubstance2) {
 			switch(getPropertyIndex()) {
 				case 0:
 					sortOrder = Integer.compare(sampleQuantSubstance2.getId(), sampleQuantSubstance1.getId());

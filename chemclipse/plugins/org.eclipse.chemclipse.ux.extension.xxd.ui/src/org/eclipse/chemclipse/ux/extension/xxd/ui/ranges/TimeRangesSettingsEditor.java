@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.model.ranges.TimeRanges;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -265,7 +266,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Add");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -291,7 +292,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Edit");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -299,10 +300,10 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)timeRangesControl.get().getSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof TimeRange) {
+				if(object instanceof TimeRange selectedTimeRange) {
 					Set<String> keySetEdit = new HashSet<>();
 					keySetEdit.addAll(settings.keySet());
-					TimeRange timeRange = (TimeRange)object;
+					TimeRange timeRange = selectedTimeRange;
 					keySetEdit.remove(timeRange.getIdentifier());
 					InputDialog dialog = new InputDialog(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getEditMessage(), settings.extractTimeRange(timeRange), new TimeRangeInputValidator(keySetEdit, timeRangeLabels));
 					if(IDialogConstants.OK_ID == dialog.open()) {
@@ -326,7 +327,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Remove Selected");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -335,8 +336,8 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getDeleteMessage())) {
 					IStructuredSelection structuredSelection = (IStructuredSelection)timeRangesControl.get().getSelection();
 					for(Object object : structuredSelection.toArray()) {
-						if(object instanceof TimeRange) {
-							settings.remove(((TimeRange)object).getIdentifier());
+						if(object instanceof TimeRange selectedTimeRange) {
+							settings.remove(selectedTimeRange.getIdentifier());
 						}
 					}
 					updateInput();

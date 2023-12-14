@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,14 +16,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 
@@ -69,11 +68,10 @@ public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 
 		for(IScan scan : chromatogram.getScans()) {
 			monitor.subTask("Export Scan " + scan.getScanNumber());
-			if(scan instanceof IVendorMassSpectrum) {
+			if(scan instanceof IVendorMassSpectrum scanMassSpectrum) {
 				/*
 				 * Export each scan.
 				 */
-				IVendorMassSpectrum scanMassSpectrum = (IVendorMassSpectrum)scan;
 				printWriter.println("##SCAN_NUMBER= " + scanMassSpectrum.getScanNumber());
 				printWriter.println("##RETENTION_TIME= " + scanMassSpectrum.getRetentionTime() / 1000.0d); // milliseconds -> seconds
 				printWriter.println("##TIC= " + (int)scanMassSpectrum.getTotalSignal());

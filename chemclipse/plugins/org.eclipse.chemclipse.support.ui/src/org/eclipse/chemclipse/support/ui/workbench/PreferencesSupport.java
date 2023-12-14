@@ -67,7 +67,7 @@ public class PreferencesSupport {
 
 	private static boolean nodeIdStartsWithPrefix(String preferenceNodeId, List<String> preservePreferencePrefixes) {
 
-		if(preservePreferencePrefixes.size() == 0) {
+		if(preservePreferencePrefixes.isEmpty()) {
 			return false;
 		} else {
 			for(String preservePreferencePrefix : preservePreferencePrefixes) {

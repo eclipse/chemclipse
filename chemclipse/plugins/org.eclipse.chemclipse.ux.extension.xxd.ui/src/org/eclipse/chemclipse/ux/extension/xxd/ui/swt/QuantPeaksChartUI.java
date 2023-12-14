@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -154,9 +154,8 @@ public class QuantPeaksChartUI extends Composite implements IExtendedPartUI {
 			boolean enableArea = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_AREA_DISPLAY_PEAKS);
 			//
 			for(Object object : quantitationCompound.getQuantitationPeaks()) {
-				if(object instanceof IQuantitationPeak) {
+				if(object instanceof IQuantitationPeak quantitationPeak) {
 					//
-					IQuantitationPeak quantitationPeak = (IQuantitationPeak)object;
 					StringBuilder builder = new StringBuilder();
 					builder.append("P");
 					builder.append(counter);

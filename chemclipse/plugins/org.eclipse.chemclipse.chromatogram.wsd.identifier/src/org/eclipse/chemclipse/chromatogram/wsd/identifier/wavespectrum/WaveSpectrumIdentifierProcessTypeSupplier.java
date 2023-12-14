@@ -68,8 +68,7 @@ public class WaveSpectrumIdentifierProcessTypeSupplier implements IProcessTypeSu
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IWaveSpectrumIdentifierSettings processSettings, IMessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-				IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+			if(chromatogramSelection instanceof IChromatogramSelectionWSD chromatogramSelectionWSD) {
 				if(processSettings instanceof IWaveSpectrumIdentifierSettings) {
 					messageConsumer.addMessages(WaveSpectrumIdentifier.identify(chromatogramSelectionWSD.getSelectedScan(), processSettings, supplier.getId(), monitor));
 				} else {

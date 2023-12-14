@@ -90,7 +90,7 @@ public class GapFiller {
 			/*
 			 * Insert new scans and sort them by retention time.
 			 */
-			if(gapFillerScans.size() > 0) {
+			if(!gapFillerScans.isEmpty()) {
 				List<IScan> scans = new ArrayList<>(chromatogram.getScans());
 				scans.addAll(gapFillerScans);
 				Collections.sort(scans, (s1, s2) -> Integer.compare(s1.getRetentionTime(), s2.getRetentionTime()));

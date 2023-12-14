@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -50,14 +51,13 @@ public class PeakTableRetentionIndexLabelProvider extends LabelProvider implemen
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IPeak) {
-			IPeak peak = (IPeak)element;
+		if(element instanceof IPeak peak) {
 			IPeakModel peakModel = peak.getPeakModel();
 			IScan peakMaximum = peakModel.getPeakMaximum();
 			//
 			switch(columnIndex) {
 				case 0:
-					text = decimalFormat.format(peakMaximum.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = decimalFormat.format(peakMaximum.getRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 1:
 					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
@@ -67,10 +67,10 @@ public class PeakTableRetentionIndexLabelProvider extends LabelProvider implemen
 					}
 					break;
 				case 2:
-					if(peak instanceof IChromatogramPeakMSD) {
-						text = decimalFormat.format(((IChromatogramPeakMSD)peak).getSignalToNoiseRatio());
-					} else if(peak instanceof IChromatogramPeakCSD) {
-						text = decimalFormat.format(((IChromatogramPeakCSD)peak).getSignalToNoiseRatio());
+					if(peak instanceof IChromatogramPeakMSD chromatogramPeakMSD) {
+						text = decimalFormat.format(chromatogramPeakMSD.getSignalToNoiseRatio());
+					} else if(peak instanceof IChromatogramPeakCSD chromatogramPeakCSD) {
+						text = decimalFormat.format(chromatogramPeakCSD.getSignalToNoiseRatio());
 					}
 					break;
 				case 3:
@@ -83,9 +83,9 @@ public class PeakTableRetentionIndexLabelProvider extends LabelProvider implemen
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
-		Image image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
-		return image;
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImageProvider.SIZE_16x16);
 	}
 }

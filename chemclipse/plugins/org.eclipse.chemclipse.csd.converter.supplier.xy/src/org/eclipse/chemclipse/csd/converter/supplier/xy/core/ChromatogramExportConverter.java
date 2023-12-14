@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,7 +36,7 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 	public IProcessingInfo<File> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
 		IProcessingInfo<File> processingInfo = super.validate(file);
-		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramCSD) {
+		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 			try {
 				/*
 				 * Base name
@@ -49,16 +49,16 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 				 */
 				IChromatogramCSDWriter writer = new ChromatogramWriter();
 				File fileMaster = new File(directory + File.separator + fileName + FILE_EXTENSION);
-				writer.writeChromatogram(fileMaster, (IChromatogramCSD)chromatogram, monitor);
+				writer.writeChromatogram(fileMaster, chromatogramCSD, monitor);
 				/*
 				 * References
 				 */
 				int id = 1;
 				List<IChromatogram<?>> chromatogramReferences = chromatogram.getReferencedChromatograms();
 				for(IChromatogram<?> chromatogramReference : chromatogramReferences) {
-					if(chromatogramReference instanceof IChromatogramCSD) {
+					if(chromatogramReference instanceof IChromatogramCSD referenceChromatogramCSD) {
 						File fileReference = new File(directory + File.separator + fileName + "-" + id++ + FILE_EXTENSION);
-						writer.writeChromatogram(fileReference, (IChromatogramCSD)chromatogramReference, monitor);
+						writer.writeChromatogram(fileReference, referenceChromatogramCSD, monitor);
 					}
 				}
 			} catch(Exception e) {

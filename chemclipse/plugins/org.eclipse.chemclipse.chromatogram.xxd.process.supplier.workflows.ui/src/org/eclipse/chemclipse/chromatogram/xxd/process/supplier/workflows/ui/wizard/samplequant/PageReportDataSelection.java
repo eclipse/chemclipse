@@ -68,7 +68,7 @@ public class PageReportDataSelection extends AbstractExtendedWizardPage {
 
 		super.setVisible(visible);
 		if(visible) {
-			if(wizardElements.getSelectedChromatograms().size() > 0) {
+			if(!wizardElements.getSelectedChromatograms().isEmpty()) {
 				/*
 				 * Get the chromatogram.
 				 */
@@ -120,6 +120,7 @@ public class PageReportDataSelection extends AbstractExtendedWizardPage {
 		textAreaPercentReport.setLayoutData(getGridDataText());
 		textAreaPercentReport.addModifyListener(new ModifyListener() {
 
+			@Override
 			public void modifyText(ModifyEvent e) {
 
 				validate();
@@ -162,6 +163,7 @@ public class PageReportDataSelection extends AbstractExtendedWizardPage {
 		textQuantitationReport.setLayoutData(getGridDataText());
 		textQuantitationReport.addModifyListener(new ModifyListener() {
 
+			@Override
 			public void modifyText(ModifyEvent e) {
 
 				validate();
@@ -204,6 +206,7 @@ public class PageReportDataSelection extends AbstractExtendedWizardPage {
 		textAdditionalReportData.setLayoutData(getGridDataText());
 		textAdditionalReportData.addModifyListener(new ModifyListener() {
 
+			@Override
 			public void modifyText(ModifyEvent e) {
 
 				validate();
@@ -309,7 +312,7 @@ public class PageReportDataSelection extends AbstractExtendedWizardPage {
 		/*
 		 * Chromatogram
 		 */
-		if(wizardElements.getSelectedChromatograms().size() == 0) {
+		if(wizardElements.getSelectedChromatograms().isEmpty()) {
 			message = "Please select a chromatogram.";
 		}
 		/*

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,7 +27,8 @@ public class PeakIntegratorSupport implements IPeakIntegratorSupport {
 	 * Creates a new suppliers list.
 	 */
 	public PeakIntegratorSupport() {
-		suppliers = new ArrayList<IPeakIntegratorSupplier>();
+
+		suppliers = new ArrayList<>();
 	}
 
 	/**
@@ -47,7 +48,7 @@ public class PeakIntegratorSupport implements IPeakIntegratorSupport {
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		arePeakIntegratorsStored();
-		List<String> availableIntegrators = new ArrayList<String>();
+		List<String> availableIntegrators = new ArrayList<>();
 		for(IPeakIntegratorSupplier supplier : suppliers) {
 			availableIntegrators.add(supplier.getId());
 		}
@@ -107,7 +108,7 @@ public class PeakIntegratorSupport implements IPeakIntegratorSupport {
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * converter filter names.<br/>
 		 */
-		ArrayList<String> integratorNames = new ArrayList<String>();
+		ArrayList<String> integratorNames = new ArrayList<>();
 		for(IPeakIntegratorSupplier supplier : suppliers) {
 			integratorNames.add(supplier.getIntegratorName());
 		}
@@ -117,7 +118,7 @@ public class PeakIntegratorSupport implements IPeakIntegratorSupport {
 	// -------------------------------------private methods
 	private void arePeakIntegratorsStored() throws NoIntegratorAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoIntegratorAvailableException();
 		}
 	}

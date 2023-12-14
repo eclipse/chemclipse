@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -50,7 +50,7 @@ public class AddPeaksWizardESTD extends Wizard {
 		removeErrorMessage();
 		double concentration = page.getConcentration();
 		String concentrationUnit = page.getConcentrationUnit();
-		if(peaks == null || peaks.size() == 0) {
+		if(peaks == null || peaks.isEmpty()) {
 			showErrorMessage("There is no peak list available.");
 			return false;
 		} else if(concentrationUnit == null || concentrationUnit.equals("")) {
@@ -66,7 +66,7 @@ public class AddPeaksWizardESTD extends Wizard {
 			 */
 			DatabaseSupport databaseSupport = new DatabaseSupport();
 			IQuantitationDatabase quantitationDatabase = databaseSupport.load();
-			if(quantitationDatabase != null && quantitationDatabase.size() >= 0) {
+			if(quantitationDatabase != null && !quantitationDatabase.isEmpty()) {
 				//
 				for(IPeak peak : peaks) {
 					//
@@ -121,13 +121,13 @@ public class AddPeaksWizardESTD extends Wizard {
 		if(peak != null) {
 			//
 			Set<IIdentificationTarget> peakTargets = peak.getTargets();
-			if(peakTargets.size() > 0) {
+			if(!peakTargets.isEmpty()) {
 				/*
 				 * Get the name of the stored identification entry.
 				 */
 				for(IIdentificationTarget peakTarget : peakTargets) {
 					if(peakTarget instanceof IIdentificationTarget) {
-						IIdentificationTarget peakIdentificationEntry = (IIdentificationTarget)peakTarget;
+						IIdentificationTarget peakIdentificationEntry = peakTarget;
 						float actualMatchFactor = peakIdentificationEntry.getComparisonResult().getMatchFactor();
 						if(actualMatchFactor > bestMatchFactor) {
 							/*

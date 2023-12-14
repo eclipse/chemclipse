@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -166,16 +166,15 @@ public class AddPeakWizardESTD extends Wizard {
 	 */
 	private List<String> getPeakTargetNames(IPeak peak) {
 
-		List<String> peakTargetNames = new ArrayList<String>();
+		List<String> peakTargetNames = new ArrayList<>();
 		if(peak != null) {
 			Set<IIdentificationTarget> peakTargets = peak.getTargets();
-			if(peakTargets.size() > 0) {
+			if(!peakTargets.isEmpty()) {
 				/*
 				 * Get the name of the stored identification entry.
 				 */
 				for(IIdentificationTarget peakTarget : peakTargets) {
-					if(peakTarget instanceof IIdentificationTarget) {
-						IIdentificationTarget peakIdentificationEntry = (IIdentificationTarget)peakTarget;
+					if(peakTarget instanceof IIdentificationTarget peakIdentificationEntry) {
 						String name = peakIdentificationEntry.getLibraryInformation().getName();
 						peakTargetNames.add(name);
 					}

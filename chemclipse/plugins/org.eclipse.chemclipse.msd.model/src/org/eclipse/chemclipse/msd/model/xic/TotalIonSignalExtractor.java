@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -153,8 +153,7 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 		 * Get each scan signal.
 		 */
 		for(IScan scan : chromatogram.getScans()) {
-			if(scan instanceof IVendorMassSpectrum) {
-				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
+			if(scan instanceof IVendorMassSpectrum ms) {
 				/*
 				 * Get the excluded version if necessary.
 				 */

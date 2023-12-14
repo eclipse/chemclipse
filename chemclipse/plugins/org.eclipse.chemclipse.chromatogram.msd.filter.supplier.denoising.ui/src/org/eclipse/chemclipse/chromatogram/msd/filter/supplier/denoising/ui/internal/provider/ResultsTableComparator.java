@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,9 +22,7 @@ public class ResultsTableComparator extends AbstractRecordTableComparator implem
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof ICombinedMassSpectrum && e2 instanceof ICombinedMassSpectrum) {
-			ICombinedMassSpectrum combinedMassSpectrum1 = (ICombinedMassSpectrum)e1;
-			ICombinedMassSpectrum combinedMassSpectrum2 = (ICombinedMassSpectrum)e2;
+		if(e1 instanceof ICombinedMassSpectrum combinedMassSpectrum1 && e2 instanceof ICombinedMassSpectrum combinedMassSpectrum2) {
 			switch(getPropertyIndex()) {
 				case 0:
 					sortOrder = Integer.compare(combinedMassSpectrum2.getStartScan(), combinedMassSpectrum1.getStartScan());

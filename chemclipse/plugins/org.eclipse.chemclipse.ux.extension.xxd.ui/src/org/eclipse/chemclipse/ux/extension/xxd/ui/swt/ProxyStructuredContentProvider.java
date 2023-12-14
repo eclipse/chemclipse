@@ -58,8 +58,8 @@ public class ProxyStructuredContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getChildren(Object parentElement) {
 
-		if(proxy instanceof ITreeContentProvider) {
-			return ((ITreeContentProvider)proxy).getChildren(parentElement);
+		if(proxy instanceof ITreeContentProvider treeContentProvider) {
+			return treeContentProvider.getChildren(parentElement);
 		}
 		return new Object[0];
 	}
@@ -67,8 +67,8 @@ public class ProxyStructuredContentProvider implements ITreeContentProvider {
 	@Override
 	public Object getParent(Object element) {
 
-		if(proxy instanceof ITreeContentProvider) {
-			return ((ITreeContentProvider)proxy).getParent(element);
+		if(proxy instanceof ITreeContentProvider treeContentProvider) {
+			return treeContentProvider.getParent(element);
 		}
 		return null;
 	}
@@ -76,8 +76,8 @@ public class ProxyStructuredContentProvider implements ITreeContentProvider {
 	@Override
 	public boolean hasChildren(Object element) {
 
-		if(proxy instanceof ITreeContentProvider) {
-			return ((ITreeContentProvider)proxy).hasChildren(element);
+		if(proxy instanceof ITreeContentProvider treeContentProvider) {
+			return treeContentProvider.hasChildren(element);
 		}
 		return false;
 	}

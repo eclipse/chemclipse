@@ -235,10 +235,9 @@ public class WellMappingTable extends Composite implements IChangeListener, IExt
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)tableViewer.get().getSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof WellMapping) {
+				if(object instanceof WellMapping mapping) {
 					WellMappings modified = new WellMappings();
 					modified.addAll(wellMappings);
-					WellMapping mapping = (WellMapping)object;
 					modified.remove(mapping);
 					InputDialog dialog = new InputDialog(e.display.getActiveShell(), DIALOG_TITLE, MESSAGE_EDIT, wellMappings.extractSetting(mapping), new WellMappingInputValidator(modified));
 					if(IDialogConstants.OK_ID == dialog.open()) {

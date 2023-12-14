@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,9 +41,8 @@ public class PeakIdentifier extends AbstractPeakIdentifierMSD<IPeakIdentificatio
 			identifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
 		}
 		//
-		if(identifierSettings instanceof PeakIdentifierSettings) {
+		if(identifierSettings instanceof PeakIdentifierSettings peakIdentifierSettings) {
 			try {
-				PeakIdentifierSettings peakIdentifierSettings = (PeakIdentifierSettings)identifierSettings;
 				/*
 				 * Pre-filter
 				 */

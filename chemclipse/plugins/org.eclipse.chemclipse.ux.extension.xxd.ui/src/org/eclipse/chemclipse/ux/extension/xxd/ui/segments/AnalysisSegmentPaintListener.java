@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -54,8 +54,7 @@ public class AnalysisSegmentPaintListener<X extends IAnalysisSegment> implements
 	public void paintControl(PaintEvent evt) {
 
 		Widget widget = evt.widget;
-		if(widget instanceof IPlotArea) {
-			IPlotArea plotArea = (IPlotArea)widget;
+		if(widget instanceof IPlotArea plotArea) {
 			Chart chart = plotArea.getChart();
 			ISeries<?> series = chart.getSeriesSet().getSeries(ExtendedChromatogramUI.SERIES_ID_CHROMATOGRAM);
 			if(series != null) {

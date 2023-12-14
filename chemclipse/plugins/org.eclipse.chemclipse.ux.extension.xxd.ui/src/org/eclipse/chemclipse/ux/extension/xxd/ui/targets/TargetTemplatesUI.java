@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.identifier.template.TargetTemplates;
 import org.eclipse.chemclipse.model.targets.TargetValidator;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
@@ -87,6 +88,7 @@ public class TargetTemplatesUI extends Composite {
 		updateInput(null);
 	}
 
+	@Override
 	public void update() {
 
 		super.update();
@@ -108,8 +110,8 @@ public class TargetTemplatesUI extends Composite {
 		if(index >= 0 && index < getItems().length) {
 			comboViewer.getCombo().select(index);
 			Object object = comboViewer.getStructuredSelection().getFirstElement();
-			if(object instanceof TargetTemplate) {
-				targetTemplate = (TargetTemplate)object;
+			if(object instanceof TargetTemplate selectedTargetTemplate) {
+				targetTemplate = selectedTargetTemplate;
 				updateTargetTemplate();
 			}
 		}
@@ -161,8 +163,7 @@ public class TargetTemplatesUI extends Composite {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof TargetTemplate) {
-					TargetTemplate targetTemplate = (TargetTemplate)element;
+				if(element instanceof TargetTemplate targetTemplate) {
 					return targetTemplate.getName();
 				}
 				return null;
@@ -181,8 +182,8 @@ public class TargetTemplatesUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof TargetTemplate) {
-					targetTemplate = (TargetTemplate)object;
+				if(object instanceof TargetTemplate selectedTargetTemplate) {
+					targetTemplate = selectedTargetTemplate;
 					updateTargetTemplate();
 					fireUpdate();
 				}
@@ -228,7 +229,7 @@ public class TargetTemplatesUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Add a new target template.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -257,7 +258,7 @@ public class TargetTemplatesUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Delete the selected target template.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -265,9 +266,9 @@ public class TargetTemplatesUI extends Composite {
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Template", "Would you like to delete the selected target template?")) {
 					Object object = comboViewer.getStructuredSelection().getFirstElement();
-					if(object instanceof TargetTemplate) {
+					if(object instanceof TargetTemplate selectedTargetTemplate) {
 						targetTemplate = null;
-						targetTemplates.remove(((TargetTemplate)object).getName());
+						targetTemplates.remove(selectedTargetTemplate.getName());
 						updateInput(null);
 						fireUpdate();
 					}
@@ -282,7 +283,7 @@ public class TargetTemplatesUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Import target templates.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -314,7 +315,7 @@ public class TargetTemplatesUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Export target templates.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override

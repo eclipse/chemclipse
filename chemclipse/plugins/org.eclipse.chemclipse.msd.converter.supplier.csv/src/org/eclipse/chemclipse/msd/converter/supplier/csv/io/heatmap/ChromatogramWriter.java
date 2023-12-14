@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.csv.io.heatmap;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -25,6 +24,7 @@ import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -40,63 +40,60 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
 	@Override
-	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		/*
 		 * Create the list writer.
 		 */
 		FileWriter writer = new FileWriter(file);
-		CSVPrinter csvFilePrinter = new CSVPrinter(writer, CSVFormat.EXCEL);
-		/*
-		 * Header
-		 */
-		List<String> headerValues = new ArrayList<String>();
-		headerValues.add("mzLo");
-		headerValues.add("mzHi");
-		headerValues.add("rtLo");
-		headerValues.add("rtHi");
-		headerValues.add("color");
-		headerValues.add("opacity");
-		headerValues.add("identification");
-		headerValues.add("matchFactor");
-		headerValues.add("reverseMatchFactor");
-		csvFilePrinter.printRecord(headerValues);
-		/*
-		 * Data
-		 */
-		try {
-			List<IChromatogramPeakMSD> chromatogramPeaks = new ArrayList<>(chromatogram.getPeaks());
-			Collections.sort(chromatogramPeaks, chromatogramPeakComparator);
-			//
-			for(IChromatogramPeakMSD chromatogramPeak : chromatogramPeaks) {
-				IPeakMassSpectrum peakMassSpectrum = chromatogramPeak.getExtractedMassSpectrum();
-				float retentionIndex = peakMassSpectrum.getRetentionIndex();
-				List<IIdentificationTarget> peakTargets = IIdentificationTarget.getTargetsSorted(chromatogramPeak.getTargets(), retentionIndex);
+		try (CSVPrinter csvFilePrinter = new CSVPrinter(writer, CSVFormat.EXCEL)) {
+			/*
+			 * Header
+			 */
+			List<String> headerValues = new ArrayList<>();
+			headerValues.add("mzLo");
+			headerValues.add("mzHi");
+			headerValues.add("rtLo");
+			headerValues.add("rtHi");
+			headerValues.add("color");
+			headerValues.add("opacity");
+			headerValues.add("identification");
+			headerValues.add("matchFactor");
+			headerValues.add("reverseMatchFactor");
+			csvFilePrinter.printRecord(headerValues);
+			/*
+			 * Data
+			 */
+			try {
+				List<IChromatogramPeakMSD> chromatogramPeaks = new ArrayList<>(chromatogram.getPeaks());
+				Collections.sort(chromatogramPeaks, chromatogramPeakComparator);
 				//
-				List<String> targetValues = new ArrayList<String>();
-				targetValues.add(decimalFormat.format(peakMassSpectrum.getLowestIon().getIon())); // mzLo
-				targetValues.add(decimalFormat.format(peakMassSpectrum.getHighestIon().getIon())); // mzHi
-				targetValues.add(decimalFormat.format(chromatogramPeak.getPeakModel().getStartRetentionTime() / IChromatogramMSD.MINUTE_CORRELATION_FACTOR)); // rtLo
-				targetValues.add(decimalFormat.format(chromatogramPeak.getPeakModel().getStopRetentionTime() / IChromatogramMSD.MINUTE_CORRELATION_FACTOR)); // rtHigh
-				targetValues.add("#A70000"); // color
-				targetValues.add("0.75"); // opacity
-				if(peakTargets.size() > 0) {
-					IIdentificationTarget peakTarget = peakTargets.get(0);
-					targetValues.add(peakTarget.getLibraryInformation().getName()); // identification
-					targetValues.add(decimalFormat.format(peakTarget.getComparisonResult().getMatchFactor())); // matchFactor
-					targetValues.add(decimalFormat.format(peakTarget.getComparisonResult().getReverseMatchFactor())); // reverseMatchFactor
-				} else {
-					targetValues.add(""); // identification
-					targetValues.add(""); // matchFactor
-					targetValues.add(""); // reverseMatchFactor
+				for(IChromatogramPeakMSD chromatogramPeak : chromatogramPeaks) {
+					IPeakMassSpectrum peakMassSpectrum = chromatogramPeak.getExtractedMassSpectrum();
+					float retentionIndex = peakMassSpectrum.getRetentionIndex();
+					List<IIdentificationTarget> peakTargets = IIdentificationTarget.getTargetsSorted(chromatogramPeak.getTargets(), retentionIndex);
+					//
+					List<String> targetValues = new ArrayList<>();
+					targetValues.add(decimalFormat.format(peakMassSpectrum.getLowestIon().getIon())); // mzLo
+					targetValues.add(decimalFormat.format(peakMassSpectrum.getHighestIon().getIon())); // mzHi
+					targetValues.add(decimalFormat.format(chromatogramPeak.getPeakModel().getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR)); // rtLo
+					targetValues.add(decimalFormat.format(chromatogramPeak.getPeakModel().getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR)); // rtHigh
+					targetValues.add("#A70000"); // color
+					targetValues.add("0.75"); // opacity
+					if(!peakTargets.isEmpty()) {
+						IIdentificationTarget peakTarget = peakTargets.get(0);
+						targetValues.add(peakTarget.getLibraryInformation().getName()); // identification
+						targetValues.add(decimalFormat.format(peakTarget.getComparisonResult().getMatchFactor())); // matchFactor
+						targetValues.add(decimalFormat.format(peakTarget.getComparisonResult().getReverseMatchFactor())); // reverseMatchFactor
+					} else {
+						targetValues.add(""); // identification
+						targetValues.add(""); // matchFactor
+						targetValues.add(""); // reverseMatchFactor
+					}
+					csvFilePrinter.printRecord(targetValues);
 				}
-				csvFilePrinter.printRecord(targetValues);
-			}
-		} catch(Exception e) {
-			throw new IOException(e);
-		} finally {
-			if(csvFilePrinter != null) {
-				csvFilePrinter.close();
+			} catch(Exception e) {
+				throw new IOException(e);
 			}
 		}
 	}

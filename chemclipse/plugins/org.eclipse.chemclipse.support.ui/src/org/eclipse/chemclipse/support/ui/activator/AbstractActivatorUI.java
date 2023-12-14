@@ -52,16 +52,6 @@ public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
-	@Override
-	public void start(BundleContext context) throws Exception {
-
-		super.start(context);
-	}
-
-	/*
-	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
@@ -97,38 +87,32 @@ public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 
 	public IEventBroker getEventBroker() {
 
-		IEclipseContext eclipseContext = getEclipseContext();
-		return eclipseContext.get(IEventBroker.class);
+		return getEclipseContext().get(IEventBroker.class);
 	}
 
 	public MApplication getApplication() {
 
-		IEclipseContext eclipseContext = getEclipseContext();
-		return eclipseContext.get(MApplication.class);
+		return getEclipseContext().get(MApplication.class);
 	}
 
 	public EModelService getModelService() {
 
-		IEclipseContext eclipseContext = getEclipseContext();
-		return eclipseContext.get(EModelService.class);
+		return getEclipseContext().get(EModelService.class);
 	}
 
 	public EPartService getPartService() {
 
-		IEclipseContext eclipseContext = getEclipseContext();
-		return eclipseContext.get(EPartService.class);
+		return getEclipseContext().get(EPartService.class);
 	}
 
 	public PartSupport getPartSupport() {
 
-		IEclipseContext eclipseContext = getEclipseContext();
-		return eclipseContext.get(PartSupport.class);
+		return getEclipseContext().get(PartSupport.class);
 	}
 
 	public PerspectiveSupport getPerspectiveSupport() {
 
-		IEclipseContext eclipseContext = getEclipseContext();
-		return eclipseContext.get(PerspectiveSupport.class);
+		return getEclipseContext().get(PerspectiveSupport.class);
 	}
 
 	public IEclipseContext getEclipseContext() {

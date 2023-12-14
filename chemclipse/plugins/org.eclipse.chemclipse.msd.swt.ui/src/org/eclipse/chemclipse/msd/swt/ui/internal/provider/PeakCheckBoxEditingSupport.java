@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,7 @@ public class PeakCheckBoxEditingSupport extends EditingSupport {
 	private TableViewer tableViewer;
 
 	public PeakCheckBoxEditingSupport(TableViewer tableViewer) {
+
 		super(tableViewer);
 		this.cellEditor = new CheckboxCellEditor(tableViewer.getTable());
 		this.tableViewer = tableViewer;
@@ -43,8 +44,7 @@ public class PeakCheckBoxEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof IPeak) {
-			IPeak peak = (IPeak)element;
+		if(element instanceof IPeak peak) {
 			return peak.isActiveForAnalysis();
 		}
 		return false;
@@ -53,8 +53,7 @@ public class PeakCheckBoxEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof IPeak) {
-			IPeak peak = (IPeak)element;
+		if(element instanceof IPeak peak) {
 			peak.setActiveForAnalysis((boolean)value);
 			tableViewer.refresh();
 		}

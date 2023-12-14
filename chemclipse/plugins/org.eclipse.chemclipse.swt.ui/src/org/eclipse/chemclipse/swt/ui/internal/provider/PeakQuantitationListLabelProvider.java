@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.support.PeakQuantitation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.peaks.PeakQuantitationListUI;
 import org.eclipse.swt.graphics.Image;
@@ -43,8 +44,7 @@ public class PeakQuantitationListLabelProvider extends AbstractChemClipseLabelPr
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof PeakQuantitation) {
-			PeakQuantitation peakQuantitationEntry = (PeakQuantitation)element;
+		if(element instanceof PeakQuantitation peakQuantitationEntry) {
 			switch(columnIndex) {
 				case 0:
 					text = decimalFormat.format(peakQuantitationEntry.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
@@ -80,8 +80,9 @@ public class PeakQuantitationListLabelProvider extends AbstractChemClipseLabelPr
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImageProvider.SIZE_16x16);
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -69,7 +69,7 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 		 * Chromatograms.
 		 */
 		final List<File> inputFiles = getInputFiles();
-		if(inputFiles.size() == 0) {
+		if(inputFiles.isEmpty()) {
 			MessageDialog.openError(getShell(), "Error", "Please select at least one chromatogram.");
 			return false;
 		}
@@ -126,6 +126,7 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 			return false;
 		} catch(InterruptedException e) {
 			MessageDialog.openError(getShell(), "Error", "Something has gone wrong with the chromatogram import.");
+			Thread.currentThread().interrupt();
 			return false;
 		}
 		MessageDialog.openInformation(getShell(), DESCRIPTION, "All chromatograms have been imported successfully.");
@@ -136,11 +137,10 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 
 		List<File> inputFiles = new ArrayList<>();
 		ISelection selection = rawFileSelectionWizardPage.getSelection();
-		if(selection instanceof IStructuredSelection) {
-			IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+		if(selection instanceof IStructuredSelection structuredSelection) {
 			for(Object object : structuredSelection.toArray()) {
-				if(object instanceof File) {
-					inputFiles.add((File)object);
+				if(object instanceof File file) {
+					inputFiles.add(file);
 				}
 			}
 		}

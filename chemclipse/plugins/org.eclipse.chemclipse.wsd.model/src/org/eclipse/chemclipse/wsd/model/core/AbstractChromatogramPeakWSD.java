@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,6 +29,7 @@ public abstract class AbstractChromatogramPeakWSD extends AbstractPeakWSD implem
 	 * @throws PeakException
 	 */
 	public AbstractChromatogramPeakWSD(IPeakModelWSD peakModel, IChromatogramWSD chromatogram) throws IllegalArgumentException, PeakException {
+
 		super(peakModel);
 		validateChromatogram(chromatogram);
 		validateRetentionTimes(chromatogram, peakModel);
@@ -40,6 +41,7 @@ public abstract class AbstractChromatogramPeakWSD extends AbstractPeakWSD implem
 	}
 
 	public AbstractChromatogramPeakWSD(IPeakModelWSD peakModel, IChromatogramWSD chromatogram, String modelDescription) throws IllegalArgumentException, PeakException {
+
 		this(peakModel, chromatogram);
 		setModelDescription(modelDescription);
 	}
@@ -87,10 +89,9 @@ public abstract class AbstractChromatogramPeakWSD extends AbstractPeakWSD implem
 		 * Extracted is the unknown and genuine the reference scan.
 		 */
 		IScan peakScan = getPeakModel().getPeakMaximum();
-		if(peakScan instanceof IScanWSD) {
-			IScanWSD peakScanWSD = (IScanWSD)peakScan;
+		if(peakScan instanceof IScanWSD peakScanWSD) {
 			IScanWSD genuineScanWSD = chromatogram.getSupplierScan(getScanMax());
-			if(peakScanWSD != null && genuineScanWSD != null) {
+			if(genuineScanWSD != null) {
 				int numberOfSignals = genuineScanWSD.getNumberOfScanSignals();
 				if(numberOfSignals != 0) {
 					purity = peakScanWSD.getNumberOfScanSignals() / (float)numberOfSignals;

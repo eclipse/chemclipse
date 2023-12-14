@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,10 +13,11 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.int
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -39,8 +40,7 @@ public class ResultsLabelProvider extends AbstractChemClipseLabelProvider {
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof ICombinedMassSpectrum) {
-			ICombinedMassSpectrum combinedMassSpectrum = (ICombinedMassSpectrum)element;
+		if(element instanceof ICombinedMassSpectrum combinedMassSpectrum) {
 			switch(columnIndex) {
 				case 0:
 					text = Integer.toString(combinedMassSpectrum.getStartScan());
@@ -49,10 +49,10 @@ public class ResultsLabelProvider extends AbstractChemClipseLabelProvider {
 					text = Integer.toString(combinedMassSpectrum.getStopScan());
 					break;
 				case 2:
-					text = decimalFormat.format(combinedMassSpectrum.getStartRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = decimalFormat.format(combinedMassSpectrum.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 3:
-					text = decimalFormat.format(combinedMassSpectrum.getStopRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = decimalFormat.format(combinedMassSpectrum.getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 4:
 					text = decimalFormat.format(combinedMassSpectrum.getStartRetentionIndex());
@@ -65,8 +65,9 @@ public class ResultsLabelProvider extends AbstractChemClipseLabelProvider {
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImageProvider.SIZE_16x16);
 	}
 }

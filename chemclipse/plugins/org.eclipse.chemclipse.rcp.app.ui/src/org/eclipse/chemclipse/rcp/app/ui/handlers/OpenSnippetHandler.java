@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -147,11 +147,9 @@ public class OpenSnippetHandler {
 	public static Consumer<MUIElement> addToEditorStack(EModelService modelService, String stackID, MUIElement searchRoot) {
 
 		return element -> {
-			if(element instanceof MStackElement) {
-				MStackElement stackElement = (MStackElement)element;
+			if(element instanceof MStackElement stackElement) {
 				MUIElement uiElement = modelService.find(stackID, searchRoot);
-				if(uiElement instanceof MPartStack) {
-					MPartStack partStack = (MPartStack)uiElement;
+				if(uiElement instanceof MPartStack partStack) {
 					logger.info("Part Stack: " + partStack);
 					partStack.getChildren().add(stackElement);
 				}
@@ -165,8 +163,7 @@ public class OpenSnippetHandler {
 			if(element instanceof MElementContainer<?>) {
 				final List<?> children = ((MElementContainer<?>)element).getChildren();
 				for(final Object child : children) {
-					if(child instanceof MUIElement) {
-						final MUIElement mui = (MUIElement)child;
+					if(child instanceof MUIElement mui) {
 						if(child instanceof MPart) {
 							mui.getTags().add(IPresentationEngine.NO_MOVE);
 						}
@@ -264,15 +261,14 @@ public class OpenSnippetHandler {
 	public static Consumer<MUIElement> activateAll(final EPartService partService) {
 
 		return element -> {
-			if(element instanceof MPart) {
-				final MPart part = (MPart)element;
+			if(element instanceof MPart part) {
 				partService.showPart(part, PartState.CREATE);
 			}
 			if(element instanceof MElementContainer<?>) {
 				final List<?> children = ((MElementContainer<?>)element).getChildren();
 				for(final Object child : children) {
-					if(child instanceof MUIElement) {
-						activateAll(partService).accept((MUIElement)child);
+					if(child instanceof MUIElement uiElement) {
+						activateAll(partService).accept(uiElement);
 					}
 				}
 			}

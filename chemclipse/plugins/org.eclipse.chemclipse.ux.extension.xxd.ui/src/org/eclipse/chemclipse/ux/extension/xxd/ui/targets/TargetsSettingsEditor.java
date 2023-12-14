@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
@@ -225,7 +226,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Add a target template.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -251,7 +252,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Edit the selected target template.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -259,10 +260,9 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)targetTemplateListControl.get().getSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof TargetTemplate) {
+				if(object instanceof TargetTemplate targetTemplate) {
 					Set<String> keySetEdit = new HashSet<>();
 					keySetEdit.addAll(settings.keySet());
-					TargetTemplate targetTemplate = (TargetTemplate)object;
 					keySetEdit.remove(targetTemplate.getName());
 					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Target", "Edit the target.", settings.extractTargetTemplate(targetTemplate), new TargetTemplateInputValidator(keySetEdit));
 					if(IDialogConstants.OK_ID == dialog.open()) {
@@ -289,7 +289,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Remove the selected target templates.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -298,8 +298,8 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Templates", "Do you want to delete the selected target templates?")) {
 					IStructuredSelection structuredSelection = (IStructuredSelection)targetTemplateListControl.get().getSelection();
 					for(Object object : structuredSelection.toArray()) {
-						if(object instanceof TargetTemplate) {
-							settings.remove(((TargetTemplate)object).getName());
+						if(object instanceof TargetTemplate targetTemplate) {
+							settings.remove(targetTemplate.getName());
 						}
 					}
 					setTableViewerInput();
@@ -315,7 +315,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Remove all target templates.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -336,7 +336,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Import a target templates from a library.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MASS_SPECTRUM_LIBRARY, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MASS_SPECTRUM_LIBRARY, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -369,14 +369,15 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 								addTargetTemplates(massSpectra);
 							}
 							setTableViewerInput();
-						} catch(InvocationTargetException e1) {
-							logger.warn(e1);
-						} catch(InterruptedException e1) {
-							logger.warn(e1);
+						} catch(InvocationTargetException ex) {
+							logger.warn(ex);
+						} catch(InterruptedException ex) {
+							logger.warn(ex);
+							Thread.currentThread().interrupt();
 						}
 					}
-				} catch(NoConverterAvailableException e1) {
-					logger.warn(e1);
+				} catch(NoConverterAvailableException ex) {
+					logger.warn(ex);
 				}
 			}
 		});
@@ -389,7 +390,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Import a target list.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -419,7 +420,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Export the target list.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -454,7 +455,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Save the target list.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -470,11 +471,10 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 	private void addTargetTemplates(IMassSpectra massSpectra) {
 
 		for(IScanMSD scanMSD : massSpectra.getList()) {
-			if(scanMSD instanceof ILibraryMassSpectrum) {
+			if(scanMSD instanceof ILibraryMassSpectrum libraryMassSpectrum) {
 				/*
 				 * Get the library
 				 */
-				ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)scanMSD;
 				ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 				/*
 				 * Transfer the target

@@ -193,8 +193,7 @@ public class PageSampleQuant {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = sampleQuantTableViewerUI.getStructuredSelection().getFirstElement();
-				if(object instanceof ISampleQuantSubstance) {
-					ISampleQuantSubstance sampleQuantSubstance = (ISampleQuantSubstance)object;
+				if(object instanceof ISampleQuantSubstance sampleQuantSubstance) {
 					int maxScan = sampleQuantSubstance.getMaxScan();
 					if(chromatogramMSD != null) {
 						IScan scan = chromatogramMSD.getScan(maxScan);

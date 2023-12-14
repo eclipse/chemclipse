@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -50,8 +50,7 @@ public class RetentionIndex extends AbstractVariable implements IRetentionIndex 
 	@Override
 	public int compareTo(IVariable o) {
 
-		if(o instanceof IRetentionIndex) {
-			IRetentionIndex retentionIndex = (IRetentionIndex)o;
+		if(o instanceof IRetentionIndex retentionIndex) {
 			return Integer.compare(getRetentionIndex(), retentionIndex.getRetentionIndex());
 		}
 		return 0;

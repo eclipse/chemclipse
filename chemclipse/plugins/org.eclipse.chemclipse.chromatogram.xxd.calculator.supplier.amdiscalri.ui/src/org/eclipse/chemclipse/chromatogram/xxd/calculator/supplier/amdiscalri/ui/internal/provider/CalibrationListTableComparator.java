@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,10 +22,8 @@ public class CalibrationListTableComparator extends AbstractRecordTableComparato
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof CalibrationFile && e2 instanceof CalibrationFile) {
+		if(e1 instanceof CalibrationFile calibrationFile1 && e2 instanceof CalibrationFile calibrationFile2) {
 			//
-			CalibrationFile calibrationFile1 = (CalibrationFile)e1;
-			CalibrationFile calibrationFile2 = (CalibrationFile)e2;
 			String column1 = calibrationFile1.getSeparationColumnIndices().getSeparationColumn().getName();
 			String column2 = calibrationFile2.getSeparationColumnIndices().getSeparationColumn().getName();
 			String type1 = calibrationFile1.getSeparationColumnIndices().getSeparationColumn().getSeparationColumnType().label();

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.QuantCompoundListUI;
@@ -52,8 +52,7 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof IQuantitationCompound) {
-			IQuantitationCompound compound = (IQuantitationCompound)element;
+		if(element instanceof IQuantitationCompound compound) {
 			if(column.equals(QuantCompoundLabelProvider.NAME)) {
 				return compound.getName();
 			}
@@ -79,13 +78,13 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 				return compound.isUseTIC();
 			}
 			if(column.equals(QuantCompoundLabelProvider.RETENTION_TIME)) {
-				return Double.toString(compound.getRetentionTimeWindow().getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+				return Double.toString(compound.getRetentionTimeWindow().getRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			}
 			if(column.equals(QuantCompoundLabelProvider.RETENTION_TIME_LOWER)) {
-				return Double.toString(compound.getRetentionTimeWindow().getAllowedNegativeDeviation() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+				return Double.toString(compound.getRetentionTimeWindow().getAllowedNegativeDeviation() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			}
 			if(column.equals(QuantCompoundLabelProvider.RETENTION_TIME_UPPER)) {
-				return Double.toString(compound.getRetentionTimeWindow().getAllowedPositiveDeviation() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+				return Double.toString(compound.getRetentionTimeWindow().getAllowedPositiveDeviation() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			}
 			if(column.equals(QuantCompoundLabelProvider.RETENTION_INDEX)) {
 				return Float.toString(compound.getRetentionIndexWindow().getRetentionIndex());
@@ -103,8 +102,7 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof IQuantitationCompound) {
-			IQuantitationCompound compound = (IQuantitationCompound)element;
+		if(element instanceof IQuantitationCompound compound) {
 			if(column.equals(QuantCompoundLabelProvider.NAME)) {
 				String name = (String)value;
 				if(!tableViewer.containsName(name)) {
@@ -130,19 +128,19 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 			if(column.equals(QuantCompoundLabelProvider.RETENTION_TIME)) {
 				double retentionTime = getValue(value, 0.0d);
 				if(retentionTime >= 0) {
-					compound.getRetentionTimeWindow().setRetentionTime((int)(retentionTime * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+					compound.getRetentionTimeWindow().setRetentionTime((int)(retentionTime * IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 				}
 			}
 			if(column.equals(QuantCompoundLabelProvider.RETENTION_TIME_LOWER)) {
 				double allowedNegativeDeviationRT = getValue(value, 0.0d);
 				if(allowedNegativeDeviationRT >= 0) {
-					compound.getRetentionTimeWindow().setAllowedNegativeDeviation((int)(allowedNegativeDeviationRT * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+					compound.getRetentionTimeWindow().setAllowedNegativeDeviation((int)(allowedNegativeDeviationRT * IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 				}
 			}
 			if(column.equals(QuantCompoundLabelProvider.RETENTION_TIME_UPPER)) {
 				double allowedPositiveDeviationRT = getValue(value, 0.0d);
 				if(allowedPositiveDeviationRT >= 0) {
-					compound.getRetentionTimeWindow().setAllowedPositiveDeviation((int)(allowedPositiveDeviationRT * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+					compound.getRetentionTimeWindow().setAllowedPositiveDeviation((int)(allowedPositiveDeviationRT * IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 				}
 			}
 			if(column.equals(QuantCompoundLabelProvider.RETENTION_INDEX)) {
@@ -170,9 +168,9 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 	private float getValue(Object value, float def) {
 
 		float result = def;
-		if(value instanceof String) {
+		if(value instanceof String text) {
 			try {
-				result = Float.parseFloat((String)value);
+				result = Float.parseFloat(text);
 			} catch(NumberFormatException e) {
 				//
 			}
@@ -183,9 +181,9 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 	private double getValue(Object value, double def) {
 
 		double result = def;
-		if(value instanceof String) {
+		if(value instanceof String text) {
 			try {
-				result = Double.parseDouble((String)value);
+				result = Double.parseDouble(text);
 			} catch(NumberFormatException e) {
 				//
 			}

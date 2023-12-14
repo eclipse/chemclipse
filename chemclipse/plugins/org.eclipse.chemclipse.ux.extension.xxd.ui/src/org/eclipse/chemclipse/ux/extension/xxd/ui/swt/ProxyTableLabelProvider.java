@@ -84,8 +84,8 @@ public class ProxyTableLabelProvider implements ITableLabelProvider, IAdaptable,
 	@Override
 	public Color getForeground(Object element, int columnIndex) {
 
-		if(proxy instanceof ITableColorProvider) {
-			return ((ITableColorProvider)proxy).getForeground(element, columnIndex);
+		if(proxy instanceof ITableColorProvider tableColorProvider) {
+			return tableColorProvider.getForeground(element, columnIndex);
 		} else {
 			return null;
 		}
@@ -94,8 +94,8 @@ public class ProxyTableLabelProvider implements ITableLabelProvider, IAdaptable,
 	@Override
 	public Color getBackground(Object element, int columnIndex) {
 
-		if(proxy instanceof ITableColorProvider) {
-			return ((ITableColorProvider)proxy).getBackground(element, columnIndex);
+		if(proxy instanceof ITableColorProvider tableColorProvider) {
+			return tableColorProvider.getBackground(element, columnIndex);
 		} else {
 			return null;
 		}
@@ -104,8 +104,8 @@ public class ProxyTableLabelProvider implements ITableLabelProvider, IAdaptable,
 	@Override
 	public Font getFont(Object element, int columnIndex) {
 
-		if(proxy instanceof ITableFontProvider) {
-			return ((ITableFontProvider)proxy).getFont(element, columnIndex);
+		if(proxy instanceof ITableFontProvider tableFontProvider) {
+			return tableFontProvider.getFont(element, columnIndex);
 		}
 		return null;
 	}
