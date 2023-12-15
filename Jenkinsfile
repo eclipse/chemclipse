@@ -66,7 +66,7 @@ pipeline {
 					sh '''
 						ssh genie.chemclipse@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/repository
 						ssh genie.chemclipse@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/downloads
-						scp -r chemclipse/sites/org.eclipse.chemclipse.rcp.compilation.community.updateSite/target/repository/* genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/repository
+						scp -r chemclipse/sites/chemclipse/target/repository/* genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/repository
 					'''
 				}
 			}
