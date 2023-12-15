@@ -88,8 +88,7 @@ public class ConverterCID {
 	public static void transfer(List<CompoundInformation> compoundList, IMassSpectra massSpectra) {
 
 		for(IScanMSD massSpectrum : massSpectra.getList()) {
-			if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
-				IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
+			if(massSpectrum instanceof IRegularLibraryMassSpectrum libraryMassSpectrum) {
 				CompoundInformation compoundInformation = getCompoundInformation(libraryMassSpectrum, compoundList);
 				if(compoundInformation != null) {
 					/*

@@ -104,8 +104,8 @@ public abstract class OLEEditor extends EditorPart {
 		setSite(site);
 		setInput(input);
 		setPartName(input.getName());
-		if(input instanceof IPathEditorInput) {
-			officeFile = ((IPathEditorInput)input).getPath().toFile();
+		if(input instanceof IPathEditorInput pathEditorInput) {
+			officeFile = pathEditorInput.getPath().toFile();
 		}
 	}
 

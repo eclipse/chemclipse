@@ -106,8 +106,7 @@ public class NamedTracesEditor extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = namedTracesListUI.getStructuredSelection().getFirstElement();
-				if(object instanceof NamedTrace) {
-					NamedTrace namedTrace = (NamedTrace)object;
+				if(object instanceof NamedTrace namedTrace) {
 					String[] items = namedTracesUI.getItems();
 					exitloop:
 					for(int i = 0; i < items.length; i++) {
@@ -138,8 +137,7 @@ public class NamedTracesEditor extends Composite {
 							 */
 							List<NamedTrace> deleteItems = new ArrayList<>();
 							for(Object object : namedTracesListUI.getStructuredSelection().toList()) {
-								if(object instanceof NamedTrace) {
-									NamedTrace namedTrace = (NamedTrace)object;
+								if(object instanceof NamedTrace namedTrace) {
 									deleteItems.add(namedTrace);
 								}
 							}

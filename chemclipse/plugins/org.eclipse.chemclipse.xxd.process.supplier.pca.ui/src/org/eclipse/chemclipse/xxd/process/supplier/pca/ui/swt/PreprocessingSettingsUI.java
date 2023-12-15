@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -165,8 +166,8 @@ public class PreprocessingSettingsUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof INormalization) {
-					preprocessingSettings.setNormalization((INormalization)object);
+				if(object instanceof INormalization normalization) {
+					preprocessingSettings.setNormalization(normalization);
 				} else {
 					preprocessingSettings.setNormalization(null);
 				}
@@ -189,8 +190,8 @@ public class PreprocessingSettingsUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof IReplacer) {
-					preprocessingSettings.setReplacer((IReplacer)object);
+				if(object instanceof IReplacer replacer) {
+					preprocessingSettings.setReplacer(replacer);
 				} else {
 					preprocessingSettings.setReplacer(null);
 				}
@@ -212,8 +213,8 @@ public class PreprocessingSettingsUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof ITransformation) {
-					preprocessingSettings.setTransformation((ITransformation)object);
+				if(object instanceof ITransformation transformation) {
+					preprocessingSettings.setTransformation(transformation);
 				} else {
 					preprocessingSettings.setTransformation(null);
 				}
@@ -268,8 +269,8 @@ public class PreprocessingSettingsUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof ICentering) {
-					preprocessingSettings.setCentering((ICentering)object);
+				if(object instanceof ICentering centering) {
+					preprocessingSettings.setCentering(centering);
 				} else {
 					preprocessingSettings.setCentering(null);
 				}
@@ -291,10 +292,10 @@ public class PreprocessingSettingsUI extends Composite {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IPreprocessing) {
-					return ((IPreprocessing)element).getName();
-				} else if(element instanceof String) {
-					return element.toString();
+				if(element instanceof IPreprocessing preprocessing) {
+					return preprocessing.getName();
+				} else if(element instanceof String text) {
+					return text;
 				}
 				return null;
 			}
@@ -313,7 +314,7 @@ public class PreprocessingSettingsUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Show the formula.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImageProvider.SIZE_16x16));
 		//
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -385,14 +386,14 @@ public class PreprocessingSettingsUI extends Composite {
 		canvas.setLayoutData(gridData);
 		canvas.addPaintListener(new PaintListener() {
 
+			@Override
 			public void paintControl(PaintEvent e) {
 
 				Object object = canvas.getData(KEY_IMAGE);
-				if(object instanceof Image) {
+				if(object instanceof Image image) {
 					/*
 					 * Center the image
 					 */
-					Image image = (Image)object;
 					Rectangle src = image.getBounds();
 					Rectangle dest = canvas.getBounds();
 					int x = (int)(dest.width / 2.0f - src.width / 2.0f);
@@ -455,8 +456,7 @@ public class PreprocessingSettingsUI extends Composite {
 		if(selectedPreprocessing != null) {
 			for(int i = 0; i < input.length; i++) {
 				Object object = input[i];
-				if(object instanceof IPreprocessing) {
-					IPreprocessing preprocessing = (IPreprocessing)object;
+				if(object instanceof IPreprocessing preprocessing) {
 					if(preprocessing.getName().equals(selectedPreprocessing.getName())) {
 						combo.select(i);
 						return;
@@ -472,8 +472,7 @@ public class PreprocessingSettingsUI extends Composite {
 		Image image = null;
 		Object object = comboViewer.getStructuredSelection().getFirstElement();
 		//
-		if(object instanceof IPreprocessing) {
-			IPreprocessing preprocessing = (IPreprocessing)object;
+		if(object instanceof IPreprocessing preprocessing) {
 			text = preprocessing.getDescription();
 		}
 		//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,18 +35,18 @@ public class FilterWizard extends Wizard {
 	@Override
 	public void addPages() {
 
-		if(filter instanceof AnovaFilter) {
-			addPage(filterWizardPage = new FilterAnovaWizardPage((AnovaFilter)filter));
-		} else if(filter instanceof CVFilter) {
-			addPage(filterWizardPage = new FilterCVWizardPage((CVFilter)filter));
-		} else if(filter instanceof AbundanceFilter) {
-			addPage(filterWizardPage = new FilterAbundanceWizardPage((AbundanceFilter)filter));
-		} else if(filter instanceof EmptyDataFilter) {
-			addPage(filterWizardPage = new FilterEmptyDataWizardPage((EmptyDataFilter)filter));
-		} else if(filter instanceof RetentionTimeFilter) {
-			addPage(filterWizardPage = new FilterRetentionTimeWizardPage((RetentionTimeFilter)filter));
-		} else if(filter instanceof RetentionTime2Filter) {
-			addPage(filterWizardPage = new FilterRetentionTime2WizardPage((RetentionTime2Filter)filter));
+		if(filter instanceof AnovaFilter anovaFilter) {
+			addPage(filterWizardPage = new FilterAnovaWizardPage(anovaFilter));
+		} else if(filter instanceof CVFilter cvFilter) {
+			addPage(filterWizardPage = new FilterCVWizardPage(cvFilter));
+		} else if(filter instanceof AbundanceFilter abundanceFilter) {
+			addPage(filterWizardPage = new FilterAbundanceWizardPage(abundanceFilter));
+		} else if(filter instanceof EmptyDataFilter emptyDataFilter) {
+			addPage(filterWizardPage = new FilterEmptyDataWizardPage(emptyDataFilter));
+		} else if(filter instanceof RetentionTimeFilter retentionTimeFilter) {
+			addPage(filterWizardPage = new FilterRetentionTimeWizardPage(retentionTimeFilter));
+		} else if(filter instanceof RetentionTime2Filter retentionTime2Filter) {
+			addPage(filterWizardPage = new FilterRetentionTime2WizardPage(retentionTime2Filter));
 		}
 	}
 

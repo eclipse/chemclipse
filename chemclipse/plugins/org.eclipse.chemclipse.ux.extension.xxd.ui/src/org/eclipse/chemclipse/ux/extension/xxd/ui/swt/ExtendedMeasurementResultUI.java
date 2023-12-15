@@ -173,11 +173,10 @@ public class ExtendedMeasurementResultUI extends Composite implements IExtendedP
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IMeasurementResult<?>) {
-					IMeasurementResult<?> measurementResult = (IMeasurementResult<?>)element;
+				if(element instanceof IMeasurementResult<?> measurementResult) {
 					return measurementResult.getName();
-				} else if(element instanceof String) {
-					return (String)element;
+				} else if(element instanceof String text) {
+					return text;
 				}
 				//
 				return super.getText(element);

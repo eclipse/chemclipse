@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -51,8 +51,7 @@ public class AmdisMSPReader_1_ITest extends TestCase {
 	public void test2() {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
-		if(massSpectrum instanceof ILibraryMassSpectrum) {
-			ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof ILibraryMassSpectrum libraryMassSpectrum) {
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			assertEquals("Test1", libraryInformation.getName());
 			assertEquals("CHO", libraryInformation.getFormula());
@@ -80,8 +79,7 @@ public class AmdisMSPReader_1_ITest extends TestCase {
 	public void test3() {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(2);
-		if(massSpectrum instanceof ILibraryMassSpectrum) {
-			ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof ILibraryMassSpectrum libraryMassSpectrum) {
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			assertEquals("Test2", libraryInformation.getName());
 			assertEquals("CHO", libraryInformation.getFormula());

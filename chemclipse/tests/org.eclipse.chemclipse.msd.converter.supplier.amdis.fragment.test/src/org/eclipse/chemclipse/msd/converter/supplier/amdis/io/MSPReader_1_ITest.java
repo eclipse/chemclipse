@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,12 +14,11 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 import java.io.File;
 import java.util.Set;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -71,8 +70,7 @@ public class MSPReader_1_ITest extends TestCase {
 	public void testRead_5() {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
-		if(massSpectrum instanceof ILibraryMassSpectrum) {
-			ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof ILibraryMassSpectrum libraryMassSpectrum) {
 			Set<String> synonyms = libraryMassSpectrum.getLibraryInformation().getSynonyms();
 			assertEquals(6, synonyms.size());
 			assertTrue(synonyms.contains("test1"));

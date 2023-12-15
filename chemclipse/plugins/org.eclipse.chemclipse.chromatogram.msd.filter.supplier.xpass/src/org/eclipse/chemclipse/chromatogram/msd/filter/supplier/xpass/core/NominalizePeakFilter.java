@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -52,8 +52,7 @@ public class NominalizePeakFilter extends AbstractPeakFilter<NominalizeFilterSet
 		//
 		SubMonitor subMonitor = SubMonitor.convert(context.getProgressMonitor(), peaks.size());
 		for(IPeak peak : peaks) {
-			if(peak instanceof IPeakMSD) {
-				IPeakMSD peakMSD = (IPeakMSD)peak;
+			if(peak instanceof IPeakMSD peakMSD) {
 				IPeakModelMSD peakModelMSD = peakMSD.getPeakModel();
 				XPassFilter.nominalize(peakModelMSD.getPeakMassSpectrum());
 				subMonitor.worked(1);

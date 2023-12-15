@@ -68,8 +68,7 @@ public class PeakQuantifier {
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
 		if(peakQuantifier != null) {
 			processingInfo = peakQuantifier.quantify(peak, peakQuantifierSettings, monitor);
-			if(!processingInfo.hasErrorMessages() && peak instanceof IChromatogramPeak) {
-				IChromatogramPeak chromatogramPeak = (IChromatogramPeak)peak;
+			if(!processingInfo.hasErrorMessages() && peak instanceof IChromatogramPeak chromatogramPeak) {
 				chromatogramPeak.getChromatogram().setDirty(true);
 			}
 		} else {

@@ -298,10 +298,10 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 		String name = ("".equals(massSpectra.getName())) ? "NoName" : massSpectra.getName();
 		massSpectrum = massSpectra.getMassSpectrum(1);
 		massSpectrum.setDirty(false);
-		if(massSpectrum instanceof IVendorStandaloneMassSpectrum) {
-			name = ((IVendorStandaloneMassSpectrum)massSpectrum).getName();
-		} else if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
-			ILibraryInformation libraryInformation = ((IRegularLibraryMassSpectrum)massSpectrum).getLibraryInformation();
+		if(massSpectrum instanceof IVendorStandaloneMassSpectrum vendorStandaloneMassSpectrum) {
+			name = vendorStandaloneMassSpectrum.getName();
+		} else if(massSpectrum instanceof IRegularLibraryMassSpectrum regularLibraryMassSpectrum) {
+			ILibraryInformation libraryInformation = regularLibraryMassSpectrum.getLibraryInformation();
 			if(libraryInformation != null) {
 				name = libraryInformation.getName();
 			}
@@ -311,8 +311,8 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 		 * Centroid / Profile
 		 */
 		boolean isProfile;
-		if(massSpectrum instanceof IRegularMassSpectrum) {
-			isProfile = ((IRegularMassSpectrum)massSpectrum).getMassSpectrumType() == 1;
+		if(massSpectrum instanceof IRegularMassSpectrum regularLibraryMassSpectrum) {
+			isProfile = regularLibraryMassSpectrum.getMassSpectrumType() == 1;
 		} else {
 			isProfile = PreferenceSupplier.useProfileMassSpectrumView();
 		}
@@ -386,9 +386,8 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IScanMSD) {
+			if(object instanceof IScanMSD scanMSD) {
 				if(object != massSpectrum) {
-					IScanMSD scanMSD = (IScanMSD)object;
 					massSpectrumChart.update(scanMSD);
 				} else {
 					dirtyable.setDirty(massSpectrum.isDirty());

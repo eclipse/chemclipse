@@ -106,16 +106,15 @@ public class MethodTreeViewer extends TreeViewer {
 			@Override
 			public boolean hasChildren(Object element) {
 
-				if(element instanceof IProcessEntry) {
-					IProcessEntry entry = (IProcessEntry)element;
+				if(element instanceof IProcessEntry entry) {
 					IProcessSupplier<?> supplier = processingSupport.getSupplier(entry.getProcessorId());
-					if(supplier instanceof ProcessEntryContainer) {
-						return ((ProcessEntryContainer)supplier).getNumberOfEntries() > 0;
+					if(supplier instanceof ProcessEntryContainer processEntryContainer) {
+						return processEntryContainer.getNumberOfEntries() > 0;
 					}
 				}
 				//
-				if(element instanceof ProcessEntryContainer) {
-					return ((ProcessEntryContainer)element).getNumberOfEntries() > 0;
+				if(element instanceof ProcessEntryContainer processEntryContainer) {
+					return processEntryContainer.getNumberOfEntries() > 0;
 				}
 				//
 				return false;
@@ -124,8 +123,8 @@ public class MethodTreeViewer extends TreeViewer {
 			@Override
 			public Object getParent(Object element) {
 
-				if(element instanceof IProcessEntry) {
-					return ((IProcessEntry)element).getParent();
+				if(element instanceof IProcessEntry processEntry) {
+					return processEntry.getParent();
 				}
 				return null;
 			}
@@ -133,13 +132,12 @@ public class MethodTreeViewer extends TreeViewer {
 			@Override
 			public Object[] getElements(Object inputElement) {
 
-				if(inputElement instanceof ProcessEntryContainer) {
-					ProcessEntryContainer container = (ProcessEntryContainer)inputElement;
+				if(inputElement instanceof ProcessEntryContainer container) {
 					return entryList(container, false);
 				}
 				//
-				if(inputElement instanceof Object[]) {
-					return (Object[])inputElement;
+				if(inputElement instanceof Object[] objects) {
+					return objects;
 				}
 				//
 				return new Object[0];
@@ -166,16 +164,15 @@ public class MethodTreeViewer extends TreeViewer {
 			@Override
 			public Object[] getChildren(Object parentElement) {
 
-				if(parentElement instanceof IProcessEntry) {
-					IProcessEntry entry = (IProcessEntry)parentElement;
+				if(parentElement instanceof IProcessEntry entry) {
 					IProcessSupplier<?> supplier = processingSupport.getSupplier(entry.getProcessorId());
-					if(supplier instanceof ProcessEntryContainer) {
-						return entryList((ProcessEntryContainer)supplier, true);
+					if(supplier instanceof ProcessEntryContainer processEntryContainer) {
+						return entryList(processEntryContainer, true);
 					}
 				}
 				//
-				if(parentElement instanceof ProcessEntryContainer) {
-					return entryList((ProcessEntryContainer)parentElement, false);
+				if(parentElement instanceof ProcessEntryContainer processEntryContainer) {
+					return entryList(processEntryContainer, false);
 				}
 				//
 				return new Object[0];
@@ -197,8 +194,7 @@ public class MethodTreeViewer extends TreeViewer {
 				}
 				//
 				Object firstElement = getStructuredSelection().getFirstElement();
-				if(firstElement instanceof IProcessEntry) {
-					IProcessEntry entry = (IProcessEntry)firstElement;
+				if(firstElement instanceof IProcessEntry entry) {
 					if(toolbarButtons.get().modifyProcessEntry(getControl().getShell(), entry, IProcessEntry.getContext(entry, processingSupport), true)) {
 						fireUpdate();
 					}

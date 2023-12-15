@@ -48,8 +48,7 @@ public class InternalStandardEditingSupport extends EditingSupport {
 	protected Object getValue(Object element) {
 
 		Object object = null;
-		if(element instanceof IInternalStandard) {
-			IInternalStandard internalStandard = (IInternalStandard)element;
+		if(element instanceof IInternalStandard internalStandard) {
 			if(column.equals(InternalStandardsLabelProvider.NAME)) {
 				object = internalStandard.getName();
 			}
@@ -63,8 +62,7 @@ public class InternalStandardEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof IInternalStandard) {
-			IInternalStandard internalStandard = (IInternalStandard)element;
+		if(element instanceof IInternalStandard internalStandard) {
 			if(column.equals(InternalStandardsLabelProvider.NAME)) {
 				String name = ((String)value).trim();
 				if(isRenameAllowed(name)) {
@@ -83,8 +81,7 @@ public class InternalStandardEditingSupport extends EditingSupport {
 
 		for(TableItem tableItem : tableViewer.getTable().getItems()) {
 			Object object = tableItem.getData();
-			if(object instanceof IInternalStandard) {
-				IInternalStandard internalStandard = (IInternalStandard)object;
+			if(object instanceof IInternalStandard internalStandard) {
 				if(internalStandard.getName().equals(name)) {
 					return false;
 				}

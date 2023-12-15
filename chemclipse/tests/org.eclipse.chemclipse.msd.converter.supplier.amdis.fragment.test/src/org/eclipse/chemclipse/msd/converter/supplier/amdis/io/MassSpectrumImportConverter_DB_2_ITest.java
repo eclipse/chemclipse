@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -81,8 +81,8 @@ public class MassSpectrumImportConverter_DB_2_ITest extends ImportConverterMslTe
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(4);
 		IVendorLibraryMassSpectrum ms = null;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			ms = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) {
+			ms = vendorLibraryMassSpectrum;
 		}
 		assertNotNull(ms);
 		assertEquals("Name", "Isopropylmyristat (wrs.)", ms.getLibraryInformation().getName());
@@ -101,8 +101,8 @@ public class MassSpectrumImportConverter_DB_2_ITest extends ImportConverterMslTe
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(7);
 		IVendorLibraryMassSpectrum ms = null;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			ms = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) {
+			ms = vendorLibraryMassSpectrum;
 		}
 		assertNotNull(ms);
 		assertEquals("Name", "unbekannt (???THF-derivate?) Oligomeren-reihe RT:2085/2550/3015/3470/3910/nach4200", ms.getLibraryInformation().getName());
@@ -121,8 +121,8 @@ public class MassSpectrumImportConverter_DB_2_ITest extends ImportConverterMslTe
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(8);
 		IVendorLibraryMassSpectrum ms = null;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			ms = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) {
+			ms = vendorLibraryMassSpectrum;
 		}
 		assertNotNull(ms);
 		assertEquals("Name", "Abbaupeak Irgacure 819 (RT: bei C23)", ms.getLibraryInformation().getName());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -46,8 +46,7 @@ public class IonListLabelProvider extends AbstractChemClipseLabelProvider {
 		 */
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IIon) {
-			IIon ion = (IIon)element;
+		if(element instanceof IIon ion) {
 			IIonTransition ionTransition = ion.getIonTransition();
 			switch(columnIndex) {
 				case 0: // m/z (normal 28.3 or with Transition 128 > 78.4)

@@ -200,8 +200,8 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 							 * The containing bundle should define in the MANIFEST.MF:
 							 * Eclipse-BundleShape: dir
 							 */
-							if(processMethod instanceof ProcessMethod && sourceFile.exists()) {
-								((ProcessMethod)processMethod).setSourceFile(sourceFile);
+							if(processMethod instanceof ProcessMethod method && sourceFile.exists()) {
+								method.setSourceFile(sourceFile);
 							}
 							processSupplierList.add(new MetaProcessorProcessSupplier(MethodProcessSupport.getID(processMethod, BUNDLE_PREFIX + bundle.getSymbolicName() + ":" + path), processMethod, this));
 						}
@@ -233,8 +233,8 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 									/*
 									 * Set the File to allow editing the profiles.
 									 */
-									if(processMethod instanceof ProcessMethod) {
-										((ProcessMethod)processMethod).setSourceFile(file);
+									if(processMethod instanceof ProcessMethod method) {
+										method.setSourceFile(file);
 									}
 									processSupplierList.add(new MetaProcessorProcessSupplier(MethodProcessSupport.getID(processMethod, SYSTEM_PREFIX + file.getName()), processMethod, this));
 								}

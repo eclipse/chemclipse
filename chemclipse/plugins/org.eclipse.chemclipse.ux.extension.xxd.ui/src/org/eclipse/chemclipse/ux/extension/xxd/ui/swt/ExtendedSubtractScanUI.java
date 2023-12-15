@@ -81,10 +81,10 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 
 	public void update(Object object) {
 
-		if(object instanceof IChromatogramSelectionMSD) {
-			chromatogramSelectionMSD = (IChromatogramSelectionMSD)object;
-		} else if(object instanceof IScanMSD) {
-			scanMSD = (IScanMSD)object;
+		if(object instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
+			this.chromatogramSelectionMSD = chromatogramSelectionMSD;
+		} else if(object instanceof IScanMSD scanMSD) {
+			this.scanMSD = scanMSD;
 		} else if(object == null) {
 			chromatogramSelectionMSD = null;
 		}

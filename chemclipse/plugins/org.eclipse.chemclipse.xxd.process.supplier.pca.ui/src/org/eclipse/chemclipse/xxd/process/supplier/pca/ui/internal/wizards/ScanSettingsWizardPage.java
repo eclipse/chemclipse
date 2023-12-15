@@ -118,7 +118,7 @@ public class ScanSettingsWizardPage extends AbstractAnalysisWizardPage {
 		//
 		UpdateValueStrategy<String, Integer> widgetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Integer.class, o1 -> {
 			try {
-				return Integer.parseInt((String)o1);
+				return Integer.parseInt(o1);
 			} catch(NumberFormatException e) {
 				// No message
 			}
@@ -126,8 +126,7 @@ public class ScanSettingsWizardPage extends AbstractAnalysisWizardPage {
 		}));
 		//
 		widgetToModel.setBeforeSetValidator(o1 -> {
-			if(o1 instanceof Integer) {
-				Integer i = (Integer)o1;
+			if(o1 instanceof Integer i) {
 				if(i > 0) {
 					return ValidationStatus.ok();
 				}
@@ -135,7 +134,7 @@ public class ScanSettingsWizardPage extends AbstractAnalysisWizardPage {
 			return ValidationStatus.error("Warning: The value must be positive.");
 		});
 		//
-		UpdateValueStrategy<Integer, String> modelToWidget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString(((Integer)o1))));
+		UpdateValueStrategy<Integer, String> modelToWidget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString((o1))));
 		dataBindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(text), retentionTimeWindow, widgetToModel, modelToWidget);
 	}
 
@@ -241,8 +240,8 @@ public class ScanSettingsWizardPage extends AbstractAnalysisWizardPage {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof Algorithm) {
-					return ((Algorithm)element).label();
+				if(element instanceof Algorithm algorithm) {
+					return algorithm.label();
 				}
 				return null;
 			}
@@ -257,8 +256,8 @@ public class ScanSettingsWizardPage extends AbstractAnalysisWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof Algorithm) {
-					analysisSettings.setAlgorithm((Algorithm)object);
+				if(object instanceof Algorithm algorithm) {
+					analysisSettings.setAlgorithm(algorithm);
 				}
 			}
 		});

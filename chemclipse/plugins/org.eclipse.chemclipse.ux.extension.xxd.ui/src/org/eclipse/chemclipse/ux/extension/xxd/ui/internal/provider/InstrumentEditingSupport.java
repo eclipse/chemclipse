@@ -46,8 +46,7 @@ public class InstrumentEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof Instrument) {
-			Instrument instrument = (Instrument)element;
+		if(element instanceof Instrument instrument) {
 			if(column.equals(InstrumentLabelProvider.NAME)) {
 				return instrument.getName();
 			}
@@ -61,8 +60,7 @@ public class InstrumentEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof Instrument) {
-			Instrument instrument = (Instrument)element;
+		if(element instanceof Instrument instrument) {
 			if(column.equals(InstrumentLabelProvider.NAME)) {
 				instrument.setName((String)value);
 			}

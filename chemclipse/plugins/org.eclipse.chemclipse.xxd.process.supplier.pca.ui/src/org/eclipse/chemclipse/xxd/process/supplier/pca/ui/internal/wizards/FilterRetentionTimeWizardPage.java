@@ -136,15 +136,14 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 		//
 		UpdateValueStrategy<String, Double> targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
 			try {
-				return decimalFormat.parse((String)o1).doubleValue();
+				return decimalFormat.parse(o1).doubleValue();
 			} catch(ParseException e1) {
 			}
 			return null;
 		}));
 		//
 		targetToModel.setBeforeSetValidator(o1 -> {
-			if(o1 instanceof Double) {
-				Double d = (Double)o1;
+			if(o1 instanceof Double d) {
 				if(d >= 0) {
 					return ValidationStatus.ok();
 				}
@@ -169,15 +168,14 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 		targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
 		targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
 			try {
-				return decimalFormat.parse((String)o1).doubleValue();
+				return decimalFormat.parse(o1).doubleValue();
 			} catch(ParseException e1) {
 			}
 			return null;
 		}));
 		//
 		targetToModel.setBeforeSetValidator(o1 -> {
-			if(o1 instanceof Double) {
-				Double d = (Double)o1;
+			if(o1 instanceof Double d) {
 				if(d >= 0) {
 					return ValidationStatus.ok();
 				}

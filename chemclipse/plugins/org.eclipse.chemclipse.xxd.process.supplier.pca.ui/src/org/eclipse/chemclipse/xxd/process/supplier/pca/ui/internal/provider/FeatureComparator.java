@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,10 +26,8 @@ public class FeatureComparator extends AbstractRecordTableComparator implements 
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof Feature && e2 instanceof Feature) {
-			Feature feature1 = (Feature)e1;
+		if(e1 instanceof Feature feature1 && e2 instanceof Feature feature2) {
 			IVariable variable1 = feature1.getVariable();
-			Feature feature2 = (Feature)e2;
 			IVariable variable2 = feature2.getVariable();
 			//
 			int columnIndex = getPropertyIndex();

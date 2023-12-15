@@ -1090,8 +1090,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		if(indices.length >= 2) {
 			peaksMSD = new ArrayList<>();
 			for(IPeak peak : getPeakList(table, indices)) {
-				if(peak instanceof IChromatogramPeakMSD) {
-					peaksMSD.add((IChromatogramPeakMSD)peak);
+				if(peak instanceof IChromatogramPeakMSD chromatogramPeakMSD) {
+					peaksMSD.add(chromatogramPeakMSD);
 				}
 			}
 		} else {
@@ -1106,8 +1106,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		List<IScan> scanList = new ArrayList<>();
 		for(TableItem tableItem : table.getItems()) {
 			Object object = tableItem.getData();
-			if(object instanceof IScan) {
-				scanList.add((IScan)object);
+			if(object instanceof IScan scan) {
+				scanList.add(scan);
 			}
 		}
 		return scanList;
@@ -1119,8 +1119,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		for(int index : indices) {
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
-			if(object instanceof IScan) {
-				scanList.add((IScan)object);
+			if(object instanceof IScan scan) {
+				scanList.add(scan);
 			}
 		}
 		return scanList;

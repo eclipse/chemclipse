@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,8 +32,8 @@ public interface IMethodImportConverter extends IImportConverter {
 			IProcessingInfo<IProcessMethod> info = readFrom(stream, file.getName(), monitor);
 			if(info != null) {
 				IProcessMethod result = info.getProcessingResult();
-				if(result instanceof ProcessMethod) {
-					((ProcessMethod)result).setSourceFile(file);
+				if(result instanceof ProcessMethod processMethod) {
+					processMethod.setSourceFile(file);
 				}
 			}
 			return info;

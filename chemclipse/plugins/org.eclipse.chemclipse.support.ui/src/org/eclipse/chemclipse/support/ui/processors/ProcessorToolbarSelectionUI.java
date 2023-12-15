@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -129,7 +130,7 @@ public class ProcessorToolbarSelectionUI extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText(""); //$NON-NLS-1$
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImageProvider.SIZE_16x16));
 		//
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -195,7 +196,7 @@ public class ProcessorToolbarSelectionUI extends Composite {
 	private void createToolItemAdd(ToolBar toolBar) {
 
 		ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImage.SIZE_16x16));
+		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImageProvider.SIZE_16x16));
 		//
 		toolItem.addSelectionListener(new SelectionAdapter() {
 
@@ -214,7 +215,7 @@ public class ProcessorToolbarSelectionUI extends Composite {
 	private void createToolItemRemove(ToolBar toolBar) {
 
 		ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImage.SIZE_16x16));
+		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImageProvider.SIZE_16x16));
 		//
 		toolItem.addSelectionListener(new SelectionAdapter() {
 
@@ -260,7 +261,7 @@ public class ProcessorToolbarSelectionUI extends Composite {
 	private void createToolItemImage(ToolBar toolBar) {
 
 		ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BITMAP_DOCUMENT, IApplicationImage.SIZE_16x16));
+		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BITMAP_DOCUMENT, IApplicationImageProvider.SIZE_16x16));
 		//
 		toolItem.addSelectionListener(new SelectionAdapter() {
 
@@ -268,8 +269,7 @@ public class ProcessorToolbarSelectionUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = processorListActive.getStructuredSelection().getFirstElement();
-				if(object instanceof Processor) {
-					Processor processor = (Processor)object;
+				if(object instanceof Processor processor) {
 					ImageDialog imageDialog = new ImageDialog(e.display.getActiveShell());
 					if(imageDialog.open() == Dialog.OK) {
 						String imageFileName = imageDialog.getImageFileName();
@@ -289,7 +289,7 @@ public class ProcessorToolbarSelectionUI extends Composite {
 	private void createToolItemMoveUp(ToolBar toolBar) {
 
 		ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
+		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImageProvider.SIZE_16x16));
 		//
 		toolItem.addSelectionListener(new SelectionAdapter() {
 
@@ -308,7 +308,7 @@ public class ProcessorToolbarSelectionUI extends Composite {
 	private void createToolItemMoveDown(ToolBar toolBar) {
 
 		ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
+		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImageProvider.SIZE_16x16));
 		//
 		toolItem.addSelectionListener(new SelectionAdapter() {
 

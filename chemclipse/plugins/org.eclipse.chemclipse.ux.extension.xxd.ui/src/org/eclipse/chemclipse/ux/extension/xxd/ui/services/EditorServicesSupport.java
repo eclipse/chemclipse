@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -73,10 +73,9 @@ public class EditorServicesSupport {
 
 		List<IEditorService> editorServices = new ArrayList<>();
 		for(Object object : Activator.getDefault().getEditorServices()) {
-			if(object instanceof IEditorService) {
-				IEditorService editorService = (IEditorService)object;
+			if(object instanceof IEditorService editorService) {
 				if(editorService.getType().equals(type)) {
-					editorServices.add((IEditorService)object);
+					editorServices.add(editorService);
 				}
 			}
 		}

@@ -107,10 +107,10 @@ public class DatabaseFileSupport {
 
 	public static void savePeaks(Shell shell, List<IPeak> peaks, String fileName) throws NoConverterAvailableException {
 
-		List<IPeakMSD> peaksMSD = new ArrayList<IPeakMSD>();
+		List<IPeakMSD> peaksMSD = new ArrayList<>();
 		for(IPeak peak : peaks) {
-			if(peak instanceof IPeakMSD) {
-				peaksMSD.add((IPeakMSD)peak);
+			if(peak instanceof IPeakMSD peakMSD) {
+				peaksMSD.add(peakMSD);
 			}
 		}
 		saveMassSpectra(shell, peaksMSD, fileName);

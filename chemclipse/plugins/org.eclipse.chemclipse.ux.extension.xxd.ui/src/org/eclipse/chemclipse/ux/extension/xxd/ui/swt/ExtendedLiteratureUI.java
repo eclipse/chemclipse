@@ -245,13 +245,10 @@ public class ExtendedLiteratureUI extends Composite implements IExtendedPartUI {
 
 	private void updateLiteratureSelection() {
 
-		LiteratureReference literatureReference = null;
 		Object object = comboViewerLiteratureControl.get().getStructuredSelection().getFirstElement();
-		if(object instanceof LiteratureReference) {
-			literatureReference = (LiteratureReference)object;
+		if(object instanceof LiteratureReference literatureReference) {
+			updateWidgets(literatureReference);
 		}
-		//
-		updateWidgets(literatureReference);
 	}
 
 	private void updateWidgets(LiteratureReference literatureReference) {

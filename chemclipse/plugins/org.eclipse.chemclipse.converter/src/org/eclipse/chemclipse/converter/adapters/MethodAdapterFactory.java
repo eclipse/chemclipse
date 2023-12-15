@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,8 +34,7 @@ public class MethodAdapterFactory implements IAdapterFactory {
 	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
 
 		if(adapterType == IProcessMethod.class) {
-			if(adaptableObject instanceof IFile) {
-				IFile resourceFile = (IFile)adaptableObject;
+			if(adaptableObject instanceof IFile resourceFile) {
 				IPath location = resourceFile.getLocation();
 				if(location != null) {
 					File localfile = location.toFile();
@@ -43,8 +42,8 @@ public class MethodAdapterFactory implements IAdapterFactory {
 						return adapterType.cast(convertFile(localfile));
 					}
 				}
-			} else if(adaptableObject instanceof File) {
-				return adapterType.cast(convertFile((File)adaptableObject));
+			} else if(adaptableObject instanceof File file) {
+				return adapterType.cast(convertFile(file));
 			}
 		}
 		return null;

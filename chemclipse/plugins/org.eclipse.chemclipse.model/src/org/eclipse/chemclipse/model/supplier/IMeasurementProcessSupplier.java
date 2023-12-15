@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,10 +17,10 @@ import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
-import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessExecutionConsumer;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 
 public interface IMeasurementProcessSupplier<ConfigType> extends IProcessSupplier<ConfigType> {
 
@@ -73,15 +73,14 @@ public interface IMeasurementProcessSupplier<ConfigType> extends IProcessSupplie
 			@Override
 			public IProcessExecutionConsumer<Collection<? extends IMeasurement>> withResult(Object initialResult) {
 
-				if(initialResult instanceof IMeasurement) {
-					return IMeasurementProcessSupplier.createConsumer(Collections.singleton((IMeasurement)initialResult));
+				if(initialResult instanceof IMeasurement measurement) {
+					return IMeasurementProcessSupplier.createConsumer(Collections.singleton(measurement));
 				}
-				if(initialResult instanceof Iterable<?>) {
-					Iterable<?> iterable = (Iterable<?>)initialResult;
+				if(initialResult instanceof Iterable<?> iterable) {
 					ArrayList<IMeasurement> list = new ArrayList<>();
 					for(Object object : iterable) {
-						if(object instanceof IMeasurement) {
-							list.add((IMeasurement)object);
+						if(object instanceof IMeasurement measurement) {
+							list.add(measurement);
 						} else {
 							// invalid object
 							return null;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,8 +55,8 @@ public class SignalToNoisePeakFilter extends AbstractPeakFilter<SignalToNoisePea
 		float minSignalToNoise = configuration.getMinSignalToNoise();
 		List<IPeak> peaksToDelete = new ArrayList<>();
 		for(IPeak peak : peaks) {
-			if(peak instanceof IChromatogramPeak) {
-				float sn = ((IChromatogramPeak)peak).getSignalToNoiseRatio();
+			if(peak instanceof IChromatogramPeak chromatogramPeak) {
+				float sn = chromatogramPeak.getSignalToNoiseRatio();
 				if(Float.isFinite(sn)) {
 					if((Float.isFinite(maxSignalToNoise) && maxSignalToNoise > 0 && sn > maxSignalToNoise) || (Float.isFinite(minSignalToNoise) && minSignalToNoise > 0 && sn < minSignalToNoise)) {
 						peaksToDelete.add(peak);

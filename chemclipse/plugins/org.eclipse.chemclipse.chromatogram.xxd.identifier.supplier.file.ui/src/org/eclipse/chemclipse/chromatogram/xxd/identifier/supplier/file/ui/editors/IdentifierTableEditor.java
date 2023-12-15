@@ -131,8 +131,7 @@ public class IdentifierTableEditor extends FieldEditor {
 		List<String> files = new ArrayList<>();
 		for(int i = 0; i < tableItems.length; i++) {
 			Object object = tableItems[i].getData();
-			if(object instanceof IdentifierFile) {
-				IdentifierFile calibrationFile = (IdentifierFile)object;
+			if(object instanceof IdentifierFile calibrationFile) {
 				File file = calibrationFile.getFile();
 				if(file != null && file.exists()) {
 					files.add(file.getAbsolutePath());
@@ -362,8 +361,8 @@ public class IdentifierTableEditor extends FieldEditor {
 		exitloop:
 		for(TableItem tableItem : tableItems) {
 			Object object = tableItem.getData();
-			if(object instanceof IdentifierFile) {
-				if(((IdentifierFile)object).equals(identifierFile)) {
+			if(object instanceof IdentifierFile newIdentifierFile) {
+				if(newIdentifierFile.equals(identifierFile)) {
 					identifierFile = null;
 					break exitloop;
 				}

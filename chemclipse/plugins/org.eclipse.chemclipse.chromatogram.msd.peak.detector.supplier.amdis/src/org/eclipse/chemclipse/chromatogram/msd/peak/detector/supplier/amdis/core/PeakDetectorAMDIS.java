@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -39,8 +39,7 @@ public class PeakDetectorAMDIS<P extends IPeak, C extends IChromatogram<P>, R> e
 		 */
 		IProcessingInfo<R> processingInfo = validate(chromatogramSelection, peakDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
-			if(peakDetectorSettings instanceof SettingsAMDIS) {
-				SettingsAMDIS settingsAMDIS = (SettingsAMDIS)peakDetectorSettings;
+			if(peakDetectorSettings instanceof SettingsAMDIS settingsAMDIS) {
 				AmdisIdentifier identifier = new AmdisIdentifier();
 				try {
 					IProcessingResult<Void> result = identifier.calulateAndSetDeconvolutedPeaks(chromatogramSelection, settingsAMDIS, monitor);

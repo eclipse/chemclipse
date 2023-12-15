@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,9 +22,7 @@ public class EditHistoryComparator extends AbstractRecordTableComparator impleme
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IEditInformation && e2 instanceof IEditInformation) {
-			IEditInformation info1 = (IEditInformation)e1;
-			IEditInformation info2 = (IEditInformation)e2;
+		if(e1 instanceof IEditInformation info1 && e2 instanceof IEditInformation info2) {
 			switch(getPropertyIndex()) {
 				case 0:
 					sortOrder = info2.getDate().compareTo(info1.getDate());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.csv.io.core;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,10 +19,10 @@ import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
@@ -50,21 +49,18 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 	public static final String RI_COLUMN = "RI";
 	public static final String TIC_COLUMN = "TIC";
 
-	public void writeChromatogram(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) throws IOException {
 
-		if(chromatogram instanceof IChromatogramCSD) {
-			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+		if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 			writeChromatogram(file, chromatogramCSD, monitor);
-		} else if(chromatogram instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+		} else if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 			writeChromatogram(file, chromatogramMSD, monitor);
-		} else if(chromatogram instanceof IChromatogramWSD) {
-			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+		} else if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
 			writeChromatogram(file, chromatogramWSD, monitor);
 		}
 	}
 
-	private void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	private void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(file), CSVFormat.EXCEL)) {
 			writeTIC(csvPrinter, chromatogram);
@@ -73,7 +69,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 		}
 	}
 
-	private void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	private void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(file), CSVFormat.EXCEL)) {
 			if(PreferenceSupplier.isExportUseTic()) {
@@ -94,7 +90,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 		}
 	}
 
-	private void writeChromatogram(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	private void writeChromatogram(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(file), CSVFormat.EXCEL)) {
 			if(PreferenceSupplier.isExportUseTic()) {
@@ -129,7 +125,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 		 * Write the header.
 		 * RT(milliseconds), RT(minutes) - NOT USED BY IMPORT, RI, TIC
 		 */
-		List<String> headerList = new ArrayList<String>();
+		List<String> headerList = new ArrayList<>();
 		headerList.add(RT_MILLISECONDS_COLUMN);
 		headerList.add(RT_MINUTES_COLUMN);
 		headerList.add(RI_COLUMN);
@@ -143,7 +139,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 		 * Write the header.
 		 * RT(milliseconds), RT(minutes) - NOT USED BY IMPORT, RI, trace 18, ...
 		 */
-		List<String> headerList = new ArrayList<String>();
+		List<String> headerList = new ArrayList<>();
 		headerList.add(RT_MILLISECONDS_COLUMN);
 		headerList.add(RT_MINUTES_COLUMN);
 		headerList.add(RI_COLUMN);
@@ -160,7 +156,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 		 */
 		List<Number> scanValues;
 		for(ITotalScanSignal totalScanSignal : totalScanSignals.getTotalScanSignals()) {
-			scanValues = new ArrayList<Number>();
+			scanValues = new ArrayList<>();
 			/*
 			 * RT (milliseconds)
 			 * RT(minutes)
@@ -168,7 +164,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 			 */
 			int milliseconds = totalScanSignal.getRetentionTime();
 			scanValues.add(milliseconds);
-			scanValues.add(milliseconds / IChromatogramMSD.MINUTE_CORRELATION_FACTOR);
+			scanValues.add(milliseconds / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			scanValues.add(totalScanSignal.getRetentionIndex());
 			scanValues.add(totalScanSignal.getTotalSignal());
 			csvPrinter.printRecord(scanValues);
@@ -183,10 +179,10 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 			 * RT(minutes)
 			 * RI
 			 */
-			List<Number> scanValues = new ArrayList<Number>();
+			List<Number> scanValues = new ArrayList<>();
 			int milliseconds = extractedIonSignal.getRetentionTime();
 			scanValues.add(milliseconds);
-			scanValues.add(milliseconds / IChromatogramMSD.MINUTE_CORRELATION_FACTOR);
+			scanValues.add(milliseconds / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			scanValues.add(extractedIonSignal.getRetentionIndex());
 			/*
 			 * ion data
@@ -206,10 +202,10 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 			 * RT(minutes)
 			 * RI
 			 */
-			List<Number> scanValues = new ArrayList<Number>();
+			List<Number> scanValues = new ArrayList<>();
 			int milliseconds = extractedSignal.getRetentionTime();
 			scanValues.add(milliseconds);
-			scanValues.add(milliseconds / IChromatogramMSD.MINUTE_CORRELATION_FACTOR);
+			scanValues.add(milliseconds / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			scanValues.add(extractedSignal.getRetentionIndex());
 			/*
 			 * ion data

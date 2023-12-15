@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -85,8 +85,7 @@ public class ExtendedNMRScanUI implements PropertyChangeListener {
 				AcquisitionParameter acquisitionParameter;
 				boolean enableArea;
 				ISeriesData peakSeriesData = null;
-				if(measurement instanceof SpectrumMeasurement) {
-					SpectrumMeasurement spectrumMeasurement = (SpectrumMeasurement)measurement;
+				if(measurement instanceof SpectrumMeasurement spectrumMeasurement) {
 					acquisitionParameter = spectrumMeasurement.getAcquisitionParameter();
 					chartNMR.setPPMconverter(new AbstractAxisScaleConverter() {
 
@@ -108,8 +107,8 @@ public class ExtendedNMRScanUI implements PropertyChangeListener {
 					if(peakList != null) {
 						peakSeriesData = ChartNMR.createPeakSeries(SERIES_ID + ".peaks", spectrumMeasurement.getSignals(), peakList.getResult(), 0, 0);
 					}
-				} else if(measurement instanceof FIDMeasurement) {
-					acquisitionParameter = ((FIDMeasurement)measurement).getAcquisitionParameter();
+				} else if(measurement instanceof FIDMeasurement fidMeasurement) {
+					acquisitionParameter = fidMeasurement.getAcquisitionParameter();
 					chartNMR.setPPMconverter(null);
 					chartNMR.modifyChart(true);
 					enableArea = false;

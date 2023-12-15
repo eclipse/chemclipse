@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,8 +38,8 @@ public interface IMethodReader {
 
 		try (InputStream stream = new BufferedInputStream(new FileInputStream(file))) {
 			IProcessMethod method = convert(stream, file.getName(), consumer, monitor);
-			if(method instanceof ProcessMethod) {
-				((ProcessMethod)method).setSourceFile(file);
+			if(method instanceof ProcessMethod processMethod) {
+				processMethod.setSourceFile(file);
 			}
 			return method;
 		}

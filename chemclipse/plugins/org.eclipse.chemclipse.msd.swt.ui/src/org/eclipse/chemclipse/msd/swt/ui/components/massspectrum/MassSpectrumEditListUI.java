@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -182,8 +182,7 @@ public class MassSpectrumEditListUI extends Composite {
 							TableItem[] tableItems = table.getSelection();
 							for(TableItem tableItem : tableItems) {
 								Object object = tableItem.getData();
-								if(object instanceof IIon) {
-									IIon ion = (IIon)object;
+								if(object instanceof IIon ion) {
 									massSpectrum.removeIon(ion);
 								}
 							}

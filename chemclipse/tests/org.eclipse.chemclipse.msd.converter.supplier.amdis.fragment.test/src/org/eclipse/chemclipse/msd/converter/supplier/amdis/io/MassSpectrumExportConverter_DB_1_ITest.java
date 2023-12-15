@@ -67,8 +67,8 @@ public class MassSpectrumExportConverter_DB_1_ITest extends MassSpectrumExportCo
 		}
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
 		IVendorLibraryMassSpectrum amdisMS = null;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			amdisMS = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) {
+			amdisMS = vendorLibraryMassSpectrum;
 		}
 		assertNotNull("IAmdisMassSpectrum", amdisMS);
 		assertEquals("Name", "NO IDENTIFIER AVAILABLE", amdisMS.getLibraryInformation().getName());

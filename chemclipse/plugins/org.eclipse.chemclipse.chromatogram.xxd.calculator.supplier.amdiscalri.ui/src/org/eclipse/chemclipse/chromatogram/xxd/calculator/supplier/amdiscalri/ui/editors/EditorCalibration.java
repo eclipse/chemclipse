@@ -83,8 +83,7 @@ public class EditorCalibration extends MultiPageEditorPart {
 		String fileName = input.getName();
 		fileName = fileName.substring(0, fileName.length() - 4);
 		setPartName(fileName);
-		if(input instanceof IFileEditorInput) {
-			IFileEditorInput fileEditorInput = (IFileEditorInput)input;
+		if(input instanceof IFileEditorInput fileEditorInput) {
 			this.file = fileEditorInput.getFile().getLocation().toFile();
 		} else {
 			throw new PartInitException("The file could't be loaded.");
@@ -142,12 +141,10 @@ public class EditorCalibration extends MultiPageEditorPart {
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof Object[]) {
-				Object[] array = (Object[])object;
+			if(object instanceof Object[] array) {
 				if(array.length == 2) {
 					Object content = array[1];
-					if(content instanceof ISeparationColumnIndices) {
-						ISeparationColumnIndices separationColumnIndices = (ISeparationColumnIndices)content;
+					if(content instanceof ISeparationColumnIndices separationColumnIndices) {
 						if(this.separationColumnIndices == separationColumnIndices) {
 							setDirty(separationColumnIndices.isDirty());
 						}

@@ -473,8 +473,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		 */
 		dataOutputStream.writeInt(massSpectrum.getTargets().size()); // Number Mass Spectrum Targets
 		for(ITarget target : massSpectrum.getTargets()) {
-			if(target instanceof IIdentificationTarget) {
-				IIdentificationTarget identificationEntry = (IIdentificationTarget)target;
+			if(target instanceof IIdentificationTarget identificationEntry) {
 				writeIdentificationEntry(dataOutputStream, identificationEntry);
 			}
 		}

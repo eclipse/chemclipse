@@ -162,10 +162,10 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 		chromatogramReader = getChromatogramReader(version);
 		//
 		if(chromatogramReader != null) {
-			if(object instanceof ZipInputStream) {
-				chromatogramMSD = chromatogramReader.read((ZipInputStream)object, directoryPrefix, monitor);
-			} else if(object instanceof ZipFile) {
-				chromatogramMSD = chromatogramReader.read((ZipFile)object, directoryPrefix, monitor);
+			if(object instanceof ZipInputStream zipInputStream) {
+				chromatogramMSD = chromatogramReader.read(zipInputStream, directoryPrefix, monitor);
+			} else if(object instanceof ZipFile zipFile) {
+				chromatogramMSD = chromatogramReader.read(zipFile, directoryPrefix, monitor);
 			}
 		}
 		//

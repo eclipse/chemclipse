@@ -127,8 +127,7 @@ public class ExtendedPlateDataUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IDetectionFormat) {
-					IDetectionFormat detectionFormat = (IDetectionFormat)element;
+				if(element instanceof IDetectionFormat detectionFormat) {
 					return detectionFormat.getName();
 				}
 				return null;
@@ -145,8 +144,7 @@ public class ExtendedPlateDataUI extends Composite implements IExtendedPartUI {
 
 				if(plate != null) {
 					Object object = comboViewer.getStructuredSelection().getFirstElement();
-					if(object instanceof IDetectionFormat) {
-						IDetectionFormat detectionFormat = (IDetectionFormat)object;
+					if(object instanceof IDetectionFormat detectionFormat) {
 						plate.setDetectionFormat(detectionFormat);
 						updateChannelSpecification(detectionFormat);
 					}
@@ -167,8 +165,7 @@ public class ExtendedPlateDataUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IChannelSpecification) {
-					IChannelSpecification channelSpecification = (IChannelSpecification)element;
+				if(element instanceof IChannelSpecification channelSpecification) {
 					return channelSpecification.getName();
 				}
 				return null;
@@ -186,8 +183,7 @@ public class ExtendedPlateDataUI extends Composite implements IExtendedPartUI {
 
 				if(plate != null) {
 					Object object = comboViewer.getStructuredSelection().getFirstElement();
-					if(object instanceof IChannelSpecification) {
-						IChannelSpecification channelSpecification = (IChannelSpecification)object;
+					if(object instanceof IChannelSpecification channelSpecification) {
 						channelSpecificationListUI.setInput(channelSpecification);
 					}
 				}

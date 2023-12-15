@@ -89,8 +89,8 @@ public class MassSpectrumSettingsWizardPage extends AbstractAnalysisWizardPage {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof Algorithm) {
-					return ((Algorithm)element).label();
+				if(element instanceof Algorithm algorithm) {
+					return algorithm.label();
 				}
 				return null;
 			}
@@ -105,8 +105,8 @@ public class MassSpectrumSettingsWizardPage extends AbstractAnalysisWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof Algorithm) {
-					analysisSettings.setAlgorithm((Algorithm)object);
+				if(object instanceof Algorithm algorithm) {
+					analysisSettings.setAlgorithm(algorithm);
 				}
 			}
 		});

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -48,7 +48,7 @@ public abstract class OfficeFileWizard extends Wizard implements INewWizard {
 	/**
 	 * Constructor for ExcelFileXLSXWizard.
 	 */
-	public OfficeFileWizard() {
+	protected OfficeFileWizard() {
 
 		super();
 		setNeedsProgressMonitor(true);
@@ -58,8 +58,8 @@ public abstract class OfficeFileWizard extends Wizard implements INewWizard {
 	public void addPage(IWizardPage page) {
 
 		super.addPage(page);
-		if(page instanceof OfficeFileWizardPage) {
-			this.page = (OfficeFileWizardPage)page;
+		if(page instanceof OfficeFileWizardPage officeFileWizardPage) {
+			this.page = officeFileWizardPage;
 		}
 	}
 
@@ -68,12 +68,14 @@ public abstract class OfficeFileWizard extends Wizard implements INewWizard {
 	 * the wizard. We will create an operation and run it
 	 * using wizard as execution context.
 	 */
+	@Override
 	public boolean performFinish() {
 
 		final String containerName = page.getContainerName();
 		final String fileName = page.getFileName();
 		IRunnableWithProgress runnableWithProgress = new IRunnableWithProgress() {
 
+			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 
 				try {
@@ -88,6 +90,7 @@ public abstract class OfficeFileWizard extends Wizard implements INewWizard {
 		try {
 			getContainer().run(true, false, runnableWithProgress);
 		} catch(InterruptedException e) {
+			Thread.currentThread().interrupt();
 			return false;
 		} catch(InvocationTargetException e) {
 			Throwable realException = e.getTargetException();
@@ -159,6 +162,7 @@ public abstract class OfficeFileWizard extends Wizard implements INewWizard {
 		monitor.setTaskName("Opening file for editing...");
 		getShell().getDisplay().asyncExec(new Runnable() {
 
+			@Override
 			public void run() {
 
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();

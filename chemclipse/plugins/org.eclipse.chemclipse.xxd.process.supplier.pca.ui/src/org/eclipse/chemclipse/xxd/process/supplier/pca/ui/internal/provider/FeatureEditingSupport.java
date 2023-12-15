@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -52,8 +52,7 @@ public class FeatureEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof Feature) {
-			Feature feature = (Feature)element;
+		if(element instanceof Feature feature) {
 			IVariable variable = feature.getVariable();
 			switch(column) {
 				case FeatureLabelProvider.USE:
@@ -78,8 +77,7 @@ public class FeatureEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof Feature) {
-			Feature feature = (Feature)element;
+		if(element instanceof Feature feature) {
 			IVariable variable = feature.getVariable();
 			switch(column) {
 				case FeatureLabelProvider.USE:

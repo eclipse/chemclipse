@@ -105,10 +105,10 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 		chromatogramReader = getChromatogramReader(version);
 		//
 		if(chromatogramReader != null) {
-			if(object instanceof ZipInputStream) {
-				chromatogramWSD = chromatogramReader.read((ZipInputStream)object, directoryPrefix, monitor);
-			} else if(object instanceof ZipFile) {
-				chromatogramWSD = chromatogramReader.read((ZipFile)object, directoryPrefix, monitor);
+			if(object instanceof ZipInputStream zipInputStream) {
+				chromatogramWSD = chromatogramReader.read(zipInputStream, directoryPrefix, monitor);
+			} else if(object instanceof ZipFile zipFile) {
+				chromatogramWSD = chromatogramReader.read(zipFile, directoryPrefix, monitor);
 			}
 		}
 		//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,18 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-
-import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 
 public class MassSpectrumListContentProvider implements IStructuredContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if(inputElement instanceof IMassSpectra) {
-			IMassSpectra massSpectra = (IMassSpectra)inputElement;
+		if(inputElement instanceof IMassSpectra massSpectra) {
 			return massSpectra.getList().toArray();
 		} else {
 			return null;

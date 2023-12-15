@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.model.traces.NamedTrace;
 import org.eclipse.chemclipse.model.traces.NamedTraces;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
@@ -87,6 +88,7 @@ public class NamedTracesUI extends Composite {
 		updateInput(null);
 	}
 
+	@Override
 	public void update() {
 
 		super.update();
@@ -108,8 +110,8 @@ public class NamedTracesUI extends Composite {
 		if(index >= 0 && index < getItems().length) {
 			comboViewer.getCombo().select(index);
 			Object object = comboViewer.getStructuredSelection().getFirstElement();
-			if(object instanceof NamedTrace) {
-				namedTrace = (NamedTrace)object;
+			if(object instanceof NamedTrace selectedNamedTrace) {
+				namedTrace = selectedNamedTrace;
 				updateNamedTrace();
 			}
 		}
@@ -161,8 +163,7 @@ public class NamedTracesUI extends Composite {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof NamedTrace) {
-					NamedTrace namedTrace = (NamedTrace)element;
+				if(element instanceof NamedTrace namedTrace) {
 					return namedTrace.getIdentifier();
 				}
 				return null;
@@ -181,8 +182,8 @@ public class NamedTracesUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof NamedTrace) {
-					namedTrace = (NamedTrace)object;
+				if(object instanceof NamedTrace selectedNamedTrace) {
+					namedTrace = selectedNamedTrace;
 					updateNamedTrace();
 					fireUpdate();
 				}
@@ -224,7 +225,7 @@ public class NamedTracesUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Add a new named trace.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -253,7 +254,7 @@ public class NamedTracesUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Delete the selected named trace.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -261,9 +262,9 @@ public class NamedTracesUI extends Composite {
 
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Named Trace", "Would you like to delete the selected named trace?")) {
 					Object object = comboViewer.getStructuredSelection().getFirstElement();
-					if(object instanceof NamedTrace) {
+					if(object instanceof NamedTrace selectedNamedTrace) {
 						namedTrace = null;
-						namedTraces.remove((NamedTrace)object);
+						namedTraces.remove(selectedNamedTrace);
 						updateInput(null);
 						fireUpdate();
 					}
@@ -278,7 +279,7 @@ public class NamedTracesUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Import named traces.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -310,7 +311,7 @@ public class NamedTracesUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Export named traces.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
