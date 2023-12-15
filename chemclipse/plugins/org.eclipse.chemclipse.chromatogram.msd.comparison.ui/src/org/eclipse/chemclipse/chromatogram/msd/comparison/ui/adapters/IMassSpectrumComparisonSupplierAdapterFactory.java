@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,8 +39,8 @@ public class IMassSpectrumComparisonSupplierAdapterFactory extends LabelProvider
 	@Override
 	public String getText(Object element) {
 
-		if(element instanceof IMassSpectrumComparisonSupplier) {
-			return ((IMassSpectrumComparisonSupplier)element).getComparatorName();
+		if(element instanceof IMassSpectrumComparisonSupplier massSpectrumComparisonSupplier) {
+			return massSpectrumComparisonSupplier.getComparatorName();
 		}
 		return super.getText(element);
 	}
@@ -48,8 +48,8 @@ public class IMassSpectrumComparisonSupplierAdapterFactory extends LabelProvider
 	@Override
 	public String getToolTipText(Object element) {
 
-		if(element instanceof IMassSpectrumComparisonSupplier) {
-			return ((IMassSpectrumComparisonSupplier)element).getDescription();
+		if(element instanceof IMassSpectrumComparisonSupplier massSpectrumComparisonSupplier) {
+			return massSpectrumComparisonSupplier.getDescription();
 		}
 		return null;
 	}

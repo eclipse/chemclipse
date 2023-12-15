@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,9 +22,7 @@ public class SamplesComparator extends AbstractRecordTableComparator implements 
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof ISample && e2 instanceof ISample) {
-			ISample sample1 = (ISample)e1;
-			ISample sample2 = (ISample)e2;
+		if(e1 instanceof ISample sample1 && e2 instanceof ISample sample2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:

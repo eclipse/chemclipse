@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,10 +23,8 @@ public class ColumnIndicesComparator extends AbstractRecordTableComparator imple
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IColumnIndexMarker && e2 instanceof IColumnIndexMarker) {
-			IColumnIndexMarker marker1 = (IColumnIndexMarker)e1;
+		if(e1 instanceof IColumnIndexMarker marker1 && e2 instanceof IColumnIndexMarker marker2) {
 			ISeparationColumn column1 = marker1.getSeparationColumn();
-			IColumnIndexMarker marker2 = (IColumnIndexMarker)e2;
 			ISeparationColumn column2 = marker2.getSeparationColumn();
 			//
 			switch(getPropertyIndex()) {

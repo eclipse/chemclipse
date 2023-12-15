@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,10 +22,8 @@ public class IdentifierListTableComparator extends AbstractRecordTableComparator
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IdentifierFile && e2 instanceof IdentifierFile) {
+		if(e1 instanceof IdentifierFile identifierFile1 && e2 instanceof IdentifierFile identifierFile2) {
 			//
-			IdentifierFile identifierFile1 = (IdentifierFile)e1;
-			IdentifierFile identifierFile2 = (IdentifierFile)e2;
 			String column1 = identifierFile1.getSeparationColumn().getName();
 			String column2 = identifierFile2.getSeparationColumn().getName();
 			String type1 = identifierFile1.getSeparationColumn().getSeparationColumnType().label();

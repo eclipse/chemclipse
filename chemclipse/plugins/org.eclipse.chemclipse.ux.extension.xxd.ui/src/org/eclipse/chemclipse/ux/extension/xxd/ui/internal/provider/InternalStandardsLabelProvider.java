@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.graphics.Image;
@@ -66,8 +67,7 @@ public class InternalStandardsLabelProvider extends AbstractChemClipseLabelProvi
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IInternalStandard) {
-			IInternalStandard internalStandard = (IInternalStandard)element;
+		if(element instanceof IInternalStandard internalStandard) {
 			switch(columnIndex) {
 				case 0:
 					text = internalStandard.getName();
@@ -97,6 +97,6 @@ public class InternalStandardsLabelProvider extends AbstractChemClipseLabelProvi
 	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImageProvider.SIZE_16x16);
 	}
 }

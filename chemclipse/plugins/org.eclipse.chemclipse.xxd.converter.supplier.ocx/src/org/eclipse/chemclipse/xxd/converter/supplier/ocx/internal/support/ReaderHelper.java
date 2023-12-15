@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,10 +37,10 @@ public class ReaderHelper {
 		String entryName = directoryPrefix + IFormat.FILE_VERSION;
 		String version = "";
 		DataInputStream dataInputStream = null;
-		if(object instanceof ZipInputStream) {
-			dataInputStream = getDataInputStream((ZipInputStream)object, entryName);
-		} else if(object instanceof ZipFile) {
-			dataInputStream = getDataInputStream((ZipFile)object, entryName);
+		if(object instanceof ZipInputStream zipInputStream) {
+			dataInputStream = getDataInputStream(zipInputStream, entryName);
+		} else if(object instanceof ZipFile zipFile) {
+			dataInputStream = getDataInputStream(zipFile, entryName);
 		}
 		//
 		if(dataInputStream != null) {
@@ -53,8 +53,7 @@ public class ReaderHelper {
 	public ZipInputStream getZipInputStream(File file) throws IOException {
 
 		FileInputStream fileInputStream = new FileInputStream(file);
-		ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(fileInputStream));
-		return zipInputStream;
+		return new ZipInputStream(new BufferedInputStream(fileInputStream));
 	}
 
 	public DataInputStream getDataInputStream(ZipInputStream zipInputStream, String entryName) throws IOException {

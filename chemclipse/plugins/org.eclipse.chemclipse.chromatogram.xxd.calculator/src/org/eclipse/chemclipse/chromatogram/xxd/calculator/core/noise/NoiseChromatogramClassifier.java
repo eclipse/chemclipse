@@ -53,8 +53,8 @@ public class NoiseChromatogramClassifier extends AbstractChromatogramClassifier 
 		});
 		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		NoiseChromatogramClassifierSettings settings;
-		if(chromatogramClassifierSettings instanceof NoiseChromatogramClassifierSettings) {
-			settings = (NoiseChromatogramClassifierSettings)chromatogramClassifierSettings;
+		if(chromatogramClassifierSettings instanceof NoiseChromatogramClassifierSettings noiseChromatogramClassifierSettings) {
+			settings = noiseChromatogramClassifierSettings;
 		} else {
 			settings = new NoiseChromatogramClassifierSettings();
 		}

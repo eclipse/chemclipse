@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -97,11 +97,11 @@ public class NMRMeasurementsUI implements PropertyChangeListener {
 			@Override
 			public boolean equals(Object a, Object b) {
 
-				if(a instanceof TreeNode) {
-					a = ((TreeNode)a).getValue();
+				if(a instanceof TreeNode treeNode) {
+					a = treeNode.getValue();
 				}
-				if(b instanceof TreeNode) {
-					b = ((TreeNode)b).getValue();
+				if(b instanceof TreeNode treeNode) {
+					b = treeNode.getValue();
 				}
 				return a.equals(b);
 			}
@@ -112,8 +112,8 @@ public class NMRMeasurementsUI implements PropertyChangeListener {
 			public String getText(Object element) {
 
 				element = getMeasurement(element);
-				if(element instanceof IMeasurement) {
-					return ((IMeasurement)element).getDataName();
+				if(element instanceof IMeasurement measurement) {
+					return measurement.getDataName();
 				}
 				return super.getText(element);
 			}
@@ -240,8 +240,8 @@ public class NMRMeasurementsUI implements PropertyChangeListener {
 			if(selection != null) {
 				ITreeSelection structuredSelection = treeViewer.getStructuredSelection();
 				Object element = structuredSelection.getFirstElement();
-				if(element instanceof TreeNode) {
-					remove((TreeNode)element, selection);
+				if(element instanceof TreeNode treeNode) {
+					remove(treeNode, selection);
 				}
 			}
 		}
@@ -265,11 +265,11 @@ public class NMRMeasurementsUI implements PropertyChangeListener {
 
 	private static IComplexSignalMeasurement<?> getMeasurement(Object value) {
 
-		if(value instanceof TreeNode) {
-			return getMeasurement(((TreeNode)value).getValue());
+		if(value instanceof TreeNode treeNode) {
+			return getMeasurement(treeNode.getValue());
 		}
-		if(value instanceof IComplexSignalMeasurement<?>) {
-			return (IComplexSignalMeasurement<?>)value;
+		if(value instanceof IComplexSignalMeasurement<?> complexSignalMeasurement) {
+			return complexSignalMeasurement;
 		}
 		return null;
 	}
@@ -327,8 +327,7 @@ public class NMRMeasurementsUI implements PropertyChangeListener {
 		List<TreeNode> children = new ArrayList<>();
 		for(Iterator<IComplexSignalMeasurement<?>> iterator = measurements.iterator(); iterator.hasNext();) {
 			IComplexSignalMeasurement<?> measurement = iterator.next();
-			if(measurement instanceof Filtered<?, ?>) {
-				Filtered<?, ?> filtered = (Filtered<?, ?>)measurement;
+			if(measurement instanceof Filtered<?, ?> filtered) {
 				if(filtered.getFilterContext().getFilteredObject() == parent.getValue()) {
 					iterator.remove();
 					TreeNode childNode = new TreeNode(filtered);

@@ -763,11 +763,10 @@ public class ChromatogramReader_1501 extends AbstractChromatogramReader implemen
 	private void parseChromatogram(Object object, String dataType, String directoryPrefix, IChromatogramMSD chromatogram, boolean closeStream, IProgressMonitor monitor) throws IOException {
 
 		String directory = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
-		if(object instanceof ZipFile) {
+		if(object instanceof ZipFile zipFile) {
 			/*
 			 * Chromatogram
 			 */
-			ZipFile zipFile = (ZipFile)object;
 			if(dataType.equals(IFormat.DATA_TYPE_MSD)) {
 				ChromatogramReaderMSD chromatogramReaderMSD = new ChromatogramReaderMSD();
 				IChromatogramMSD chromatogramMSD = chromatogramReaderMSD.read(zipFile, directory, monitor);

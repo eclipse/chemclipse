@@ -46,8 +46,8 @@ public class Classifier extends AbstractChromatogramClassifier {
 	public IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
 
 		ClassifierSettings classifierSettings;
-		if(chromatogramClassifierSettings instanceof ClassifierSettings) {
-			classifierSettings = (ClassifierSettings)chromatogramClassifierSettings;
+		if(chromatogramClassifierSettings instanceof ClassifierSettings settings) {
+			classifierSettings = settings;
 		} else {
 			classifierSettings = PreferenceSupplier.getChromatogramClassifierSettings();
 		}

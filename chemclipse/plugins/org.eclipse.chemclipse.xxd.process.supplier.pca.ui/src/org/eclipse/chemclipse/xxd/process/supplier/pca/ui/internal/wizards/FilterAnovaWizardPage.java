@@ -77,15 +77,14 @@ public class FilterAnovaWizardPage extends WizardPage implements IFilterWizardPa
 		//
 		targetToModel.setConverter(IConverter.create(String.class, Double.class, o1 -> {
 			try {
-				return Double.parseDouble((String)o1) / 100.0;
+				return Double.parseDouble(o1) / 100.0;
 			} catch(NumberFormatException e) {
 			}
 			return null;
 		}));
 		//
 		targetToModel.setAfterConvertValidator(o1 -> {
-			if(o1 instanceof Double) {
-				Double d = (Double)o1;
+			if(o1 instanceof Double d) {
 				if(d <= 1 && d >= 0) {
 					return ValidationStatus.ok();
 				}
@@ -93,7 +92,7 @@ public class FilterAnovaWizardPage extends WizardPage implements IFilterWizardPa
 			return ValidationStatus.error("error");
 		});
 		//
-		UpdateValueStrategy<Double, String> modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString(((Double)o1) * 100.0)));
+		UpdateValueStrategy<Double, String> modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString((o1) * 100.0)));
 		dataBindingContext.bindValue(targetObservableValue, observeAlfa, targetToModel, modelToTarget);
 		setControl(composite);
 	}

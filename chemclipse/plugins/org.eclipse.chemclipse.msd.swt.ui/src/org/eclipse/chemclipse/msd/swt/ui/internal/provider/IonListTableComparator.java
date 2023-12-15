@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,9 +26,7 @@ public class IonListTableComparator extends AbstractRecordTableComparator implem
 		 * SYNCHRONIZE: PeakListLabelProvider PeakListLabelComparator PeakListView
 		 */
 		int sortOrder = 0;
-		if(e1 instanceof IIon && e2 instanceof IIon) {
-			IIon ion1 = (IIon)e1;
-			IIon ion2 = (IIon)e2;
+		if(e1 instanceof IIon ion1 && e2 instanceof IIon ion2) {
 			IIonTransition ionTransition1 = ion1.getIonTransition();
 			IIonTransition ionTransition2 = ion2.getIonTransition();
 			//

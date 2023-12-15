@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,10 +22,7 @@ public class NamedTracesComparator extends AbstractRecordTableComparator impleme
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof NamedTrace && e2 instanceof NamedTrace) {
-			//
-			NamedTrace namedTrace1 = (NamedTrace)e1;
-			NamedTrace namedTrace2 = (NamedTrace)e2;
+		if(e1 instanceof NamedTrace namedTrace1 && e2 instanceof NamedTrace namedTrace2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:

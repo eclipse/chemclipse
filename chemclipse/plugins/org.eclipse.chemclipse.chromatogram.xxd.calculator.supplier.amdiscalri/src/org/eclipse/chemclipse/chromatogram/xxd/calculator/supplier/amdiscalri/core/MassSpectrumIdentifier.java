@@ -38,8 +38,8 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 		try {
 			AlkaneIdentifier alkaneIdentifier = new AlkaneIdentifier();
 			MassSpectrumIdentifierAlkaneSettings alkaneSettings;
-			if(massSpectrumIdentifierSettings instanceof MassSpectrumIdentifierAlkaneSettings) {
-				alkaneSettings = (MassSpectrumIdentifierAlkaneSettings)massSpectrumIdentifierSettings;
+			if(massSpectrumIdentifierSettings instanceof MassSpectrumIdentifierAlkaneSettings settings) {
+				alkaneSettings = settings;
 			} else {
 				alkaneSettings = PreferenceSupplier.getMassSpectrumIdentifierAlkaneSettings();
 			}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.ui.inte
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.model.IdentifierFile;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
@@ -37,7 +38,7 @@ public class IdentifierListLabelProvider extends AbstractChemClipseLabelProvider
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
-			return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16);
+			return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImageProvider.SIZE_16x16);
 		}
 		return null;
 	}
@@ -46,8 +47,7 @@ public class IdentifierListLabelProvider extends AbstractChemClipseLabelProvider
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IdentifierFile) {
-			IdentifierFile identifierFile = (IdentifierFile)element;
+		if(element instanceof IdentifierFile identifierFile) {
 			switch(columnIndex) {
 				case 0:
 					text = identifierFile.getSeparationColumn().getName();
@@ -69,7 +69,6 @@ public class IdentifierListLabelProvider extends AbstractChemClipseLabelProvider
 	@Override
 	public Image getImage(Object element) {
 
-		Image image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16);
-		return image;
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImageProvider.SIZE_16x16);
 	}
 }

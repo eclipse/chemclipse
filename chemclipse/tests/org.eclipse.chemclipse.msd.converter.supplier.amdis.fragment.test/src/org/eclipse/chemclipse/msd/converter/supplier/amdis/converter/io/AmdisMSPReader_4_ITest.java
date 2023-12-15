@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
@@ -43,16 +44,17 @@ public class AmdisMSPReader_4_ITest extends TestCase {
 		super.tearDown();
 	}
 
+	@Test
 	public void test1() {
 
 		assertEquals(3, massSpectra.size());
 	}
 
+	@Test
 	public void test2() {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
-		if(massSpectrum instanceof ILibraryMassSpectrum) {
-			ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof ILibraryMassSpectrum libraryMassSpectrum) {
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			assertEquals("Demo1", libraryInformation.getName());
 			assertEquals("CHO", libraryInformation.getFormula());
@@ -77,11 +79,11 @@ public class AmdisMSPReader_4_ITest extends TestCase {
 		assertEquals(144811.0f, massSpectrum.getTotalSignal());
 	}
 
+	@Test
 	public void test3() {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(2);
-		if(massSpectrum instanceof ILibraryMassSpectrum) {
-			ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof ILibraryMassSpectrum libraryMassSpectrum) {
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			assertEquals("Demo2", libraryInformation.getName());
 			assertEquals("COH", libraryInformation.getFormula());
@@ -106,11 +108,11 @@ public class AmdisMSPReader_4_ITest extends TestCase {
 		assertEquals(84929.0f, massSpectrum.getTotalSignal());
 	}
 
+	@Test
 	public void test4() {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(3);
-		if(massSpectrum instanceof ILibraryMassSpectrum) {
-			ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof ILibraryMassSpectrum libraryMassSpectrum) {
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			assertEquals("Demo3", libraryInformation.getName());
 			assertEquals("OHC", libraryInformation.getFormula());

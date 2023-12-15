@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -42,8 +42,8 @@ public class MSLImportConverter_2_ITest extends ImportConverterMslTestCase {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
 		IVendorLibraryMassSpectrum ms = null;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			ms = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) {
+			ms = vendorLibraryMassSpectrum;
 		}
 		assertNotNull(ms);
 		assertEquals("M000000_A097001-101-xxx_NA_959,45_PRED_VAR5_ALK_Unknown#bth-pae-001", ms.getLibraryInformation().getName());
@@ -68,8 +68,8 @@ public class MSLImportConverter_2_ITest extends ImportConverterMslTestCase {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(2);
 		IVendorLibraryMassSpectrum ms = null;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			ms = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) {
+			ms = vendorLibraryMassSpectrum;
 		}
 		assertNotNull(ms);
 		assertEquals("M000880_A098001-101-xxx_NA_986,97_TRUE_VAR5_ALK_Glycine, N,N-dimethyl- (1TMS)", ms.getLibraryInformation().getName());
@@ -94,8 +94,8 @@ public class MSLImportConverter_2_ITest extends ImportConverterMslTestCase {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(3);
 		IVendorLibraryMassSpectrum ms = null;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			ms = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) {
+			ms = vendorLibraryMassSpectrum;
 		}
 		assertNotNull(ms);
 		assertEquals("M001213_A098002-101-xxx_NA_988_TRUE_VAR5_ALK_Propane-1,2-diol (2TMS)", ms.getLibraryInformation().getName());

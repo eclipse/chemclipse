@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,14 +26,13 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings imp
 	public ISettingStatus getSettingStatus(IPeak peak) {
 
 		int startRetentionTime = 0;
-		if(peak instanceof IPeakMSD) {
-			startRetentionTime = ((IPeakMSD)peak).getPeakModel().getStartRetentionTime();
-		} else if(peak instanceof IPeakCSD) {
-			startRetentionTime = ((IPeakCSD)peak).getPeakModel().getStartRetentionTime();
+		if(peak instanceof IPeakMSD peakMSD) {
+			startRetentionTime = peakMSD.getPeakModel().getStartRetentionTime();
+		} else if(peak instanceof IPeakCSD peakCSD) {
+			startRetentionTime = peakCSD.getPeakModel().getStartRetentionTime();
 		}
 		boolean report = report(peak);
 		boolean sumOn = getAreaSupport().isAreaSumOn(startRetentionTime);
-		ISettingStatus firstDerivativeSettingStatus = new SettingStatus(report, sumOn);
-		return firstDerivativeSettingStatus;
+		return new SettingStatus(report, sumOn);
 	}
 }

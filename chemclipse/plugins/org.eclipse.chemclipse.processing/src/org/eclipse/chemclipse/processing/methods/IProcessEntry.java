@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -47,6 +47,7 @@ public interface IProcessEntry extends ProcessEntryContainer {
 	 * 
 	 * @return String
 	 */
+	@Override
 	String getActiveProfile();
 
 	/**
@@ -54,6 +55,7 @@ public interface IProcessEntry extends ProcessEntryContainer {
 	 * 
 	 * @param activeProfile
 	 */
+	@Override
 	void setActiveProfile(String activeProfile);
 
 	boolean isSkipValidation();
@@ -70,6 +72,7 @@ public interface IProcessEntry extends ProcessEntryContainer {
 	 * 
 	 * @param profile
 	 */
+	@Override
 	void deleteProfile(String profile);
 
 	/**
@@ -192,11 +195,10 @@ public interface IProcessEntry extends ProcessEntryContainer {
 
 		ProcessEntryContainer processEntryContainer = processEntry.getParent();
 		//
-		if(processEntryContainer instanceof IProcessEntry) {
-			IProcessEntry processEntryParent = (IProcessEntry)processEntryContainer;
+		if(processEntryContainer instanceof IProcessEntry processEntryParent) {
 			IProcessSupplier<?> processSupplier = getContext(processEntryParent, defaultContext).getSupplier(processEntryParent.getProcessorId());
-			if(processSupplier instanceof IProcessSupplierContext) {
-				return (IProcessSupplierContext)processSupplier;
+			if(processSupplier instanceof IProcessSupplierContext processSupplierContext) {
+				return processSupplierContext;
 			}
 		}
 		//

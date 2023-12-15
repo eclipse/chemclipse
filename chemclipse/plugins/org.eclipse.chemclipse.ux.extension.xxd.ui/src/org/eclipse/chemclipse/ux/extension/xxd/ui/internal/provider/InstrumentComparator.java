@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,10 +22,7 @@ public class InstrumentComparator extends AbstractRecordTableComparator implemen
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof Instrument && e2 instanceof Instrument) {
-			//
-			Instrument instrument1 = (Instrument)e1;
-			Instrument instrument2 = (Instrument)e2;
+		if(e1 instanceof Instrument instrument1 && e2 instanceof Instrument instrument2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:

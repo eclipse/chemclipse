@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -45,6 +46,7 @@ public abstract class OfficeFileWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	public OfficeFileWizardPage(ISelection selection, String title, String description, String fileNameDefault, String fileExtension) {
+
 		super("wizardPage");
 		setTitle(title);
 		setDescription(description);
@@ -56,6 +58,7 @@ public abstract class OfficeFileWizardPage extends WizardPage {
 	/**
 	 * @see IDialogPage#createControl(Composite)
 	 */
+	@Override
 	public void createControl(Composite parent) {
 
 		Composite container = new Composite(parent, SWT.NULL);
@@ -70,6 +73,7 @@ public abstract class OfficeFileWizardPage extends WizardPage {
 		containerText.setLayoutData(gd);
 		containerText.addModifyListener(new ModifyListener() {
 
+			@Override
 			public void modifyText(ModifyEvent e) {
 
 				dialogChanged();
@@ -79,6 +83,7 @@ public abstract class OfficeFileWizardPage extends WizardPage {
 		button.setText("Browse...");
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				handleBrowse();
@@ -91,6 +96,7 @@ public abstract class OfficeFileWizardPage extends WizardPage {
 		fileText.setLayoutData(gd);
 		fileText.addModifyListener(new ModifyListener() {
 
+			@Override
 			public void modifyText(ModifyEvent e) {
 
 				dialogChanged();
@@ -106,17 +112,18 @@ public abstract class OfficeFileWizardPage extends WizardPage {
 	 */
 	private void initialize() {
 
-		if(selection != null && selection.isEmpty() == false && selection instanceof IStructuredSelection) {
-			IStructuredSelection ssel = (IStructuredSelection)selection;
-			if(ssel.size() > 1)
+		if(selection != null && !selection.isEmpty() && selection instanceof IStructuredSelection structuredSelection) {
+			if(structuredSelection.size() > 1) {
 				return;
-			Object obj = ssel.getFirstElement();
-			if(obj instanceof IResource) {
+			}
+			Object obj = structuredSelection.getFirstElement();
+			if(obj instanceof IResource resource) {
 				IContainer container;
-				if(obj instanceof IContainer)
-					container = (IContainer)obj;
-				else
-					container = ((IResource)obj).getParent();
+				if(obj instanceof IContainer resourceContainer) {
+					container = resourceContainer;
+				} else {
+					container = resource.getParent();
+				}
 				containerText.setText(container.getFullPath().toString());
 			}
 		}
@@ -168,7 +175,7 @@ public abstract class OfficeFileWizardPage extends WizardPage {
 		int dotLoc = fileName.lastIndexOf('.');
 		if(dotLoc != -1) {
 			String ext = fileName.substring(dotLoc + 1);
-			if(ext.equalsIgnoreCase(fileExtension) == false) {
+			if(!ext.equalsIgnoreCase(fileExtension)) {
 				updateStatus("File extension must be \"" + fileExtension + "\".");
 				return;
 			}

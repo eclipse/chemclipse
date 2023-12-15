@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,8 +33,7 @@ public class InstrumentFilter extends ViewerFilter {
 			return true;
 		}
 		//
-		if(element instanceof Instrument) {
-			Instrument instrument = (Instrument)element;
+		if(element instanceof Instrument instrument) {
 			String identifier = instrument.getIdentifier();
 			String name = instrument.getName();
 			String desciption = instrument.getDescription();

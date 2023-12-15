@@ -74,11 +74,10 @@ public class NoiseCalculator implements IonNoiseCalculator {
 	private float calculateNoiseFactorByStein(IChromatogram<?> chromatogram) {
 
 		if(chromatogram != null) {
-			List<Double> noiseFactors = new ArrayList<Double>();
+			List<Double> noiseFactors = new ArrayList<>();
 			Consumer<NoiseSegment> consumer = segment -> noiseFactors.add(segment.getNoiseFactor());
 			getNoiseSegments(chromatogram, null).forEach(consumer);
-			if(chromatogram instanceof IChromatogramMSD) {
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+			if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 				SegmentValidator segmentValidator = new SegmentValidator();
 				IExtractedIonSignalExtractor extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogramMSD);
 				IExtractedIonSignals extractedSignals = extractedIonSignalExtractor.getExtractedIonSignals();
@@ -156,8 +155,7 @@ public class NoiseCalculator implements IonNoiseCalculator {
 	@Override
 	public List<NoiseSegment> getNoiseSegments(IChromatogram<?> chromatogram, double ion, IProgressMonitor monitor) {
 
-		if(chromatogram instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+		if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 			ChromatogramSegmentation segmentation = chromatogram.getMeasurementResult(ChromatogramSegmentation.class);
 			if(segmentation != null) {
 				SegmentValidator segmentValidator = new SegmentValidator();

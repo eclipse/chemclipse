@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -31,8 +31,8 @@ public class ClassificationRuleValidator extends ValueParserSupport implements I
 		if(value == null) {
 			message = "Value can't be null";
 		} else {
-			if(value instanceof String) {
-				String text = ((String)value).trim();
+			if(value instanceof String text) {
+				text = text.trim();
 				if(text.isEmpty()) {
 					message = "Entry can't be empty";
 				} else {

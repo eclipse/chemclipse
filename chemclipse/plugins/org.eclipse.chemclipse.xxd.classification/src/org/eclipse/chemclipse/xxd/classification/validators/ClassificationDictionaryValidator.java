@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,8 +28,7 @@ public class ClassificationDictionaryValidator implements IValidator<Object> {
 		if(value == null) {
 			message = "The classification dictionary is empty.";
 		} else {
-			if(value instanceof ClassificationDictionary) {
-				ClassificationDictionary dictionary = (ClassificationDictionary)value;
+			if(value instanceof ClassificationDictionary dictionary) {
 				for(ClassificationRule rule : dictionary) {
 					if(rule.getSearchExpression().isEmpty()) {
 						message = "The match expressions is empty.";

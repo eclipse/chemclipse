@@ -63,9 +63,9 @@ public class IntegerColumnEditingSupport<T> extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(value instanceof String) {
+		if(value instanceof String text) {
 			try {
-				int integer = Integer.parseInt((String)value);
+				int integer = Integer.parseInt(text);
 				updateFunction.accept(getEditObject(element), integer);
 				getViewer().refresh(element);
 			} catch(NumberFormatException e) {

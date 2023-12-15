@@ -50,8 +50,7 @@ public class NamedTracesEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof NamedTrace) {
-			NamedTrace namedTrace = (NamedTrace)element;
+		if(element instanceof NamedTrace namedTrace) {
 			if(column.equals(NamedTracesLabelProvider.TRACES)) {
 				return namedTrace.getTraces();
 			}
@@ -62,8 +61,7 @@ public class NamedTracesEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof NamedTrace) {
-			NamedTrace namedTrace = (NamedTrace)element;
+		if(element instanceof NamedTrace namedTrace) {
 			if(column.equals(NamedTracesLabelProvider.TRACES)) {
 				IStatus status = traceValidator.validate(value);
 				if(status.isOK()) {

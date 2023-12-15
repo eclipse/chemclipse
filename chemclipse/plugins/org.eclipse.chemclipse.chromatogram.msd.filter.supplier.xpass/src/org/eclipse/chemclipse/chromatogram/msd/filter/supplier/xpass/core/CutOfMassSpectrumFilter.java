@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,14 +26,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class CutOfMassSpectrumFilter extends AbstractMassSpectrumFilter {
 
 	public CutOfMassSpectrumFilter() {
+
 	}
 
 	@Override
 	public IProcessingInfo<IMassSpectrumFilterResult> applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings massSpectrumFilterSettings, IProgressMonitor monitor) {
 
 		CutOfMassSpectrumFilterSettings settings;
-		if(massSpectrumFilterSettings instanceof CutOfMassSpectrumFilterSettings) {
-			settings = (CutOfMassSpectrumFilterSettings)massSpectrumFilterSettings;
+		if(massSpectrumFilterSettings instanceof CutOfMassSpectrumFilterSettings cutOfMassSpectrumFilterSettings) {
+			settings = cutOfMassSpectrumFilterSettings;
 		} else {
 			settings = new CutOfMassSpectrumFilterSettings();
 		}

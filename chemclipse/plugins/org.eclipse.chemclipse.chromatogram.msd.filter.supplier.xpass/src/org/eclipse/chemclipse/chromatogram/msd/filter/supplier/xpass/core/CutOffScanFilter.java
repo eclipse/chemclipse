@@ -66,8 +66,7 @@ public class CutOffScanFilter implements IScanFilter<CutOffScanFilterSettings> {
 		DefaultProcessingResult<Boolean> result = new DefaultProcessingResult<>();
 		int modified = 0;
 		for(IScan scan : filterItems) {
-			if(scan instanceof IScanMSD) {
-				IScanMSD scanMSD = (IScanMSD)scan;
+			if(scan instanceof IScanMSD scanMSD) {
 				if(processScan(scanMSD, configuration)) {
 					scanMSD.setDirty(true);
 					modified++;

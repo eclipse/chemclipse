@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,8 +20,7 @@ public class EditHistoryContentProvider implements IStructuredContentProvider {
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if(inputElement instanceof IChromatogramSelectionMSD) {
-			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)inputElement;
+		if(inputElement instanceof IChromatogramSelectionMSD chromatogramSelection) {
 			return chromatogramSelection.getChromatogram().getEditHistory().toArray();
 		} else {
 			return null;

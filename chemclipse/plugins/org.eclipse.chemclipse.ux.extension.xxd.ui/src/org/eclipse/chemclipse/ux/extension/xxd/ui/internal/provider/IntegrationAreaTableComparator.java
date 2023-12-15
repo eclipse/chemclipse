@@ -22,9 +22,7 @@ public class IntegrationAreaTableComparator extends AbstractRecordTableComparato
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IIntegrationEntry && e2 instanceof IIntegrationEntry) {
-			IIntegrationEntry integrationEntry1 = (IIntegrationEntry)e1;
-			IIntegrationEntry integrationEntry2 = (IIntegrationEntry)e2;
+		if(e1 instanceof IIntegrationEntry integrationEntry1 && e2 instanceof IIntegrationEntry integrationEntry2) {
 			switch(getPropertyIndex()) {
 				case 0:
 					sortOrder = Double.compare(integrationEntry2.getIntegratedArea(), integrationEntry1.getIntegratedArea());

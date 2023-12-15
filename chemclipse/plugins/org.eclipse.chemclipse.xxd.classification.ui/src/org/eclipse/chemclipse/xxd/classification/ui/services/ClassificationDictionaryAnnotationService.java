@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -35,8 +35,8 @@ public class ClassificationDictionaryAnnotationService extends ClassificationDic
 		gridData.heightHint = 200;
 		classificationDictionaryEditor.setLayoutData(gridData);
 		//
-		if(currentSelection instanceof String) {
-			classificationDictionaryEditor.load((String)currentSelection);
+		if(currentSelection instanceof String text) {
+			classificationDictionaryEditor.load(text);
 		}
 		//
 		return classificationDictionaryEditor;

@@ -186,8 +186,7 @@ public class OpenSnippetHandler {
 			public void accept(MUIElement element) {
 
 				IEclipseContext context = parent.createChild(element.getElementId() + ".composite");
-				if(element instanceof MPart) {
-					MPart part = (MPart)element;
+				if(element instanceof MPart part) {
 					part.setContext(context);
 					context.set(MPart.class, part);
 					Runnable runnable;
@@ -309,8 +308,7 @@ public class OpenSnippetHandler {
 	public static Consumer<MUIElement> focusPart(EPartService partService) {
 
 		return element -> {
-			if(element instanceof MPart) {
-				MPart part = (MPart)element;
+			if(element instanceof MPart part) {
 				if(partService != null) {
 					Display.getDefault().asyncExec(new Runnable() {
 
@@ -328,8 +326,7 @@ public class OpenSnippetHandler {
 	public static Consumer<MUIElement> openPart(EPartService partService) {
 
 		return element -> {
-			if(element instanceof MPart) {
-				MPart part = (MPart)element;
+			if(element instanceof MPart part) {
 				if(partService != null) {
 					logger.info("Activate part: " + part);
 					part.setCloseable(true);

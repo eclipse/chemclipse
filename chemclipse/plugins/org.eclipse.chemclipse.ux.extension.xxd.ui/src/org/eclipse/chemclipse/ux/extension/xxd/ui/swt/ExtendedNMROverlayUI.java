@@ -93,8 +93,7 @@ public class ExtendedNMROverlayUI extends Composite implements PropertyChangeLis
 		Collection<MPart> parts = partservice.getParts();
 		for(MPart part : parts) {
 			Object object = part.getObject();
-			if(object instanceof IScanEditorNMR) {
-				IScanEditorNMR editor = (IScanEditorNMR)object;
+			if(object instanceof IScanEditorNMR editor) {
 				OverlayDataNMRSelection oldSelection = oldEditors.get(editor);
 				if(oldSelection == null) {
 					OverlayDataNMRSelection initialSelection = new OverlayDataNMRSelection(editor);

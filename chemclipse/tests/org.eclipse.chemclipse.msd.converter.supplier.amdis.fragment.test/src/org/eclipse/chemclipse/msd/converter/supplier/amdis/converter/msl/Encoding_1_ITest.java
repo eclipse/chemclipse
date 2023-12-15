@@ -41,7 +41,7 @@ public class Encoding_1_ITest extends ImportConverterMslTestCase {
 	public void testImport_2() {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
-		IVendorLibraryMassSpectrum libraryMassSpectrum = (massSpectrum instanceof IVendorLibraryMassSpectrum) ? (IVendorLibraryMassSpectrum)massSpectrum : null;
+		IVendorLibraryMassSpectrum libraryMassSpectrum = (massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) ? vendorLibraryMassSpectrum : null;
 		assertNotNull(libraryMassSpectrum);
 		assertEquals("Propylphenyl acetate te te", libraryMassSpectrum.getLibraryInformation().getName());
 	}
@@ -49,7 +49,7 @@ public class Encoding_1_ITest extends ImportConverterMslTestCase {
 	public void testImport_3() {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(2);
-		IVendorLibraryMassSpectrum libraryMassSpectrum = (massSpectrum instanceof IVendorLibraryMassSpectrum) ? (IVendorLibraryMassSpectrum)massSpectrum : null;
+		IVendorLibraryMassSpectrum libraryMassSpectrum = (massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) ? vendorLibraryMassSpectrum : null;
 		assertNotNull(libraryMassSpectrum);
 		assertEquals("Lauryl acetate etate te te", libraryMassSpectrum.getLibraryInformation().getName());
 	}

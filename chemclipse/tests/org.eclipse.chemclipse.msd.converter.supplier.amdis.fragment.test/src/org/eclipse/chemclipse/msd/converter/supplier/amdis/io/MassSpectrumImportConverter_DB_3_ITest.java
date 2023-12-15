@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,8 +41,8 @@ public class MassSpectrumImportConverter_DB_3_ITest extends ImportConverterMslTe
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
 		IVendorLibraryMassSpectrum ms = null;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			ms = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) {
+			ms = vendorLibraryMassSpectrum;
 		}
 		assertNotNull(ms);
 		assertEquals("Name", "1,3,5-Trimethylbenzol", ms.getLibraryInformation().getName());
@@ -62,8 +62,8 @@ public class MassSpectrumImportConverter_DB_3_ITest extends ImportConverterMslTe
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(2);
 		IVendorLibraryMassSpectrum ms = null;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			ms = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) {
+			ms = vendorLibraryMassSpectrum;
 		}
 		assertNotNull(ms);
 		assertEquals("Name", "(+)-Longifolen", ms.getLibraryInformation().getName());

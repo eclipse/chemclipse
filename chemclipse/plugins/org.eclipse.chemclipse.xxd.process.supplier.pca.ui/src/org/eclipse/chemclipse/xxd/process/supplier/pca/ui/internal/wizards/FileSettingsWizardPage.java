@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
@@ -140,8 +141,8 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof Algorithm) {
-					return ((Algorithm)element).label();
+				if(element instanceof Algorithm algorithm) {
+					return algorithm.label();
 				}
 				return null;
 			}
@@ -158,8 +159,8 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof Algorithm) {
-					analysisSettings.setAlgorithm((Algorithm)object);
+				if(object instanceof Algorithm algorithm) {
+					analysisSettings.setAlgorithm(algorithm);
 				}
 			}
 		});
@@ -190,7 +191,7 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Select the data matrix.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -221,7 +222,7 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
 		button.setLayoutData(gridData);
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override

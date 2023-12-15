@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -327,8 +327,7 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		 */
 		dataOutputStream.writeInt(massSpectrum.getTargets().size()); // Number Mass Spectrum Targets
 		for(ITarget target : massSpectrum.getTargets()) {
-			if(target instanceof IIdentificationTarget) {
-				IIdentificationTarget identificationEntry = (IIdentificationTarget)target;
+			if(target instanceof IIdentificationTarget identificationEntry) {
 				writeIdentificationEntry(dataOutputStream, identificationEntry);
 			}
 		}

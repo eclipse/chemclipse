@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,9 +22,7 @@ public class ClassificationRuleTableComparator extends AbstractRecordTableCompar
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof ClassificationRule && e2 instanceof ClassificationRule) {
-			ClassificationRule rule1 = (ClassificationRule)e1;
-			ClassificationRule rule2 = (ClassificationRule)e2;
+		if(e1 instanceof ClassificationRule rule1 && e2 instanceof ClassificationRule rule2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:

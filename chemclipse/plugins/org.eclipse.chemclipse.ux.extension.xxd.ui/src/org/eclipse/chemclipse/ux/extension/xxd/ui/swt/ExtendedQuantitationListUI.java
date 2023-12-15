@@ -174,8 +174,8 @@ public class ExtendedQuantitationListUI extends Composite implements IExtendedPa
 			Iterator<?> iterator = quantitationListUI.getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
-				if(object instanceof IQuantitationEntry) {
-					deleteQuantitationEntry((IQuantitationEntry)object);
+				if(object instanceof IQuantitationEntry quantitationEntry) {
+					deleteQuantitationEntry(quantitationEntry);
 				}
 			}
 			//

@@ -97,8 +97,8 @@ public class PageDataType extends AbstractExtendedWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof DataType) {
-					dataType = (DataType)object;
+				if(object instanceof DataType selectedDataType) {
+					dataType = selectedDataType;
 				} else {
 					dataType = BatchProcessJob.DATA_TYPE_DEFAULT;
 				}

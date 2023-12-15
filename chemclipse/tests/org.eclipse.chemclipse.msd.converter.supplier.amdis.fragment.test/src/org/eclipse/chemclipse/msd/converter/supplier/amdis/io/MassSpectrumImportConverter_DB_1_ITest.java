@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -43,8 +43,8 @@ public class MassSpectrumImportConverter_DB_1_ITest extends ImportConverterMslTe
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
 		IVendorLibraryMassSpectrum ms = null;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			ms = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) {
+			ms = vendorLibraryMassSpectrum;
 		}
 		assertNotNull("IAmdisMassSpectrum", ms);
 		assertEquals("Name", "0.5203 min, OP17760", ms.getLibraryInformation().getName());
@@ -63,8 +63,8 @@ public class MassSpectrumImportConverter_DB_1_ITest extends ImportConverterMslTe
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(6);
 		IVendorLibraryMassSpectrum ms = null;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			ms = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) {
+			ms = vendorLibraryMassSpectrum;
 		}
 		assertNotNull("IAmdisMassSpectrum", ms);
 		assertEquals("Name", "1.5763 min, OP17760", ms.getLibraryInformation().getName());
@@ -83,8 +83,8 @@ public class MassSpectrumImportConverter_DB_1_ITest extends ImportConverterMslTe
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(4);
 		IVendorLibraryMassSpectrum ms = null;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			ms = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum vendorLibraryMassSpectrum) {
+			ms = vendorLibraryMassSpectrum;
 		}
 		assertNotNull("IAmdisMassSpectrum", ms);
 		assertEquals("Name", "1.3982 min, OP17760", ms.getLibraryInformation().getName());
@@ -102,7 +102,7 @@ public class MassSpectrumImportConverter_DB_1_ITest extends ImportConverterMslTe
 	public void testImport_5() {
 
 		IScanMSD massSpectrum;
-		List<Integer> numberOfIons = new ArrayList<Integer>();
+		List<Integer> numberOfIons = new ArrayList<>();
 		numberOfIons.add(0); // first is 0, because massSpectra starts
 								// with index 1
 		numberOfIons.add(6);

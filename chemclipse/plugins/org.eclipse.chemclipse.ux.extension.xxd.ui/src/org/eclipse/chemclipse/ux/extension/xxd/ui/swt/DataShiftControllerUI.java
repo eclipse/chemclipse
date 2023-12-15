@@ -486,7 +486,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = button.getData(KEY_MIRROR_MODUS);
-				DisplayModus displayModus = object instanceof DisplayModus ? (DisplayModus)object : DisplayModus.NORMAL;
+				DisplayModus displayModus = object instanceof DisplayModus dp ? dp : DisplayModus.NORMAL;
 				displayModus = DisplayModus.NORMAL.equals(displayModus) ? DisplayModus.MIRROR : DisplayModus.NORMAL;
 				setDisplayModus(displayModus, getSelectedSeriesId());
 				updateComboViewerSelect(BaseChart.SELECTED_SERIES_NONE);

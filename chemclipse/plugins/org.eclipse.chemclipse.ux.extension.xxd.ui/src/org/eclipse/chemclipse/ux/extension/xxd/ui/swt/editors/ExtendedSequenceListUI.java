@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,16 +24,17 @@ import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IMessageProvider;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -179,11 +180,10 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 				//
 				for(TableItem tableItem : tableItems) {
 					Object object = tableItem.getData();
-					if(object instanceof ISequenceRecord) {
+					if(object instanceof ISequenceRecord sequenceRecord) {
 						/*
 						 * Get the file.
 						 */
-						ISequenceRecord sequenceRecord = (ISequenceRecord)object;
 						String pathChromatogram = sequence.getDataPath() + File.separator + sequenceRecord.getDataFile();
 						IProcessingInfo<IChromatogramSelection<?, ?>> processingInfoChromatogram = chromatogramTypeSupport.getChromatogramSelection(pathChromatogram, monitor);
 						if(!processingInfoChromatogram.hasErrorMessages()) {
@@ -254,7 +254,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Set the data path folder.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -278,7 +278,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Select the data path folder.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -308,14 +308,14 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle search toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSearch);
-				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16, visible));
+				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImageProvider.SIZE_16x16, visible));
 			}
 		});
 		//
@@ -327,7 +327,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the data path toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -335,9 +335,9 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarDataPath);
 				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ACTIVE, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ACTIVE, IApplicationImageProvider.SIZE_16x16));
 				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImageProvider.SIZE_16x16));
 				}
 			}
 		});
@@ -350,7 +350,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the method toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -358,9 +358,9 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarMethod);
 				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImageProvider.SIZE_16x16));
 				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD, IApplicationImageProvider.SIZE_16x16));
 				}
 			}
 		});
@@ -373,7 +373,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Open the selected chromatograms");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -390,8 +390,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 				//
 				for(int index : indices) {
 					Object object = table.getItem(index).getData();
-					if(object instanceof ISequenceRecord) {
-						ISequenceRecord sequenceRecord = (ISequenceRecord)object;
+					if(object instanceof ISequenceRecord sequenceRecord) {
 						files.add(new File(sequence.getDataPath() + File.separator + sequenceRecord.getDataFile()));
 					}
 				}
@@ -411,7 +410,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Reset the sequence");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -462,8 +461,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 			public void mouseDoubleClick(MouseEvent e) {
 
 				Object object = sequenceListUI.getStructuredSelection().getFirstElement();
-				if(object instanceof ISequenceRecord) {
-					ISequenceRecord sequenceRecord = (ISequenceRecord)object;
+				if(object instanceof ISequenceRecord sequenceRecord) {
 					List<File> files = new ArrayList<>();
 					files.add(new File(sequence.getDataPath() + File.separator + sequenceRecord.getDataFile()));
 					try {

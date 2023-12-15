@@ -154,9 +154,7 @@ public class EditorSampleQuant extends MultiPageEditorPart {
 		String fileName = input.getName();
 		fileName = fileName.substring(0, fileName.length() - 4);
 		setPartName(fileName);
-		if(input instanceof IFileEditorInput) {
-			//
-			IFileEditorInput fileEditorInput = (IFileEditorInput)input;
+		if(input instanceof IFileEditorInput fileEditorInput) {
 			file = fileEditorInput.getFile().getLocation().toFile();
 		} else {
 			throw new PartInitException("The file could't be loaded.");

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,8 +42,7 @@ public class QuantitationCalculatorMSD_XIC_6_Test extends QuantitationCalculator
 		List<IQuantitationPeak> quantitationPeaks = getQuantitationPeaks();
 		for(IQuantitationPeak peak : quantitationPeaks) {
 			IPeakModel peakModel = peak.getReferencePeak().getPeakModel();
-			if(peakModel instanceof IPeakModelMSD) {
-				IPeakModelMSD peakModelMSD = (IPeakModelMSD)peakModel;
+			if(peakModel instanceof IPeakModelMSD peakModelMSD) {
 				peakModelMSD.getPeakMassSpectrum().addIon(new Ion(108.0, 54903.5f));
 			}
 		}

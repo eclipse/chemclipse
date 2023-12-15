@@ -251,10 +251,9 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof NamedTrace) {
+				if(object instanceof NamedTrace namedTrace) {
 					Set<String> keySetEdit = new HashSet<>();
 					keySetEdit.addAll(settings.keySet());
-					NamedTrace namedTrace = (NamedTrace)object;
 					keySetEdit.remove(namedTrace.getIdentifier());
 					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Named Trace", "Edit the selected named trace.", settings.extractNamedTrace(namedTrace), new NamedTraceInputValidator(keySetEdit));
 					if(IDialogConstants.OK_ID == dialog.open()) {
@@ -287,8 +286,8 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Named Traces", "Do you want to delete the selected named traces?")) {
 					IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {
-						if(object instanceof NamedTrace) {
-							settings.remove(((NamedTrace)object).getIdentifier());
+						if(object instanceof NamedTrace namedTrace) {
+							settings.remove(namedTrace.getIdentifier());
 						}
 					}
 					setTableViewerInput();

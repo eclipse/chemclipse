@@ -288,8 +288,7 @@ public class LibraryModifySupportUI extends Composite {
 							TableItem[] tableItems = table.getSelection();
 							for(TableItem tableItem : tableItems) {
 								Object object = tableItem.getData();
-								if(object instanceof IScanMSD) {
-									IScanMSD massSpectrum = (IScanMSD)object;
+								if(object instanceof IScanMSD massSpectrum) {
 									massSpectra.removeMassSpectrum(massSpectrum);
 									massSpectra.setDirty(true);
 								}

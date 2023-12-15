@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -49,8 +49,7 @@ public class ClassificationRuleLabelProvider extends AbstractChemClipseLabelProv
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof ClassificationRule) {
-			ClassificationRule rule = (ClassificationRule)element;
+		if(element instanceof ClassificationRule rule) {
 			switch(columnIndex) {
 				case 0:
 					text = rule.getSearchExpression();
