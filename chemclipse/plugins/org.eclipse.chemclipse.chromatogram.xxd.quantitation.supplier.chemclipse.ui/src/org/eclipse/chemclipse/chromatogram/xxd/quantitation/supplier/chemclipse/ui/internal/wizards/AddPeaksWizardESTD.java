@@ -101,7 +101,7 @@ public class AddPeaksWizardESTD extends Wizard {
 				databaseSupport.save(quantitationDatabase);
 				return true;
 			} else {
-				showErrorMessage("Please select a quantitation table previously.");
+				showErrorMessage("Please select a quantitation table.");
 				return false;
 			}
 		}
