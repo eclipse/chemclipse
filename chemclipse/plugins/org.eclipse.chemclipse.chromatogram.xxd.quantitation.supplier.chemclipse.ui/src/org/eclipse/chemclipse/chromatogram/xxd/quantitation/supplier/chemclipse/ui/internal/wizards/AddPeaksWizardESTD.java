@@ -66,7 +66,7 @@ public class AddPeaksWizardESTD extends Wizard {
 			 */
 			DatabaseSupport databaseSupport = new DatabaseSupport();
 			IQuantitationDatabase quantitationDatabase = databaseSupport.load();
-			if(quantitationDatabase != null && !quantitationDatabase.isEmpty()) {
+			if(quantitationDatabase != null) {
 				//
 				for(IPeak peak : peaks) {
 					//
@@ -101,7 +101,7 @@ public class AddPeaksWizardESTD extends Wizard {
 				databaseSupport.save(quantitationDatabase);
 				return true;
 			} else {
-				showErrorMessage("Please select a quantitation table previously.");
+				showErrorMessage("Please select a quantitation table.");
 				return false;
 			}
 		}
@@ -126,16 +126,13 @@ public class AddPeaksWizardESTD extends Wizard {
 				 * Get the name of the stored identification entry.
 				 */
 				for(IIdentificationTarget peakTarget : peakTargets) {
-					if(peakTarget instanceof IIdentificationTarget) {
-						IIdentificationTarget peakIdentificationEntry = peakTarget;
-						float actualMatchFactor = peakIdentificationEntry.getComparisonResult().getMatchFactor();
-						if(actualMatchFactor > bestMatchFactor) {
-							/*
-							 * Best match.
-							 */
-							bestMatchFactor = actualMatchFactor;
-							libraryInformation = peakIdentificationEntry.getLibraryInformation();
-						}
+					float actualMatchFactor = peakTarget.getComparisonResult().getMatchFactor();
+					if(actualMatchFactor > bestMatchFactor) {
+						/*
+						 * Best match.
+						 */
+						bestMatchFactor = actualMatchFactor;
+						libraryInformation = peakTarget.getLibraryInformation();
 					}
 				}
 			}
