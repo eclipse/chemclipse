@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
@@ -30,7 +31,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.l10n.Messages;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
@@ -38,8 +38,6 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvid
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.LazyFileExplorerContentProvider;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -68,6 +66,7 @@ import org.eclipse.swt.widgets.TabItem;
 
 public class MultiDataExplorerTreeUI {
 
+	private static final Logger logger = Logger.getLogger(MultiDataExplorerTreeUI.class);
 	private static final String TAB_KEY_SUFFIX = "selectedTab"; //$NON-NLS-1$
 	//
 	private final TabFolder tabFolder;
@@ -134,7 +133,7 @@ public class MultiDataExplorerTreeUI {
 				try {
 					persistentPreferenceStore.save();
 				} catch(IOException e) {
-					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), Messages.storingPreferencesFailed, e));
+					logger.warn(Messages.storingPreferencesFailed);
 				}
 			}
 		}
@@ -176,17 +175,21 @@ public class MultiDataExplorerTreeUI {
 
 	}
 
-	protected void initTabComponent(Composite parent, DataExplorerTreeUI treeUI) {
+	protected void initTabComponent(Composite parent, DataExplorerTreeUI dataExplorerTreeUI) {
 
-		if(treeUI.getRoot() == DataExplorerTreeRoot.USER_LOCATION) {
-			addUserLocationButton(parent, treeUI);
+		/*
+		 * The User Location tab needs to be handled separately.
+		 */
+		if(dataExplorerTreeUI.getRoot() == DataExplorerTreeRoot.USER_LOCATION) {
+			addUserLocationButton(parent, dataExplorerTreeUI);
 			File directory = new File(preferenceStore.getString(getUserLocationPreferenceKey()));
 			if(directory.exists()) {
-				treeUI.getTreeViewer().setInput(new File[]{directory});
+				dataExplorerTreeUI.updateDirectory(directory);
 			}
 		}
-		createContextMenu(treeUI);
-		addBatchOpenButton(parent, treeUI);
+		//
+		createContextMenu(dataExplorerTreeUI);
+		addBatchOpenButton(parent, dataExplorerTreeUI);
 	}
 
 	private DataExplorerTreeUI createDataExplorerTreeUI(TabFolder tabFolder, DataExplorerTreeRoot root) {

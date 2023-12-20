@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 import org.eclipse.chemclipse.processing.converter.ISupplier;
@@ -41,8 +42,10 @@ import org.eclipse.swt.widgets.Display;
 
 public class DataExplorerTreeUI {
 
-	private final TreeViewer treeViewer;
-	private final DataExplorerTreeRoot dataExplorerTreeRoot;
+	private AtomicReference<TreeViewer> treeViewerControl = new AtomicReference<>();
+	//
+	private DataExplorerTreeRoot dataExplorerTreeRoot = null;
+	private File directory = null;
 	private IPreferenceStore preferenceStore = null;
 	private String preferenceKey = null;
 
@@ -54,11 +57,14 @@ public class DataExplorerTreeUI {
 	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot dataExplorerTreeRoot, Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
 
 		this.dataExplorerTreeRoot = dataExplorerTreeRoot;
-		treeViewer = createTreeViewer(parent, identifier);
-		//
-		DataExplorerDragListener dragListener = new DataExplorerDragListener(treeViewer);
-		Transfer[] transferTypes = new Transfer[]{FileTransfer.getInstance()};
-		this.treeViewer.addDragSupport(DND.DROP_MOVE | DND.DROP_COPY, transferTypes, dragListener);
+		createTreeViewer(parent, identifier);
+		initialize();
+	}
+
+	public void updateDirectory(File directory) {
+
+		this.directory = directory;
+		updateDirectory();
 	}
 
 	public DataExplorerTreeRoot getRoot() {
@@ -68,7 +74,7 @@ public class DataExplorerTreeUI {
 
 	public TreeViewer getTreeViewer() {
 
-		return treeViewer;
+		return treeViewerControl.get();
 	}
 
 	public void expandLastDirectoryPath(IPreferenceStore preferenceStore) {
@@ -82,13 +88,14 @@ public class DataExplorerTreeUI {
 		this.preferenceStore = preferenceStore;
 		this.preferenceKey = preferenceKey;
 		//
-		File lastFile = new File(preferenceStore.getString(preferenceKey));
-		if(lastFile.exists()) {
+		File selection = new File(preferenceStore.getString(preferenceKey));
+		if(selection.exists()) {
 			/*
 			 * Expand Level
 			 */
-			treeViewer.expandToLevel(lastFile, 1);
-			treeViewer.setSelection(new StructuredSelection(lastFile), true);
+			TreeViewer treeViewer = treeViewerControl.get();
+			treeViewer.expandToLevel(selection, 1);
+			treeViewer.setSelection(new StructuredSelection(selection), true);
 			//
 			Display.getDefault().asyncExec(new Runnable() {
 
@@ -109,7 +116,7 @@ public class DataExplorerTreeUI {
 
 	public void saveLastDirectoryPath(IPreferenceStore preferenceStore, String preferenceKey) {
 
-		Object object = treeViewer.getStructuredSelection().getFirstElement();
+		Object object = treeViewerControl.get().getStructuredSelection().getFirstElement();
 		if(object instanceof File file) {
 			File directoryPath = null;
 			if(file.isFile()) {
@@ -129,6 +136,7 @@ public class DataExplorerTreeUI {
 			} else {
 				directoryPath = file;
 			}
+			//
 			if(directoryPath != null) {
 				preferenceStore.setValue(preferenceKey, directoryPath.getAbsolutePath());
 			}
@@ -145,7 +153,14 @@ public class DataExplorerTreeUI {
 		}
 	}
 
-	private TreeViewer createTreeViewer(Composite parent, Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
+	private void initialize() {
+
+		DataExplorerDragListener dragListener = new DataExplorerDragListener(treeViewerControl.get());
+		Transfer[] transferTypes = new Transfer[]{FileTransfer.getInstance()};
+		treeViewerControl.get().addDragSupport(DND.DROP_MOVE | DND.DROP_COPY, transferTypes, dragListener);
+	}
+
+	private void createTreeViewer(Composite parent, Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
 
 		TreeViewer treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.VIRTUAL);
 		//
@@ -155,7 +170,7 @@ public class DataExplorerTreeUI {
 		treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
 		setInput(treeViewer);
 		//
-		return treeViewer;
+		treeViewerControl.set(treeViewer);
 	}
 
 	private void setInput(TreeViewer treeViewer) {
@@ -169,11 +184,19 @@ public class DataExplorerTreeUI {
 			public void run() {
 
 				treeViewer.setInput(dataExplorerTreeRoot.getRootContent());
+				updateDirectory();
 				if(preferenceStore != null && preferenceKey != null) {
 					expandLastDirectoryPath(preferenceStore, preferenceKey);
 				}
 			}
 		});
+	}
+
+	private void updateDirectory() {
+
+		if(directory != null && directory.exists()) {
+			treeViewerControl.get().setInput(new File[]{directory});
+		}
 	}
 
 	private int getNumberOfChildDirectories(File directory) {
