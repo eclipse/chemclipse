@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final int MIN_LIMIT_IONS_SIM = 1;
-	public static final int MAX_LIMIT_IONS_SIM = 100;
+	public static final int MAX_LIMIT_IONS_SIM = Integer.MAX_VALUE;
 	//
 	public static final String P_LIMIT_IONS_SIM = "limitIonsSIM";
 	public static final int DEF_LIMIT_IONS_SIM = 5;
@@ -74,8 +74,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static FilterSettingsSIM getFilterSettingsSIM() {
 
 		FilterSettingsSIM settings = new FilterSettingsSIM();
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		settings.setLimitIons(preferences.getInt(P_LIMIT_IONS_SIM, DEF_LIMIT_IONS_SIM));
+		settings.setLimitIons(INSTANCE().getInteger(P_LIMIT_IONS_SIM, DEF_LIMIT_IONS_SIM));
 		//
 		return settings;
 	}

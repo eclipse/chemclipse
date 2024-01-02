@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ public class FilterSettingsSIM extends AbstractChromatogramFilterSettings {
 	@JsonProperty(value = "Limit Ions", defaultValue = "5")
 	@JsonPropertyDescription(value = "If the scan contains m/z values <= limit, then assume that it is a SIM.")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_LIMIT_IONS_SIM, maxValue = PreferenceSupplier.MAX_LIMIT_IONS_SIM)
-	private int limitIons = 5;
+	private int limitIons = PreferenceSupplier.DEF_LIMIT_IONS_SIM;
 
 	public int getLimitIons() {
 

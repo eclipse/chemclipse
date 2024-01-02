@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,10 +46,8 @@ public class ChromatogramFilterSIM extends AbstractChromatogramFilterMSD {
 		} else {
 			filterSettings = PreferenceSupplier.getFilterSettingsSIM();
 		}
-		int limitIons = filterSettings.getLimitIons();
 		//
 		if(!processingInfo.hasErrorMessages()) {
-			//
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 				/*
@@ -57,6 +55,7 @@ public class ChromatogramFilterSIM extends AbstractChromatogramFilterMSD {
 				 */
 				List<IScanMSD> fullScans = new ArrayList<>();
 				List<IScanMSD> simScans = new ArrayList<>();
+				int limitIons = filterSettings.getLimitIons();
 				//
 				for(IScan scan : chromatogramMSD.getScans()) {
 					if(scan instanceof IScanMSD scanMSD) {
@@ -77,6 +76,7 @@ public class ChromatogramFilterSIM extends AbstractChromatogramFilterMSD {
 			chromatogramSelection.getChromatogram().setDirty(true);
 			processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram was splitted into SCAN, SIM reference chromatograms."));
 		}
+		//
 		return processingInfo;
 	}
 
