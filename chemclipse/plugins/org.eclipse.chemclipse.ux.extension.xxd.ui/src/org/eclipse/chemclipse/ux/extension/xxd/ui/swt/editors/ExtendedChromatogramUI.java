@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -604,10 +605,17 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-					DefaultProcessingResult<Object> processingInfo = new DefaultProcessingResult<>();
-					IProcessSupplier.applyProcessor(settings, IChromatogramSelectionProcessSupplier.createConsumer(getChromatogramSelection()), new ProcessExecutionContext(monitor, processingInfo, processSupplierContext));
-					updateResult(processingInfo);
-					updateAuditTrail(processingInfo, processSupplier);
+					executeMethod(getChromatogramSelection(), new Consumer<IChromatogramSelection<?, ?>>() {
+
+						@Override
+						public void accept(IChromatogramSelection<?, ?> chromatogramSelection) {
+
+							DefaultProcessingResult<Object> processingInfo = new DefaultProcessingResult<>();
+							IProcessSupplier.applyProcessor(settings, IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection), new ProcessExecutionContext(monitor, processingInfo, processSupplierContext));
+							updateResult(processingInfo);
+							updateAuditTrail(processingInfo, processSupplier);
+						}
+					});
 				}
 			}, shell);
 		} catch(IOException e) {
@@ -1106,14 +1114,20 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			@Override
 			public void execute(IProcessMethod processMethod, IProgressMonitor monitor) {
 
-				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-				IChromatogramSelection<?, ?> chromatogramSelection = getChromatogramSelection();
-				ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processingInfo, processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
-				chromatogramSelection.getChromatogram().setDirty(true); // TODO: check each entry
-				updateResult(processingInfo);
-				updateAuditTrail(processingInfo, processMethod);
-				forceReset(true);
-				UpdateNotifierUI.update(getDisplay(), chromatogramSelection.getSelectedScan());
+				executeMethod(chromatogramSelection, new Consumer<IChromatogramSelection<?, ?>>() {
+
+					@Override
+					public void accept(IChromatogramSelection<?, ?> chromatogramSelection) {
+
+						IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+						ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processingInfo, processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
+						chromatogramSelection.getChromatogram().setDirty(true); // TODO: check each entry
+						updateResult(processingInfo);
+						updateAuditTrail(processingInfo, processMethod);
+						forceReset(true);
+						UpdateNotifierUI.update(getDisplay(), chromatogramSelection.getSelectedScan());
+					}
+				});
 			}
 		});
 		//
@@ -1757,5 +1771,32 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		setButtonImage(buttonToggleRetentionIndexControl.get(), IMAGE_RETENTION_INDICES, PREFIX_SHOW, PREFIX_HIDE, TOOLTIP_RETENTION_INDICES, showRetentionIndexMarker);
 		retentionIndexMarker.setDraw(showRetentionIndexMarker);
 		chromatogramChartControl.get().redraw();
+	}
+
+	private void executeMethod(IChromatogramSelection<?, ?> chromatogramSelection, Consumer<IChromatogramSelection<?, ?>> consumer) {
+
+		if(chromatogramSelection != null) {
+			/*
+			 * Some methods modify the chromatogram references.
+			 * In such a case, update the references and alignment toolbar.
+			 */
+			int sizeReferencesBefore = chromatogramSelection.getChromatogram().getReferencedChromatograms().size();
+			consumer.accept(chromatogramSelection);
+			int sizeReferencesAfter = chromatogramSelection.getChromatogram().getReferencedChromatograms().size();
+			if(sizeReferencesBefore != sizeReferencesAfter) {
+				Display.getDefault().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						/*
+						 * Update the references and alignment toolbars.
+						 */
+						toolbarReferencesControl.get().update();
+						toolbarAlignmentControl.get().update(toolbarReferencesControl.get().getChromatogramSelections());
+					}
+				});
+			}
+		}
 	}
 }

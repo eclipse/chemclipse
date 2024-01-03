@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - refactoring to use ComboViewer instead of raw combo, change to use EditorToolBar
  *******************************************************************************/
@@ -78,18 +78,17 @@ public class ChromatogramReferencesUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReferencesUI.class);
 	//
+	private AtomicReference<Button> buttonPreviousControl = new AtomicReference<>();
+	private AtomicReference<ComboViewer> comboViewerReferencesControl = new AtomicReference<>();
+	private AtomicReference<Button> buttonNextControl = new AtomicReference<>();
+	private AtomicReference<Button> buttonAddControl = new AtomicReference<>();
+	private AtomicReference<Button> buttonImportControl = new AtomicReference<>();
+	private AtomicReference<Button> buttonRemoveControl = new AtomicReference<>();
+	private AtomicReference<Button> buttonRemoveAllControl = new AtomicReference<>();
+	private AtomicReference<Button> buttonOpenControl = new AtomicReference<>();
+	private AtomicReference<Button> buttonRefreshControl = new AtomicReference<>();
+	//
 	private ComboContainer comboChromatograms = null;
-	//
-	private Button buttonPrevious;
-	private ComboViewer comboViewerReferences;
-	private Button buttonNext;
-	private Button buttonAdd;
-	private Button buttonImport;
-	private Button buttonRemove;
-	private Button buttonRemoveAll;
-	private Button buttonOpen;
-	private Button buttonRefresh;
-	//
 	private ISelectionChangedListener selectionChangeListener = null;
 	private HashMap<IChromatogram<?>, IChromatogramSelection<?, ?>> referenceSelections = new HashMap<>();
 
@@ -104,6 +103,7 @@ public class ChromatogramReferencesUI extends Composite {
 		/*
 		 * Create the container
 		 */
+		ComboViewer comboViewerReferences = comboViewerReferencesControl.get();
 		comboChromatograms = new ComboContainer(chromatogramReferencesListener.andThen(t -> updateButtons()));
 		comboChromatograms.viewerReference.set(comboViewerReferences);
 		/*
@@ -210,15 +210,15 @@ public class ChromatogramReferencesUI extends Composite {
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
 		//
-		buttonPrevious = createButtonSelectPreviousChromatogram(composite);
-		comboViewerReferences = createComboChromatograms(composite);
-		buttonNext = createButtonSelectNextChromatogram(composite);
-		buttonRemove = createButtonRemoveReference(composite);
-		buttonRemoveAll = createButtonRemoveReferenceAll(composite);
-		buttonAdd = createButtonAddReference(composite);
-		buttonImport = createButtonImportReferences(composite);
-		buttonOpen = createButtonOpenReference(composite);
-		buttonRefresh = createButtonRefresh(composite);
+		createButtonSelectPreviousChromatogram(composite);
+		createComboChromatograms(composite);
+		createButtonSelectNextChromatogram(composite);
+		createButtonRemoveReference(composite);
+		createButtonRemoveReferenceAll(composite);
+		createButtonAddReference(composite);
+		createButtonImportReferences(composite);
+		createButtonOpenReference(composite);
+		createButtonRefresh(composite);
 		//
 		initialize();
 	}
@@ -228,7 +228,7 @@ public class ChromatogramReferencesUI extends Composite {
 		// comboViewerReferences.setInput(dataTypes);
 	}
 
-	private Button createButtonSelectPreviousChromatogram(Composite parent) {
+	private void createButtonSelectPreviousChromatogram(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -247,10 +247,10 @@ public class ChromatogramReferencesUI extends Composite {
 			}
 		});
 		//
-		return button;
+		buttonPreviousControl.set(button);
 	}
 
-	private ComboViewer createComboChromatograms(Composite parent) {
+	private void createComboChromatograms(Composite parent) {
 
 		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
@@ -279,10 +279,10 @@ public class ChromatogramReferencesUI extends Composite {
 		combo.setToolTipText("Select a referenced chromatogram.");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		return comboViewer;
+		comboViewerReferencesControl.set(comboViewer);
 	}
 
-	private Button createButtonSelectNextChromatogram(Composite parent) {
+	private void createButtonSelectNextChromatogram(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -301,10 +301,10 @@ public class ChromatogramReferencesUI extends Composite {
 			}
 		});
 		//
-		return button;
+		buttonNextControl.set(button);
 	}
 
-	private Button createButtonRemoveReference(Composite parent) {
+	private void createButtonRemoveReference(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -330,10 +330,10 @@ public class ChromatogramReferencesUI extends Composite {
 			}
 		});
 		//
-		return button;
+		buttonRemoveControl.set(button);
 	}
 
-	private Button createButtonRemoveReferenceAll(Composite parent) {
+	private void createButtonRemoveReferenceAll(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -361,10 +361,10 @@ public class ChromatogramReferencesUI extends Composite {
 			}
 		});
 		//
-		return button;
+		buttonRemoveAllControl.set(button);
 	}
 
-	private Button createButtonAddReference(Composite parent) {
+	private void createButtonAddReference(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -399,10 +399,10 @@ public class ChromatogramReferencesUI extends Composite {
 			}
 		});
 		//
-		return button;
+		buttonAddControl.set(button);
 	}
 
-	private Button createButtonImportReferences(Composite parent) {
+	private void createButtonImportReferences(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -449,7 +449,7 @@ public class ChromatogramReferencesUI extends Composite {
 			}
 		});
 		//
-		return button;
+		buttonImportControl.set(button);
 	}
 
 	private void addReferences(IChromatogramSelection<?, ?> masterSelection, List<IChromatogramSelection<?, ?>> chromatogramSelections) {
@@ -487,7 +487,7 @@ public class ChromatogramReferencesUI extends Composite {
 		}
 	}
 
-	private Button createButtonOpenReference(Composite parent) {
+	private void createButtonOpenReference(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -527,10 +527,10 @@ public class ChromatogramReferencesUI extends Composite {
 			}
 		});
 		//
-		return button;
+		buttonOpenControl.set(button);
 	}
 
-	private Button createButtonRefresh(Composite parent) {
+	private void createButtonRefresh(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -545,7 +545,7 @@ public class ChromatogramReferencesUI extends Composite {
 			}
 		});
 		//
-		return button;
+		buttonRefreshControl.set(button);
 	}
 
 	private void updateButtons() {
@@ -556,14 +556,14 @@ public class ChromatogramReferencesUI extends Composite {
 					int size = comboChromatograms.data.size();
 					int selectionIndex = comboChromatograms.currentIndex();
 					//
-					buttonPrevious.setEnabled(selectionIndex > 0);
-					buttonNext.setEnabled(selectionIndex < size - 1);
-					buttonRemove.setEnabled(selectionIndex > 0); // 0 is the master can't be removed
-					buttonRemoveAll.setEnabled(selectionIndex == 0 && size > 1); // Remove all when in master modus
-					buttonAdd.setEnabled(selectionIndex == 0); // 0 references can be added only to master
-					buttonImport.setEnabled(selectionIndex == 0); // 0 references can be added only to master
-					buttonOpen.setEnabled(true); // Always true
-					buttonRefresh.setEnabled(selectionIndex > 0);
+					buttonPreviousControl.get().setEnabled(selectionIndex > 0);
+					buttonNextControl.get().setEnabled(selectionIndex < size - 1);
+					buttonRemoveControl.get().setEnabled(selectionIndex > 0); // 0 is the master can't be removed
+					buttonRemoveAllControl.get().setEnabled(selectionIndex == 0 && size > 1); // Remove all when in master modus
+					buttonAddControl.get().setEnabled(selectionIndex == 0); // 0 references can be added only to master
+					buttonImportControl.get().setEnabled(selectionIndex == 0); // 0 references can be added only to master
+					buttonOpenControl.get().setEnabled(true); // Always true
+					buttonRefreshControl.get().setEnabled(true); // Always true
 				}
 			}
 		} catch(Exception e) {
