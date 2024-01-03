@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 
+import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
@@ -31,6 +32,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.l10n.Messages;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
@@ -60,6 +62,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -275,101 +278,139 @@ public class MultiDataExplorerTreeUI {
 		});
 	}
 
-	private void createContextMenu(DataExplorerTreeUI treeUI) {
+	private void createContextMenu(DataExplorerTreeUI dataExplorerTreeUI) {
 
-		TreeViewer treeViewer = treeUI.getTreeViewer();
-		MenuManager contextMenu = new MenuManager("#ViewerMenu"); //$NON-NLS-1$
-		contextMenu.setRemoveAllWhenShown(true);
-		contextMenu.addMenuListener(new IMenuListener() {
+		TreeViewer treeViewer = dataExplorerTreeUI.getTreeViewer();
+		MenuManager menuManager = new MenuManager("#ViewerMenu"); //$NON-NLS-1$
+		menuManager.setRemoveAllWhenShown(true);
+		menuManager.addMenuListener(new IMenuListener() {
 
 			@Override
 			public void menuAboutToShow(IMenuManager mgr) {
 
+				/*
+				 * Menu Entries
+				 */
 				Object[] selection = treeViewer.getStructuredSelection().toArray();
-				Set<ISupplier> supplierSet = new TreeSet<>(new Comparator<ISupplier>() {
+				updateFileAndFolders(dataExplorerTreeUI, menuManager);
+				selectMethodDirectory(menuManager, selection);
+				openFileAs(menuManager, selection);
+				openFiles(dataExplorerTreeUI, menuManager, selection);
+			}
+		});
+		//
+		Menu menu = menuManager.createContextMenu(treeViewer.getControl());
+		treeViewer.getControl().setMenu(menu);
+	}
 
-					@Override
-					public int compare(ISupplier o1, ISupplier o2) {
+	private void updateFileAndFolders(DataExplorerTreeUI dataExplorerTreeUI, MenuManager menuManager) {
 
-						return o1.getId().compareTo(o2.getId());
-					}
-				});
-				//
-				for(Object object : selection) {
-					if(object instanceof File file) {
-						Map<ISupplierFileIdentifier, Collection<ISupplier>> map = getIdentifierSupplier().apply(file);
-						if(map == null) {
-							continue;
-						}
-						for(ISupplierFileIdentifier supplierFileIdentifier : map.keySet()) {
-							if(supplierFileIdentifier.isMatchContent(file)) {
-								Collection<ISupplier> suppliers = map.get(supplierFileIdentifier);
-								for(ISupplier supplier : suppliers) {
-									if(supplier.isMatchMagicNumber(file) && supplier.isMatchContent(file)) {
-										supplierSet.add(supplier);
-									}
-								}
-							}
-						}
-					}
-				}
-				contextMenu.add(new Action(Messages.scanForFilesystemUpdates, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_REFRESH, IApplicationImageProvider.SIZE_16x16)) {
+		TreeViewer treeViewer = dataExplorerTreeUI.getTreeViewer();
+		menuManager.add(new Action(Messages.scanForFilesystemUpdates, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_REFRESH, IApplicationImageProvider.SIZE_16x16)) {
 
-					@Override
-					public void run() {
+			@Override
+			public void run() {
 
-						treeViewer.refresh();
-					}
-				});
-				//
-				for(ISupplier activeFileSupplier : supplierSet) {
-					contextMenu.add(new Action(NLS.bind(Messages.openAs, activeFileSupplier.getFilterName()), ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImageProvider.SIZE_16x16)) {
+				treeViewer.refresh();
+			}
+		});
+	}
+
+	private void selectMethodDirectory(MenuManager menuManager, Object[] selection) {
+
+		if(selection.length >= 1) {
+			if(selection[0] instanceof File file) {
+				if(file.isDirectory()) {
+					menuManager.add(new Action(Messages.setAsMethodDirectory, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_METHOD, IApplicationImageProvider.SIZE_16x16)) {
 
 						@Override
 						public void run() {
 
-							for(Object object : selection) {
-								if(object instanceof File file) {
-									Map<ISupplierFileIdentifier, Collection<ISupplier>> identifiers = getIdentifierSupplier().apply(file);
-									for(Entry<ISupplierFileIdentifier, Collection<ISupplier>> entry : identifiers.entrySet()) {
-										ISupplierFileIdentifier identifier = entry.getKey();
-										if(identifier instanceof ISupplierFileEditorSupport supplierFileEditorSupport) {
-											for(ISupplier supplier : entry.getValue()) {
-												if(activeFileSupplier.getId().equals(supplier.getId())) {
-													if(openEditorWithSupplier(file, supplierFileEditorSupport, supplier)) {
-														return;
-													}
-												}
+							MethodConverter.setUserMethodDirectory(file);
+							UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_METHOD_UPDATE, null);
+						}
+					});
+				}
+			}
+		}
+	}
+
+	private void openFileAs(MenuManager menuManager, Object[] selection) {
+
+		Set<ISupplier> supplierSet = new TreeSet<>(new Comparator<ISupplier>() {
+
+			@Override
+			public int compare(ISupplier supplier1, ISupplier supplier2) {
+
+				return supplier1.getId().compareTo(supplier2.getId());
+			}
+		});
+		//
+		for(Object object : selection) {
+			if(object instanceof File file) {
+				Map<ISupplierFileIdentifier, Collection<ISupplier>> map = getIdentifierSupplier().apply(file);
+				if(map == null) {
+					continue;
+				}
+				for(ISupplierFileIdentifier supplierFileIdentifier : map.keySet()) {
+					if(supplierFileIdentifier.isMatchContent(file)) {
+						Collection<ISupplier> suppliers = map.get(supplierFileIdentifier);
+						for(ISupplier supplier : suppliers) {
+							if(supplier.isMatchMagicNumber(file) && supplier.isMatchContent(file)) {
+								supplierSet.add(supplier);
+							}
+						}
+					}
+				}
+			}
+		}
+		//
+		for(ISupplier activeFileSupplier : supplierSet) {
+			menuManager.add(new Action(NLS.bind(Messages.openAs, activeFileSupplier.getFilterName()), ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImageProvider.SIZE_16x16)) {
+
+				@Override
+				public void run() {
+
+					for(Object object : selection) {
+						if(object instanceof File file) {
+							Map<ISupplierFileIdentifier, Collection<ISupplier>> identifiers = getIdentifierSupplier().apply(file);
+							for(Entry<ISupplierFileIdentifier, Collection<ISupplier>> entry : identifiers.entrySet()) {
+								ISupplierFileIdentifier identifier = entry.getKey();
+								if(identifier instanceof ISupplierFileEditorSupport supplierFileEditorSupport) {
+									for(ISupplier supplier : entry.getValue()) {
+										if(activeFileSupplier.getId().equals(supplier.getId())) {
+											if(openEditorWithSupplier(file, supplierFileEditorSupport, supplier)) {
+												return;
 											}
 										}
 									}
 								}
 							}
 						}
-
-						@Override
-						public String getToolTipText() {
-
-							return activeFileSupplier.getDescription();
-						}
-					});
+					}
 				}
-				//
-				if(selection.length == 1 && selection[0] instanceof File file && file.isDirectory()) {
-					contextMenu.add(new Action(Messages.openAllContainedMeasurements, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER, IApplicationImageProvider.SIZE_16x16)) {
 
-						@Override
-						public void run() {
+				@Override
+				public String getToolTipText() {
 
-							openRecursively((File)selection[0], treeUI);
-						}
-					});
+					return activeFileSupplier.getDescription();
 				}
-			}
-		});
-		//
-		Menu menu = contextMenu.createContextMenu(treeViewer.getControl());
-		treeViewer.getControl().setMenu(menu);
+			});
+		}
+	}
+
+	private void openFiles(DataExplorerTreeUI dataExplorerTreeUI, MenuManager menuManager, Object[] selection) {
+
+		if(selection.length == 1 && selection[0] instanceof File file && file.isDirectory()) {
+			menuManager.add(new Action(Messages.openAllContainedMeasurements, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER, IApplicationImageProvider.SIZE_16x16)) {
+
+				@Override
+				public void run() {
+
+					openRecursively((File)selection[0], dataExplorerTreeUI);
+				}
+			});
+		}
 	}
 
 	private boolean openRecursively(File file, DataExplorerTreeUI treeUI) {
