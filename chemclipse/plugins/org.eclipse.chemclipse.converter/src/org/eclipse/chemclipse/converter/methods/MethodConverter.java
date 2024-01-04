@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - Stream support
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
 
@@ -321,6 +322,18 @@ public class MethodConverter {
 				directory = file.getParent();
 			}
 			PreferenceSupplier.setSettings(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, directory);
+		}
+	}
+
+	public static void setUserMethodFile(File file) {
+
+		if(file != null && file.isFile()) {
+			IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(file, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
+			IProcessMethod processMethod = processingInfo.getProcessingResult();
+			if(processMethod != null) {
+				setUserMethodDirectory(file.getParentFile());
+				PreferenceSupplier.setSelectedMethodName(processMethod.getName());
+			}
 		}
 	}
 }
