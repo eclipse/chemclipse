@@ -31,6 +31,7 @@ public class Messages extends NLS {
 	public static String userLocation;
 	public static String workspace;
 	public static String setAsMethodDirectory;
+	public static String setAsActiveMethod;
 	//
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

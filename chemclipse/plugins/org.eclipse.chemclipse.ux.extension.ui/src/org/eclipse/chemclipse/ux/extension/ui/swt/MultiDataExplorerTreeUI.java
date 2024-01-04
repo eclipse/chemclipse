@@ -28,6 +28,8 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -40,6 +42,7 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvid
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.LazyFileExplorerContentProvider;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -294,6 +297,7 @@ public class MultiDataExplorerTreeUI {
 				Object[] selection = treeViewer.getStructuredSelection().toArray();
 				updateFileAndFolders(dataExplorerTreeUI, menuManager);
 				selectMethodDirectory(menuManager, selection);
+				selectMethodFile(menuManager, selection);
 				openFileAs(menuManager, selection);
 				openFiles(dataExplorerTreeUI, menuManager, selection);
 			}
@@ -328,6 +332,29 @@ public class MultiDataExplorerTreeUI {
 
 							MethodConverter.setUserMethodDirectory(file);
 							UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_METHOD_UPDATE, null);
+						}
+					});
+				}
+			}
+		}
+	}
+
+	private void selectMethodFile(MenuManager menuManager, Object[] selection) {
+
+		if(selection.length >= 1) {
+			if(selection[0] instanceof File file) {
+				if(file.isFile()) {
+					menuManager.add(new Action(Messages.setAsActiveMethod, ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_METHOD, IApplicationImageProvider.SIZE_16x16)) {
+
+						@Override
+						public void run() {
+
+							IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.convert(file, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
+							IProcessMethod processMethod = processingInfo.getProcessingResult();
+							if(processMethod != null) {
+								MethodConverter.setUserMethodDirectory(file.getParentFile());
+								UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_METHOD_UPDATE, processMethod);
+							}
 						}
 					});
 				}
