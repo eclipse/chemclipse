@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,17 +7,20 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - refactor for use in generic processor framework
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.supplier;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.support.literature.LiteratureReference;
 import org.eclipse.chemclipse.support.settings.parser.SettingsClassParser;
 import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 
@@ -26,6 +29,7 @@ public abstract class AbstractProcessSupplier<SettingsClass> implements IProcess
 	private final String id;
 	private final String name;
 	private final String description;
+	private final List<LiteratureReference> literatureReferences = new ArrayList<>();
 	private final Class<SettingsClass> settingsClass;
 	private final Set<DataCategory> dataTypes;
 	private final IProcessTypeSupplier parent;
@@ -78,6 +82,12 @@ public abstract class AbstractProcessSupplier<SettingsClass> implements IProcess
 	public String getDescription() {
 
 		return description;
+	}
+
+	@Override
+	public List<LiteratureReference> getLiteratureReferences() {
+
+		return literatureReferences;
 	}
 
 	@Override

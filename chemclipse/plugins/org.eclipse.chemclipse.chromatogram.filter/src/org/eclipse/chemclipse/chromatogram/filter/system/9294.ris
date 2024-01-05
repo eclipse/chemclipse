@@ -1,0 +1,18 @@
+TY  - JOUR
+TI  - A general procedure for rounding m/z values in low‐resolution mass spectra
+AU  - Khrisanfov, Mikhail
+AU  - Samokhin, Andrey
+T2  - Rapid Communications in Mass Spectrometry
+DA  - 2022/06/15/
+PY  - 2022
+DO  - 10.1002/rcm.9294
+DP  - DOI.org (Crossref)
+VL  - 36
+IS  - 11
+AB  - It was revealed that nominal mass spectra extracted from the same NetCDF file using different gas chromatography/mass spectrometry (GC/MS) software products are not identical. This phenomenon is caused by differences in algorithms used for rounding floating-point m/z values to integers. It was found that all programs under consideration (AMDIS, ChemStation, ChromaTOF, MS Search, OpenChrom) use different procedures. It is necessary to know how fractional parts of accurate m/z values of ions are distributed to determine which algorithm yields more robust results. We estimated the respective distribution using two databases (PubChem and NIST). As a result, we came up with a procedure that minimizes the influence of random errors on rounding to integer m/z values. The procedure we suggest is to sum intensities of all floating-point m/z values in a bin [MZ − 0.38; MZ + 0.62] and assign MZ as a nominal m/z value, where MZ is an integer m/z value.
+J2  - Rapid Comm Mass Spectrometry
+LA  - en
+SN  - 0951-4198, 1097-0231
+UR  - https://doi.org/10.1002/rcm.9294
+Y2  - 2022/08/18/15:22:47
+ER  - 

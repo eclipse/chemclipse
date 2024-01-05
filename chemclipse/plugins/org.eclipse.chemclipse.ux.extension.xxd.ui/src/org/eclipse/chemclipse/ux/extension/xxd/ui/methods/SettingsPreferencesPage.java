@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,12 +13,27 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences.DialogBehavior;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.editor.SystemEditor;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.literature.LiteratureReference;
+import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -28,7 +43,9 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -37,14 +54,19 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 
 	private static final Logger logger = Logger.getLogger(SettingsPreferencesPage.class);
 	//
+	private static final String DATA_URL = "DATA_URL";
+	private static final int MAX_LENGTH_LITERATURE_REFERENCE = 97; // 100 = 97 + ...
+	//
+	private AtomicReference<Button> buttonDefault = new AtomicReference<>();
+	private AtomicReference<Button> buttonUser = new AtomicReference<>();
+	private AtomicReference<SettingsUI<?>> settingsUI = new AtomicReference<>();
+	private AtomicReference<ComboViewer> comboViewerLiterature = new AtomicReference<>();
+	private AtomicReference<Button> buttonLink = new AtomicReference<>();
+	//
 	private boolean isDontAskAgain;
 	private boolean isUseSystemDefaults;
-	//
-	private Button buttonDefault;
-	private Button buttonUser;
-	private SettingsUI<?> settingsUI;
-	//
 	private String jsonSettings;
+	//
 	private final IProcessorPreferences<T> preferences;
 	private final boolean showProfileToolbar;
 
@@ -94,25 +116,134 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		composite.setLayout(new GridLayout(1, true));
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
+		createLiteratureSection(composite);
 		createSystemOptions(composite);
+		createLabelSeparator(composite);
 		createUserOptions(composite);
-		//
-		Listener validationListener = createValidationListener();
-		SelectionListener selectionListener = createSelectionListener(validationListener);
-		//
-		Composite bottomComposite = new Composite(composite, SWT.NONE);
-		bottomComposite.setLayout(new GridLayout(2, true));
-		bottomComposite.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL));
-		addButtonResetDefaults(bottomComposite);
-		addButtonSettings(bottomComposite, validationListener, selectionListener);
+		createProcessSection(composite);
 		//
 		return composite;
 	}
 
+	private void createLiteratureSection(Composite parent) {
+
+		List<LiteratureReference> literatureReferences = preferences.getSupplier().getLiteratureReferences();
+		boolean useLiterature = !literatureReferences.isEmpty();
+		/*
+		 * Create the literature references only on demand.
+		 */
+		if(useLiterature) {
+			createLabelText(parent, ExtensionMessages.literatureReferences);
+			createReferenceSection(parent, literatureReferences);
+			createLabelText(parent, ExtensionMessages.settings);
+		}
+	}
+
+	private void createReferenceSection(Composite parent, List<LiteratureReference> literatureReferences) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(2, false));
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		createComboViewerLiterature(composite);
+		createButtonDOI(composite);
+		//
+		comboViewerLiterature.get().setInput(literatureReferences);
+		comboViewerLiterature.get().setSelection(new StructuredSelection(literatureReferences.get(0)));
+		updateLiteratureSelection();
+	}
+
+	private void createComboViewerLiterature(Composite parent) {
+
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
+		comboViewer.setContentProvider(ListContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof LiteratureReference literatureReference) {
+					String title = literatureReference.getTitle();
+					if(title.isEmpty()) {
+						return ExtensionMessages.literatureReference;
+					} else {
+						if(title.length() > MAX_LENGTH_LITERATURE_REFERENCE) {
+							title = title.substring(0, MAX_LENGTH_LITERATURE_REFERENCE) + "...";
+						}
+						return title;
+					}
+				}
+				return null;
+			}
+		});
+		//
+		Combo combo = comboViewer.getCombo();
+		combo.setToolTipText(ExtensionMessages.literatureReferences);
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				updateLiteratureSelection();
+			}
+		});
+		//
+		comboViewerLiterature.set(comboViewer);
+	}
+
+	private void updateLiteratureSelection() {
+
+		Object object = comboViewerLiterature.get().getStructuredSelection().getFirstElement();
+		if(object instanceof LiteratureReference literatureReference) {
+			updateLiterature(literatureReference);
+		}
+	}
+
+	private void updateLiterature(LiteratureReference literatureReference) {
+
+		String url = "";
+		if(literatureReference != null) {
+			url = literatureReference.getUrl();
+			UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_LITERATURE_UPDATE, literatureReference.getContent());
+		}
+		//
+		buttonLink.get().setData(DATA_URL, url);
+		buttonLink.get().setEnabled(!url.isEmpty());
+		buttonLink.get().setToolTipText(!url.isEmpty() ? url : ExtensionMessages.noLinkIsSupplierYet);
+	}
+
+	private void createButtonDOI(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText(ExtensionMessages.openInExternalBrowser);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXTERNAL_BROWSER, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Object data = button.getData(DATA_URL);
+				if(data instanceof String value) {
+					if(!value.isEmpty()) {
+						try {
+							URL url = new URL(value);
+							SystemEditor.browse(url);
+						} catch(MalformedURLException e1) {
+							logger.warn(e1);
+						}
+					}
+				}
+			}
+		});
+		//
+		buttonLink.set(button);
+	}
+
 	private void createSystemOptions(Composite parent) {
 
-		buttonDefault = createButtonDefault(parent);
-		createLabelSeparator(parent);
+		buttonDefault.set(createButtonDefault(parent));
 	}
 
 	private Button createButtonDefault(Composite parent) {
@@ -133,32 +264,52 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
-	private void createUserOptions(Composite parent) {
+	private void createLabelText(Composite parent, String text) {
 
-		buttonUser = createButtonUser(parent);
-		settingsUI = createSettingsUI(parent);
+		Label label = new Label(parent, SWT.NONE);
+		label.setText(text);
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
-	private Button createButtonUser(Composite parent) {
+	private void createUserOptions(Composite parent) {
+
+		createButtonUser(parent);
+		createSettingsUI(parent);
+	}
+
+	private void createButtonUser(Composite parent) {
 
 		Button button = new Button(parent, SWT.RADIO);
 		button.setText(ExtensionMessages.useSpecificOptions);
 		//
-		return button;
+		buttonUser.set(button);
 	}
 
-	private SettingsUI<?> createSettingsUI(Composite parent) {
+	private void createSettingsUI(Composite parent) {
 
-		SettingsUI<?> settingsUI = null;
+		SettingsUI<?> control = null;
 		//
 		try {
-			settingsUI = new SettingsUI<>(parent, preferences, showProfileToolbar);
-			settingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+			control = new SettingsUI<>(parent, preferences, showProfileToolbar);
+			control.setLayoutData(new GridData(GridData.FILL_BOTH));
 		} catch(IOException e) {
 			throw new RuntimeException("Reading the settings failed.", e);
 		}
 		//
-		return settingsUI;
+		settingsUI.set(control);
+	}
+
+	private void createProcessSection(Composite parent) {
+
+		Listener validationListener = createValidationListener();
+		SelectionListener selectionListener = createSelectionListener(validationListener);
+		//
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(2, true));
+		composite.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL));
+		//
+		addButtonResetDefaults(composite);
+		addButtonSettings(composite, validationListener, selectionListener);
 	}
 
 	private Listener createValidationListener() {
@@ -169,8 +320,8 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 			public void handleEvent(Event event) {
 
 				jsonSettings = null;
-				if(buttonUser.getSelection()) {
-					IStatus validate = settingsUI.getControl().validate();
+				if(buttonUser.get().getSelection()) {
+					IStatus validate = settingsUI.get().getControl().validate();
 					if(validate.isOK()) {
 						setErrorMessage(null);
 						setPageComplete(true);
@@ -186,7 +337,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 				 * User Specific Settings
 				 */
 				try {
-					jsonSettings = settingsUI.getControl().getSettings();
+					jsonSettings = settingsUI.get().getControl().getSettings();
 				} catch(Exception e) {
 					logger.warn("Error while fetching the settings.");
 					logger.warn(e);
@@ -204,17 +355,17 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				settingsUI.setEnabled(buttonUser.getSelection());
+				settingsUI.get().setEnabled(buttonUser.get().getSelection());
 				validationListener.handleEvent(null);
-				isUseSystemDefaults = buttonDefault.getSelection();
+				isUseSystemDefaults = buttonDefault.get().getSelection();
 			}
 		};
 	}
 
 	private void addButtonSettings(Composite parent, Listener validationListener, SelectionListener selectionListener) {
 
-		buttonDefault.addSelectionListener(selectionListener);
-		buttonUser.addSelectionListener(selectionListener);
+		buttonDefault.get().addSelectionListener(selectionListener);
+		buttonUser.get().addSelectionListener(selectionListener);
 		//
 		if(preferences.getDialogBehaviour() == DialogBehavior.NONE) {
 			isDontAskAgain = false;
@@ -233,15 +384,17 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 			isDontAskAgain = preferences.getDialogBehaviour() != DialogBehavior.SHOW;
 			buttonDontAskAgain.setSelection(isDontAskAgain);
 		}
-		//
+		/*
+		 * Defaults
+		 */
 		if(preferences.isUseSystemDefaults() && !preferences.requiresUserSettings()) {
-			buttonDefault.setSelection(true);
+			buttonDefault.get().setSelection(true);
 		} else {
-			buttonUser.setSelection(true);
+			buttonUser.get().setSelection(true);
 		}
 		//
 		selectionListener.widgetSelected(null);
-		settingsUI.getControl().addChangeListener(validationListener);
+		settingsUI.get().getControl().addChangeListener(validationListener);
 	}
 
 	private void addButtonResetDefaults(Composite parent) {
@@ -254,7 +407,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				settingsUI.getControl().restoreDefaults();
+				settingsUI.get().getControl().restoreDefaults();
 			}
 		});
 	}

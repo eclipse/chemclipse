@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - move method to open wizard, refactor for new settings
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
@@ -64,24 +64,24 @@ public class SettingsWizard extends Wizard {
 	public static <T> boolean openEditPreferencesWizard(Shell shell, IProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
 
 		IProcessSupplier<T> processorSupplier = preferences.getSupplier();
-		SettingsWizard wizard = new SettingsWizard(ExtensionMessages.editProcessorOptions);
+		SettingsWizard settingsWizard = new SettingsWizard(ExtensionMessages.editProcessorOptions);
 		//
-		SettingsPreferencesPage<T> page = new SettingsPreferencesPage<>(preferences, showProfileToolbar);
-		page.setTitle(MessageFormat.format(ExtensionMessages.selectOptionsForProcessorName, processorSupplier.getName()));
-		page.setMessage(processorSupplier.getDescription());
-		wizard.addPage(page);
+		SettingsPreferencesPage<T> settingsPreferencePage = new SettingsPreferencesPage<>(preferences, showProfileToolbar);
+		settingsPreferencePage.setTitle(MessageFormat.format(ExtensionMessages.selectOptionsForProcessorName, processorSupplier.getName()));
+		settingsPreferencePage.setMessage(processorSupplier.getDescription());
+		settingsWizard.addPage(settingsPreferencePage);
 		//
-		WizardDialog wizardDialog = new WizardDialog(shell, wizard);
+		WizardDialog wizardDialog = new WizardDialog(shell, settingsWizard);
 		wizardDialog.setMinimumPageSize(SettingsWizard.DEFAULT_WIDTH, SettingsWizard.DEFAULT_HEIGHT);
 		//
 		if(wizardDialog.open() == Window.OK) {
-			preferences.setAskForSettings(!page.getIsDontAskAgainEdited());
-			boolean useSystem = page.getIsUseSystemDefaultsEdited();
+			preferences.setAskForSettings(!settingsPreferencePage.getIsDontAskAgainEdited());
+			boolean useSystem = settingsPreferencePage.getIsUseSystemDefaultsEdited();
 			if(useSystem) {
 				preferences.setUseSystemDefaults(true);
 			} else {
 				preferences.setUseSystemDefaults(false);
-				preferences.setUserSettings(page.getSettingsEdited());
+				preferences.setUserSettings(settingsPreferencePage.getSettingsEdited());
 			}
 			return true;
 		} else {

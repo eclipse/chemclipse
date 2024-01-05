@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -332,6 +332,10 @@ public class ExtensionMessages extends NLS {
 	public static String fluorescence;
 	public static String pcrExport;
 	public static String plateChart;
+	public static String literatureReferences;
+	public static String literatureReference;
+	public static String noLinkIsSupplierYet;
+	public static String openInExternalBrowser;
 	//
 	static {
 		NLS.initializeMessages("org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.messages", ExtensionMessages.class); //$NON-NLS-1$

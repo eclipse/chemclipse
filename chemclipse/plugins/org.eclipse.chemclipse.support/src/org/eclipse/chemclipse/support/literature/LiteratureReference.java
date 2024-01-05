@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,9 +9,7 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.model;
-
-import org.eclipse.chemclipse.model.literature.LiteratureSupport;
+package org.eclipse.chemclipse.support.literature;
 
 public class LiteratureReference {
 
@@ -23,7 +21,7 @@ public class LiteratureReference {
 
 		this.content = content;
 		this.title = LiteratureSupport.getTitle(content);
-		this.url = LiteratureSupport.getContainedDOI(content);
+		this.url = LiteratureSupport.getContainedLink(content);
 	}
 
 	public String getContent() {

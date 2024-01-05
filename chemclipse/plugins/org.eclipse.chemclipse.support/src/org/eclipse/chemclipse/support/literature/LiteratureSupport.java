@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.literature;
+package org.eclipse.chemclipse.support.literature;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -109,9 +109,10 @@ public class LiteratureSupport {
 		RIS_IDENTIFIER_MAP.put("ER", "End of Reference");
 	}
 	//
-	private static final Pattern PATTERN_TITLE = Pattern.compile("(TI\\s+-\\s+|T1\\s+-\\s+|Title: )(.*?)(\n|[A-Z][A-Z]|$)");
-	private static final Pattern PATTERN_DOI_ORG = Pattern.compile("(http)(s?)(://doi.org/)(.*?)(\\s+)");
-	private static final Pattern PATTERN_DOI_DX = Pattern.compile("(http)(s?)(://dx.doi.org/)(.*?)(\\s+)");
+	private static final Pattern PATTERN_TITLE = Pattern.compile("(TI\\s+-\\s+|T1\\s+-\\s+|Title: )(.*?)(\n|\r|\r\n|[A-Z][A-Z]|$)");
+	private static final Pattern PATTERN_DOI_ORG = Pattern.compile("(http)(s?)(://doi.org/)(.*?)(\\s+|$)");
+	private static final Pattern PATTERN_DOI_DX = Pattern.compile("(http)(s?)(://dx.doi.org/)(.*?)(\\s+|$)");
+	private static final Pattern PATTERN_URL = Pattern.compile("(http)(s?)(://)(.*?)(\\s+|$)");
 	private static final String PATTERN_KEY_RIS = "([A-Z])([A-Z]|[0-9])(  -)";
 
 	/**
@@ -193,23 +194,31 @@ public class LiteratureSupport {
 		return title;
 	}
 
-	public static String getContainedDOI(String content) {
+	/**
+	 * Returns the DOI or URL if available.
+	 * 
+	 * @param content
+	 * @return String
+	 */
+	public static String getContainedLink(String content) {
 
-		String doi = getContainedDOI(content, LiteratureSupport.PATTERN_DOI_ORG);
-		if(doi.isEmpty()) {
-			doi = getContainedDOI(content, LiteratureSupport.PATTERN_DOI_DX);
+		String link = getContainedLink(content, LiteratureSupport.PATTERN_DOI_ORG);
+		if(link.isEmpty()) {
+			link = getContainedLink(content, LiteratureSupport.PATTERN_DOI_DX);
+			if(link.isEmpty()) {
+				link = getContainedLink(content, LiteratureSupport.PATTERN_URL);
+			}
 		}
 		//
-		return doi;
+		return link;
 	}
 
 	/**
 	 * This method tries to extract the URL of the first matched
 	 * DOI (digital object identifier) according to the specification
-	 * of the DOI Foundation:
-	 * https://www.doi.org
+	 * of the DOI Foundation: https://www.doi.org or the generic URL.
 	 */
-	private static String getContainedDOI(String content, Pattern pattern) {
+	private static String getContainedLink(String content, Pattern pattern) {
 
 		String url = "";
 		if(content != null) {
