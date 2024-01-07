@@ -10,3 +10,6 @@ org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum
 	
 org.eclipse.chemclipse.model.identifier.ILibraryInformation
 	CompoundClass
+	
+org.eclipse.chemclipse.msd.model.core.IChromatogramMSD
+	CombinedMassSpectrum

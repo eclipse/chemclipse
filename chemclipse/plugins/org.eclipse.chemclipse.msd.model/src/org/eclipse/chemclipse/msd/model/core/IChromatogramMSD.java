@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -107,4 +107,18 @@ public interface IChromatogramMSD extends IChromatogram<IChromatogramPeakMSD> {
 	 * 
 	 */
 	IIonTransitionSettings getIonTransitionSettings();
+
+	/**
+	 * Set the combined mass spectrum of the chromatogram.
+	 * 
+	 * @param scanMSD
+	 */
+	void setCombinedMassSpectrum(IScanMSD scanMSD);
+
+	/**
+	 * The combined mass spectrum is a summary of the scans/peaks of the chromatogram.
+	 * 
+	 * @return {@link IScanMSD}
+	 */
+	IScanMSD getCombinedMassSpectrum();
 }

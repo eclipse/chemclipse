@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
  * Christoph Läubrich - adjust to new {@link INoiseCalculator} API
  *******************************************************************************/
@@ -57,8 +57,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * IUpdater is implemented which takes care that all registered listeners (
  * {@link IChromatogramUpdateListener}) will be informed if values of the
  * chromatogram has been changed.
- * 
- * @author eselmeister
  */
 public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChromatogramPeakMSD> implements IChromatogramMSD {
 
@@ -69,6 +67,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	private final IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
 	private ImmutableZeroIon immutableZeroIon;
+	private IScanMSD combinedMassSpectrum;
 
 	public AbstractChromatogramMSD() {
 
@@ -260,9 +259,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 		}
 		return highestIon;
 	}
-	// -----------------------------------------------IChromatogram
 
-	// -----------------------------------------------IIntegration
 	@Override
 	public double getPeakIntegratedArea() {
 
@@ -277,6 +274,18 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	public IIonTransitionSettings getIonTransitionSettings() {
 
 		return ionTransitionSettings;
+	}
+
+	@Override
+	public IScanMSD getCombinedMassSpectrum() {
+
+		return combinedMassSpectrum;
+	}
+
+	@Override
+	public void setCombinedMassSpectrum(IScanMSD combinedMassSpectrum) {
+
+		this.combinedMassSpectrum = combinedMassSpectrum;
 	}
 
 	private boolean isZeroImmutableIon(IIon ion) {
