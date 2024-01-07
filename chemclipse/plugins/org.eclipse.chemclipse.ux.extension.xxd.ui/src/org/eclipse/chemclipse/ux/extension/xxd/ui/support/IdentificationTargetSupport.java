@@ -47,10 +47,12 @@ public class IdentificationTargetSupport {
 		}
 		//
 		if(addRetentionIndex) {
-			int retentionIndex = Math.round(scan.getRetentionIndex());
-			if(retentionIndex > 0) {
-				builder.append(" - ");
-				builder.append(Integer.toString(retentionIndex));
+			if(scan != null) {
+				int retentionIndex = Math.round(scan.getRetentionIndex());
+				if(retentionIndex > 0) {
+					builder.append(" - ");
+					builder.append(Integer.toString(retentionIndex));
+				}
 			}
 		}
 		//
