@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,12 +42,12 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -85,8 +85,15 @@ public class MassSpectrumLibraryUI extends Composite {
 		updateLabel();
 	}
 
+	public MassSpectrumListUI getMassSpectrumListUI() {
+
+		return massSpectrumListUI;
+	}
+
 	private void createControl() {
 
+		setLayout(new FillLayout());
+		//
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		composite.setLayout(new GridLayout(1, true));
@@ -328,8 +335,7 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
-				Object firstElement = ((IStructuredSelection)event.getSelection()).getFirstElement();
-				if(firstElement != null && firstElement instanceof IScanMSD massSpectrum) {
+				if(event.getStructuredSelection().getFirstElement() instanceof IScanMSD massSpectrum) {
 					/*
 					 * Fire an update if an identified scan has been selected.
 					 */
