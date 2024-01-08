@@ -40,10 +40,4 @@
             reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings4">
       </ChromatogramReportSupplier> 
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

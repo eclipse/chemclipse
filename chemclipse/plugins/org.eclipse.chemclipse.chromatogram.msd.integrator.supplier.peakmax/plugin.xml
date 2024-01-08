@@ -11,10 +11,4 @@
             integratorSettings="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.settings.PeakIntegrationSettings">
       </PeakIntegratorSupplier>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

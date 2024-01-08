@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2021 Lablicate GmbH.
+ * Copyright (c) 2010, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences;
 
@@ -21,12 +21,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderiv
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsWSD;
 import org.eclipse.chemclipse.support.model.WindowSize;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final float MIN_SN_RATIO_MIN = 0.0f; // 0 = all peaks will be added
 	public static final float MIN_SN_RATIO_MAX = Float.MAX_VALUE; // 0 = all peaks will be added
@@ -134,41 +135,38 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static PeakDetectorSettingsCSD getPeakDetectorSettingsCSD() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		PeakDetectorSettingsCSD settings = new PeakDetectorSettingsCSD();
-		settings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD_CSD, DEF_THRESHOLD_CSD)));
-		settings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_CSD, DEF_INCLUDE_BACKGROUND_CSD));
-		settings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_CSD, DEF_MIN_SN_RATIO_CSD));
-		settings.setMovingAverageWindowSize(WindowSize.getAdjustedSetting(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_CSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD)));
-		settings.setUseNoiseSegments(preferences.getBoolean(P_USE_NOISE_SEGMENTS_CSD, DEF_USE_NOISE_SEGMENTS_CSD));
-		settings.setOptimizeBaseline(preferences.getBoolean(P_OPTIMIZE_BASELINE_CSD, DEF_OPTIMIZE_BASELINE_CSD));
+		settings.setThreshold(Threshold.valueOf(INSTANCE().get(P_THRESHOLD_CSD, DEF_THRESHOLD_CSD)));
+		settings.setIncludeBackground(INSTANCE().getBoolean(P_INCLUDE_BACKGROUND_CSD, DEF_INCLUDE_BACKGROUND_CSD));
+		settings.setMinimumSignalToNoiseRatio(INSTANCE().getFloat(P_MIN_SN_RATIO_CSD, DEF_MIN_SN_RATIO_CSD));
+		settings.setMovingAverageWindowSize(WindowSize.getAdjustedSetting(INSTANCE().get(P_MOVING_AVERAGE_WINDOW_SIZE_CSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD)));
+		settings.setUseNoiseSegments(INSTANCE().getBoolean(P_USE_NOISE_SEGMENTS_CSD, DEF_USE_NOISE_SEGMENTS_CSD));
+		settings.setOptimizeBaseline(INSTANCE().getBoolean(P_OPTIMIZE_BASELINE_CSD, DEF_OPTIMIZE_BASELINE_CSD));
 		return settings;
 	}
 
 	public static PeakDetectorSettingsMSD getPeakDetectorSettingsMSD() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		PeakDetectorSettingsMSD settings = new PeakDetectorSettingsMSD();
-		settings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD_MSD, DEF_THRESHOLD_MSD)));
-		settings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_MSD, DEF_INCLUDE_BACKGROUND_MSD));
-		settings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_MSD, DEF_MIN_SN_RATIO_MSD));
-		settings.setMovingAverageWindowSize(WindowSize.getAdjustedSetting(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_MSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD)));
-		settings.setUseNoiseSegments(preferences.getBoolean(P_USE_NOISE_SEGMENTS_MSD, DEF_USE_NOISE_SEGMENTS_MSD));
-		settings.setFilterMode(FilterMode.valueOf(preferences.get(P_FILTER_MODE_MSD, DEF_FILTER_MODE_MSD)));
-		settings.setFilterIonsString(preferences.get(P_MZ_VALUES_TO_FILTER_MSD, DEF_MZ_VALUES_TO_FILTER_MSD));
-		settings.setUseIndividualTraces(preferences.getBoolean(P_USE_INDIVIDUAL_TRACES_MSD, DEF_USE_INDIVIDUAL_TRACES_MSD));
-		settings.setOptimizeBaseline(preferences.getBoolean(P_OPTIMIZE_BASELINE_MSD, DEF_OPTIMIZE_BASELINE_MSD));
+		settings.setThreshold(Threshold.valueOf(INSTANCE().get(P_THRESHOLD_MSD, DEF_THRESHOLD_MSD)));
+		settings.setIncludeBackground(INSTANCE().getBoolean(P_INCLUDE_BACKGROUND_MSD, DEF_INCLUDE_BACKGROUND_MSD));
+		settings.setMinimumSignalToNoiseRatio(INSTANCE().getFloat(P_MIN_SN_RATIO_MSD, DEF_MIN_SN_RATIO_MSD));
+		settings.setMovingAverageWindowSize(WindowSize.getAdjustedSetting(INSTANCE().get(P_MOVING_AVERAGE_WINDOW_SIZE_MSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD)));
+		settings.setUseNoiseSegments(INSTANCE().getBoolean(P_USE_NOISE_SEGMENTS_MSD, DEF_USE_NOISE_SEGMENTS_MSD));
+		settings.setFilterMode(FilterMode.valueOf(INSTANCE().get(P_FILTER_MODE_MSD, DEF_FILTER_MODE_MSD)));
+		settings.setFilterIonsString(INSTANCE().get(P_MZ_VALUES_TO_FILTER_MSD, DEF_MZ_VALUES_TO_FILTER_MSD));
+		settings.setUseIndividualTraces(INSTANCE().getBoolean(P_USE_INDIVIDUAL_TRACES_MSD, DEF_USE_INDIVIDUAL_TRACES_MSD));
+		settings.setOptimizeBaseline(INSTANCE().getBoolean(P_OPTIMIZE_BASELINE_MSD, DEF_OPTIMIZE_BASELINE_MSD));
 		return settings;
 	}
 
 	public static PeakDetectorSettingsWSD getPeakDetectorSettingsWSD() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		PeakDetectorSettingsWSD settings = new PeakDetectorSettingsWSD();
-		settings.setThreshold(Threshold.valueOf(preferences.get(P_THRESHOLD_WSD, DEF_THRESHOLD_WSD)));
-		settings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_WSD, DEF_INCLUDE_BACKGROUND_WSD));
-		settings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_WSD, DEF_MIN_SN_RATIO_WSD));
-		settings.setMovingAverageWindowSize(WindowSize.getAdjustedSetting(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_WSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_WSD)));
+		settings.setThreshold(Threshold.valueOf(INSTANCE().get(P_THRESHOLD_WSD, DEF_THRESHOLD_WSD)));
+		settings.setIncludeBackground(INSTANCE().getBoolean(P_INCLUDE_BACKGROUND_WSD, DEF_INCLUDE_BACKGROUND_WSD));
+		settings.setMinimumSignalToNoiseRatio(INSTANCE().getFloat(P_MIN_SN_RATIO_WSD, DEF_MIN_SN_RATIO_WSD));
+		settings.setMovingAverageWindowSize(WindowSize.getAdjustedSetting(INSTANCE().get(P_MOVING_AVERAGE_WINDOW_SIZE_WSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_WSD)));
 		return settings;
 	}
 }

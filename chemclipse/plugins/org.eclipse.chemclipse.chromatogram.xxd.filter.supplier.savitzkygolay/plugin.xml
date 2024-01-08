@@ -41,10 +41,4 @@
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.savitzkygolay.massspectrum">
       </MassSpectrumFilterSupplier>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

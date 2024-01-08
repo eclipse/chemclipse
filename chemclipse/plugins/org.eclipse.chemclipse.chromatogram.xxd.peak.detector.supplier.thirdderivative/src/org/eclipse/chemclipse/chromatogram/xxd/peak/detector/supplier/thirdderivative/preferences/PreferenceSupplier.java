@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.preferences;
 
@@ -16,12 +16,13 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.settings.PeakDetectorSettings;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_THRESHOLD = "threshold";
 	public static final String P_INCLUDE_BACKGROUND = "includeBackground";
@@ -68,10 +69,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static PeakDetectorSettings getPeakDetectorSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		PeakDetectorSettings peakDetectorSettings = new PeakDetectorSettings();
-		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND, DEF_INCLUDE_BACKGROUND));
-		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO));
+		peakDetectorSettings.setIncludeBackground(INSTANCE().getBoolean(P_INCLUDE_BACKGROUND, DEF_INCLUDE_BACKGROUND));
+		peakDetectorSettings.setMinimumSignalToNoiseRatio(INSTANCE().getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO));
 		return peakDetectorSettings;
 	}
 }

@@ -21,10 +21,4 @@
             id="org.eclipse.chemclipse.chromatogram.wsd.filter.supplier.zeroset">
       </ChromatogramFilterSupplier>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.zeroset.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

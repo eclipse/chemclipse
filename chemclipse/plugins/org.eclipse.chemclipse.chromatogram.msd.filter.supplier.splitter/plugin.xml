@@ -17,11 +17,5 @@
             filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsSIM"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.sim">
       </ChromatogramFilterSupplier>      
-   </extension>   
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.preferences.PreferenceInitializer">
-      </initializer>
    </extension>
 </plugin>

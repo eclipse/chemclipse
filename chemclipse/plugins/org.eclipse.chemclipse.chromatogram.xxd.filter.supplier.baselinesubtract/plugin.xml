@@ -17,11 +17,5 @@
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.settings.BaselineFilterSettings"            
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselineextract">
       </ChromatogramFilterSupplier>
-   </extension>   
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.preferences.PreferenceInitializer">
-      </initializer>
    </extension>
 </plugin>

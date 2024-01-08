@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,13 +14,14 @@ package org.eclipse.chemclipse.wsd.converter.supplier.arw.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.wsd.converter.supplier.arw.Activator;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_NORMALIZE_SCANS = "normalizeScans";
 	public static final boolean DEF_NORMALIZE_SCANS = true;
@@ -66,13 +67,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static boolean isNormalizeScans() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_NORMALIZE_SCANS, DEF_NORMALIZE_SCANS);
+		return INSTANCE().getBoolean(P_NORMALIZE_SCANS, DEF_NORMALIZE_SCANS);
 	}
 
 	public static int getNormalizationSteps() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_NORMALIZATION_STEPS, DEF_NORMALIZATION_STEPS);
+		return INSTANCE().getInteger(P_NORMALIZATION_STEPS, DEF_NORMALIZATION_STEPS);
 	}
 }

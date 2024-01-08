@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.support
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: org.eclipse.chemclipse.support;singleton:=true
+Bundle-SymbolicName: org.eclipse.chemclipse.support
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.support.Activator
 Bundle-Vendor: %Bundle-Vendor

@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.chemclipse.model
 Eclipse-BuddyPolicy: registered
 Bundle-ManifestVersion: 2
 Bundle-Name: Model
-Bundle-SymbolicName: org.eclipse.chemclipse.model;singleton:=true
+Bundle-SymbolicName: org.eclipse.chemclipse.model
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.model.Activator
 Bundle-Vendor: ChemClipse
@@ -38,7 +38,6 @@ Export-Package: org.eclipse.chemclipse.model.baseline,
  org.eclipse.chemclipse.model.implementation,
  org.eclipse.chemclipse.model.instruments,
  org.eclipse.chemclipse.model.interpolation,
- org.eclipse.chemclipse.model.literature,
  org.eclipse.chemclipse.model.math,
  org.eclipse.chemclipse.model.methods,
  org.eclipse.chemclipse.model.notifier,

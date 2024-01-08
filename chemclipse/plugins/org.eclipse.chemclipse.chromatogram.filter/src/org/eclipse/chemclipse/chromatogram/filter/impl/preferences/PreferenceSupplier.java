@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.impl.preferences;
 
@@ -25,12 +25,13 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.MaxDetectorFilterSett
 import org.eclipse.chemclipse.chromatogram.filter.system.SettingsIonRounding;
 import org.eclipse.chemclipse.chromatogram.filter.system.SettingsRetentionIndexQC;
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final double MIN_RETENTION_TIME_MINUTES = 0.0d;
 	public static final double MAX_RETENTION_TIME_MINUTES = Double.MAX_VALUE;
@@ -138,10 +139,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static FilterSettingsSelection getFilterSettingsSelection() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		FilterSettingsSelection filterSettings = new FilterSettingsSelection();
-		filterSettings.setStartRetentionTimeMinutes(preferences.getDouble(P_START_RETENTION_TIME_MINUTES, DEF_START_RETENTION_TIME_MINUTES));
-		filterSettings.setStopRetentionTimeMinutes(preferences.getDouble(P_STOP_RETENTION_TIME_MINUTES, DEF_STOP_RETENTION_TIME_MINUTES));
+		filterSettings.setStartRetentionTimeMinutes(INSTANCE().getDouble(P_START_RETENTION_TIME_MINUTES, DEF_START_RETENTION_TIME_MINUTES));
+		filterSettings.setStopRetentionTimeMinutes(INSTANCE().getDouble(P_STOP_RETENTION_TIME_MINUTES, DEF_STOP_RETENTION_TIME_MINUTES));
 		return filterSettings;
 	}
 
@@ -160,10 +160,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static SettingsIonRounding getFilterSettingsIonRounding() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		SettingsIonRounding settings = new SettingsIonRounding();
 		try {
-			settings.setIonRoundMethod(IonRoundMethod.valueOf(preferences.get(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD)));
+			settings.setIonRoundMethod(IonRoundMethod.valueOf(INSTANCE().get(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD)));
 		} catch(Exception e) {
 			settings.setIonRoundMethod(IonRoundMethod.DEFAULT);
 		}
@@ -172,46 +171,41 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static SettingsRetentionIndexQC getFilterSettingsQC() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		SettingsRetentionIndexQC settings = new SettingsRetentionIndexQC();
-		settings.setUseRetentionIndexQC(preferences.getBoolean(P_USE_RETENTION_INDEX_QC, DEF_USE_RETENTION_INDEX_QC));
+		settings.setUseRetentionIndexQC(INSTANCE().getBoolean(P_USE_RETENTION_INDEX_QC, DEF_USE_RETENTION_INDEX_QC));
 		return settings;
 	}
 
 	public static ScanTargetsToPeakSettings getScanToPeakTargetTransferSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ScanTargetsToPeakSettings settings = new ScanTargetsToPeakSettings();
-		settings.setTransferClosestScan(preferences.getBoolean(P_STTP_TRANSFER_CLOSEST_SCAN, DEF_STTP_TRANSFER_CLOSEST_SCAN));
-		settings.setUseBestTargetOnly(preferences.getBoolean(P_STTP_USE_BEST_TARGET_ONLY, DEF_STTP_USE_BEST_TARGET_ONLY));
+		settings.setTransferClosestScan(INSTANCE().getBoolean(P_STTP_TRANSFER_CLOSEST_SCAN, DEF_STTP_TRANSFER_CLOSEST_SCAN));
+		settings.setUseBestTargetOnly(INSTANCE().getBoolean(P_STTP_USE_BEST_TARGET_ONLY, DEF_STTP_USE_BEST_TARGET_ONLY));
 		return settings;
 	}
 
 	public static PeakTargetsToReferencesSettings getPeaksToReferencesTransferSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		PeakTargetsToReferencesSettings settings = new PeakTargetsToReferencesSettings();
-		settings.setUseBestTargetOnly(preferences.getBoolean(P_PTTR_USE_BEST_TARGET_ONLY, DEF_PTTR_USE_BEST_TARGET_ONLY));
-		settings.setDeltaRetentionTime(preferences.getDouble(P_DELTA_RETENTION_TIME_MINUTES, DEF_DELTA_RETENTION_TIME_MINUTES));
+		settings.setUseBestTargetOnly(INSTANCE().getBoolean(P_PTTR_USE_BEST_TARGET_ONLY, DEF_PTTR_USE_BEST_TARGET_ONLY));
+		settings.setDeltaRetentionTime(INSTANCE().getDouble(P_DELTA_RETENTION_TIME_MINUTES, DEF_DELTA_RETENTION_TIME_MINUTES));
 		return settings;
 	}
 
 	public static ScanTargetsToReferencesSettings getScansToReferencesTransferSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ScanTargetsToReferencesSettings settings = new ScanTargetsToReferencesSettings();
-		settings.setUseBestTargetOnly(preferences.getBoolean(P_STTR_USE_BEST_TARGET_ONLY, DEF_STTR_USE_BEST_TARGET_ONLY));
+		settings.setUseBestTargetOnly(INSTANCE().getBoolean(P_STTR_USE_BEST_TARGET_ONLY, DEF_STTR_USE_BEST_TARGET_ONLY));
 		return settings;
 	}
 
 	public static MaxDetectorFilterSettings getMaxDetectorFilterSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		MaxDetectorFilterSettings settings = new MaxDetectorFilterSettings();
-		settings.setTargetName(preferences.get(P_MAX_DETECTOR_TARGET_NAME, DEF_MAX_DETECTOR_TARGET_NAME));
-		settings.setMatchFactor(preferences.getFloat(P_MAX_DETECTOR_MATCH_FACTOR, DEF_MAX_DETECTOR_MATCH_FACTOR));
-		settings.setDetectMinima(preferences.getBoolean(P_MAX_DETECTOR_MINIMA, DEF_MAX_DETECTOR_MINIMA));
-		settings.setCount(preferences.getInt(P_MAX_DETECTOR_COUNT, DEF_MAX_DETECTOR_COUNT));
+		settings.setTargetName(INSTANCE().get(P_MAX_DETECTOR_TARGET_NAME, DEF_MAX_DETECTOR_TARGET_NAME));
+		settings.setMatchFactor(INSTANCE().getFloat(P_MAX_DETECTOR_MATCH_FACTOR, DEF_MAX_DETECTOR_MATCH_FACTOR));
+		settings.setDetectMinima(INSTANCE().getBoolean(P_MAX_DETECTOR_MINIMA, DEF_MAX_DETECTOR_MINIMA));
+		settings.setCount(INSTANCE().getInteger(P_MAX_DETECTOR_COUNT, DEF_MAX_DETECTOR_COUNT));
 		//
 		return settings;
 	}

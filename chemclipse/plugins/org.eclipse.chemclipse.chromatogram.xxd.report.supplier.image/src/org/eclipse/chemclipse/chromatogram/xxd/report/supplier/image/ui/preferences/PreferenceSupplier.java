@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - preference initializer
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.preferences;
 
@@ -17,12 +18,13 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.settings.ImageFormat;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.settings.ImageReportSettings;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_APPEND_FILES = "appendFiles";
 	public static final boolean DEF_APPEND_FILES = false;
@@ -91,37 +93,31 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static boolean isAppendFiles() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_APPEND_FILES, DEF_APPEND_FILES);
+		return INSTANCE().getBoolean(P_APPEND_FILES, DEF_APPEND_FILES);
 	}
 
 	public static int getWidth() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_WIDTH, DEF_WIDTH);
+		return INSTANCE().getInteger(P_WIDTH, DEF_WIDTH);
 	}
 
 	public static int getHeight() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_HEIGHT, DEF_HEIGHT);
+		return INSTANCE().getInteger(P_HEIGHT, DEF_HEIGHT);
 	}
 
 	public static boolean isPeaks() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_ADD_PEAKS, DEF_ADD_PEAKS);
+		return INSTANCE().getBoolean(P_ADD_PEAKS, DEF_ADD_PEAKS);
 	}
 
 	public static boolean isScans() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_ADD_SCANS, DEF_ADD_SCANS);
+		return INSTANCE().getBoolean(P_ADD_SCANS, DEF_ADD_SCANS);
 	}
 
 	public static ImageFormat getFormat() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return ImageFormat.valueOf(preferences.get(P_FORMAT, DEF_FORMAT));
+		return ImageFormat.valueOf(INSTANCE().get(P_FORMAT, DEF_FORMAT));
 	}
 }

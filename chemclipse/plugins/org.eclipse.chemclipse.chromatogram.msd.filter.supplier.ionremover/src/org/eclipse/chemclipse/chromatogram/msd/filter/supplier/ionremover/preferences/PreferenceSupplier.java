@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences;
 
@@ -19,12 +19,13 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.Activa
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.PeakFilterSettings;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_IONS_TO_REMOVE = "ionsToRemove";
 	public static final String DEF_IONS_TO_REMOVE = "18 28 84 207";
@@ -68,8 +69,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static ChromatogramFilterSettings getFilterSettings() {
 
 		ChromatogramFilterSettings filterSettings = new ChromatogramFilterSettings();
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		filterSettings.setIonsToRemove(preferences.get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
+		filterSettings.setIonsToRemove(INSTANCE().get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
 		return filterSettings;
 	}
 
@@ -79,16 +79,14 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		/*
 		 * Set the ions that shall be removed in every case.
 		 */
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		peakFilterSettings.setIonsToRemove(preferences.get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
+		peakFilterSettings.setIonsToRemove(INSTANCE().get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
 		return peakFilterSettings;
 	}
 
 	public static IMassSpectrumFilterSettings getMassSpectrumFilterSettings() {
 
 		MassSpectrumFilterSettings massSpectrumFilterSettings = new MassSpectrumFilterSettings();
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		massSpectrumFilterSettings.setIonsToRemove(preferences.get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
+		massSpectrumFilterSettings.setIonsToRemove(INSTANCE().get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
 		return massSpectrumFilterSettings;
 	}
 }

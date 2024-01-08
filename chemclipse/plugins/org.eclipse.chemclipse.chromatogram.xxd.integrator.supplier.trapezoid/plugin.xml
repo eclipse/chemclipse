@@ -31,10 +31,4 @@
             integratorSettings="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings">
       </PeakIntegratorSupplier>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

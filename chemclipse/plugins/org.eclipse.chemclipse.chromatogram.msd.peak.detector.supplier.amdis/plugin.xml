@@ -20,11 +20,5 @@
             peakDetectorName="AMDIS [ELU] (extern)"
             peakDetectorSettings="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsELU">
       </PeakDetector>
-   </extension>   
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceInitializer">
-      </initializer>
    </extension>
 </plugin>

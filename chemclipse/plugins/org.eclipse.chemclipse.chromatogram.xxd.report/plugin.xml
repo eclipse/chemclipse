@@ -2,5 +2,4 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.eclipse.chemclipse.chromatogram.xxd.report.chromatogramReportSupplier" name="Chromatogram Report Supplier" schema="schema/org.eclipse.chemclipse.chromatogram.xxd.report.chromatogramReportSupplier.exsd"/>
-
 </plugin>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences;
 
@@ -19,12 +19,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.Basel
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.PeakFilterSettings;
 import org.eclipse.chemclipse.support.model.WindowSize;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_ITERATIONS = "iterations";
 	public static final int DEF_ITERATIONS = 100;
@@ -110,25 +111,21 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static int getIterations() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_ITERATIONS, DEF_ITERATIONS);
+		return INSTANCE().getInteger(P_ITERATIONS, DEF_ITERATIONS);
 	}
 
 	public static int getWindowSize() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return WindowSize.getAdjustedSetting(preferences.get(P_WINDOW_SIZE, Integer.toString(DEF_WINDOW_SIZE)));
+		return WindowSize.getAdjustedSetting(INSTANCE().get(P_WINDOW_SIZE, Integer.toString(DEF_WINDOW_SIZE)));
 	}
 
 	public static double getMagnificationFactor() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getDouble(P_MAGNIFICATION_FACTOR, DEF_MAGNIFICATION_FACTOR);
+		return INSTANCE().getDouble(P_MAGNIFICATION_FACTOR, DEF_MAGNIFICATION_FACTOR);
 	}
 
 	public static int getTransitions() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_TRANSITIONS, DEF_TRANSITIONS);
+		return INSTANCE().getInteger(P_TRANSITIONS, DEF_TRANSITIONS);
 	}
 }

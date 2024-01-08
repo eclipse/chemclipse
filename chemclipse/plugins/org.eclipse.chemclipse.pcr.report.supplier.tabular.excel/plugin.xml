@@ -2,12 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
-   <extension
          point="org.eclipse.chemclipse.pcr.converter.plateSupplier">
       <PlateSupplier
             description="Exports PCR Plate Data to Excel"

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.preferences;
 
@@ -19,12 +19,13 @@ import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
 import org.eclipse.chemclipse.model.support.HeaderUtil;
 import org.eclipse.chemclipse.model.targets.LibraryField;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_MISC_SEPARATOR = "miscSeparator";
 	public static final String DEF_MISC_SEPARATOR = "!";
@@ -128,14 +129,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static String getMiscSeparator() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_MISC_SEPARATOR, DEF_MISC_SEPARATOR);
+		return INSTANCE().get(P_MISC_SEPARATOR, DEF_MISC_SEPARATOR);
 	}
 
 	public static String getMiscSeparatedDelimiter() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_MISC_SEPARATED_DELIMITER, DEF_MISC_SEPARATED_DELIMITER);
+		return INSTANCE().get(P_MISC_SEPARATED_DELIMITER, DEF_MISC_SEPARATED_DELIMITER);
 	}
 
 	public static boolean condenseCycleNumberScans() {
@@ -186,8 +185,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static LibraryField getBestTargetLibraryField() {
 
 		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			return LibraryField.valueOf(preferences.get(P_BEST_TARGET_LIBRARY_FIELD, DEF_BEST_TARGET_LIBRARY_FIELD));
+			return LibraryField.valueOf(INSTANCE().get(P_BEST_TARGET_LIBRARY_FIELD, DEF_BEST_TARGET_LIBRARY_FIELD));
 		} catch(Exception e) {
 			/*
 			 * Default if something went wrong.
@@ -218,8 +216,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 			 * Try to get the currently used ion round method.
 			 */
 			try {
-				IEclipsePreferences preferences = INSTANCE().getPreferences();
-				activeIonRoundMethod = IonRoundMethod.valueOf(preferences.get(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD));
+				activeIonRoundMethod = IonRoundMethod.valueOf(INSTANCE().get(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD));
 			} catch(Exception e) {
 				activeIonRoundMethod = IonRoundMethod.DEFAULT;
 			}

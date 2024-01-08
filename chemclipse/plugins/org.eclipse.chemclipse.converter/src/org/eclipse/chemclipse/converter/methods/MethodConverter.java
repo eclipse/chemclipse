@@ -321,7 +321,7 @@ public class MethodConverter {
 			} else {
 				directory = file.getParent();
 			}
-			PreferenceSupplier.setSettings(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, directory);
+			PreferenceSupplier.setMethodExplorerPathRootFolder(directory);
 		}
 	}
 

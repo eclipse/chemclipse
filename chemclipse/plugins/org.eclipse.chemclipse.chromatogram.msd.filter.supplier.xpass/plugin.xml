@@ -31,11 +31,5 @@
             filterName="Min Ion Count"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.threshold">
       </MassSpectrumFilterSupplier>
-   </extension>   
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.preferences.PreferenceInitializer">
-      </initializer>
    </extension>
 </plugin>

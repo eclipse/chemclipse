@@ -11,10 +11,4 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer">
       </ChromatogramFilterSupplier>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

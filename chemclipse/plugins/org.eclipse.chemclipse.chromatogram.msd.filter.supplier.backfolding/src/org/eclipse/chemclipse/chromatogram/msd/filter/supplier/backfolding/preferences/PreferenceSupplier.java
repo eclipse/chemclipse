@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.preferences;
 
@@ -16,12 +16,13 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ChromatogramFilterSettings;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_BACKFOLDING_RUNS = "backfoldingRuns";
 	public static final String P_MAX_RETENTION_TIME_SHIFT = "maxRetentionTimeShift";
@@ -71,22 +72,19 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static ChromatogramFilterSettings getFilterSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ChromatogramFilterSettings filterSettings = new ChromatogramFilterSettings();
-		filterSettings.setMaximumRetentionTimeShift(preferences.getInt(P_MAX_RETENTION_TIME_SHIFT, DEF_RETENTION_TIME_SHIFT));
-		filterSettings.setNumberOfBackfoldingRuns(preferences.getInt(P_BACKFOLDING_RUNS, DEF_BACKFOLDING_RUNS));
+		filterSettings.setMaximumRetentionTimeShift(INSTANCE().getInteger(P_MAX_RETENTION_TIME_SHIFT, DEF_RETENTION_TIME_SHIFT));
+		filterSettings.setNumberOfBackfoldingRuns(INSTANCE().getInteger(P_BACKFOLDING_RUNS, DEF_BACKFOLDING_RUNS));
 		return filterSettings;
 	}
 
 	public static int getMaxRetentionTimeShift() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_MAX_RETENTION_TIME_SHIFT, DEF_RETENTION_TIME_SHIFT);
+		return INSTANCE().getInteger(P_MAX_RETENTION_TIME_SHIFT, DEF_RETENTION_TIME_SHIFT);
 	}
 
 	public static int getBackfoldingRuns() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_BACKFOLDING_RUNS, DEF_BACKFOLDING_RUNS);
+		return INSTANCE().getInteger(P_BACKFOLDING_RUNS, DEF_BACKFOLDING_RUNS);
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - Settings
  * Lorenz Gerber - report 4
  *******************************************************************************/
@@ -21,12 +21,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.Repo
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings2;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings3;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings4;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_APPEND_FILES = "appendFiles";
 	public static final boolean DEF_APPEND_FILES = false;
@@ -110,37 +111,31 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static boolean isAppendFiles() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_APPEND_FILES, DEF_APPEND_FILES);
+		return INSTANCE().getBoolean(P_APPEND_FILES, DEF_APPEND_FILES);
 	}
 
 	public static int getDeltaRetentionTimeLeft() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_DELTA_RETENTION_TIME_LEFT, DEF_DELTA_RETENTION_TIME_LEFT);
+		return INSTANCE().getInteger(P_DELTA_RETENTION_TIME_LEFT, DEF_DELTA_RETENTION_TIME_LEFT);
 	}
 
 	public static int getDeltaRetentionTimeRight() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_DELTA_RETENTION_TIME_RIGHT, DEF_DELTA_RETENTION_TIME_RIGHT);
+		return INSTANCE().getInteger(P_DELTA_RETENTION_TIME_RIGHT, DEF_DELTA_RETENTION_TIME_RIGHT);
 	}
 
 	public static boolean isUseBestMatch() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_BEST_MATCH, DEF_USE_BEST_MATCH);
+		return INSTANCE().getBoolean(P_USE_BEST_MATCH, DEF_USE_BEST_MATCH);
 	}
 
 	public static boolean isUseRetentionIndexQC() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_RETENTION_INDEX_QC, DEF_USE_RETENTION_INDEX_QC);
+		return INSTANCE().getBoolean(P_USE_RETENTION_INDEX_QC, DEF_USE_RETENTION_INDEX_QC);
 	}
 
 	public static boolean isAddPeakArea() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_ADD_PEAK_AREA, DEF_ADD_PEAK_AREA);
+		return INSTANCE().getBoolean(P_ADD_PEAK_AREA, DEF_ADD_PEAK_AREA);
 	}
 }

@@ -4,12 +4,6 @@
    <extension-point id="org.eclipse.chemclipse.chromatogram.xxd.calculator.noiseCalculationSupplier" name="Noise Calculation Supplier" schema="schema/org.eclipse.chemclipse.chromatogram.xxd.calculator.noiseCalculationSupplier.exsd"/>
    <extension-point id="org.eclipse.chemclipse.chromatogram.xxd.calculator.chromatogramCalculatorSupplier" name="Chromatogram Calculator" schema="schema/org.eclipse.chemclipse.chromatogram.xxd.calculator.chromatogramCalculator.exsd"/>
    <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
-   <extension
          point="org.eclipse.chemclipse.chromatogram.msd.classifier.chromatogramClassifierSupplier">
       <ChromatogramClassifierSupplier
             classifier="org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseChromatogramClassifier"

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.tsd.converter
 Bundle-ManifestVersion: 2
 Bundle-Name: TSD Converter
-Bundle-SymbolicName: org.eclipse.chemclipse.tsd.converter;singleton:=true
+Bundle-SymbolicName: org.eclipse.chemclipse.tsd.converter
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.tsd.converter.Activator
 Bundle-Vendor: ChemClipse

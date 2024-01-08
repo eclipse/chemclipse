@@ -10,10 +10,4 @@
             peakDetectorName="Peak Detector ThirdDerivative">
       </PeakDetector>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

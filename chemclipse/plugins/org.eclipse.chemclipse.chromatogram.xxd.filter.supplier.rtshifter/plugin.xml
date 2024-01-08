@@ -24,11 +24,5 @@
 			filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsGapFiller"            
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.gapfiller">
       </ChromatogramFilterSupplier>
-   </extension>   
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.preferences.PreferenceInitializer">
-      </initializer>
    </extension>
 </plugin>

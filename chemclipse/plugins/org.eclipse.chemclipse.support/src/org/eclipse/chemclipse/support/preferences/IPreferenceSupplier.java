@@ -62,6 +62,10 @@ public interface IPreferenceSupplier {
 	 * @return {@link IEclipsePreferences}
 	 */
 	IEclipsePreferences getPreferences();
+	/**
+	 * Initialize the default values.
+	 */
+	// void initializeDefaultPreferences();
 
 	/**
 	 * Call this method via AbstractPreferenceInitializer when initializeDefaultPreferences()
@@ -98,6 +102,12 @@ public interface IPreferenceSupplier {
 	default void putBoolean(String key, boolean value) {
 
 		put(key, Boolean.toString(value));
+	}
+
+	default byte getByte(String key, int value) {
+
+		IEclipsePreferences preferences = this.getPreferences();
+		return (byte)preferences.getInt(key, value);
 	}
 
 	default int getInteger(String key, int value) {

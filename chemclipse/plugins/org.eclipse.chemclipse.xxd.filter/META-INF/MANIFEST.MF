@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.xxd.filter
 Bundle-ManifestVersion: 2
 Bundle-Name: Peak/Scan Filter
-Bundle-SymbolicName: org.eclipse.chemclipse.xxd.filter;singleton:=true
+Bundle-SymbolicName: org.eclipse.chemclipse.xxd.filter
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.xxd.filter.Activator
 Bundle-Vendor: ChemClipse

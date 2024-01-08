@@ -11,10 +11,4 @@
             integratorSettings="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.ChromatogramIntegrationSettings">
       </ChromatogramIntegratorSupplier>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

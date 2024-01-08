@@ -5,10 +5,4 @@
    <extension-point id="org.eclipse.chemclipse.msd.converter.massSpectrumSupplier" name="Mass Spectrum Supplier" schema="schema/org.eclipse.chemclipse.msd.converter.massSpectrumSupplier.exsd"/>
    <extension-point id="org.eclipse.chemclipse.msd.converter.databaseSupplier" name="Database Supplier" schema="schema/org.eclipse.chemclipse.msd.converter.databaseSupplier.exsd"/>
    <extension-point id="org.eclipse.chemclipse.msd.converter.peakSupplier" name="MS Peak Supplier" schema="schema/org.eclipse.chemclipse.msd.converter.peakSupplier.exsd"/>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.msd.converter.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

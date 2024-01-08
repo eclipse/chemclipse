@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Lorenz Gerber - adjustments for per ion calculation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences;
@@ -20,12 +20,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.set
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettingsWSD;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.MassSpectrumFilterSettings;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final int MIN_DERIVATIVE = 0;
 	public static final int MAX_DERIVATIVE = 5;
@@ -89,29 +90,26 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static ChromatogramFilterSettingsCSD getFilterSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ChromatogramFilterSettingsCSD settings = new ChromatogramFilterSettingsCSD();
-		settings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
-		settings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
+		settings.setOrder(INSTANCE().getInteger(P_ORDER, DEF_ORDER));
+		settings.setWidth(INSTANCE().getInteger(P_WIDTH, DEF_WIDTH));
 		return settings;
 	}
 
 	public static ChromatogramFilterSettingsMSD getFilterSettingsMSD() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ChromatogramFilterSettingsMSD settings = new ChromatogramFilterSettingsMSD();
-		settings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
-		settings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
-		settings.setPerIonCalculation(preferences.getBoolean(P_PER_ION_CALCULATION, DEF_PER_ION_CALCULATION));
+		settings.setOrder(INSTANCE().getInteger(P_ORDER, DEF_ORDER));
+		settings.setWidth(INSTANCE().getInteger(P_WIDTH, DEF_WIDTH));
+		settings.setPerIonCalculation(INSTANCE().getBoolean(P_PER_ION_CALCULATION, DEF_PER_ION_CALCULATION));
 		return settings;
 	}
 
 	public static ChromatogramFilterSettingsWSD getFilterSettingsWSD() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ChromatogramFilterSettingsWSD settings = new ChromatogramFilterSettingsWSD();
-		settings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
-		settings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
+		settings.setOrder(INSTANCE().getInteger(P_ORDER, DEF_ORDER));
+		settings.setWidth(INSTANCE().getInteger(P_WIDTH, DEF_WIDTH));
 		return settings;
 	}
 
@@ -125,25 +123,21 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static int getDerivative() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_DERIVATIVE, DEF_DERIVATIVE);
+		return INSTANCE().getInteger(P_DERIVATIVE, DEF_DERIVATIVE);
 	}
 
 	public static int getOrder() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_ORDER, DEF_ORDER);
+		return INSTANCE().getInteger(P_ORDER, DEF_ORDER);
 	}
 
 	public static int getWidth() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_WIDTH, DEF_WIDTH);
+		return INSTANCE().getInteger(P_WIDTH, DEF_WIDTH);
 	}
 
 	public static boolean getPerIonCalculation() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_PER_ION_CALCULATION, DEF_PER_ION_CALCULATION);
+		return INSTANCE().getBoolean(P_PER_ION_CALCULATION, DEF_PER_ION_CALCULATION);
 	}
 }

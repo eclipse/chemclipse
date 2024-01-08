@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.preferences;
 
@@ -18,12 +18,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.Activat
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsGapFiller;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsStretch;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	//
 	public static final int MIN_MILLISECONDS_SHIFT = Integer.MIN_VALUE;
@@ -100,41 +101,35 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static FilterSettingsGapFiller getFilterSettingsFillGaps() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		FilterSettingsGapFiller settings = new FilterSettingsGapFiller();
-		settings.setLimitFactor(preferences.getInt(P_LIMIT_FACTOR, DEF_LIMIT_FACTOR));
+		settings.setLimitFactor(INSTANCE().getInteger(P_LIMIT_FACTOR, DEF_LIMIT_FACTOR));
 		return settings;
 	}
 
 	public static FilterSettingsStretch getFilterSettingsStretch() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		FilterSettingsStretch settings = new FilterSettingsStretch(preferences.getInt(P_STRETCH_MILLISECONDS_LENGTH, DEF_STRETCH_MILLISECONDS_LENGTH));
-		settings.setScanDelay(preferences.getInt(P_STRETCH_MILLISECONDS_SCAN_DELAY, DEF_STRETCH_MILLISECONDS_SCAN_DELAY));
+		FilterSettingsStretch settings = new FilterSettingsStretch(INSTANCE().getInteger(P_STRETCH_MILLISECONDS_LENGTH, DEF_STRETCH_MILLISECONDS_LENGTH));
+		settings.setScanDelay(INSTANCE().getInteger(P_STRETCH_MILLISECONDS_SCAN_DELAY, DEF_STRETCH_MILLISECONDS_SCAN_DELAY));
 		return settings;
 	}
 
 	public static boolean isShiftAllScans() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_SHIFT_ALL_SCANS, DEF_SHIFT_ALL_SCANS);
+		return INSTANCE().getBoolean(P_SHIFT_ALL_SCANS, DEF_SHIFT_ALL_SCANS);
 	}
 
 	private static int getMillisecondsShift() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_MILLISECONDS_SHIFT, DEF_MILLISECONDS_SHIFT);
+		return INSTANCE().getInteger(P_MILLISECONDS_SHIFT, DEF_MILLISECONDS_SHIFT);
 	}
 
 	public static void setStretchScanDelay(int scanDelay) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		preferences.putInt(P_STRETCH_MILLISECONDS_SCAN_DELAY, scanDelay);
+		INSTANCE().putInteger(P_STRETCH_MILLISECONDS_SCAN_DELAY, scanDelay);
 	}
 
 	public static void setStretchLength(int length) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		preferences.putInt(P_STRETCH_MILLISECONDS_LENGTH, length);
+		INSTANCE().putInteger(P_STRETCH_MILLISECONDS_LENGTH, length);
 	}
 }

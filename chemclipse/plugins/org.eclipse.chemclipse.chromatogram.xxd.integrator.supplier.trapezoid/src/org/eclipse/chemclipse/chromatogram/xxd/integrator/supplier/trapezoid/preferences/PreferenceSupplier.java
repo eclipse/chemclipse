@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2023 Lablicate GmbH.
+ * Copyright (c) 2010, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences;
 
@@ -21,13 +21,14 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.set
 import org.eclipse.chemclipse.model.core.IMarkedTrace;
 import org.eclipse.chemclipse.model.core.IMarkedTraces;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_SELECTED_IONS = "selectedIons";
 	public static final String DEF_SELECTED_IONS = "0"; // 103;104 | 0 = TIC
@@ -107,14 +108,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static boolean getPeakAreaIncludeBackground() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_PEAK_AREA_INCLUDE_BACKGROUND, DEF_PEAK_AREA_INCLUDE_BACKGROUND);
+		return INSTANCE().getBoolean(P_PEAK_AREA_INCLUDE_BACKGROUND, DEF_PEAK_AREA_INCLUDE_BACKGROUND);
 	}
 
 	public static boolean isUseAreaConstraint() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_AREA_CONSTRAINT, DEF_USE_AREA_CONSTRAINT);
+		return INSTANCE().getBoolean(P_USE_AREA_CONSTRAINT, DEF_USE_AREA_CONSTRAINT);
 	}
 
 	/**
@@ -124,10 +123,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static String getIons(String preference, String def) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		/*
 		 * E.g. "18;28;84;207" to 18 28 84 207
 		 */
-		return preferences.get(preference, def);
+		return INSTANCE().get(preference, def);
 	}
 }

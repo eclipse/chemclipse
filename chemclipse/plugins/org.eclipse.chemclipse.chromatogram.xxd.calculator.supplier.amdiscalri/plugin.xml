@@ -72,11 +72,5 @@
             identifier="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.LibraryService"
             identifierName="Alkane Library Service">
       </LibraryServiceSupplier>
-   </extension>   
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceInitializer">
-      </initializer>
    </extension>
 </plugin>

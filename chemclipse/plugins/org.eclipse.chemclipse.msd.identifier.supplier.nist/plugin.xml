@@ -28,10 +28,4 @@
             identifierSettings="org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.ScanDirectIdentifierSettings">
       </MassSpectrumIdentificationSupplier>      
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

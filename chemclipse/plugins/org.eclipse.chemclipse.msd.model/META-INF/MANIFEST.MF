@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Eclipse-BuddyPolicy: registered
 Bundle-ManifestVersion: 2
 Bundle-Name: Model Plug-in
-Bundle-SymbolicName: org.eclipse.chemclipse.msd.model;singleton:=true
+Bundle-SymbolicName: org.eclipse.chemclipse.msd.model
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.msd.model.Activator
 Bundle-Vendor: ChemClipse

@@ -64,12 +64,6 @@
             identifierName="Unknown Marker"
             identifierSettings="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.WaveSpectrumUnknownSettings">
       </WaveSpectrumIdentificationSupplier>        
-   </extension>   
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences.PreferenceInitializer">
-      </initializer>
    </extension>
    <extension
          point="org.eclipse.chemclipse.chromatogram.msd.identifier.libraryService">

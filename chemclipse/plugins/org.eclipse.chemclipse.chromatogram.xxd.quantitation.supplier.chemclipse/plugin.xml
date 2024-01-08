@@ -18,10 +18,4 @@
             peakQuantifierSettings="org.eclipse.chemclipse.chromatogram.xxd.quantitation.supplier.chemclipse.settings.PeakQuantifierSettings">
       </PeakQuantifierSupplier>           
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.quantitation.supplier.chemclipse.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

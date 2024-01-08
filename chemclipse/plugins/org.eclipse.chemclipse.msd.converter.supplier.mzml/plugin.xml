@@ -30,11 +30,5 @@
             isExportable="false"
             isImportable="true">
       </MassSpectrumSupplier>
-   </extension>
-      <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.msd.converter.supplier.mzml.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
+   </extension>   
 </plugin>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - preference initializer
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.preferences;
 
@@ -17,12 +18,13 @@ import java.util.Map;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.Activator;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ChromatogramWriter32;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion32;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_CHROMATOGRAM_VERSION_SAVE = "chromatogramVersionSave";
 	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = ChromatogramWriter32.VERSION;
@@ -67,8 +69,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static String getChromatogramVersionSave() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_CHROMATOGRAM_VERSION_SAVE, DEF_CHROMATOGRAM_VERSION_SAVE);
+		return INSTANCE().get(P_CHROMATOGRAM_VERSION_SAVE, DEF_CHROMATOGRAM_VERSION_SAVE);
 	}
 
 	public static String[][] getChromatogramVersions() {
@@ -81,7 +82,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static boolean getChromatogramSaveCompression() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_CHROMATOGRAM_SAVE_COMPRESSION, DEF_CHROMATOGRAM_SAVE_COMPRESSION);
+		return INSTANCE().getBoolean(P_CHROMATOGRAM_SAVE_COMPRESSION, DEF_CHROMATOGRAM_SAVE_COMPRESSION);
 	}
 }

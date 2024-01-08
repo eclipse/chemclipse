@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2022 Lablicate GmbH.
+ * Copyright (c) 2010, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences;
 
@@ -28,12 +28,13 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.sett
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsAMDIS;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsELU;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
 	//
@@ -213,59 +214,50 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static void setProcessSettings(IProcessSettings processSettings) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		//
-		processSettings.setMinSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO));
-		processSettings.setMinLeading(preferences.getFloat(P_MIN_LEADING, DEF_MIN_LEADING));
-		processSettings.setMaxLeading(preferences.getFloat(P_MAX_LEADING, DEF_MAX_LEADING));
-		processSettings.setMinTailing(preferences.getFloat(P_MIN_TAILING, DEF_MIN_TAILING));
-		processSettings.setMaxTailing(preferences.getFloat(P_MAX_TAILING, DEF_MAX_TAILING));
-		processSettings.setModelPeakOption(ModelPeakOption.valueOf(preferences.get(P_MODEL_PEAK_OPTION, DEF_MODEL_PEAK_OPTION)));
+		processSettings.setMinSignalToNoiseRatio(INSTANCE().getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO));
+		processSettings.setMinLeading(INSTANCE().getFloat(P_MIN_LEADING, DEF_MIN_LEADING));
+		processSettings.setMaxLeading(INSTANCE().getFloat(P_MAX_LEADING, DEF_MAX_LEADING));
+		processSettings.setMinTailing(INSTANCE().getFloat(P_MIN_TAILING, DEF_MIN_TAILING));
+		processSettings.setMaxTailing(INSTANCE().getFloat(P_MAX_TAILING, DEF_MAX_TAILING));
+		processSettings.setModelPeakOption(ModelPeakOption.valueOf(INSTANCE().get(P_MODEL_PEAK_OPTION, DEF_MODEL_PEAK_OPTION)));
 	}
 
 	public static void setResultSettings(SettingsELU settings) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		//
-		settings.setResultFile(new File(preferences.get(P_PATH_ELU_FILE, DEF_PATH_ELU_FILE)));
+		settings.setResultFile(new File(INSTANCE().get(P_PATH_ELU_FILE, DEF_PATH_ELU_FILE)));
 	}
 
 	public static void setOnsiteSettings(IOnsiteSettings onsiteSettings) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		onsiteSettings.setValue(IOnsiteSettings.KEY_LOW_MZ_AUTO, INSTANCE().getBoolean(P_LOW_MZ_AUTO, DEF_LOW_MZ_AUTO) ? Option.YES.value() : Option.NO.value());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_START_MZ, Integer.toString(INSTANCE().getInteger(P_START_MZ, DEF_START_MZ)));
+		onsiteSettings.setValue(IOnsiteSettings.KEY_HIGH_MZ_AUTO, INSTANCE().getBoolean(P_HIGH_MZ_AUTO, DEF_HIGH_MZ_AUTO) ? Option.YES.value() : Option.NO.value());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_STOP_MZ, Integer.toString(INSTANCE().getInteger(P_STOP_MZ, DEF_STOP_MZ)));
+		onsiteSettings.setValue(IOnsiteSettings.KEY_OMIT_MZ, INSTANCE().getBoolean(P_OMIT_MZ, DEF_OMIT_MZ) ? Option.YES.value() : Option.NO.value());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_OMITED_MZ, INSTANCE().get(P_OMITED_MZ, DEF_OMITED_MZ));
 		//
-		onsiteSettings.setValue(IOnsiteSettings.KEY_LOW_MZ_AUTO, preferences.getBoolean(P_LOW_MZ_AUTO, DEF_LOW_MZ_AUTO) ? Option.YES.value() : Option.NO.value());
-		onsiteSettings.setValue(IOnsiteSettings.KEY_START_MZ, Integer.toString(preferences.getInt(P_START_MZ, DEF_START_MZ)));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_HIGH_MZ_AUTO, preferences.getBoolean(P_HIGH_MZ_AUTO, DEF_HIGH_MZ_AUTO) ? Option.YES.value() : Option.NO.value());
-		onsiteSettings.setValue(IOnsiteSettings.KEY_STOP_MZ, Integer.toString(preferences.getInt(P_STOP_MZ, DEF_STOP_MZ)));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_OMIT_MZ, preferences.getBoolean(P_OMIT_MZ, DEF_OMIT_MZ) ? Option.YES.value() : Option.NO.value());
-		onsiteSettings.setValue(IOnsiteSettings.KEY_OMITED_MZ, preferences.get(P_OMITED_MZ, DEF_OMITED_MZ));
+		onsiteSettings.setValue(IOnsiteSettings.KEY_USE_SOLVENT_TAILING, INSTANCE().getBoolean(P_USE_SOLVENT_TAILING, DEF_USE_SOLVENT_TAILING) ? Option.YES.value() : Option.NO.value());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_SOLVENT_TAILING_MZ, Integer.toString(INSTANCE().getInteger(P_SOLVENT_TAILING_MZ, DEF_SOLVENT_TAILING_MZ)));
+		onsiteSettings.setValue(IOnsiteSettings.KEY_USE_COLUMN_BLEED, INSTANCE().getBoolean(P_USE_COLUMN_BLEED, DEF_USE_COLUMN_BLEED) ? Option.YES.value() : Option.NO.value());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_COLUMN_BLEED_MZ, Integer.toString(INSTANCE().getInteger(P_COLUMN_BLEED_MZ, DEF_COLUMN_BLEED_MZ)));
 		//
-		onsiteSettings.setValue(IOnsiteSettings.KEY_USE_SOLVENT_TAILING, preferences.getBoolean(P_USE_SOLVENT_TAILING, DEF_USE_SOLVENT_TAILING) ? Option.YES.value() : Option.NO.value());
-		onsiteSettings.setValue(IOnsiteSettings.KEY_SOLVENT_TAILING_MZ, Integer.toString(preferences.getInt(P_SOLVENT_TAILING_MZ, DEF_SOLVENT_TAILING_MZ)));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_USE_COLUMN_BLEED, preferences.getBoolean(P_USE_COLUMN_BLEED, DEF_USE_COLUMN_BLEED) ? Option.YES.value() : Option.NO.value());
-		onsiteSettings.setValue(IOnsiteSettings.KEY_COLUMN_BLEED_MZ, Integer.toString(preferences.getInt(P_COLUMN_BLEED_MZ, DEF_COLUMN_BLEED_MZ)));
-		//
-		onsiteSettings.setValue(IOnsiteSettings.KEY_THRESHOLD, preferences.get(P_THRESHOLD, DEF_THRESHOLD));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_PEAK_WIDTH, Integer.toString(preferences.getInt(P_PEAK_WIDTH, DEF_PEAK_WIDTH)));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_ADJACENT_PEAK_SUBTRACTION, preferences.get(P_ADJACENT_PEAK_SUBTRACTION, DEF_ADJACENT_PEAK_SUBTRACTION));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_RESOLUTION, preferences.get(P_RESOLUTION, DEF_RESOLUTION));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_SENSITIVITY, preferences.get(P_SENSITIVITY, DEF_SENSITIVITY));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_SHAPE_REQUIREMENTS, preferences.get(P_SHAPE_REQUIREMENTS, DEF_SHAPE_REQUIREMENTS));
+		onsiteSettings.setValue(IOnsiteSettings.KEY_THRESHOLD, INSTANCE().get(P_THRESHOLD, DEF_THRESHOLD));
+		onsiteSettings.setValue(IOnsiteSettings.KEY_PEAK_WIDTH, Integer.toString(INSTANCE().getInteger(P_PEAK_WIDTH, DEF_PEAK_WIDTH)));
+		onsiteSettings.setValue(IOnsiteSettings.KEY_ADJACENT_PEAK_SUBTRACTION, INSTANCE().get(P_ADJACENT_PEAK_SUBTRACTION, DEF_ADJACENT_PEAK_SUBTRACTION));
+		onsiteSettings.setValue(IOnsiteSettings.KEY_RESOLUTION, INSTANCE().get(P_RESOLUTION, DEF_RESOLUTION));
+		onsiteSettings.setValue(IOnsiteSettings.KEY_SENSITIVITY, INSTANCE().get(P_SENSITIVITY, DEF_SENSITIVITY));
+		onsiteSettings.setValue(IOnsiteSettings.KEY_SHAPE_REQUIREMENTS, INSTANCE().get(P_SHAPE_REQUIREMENTS, DEF_SHAPE_REQUIREMENTS));
 	}
 
 	public static String getMacWineBinary() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_MAC_WINE_BINARY, DEF_MAC_WINE_BINARY);
+		return INSTANCE().get(P_MAC_WINE_BINARY, DEF_MAC_WINE_BINARY);
 	}
 
 	public static File getFolder(String key) {
 
 		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			String path = preferences.get(key, "");
-			//
+			String path = INSTANCE().get(key, "");
 			if(path != null && !path.isEmpty()) {
 				//
 				File file = new File(path);

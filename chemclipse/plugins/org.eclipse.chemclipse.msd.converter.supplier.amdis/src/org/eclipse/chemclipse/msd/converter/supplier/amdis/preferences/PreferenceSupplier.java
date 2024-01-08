@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences;
 
@@ -16,14 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.Activator;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.text.CharsetNIO;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.osgi.service.prefs.BackingStoreException;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_SPLIT_LIBRARY = "splitLibrary";
 	public static final boolean DEF_SPLIT_LIBRARY = false;
@@ -111,50 +111,42 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static boolean isSplitLibrary() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_SPLIT_LIBRARY, DEF_SPLIT_LIBRARY);
+		return INSTANCE().getBoolean(P_SPLIT_LIBRARY, DEF_SPLIT_LIBRARY);
 	}
 
 	public static boolean isExcludeUncertainIons() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_EXCLUDE_UNCERTAIN_IONS, DEF_EXCLUDE_UNCERTAIN_IONS);
+		return INSTANCE().getBoolean(P_EXCLUDE_UNCERTAIN_IONS, DEF_EXCLUDE_UNCERTAIN_IONS);
 	}
 
 	public static boolean isUseUnitMassResolution() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_UNIT_MASS_RESOLUTION, DEF_USE_UNIT_MASS_RESOLUTION);
+		return INSTANCE().getBoolean(P_USE_UNIT_MASS_RESOLUTION, DEF_USE_UNIT_MASS_RESOLUTION);
 	}
 
 	public static boolean isRemoveIntensitiesLowerThanOne() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_REMOVE_INTENSITIES_LOWER_THAN_ONE, DEF_REMOVE_INTENSITIES_LOWER_THAN_ONE);
+		return INSTANCE().getBoolean(P_REMOVE_INTENSITIES_LOWER_THAN_ONE, DEF_REMOVE_INTENSITIES_LOWER_THAN_ONE);
 	}
 
 	public static boolean isNormalizeIntensities() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_NORMALIZE_INTENSITIES, DEF_NORMALIZE_INTENSITIES);
+		return INSTANCE().getBoolean(P_NORMALIZE_INTENSITIES, DEF_NORMALIZE_INTENSITIES);
 	}
 
 	public static boolean isExportIntensitiesAsInteger() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_EXPORT_INTENSITIES_AS_INTEGER, DEF_EXPORT_INTENSITIES_AS_INTEGER);
+		return INSTANCE().getBoolean(P_EXPORT_INTENSITIES_AS_INTEGER, DEF_EXPORT_INTENSITIES_AS_INTEGER);
 	}
 
 	public static boolean isParseCompoundInformation() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_PARSE_COMPOUND_INFORMATION, DEF_PARSE_COMPOUND_INFORMATION);
+		return INSTANCE().getBoolean(P_PARSE_COMPOUND_INFORMATION, DEF_PARSE_COMPOUND_INFORMATION);
 	}
 
 	public static boolean isParseMolInformation() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_PARSE_MOL_INFORMATION, DEF_PARSE_MOL_INFORMATION);
+		return INSTANCE().getBoolean(P_PARSE_MOL_INFORMATION, DEF_PARSE_MOL_INFORMATION);
 	}
 
 	public static Charset getCharsetImportMSL() {
@@ -219,9 +211,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static Charset getCharset(String key, String def) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		try {
-			return CharsetNIO.valueOf(preferences.get(key, def)).getCharset();
+			return CharsetNIO.valueOf(INSTANCE().get(key, def)).getCharset();
 		} catch(Exception e) {
 			return CharsetNIO.US_ASCII.getCharset();
 		}
@@ -229,12 +220,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static void setCharset(String key, CharsetNIO charsetNIO) {
 
-		try {
-			IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-			preferences.put(key, charsetNIO.name());
-			preferences.flush();
-		} catch(BackingStoreException e) {
-			logger.warn(e);
-		}
+		INSTANCE().put(key, charsetNIO.name());
 	}
 }

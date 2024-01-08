@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2021 Lablicate GmbH.
+ * Copyright (c) 2010, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.preferences;
 
@@ -23,12 +23,13 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.support.model.SegmentWidth;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_IONS_TO_REMOVE = "ionsToRemove";
 	public static final String P_IONS_TO_PRESERVE = "ionsToPreserve";
@@ -89,13 +90,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static FilterSettings getFilterSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		FilterSettings filterSettings = new FilterSettings();
-		filterSettings.setAdjustThresholdTransitions(preferences.getBoolean(P_ADJUST_THRESHOLD_TRANSITIONS, DEF_ADJUST_THRESHOLD_TRANSITIONS));
-		filterSettings.setNumberOfUsedIonsForCoefficient(preferences.getInt(P_NUMBER_OF_USE_IONS_FOR_COEFFICIENT, DEF_NUMBER_OF_USE_IONS_FOR_COEFFICIENT));
-		filterSettings.setIonsToRemove(preferences.get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
-		filterSettings.setIonsToPreserve(preferences.get(P_IONS_TO_PRESERVE, DEF_IONS_TO_PRESERVE));
-		filterSettings.setSegmentWidth(preferences.getInt(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
+		filterSettings.setAdjustThresholdTransitions(INSTANCE().getBoolean(P_ADJUST_THRESHOLD_TRANSITIONS, DEF_ADJUST_THRESHOLD_TRANSITIONS));
+		filterSettings.setNumberOfUsedIonsForCoefficient(INSTANCE().getInteger(P_NUMBER_OF_USE_IONS_FOR_COEFFICIENT, DEF_NUMBER_OF_USE_IONS_FOR_COEFFICIENT));
+		filterSettings.setIonsToRemove(INSTANCE().get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
+		filterSettings.setIonsToPreserve(INSTANCE().get(P_IONS_TO_PRESERVE, DEF_IONS_TO_PRESERVE));
+		filterSettings.setSegmentWidth(INSTANCE().getInteger(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
 		return filterSettings;
 	}
 
@@ -120,12 +120,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static Set<Integer> getIons(String preference, String def) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		/*
 		 * E.g. "18;28;84;207" to 18 28 84 207
 		 */
 		Set<Integer> ions = new HashSet<Integer>();
-		String preferenceEntry = preferences.get(preference, def);
+		String preferenceEntry = INSTANCE().get(preference, def);
 		if(preferenceEntry != "") {
 			String[] items = parseString(preferenceEntry);
 			if(items.length > 0) {
@@ -193,8 +192,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static boolean adjustThresholdTransitions() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_ADJUST_THRESHOLD_TRANSITIONS, DEF_ADJUST_THRESHOLD_TRANSITIONS);
+		return INSTANCE().getBoolean(P_ADJUST_THRESHOLD_TRANSITIONS, DEF_ADJUST_THRESHOLD_TRANSITIONS);
 	}
 
 	/**
@@ -224,7 +222,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static int getSegmentWidth() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH);
+		return INSTANCE().getInteger(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH);
 	}
 }

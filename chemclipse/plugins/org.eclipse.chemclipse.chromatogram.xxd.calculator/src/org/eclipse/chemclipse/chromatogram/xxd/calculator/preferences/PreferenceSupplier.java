@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Dr. Alexander Kerner - implementation
  * Christoph Läubrich - add method getDefaultSegmentWidth that return the raw enum instead, null check
  * Matthias Mailänder - remove getDefaultSegmentWidth and add min/max segment size
@@ -19,13 +19,14 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.Activator;
 import org.eclipse.chemclipse.support.model.SegmentWidth;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.framework.BundleContext;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_NOISE_CALCULATOR_ID = "noiseCalculatorId";
 	public static final String DEF_NOISE_CALCULATOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson";
@@ -90,8 +91,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static String getSelectedNoiseCalculatorId() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_NOISE_CALCULATOR_ID, DEF_NOISE_CALCULATOR_ID);
+		return INSTANCE().get(P_NOISE_CALCULATOR_ID, DEF_NOISE_CALCULATOR_ID);
 	}
 
 	/**
@@ -101,7 +101,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static int getSelectedSegmentWidth() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return SegmentWidth.getAdjustedSetting(preferences.get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
+		return SegmentWidth.getAdjustedSetting(INSTANCE().get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
 	}
 }

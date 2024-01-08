@@ -123,10 +123,4 @@
             isImportable="false">
       </ChromatogramSupplier> 
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

@@ -30,11 +30,5 @@
             filterName="SNIP"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.snip.massspectrum">
       </MassSpectrumFilterSupplier>
-   </extension>   
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceInitializer">
-      </initializer>
    </extension>
 </plugin>

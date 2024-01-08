@@ -11,10 +11,4 @@
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda">
       </ChromatogramFilterSupplier>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 </plugin>

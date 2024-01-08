@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * Contributors:
  *
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - preference initializer
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.preferences;
 
@@ -19,12 +20,13 @@ import java.util.Set;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.Activator;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMappings;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.preferences.StringUtils;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_IGNORE_SUBSETS = "ignore-subsets";
 	public static final String DEF_IGNORE_SUBSETS = "New Subset";
@@ -80,17 +82,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static ChannelMappings getChannelMappings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ChannelMappings channelMappings = new ChannelMappings();
-		channelMappings.load(preferences.get(P_CHANNEL_MAPPING, DEF_CHANNEL_MAPPING));
+		channelMappings.load(INSTANCE().get(P_CHANNEL_MAPPING, DEF_CHANNEL_MAPPING));
 		return channelMappings;
 	}
 
 	public static Set<String> getIgnoredSubsets() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		Set<String> subsets = new HashSet<>();
-		String preferenceEntry = preferences.get(P_IGNORE_SUBSETS, DEF_IGNORE_SUBSETS);
+		String preferenceEntry = INSTANCE().get(P_IGNORE_SUBSETS, DEF_IGNORE_SUBSETS);
 		if(!"".equals(preferenceEntry)) {
 			String[] items = StringUtils.parseString(preferenceEntry);
 			if(items.length > 0) {
@@ -104,27 +104,21 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static String getAnalysisSeparator() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_ANALYSIS_SEPARATOR, DEF_ANALYSIS_SEPARATOR);
+		return INSTANCE().get(P_ANALYSIS_SEPARATOR, DEF_ANALYSIS_SEPARATOR);
 	}
 
 	public static String getListPathImport() {
 
-		return getFilterPath(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		return INSTANCE().get(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
 	}
 
 	public static String getListPathExport() {
 
-		return getFilterPath(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
+		return INSTANCE().get(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 	}
 
 	public static Boolean isOpenReport() {
 
 		return INSTANCE().getBoolean(P_OPEN_REPORT, DEF_OPEN_REPORT);
-	}
-
-	private static String getFilterPath(String key, String def) {
-
-		return INSTANCE().get(key, def);
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Lorenz Gerber - initial API and implementation
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences;
 
@@ -20,12 +20,13 @@ import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.Classifie
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.PeakIdentifierSettings;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final float MIN_FACTOR = 0.0f;
 	public static final float MAX_FACTOR = 100.0f;
@@ -95,8 +96,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static void assignDefaultValues(IBasePeakSettings settings) {
 
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		settings.setLimitMatchFactor(preferences.getFloat(P_LIMIT_MATCH_FACTOR, DEF_LIMIT_MATCH_FACTOR));
-		settings.setMatchQuality(preferences.getFloat(P_MATCH_QUALITY, DEF_MATCH_QUALITY));
+		settings.setLimitMatchFactor(INSTANCE().getFloat(P_LIMIT_MATCH_FACTOR, DEF_LIMIT_MATCH_FACTOR));
+		settings.setMatchQuality(INSTANCE().getFloat(P_MATCH_QUALITY, DEF_MATCH_QUALITY));
 	}
 }

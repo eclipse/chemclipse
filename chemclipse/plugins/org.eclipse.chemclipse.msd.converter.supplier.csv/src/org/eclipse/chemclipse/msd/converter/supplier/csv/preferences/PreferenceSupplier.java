@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.csv.preferences;
 
@@ -16,12 +16,13 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.model.settings.Delimiter;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.Activator;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_IMPORT_DELIMITER = "importDelimiter";
 	public static final String DEF_IMPORT_DELIMITER = Delimiter.COMMA.name();
@@ -72,8 +73,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static Delimiter getImportDelimiter() {
 
 		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			return Delimiter.valueOf(preferences.get(P_IMPORT_DELIMITER, DEF_IMPORT_DELIMITER));
+			return Delimiter.valueOf(INSTANCE().get(P_IMPORT_DELIMITER, DEF_IMPORT_DELIMITER));
 		} catch(Exception e) {
 			return Delimiter.COMMA;
 		}
@@ -86,8 +86,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static String getImportZeroMarker() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_IMPORT_ZERO_MARKER, DEF_IMPORT_ZERO_MARKER);
+		return INSTANCE().get(P_IMPORT_ZERO_MARKER, DEF_IMPORT_ZERO_MARKER);
 	}
 
 	public static void setImportZeroMarker(String zeroMarker) {
@@ -97,8 +96,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static boolean isExportUseTic() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_EXPORT_USE_TIC, DEF_EXPORT_USE_TIC);
+		return INSTANCE().getBoolean(P_EXPORT_USE_TIC, DEF_EXPORT_USE_TIC);
 	}
 
 	public static void setExportUseTic(boolean useTic) {
