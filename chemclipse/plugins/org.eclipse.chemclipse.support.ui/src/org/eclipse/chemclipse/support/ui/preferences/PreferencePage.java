@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,11 +7,11 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences;
 
-import org.eclipse.chemclipse.support.preferences.SupportPreferences;
+import org.eclipse.chemclipse.support.preferences.PreferenceSupplierSupport;
 import org.eclipse.chemclipse.support.ui.Activator;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -32,15 +32,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(SupportPreferences.P_CLIPBOARD_TABLE_DEFAULT_SORTING, SupportMessages.clipboardTableDefaultSorting, getFieldEditorParent()));
-		addField(new IntegerFieldEditor(SupportPreferences.P_UNDO_LIMIT, SupportMessages.maximumAllowedUndoSteps, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplierSupport.P_CLIPBOARD_TABLE_DEFAULT_SORTING, SupportMessages.clipboardTableDefaultSorting, getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplierSupport.P_UNDO_LIMIT, SupportMessages.maximumAllowedUndoSteps, getFieldEditorParent()));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
-	 */
 	@Override
 	public void init(IWorkbench workbench) {
 

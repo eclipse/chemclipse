@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,11 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - preference support
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.undo;
 
-import org.eclipse.chemclipse.support.preferences.SupportPreferences;
+import org.eclipse.chemclipse.support.preferences.PreferenceSupplierSupport;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.commands.operations.UndoContext;
@@ -25,7 +26,7 @@ public final class UndoContextFactory {
 		if(undoContext == null) {
 			undoContext = new UndoContext();
 		}
-		OperationHistoryFactory.getOperationHistory().setLimit(undoContext, SupportPreferences.getUndoLimit());
+		OperationHistoryFactory.getOperationHistory().setLimit(undoContext, PreferenceSupplierSupport.getUndoLimit());
 		return undoContext;
 	}
 

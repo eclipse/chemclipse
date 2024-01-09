@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,17 +7,14 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui;
 
-import org.eclipse.chemclipse.support.preferences.SupportPreferences;
+import org.eclipse.chemclipse.support.preferences.PreferenceSupplierSupport;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.osgi.framework.BundleContext;
 
-/**
- * The activator class controls the plug-in life cycle
- */
 public class Activator extends AbstractActivatorUI {
 
 	public static final String ICON_FOLDER_OPENED = "ICON_FOLDER_OPENED"; // $NON-NLS-1$
@@ -34,17 +31,13 @@ public class Activator extends AbstractActivatorUI {
 		return context;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 
 		super.start(context);
 		Activator.context = context;
 		plugin = this;
-		initializePreferenceStore(SupportPreferences.INSTANCE());
+		initializePreferenceStore(PreferenceSupplierSupport.INSTANCE());
 		/*
 		 * Don't initialize the image registry.
 		 * The plug-in crashed when running the unit tests.
@@ -52,10 +45,6 @@ public class Activator extends AbstractActivatorUI {
 		 */
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
 
@@ -63,11 +52,6 @@ public class Activator extends AbstractActivatorUI {
 		super.stop(context);
 	}
 
-	/**
-	 * Returns the shared instance
-	 * 
-	 * @return the shared instance
-	 */
 	public static AbstractActivatorUI getDefault() {
 
 		return plugin;

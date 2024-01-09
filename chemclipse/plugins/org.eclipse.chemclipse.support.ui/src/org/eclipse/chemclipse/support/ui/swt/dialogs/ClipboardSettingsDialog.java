@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.preferences.SupportPreferences;
+import org.eclipse.chemclipse.support.preferences.PreferenceSupplierSupport;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.support.CopyColumnsSupport;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -74,7 +74,7 @@ public class ClipboardSettingsDialog extends Dialog {
 			}
 		}
 		//
-		return SupportPreferences.DEF_CLIPBOARD_COPY_COLUMNS;
+		return PreferenceSupplierSupport.DEF_CLIPBOARD_COPY_COLUMNS;
 	}
 
 	public void setExtendedTableViewer(ExtendedTableViewer extendedTableViewer) {

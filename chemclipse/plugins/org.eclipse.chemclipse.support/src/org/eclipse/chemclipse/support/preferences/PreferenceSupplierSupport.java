@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class SupportPreferences extends AbstractPreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplierSupport extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_CLIPBOARD_TABLE_DEFAULT_SORTING = "clipboardTableDefaultSorting";
 	public static final boolean DEF_CLIPBOARD_TABLE_DEFAULT_SORTING = false;
@@ -44,7 +44,7 @@ public class SupportPreferences extends AbstractPreferenceSupplier implements IP
 	public static IPreferenceSupplier INSTANCE() {
 
 		if(preferenceSupplier == null) {
-			preferenceSupplier = new SupportPreferences();
+			preferenceSupplier = new PreferenceSupplierSupport();
 		}
 		return preferenceSupplier;
 	}
