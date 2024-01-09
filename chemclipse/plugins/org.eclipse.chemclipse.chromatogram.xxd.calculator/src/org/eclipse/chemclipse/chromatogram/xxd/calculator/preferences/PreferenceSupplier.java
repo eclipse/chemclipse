@@ -14,16 +14,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.Activator;
 import org.eclipse.chemclipse.support.model.SegmentWidth;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.framework.BundleContext;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
@@ -36,7 +30,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final int MIN_SEGMENT_SIZE = 5;
 	public static final int MAX_SEGMENT_SIZE = 19;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -52,12 +46,6 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		BundleContext context = Activator.getContext();
@@ -69,18 +57,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<>();
-		defaultValues.put(P_NOISE_CALCULATOR_ID, DEF_NOISE_CALCULATOR_ID);
-		defaultValues.put(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH);
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_NOISE_CALCULATOR_ID, DEF_NOISE_CALCULATOR_ID);
+		putDefault(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH);
 	}
 
 	/**

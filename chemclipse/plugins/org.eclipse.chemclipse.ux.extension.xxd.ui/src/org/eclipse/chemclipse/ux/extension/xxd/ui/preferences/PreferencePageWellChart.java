@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Matthias Mailänder - add a color codes setting
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
@@ -34,8 +34,8 @@ public class PreferencePageWellChart extends FieldEditorPreferencePage implement
 	public void createFieldEditors() {
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_PCR_DEFAULT_COLOR, "Default Line Color:", getFieldEditorParent()));
-		addField(new ColorCodesFieldEditor(PreferenceConstants.P_PCR_WELL_COLOR_CODES, "Color Codes", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceSupplier.P_PCR_DEFAULT_COLOR, "Default Line Color:", getFieldEditorParent()));
+		addField(new ColorCodesFieldEditor(PreferenceSupplier.P_PCR_WELL_COLOR_CODES, "Color Codes", getFieldEditorParent()));
 	}
 
 	@Override

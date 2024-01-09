@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.BaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.MassSpectrumFilterSettings;
@@ -21,9 +18,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.PeakF
 import org.eclipse.chemclipse.support.model.WindowSize;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -44,7 +38,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final int MIN_TRANSITIONS = 1;
 	public static final int MAX_TRANSITIONS = 100;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -55,32 +49,18 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_ITERATIONS, Integer.toString(DEF_ITERATIONS));
-		defaultValues.put(P_MAGNIFICATION_FACTOR, Double.toString(DEF_MAGNIFICATION_FACTOR));
-		defaultValues.put(P_TRANSITIONS, Integer.toString(DEF_TRANSITIONS));
-		defaultValues.put(P_WINDOW_SIZE, Integer.toString(DEF_WINDOW_SIZE));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_ITERATIONS, Integer.toString(DEF_ITERATIONS));
+		putDefault(P_MAGNIFICATION_FACTOR, Double.toString(DEF_MAGNIFICATION_FACTOR));
+		putDefault(P_TRANSITIONS, Integer.toString(DEF_TRANSITIONS));
+		putDefault(P_WINDOW_SIZE, Integer.toString(DEF_WINDOW_SIZE));
 	}
 
 	public static BaselineDetectorSettings getBaselineDetectorSettings() {

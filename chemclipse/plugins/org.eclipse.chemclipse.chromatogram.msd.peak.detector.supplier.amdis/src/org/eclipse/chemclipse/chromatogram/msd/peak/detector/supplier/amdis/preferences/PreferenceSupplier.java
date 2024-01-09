@@ -12,8 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.AdjacentPeakSubtraction;
@@ -30,9 +28,6 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.sett
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -107,7 +102,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_PATH_ELU_FILE = "pathELUFile";
 	public static final String DEF_PATH_ELU_FILE = "";
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -118,61 +113,47 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<>();
 		/*
 		 * AMDIS settings
 		 */
-		defaultValues.put(P_LOW_MZ_AUTO, Boolean.toString(DEF_LOW_MZ_AUTO));
-		defaultValues.put(P_START_MZ, Integer.toString(DEF_START_MZ));
-		defaultValues.put(P_HIGH_MZ_AUTO, Boolean.toString(DEF_HIGH_MZ_AUTO));
-		defaultValues.put(P_STOP_MZ, Integer.toString(DEF_STOP_MZ));
-		defaultValues.put(P_OMIT_MZ, Boolean.toString(DEF_OMIT_MZ));
-		defaultValues.put(P_OMITED_MZ, DEF_OMITED_MZ);
+		putDefault(P_LOW_MZ_AUTO, Boolean.toString(DEF_LOW_MZ_AUTO));
+		putDefault(P_START_MZ, Integer.toString(DEF_START_MZ));
+		putDefault(P_HIGH_MZ_AUTO, Boolean.toString(DEF_HIGH_MZ_AUTO));
+		putDefault(P_STOP_MZ, Integer.toString(DEF_STOP_MZ));
+		putDefault(P_OMIT_MZ, Boolean.toString(DEF_OMIT_MZ));
+		putDefault(P_OMITED_MZ, DEF_OMITED_MZ);
 		//
-		defaultValues.put(P_USE_SOLVENT_TAILING, Boolean.toString(DEF_USE_SOLVENT_TAILING));
-		defaultValues.put(P_SOLVENT_TAILING_MZ, Integer.toString(DEF_SOLVENT_TAILING_MZ));
-		defaultValues.put(P_USE_COLUMN_BLEED, Boolean.toString(DEF_USE_COLUMN_BLEED));
-		defaultValues.put(P_COLUMN_BLEED_MZ, Integer.toString(DEF_COLUMN_BLEED_MZ));
+		putDefault(P_USE_SOLVENT_TAILING, Boolean.toString(DEF_USE_SOLVENT_TAILING));
+		putDefault(P_SOLVENT_TAILING_MZ, Integer.toString(DEF_SOLVENT_TAILING_MZ));
+		putDefault(P_USE_COLUMN_BLEED, Boolean.toString(DEF_USE_COLUMN_BLEED));
+		putDefault(P_COLUMN_BLEED_MZ, Integer.toString(DEF_COLUMN_BLEED_MZ));
 		//
-		defaultValues.put(P_THRESHOLD, DEF_THRESHOLD);
-		defaultValues.put(P_PEAK_WIDTH, Integer.toString(DEF_PEAK_WIDTH));
-		defaultValues.put(P_ADJACENT_PEAK_SUBTRACTION, DEF_ADJACENT_PEAK_SUBTRACTION);
-		defaultValues.put(P_RESOLUTION, DEF_RESOLUTION);
-		defaultValues.put(P_SENSITIVITY, DEF_SENSITIVITY);
-		defaultValues.put(P_SHAPE_REQUIREMENTS, DEF_SHAPE_REQUIREMENTS);
+		putDefault(P_THRESHOLD, DEF_THRESHOLD);
+		putDefault(P_PEAK_WIDTH, Integer.toString(DEF_PEAK_WIDTH));
+		putDefault(P_ADJACENT_PEAK_SUBTRACTION, DEF_ADJACENT_PEAK_SUBTRACTION);
+		putDefault(P_RESOLUTION, DEF_RESOLUTION);
+		putDefault(P_SENSITIVITY, DEF_SENSITIVITY);
+		putDefault(P_SHAPE_REQUIREMENTS, DEF_SHAPE_REQUIREMENTS);
 		/*
 		 * Extra settings
 		 */
-		defaultValues.put(P_MIN_SN_RATIO, Float.toString(DEF_MIN_SN_RATIO));
-		defaultValues.put(P_MIN_LEADING, Float.toString(DEF_MIN_LEADING));
-		defaultValues.put(P_MAX_LEADING, Float.toString(DEF_MAX_LEADING));
-		defaultValues.put(P_MIN_TAILING, Float.toString(DEF_MIN_TAILING));
-		defaultValues.put(P_MAX_TAILING, Float.toString(DEF_MAX_TAILING));
-		defaultValues.put(P_MODEL_PEAK_OPTION, DEF_MODEL_PEAK_OPTION);
+		putDefault(P_MIN_SN_RATIO, Float.toString(DEF_MIN_SN_RATIO));
+		putDefault(P_MIN_LEADING, Float.toString(DEF_MIN_LEADING));
+		putDefault(P_MAX_LEADING, Float.toString(DEF_MAX_LEADING));
+		putDefault(P_MIN_TAILING, Float.toString(DEF_MIN_TAILING));
+		putDefault(P_MAX_TAILING, Float.toString(DEF_MAX_TAILING));
+		putDefault(P_MODEL_PEAK_OPTION, DEF_MODEL_PEAK_OPTION);
 		//
-		defaultValues.put(P_PATH_ELU_FILE, DEF_PATH_ELU_FILE);
+		putDefault(P_PATH_ELU_FILE, DEF_PATH_ELU_FILE);
 		//
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
 	}
 
 	public static File getInstallationFolder() {

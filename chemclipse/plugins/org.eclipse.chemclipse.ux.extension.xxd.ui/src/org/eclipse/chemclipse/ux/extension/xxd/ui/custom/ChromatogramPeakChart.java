@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - Adjust API
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.custom;
@@ -33,7 +33,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
@@ -289,7 +289,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		chartSettings.setCreateMenu(true);
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		chartSettings.getRangeRestriction().setRestrictFrame(true);
-		rangeRestriction.setExtendMaxY(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_EXTEND_Y));
+		rangeRestriction.setExtendMaxY(preferenceStore.getDouble(PreferenceSupplier.P_CHROMATOGRAM_EXTEND_Y));
 		applySettings(chartSettings);
 		setData("org.eclipse.e4.ui.css.CssClassName", "ChromatogramPeakChart");
 	}
@@ -299,7 +299,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		/*
 		 * Define the compression level.
 		 */
-		String compressionType = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE);
+		String compressionType = preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE);
 		int compressionToLength = chromatogramChartSupport.getCompressionLength(compressionType, lineSeriesDataList.size());
 		addSeriesData(lineSeriesDataList, compressionToLength);
 	}
@@ -308,10 +308,10 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 		if(chromatogramSelection != null) {
 			boolean containsTraces = containsTraces(chromatogramSelection);
-			Color colorActive = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
-			Color colorInactive = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_INACTIVE));
+			Color colorActive = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM));
+			Color colorInactive = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_INACTIVE));
 			Color colorTIC = containsTraces ? colorInactive : colorActive;
-			boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
+			boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceSupplier.P_ENABLE_CHROMATOGRAM_AREA);
 			/*
 			 * TIC
 			 */
@@ -361,11 +361,11 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 	private void addBaselineData(List<ILineSeriesData> lineSeriesDataList, PeakChartSettings peakChartSettings) {
 
-		boolean showChromatogramBaseline = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_BASELINE);
+		boolean showChromatogramBaseline = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_CHROMATOGRAM_BASELINE);
 		//
 		if(chromatogramSelection != null && showChromatogramBaseline) {
-			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_BASELINE));
-			boolean enableBaselineArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_BASELINE_AREA);
+			Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_BASELINE));
+			boolean enableBaselineArea = preferenceStore.getBoolean(PreferenceSupplier.P_ENABLE_BASELINE_AREA);
 			ILineSeriesData lineSeriesData = null;
 			lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogramSelection, SERIES_ID_BASELINE, DisplayType.TIC, color, false);
 			ILineSeriesSettings settings = lineSeriesData.getSettings();
@@ -377,11 +377,11 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 	private void addPeakData(List<? extends IPeak> peaks, List<ILineSeriesData> lineSeriesDataList) {
 
-		int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
-		PlotSymbolType symbolTypeActiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_MARKER_TYPE));
-		PlotSymbolType symbolTypeInactiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL_MARKER_TYPE));
-		PlotSymbolType symbolTypeActiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_MARKER_TYPE));
-		PlotSymbolType symbolTypeInactiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE));
+		int symbolSize = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
+		PlotSymbolType symbolTypeActiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_MARKER_TYPE));
+		PlotSymbolType symbolTypeInactiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL_MARKER_TYPE));
+		PlotSymbolType symbolTypeActiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_MARKER_TYPE));
+		PlotSymbolType symbolTypeInactiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE));
 		//
 		List<IPeak> peaksActiveNormal = new ArrayList<>();
 		List<IPeak> peaksInactiveNormal = new ArrayList<>();
@@ -447,11 +447,11 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 			 * Settings
 			 */
 			boolean mirrored = false;
-			Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_PEAK));
-			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
-			PlotSymbolType symbolTypePeakMarker = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE));
-			int scanMarkerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_SIZE);
-			PlotSymbolType symbolTypeScanMarker = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_TYPE));
+			Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_SELECTED_PEAK));
+			int symbolSize = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
+			PlotSymbolType symbolTypePeakMarker = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE));
+			int scanMarkerSize = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_SIZE);
+			PlotSymbolType symbolTypeScanMarker = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_TYPE));
 			/*
 			 * Peak Marker
 			 */
@@ -475,7 +475,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 			 * Background
 			 */
 			String peakBackgroundId = getSelectedPeakSerieId(SERIES_ID_PEAKS_SELECTED_BACKGROUND, index);
-			Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BACKGROUND));
+			Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_BACKGROUND));
 			lineSeriesData = peakChartSupport.getPeakBackground(peak, mirrored, colorBackground, peakBackgroundId);
 			lineSeriesDataList.add(lineSeriesData);
 			selectedPeakIds.add(peakBackgroundId);
@@ -487,8 +487,8 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		if(chromatogramSelection != null) {
 			String seriesId = SERIES_ID_IDENTIFIED_SCANS;
 			List<IScan> scans = ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram());
-			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
-			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SCAN_MARKER_TYPE));
+			int symbolSize = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
+			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_SCAN_MARKER_TYPE));
 			addIdentifiedScansData(chromatogramSelection, lineSeriesDataList, scans, symbolType, symbolSize, Colors.DARK_GRAY, seriesId);
 			/*
 			 * Add the labels.
@@ -524,9 +524,9 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		if(chromatogramSelection != null) {
 			IScan scan = chromatogramSelection.getSelectedScan();
 			if(scan != null) {
-				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN));
-				int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE);
-				PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE));
+				Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_SELECTED_SCAN));
+				int markerSize = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE);
+				PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE));
 				ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN, displayType, chromatogramSelection);
 				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 				lineSeriesSettings.setLineStyle(LineStyle.NONE);
@@ -544,9 +544,9 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 			List<IScan> selectedIdentifiedScans = chromatogramSelection.getSelectedIdentifiedScans();
 			if(!selectedIdentifiedScans.isEmpty()) {
 				String seriesId = SERIES_ID_IDENTIFIED_SCAN_SELECTED;
-				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_IDENTIFIED_SCAN));
-				PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_IDENTIFIED_SCAN_MARKER_TYPE));
-				int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
+				Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_IDENTIFIED_SCAN));
+				PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_IDENTIFIED_SCAN_MARKER_TYPE));
+				int symbolSize = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
 				addIdentifiedScansData(chromatogramSelection, lineSeriesDataList, selectedIdentifiedScans, symbolType, symbolSize, color, seriesId);
 			}
 		}

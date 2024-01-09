@@ -23,6 +23,13 @@ public interface IPreferenceSupplier {
 	static final Logger logger = Logger.getLogger(IPreferenceSupplier.class);
 
 	/**
+	 * Via the postfix, the key is modified dynamically.
+	 * 
+	 * @return {@link String}
+	 */
+	String getPostfix();
+
+	/**
 	 * Returns the scope context, e.g.:
 	 * InstanceScope.INSTANCE
 	 * 
@@ -37,6 +44,19 @@ public interface IPreferenceSupplier {
 	 * @return String
 	 */
 	String getPreferenceNode();
+
+	/**
+	 * Initialize the default values.
+	 */
+	void initializeDefaults();
+
+	/**
+	 * Puts the default value to the map.
+	 * 
+	 * @param key
+	 * @param def
+	 */
+	void putDefault(String key, Object def);
 
 	/**
 	 * Returns a map of default values
@@ -62,25 +82,22 @@ public interface IPreferenceSupplier {
 	 * @return {@link IEclipsePreferences}
 	 */
 	IEclipsePreferences getPreferences();
-	/**
-	 * Initialize the default values.
-	 */
-	// void initializeDefaultPreferences();
 
 	/**
 	 * Call this method via AbstractPreferenceInitializer when initializeDefaultPreferences()
 	 * is executed.
 	 */
-	default void initialize() {
+	default void persistDefaults() {
 
 		IEclipsePreferences preferences = this.getPreferences();
 		Map<String, String> defaultValues = getDefaultValues();
 		for(Map.Entry<String, String> entry : defaultValues.entrySet()) {
 			/*
-			 * Add if the doesn't exists already.
+			 * Add if the entry doesn't exists already.
 			 */
-			if(null == preferences.get(entry.getKey(), null)) {
-				preferences.put(entry.getKey(), entry.getValue());
+			String key = getKey(entry.getKey());
+			if(null == preferences.get(key, null)) {
+				preferences.put(key, entry.getValue());
 			}
 		}
 		/*
@@ -93,67 +110,167 @@ public interface IPreferenceSupplier {
 		}
 	}
 
-	default boolean getBoolean(String key, boolean value) {
+	/*
+	 * Handle separate settings
+	 */
+	default String getKey(String key) {
+
+		String postfix = getPostfix();
+		if(postfix.isEmpty()) {
+			return key;
+		} else {
+			return key + postfix;
+		}
+	}
+
+	default boolean getBoolean(String key) {
+
+		String def = getDefaultValues().getOrDefault(key, "false");
+		return getBoolean(key, Boolean.valueOf(def));
+	}
+
+	default boolean getBoolean(String key, boolean def) {
 
 		IEclipsePreferences preferences = this.getPreferences();
-		return preferences.getBoolean(key, value);
+		return preferences.getBoolean(getKey(key), def);
+	}
+
+	default void setBoolean(String key, boolean value) {
+
+		putBoolean(key, value);
 	}
 
 	default void putBoolean(String key, boolean value) {
 
-		put(key, Boolean.toString(value));
+		put(getKey(key), Boolean.toString(value));
 	}
 
-	default byte getByte(String key, int value) {
+	default byte getByte(String key) {
 
-		IEclipsePreferences preferences = this.getPreferences();
-		return (byte)preferences.getInt(key, value);
+		try {
+			String def = getDefaultValues().getOrDefault(key, "0");
+			return getByte(key, Byte.valueOf(def));
+		} catch(NumberFormatException e) {
+			return 0;
+		}
 	}
 
-	default int getInteger(String key, int value) {
+	default byte getByte(String key, int def) {
 
 		IEclipsePreferences preferences = this.getPreferences();
-		return preferences.getInt(key, value);
+		return (byte)preferences.getInt(getKey(key), def);
+	}
+
+	default void setByte(String key, byte value) {
+
+		putByte(key, value);
+	}
+
+	default void putByte(String key, byte value) {
+
+		put(getKey(key), Byte.toString(value));
+	}
+
+	default int getInteger(String key) {
+
+		try {
+			String def = getDefaultValues().getOrDefault(key, "0");
+			return getInteger(key, Integer.valueOf(def));
+		} catch(NumberFormatException e) {
+			return 0;
+		}
+	}
+
+	default int getInteger(String key, int def) {
+
+		IEclipsePreferences preferences = this.getPreferences();
+		return preferences.getInt(getKey(key), def);
+	}
+
+	default void setInteger(String key, int value) {
+
+		putInteger(key, value);
 	}
 
 	default void putInteger(String key, int value) {
 
-		put(key, Integer.toString(value));
+		put(getKey(key), Integer.toString(value));
 	}
 
-	default float getFloat(String key, float value) {
+	default float getFloat(String key) {
+
+		try {
+			String def = getDefaultValues().getOrDefault(key, "0");
+			return getFloat(key, Float.valueOf(def));
+		} catch(NumberFormatException e) {
+			return 0;
+		}
+	}
+
+	default float getFloat(String key, float def) {
 
 		IEclipsePreferences preferences = this.getPreferences();
-		return preferences.getFloat(key, value);
+		return preferences.getFloat(getKey(key), def);
+	}
+
+	default void setFloat(String key, float value) {
+
+		putFloat(key, value);
 	}
 
 	default void putFloat(String key, float value) {
 
-		put(key, Float.toString(value));
+		put(getKey(key), Float.toString(value));
 	}
 
-	default double getDouble(String key, double value) {
+	default double getDouble(String key) {
+
+		try {
+			String def = getDefaultValues().getOrDefault(key, "0");
+			return getDouble(key, Double.valueOf(def));
+		} catch(NumberFormatException e) {
+			return 0;
+		}
+	}
+
+	default double getDouble(String key, double def) {
 
 		IEclipsePreferences preferences = this.getPreferences();
-		return preferences.getDouble(key, value);
+		return preferences.getDouble(getKey(key), def);
+	}
+
+	default void setDouble(String key, double value) {
+
+		putDouble(key, value);
 	}
 
 	default void putDouble(String key, double value) {
 
-		put(key, Double.toString(value));
+		put(getKey(key), Double.toString(value));
 	}
 
-	default String get(String key, String value) {
+	default String get(String key) {
+
+		String def = getDefaultValues().getOrDefault(key, "");
+		return get(key, def);
+	}
+
+	default String get(String key, String def) {
 
 		IEclipsePreferences preferences = this.getPreferences();
-		return preferences.get(key, value);
+		return preferences.get(getKey(key), def);
+	}
+
+	default void set(String key, String value) {
+
+		put(key, value);
 	}
 
 	default void put(String key, String value) {
 
 		try {
 			IEclipsePreferences preferences = this.getPreferences();
-			preferences.put(key, value);
+			preferences.put(getKey(key), value);
 			preferences.flush();
 		} catch(BackingStoreException e) {
 			logger.warn(e);

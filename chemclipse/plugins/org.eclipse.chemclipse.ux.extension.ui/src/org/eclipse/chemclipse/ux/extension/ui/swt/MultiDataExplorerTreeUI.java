@@ -34,7 +34,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.l10n.Messages;
-import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
@@ -166,7 +165,7 @@ public class MultiDataExplorerTreeUI {
 
 	protected String getUserLocationPreferenceKey() {
 
-		return PreferenceConstants.P_USER_LOCATION_PATH;
+		return PreferenceSupplier.P_USER_LOCATION_PATH;
 	}
 
 	protected String getPreferenceKey(DataExplorerTreeRoot root) {

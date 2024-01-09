@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.model.core.IMarkedTrace;
@@ -22,9 +19,6 @@ import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.TraceSettingUtil;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -36,7 +30,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final int MIN_RETENTION_TIME = 0; // = 0.0 minutes
 	public static final int MAX_RETENTION_TIME = 60000; // = 1.0 minutes
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -47,30 +41,16 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<>();
-		defaultValues.put(P_SELECTED_IONS, DEF_SELECTED_IONS);
-		defaultValues.put(P_USE_AREA_CONSTRAINT, Boolean.toString(DEF_USE_AREA_CONSTRAINT));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_SELECTED_IONS, DEF_SELECTED_IONS);
+		putDefault(P_USE_AREA_CONSTRAINT, Boolean.toString(DEF_USE_AREA_CONSTRAINT));
 	}
 
 	public static PeakIntegrationSettings getPeakIntegrationSettings() {

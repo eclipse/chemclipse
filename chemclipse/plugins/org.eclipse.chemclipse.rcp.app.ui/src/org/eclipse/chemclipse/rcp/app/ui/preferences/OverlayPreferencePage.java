@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.preferences;
 
@@ -19,6 +19,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class OverlayPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public OverlayPreferencePage() {
+
 		super(GRID);
 	}
 
@@ -26,7 +27,8 @@ public class OverlayPreferencePage extends FieldEditorPreferencePage implements 
 	public void init(IWorkbench workbench) {
 
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Overlay");
+		setTitle("Overlay");
+		setDescription("");
 	}
 
 	@Override

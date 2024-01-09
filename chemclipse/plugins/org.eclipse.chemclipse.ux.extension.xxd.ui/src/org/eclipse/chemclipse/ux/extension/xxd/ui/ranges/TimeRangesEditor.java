@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,7 +34,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -129,12 +129,12 @@ public class TimeRangesEditor extends Composite {
 					fileDialog.setText(TimeRanges.DESCRIPTION);
 					fileDialog.setFilterExtensions(new String[]{TimeRanges.FILTER_EXTENSION});
 					fileDialog.setFilterNames(new String[]{TimeRanges.FILTER_NAME});
-					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER));
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceSupplier.P_TIME_RANGE_TEMPLATE_FOLDER));
 					String pathname = fileDialog.open();
 					if(pathname != null) {
 						File file = new File(pathname);
 						String path = file.getParentFile().getAbsolutePath();
-						preferenceStore.setValue(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, path);
+						preferenceStore.setValue(PreferenceSupplier.P_TIME_RANGE_TEMPLATE_FOLDER, path);
 						timeRanges.importItems(file);
 						updateTimeRanges();
 					}
@@ -159,11 +159,11 @@ public class TimeRangesEditor extends Composite {
 					FileDialog fileDialog = ExtendedFileDialog.create(e.display.getActiveShell(), SWT.READ_ONLY);
 					fileDialog.setText("Chromatogram (*.ocb)");
 					fileDialog.setFilterExtensions(new String[]{"*.ocb"});
-					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER));
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceSupplier.P_TIME_RANGE_TEMPLATE_FOLDER));
 					//
 					String pathname = fileDialog.open();
 					if(pathname != null) {
-						preferenceStore.setValue(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, fileDialog.getFilterPath());
+						preferenceStore.setValue(PreferenceSupplier.P_TIME_RANGE_TEMPLATE_FOLDER, fileDialog.getFilterPath());
 						File file = new File(pathname);
 						TimeRanges timeRangesImport = extractTimeRangesFromChromatogram(file, new NullProgressMonitor());
 						if(timeRangesImport != null) {
@@ -195,12 +195,12 @@ public class TimeRangesEditor extends Composite {
 					fileDialog.setFilterExtensions(new String[]{TimeRanges.FILTER_EXTENSION});
 					fileDialog.setFilterNames(new String[]{TimeRanges.FILTER_NAME});
 					fileDialog.setFileName(TimeRanges.FILE_NAME);
-					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER));
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceSupplier.P_TIME_RANGE_TEMPLATE_FOLDER));
 					String pathname = fileDialog.open();
 					if(pathname != null) {
 						File file = new File(pathname);
 						String path = file.getParentFile().getAbsolutePath();
-						preferenceStore.setValue(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, path);
+						preferenceStore.setValue(PreferenceSupplier.P_TIME_RANGE_TEMPLATE_FOLDER, path);
 						if(timeRanges.exportItems(file)) {
 							MessageDialog.openInformation(button.getShell(), TimeRanges.DESCRIPTION, "Export Successful");
 						} else {

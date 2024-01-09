@@ -11,18 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.HighPassFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.LowPassFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.NominalizeFilterSettings;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -36,7 +30,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final int MIN_NUMBER_HIGHEST = 1;
 	public static final int MAX_NUMBER_HIGHEST = Integer.MAX_VALUE;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -47,30 +41,16 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_NUMBER_LOWEST, Integer.toString(DEF_NUMBER_LOWEST));
-		defaultValues.put(P_NUMBER_HIGHEST, Integer.toString(DEF_NUMBER_HIGHEST));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_NUMBER_LOWEST, Integer.toString(DEF_NUMBER_LOWEST));
+		putDefault(P_NUMBER_HIGHEST, Integer.toString(DEF_NUMBER_HIGHEST));
 	}
 
 	public static HighPassFilterSettings getHighPassFilterSettings() {

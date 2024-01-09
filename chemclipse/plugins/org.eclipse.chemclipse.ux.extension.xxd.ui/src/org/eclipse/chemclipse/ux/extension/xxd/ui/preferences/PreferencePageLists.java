@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,11 +29,11 @@ public class PreferencePageLists extends FieldEditorPreferencePage implements IW
 
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_PEAKS_IN_LIST, "Show peaks in list", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE, "Show peaks in selected range", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_SCANS_IN_LIST, "Show scans in list", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE, "Show scans in selected range", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_PEAK_PROFILES_SELECTION_ALL, "Show peak profiles (CTRL + A)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_PEAKS_IN_LIST, "Show peaks in list", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_PEAKS_IN_SELECTED_RANGE, "Show peaks in selected range", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_SCANS_IN_LIST, "Show scans in list", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_SCANS_IN_SELECTED_RANGE, "Show scans in selected range", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_PEAK_PROFILES_SELECTION_ALL, "Show peak profiles (CTRL + A)", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

@@ -11,15 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.support.Activator;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplierSupport extends AbstractPreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_CLIPBOARD_TABLE_DEFAULT_SORTING = "clipboardTableDefaultSorting";
 	public static final boolean DEF_CLIPBOARD_TABLE_DEFAULT_SORTING = false;
@@ -39,20 +33,14 @@ public class PreferenceSupplierSupport extends AbstractPreferenceSupplier implem
 	public static final String P_COLUMN_WIDTH = "columnWidth_";
 	public static final String DEF_COLUMN_WIDTH = "";
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
 		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplierSupport();
+			preferenceSupplier = new PreferenceSupplier();
 		}
 		return preferenceSupplier;
-	}
-
-	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
 	}
 
 	@Override
@@ -62,18 +50,10 @@ public class PreferenceSupplierSupport extends AbstractPreferenceSupplier implem
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<>();
-		defaultValues.put(P_CLIPBOARD_TABLE_DEFAULT_SORTING, Boolean.toString(DEF_CLIPBOARD_TABLE_DEFAULT_SORTING));
-		defaultValues.put(P_UNDO_LIMIT, Integer.toString(DEF_UNDO_LIMIT));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_CLIPBOARD_TABLE_DEFAULT_SORTING, Boolean.toString(DEF_CLIPBOARD_TABLE_DEFAULT_SORTING));
+		putDefault(P_UNDO_LIMIT, Integer.toString(DEF_UNDO_LIMIT));
 	}
 
 	public static boolean isClipboardCopyHeader(String key) {

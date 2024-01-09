@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -40,12 +39,13 @@ import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.services.IScanIdentifierService;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModelMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ChromatogramUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.SubtractScanWizard;
@@ -191,7 +191,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 							 */
 							logger.info("Subtract Scan: " + scanNumberSource + " - " + scanNumberSubtract);
 							subtractScanMSD(scanSource, scanSubtract);
-							if(!preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT)) {
+							if(!preferenceStore.getBoolean(PreferenceSupplier.P_ENABLE_MULTI_SUBTRACT)) {
 								setSubtractModus(display, false, false);
 								updateInfoLabels();
 							}
@@ -229,22 +229,22 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		/*
 		 * Set a fixed range on demand.
 		 */
-		boolean isFixedRangeX = preferenceStore.getBoolean(PreferenceConstants.P_SCAN_CHART_ENABLE_FIXED_RANGE_X);
-		boolean isFixedRangeY = preferenceStore.getBoolean(PreferenceConstants.P_SCAN_CHART_ENABLE_FIXED_RANGE_Y);
+		boolean isFixedRangeX = preferenceStore.getBoolean(PreferenceSupplier.P_SCAN_CHART_ENABLE_FIXED_RANGE_X);
+		boolean isFixedRangeY = preferenceStore.getBoolean(PreferenceSupplier.P_SCAN_CHART_ENABLE_FIXED_RANGE_Y);
 		//
 		if(isFixedRangeX || isFixedRangeY) {
 			BaseChart baseChart = chartControl.get().getBaseChart();
 			//
 			if(isFixedRangeX) {
-				double startX = preferenceStore.getDouble(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_START_X);
-				double stopX = preferenceStore.getDouble(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_STOP_X);
+				double startX = preferenceStore.getDouble(PreferenceSupplier.P_SCAN_CHART_FIXED_RANGE_START_X);
+				double stopX = preferenceStore.getDouble(PreferenceSupplier.P_SCAN_CHART_FIXED_RANGE_STOP_X);
 				IAxis axisX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
 				axisX.setRange(new Range(startX, stopX));
 			}
 			//
 			if(isFixedRangeY) {
-				double startY = preferenceStore.getDouble(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_START_Y);
-				double stopY = preferenceStore.getDouble(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_STOP_Y);
+				double startY = preferenceStore.getDouble(PreferenceSupplier.P_SCAN_CHART_FIXED_RANGE_START_Y);
+				double stopY = preferenceStore.getDouble(PreferenceSupplier.P_SCAN_CHART_FIXED_RANGE_STOP_Y);
 				IAxis axisY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
 				axisY.setRange(new Range(startY, stopY));
 			}
@@ -435,7 +435,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		buttonSubtractOption.setImage(ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImageProvider.SIZE_16x16));
 		//
 		if(this.subtractModus && showDialog) {
-			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG)) {
+			if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_SUBTRACT_DIALOG)) {
 				if(display != null) {
 					SubtractScanWizard.openWizard(display.getActiveShell());
 				}
@@ -482,9 +482,9 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		 * Settings
 		 */
 		MassSpectrumFilterSettings settings = new MassSpectrumFilterSettings();
-		settings.setUseNominalMasses(PreferenceSupplier.isUseNominalMZ());
-		settings.setUseNormalize(PreferenceSupplier.isUseNormalizedScan());
-		settings.setSubtractMassSpectrum(PreferenceSupplier.getMassSpectrum(scanSubtract));
+		settings.setUseNominalMasses(PreferenceSupplierModelMSD.isUseNominalMZ());
+		settings.setUseNormalize(PreferenceSupplierModelMSD.isUseNormalizedScan());
+		settings.setSubtractMassSpectrum(PreferenceSupplierModelMSD.getMassSpectrum(scanSubtract));
 		/*
 		 * Subtract
 		 */

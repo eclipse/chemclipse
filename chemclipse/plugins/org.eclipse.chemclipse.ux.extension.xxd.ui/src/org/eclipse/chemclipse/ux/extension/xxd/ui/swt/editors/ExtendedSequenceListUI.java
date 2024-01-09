@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - adjust to API
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
@@ -42,9 +42,9 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ChromatogramTypeSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
@@ -289,10 +289,10 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 					directoryDialog.setText("Sequence Folder");
 					directoryDialog.setMessage("Select the sequence root folder.");
 					IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-					directoryDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER));
+					directoryDialog.setFilterPath(preferenceStore.getString(PreferenceSupplier.P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER));
 					String directory = directoryDialog.open();
 					if(directory != null) {
-						preferenceStore.setValue(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER, directory);
+						preferenceStore.setValue(PreferenceSupplier.P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER, directory);
 						sequence.setDataPath(directory);
 						updateDataSequenceData();
 					}
@@ -383,7 +383,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 				int[] indices = table.getSelectionIndices();
 				List<File> files = new ArrayList<>();
 				//
-				String chromatogramProcessMethod = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_LOAD_PROCESS_METHOD);
+				String chromatogramProcessMethod = preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_LOAD_PROCESS_METHOD);
 				if(!"".equals(chromatogramProcessMethod)) {
 					// MessageDialog.openWarning(e.display.getActiveShell(), "Batch Open", "A default chromatogram processing method is currently set.");
 				}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,12 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -54,48 +54,48 @@ public class OverlayChartSupport {
 	public double getOverlayShiftX() {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		return preferenceStore.getDouble(PreferenceConstants.P_OVERLAY_SHIFT_X);
+		return preferenceStore.getDouble(PreferenceSupplier.P_OVERLAY_SHIFT_X);
 	}
 
 	public void setOverlayShiftX(double value) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		preferenceStore.setValue(PreferenceConstants.P_OVERLAY_SHIFT_X, value);
+		preferenceStore.setValue(PreferenceSupplier.P_OVERLAY_SHIFT_X, value);
 	}
 
 	public int getIndexShiftX() {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		return preferenceStore.getInt(PreferenceConstants.P_INDEX_SHIFT_X);
+		return preferenceStore.getInt(PreferenceSupplier.P_INDEX_SHIFT_X);
 	}
 
 	public void setIndexShiftX(int value) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		preferenceStore.setValue(PreferenceConstants.P_INDEX_SHIFT_X, value);
+		preferenceStore.setValue(PreferenceSupplier.P_INDEX_SHIFT_X, value);
 	}
 
 	public double getOverlayShiftY() {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		return preferenceStore.getDouble(PreferenceConstants.P_OVERLAY_SHIFT_Y);
+		return preferenceStore.getDouble(PreferenceSupplier.P_OVERLAY_SHIFT_Y);
 	}
 
 	public void setOverlayShiftY(double value) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		preferenceStore.setValue(PreferenceConstants.P_OVERLAY_SHIFT_Y, value);
+		preferenceStore.setValue(PreferenceSupplier.P_OVERLAY_SHIFT_Y, value);
 	}
 
 	public int getIndexShiftY() {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		return preferenceStore.getInt(PreferenceConstants.P_INDEX_SHIFT_Y);
+		return preferenceStore.getInt(PreferenceSupplier.P_INDEX_SHIFT_Y);
 	}
 
 	public void setIndexShiftY(int value) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		preferenceStore.setValue(PreferenceConstants.P_INDEX_SHIFT_Y, value);
+		preferenceStore.setValue(PreferenceSupplier.P_INDEX_SHIFT_Y, value);
 	}
 }

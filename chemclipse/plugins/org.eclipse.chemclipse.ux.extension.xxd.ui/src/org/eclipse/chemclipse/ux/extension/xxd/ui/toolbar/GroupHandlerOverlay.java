@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskOverlay;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferencePage;
 
 public class GroupHandlerOverlay extends AbstractGroupHandler {
@@ -40,9 +40,9 @@ public class GroupHandlerOverlay extends AbstractGroupHandler {
 
 		List<IPartHandler> partHandler = new ArrayList<>();
 		//
-		partHandler.add(new PartHandler("Overlay (Chromatogram)", PartSupport.PARTDESCRIPTOR_OVERLAY_CHROMATOGRAM, PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT));
-		partHandler.add(new PartHandler("Overlay (NMR)", PartSupport.PARTDESCRIPTOR_OVERLAY_NMR, PreferenceConstants.P_STACK_POSITION_OVERLAY_NMR));
-		partHandler.add(new PartHandler("Overlay (XIR)", PartSupport.PARTDESCRIPTOR_OVERLAY_XIR, PreferenceConstants.P_STACK_POSITION_OVERLAY_XIR));
+		partHandler.add(new PartHandler("Overlay (Chromatogram)", PartSupport.PARTDESCRIPTOR_OVERLAY_CHROMATOGRAM, PreferenceSupplier.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT));
+		partHandler.add(new PartHandler("Overlay (NMR)", PartSupport.PARTDESCRIPTOR_OVERLAY_NMR, PreferenceSupplier.P_STACK_POSITION_OVERLAY_NMR));
+		partHandler.add(new PartHandler("Overlay (XIR)", PartSupport.PARTDESCRIPTOR_OVERLAY_XIR, PreferenceSupplier.P_STACK_POSITION_OVERLAY_XIR));
 		//
 		return partHandler;
 	}

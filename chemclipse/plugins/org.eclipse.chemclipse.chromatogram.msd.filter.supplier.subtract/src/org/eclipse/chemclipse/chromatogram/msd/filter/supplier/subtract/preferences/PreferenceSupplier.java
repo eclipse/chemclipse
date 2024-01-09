@@ -11,18 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.Activator;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.internal.preferences.PreferenceSupplierMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.PeakFilterSettings;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -32,7 +27,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String FILTER_ID_CHROMATOGRAM = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.chromatogram";
 	public static final String FILTER_ID_PEAK = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.peak";
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -43,36 +38,22 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
 	}
 
 	public static ChromatogramFilterSettings getFilterSettings() {
 
 		ChromatogramFilterSettings subtractFilterSettingsChromatogram = new ChromatogramFilterSettings();
-		subtractFilterSettingsChromatogram.setSubtractMassSpectrum(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.getSessionSubtractMassSpectrumAsString());
-		subtractFilterSettingsChromatogram.setUseNominalMasses(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNominalMZ());
-		subtractFilterSettingsChromatogram.setUseNormalize(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan());
+		subtractFilterSettingsChromatogram.setSubtractMassSpectrum(PreferenceSupplierMSD.getSessionSubtractMassSpectrumAsString());
+		subtractFilterSettingsChromatogram.setUseNominalMasses(PreferenceSupplierMSD.isUseNominalMZ());
+		subtractFilterSettingsChromatogram.setUseNormalize(PreferenceSupplierMSD.isUseNormalizedScan());
 		//
 		return subtractFilterSettingsChromatogram;
 	}
@@ -80,9 +61,9 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static PeakFilterSettings getPeakFilterSettings() {
 
 		PeakFilterSettings peakFilterSettings = new PeakFilterSettings();
-		peakFilterSettings.setSubtractMassSpectrum(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.getSessionSubtractMassSpectrumAsString());
-		peakFilterSettings.setUseNominalMasses(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNominalMZ());
-		peakFilterSettings.setUseNormalize(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan());
+		peakFilterSettings.setSubtractMassSpectrum(PreferenceSupplierMSD.getSessionSubtractMassSpectrumAsString());
+		peakFilterSettings.setUseNominalMasses(PreferenceSupplierMSD.isUseNominalMZ());
+		peakFilterSettings.setUseNormalize(PreferenceSupplierMSD.isUseNormalizedScan());
 		//
 		return peakFilterSettings;
 	}
@@ -90,9 +71,9 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static MassSpectrumFilterSettings getMassSpectrumFilterSettings() {
 
 		MassSpectrumFilterSettings massSpectrumFilterSettings = new MassSpectrumFilterSettings();
-		massSpectrumFilterSettings.setSubtractMassSpectrum(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.getSessionSubtractMassSpectrumAsString());
-		massSpectrumFilterSettings.setUseNominalMasses(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNominalMZ());
-		massSpectrumFilterSettings.setUseNormalize(org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan());
+		massSpectrumFilterSettings.setSubtractMassSpectrum(PreferenceSupplierMSD.getSessionSubtractMassSpectrumAsString());
+		massSpectrumFilterSettings.setUseNominalMasses(PreferenceSupplierMSD.isUseNominalMZ());
+		massSpectrumFilterSettings.setUseNormalize(PreferenceSupplierMSD.isUseNormalizedScan());
 		//
 		return massSpectrumFilterSettings;
 	}

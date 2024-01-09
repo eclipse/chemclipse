@@ -222,12 +222,6 @@
       </page>
    </extension>
    <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
-   <extension
          point="org.eclipse.chemclipse.ux.extension.ui.welcometile">
       <WelcomeTile
             Description="Please write us an email if you need help."

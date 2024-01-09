@@ -107,8 +107,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisRe
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisRetentionIndex;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisSeconds;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceInitializer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
@@ -118,6 +116,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProc
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
@@ -218,7 +217,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scans Selected";
 	//
-	private String titleScans = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_SCANS);
+	private String titleScans = Activator.getDefault().getPreferenceStore().getString(PreferenceSupplier.P_TITLE_X_AXIS_SCANS);
 	private ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
 	//
 	private AtomicReference<ProcessorToolbarUI> processorToolbarControl = new AtomicReference<>();
@@ -745,7 +744,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		/*
 		 * Add space on top to show labels correctly.
 		 */
-		double extendY = preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_EXTEND_Y);
+		double extendY = preferenceStore.getDouble(PreferenceSupplier.P_CHROMATOGRAM_EXTEND_Y);
 		rangeRestriction.setExtendMaxY(extendY);
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			/*
@@ -754,7 +753,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			 * setForceZeroMinY(true) shows all data from the 0 baseline.
 			 */
 			rangeRestriction.setZeroY(true);
-			rangeRestriction.setForceZeroMinY(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD));
+			rangeRestriction.setForceZeroMinY(preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD));
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD || chromatogramSelection instanceof IChromatogramSelectionWSD) {
 			/*
 			 * FID and DAD could contain negative scan intensities.
@@ -766,12 +765,12 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		/*
 		 * Zooming
 		 */
-		rangeRestriction.setRestrictSelectX(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_SELECT_X));
-		rangeRestriction.setRestrictSelectY(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_SELECT_Y));
-		rangeRestriction.setReferenceZoomZeroX(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_X));
-		rangeRestriction.setReferenceZoomZeroY(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_Y));
-		rangeRestriction.setRestrictZoomX(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_ZOOM_X));
-		rangeRestriction.setRestrictZoomY(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_ZOOM_Y));
+		rangeRestriction.setRestrictSelectX(preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_RESTRICT_SELECT_X));
+		rangeRestriction.setRestrictSelectY(preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_RESTRICT_SELECT_Y));
+		rangeRestriction.setReferenceZoomZeroX(preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_X));
+		rangeRestriction.setReferenceZoomZeroY(preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_Y));
+		rangeRestriction.setRestrictZoomX(preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_RESTRICT_ZOOM_X));
+		rangeRestriction.setRestrictZoomY(preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_RESTRICT_ZOOM_Y));
 		//
 		chromatogramChartControl.get().applySettings(chartSettings);
 	}
@@ -805,8 +804,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void addChromatogramData(List<ILineSeriesData> lineSeriesDataList) {
 
-		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
-		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
+		Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM));
+		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceSupplier.P_ENABLE_CHROMATOGRAM_AREA);
 		//
 		ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM, displayType, color, false);
 		lineSeriesData.getSettings().setEnableArea(enableChromatogramArea);
@@ -821,19 +820,19 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			 */
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			ITargetDisplaySettings targetDisplaySettings = chromatogram;
-			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
+			int symbolSize = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
 			//
-			PlotSymbolType symbolTypeActiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_MARKER_TYPE));
-			PlotSymbolType symbolTypeInactiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL_MARKER_TYPE));
-			PlotSymbolType symbolTypeActiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_MARKER_TYPE));
-			PlotSymbolType symbolTypeInactiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE));
+			PlotSymbolType symbolTypeActiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_MARKER_TYPE));
+			PlotSymbolType symbolTypeInactiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL_MARKER_TYPE));
+			PlotSymbolType symbolTypeActiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_MARKER_TYPE));
+			PlotSymbolType symbolTypeInactiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE));
 			//
-			Color colorTypeActiveNormal = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL));
-			Color colorTypeActiveTargetsHidden = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_TARGETS_HIDDEN));
-			Color colorTypeInactiveNormal = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL));
-			Color colorTypeActiveIstd = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD));
-			Color colorTypeActiveIstdTargetsHidden = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_TARGETS_HIDDEN));
-			Color colorTypeInactiveIstd = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_ISTD));
+			Color colorTypeActiveNormal = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL));
+			Color colorTypeActiveTargetsHidden = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_TARGETS_HIDDEN));
+			Color colorTypeInactiveNormal = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL));
+			Color colorTypeActiveIstd = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD));
+			Color colorTypeActiveIstdTargetsHidden = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_TARGETS_HIDDEN));
+			Color colorTypeInactiveIstd = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_ISTD));
 			//
 			List<? extends IPeak> peaks = ChromatogramDataSupport.getPeaks(chromatogram);
 			List<IPeak> peaksActiveNormal = new ArrayList<>();
@@ -933,8 +932,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		if(chromatogramSelection != null) {
 			String seriesId = SERIES_ID_IDENTIFIED_SCANS;
 			List<IScan> scans = ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram());
-			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
-			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SCAN_MARKER_TYPE));
+			int symbolSize = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
+			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_SCAN_MARKER_TYPE));
 			addIdentifiedScansData(lineSeriesDataList, scans, symbolType, symbolSize, Colors.DARK_GRAY, seriesId);
 			/*
 			 * Add the labels.
@@ -971,9 +970,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			List<IScan> selectedIdentifiedScans = chromatogramSelection.getSelectedIdentifiedScans();
 			if(!selectedIdentifiedScans.isEmpty()) {
 				String seriesId = SERIES_ID_IDENTIFIED_SCAN_SELECTED;
-				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_IDENTIFIED_SCAN));
-				PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_IDENTIFIED_SCAN_MARKER_TYPE));
-				int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
+				Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_IDENTIFIED_SCAN));
+				PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_IDENTIFIED_SCAN_MARKER_TYPE));
+				int symbolSize = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
 				addIdentifiedScansData(lineSeriesDataList, selectedIdentifiedScans, symbolType, symbolSize, color, seriesId);
 			}
 		}
@@ -988,11 +987,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			 */
 			boolean mirrored = false;
 			ILineSeriesData lineSeriesData;
-			Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_PEAK));
-			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
-			PlotSymbolType symbolTypePeakMarker = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE));
-			int scanMarkerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_SIZE);
-			PlotSymbolType symbolTypeScanMarker = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_TYPE));
+			Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_SELECTED_PEAK));
+			int symbolSize = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
+			PlotSymbolType symbolTypePeakMarker = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE));
+			int scanMarkerSize = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_SIZE);
+			PlotSymbolType symbolTypeScanMarker = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_TYPE));
 			/*
 			 * Peak Marker
 			 */
@@ -1012,7 +1011,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				/*
 				 * Background
 				 */
-				Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BACKGROUND));
+				Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_BACKGROUND));
 				lineSeriesData = peakChartSupport.getPeakBackground(peak, mirrored, colorBackground, SERIES_ID_SELECTED_PEAK_BACKGROUND + i);
 				lineSeriesDataList.add(lineSeriesData);
 				//
@@ -1025,9 +1024,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 		IScan scan = chromatogramSelection.getSelectedScan();
 		if(scan != null) {
-			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN));
-			int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE);
-			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE));
+			Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_SELECTED_SCAN));
+			int markerSize = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE);
+			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE));
 			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN, displayType, chromatogramSelection);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setLineStyle(LineStyle.NONE);
@@ -1040,11 +1039,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void addBaselineData(List<ILineSeriesData> lineSeriesDataList) {
 
-		boolean showChromatogramBaseline = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_BASELINE);
+		boolean showChromatogramBaseline = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_CHROMATOGRAM_BASELINE);
 		//
 		if(chromatogramSelection != null && showChromatogramBaseline) {
-			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_BASELINE));
-			boolean enableBaselineArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_BASELINE_AREA);
+			Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM_BASELINE));
+			boolean enableBaselineArea = preferenceStore.getBoolean(PreferenceSupplier.P_ENABLE_BASELINE_AREA);
 			ILineSeriesData lineSeriesData = null;
 			lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogramSelection, SERIES_ID_BASELINE, displayType, color, false);
 			lineSeriesData.getSettings().setEnableArea(enableBaselineArea);
@@ -1057,7 +1056,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		/*
 		 * Define the compression level.
 		 */
-		String compressionType = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE);
+		String compressionType = preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE);
 		int compressionToLength = chromatogramChartSupport.getCompressionLength(compressionType, lineSeriesDataList.size());
 		chromatogramChartControl.get().addSeriesData(lineSeriesDataList, compressionToLength);
 	}
@@ -1088,10 +1087,10 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, HelpContext.CHROMATOGRAM_EDITOR);
 		//
 		enableToolbar(toolbarInfoControl, buttonToolbarInfo.get(), IMAGE_INFO, TOOLTIP_INFO, false);
-		enableToolbar(toolbarReferencesControl, buttonToolbarReferences.get(), IMAGE_REFERENCES, TOOLTIP_REFERENCES, preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_SHOW_REFERENCES_COMBO));
+		enableToolbar(toolbarReferencesControl, buttonToolbarReferences.get(), IMAGE_REFERENCES, TOOLTIP_REFERENCES, preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_SHOW_REFERENCES_COMBO));
 		enableToolbar(toolbarEditControl, buttonToolbarEdit.get(), IMAGE_EDIT, TOOLTIP_EDIT, false);
 		enableToolbar(toolbarAlignmentControl, buttonToolbarAlignment.get(), IMAGE_ALIGNMENT, TOOLTIP_ALIGNMENT, false);
-		enableToolbar(toolbarMethodControl, buttonToolbarMethod.get(), IMAGE_METHOD, TOOLTIP_METHOD, preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR));
+		enableToolbar(toolbarMethodControl, buttonToolbarMethod.get(), IMAGE_METHOD, TOOLTIP_METHOD, preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR));
 		enableChartGrid(chromatogramChartControl, buttonChartGridControl.get(), IMAGE_CHART_GRID, chartGridSupport);
 		//
 		comboViewerColumnsControl.get().setInput(separationColumns);
@@ -1295,7 +1294,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 					/*
 					 * Transfer to references?
 					 */
-					if(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES)) {
+					if(preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES)) {
 						for(IChromatogram<?> chromatogramReference : chromatogram.getReferencedChromatograms()) {
 							chromatogramReference.getSeparationColumnIndices().setSeparationColumn(separationColumn);
 						}
@@ -1317,7 +1316,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_SHOW_REFERENCES_COMBO, toolbarReferencesControl.get().isVisible());
+				preferenceStore.setValue(PreferenceSupplier.P_CHROMATOGRAM_SHOW_REFERENCES_COMBO, toolbarReferencesControl.get().isVisible());
 			}
 		});
 		//
@@ -1344,7 +1343,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR, toolbarMethodControl.get().isVisible());
+				preferenceStore.setValue(PreferenceSupplier.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR, toolbarMethodControl.get().isVisible());
 			}
 		});
 		//
@@ -1355,14 +1354,14 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
-		setButtonImage(button, IMAGE_RETENTION_INDICES, PREFIX_SHOW, PREFIX_HIDE, TOOLTIP_RETENTION_INDICES, preferenceStore.getBoolean(PreferenceConstants.P_SHOW_RETENTION_INDEX_MARKER));
+		setButtonImage(button, IMAGE_RETENTION_INDICES, PREFIX_SHOW, PREFIX_HIDE, TOOLTIP_RETENTION_INDICES, preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_RETENTION_INDEX_MARKER));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean showRetentionIndexMarker = !preferenceStore.getBoolean(PreferenceConstants.P_SHOW_RETENTION_INDEX_MARKER);
-				preferenceStore.setValue(PreferenceConstants.P_SHOW_RETENTION_INDEX_MARKER, showRetentionIndexMarker);
+				boolean showRetentionIndexMarker = !preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_RETENTION_INDEX_MARKER);
+				preferenceStore.setValue(PreferenceSupplier.P_SHOW_RETENTION_INDEX_MARKER, showRetentionIndexMarker);
 				updateRetentionIndexDisplayStatus();
 			}
 		});
@@ -1453,7 +1452,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		 * Some converter have an option to set analysis segments while parsing the chromatogram data.
 		 * Via the preferences it's defined, whether these segements shall be displayed be default.
 		 */
-		boolean markAnalysisSegments = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS);
+		boolean markAnalysisSegments = preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS);
 		if(markAnalysisSegments) {
 			AnalysisSegmentPaintListener<IAnalysisSegment> listener = new AnalysisSegmentPaintListener<>(AnalysisSegmentColorScheme.CHROMATOGRAM, new Supplier<Collection<IAnalysisSegment>>() {
 
@@ -1678,15 +1677,15 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			if(chromatogram != null) {
 				IChartSettings chartSettings = chromatogramChartControl.get().getChartSettings();
 				ISecondaryAxisSettings axisSettings = ChartSupport.getSecondaryAxisSettingsX(titleScans, chartSettings);
-				String title = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_SCANS);
+				String title = preferenceStore.getString(PreferenceSupplier.P_TITLE_X_AXIS_SCANS);
 				//
-				if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SCANS)) {
+				if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_X_AXIS_SCANS)) {
 					if(axisSettings == null) {
 						try {
 							int scanDelay = chromatogram.getScanDelay();
 							int scanInterval = chromatogram.getScanInterval();
 							ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(title, new MillisecondsToScanNumberConverter(scanDelay, scanInterval));
-							secondaryAxisSettingsX.setTitleVisible(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_SCANS));
+							secondaryAxisSettingsX.setTitleVisible(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_X_AXIS_TITLE_SCANS));
 							setScanAxisSettings(secondaryAxisSettingsX);
 							chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 						} catch(Exception e) {
@@ -1711,16 +1710,16 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void setScanAxisSettings(IAxisSettings axisSettings) {
 
-		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_SCANS;
-		String patternNode = PreferenceConstants.P_FORMAT_X_AXIS_SCANS;
-		String colorNode = PreferencesSupport.isDarkTheme() ? PreferenceConstants.P_COLOR_X_AXIS_SCANS_DARKTHEME : PreferenceConstants.P_COLOR_X_AXIS_SCANS;
-		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SCANS;
-		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SCANS;
+		String positionNode = PreferenceSupplier.P_POSITION_X_AXIS_SCANS;
+		String patternNode = PreferenceSupplier.P_FORMAT_X_AXIS_SCANS;
+		String colorNode = PreferencesSupport.isDarkTheme() ? PreferenceSupplier.P_COLOR_X_AXIS_SCANS_DARKTHEME : PreferenceSupplier.P_COLOR_X_AXIS_SCANS;
+		String gridLineStyleNode = PreferenceSupplier.P_GRIDLINE_STYLE_X_AXIS_SCANS;
+		String gridColorNode = PreferenceSupplier.P_GRIDLINE_COLOR_X_AXIS_SCANS;
 		ChartSupport.setAxisSettingsExtended(axisSettings, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);
 		//
-		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_SCANS);
-		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_SCANS);
-		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_X_AXIS_SCANS);
+		String name = preferenceStore.getString(PreferenceSupplier.P_FONT_NAME_X_AXIS_SCANS);
+		int height = preferenceStore.getInt(PreferenceSupplier.P_FONT_SIZE_X_AXIS_SCANS);
+		int style = preferenceStore.getInt(PreferenceSupplier.P_FONT_STYLE_X_AXIS_SCANS);
 		Font titleFont = Fonts.getCachedFont(chromatogramChartControl.get().getDisplay(), name, height, style);
 		axisSettings.setTitleFont(titleFont);
 	}
@@ -1730,16 +1729,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 		chromatogramChartControl.get().dispose();
 		super.dispose();
-	}
-
-	/**
-	 * Initializes a store with required defaults so it can be used with the {@link ExtendedChromatogramUI}
-	 * 
-	 * @param preferenceStore
-	 */
-	public static void initializeChartDefaults(IPreferenceStore preferenceStore) {
-
-		PreferenceInitializer.initializeChromatogramDefaults(preferenceStore);
 	}
 
 	private void updateMappedRetentionIndices() {
@@ -1755,7 +1744,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			}
 			retentionIndexMarker.clear();
 			retentionIndexMarker.getPositionMarkers().addAll(positionMarkers);
-			retentionIndexMarker.setDraw(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_RETENTION_INDEX_MARKER));
+			retentionIndexMarker.setDraw(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_RETENTION_INDEX_MARKER));
 		} else {
 			/*
 			 * Clear
@@ -1767,7 +1756,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void updateRetentionIndexDisplayStatus() {
 
-		boolean showRetentionIndexMarker = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_RETENTION_INDEX_MARKER);
+		boolean showRetentionIndexMarker = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_RETENTION_INDEX_MARKER);
 		setButtonImage(buttonToggleRetentionIndexControl.get(), IMAGE_RETENTION_INDICES, PREFIX_SHOW, PREFIX_HIDE, TOOLTIP_RETENTION_INDICES, showRetentionIndexMarker);
 		retentionIndexMarker.setDraw(showRetentionIndexMarker);
 		chromatogramChartControl.get().redraw();

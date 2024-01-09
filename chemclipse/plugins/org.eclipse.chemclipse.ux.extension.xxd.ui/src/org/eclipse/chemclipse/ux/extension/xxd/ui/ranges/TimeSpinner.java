@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TimeRangesLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -296,7 +296,7 @@ public class TimeSpinner extends Composite {
 
 	private void updateLabel() {
 
-		boolean visible = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_TIME_RANGE_SPINNER_LABEL);
+		boolean visible = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_TIME_RANGE_SPINNER_LABEL);
 		PartSupport.setControlVisibility(label, visible);
 		PartSupport.setControlVisibility(spacer, visible);
 	}

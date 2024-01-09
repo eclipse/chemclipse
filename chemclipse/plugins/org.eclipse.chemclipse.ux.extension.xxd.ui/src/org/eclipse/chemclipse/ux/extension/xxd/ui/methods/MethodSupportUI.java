@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - make helper method public static to read all configured methods, set processinginfo to the results view
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
-import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.ListProcessEntryContainer;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
@@ -44,6 +43,7 @@ import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierConverter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -176,7 +176,7 @@ public class MethodSupportUI extends Composite {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof IProcessMethod processMethod) {
-					PreferenceSupplier.setSelectedMethodName(processMethod.getName());
+					PreferenceSupplierConverter.setSelectedMethodName(processMethod.getName());
 				}
 				enableWidgets();
 			}
@@ -340,7 +340,7 @@ public class MethodSupportUI extends Composite {
 					if(file != null && file.exists()) {
 						if(MessageDialog.openQuestion(e.display.getActiveShell(), ExtensionMessages.deleteMethod, MessageFormat.format(ExtensionMessages.shallDeleteMethod, file.getName()))) {
 							file.delete();
-							PreferenceSupplier.setSelectedMethodName("");
+							PreferenceSupplierConverter.setSelectedMethodName("");
 							updateInput();
 						}
 						return;
@@ -433,7 +433,7 @@ public class MethodSupportUI extends Composite {
 			//
 			IProcessingInfo<?> processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
 			if(!processingInfo.hasErrorMessages()) {
-				PreferenceSupplier.setSelectedMethodName(file.getName());
+				PreferenceSupplierConverter.setSelectedMethodName(file.getName());
 				if(openEditor) {
 					updateInput();
 					MessageConsoleAppender.printLine("New Method: " + file.getAbsolutePath());
@@ -468,7 +468,7 @@ public class MethodSupportUI extends Composite {
 
 	private void updateProcessMethodSelection() {
 
-		String selectedMethodName = PreferenceSupplier.getSelectedMethodName();
+		String selectedMethodName = PreferenceSupplierConverter.getSelectedMethodName();
 		Combo combo = methodsControl.get().getCombo();
 		//
 		exitloop:
@@ -481,7 +481,7 @@ public class MethodSupportUI extends Composite {
 		//
 		if(combo.getSelectionIndex() == -1) {
 			combo.select(0);
-			PreferenceSupplier.setSelectedMethodName(combo.getItem(0));
+			PreferenceSupplierConverter.setSelectedMethodName(combo.getItem(0));
 		}
 	}
 

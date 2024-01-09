@@ -11,93 +11,123 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.preferences;
 
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
-import org.eclipse.jface.preference.IPreferenceStore;
 
-public class PreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
-	/*
-	 * Use only static methods.
-	 */
-	private PreferenceSupplier() {
+	public static final String P_SELECTED_DRIVE_PATH = "selectedDrivePath";
+	public static final String DEF_SELECTED_DRIVE_PATH = "";
+	public static final String P_SELECTED_HOME_PATH = "selectedHomePath";
+	public static final String DEF_SELECTED_HOME_PATH = "";
+	public static final String P_SELECTED_WORKSPACE_PATH = "selectedWorkspacePath";
+	public static final String DEF_SELECTED_WORKSPACE_PATH = "";
+	public static final String P_SELECTED_USER_LOCATION_PATH = "selectedUserLocationPath";
+	public static final String DEF_SELECTED_USER_LOCATION_PATH = "";
+	//
+	public static final String P_USER_LOCATION_PATH = "userLocation";
+	public static final String DEF_USER_LOCATION_PATH = UserManagement.getUserHome();
+	public static final String P_SHOW_NETWORK_SHARES = "showWindowsNetworkDrive";
+	public static final boolean DEF_SHOW_NETWORK_SHARES = true;
+	//
+	public static final String P_OPEN_FIRST_DATA_MATCH_ONLY = "openFirstDataMatchOnly";
+	public static final boolean DEF_OPEN_FIRST_DATA_MATCH_ONLY = true;
+	public static final String P_OPEN_EDITOR_MULTIPLE_TIMES = "openEditorMultipleTimes";
+	public static final boolean DEF_OPEN_EDITOR_MULTIPLE_TIMES = true;
+	//
+	private static IPreferenceSupplier preferenceSupplier = null;
 
+	public static IPreferenceSupplier INSTANCE() {
+
+		if(preferenceSupplier == null) {
+			preferenceSupplier = new PreferenceSupplier();
+		}
+		return preferenceSupplier;
+	}
+
+	@Override
+	public String getPreferenceNode() {
+
+		return Activator.getDefault().getBundle().getSymbolicName();
+	}
+
+	@Override
+	public void initializeDefaults() {
+
+		putDefault(P_SELECTED_DRIVE_PATH, DEF_SELECTED_DRIVE_PATH);
+		putDefault(P_SELECTED_HOME_PATH, DEF_SELECTED_HOME_PATH);
+		putDefault(P_SELECTED_WORKSPACE_PATH, DEF_SELECTED_WORKSPACE_PATH);
+		putDefault(P_SELECTED_USER_LOCATION_PATH, DEF_SELECTED_USER_LOCATION_PATH);
+		putDefault(P_USER_LOCATION_PATH, DEF_USER_LOCATION_PATH);
+		putDefault(P_SHOW_NETWORK_SHARES, DEF_SHOW_NETWORK_SHARES);
+		putDefault(P_OPEN_FIRST_DATA_MATCH_ONLY, DEF_OPEN_FIRST_DATA_MATCH_ONLY);
+		putDefault(P_OPEN_EDITOR_MULTIPLE_TIMES, DEF_OPEN_EDITOR_MULTIPLE_TIMES);
 	}
 
 	public static String getSelectedDrivePath() {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getString(PreferenceConstants.P_SELECTED_DRIVE_PATH);
+		return INSTANCE().get(P_SELECTED_DRIVE_PATH);
 	}
 
 	public static void setSelectedDrivePath(String directoryPath) {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setValue(PreferenceConstants.P_SELECTED_DRIVE_PATH, directoryPath);
+		INSTANCE().set(P_SELECTED_DRIVE_PATH, directoryPath);
 	}
 
 	public static String getSelectedHomePath() {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getString(PreferenceConstants.P_SELECTED_HOME_PATH);
+		return INSTANCE().get(P_SELECTED_HOME_PATH);
 	}
 
 	public static void setSelectedHomePath(String directoryPath) {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setValue(PreferenceConstants.P_SELECTED_HOME_PATH, directoryPath);
+		INSTANCE().set(P_SELECTED_HOME_PATH, directoryPath);
 	}
 
 	public static String getSelectedWorkspacePath() {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getString(PreferenceConstants.P_SELECTED_WORKSPACE_PATH);
+		return INSTANCE().get(P_SELECTED_WORKSPACE_PATH);
 	}
 
 	public static void setSelectedWorkspaceath(String directoryPath) {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setValue(PreferenceConstants.P_SELECTED_WORKSPACE_PATH, directoryPath);
+		INSTANCE().set(P_SELECTED_WORKSPACE_PATH, directoryPath);
 	}
 
 	public static String getSelectedUserLocationPath() {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getString(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH);
+		return INSTANCE().get(P_SELECTED_USER_LOCATION_PATH);
 	}
 
 	public static void setSelectedUserLocationPath(String directoryPath) {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setValue(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH, directoryPath);
+		INSTANCE().set(P_SELECTED_USER_LOCATION_PATH, directoryPath);
 	}
 
 	public static String getUserLocationPath() {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getString(PreferenceConstants.P_USER_LOCATION_PATH);
+		return INSTANCE().get(P_USER_LOCATION_PATH);
 	}
 
 	public static void setUserLocationPath(String directoryPath) {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setValue(PreferenceConstants.P_USER_LOCATION_PATH, directoryPath);
+		INSTANCE().set(P_USER_LOCATION_PATH, directoryPath);
 	}
 
 	public static boolean isOpenFirstDataMatchOnly() {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getBoolean(PreferenceConstants.P_OPEN_FIRST_DATA_MATCH_ONLY);
+		return INSTANCE().getBoolean(P_OPEN_FIRST_DATA_MATCH_ONLY);
 	}
 
 	public static boolean isOpenEditorMultipleTimes() {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getBoolean(PreferenceConstants.P_OPEN_EDITOR_MULTIPLE_TIMES);
+		return INSTANCE().getBoolean(P_OPEN_EDITOR_MULTIPLE_TIMES);
 	}
 
 	public static boolean showNetworkShares() {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getBoolean(PreferenceConstants.P_SHOW_NETWORK_SHARES);
+		return INSTANCE().getBoolean(P_SHOW_NETWORK_SHARES);
 	}
 }

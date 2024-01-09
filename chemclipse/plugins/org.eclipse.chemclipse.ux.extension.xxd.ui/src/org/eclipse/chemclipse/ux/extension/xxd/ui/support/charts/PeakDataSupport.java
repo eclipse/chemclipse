@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
@@ -18,9 +18,9 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModel;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 
 public class PeakDataSupport {
@@ -41,7 +41,7 @@ public class PeakDataSupport {
 			builder.append(decimalFormat.format(scan.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 			builder.append(" | ");
 			builder.append("Center RI: ");
-			if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+			if(PreferenceSupplierModel.showRetentionIndexWithoutDecimals()) {
 				builder.append(Integer.toString((int)scan.getRetentionIndex()));
 			} else {
 				builder.append(decimalFormat.format(scan.getRetentionIndex()));

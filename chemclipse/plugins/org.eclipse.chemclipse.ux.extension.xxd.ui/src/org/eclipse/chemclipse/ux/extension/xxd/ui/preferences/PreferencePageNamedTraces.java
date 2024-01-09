@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -29,7 +29,7 @@ public class PreferencePageNamedTraces extends FieldEditorPreferencePage impleme
 
 	public void createFieldEditors() {
 
-		addField(new NamedTracesFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES, "Named Traces", getFieldEditorParent()));
+		addField(new NamedTracesFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES, "Named Traces", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

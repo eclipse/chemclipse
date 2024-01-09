@@ -12,9 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.Activator;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.ClassifierSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
@@ -22,9 +19,6 @@ import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.MassSpect
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -36,7 +30,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_MATCH_QUALITY = "matchQuality";
 	public static final float DEF_MATCH_QUALITY = 80.0f;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -47,24 +41,16 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_LIMIT_MATCH_FACTOR, Float.toString(DEF_LIMIT_MATCH_FACTOR));
-		defaultValues.put(P_MATCH_QUALITY, Float.toString(DEF_MATCH_QUALITY));
-		return defaultValues;
+		putDefault(P_LIMIT_MATCH_FACTOR, Float.toString(DEF_LIMIT_MATCH_FACTOR));
+		putDefault(P_MATCH_QUALITY, Float.toString(DEF_MATCH_QUALITY));
 	}
 
 	public static MassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
@@ -86,12 +72,6 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static ClassifierSettings getChromatogramClassifierSettings() {
 
 		return new ClassifierSettings();
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
 	}
 
 	private static void assignDefaultValues(IBasePeakSettings settings) {

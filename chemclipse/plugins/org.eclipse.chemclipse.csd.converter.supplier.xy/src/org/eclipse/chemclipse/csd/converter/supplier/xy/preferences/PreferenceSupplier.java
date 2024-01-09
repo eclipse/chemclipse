@@ -11,17 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.converter.supplier.xy.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.csd.converter.supplier.xy.Activator;
 import org.eclipse.chemclipse.csd.converter.supplier.xy.io.DelimiterFormat;
 import org.eclipse.chemclipse.csd.converter.supplier.xy.io.RetentionTimeFormat;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -32,7 +26,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_RETENTION_TIME_FORMAT = "timeFormat";
 	public static final String DEF_RETENTION_TIME_FORMAT = RetentionTimeFormat.MINUTES.name();
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -48,31 +42,17 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_AUTO_DETECT_FORMAT, Boolean.toString(DEF_AUTO_DETECT_FORMAT));
-		defaultValues.put(P_DELIMITER_FORMAT, DEF_DELIMITER_FORMAT);
-		defaultValues.put(P_RETENTION_TIME_FORMAT, DEF_RETENTION_TIME_FORMAT);
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_AUTO_DETECT_FORMAT, Boolean.toString(DEF_AUTO_DETECT_FORMAT));
+		putDefault(P_DELIMITER_FORMAT, DEF_DELIMITER_FORMAT);
+		putDefault(P_RETENTION_TIME_FORMAT, DEF_RETENTION_TIME_FORMAT);
 	}
 
 	public static boolean isAutoDetectFormat() {

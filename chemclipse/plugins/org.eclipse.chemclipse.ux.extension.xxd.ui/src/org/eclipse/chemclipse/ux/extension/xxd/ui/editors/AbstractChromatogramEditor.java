@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
@@ -64,7 +64,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.MeasurementResult
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ObjectChangedListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ProcessMethodNotifications;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.AbstractUpdater;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
@@ -249,7 +249,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 
 	private String getFilterPath() {
 
-		String filterPath = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SAVE_AS_FOLDER);
+		String filterPath = preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_SAVE_AS_FOLDER);
 		if("".equals(filterPath)) {
 			if(chromatogramFile != null) {
 				if(chromatogramFile.isDirectory()) {
@@ -325,7 +325,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 
 	private void processChromatogram(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		File file = new File(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_LOAD_PROCESS_METHOD));
+		File file = new File(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_LOAD_PROCESS_METHOD));
 		if(chromatogramSelection != null) {
 			try {
 				ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);

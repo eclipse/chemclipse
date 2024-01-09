@@ -12,15 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.classification.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.xxd.classification.Activator;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -29,7 +23,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_LIST_PATH_EXPORT = "listPathExport";
 	public static final String DEF_LIST_PATH_EXPORT = "";
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -40,30 +34,16 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public IEclipsePreferences getPreferences() {
+	public void initializeDefaults() {
 
-		return getScopeContext().getNode(getPreferenceNode());
-	}
-
-	@Override
-	public Map<String, String> getDefaultValues() {
-
-		Map<String, String> defaultValues = new HashMap<>();
-		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
-		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
-		return defaultValues;
+		putDefault(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		putDefault(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 	}
 
 	public static String getListPathImport() {

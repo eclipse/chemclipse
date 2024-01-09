@@ -13,8 +13,6 @@
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.Activator;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings;
@@ -25,8 +23,6 @@ import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -56,7 +52,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_MIN_REVERSE_MATCH_FACTOR = "minReverseMatchFactor";
 	public static final float DEF_MIN_REVERSE_MATCH_FACTOR = 80.0f;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -67,36 +63,22 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_MAC_WINE_BINARY, DEF_MAC_WINE_BINARY);
-		defaultValues.put(P_LIMIT_MATCH_FACTOR, Float.toString(DEF_LIMIT_MATCH_FACTOR));
-		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
-		defaultValues.put(P_USE_OPTIMIZED_MASS_SPECTRUM, Boolean.toString(DEF_USE_OPTIMIZED_MASS_SPECTRUM));
-		defaultValues.put(P_TIMEOUT_IN_MINUTES, Integer.toString(DEF_TIMEOUT_IN_MINUTES));
-		defaultValues.put(P_WAIT_IN_SECONDS, Integer.toString(DEF_WAIT_IN_SECONDS));
-		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
-		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_MAC_WINE_BINARY, DEF_MAC_WINE_BINARY);
+		putDefault(P_LIMIT_MATCH_FACTOR, Float.toString(DEF_LIMIT_MATCH_FACTOR));
+		putDefault(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
+		putDefault(P_USE_OPTIMIZED_MASS_SPECTRUM, Boolean.toString(DEF_USE_OPTIMIZED_MASS_SPECTRUM));
+		putDefault(P_TIMEOUT_IN_MINUTES, Integer.toString(DEF_TIMEOUT_IN_MINUTES));
+		putDefault(P_WAIT_IN_SECONDS, Integer.toString(DEF_WAIT_IN_SECONDS));
+		putDefault(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
+		putDefault(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
 	}
 
 	/**

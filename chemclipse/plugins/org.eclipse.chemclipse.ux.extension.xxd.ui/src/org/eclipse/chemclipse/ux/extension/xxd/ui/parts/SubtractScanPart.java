@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
@@ -17,9 +17,9 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModelMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedSubtractScanUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -51,7 +51,7 @@ public class SubtractScanPart extends AbstractPart<ExtendedSubtractScanUI> {
 			} else {
 				Object object = objects.get(0);
 				if(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM.equals(topic)) {
-					IScanMSD scanMSD = PreferenceSupplier.getSessionSubtractMassSpectrum();
+					IScanMSD scanMSD = PreferenceSupplierModelMSD.getSessionSubtractMassSpectrum();
 					getControl().update(scanMSD);
 					/*
 					 * Additionally try to get the latest chromatogram selection.

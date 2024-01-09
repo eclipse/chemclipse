@@ -5,16 +5,9 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.converter.ui.converterPreferencePage"      
-            class="org.eclipse.chemclipse.nmr.converter.ui.preferences.ConverterPreferencePage"
+            class="org.eclipse.chemclipse.nmr.converter.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.nmr.converter.ui.converterPreferencePage"
             name="Converter NMR">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.nmr.converter.ui.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>   
-
 </plugin>

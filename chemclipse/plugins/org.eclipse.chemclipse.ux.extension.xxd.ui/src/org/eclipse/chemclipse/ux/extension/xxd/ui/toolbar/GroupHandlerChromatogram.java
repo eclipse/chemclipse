@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskChromatogram;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferencePage;
 
 public class GroupHandlerChromatogram extends AbstractGroupHandler {
@@ -40,11 +40,11 @@ public class GroupHandlerChromatogram extends AbstractGroupHandler {
 
 		List<IPartHandler> partHandler = new ArrayList<>();
 		//
-		partHandler.add(new PartHandler("Baseline", PartSupport.PARTDESCRIPTOR_BASELINE, PreferenceConstants.P_STACK_POSITION_BASELINE_CHROMATOGRAM));
-		partHandler.add(new PartHandler("Retention Indices", PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_INDICES, PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_INDICES));
-		partHandler.add(new PartHandler("Heatmap", PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEATMAP, PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_HEATMAP));
-		partHandler.add(new PartHandler("Scan Info", PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_SCAN_INFO, PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_SCAN_INFO));
-		partHandler.add(new PartHandler("Integration", PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA));
+		partHandler.add(new PartHandler("Baseline", PartSupport.PARTDESCRIPTOR_BASELINE, PreferenceSupplier.P_STACK_POSITION_BASELINE_CHROMATOGRAM));
+		partHandler.add(new PartHandler("Retention Indices", PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_INDICES, PreferenceSupplier.P_STACK_POSITION_CHROMATOGRAM_INDICES));
+		partHandler.add(new PartHandler("Heatmap", PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEATMAP, PreferenceSupplier.P_STACK_POSITION_CHROMATOGRAM_HEATMAP));
+		partHandler.add(new PartHandler("Scan Info", PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_SCAN_INFO, PreferenceSupplier.P_STACK_POSITION_CHROMATOGRAM_SCAN_INFO));
+		partHandler.add(new PartHandler("Integration", PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, PreferenceSupplier.P_STACK_POSITION_INTEGRATION_AREA));
 		//
 		return partHandler;
 	}

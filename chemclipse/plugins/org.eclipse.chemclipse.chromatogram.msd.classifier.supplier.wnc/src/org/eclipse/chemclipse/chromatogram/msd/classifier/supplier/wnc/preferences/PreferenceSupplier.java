@@ -12,9 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.preferences;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.Activator;
@@ -27,9 +25,6 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.settings.
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -39,7 +34,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String VALUE_DELIMITER = ":"; //$NON-NLS-1$
 	//
 	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -50,29 +45,15 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<>();
-		defaultValues.put(P_WNC_IONS, DEF_WNC_IONS);
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_WNC_IONS, DEF_WNC_IONS);
 	}
 
 	public static ClassifierSettings getClassifierSettings() {

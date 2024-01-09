@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Matthias Mailänder - add a reference label setting
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
@@ -36,10 +36,10 @@ public class PreferencePagePlateChart extends FieldEditorPreferencePage implemen
 	@Override
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_PCR_REFERENCE_LABEL, ExtensionMessages.referenceLabel, LabelSetting.getOptions(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_PCR_REFERENCE_LABEL, ExtensionMessages.referenceLabel, LabelSetting.getOptions(), getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_PCR_DEFAULT_COLOR, ExtensionMessages.defaultLineColor, getFieldEditorParent()));
-		addField(new ColorCodesFieldEditor(PreferenceConstants.P_PCR_PLATE_COLOR_CODES, ExtensionMessages.colorCodes, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceSupplier.P_PCR_DEFAULT_COLOR, ExtensionMessages.defaultLineColor, getFieldEditorParent()));
+		addField(new ColorCodesFieldEditor(PreferenceSupplier.P_PCR_PLATE_COLOR_CODES, ExtensionMessages.colorCodes, getFieldEditorParent()));
 	}
 
 	@Override

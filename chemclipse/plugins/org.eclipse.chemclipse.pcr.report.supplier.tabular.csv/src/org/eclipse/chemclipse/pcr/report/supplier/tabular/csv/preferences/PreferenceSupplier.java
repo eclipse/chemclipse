@@ -12,9 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.model.settings.Delimiter;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.Activator;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMappings;
@@ -23,9 +20,6 @@ import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.VirtualChannels;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.WellMappings;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -45,7 +39,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_LIST_PATH_EXPORT = "listPathExport";
 	public static final String DEF_LIST_PATH_EXPORT = "";
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -56,35 +50,21 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<>();
-		defaultValues.put(P_DELIMITER, DEF_DELIMITER);
-		defaultValues.put(P_DECIMAL_SEPARATOR, DEF_DECIMAL_SEPARATOR);
-		defaultValues.put(P_CHANNEL_MAPPING, DEF_CHANNEL_MAPPING);
-		defaultValues.put(P_WELL_MAPPING, DEF_WELL_MAPPING);
-		defaultValues.put(P_VIRTUAL_CHANNELS, DEF_VIRTUAL_CHANNELS);
-		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
-		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_DELIMITER, DEF_DELIMITER);
+		putDefault(P_DECIMAL_SEPARATOR, DEF_DECIMAL_SEPARATOR);
+		putDefault(P_CHANNEL_MAPPING, DEF_CHANNEL_MAPPING);
+		putDefault(P_WELL_MAPPING, DEF_WELL_MAPPING);
+		putDefault(P_VIRTUAL_CHANNELS, DEF_VIRTUAL_CHANNELS);
+		putDefault(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		putDefault(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 	}
 
 	public static ChannelMappings getChannelMappings() {

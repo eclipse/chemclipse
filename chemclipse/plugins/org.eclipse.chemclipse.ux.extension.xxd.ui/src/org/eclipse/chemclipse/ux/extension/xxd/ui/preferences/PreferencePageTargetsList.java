@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -29,7 +29,7 @@ public class PreferencePageTargetsList extends FieldEditorPreferencePage impleme
 
 	public void createFieldEditors() {
 
-		addField(new TargetFieldEditor(PreferenceConstants.P_TARGET_LIST, "Targets", getFieldEditorParent()));
+		addField(new TargetFieldEditor(PreferenceSupplier.P_TARGET_LIST, "Targets", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

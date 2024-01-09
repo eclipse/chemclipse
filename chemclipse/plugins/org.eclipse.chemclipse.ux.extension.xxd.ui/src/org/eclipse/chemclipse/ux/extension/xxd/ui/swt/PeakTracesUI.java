@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -34,7 +34,7 @@ import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.PeakTracesOffsetListener;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
@@ -142,7 +142,7 @@ public class PeakTracesUI extends ScrollableChart {
 		IChromatogramMSD chromatogram = chromatogramPeak.getChromatogram();
 		IPeakModelMSD peakModel = chromatogramPeak.getPeakModel();
 		//
-		int offsetRetentionTime = preferenceStore.getInt(PreferenceConstants.P_PEAK_TRACES_OFFSET_RETENTION_TIME);
+		int offsetRetentionTime = preferenceStore.getInt(PreferenceSupplier.P_PEAK_TRACES_OFFSET_RETENTION_TIME);
 		peakTracesOffsetListener.setOffsetRetentionTime(offsetRetentionTime);
 		//
 		int startRetentionTime = peakModel.getStartRetentionTime() - offsetRetentionTime;
@@ -151,7 +151,7 @@ public class PeakTracesUI extends ScrollableChart {
 		IChromatogramSelection<?, ?> chromatogramSelection = new ChromatogramSelection<>(chromatogram);
 		chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime, false);
 		//
-		IColorScheme colors = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_PEAK_TRACES));
+		IColorScheme colors = Colors.getColorScheme(preferenceStore.getString(PreferenceSupplier.P_COLOR_SCHEME_PEAK_TRACES));
 		traces.addAll(extractTraces(massSpectrum));
 		//
 		for(Integer trace : traces) {
@@ -175,7 +175,7 @@ public class PeakTracesUI extends ScrollableChart {
 		IChromatogramWSD chromatogram = chromatogramPeak.getChromatogram();
 		IPeakModelWSD peakModel = chromatogramPeak.getPeakModel();
 		//
-		int offsetRetentionTime = preferenceStore.getInt(PreferenceConstants.P_PEAK_TRACES_OFFSET_RETENTION_TIME);
+		int offsetRetentionTime = preferenceStore.getInt(PreferenceSupplier.P_PEAK_TRACES_OFFSET_RETENTION_TIME);
 		peakTracesOffsetListener.setOffsetRetentionTime(offsetRetentionTime);
 		//
 		int startRetentionTime = peakModel.getStartRetentionTime() - offsetRetentionTime;
@@ -185,7 +185,7 @@ public class PeakTracesUI extends ScrollableChart {
 			IChromatogramSelection<?, ?> chromatogramSelection = new ChromatogramSelection<>(chromatogram);
 			chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime, false);
 			//
-			IColorScheme colors = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_PEAK_TRACES));
+			IColorScheme colors = Colors.getColorScheme(preferenceStore.getString(PreferenceSupplier.P_COLOR_SCHEME_PEAK_TRACES));
 			traces.addAll(extractTraces(scanWSD));
 			//
 			for(Integer trace : traces) {
@@ -215,7 +215,7 @@ public class PeakTracesUI extends ScrollableChart {
 		//
 		List<IIon> ions = new ArrayList<>(scanMSD.getIons());
 		Collections.sort(ions, (i1, i2) -> Float.compare(i2.getAbundance(), i1.getAbundance()));
-		int maxDisplayTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_DISPLAY_PEAK_TRACES);
+		int maxDisplayTraces = preferenceStore.getInt(PreferenceSupplier.P_MAX_DISPLAY_PEAK_TRACES);
 		//
 		exitloop:
 		for(IIon ion : ions) {
@@ -244,7 +244,7 @@ public class PeakTracesUI extends ScrollableChart {
 		//
 		List<IScanSignalWSD> scanSignals = new ArrayList<>(scanWSD.getScanSignals());
 		Collections.sort(scanSignals, (s1, s2) -> Float.compare(s2.getAbundance(), s1.getAbundance()));
-		int maxDisplayTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_DISPLAY_PEAK_TRACES);
+		int maxDisplayTraces = preferenceStore.getInt(PreferenceSupplier.P_MAX_DISPLAY_PEAK_TRACES);
 		//
 		exitloop:
 		for(IScanSignalWSD scanSignal : scanSignals) {
@@ -281,10 +281,10 @@ public class PeakTracesUI extends ScrollableChart {
 		rangeRestriction.setExtendMinY(0.0d);
 		rangeRestriction.setExtendMaxY(0.1d);
 		//
-		String titleX = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS);
-		String titleY = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
-		String titleX1 = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MINUTES);
-		String titleY1 = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		String titleX = preferenceStore.getString(PreferenceSupplier.P_TITLE_X_AXIS_MILLISECONDS);
+		String titleY = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_INTENSITY);
+		String titleX1 = preferenceStore.getString(PreferenceSupplier.P_TITLE_X_AXIS_MINUTES);
+		String titleY1 = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
 		//
 		ChartSupport.setPrimaryAxisSet(chartSettings, titleX, false, titleY);
 		ChartSupport.clearSecondaryAxes(chartSettings);

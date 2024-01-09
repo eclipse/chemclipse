@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.processors.Processor;
 import org.eclipse.chemclipse.support.ui.processors.ProcessorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -69,7 +69,7 @@ public class PreferencesProcessSupport {
 	public List<Processor> getActiveProcessors() {
 
 		updateProcessSuppliers();
-		String settings = preferenceStore.getString(PreferenceConstants.P_QUICK_ACCESS_PROCESSORS + dataCategory.name());
+		String settings = preferenceStore.getString(PreferenceSupplier.P_QUICK_ACCESS_PROCESSORS + dataCategory.name());
 		return ProcessorSupport.getActiveProcessors(processSuppliers, settings);
 	}
 

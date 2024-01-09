@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -33,8 +33,8 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.SequenceFileRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -206,8 +206,8 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof File file) {
-					preferenceStore.setValue(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER, file.getAbsolutePath());
-					if(preferenceStore.getBoolean(PreferenceConstants.P_SEQUENCE_EXPLORER_USE_SUBFOLDER)) {
+					preferenceStore.setValue(PreferenceSupplier.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER, file.getAbsolutePath());
+					if(preferenceStore.getBoolean(PreferenceSupplier.P_SEQUENCE_EXPLORER_USE_SUBFOLDER)) {
 						List<File> files = getDirectories(file);
 						setSubFolderContent(files);
 					} else {
@@ -234,11 +234,11 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 				DirectoryDialog directoryDialog = new DirectoryDialog(DisplayUtils.getShell(button));
 				directoryDialog.setText("Sequence Folder");
 				directoryDialog.setMessage("Select the sequence root folder.");
-				directoryDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER));
+				directoryDialog.setFilterPath(preferenceStore.getString(PreferenceSupplier.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER));
 				String directory = directoryDialog.open();
 				if(directory != null) {
 					List<File> files = getDirectories(new File(directory));
-					preferenceStore.setValue(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER, directory);
+					preferenceStore.setValue(PreferenceSupplier.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER, directory);
 					setRootFolderContent(files);
 				}
 			}
@@ -275,7 +275,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof File file && file.isDirectory()) {
-					preferenceStore.setValue(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER, file.getAbsolutePath());
+					preferenceStore.setValue(PreferenceSupplier.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER, file.getAbsolutePath());
 					setSequenceListContent(file);
 				}
 			}
@@ -354,7 +354,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 		rootFolderComboViewer.setInput(files);
 		//
 		if(!files.isEmpty()) {
-			int index = getSelectedDirectoryIndex(files, preferenceStore.getString(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER));
+			int index = getSelectedDirectoryIndex(files, preferenceStore.getString(PreferenceSupplier.P_SEQUENCE_EXPLORER_PATH_PARENT_FOLDER));
 			File file = files.get(index);
 			rootFolderComboViewer.getCombo().select(index);
 			//
@@ -369,7 +369,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 		subFolderComboViewer.setInput(files);
 		//
 		if(!files.isEmpty()) {
-			int index = getSelectedDirectoryIndex(files, preferenceStore.getString(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER));
+			int index = getSelectedDirectoryIndex(files, preferenceStore.getString(PreferenceSupplier.P_SEQUENCE_EXPLORER_PATH_SUB_FOLDER));
 			File file = files.get(index);
 			subFolderComboViewer.getCombo().select(index);
 			setSequenceListContent(file);
@@ -411,13 +411,13 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 
 	private void applySettings() {
 
-		File file = new File(preferenceStore.getString(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER));
+		File file = new File(preferenceStore.getString(PreferenceSupplier.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER));
 		if(file.exists() && file.isDirectory()) {
 			List<File> files = getDirectories(file);
 			setRootFolderContent(files);
 		}
 		//
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SEQUENCE_EXPLORER_USE_SUBFOLDER)) {
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SEQUENCE_EXPLORER_USE_SUBFOLDER)) {
 			subFolderComboViewer.getCombo().setEnabled(true);
 		} else {
 			subFolderComboViewer.getCombo().setEnabled(false);

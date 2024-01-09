@@ -17,10 +17,4 @@
             name="Wavelength Selective Detector (MSD)">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.ux.extension.wsd.ui.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>   
 </plugin>

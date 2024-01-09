@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class IdentificationTargetSupport {
@@ -26,10 +26,10 @@ public class IdentificationTargetSupport {
 	public static IIdentificationTarget getTargetUnknown(IScan scan) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		float matchFactor = preferenceStore.getFloat(PreferenceConstants.P_MATCH_QUALITY_UNKNOWN_TARGET);
-		boolean addRetentionIndex = preferenceStore.getBoolean(PreferenceConstants.P_UNKNOWN_TARGET_ADD_RETENTION_INDEX);
+		float matchFactor = preferenceStore.getFloat(PreferenceSupplier.P_MATCH_QUALITY_UNKNOWN_TARGET);
+		boolean addRetentionIndex = preferenceStore.getBoolean(PreferenceSupplier.P_UNKNOWN_TARGET_ADD_RETENTION_INDEX);
 		IIdentificationTarget identificationTarget = IIdentificationTarget.createDefaultTarget(getUnknownTargetName(scan, addRetentionIndex), CasSupport.CAS_DEFAULT, IDENTIFIER_UNKNOWN, matchFactor);
-		identificationTarget.setVerified(preferenceStore.getBoolean(PreferenceConstants.P_VERIFY_UNKNOWN_TARGET));
+		identificationTarget.setVerified(preferenceStore.getBoolean(PreferenceSupplier.P_VERIFY_UNKNOWN_TARGET));
 		//
 		return identificationTarget;
 	}

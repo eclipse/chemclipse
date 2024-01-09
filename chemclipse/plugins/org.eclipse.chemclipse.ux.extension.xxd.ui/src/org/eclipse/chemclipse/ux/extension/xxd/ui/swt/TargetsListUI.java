@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetListFi
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -189,19 +189,19 @@ public class TargetsListUI extends ExtendedTableViewer {
 							//
 							if(retentionTime != null && retentionTimeTarget != 0) {
 								//
-								boolean useAbsoluteDeviation = preferenceStore.getBoolean(PreferenceConstants.P_USE_ABSOLUTE_DEVIATION_RETENTION_TIME);
+								boolean useAbsoluteDeviation = preferenceStore.getBoolean(PreferenceSupplier.P_USE_ABSOLUTE_DEVIATION_RETENTION_TIME);
 								double deviation;
 								double deviationWarn;
 								double deviationError;
 								//
 								if(useAbsoluteDeviation) {
 									deviation = Math.abs(retentionTime - retentionTimeTarget);
-									deviationWarn = preferenceStore.getInt(PreferenceConstants.P_RETENTION_TIME_DEVIATION_ABS_OK);
-									deviationError = preferenceStore.getInt(PreferenceConstants.P_RETENTION_TIME_DEVIATION_ABS_WARN);
+									deviationWarn = preferenceStore.getInt(PreferenceSupplier.P_RETENTION_TIME_DEVIATION_ABS_OK);
+									deviationError = preferenceStore.getInt(PreferenceSupplier.P_RETENTION_TIME_DEVIATION_ABS_WARN);
 								} else {
 									deviation = (Math.abs(retentionTime - retentionTimeTarget) / retentionTimeTarget) * 100.0d;
-									deviationWarn = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_TIME_DEVIATION_REL_OK);
-									deviationError = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_TIME_DEVIATION_REL_WARN);
+									deviationWarn = preferenceStore.getFloat(PreferenceSupplier.P_RETENTION_TIME_DEVIATION_REL_OK);
+									deviationError = preferenceStore.getFloat(PreferenceSupplier.P_RETENTION_TIME_DEVIATION_REL_WARN);
 								}
 								//
 								if(deviation < deviationWarn) {
@@ -244,19 +244,19 @@ public class TargetsListUI extends ExtendedTableViewer {
 							//
 							if(retentionIndex != null && retentionIndexTarget != 0) {
 								//
-								boolean useAbsoluteDeviation = preferenceStore.getBoolean(PreferenceConstants.P_USE_ABSOLUTE_DEVIATION_RETENTION_INDEX);
+								boolean useAbsoluteDeviation = preferenceStore.getBoolean(PreferenceSupplier.P_USE_ABSOLUTE_DEVIATION_RETENTION_INDEX);
 								double deviation;
 								double deviationWarn;
 								double deviationError;
 								//
 								if(useAbsoluteDeviation) {
 									deviation = Math.abs(retentionIndex - retentionIndexTarget);
-									deviationWarn = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_ABS_OK);
-									deviationError = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_ABS_WARN);
+									deviationWarn = preferenceStore.getFloat(PreferenceSupplier.P_RETENTION_INDEX_DEVIATION_ABS_OK);
+									deviationError = preferenceStore.getFloat(PreferenceSupplier.P_RETENTION_INDEX_DEVIATION_ABS_WARN);
 								} else {
 									deviation = (Math.abs(retentionIndex - retentionIndexTarget) / retentionIndexTarget) * 100.0d;
-									deviationWarn = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_REL_OK);
-									deviationError = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_REL_WARN);
+									deviationWarn = preferenceStore.getFloat(PreferenceSupplier.P_RETENTION_INDEX_DEVIATION_REL_OK);
+									deviationError = preferenceStore.getFloat(PreferenceSupplier.P_RETENTION_INDEX_DEVIATION_REL_WARN);
 								}
 								//
 								if(deviation < deviationWarn) {

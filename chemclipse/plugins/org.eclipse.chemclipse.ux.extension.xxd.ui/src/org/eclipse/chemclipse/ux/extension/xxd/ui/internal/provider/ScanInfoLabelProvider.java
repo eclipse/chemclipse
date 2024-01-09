@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Image;
 
@@ -41,7 +41,7 @@ public class ScanInfoLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String IONS = "m/z...";
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private int limitSimTraces = preferenceStore.getInt(PreferenceConstants.P_LIMIT_SIM_TRACES);
+	private int limitSimTraces = preferenceStore.getInt(PreferenceSupplier.P_LIMIT_SIM_TRACES);
 	//
 	public static final String[] TITLES = { //
 			SCAN, //

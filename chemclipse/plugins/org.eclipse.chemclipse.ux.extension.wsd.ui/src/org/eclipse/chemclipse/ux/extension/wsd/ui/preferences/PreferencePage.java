@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.wsd.ui.preferences;
 
@@ -26,7 +26,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Wavelength Selective Detector (WSD)");
+		setTitle("Wavelength Selective Detector (WSD)");
+		setDescription("");
 	}
 
 	/**
@@ -36,8 +37,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
-		addField(new RetentionTimeMinutesFieldEditor(PreferenceConstants.P_OVERLAY_X_OFFSET, "Retention time offset (minutes):", PreferenceConstants.MIN_X_OFFSET, PreferenceConstants.MAX_X_OFFSET, getFieldEditorParent()));
-		addField(new IntegerFieldEditor(PreferenceConstants.P_OVERLAY_Y_OFFSET, "Abundance offset:", getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_OVERLAY_X_OFFSET, "Retention time offset (minutes):", PreferenceSupplier.MIN_X_OFFSET, PreferenceSupplier.MAX_X_OFFSET, getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_OVERLAY_Y_OFFSET, "Abundance offset:", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_PATH_OPEN_CHROMATOGRAMS, "Path Chromatograms", getFieldEditorParent()));

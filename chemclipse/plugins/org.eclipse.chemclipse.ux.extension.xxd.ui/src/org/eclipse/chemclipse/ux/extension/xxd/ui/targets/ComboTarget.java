@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.model.targets.TargetValidator;
 import org.eclipse.chemclipse.model.updates.ITargetUpdateListener;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ContentProposal;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -82,11 +82,11 @@ public class ComboTarget extends Composite {
 	public void updateContentProposals() {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		boolean useTargetList = preferenceStore.getBoolean(PreferenceConstants.P_USE_TARGET_LIST);
+		boolean useTargetList = preferenceStore.getBoolean(PreferenceSupplier.P_USE_TARGET_LIST);
 		//
 		String[] items;
 		if(useTargetList) {
-			items = targetListUtil.parseString(preferenceStore.getString(PreferenceConstants.P_TARGET_LIST));
+			items = targetListUtil.parseString(preferenceStore.getString(PreferenceSupplier.P_TARGET_LIST));
 			Arrays.sort(items);
 		} else {
 			items = new String[]{};

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.preferences;
 
@@ -15,11 +15,21 @@ import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-public class PreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
+	public static final int MIN_X_OFFSET = 0; // = 0.0 minutes
+	public static final int MAX_X_OFFSET = 6000000; // = 100.0 minutes;
+	//
+	public static final String P_OVERLAY_X_OFFSET = "overlayXOffset";
+	public static final int DEF_OVERLAY_X_OFFSET = 0;
+	public static final String P_OVERLAY_Y_OFFSET = "overlayYOffset";
+	public static final int DEF_OVERLAY_Y_OFFSET = 0;
+	//
 	public static final String P_SELECTED_ORGANIC_COMPOUND = "selectedOrganicCompound";
 	//
 	public static final String P_ORGANIC_COMPOUND_HYDROCARBONS = "organicCompoundHydrocarbons";
@@ -42,12 +52,32 @@ public class PreferenceSupplier {
 	//
 	public static final String P_PATH_OPEN_CHROMATOGRAMS = "pathOpenChromatograms";
 	public static final String DEF_PATH_OPEN_CHROMATOGRAMS = "";
+	//
+	private static IPreferenceSupplier preferenceSupplier = null;
 
-	/*
-	 * Use only static methods.
-	 */
-	private PreferenceSupplier() {
+	public static IPreferenceSupplier INSTANCE() {
 
+		if(preferenceSupplier == null) {
+			preferenceSupplier = new PreferenceSupplier();
+		}
+		return preferenceSupplier;
+	}
+
+	@Override
+	public String getPreferenceNode() {
+
+		return Activator.getDefault().getBundle().getSymbolicName();
+	}
+
+	@Override
+	public void initializeDefaults() {
+
+		putDefault(P_OVERLAY_X_OFFSET, DEF_OVERLAY_X_OFFSET);
+		putDefault(P_OVERLAY_Y_OFFSET, DEF_OVERLAY_Y_OFFSET);
+		putDefault(PreferenceSupplier.P_SELECTED_ORGANIC_COMPOUND, PreferenceSupplier.P_ORGANIC_COMPOUND_HYDROCARBONS);
+		putDefault(PreferenceSupplier.P_MAGNIFICATION_FACTOR, PreferenceSupplier.DEF_MAGNIFICATION_FACTOR);
+		putDefault(PreferenceSupplier.P_USE_PROFILE_MASS_SPECTRUM_VIEW, PreferenceSupplier.DEF_USE_PROFILE_MASS_SPECTRUM_VIEW);
+		putDefault(PreferenceSupplier.P_PATH_OPEN_CHROMATOGRAMS, PreferenceSupplier.DEF_PATH_OPEN_CHROMATOGRAMS);
 	}
 
 	public static String[][] getOrganicCompoundPresets() {
@@ -113,6 +143,7 @@ public class PreferenceSupplier {
 			 */
 			compoundIons = compoundIonsEmpty;
 		}
+		//
 		return compoundIons;
 	}
 
@@ -123,8 +154,7 @@ public class PreferenceSupplier {
 	 */
 	public static int getOverlayXOffset() {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getInt(PreferenceConstants.P_OVERLAY_X_OFFSET);
+		return INSTANCE().getInteger(P_OVERLAY_X_OFFSET);
 	}
 
 	/**
@@ -134,25 +164,21 @@ public class PreferenceSupplier {
 	 */
 	public static int getOverlayYOffset() {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getInt(PreferenceConstants.P_OVERLAY_Y_OFFSET);
+		return INSTANCE().getInteger(P_OVERLAY_Y_OFFSET);
 	}
 
 	public static boolean useProfileMassSpectrumView() {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getBoolean(P_USE_PROFILE_MASS_SPECTRUM_VIEW);
+		return INSTANCE().getBoolean(P_USE_PROFILE_MASS_SPECTRUM_VIEW);
 	}
 
 	public static String getPathOpenChromatograms() {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getString(P_PATH_OPEN_CHROMATOGRAMS);
+		return INSTANCE().get(P_PATH_OPEN_CHROMATOGRAMS);
 	}
 
 	public static void setPathOpenChromatograms(String value) {
 
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setValue(P_PATH_OPEN_CHROMATOGRAMS, value);
+		INSTANCE().set(P_PATH_OPEN_CHROMATOGRAMS, value);
 	}
 }

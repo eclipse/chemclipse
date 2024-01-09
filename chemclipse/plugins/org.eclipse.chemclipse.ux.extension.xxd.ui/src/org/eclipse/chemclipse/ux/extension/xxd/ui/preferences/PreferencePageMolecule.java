@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -31,9 +31,9 @@ public class PreferencePageMolecule extends FieldEditorPreferencePage implements
 
 	public void createFieldEditors() {
 
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_MOLECULE_PATH_EXPORT, "Molecule Path Export", getFieldEditorParent()));
-		addField(new ExtendedIntegerFieldEditor(PreferenceConstants.P_LENGTH_MOLECULE_NAME_EXPORT, "Molecule Name Length", PreferenceConstants.MIN_LENGTH_NAME_EXPORT, PreferenceConstants.MAX_LENGTH_NAME_EXPORT, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PREFER_OFFLINE_MOLECULE, "Prefer Offline Libraries", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_MOLECULE_PATH_EXPORT, "Molecule Path Export", getFieldEditorParent()));
+		addField(new ExtendedIntegerFieldEditor(PreferenceSupplier.P_LENGTH_MOLECULE_NAME_EXPORT, "Molecule Name Length", PreferenceSupplier.MIN_LENGTH_NAME_EXPORT, PreferenceSupplier.MAX_LENGTH_NAME_EXPORT, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_PREFER_OFFLINE_MOLECULE, "Prefer Offline Libraries", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

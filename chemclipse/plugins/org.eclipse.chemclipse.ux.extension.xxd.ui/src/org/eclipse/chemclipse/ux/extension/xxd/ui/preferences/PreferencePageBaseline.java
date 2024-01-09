@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -33,8 +33,8 @@ public class PreferencePageBaseline extends FieldEditorPreferencePage implements
 	@Override
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_BASELINE_CHART_COMPRESSION_TYPE, ExtensionMessages.compressionType, ChartOptions.COMPRESSION_TYPES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_BASELINE, ExtensionMessages.displayColorScheme, Colors.getAvailableColorSchemes(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_BASELINE_CHART_COMPRESSION_TYPE, ExtensionMessages.compressionType, ChartOptions.COMPRESSION_TYPES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_COLOR_SCHEME_DISPLAY_BASELINE, ExtensionMessages.displayColorScheme, Colors.getAvailableColorSchemes(), getFieldEditorParent()));
 	}
 
 	@Override

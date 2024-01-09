@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,7 +35,7 @@ import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.MassSpectrumIdentifierRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.WaveSpectrumIdentifierRunnable;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -241,7 +241,7 @@ public class ScanIdentifierUI extends Composite {
 		/*
 		 * Try to set the selected identifier.
 		 */
-		String id = preferenceStore.getString(PreferenceConstants.P_SCAN_IDENTIFER_MSD);
+		String id = preferenceStore.getString(PreferenceSupplier.P_SCAN_IDENTIFER_MSD);
 		if(!id.isEmpty()) {
 			exitloop:
 			for(IMassSpectrumIdentifierSupplier identifierSupplier : identifierSuppliers) {
@@ -270,7 +270,7 @@ public class ScanIdentifierUI extends Composite {
 		/*
 		 * Try to set the selected identifier.
 		 */
-		String id = preferenceStore.getString(PreferenceConstants.P_SCAN_IDENTIFER_WSD);
+		String id = preferenceStore.getString(PreferenceSupplier.P_SCAN_IDENTIFER_WSD);
 		if(!id.isEmpty()) {
 			exitloop:
 			for(IWaveSpectrumIdentifierSupplier identifierSupplier : identifierSuppliers) {
@@ -313,7 +313,7 @@ public class ScanIdentifierUI extends Composite {
 				public void widgetSelected(SelectionEvent e) {
 
 					button.setToolTipText(identifierSupplier.getIdentifierName());
-					preferenceStore.setValue(PreferenceConstants.P_SCAN_IDENTIFER_MSD, identifierSupplier.getId());
+					preferenceStore.setValue(PreferenceSupplier.P_SCAN_IDENTIFER_MSD, identifierSupplier.getId());
 					massSpectrumIdentifierSupplier = identifierSupplier;
 					runIdentification(e.display);
 				}
@@ -340,7 +340,7 @@ public class ScanIdentifierUI extends Composite {
 				public void widgetSelected(SelectionEvent e) {
 
 					button.setToolTipText(identifierSupplier.getIdentifierName());
-					preferenceStore.setValue(PreferenceConstants.P_SCAN_IDENTIFER_WSD, identifierSupplier.getId());
+					preferenceStore.setValue(PreferenceSupplier.P_SCAN_IDENTIFER_WSD, identifierSupplier.getId());
 					waveSpectrumIdentifierSupplier = identifierSupplier;
 					runIdentification(e.display);
 				}

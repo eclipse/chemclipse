@@ -12,16 +12,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.Activator;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -66,7 +60,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_LIST_PATH_EXPORT = "listPathExport";
 	public static final String DEF_LIST_PATH_EXPORT = "";
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -77,45 +71,29 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
+		putDefault(P_CHROMATOGRAM_VERSION_SAVE, DEF_CHROMATOGRAM_VERSION_SAVE);
+		putDefault(P_CHROMATOGRAM_COMPRESSION_LEVEL, Integer.toString(DEF_CHROMATOGRAM_COMPRESSION_LEVEL));
+		putDefault(P_FORCE_LOAD_ALTERNATE_DETECTOR, Boolean.toString(DEF_FORCE_LOAD_ALTERNATE_DETECTOR));
+		putDefault(P_USE_SCAN_PROXIES, Boolean.toString(DEF_USE_SCAN_PROXIES));
+		putDefault(P_LOAD_SCAN_PROXIES_IN_BACKGROUND, Boolean.toString(DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND));
+		putDefault(P_MIN_BYTES_TO_LOAD_IN_BACKGROUND, Integer.toString(DEF_MIN_BYTES_TO_LOAD_IN_BACKGROUND));
 		//
-		defaultValues.put(P_CHROMATOGRAM_VERSION_SAVE, DEF_CHROMATOGRAM_VERSION_SAVE);
-		defaultValues.put(P_CHROMATOGRAM_COMPRESSION_LEVEL, Integer.toString(DEF_CHROMATOGRAM_COMPRESSION_LEVEL));
-		defaultValues.put(P_FORCE_LOAD_ALTERNATE_DETECTOR, Boolean.toString(DEF_FORCE_LOAD_ALTERNATE_DETECTOR));
-		defaultValues.put(P_USE_SCAN_PROXIES, Boolean.toString(DEF_USE_SCAN_PROXIES));
-		defaultValues.put(P_LOAD_SCAN_PROXIES_IN_BACKGROUND, Boolean.toString(DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND));
-		defaultValues.put(P_MIN_BYTES_TO_LOAD_IN_BACKGROUND, Integer.toString(DEF_MIN_BYTES_TO_LOAD_IN_BACKGROUND));
+		putDefault(P_METHOD_VERSION_SAVE, DEF_METHOD_VERSION_SAVE);
+		putDefault(P_METHOD_COMPRESSION_LEVEL, Integer.toString(DEF_METHOD_COMPRESSION_LEVEL));
 		//
-		defaultValues.put(P_METHOD_VERSION_SAVE, DEF_METHOD_VERSION_SAVE);
-		defaultValues.put(P_METHOD_COMPRESSION_LEVEL, Integer.toString(DEF_METHOD_COMPRESSION_LEVEL));
+		putDefault(P_QUANTITATION_DB_VERSION_SAVE, DEF_QUANTITATION_DB_VERSION_SAVE);
+		putDefault(P_QUANTITATION_DB_COMPRESSION_LEVEL, Integer.toString(DEF_QUANTITATION_DB_COMPRESSION_LEVEL));
 		//
-		defaultValues.put(P_QUANTITATION_DB_VERSION_SAVE, DEF_QUANTITATION_DB_VERSION_SAVE);
-		defaultValues.put(P_QUANTITATION_DB_COMPRESSION_LEVEL, Integer.toString(DEF_QUANTITATION_DB_COMPRESSION_LEVEL));
-		//
-		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
-		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
-		//
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		putDefault(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 	}
 
 	public static String getChromatogramVersionSave() {

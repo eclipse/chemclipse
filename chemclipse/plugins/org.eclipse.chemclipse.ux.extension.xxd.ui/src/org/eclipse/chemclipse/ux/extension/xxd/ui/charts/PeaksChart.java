@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,13 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
 
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -51,8 +51,8 @@ public class PeaksChart extends LineChart {
 		/*
 		 * Initialize secondary axis titles.
 		 */
-		titleMinutes = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MINUTES);
-		titleRelativeIntensity = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		titleMinutes = preferenceStore.getString(PreferenceSupplier.P_TITLE_X_AXIS_MINUTES);
+		titleRelativeIntensity = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
 		//
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.setOrientation(SWT.HORIZONTAL);
@@ -87,14 +87,14 @@ public class PeaksChart extends LineChart {
 
 		IChartSettings chartSettings = getChartSettings();
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
-		primaryAxisSettingsX.setTitle(preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS));
+		primaryAxisSettingsX.setTitle(preferenceStore.getString(PreferenceSupplier.P_TITLE_X_AXIS_MILLISECONDS));
 		//
-		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS_PEAKS;
+		String positionNode = PreferenceSupplier.P_POSITION_X_AXIS_MILLISECONDS_PEAKS;
 		String pattern = "0.0##";
-		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS_PEAKS;
-		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS_PEAKS;
-		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS_PEAKS;
-		boolean isShowAxis = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS_PEAKS);
+		String colorNode = PreferenceSupplier.P_COLOR_X_AXIS_MILLISECONDS_PEAKS;
+		String gridLineStyleNode = PreferenceSupplier.P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS_PEAKS;
+		String gridColorNode = PreferenceSupplier.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS_PEAKS;
+		boolean isShowAxis = ChartSupport.getBoolean(PreferenceSupplier.P_SHOW_X_AXIS_MILLISECONDS_PEAKS);
 		//
 		ChartSupport.setAxisSettings(primaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 		primaryAxisSettingsX.setVisible(isShowAxis);
@@ -104,14 +104,14 @@ public class PeaksChart extends LineChart {
 
 		IChartSettings chartSettings = getChartSettings();
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
-		primaryAxisSettingsY.setTitle(preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY));
+		primaryAxisSettingsY.setTitle(preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_INTENSITY));
 		//
-		String positionNode = PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY_PEAKS;
+		String positionNode = PreferenceSupplier.P_POSITION_Y_AXIS_INTENSITY_PEAKS;
 		String pattern = "0.0#E0";
-		String colorNode = PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY_PEAKS;
-		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_INTENSITY_PEAKS;
-		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_INTENSITY_PEAKS;
-		boolean isShowAxis = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY_PEAKS);
+		String colorNode = PreferenceSupplier.P_COLOR_Y_AXIS_INTENSITY_PEAKS;
+		String gridLineStyleNode = PreferenceSupplier.P_GRIDLINE_STYLE_Y_AXIS_INTENSITY_PEAKS;
+		String gridColorNode = PreferenceSupplier.P_GRIDLINE_COLOR_Y_AXIS_INTENSITY_PEAKS;
+		boolean isShowAxis = ChartSupport.getBoolean(PreferenceSupplier.P_SHOW_Y_AXIS_INTENSITY_PEAKS);
 		//
 		ChartSupport.setAxisSettings(primaryAxisSettingsY, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
 		primaryAxisSettingsY.setVisible(isShowAxis);
@@ -122,18 +122,18 @@ public class PeaksChart extends LineChart {
 		IChartSettings chartSettings = getChartSettings();
 		ISecondaryAxisSettings axisSettings = ChartSupport.getSecondaryAxisSettingsX(titleMinutes, chartSettings);
 		//
-		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_MINUTES_PEAKS;
+		String positionNode = PreferenceSupplier.P_POSITION_X_AXIS_MINUTES_PEAKS;
 		String pattern = "0.00";
-		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_MINUTES_PEAKS;
-		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES_PEAKS;
-		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES_PEAKS;
-		boolean isShowAxis = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MINUTES_PEAKS);
-		boolean isShowAxisTitle = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MINUTES);
+		String colorNode = PreferenceSupplier.P_COLOR_X_AXIS_MINUTES_PEAKS;
+		String gridLineStyleNode = PreferenceSupplier.P_GRIDLINE_STYLE_X_AXIS_MINUTES_PEAKS;
+		String gridColorNode = PreferenceSupplier.P_GRIDLINE_COLOR_X_AXIS_MINUTES_PEAKS;
+		boolean isShowAxis = ChartSupport.getBoolean(PreferenceSupplier.P_SHOW_X_AXIS_MINUTES_PEAKS);
+		boolean isShowAxisTitle = ChartSupport.getBoolean(PreferenceSupplier.P_SHOW_X_AXIS_TITLE_MINUTES);
 		//
-		String title = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MINUTES);
-		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_MINUTES);
-		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_MINUTES);
-		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_X_AXIS_MINUTES);
+		String title = preferenceStore.getString(PreferenceSupplier.P_TITLE_X_AXIS_MINUTES);
+		String name = preferenceStore.getString(PreferenceSupplier.P_FONT_NAME_X_AXIS_MINUTES);
+		int height = preferenceStore.getInt(PreferenceSupplier.P_FONT_SIZE_X_AXIS_MINUTES);
+		int style = preferenceStore.getInt(PreferenceSupplier.P_FONT_STYLE_X_AXIS_MINUTES);
 		Font titleFont = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
 		//
 		if(isShowAxis) {
@@ -169,18 +169,18 @@ public class PeaksChart extends LineChart {
 		IChartSettings chartSettings = getChartSettings();
 		ISecondaryAxisSettings axisSettings = ChartSupport.getSecondaryAxisSettingsY(titleRelativeIntensity, chartSettings);
 		//
-		String positionNode = PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY_PEAKS;
+		String positionNode = PreferenceSupplier.P_POSITION_Y_AXIS_RELATIVE_INTENSITY_PEAKS;
 		String pattern = "0.00";
-		String colorNode = PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS;
-		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY_PEAKS;
-		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS;
-		boolean isShowAxis = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY_PEAKS);
-		boolean isShowAxisTitle = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY);
+		String colorNode = PreferenceSupplier.P_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS;
+		String gridLineStyleNode = PreferenceSupplier.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY_PEAKS;
+		String gridColorNode = PreferenceSupplier.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY_PEAKS;
+		boolean isShowAxis = ChartSupport.getBoolean(PreferenceSupplier.P_SHOW_Y_AXIS_RELATIVE_INTENSITY_PEAKS);
+		boolean isShowAxisTitle = ChartSupport.getBoolean(PreferenceSupplier.P_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY);
 		//
-		String title = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
-		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY);
-		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_Y_AXIS_RELATIVE_INTENSITY);
-		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY);
+		String title = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		String name = preferenceStore.getString(PreferenceSupplier.P_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY);
+		int height = preferenceStore.getInt(PreferenceSupplier.P_FONT_SIZE_Y_AXIS_RELATIVE_INTENSITY);
+		int style = preferenceStore.getInt(PreferenceSupplier.P_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY);
 		Font titleFont = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
 		//
 		if(isShowAxis) {

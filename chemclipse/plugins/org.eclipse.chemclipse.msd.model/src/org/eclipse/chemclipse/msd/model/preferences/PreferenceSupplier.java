@@ -12,9 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.Activator;
@@ -25,9 +22,6 @@ import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -54,7 +48,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	 */
 	private static IScanMSD sessionSubtractMassSpectrum;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -65,34 +59,20 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
-		defaultValues.put(P_USE_NOMINAL_MZ, Boolean.toString(DEF_USE_NOMINAL_MZ));
-		defaultValues.put(P_USE_NORMALIZED_SCAN, Boolean.toString(DEF_USE_NORMALIZED_SCAN));
-		defaultValues.put(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE);
-		defaultValues.put(P_USE_PEAKS_INSTEAD_OF_SCANS, Boolean.toString(DEF_USE_PEAKS_INSTEAD_OF_SCANS));
-		defaultValues.put(P_COPY_TRACES_CLIPBOARD, Integer.toString(DEF_COPY_TRACES_CLIPBOARD));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
+		putDefault(P_USE_NOMINAL_MZ, Boolean.toString(DEF_USE_NOMINAL_MZ));
+		putDefault(P_USE_NORMALIZED_SCAN, Boolean.toString(DEF_USE_NORMALIZED_SCAN));
+		putDefault(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE);
+		putDefault(P_USE_PEAKS_INSTEAD_OF_SCANS, Boolean.toString(DEF_USE_PEAKS_INSTEAD_OF_SCANS));
+		putDefault(P_COPY_TRACES_CLIPBOARD, Integer.toString(DEF_COPY_TRACES_CLIPBOARD));
 	}
 
 	public static void loadSessionSubtractMassSpectrum() {

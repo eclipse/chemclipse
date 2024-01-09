@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,15 +18,15 @@ import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IRatingSupplier;
-import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModel;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Image;
 
@@ -129,7 +129,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 		DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 		String deltaRetentionTime = "";
 		if(retentionTime != null) {
-			if(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SHOW_DEVIATION_RT)) {
+			if(preferenceStore.getBoolean(PreferenceSupplier.P_TARGETS_TABLE_SHOW_DEVIATION_RT)) {
 				int delta = libraryInformation.getRetentionTime() - retentionTime;
 				deltaRetentionTime = " [" + decimalFormat.format(delta / IChromatogramOverview.MINUTE_CORRELATION_FACTOR) + "]";
 			}
@@ -145,11 +145,11 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 
 		DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 		DecimalFormat decimalFormatInteger = ValueFormat.getDecimalFormatEnglish("0");
-		boolean showRetentionIndexWithoutDecimals = PreferenceSupplier.showRetentionIndexWithoutDecimals();
+		boolean showRetentionIndexWithoutDecimals = PreferenceSupplierModel.showRetentionIndexWithoutDecimals();
 		//
 		String deltaRetentionIndex = "";
 		if(retentionIndex != null) {
-			if(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SHOW_DEVIATION_RI)) {
+			if(preferenceStore.getBoolean(PreferenceSupplier.P_TARGETS_TABLE_SHOW_DEVIATION_RI)) {
 				float delta = libraryInformation.getRetentionIndex() - retentionIndex;
 				if(showRetentionIndexWithoutDecimals) {
 					deltaRetentionIndex = " [" + decimalFormatInteger.format(delta) + "]";

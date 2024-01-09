@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -29,20 +29,20 @@ public class PreferencePageFileExplorer extends FieldEditorPreferencePage implem
 
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_MSD, "MSD (Quadrupole, IonTrap, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_LIBRARY_MSD, "MSD (Libraries, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_SCANS_MSD, "MSD (MALDI-TOF, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_CSD, "CSD (FID, ECD, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_WSD, "WSD (UV/Vis, DAD, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_ISD, "ISD (Raman, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_TSD, "TSD (IMS, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_XIR, "XIR (FTIR, NIR, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_NMR, "NMR", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_CAL, "CAL", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_PCR, "PCR", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_SEQUENCE, "SEQ (Sequences)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_METHOD, "MTH (Methods)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_DATA_QUANT_DB, "QDB (Quantitation Databases)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_MSD, "MSD (Quadrupole, IonTrap, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_LIBRARY_MSD, "MSD (Libraries, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_SCANS_MSD, "MSD (MALDI-TOF, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_CSD, "CSD (FID, ECD, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_WSD, "WSD (UV/Vis, DAD, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_ISD, "ISD (Raman, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_TSD, "TSD (IMS, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_XIR, "XIR (FTIR, NIR, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_NMR, "NMR", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_CAL, "CAL", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_PCR, "PCR", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_SEQUENCE, "SEQ (Sequences)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_METHOD, "MTH (Methods)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_QUANT_DB, "QDB (Quantitation Databases)", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

@@ -18,12 +18,12 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModel;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -60,7 +60,7 @@ public class PeakTableRetentionIndexLabelProvider extends LabelProvider implemen
 					text = decimalFormat.format(peakMaximum.getRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 1:
-					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+					if(PreferenceSupplierModel.showRetentionIndexWithoutDecimals()) {
 						text = Integer.toString((int)peakMaximum.getRetentionIndex());
 					} else {
 						text = decimalFormat.format(peakMaximum.getRetentionIndex());

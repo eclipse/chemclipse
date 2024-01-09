@@ -12,9 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettingsCSD;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettingsMSD;
@@ -22,9 +19,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.set
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -49,7 +43,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_PER_ION_CALCULATION = "perIonCalculation";
 	public static final boolean DEF_PER_ION_CALCULATION = true;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -60,32 +54,18 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_DERIVATIVE, Integer.toString(DEF_DERIVATIVE));
-		defaultValues.put(P_ORDER, Integer.toString(DEF_ORDER));
-		defaultValues.put(P_WIDTH, Integer.toString(DEF_WIDTH));
-		defaultValues.put(P_PER_ION_CALCULATION, Boolean.toString(DEF_PER_ION_CALCULATION));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_DERIVATIVE, Integer.toString(DEF_DERIVATIVE));
+		putDefault(P_ORDER, Integer.toString(DEF_ORDER));
+		putDefault(P_WIDTH, Integer.toString(DEF_WIDTH));
+		putDefault(P_PER_ION_CALCULATION, Boolean.toString(DEF_PER_ION_CALCULATION));
 	}
 
 	public static ChromatogramFilterSettingsCSD getFilterSettings() {

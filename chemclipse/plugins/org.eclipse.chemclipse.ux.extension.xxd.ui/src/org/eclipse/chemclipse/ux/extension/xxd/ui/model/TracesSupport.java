@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.WavelengthSupport;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
@@ -105,18 +105,18 @@ public class TracesSupport {
 
 	private static int getNumberOfTraces() {
 
-		return preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
+		return preferenceStore.getInt(PreferenceSupplier.P_MAX_COPY_SCAN_TRACES);
 	}
 
 	private static boolean isSortTraces() {
 
-		return preferenceStore.getBoolean(PreferenceConstants.P_SORT_COPY_TRACES);
+		return preferenceStore.getBoolean(PreferenceSupplier.P_SORT_COPY_TRACES);
 	}
 
 	private static TracesExportOption getTracesExportOption() {
 
 		try {
-			return TracesExportOption.valueOf(preferenceStore.getString(PreferenceConstants.P_TRACES_EXPORT_OPTION));
+			return TracesExportOption.valueOf(preferenceStore.getString(PreferenceSupplier.P_TRACES_EXPORT_OPTION));
 		} catch(Exception e) {
 			return TracesExportOption.SIMPLE_TEXT;
 		}

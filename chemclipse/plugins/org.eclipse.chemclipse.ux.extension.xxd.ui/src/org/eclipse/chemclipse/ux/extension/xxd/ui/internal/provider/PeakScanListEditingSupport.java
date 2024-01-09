@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add support for name editing, improve classifier support
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
@@ -17,10 +17,10 @@ import java.text.DecimalFormat;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
-import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.targets.TargetSupport;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModel;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -77,13 +77,13 @@ public class PeakScanListEditingSupport extends EditingSupport {
 				return decimalFormat.format(peakModel.getPeakMaximum().getRelativeRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			}
 			if(column.equals(PeakScanListLabelProvider.RETENTION_INDEX)) {
-				if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+				if(PreferenceSupplierModel.showRetentionIndexWithoutDecimals()) {
 					return integerFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
 				}
 				return decimalFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
 			}
 			if(column.equals(PeakScanListLabelProvider.AREA_TOTAL)) {
-				if(PreferenceSupplier.showAreaWithoutDecimals()) {
+				if(PreferenceSupplierModel.showAreaWithoutDecimals()) {
 					return integerFormat.format(peak.getIntegratedArea());
 				}
 				return decimalFormat.format(peak.getIntegratedArea());

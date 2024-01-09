@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.undo;
 
-import org.eclipse.chemclipse.support.preferences.PreferenceSupplierSupport;
+import org.eclipse.chemclipse.support.preferences.PreferenceSupplier;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.commands.operations.UndoContext;
@@ -26,7 +26,7 @@ public final class UndoContextFactory {
 		if(undoContext == null) {
 			undoContext = new UndoContext();
 		}
-		OperationHistoryFactory.getOperationHistory().setLimit(undoContext, PreferenceSupplierSupport.getUndoLimit());
+		OperationHistoryFactory.getOperationHistory().setLimit(undoContext, PreferenceSupplier.getUndoLimit());
 		return undoContext;
 	}
 

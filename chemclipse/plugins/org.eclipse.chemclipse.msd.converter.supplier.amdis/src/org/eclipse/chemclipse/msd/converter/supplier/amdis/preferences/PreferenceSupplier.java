@@ -12,16 +12,11 @@
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences;
 
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.Activator;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.text.CharsetNIO;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -56,7 +51,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_PATH_EXPORT = "pathExport";
 	public static final String DEF_PATH_EXPORT = "";
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -67,46 +62,30 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
+		putDefault(P_SPLIT_LIBRARY, Boolean.toString(DEF_SPLIT_LIBRARY));
+		putDefault(P_EXCLUDE_UNCERTAIN_IONS, Boolean.toString(DEF_EXCLUDE_UNCERTAIN_IONS));
+		putDefault(P_USE_UNIT_MASS_RESOLUTION, Boolean.toString(DEF_USE_UNIT_MASS_RESOLUTION));
+		putDefault(P_REMOVE_INTENSITIES_LOWER_THAN_ONE, Boolean.toString(DEF_REMOVE_INTENSITIES_LOWER_THAN_ONE));
+		putDefault(P_NORMALIZE_INTENSITIES, Boolean.toString(DEF_NORMALIZE_INTENSITIES));
+		putDefault(P_EXPORT_INTENSITIES_AS_INTEGER, Boolean.toString(DEF_EXPORT_INTENSITIES_AS_INTEGER));
+		putDefault(P_PARSE_COMPOUND_INFORMATION, Boolean.toString(DEF_PARSE_COMPOUND_INFORMATION));
+		putDefault(P_PARSE_MOL_INFORMATION, Boolean.toString(DEF_PARSE_MOL_INFORMATION));
 		//
-		defaultValues.put(P_SPLIT_LIBRARY, Boolean.toString(DEF_SPLIT_LIBRARY));
-		defaultValues.put(P_EXCLUDE_UNCERTAIN_IONS, Boolean.toString(DEF_EXCLUDE_UNCERTAIN_IONS));
-		defaultValues.put(P_USE_UNIT_MASS_RESOLUTION, Boolean.toString(DEF_USE_UNIT_MASS_RESOLUTION));
-		defaultValues.put(P_REMOVE_INTENSITIES_LOWER_THAN_ONE, Boolean.toString(DEF_REMOVE_INTENSITIES_LOWER_THAN_ONE));
-		defaultValues.put(P_NORMALIZE_INTENSITIES, Boolean.toString(DEF_NORMALIZE_INTENSITIES));
-		defaultValues.put(P_EXPORT_INTENSITIES_AS_INTEGER, Boolean.toString(DEF_EXPORT_INTENSITIES_AS_INTEGER));
-		defaultValues.put(P_PARSE_COMPOUND_INFORMATION, Boolean.toString(DEF_PARSE_COMPOUND_INFORMATION));
-		defaultValues.put(P_PARSE_MOL_INFORMATION, Boolean.toString(DEF_PARSE_MOL_INFORMATION));
+		putDefault(P_CHARSET_IMPORT_MSL, DEF_CHARSET_IMPORT_MSL);
+		putDefault(P_CHARSET_IMPORT_MSP, DEF_CHARSET_IMPORT_MSP);
+		putDefault(P_CHARSET_IMPORT_FIN, DEF_CHARSET_IMPORT_FIN);
+		putDefault(P_CHARSET_IMPORT_ELU, DEF_CHARSET_IMPORT_ELU);
 		//
-		defaultValues.put(P_CHARSET_IMPORT_MSL, DEF_CHARSET_IMPORT_MSL);
-		defaultValues.put(P_CHARSET_IMPORT_MSP, DEF_CHARSET_IMPORT_MSP);
-		defaultValues.put(P_CHARSET_IMPORT_FIN, DEF_CHARSET_IMPORT_FIN);
-		defaultValues.put(P_CHARSET_IMPORT_ELU, DEF_CHARSET_IMPORT_ELU);
-		//
-		defaultValues.put(P_PATH_IMPORT, DEF_PATH_IMPORT);
-		defaultValues.put(P_PATH_EXPORT, DEF_PATH_EXPORT);
-		//
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_PATH_IMPORT, DEF_PATH_IMPORT);
+		putDefault(P_PATH_EXPORT, DEF_PATH_EXPORT);
 	}
 
 	public static boolean isSplitLibrary() {

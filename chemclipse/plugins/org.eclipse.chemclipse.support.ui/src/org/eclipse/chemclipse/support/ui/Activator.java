@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui;
 
-import org.eclipse.chemclipse.support.preferences.PreferenceSupplierSupport;
+import org.eclipse.chemclipse.support.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.osgi.framework.BundleContext;
 
@@ -37,7 +37,7 @@ public class Activator extends AbstractActivatorUI {
 		super.start(context);
 		Activator.context = context;
 		plugin = this;
-		initializePreferenceStore(PreferenceSupplierSupport.INSTANCE());
+		initializePreferenceStore(PreferenceSupplier.INSTANCE());
 		/*
 		 * Don't initialize the image registry.
 		 * The plug-in crashed when running the unit tests.

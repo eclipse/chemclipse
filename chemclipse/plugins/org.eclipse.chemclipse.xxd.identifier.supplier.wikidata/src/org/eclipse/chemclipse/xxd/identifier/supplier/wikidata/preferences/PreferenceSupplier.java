@@ -12,18 +12,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.Activator;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
-public class PreferenceSupplier implements IPreferenceSupplier {
+public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -34,27 +29,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<>();
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
 	}
 }

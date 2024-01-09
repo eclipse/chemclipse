@@ -19,6 +19,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class DevicesPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public DevicesPreferencePage() {
+
 		super(GRID);
 	}
 
@@ -26,7 +27,8 @@ public class DevicesPreferencePage extends FieldEditorPreferencePage implements 
 	public void init(IWorkbench workbench) {
 
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Devices");
+		setTitle("Devices");
+		setDescription("");
 	}
 
 	@Override

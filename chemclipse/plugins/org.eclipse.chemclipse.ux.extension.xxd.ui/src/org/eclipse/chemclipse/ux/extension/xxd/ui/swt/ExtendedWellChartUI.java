@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Matthias Mailänder - add color compensation, per channel coloring
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
@@ -29,8 +29,8 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCodes;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageWellChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -241,7 +241,7 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 			 * Extract the channels.
 			 */
 			ColorCodes colorCodes = new ColorCodes();
-			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_WELL_COLOR_CODES));
+			colorCodes.load(preferenceStore.getString(PreferenceSupplier.P_PCR_WELL_COLOR_CODES));
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			int index = comboChannels.getSelectionIndex();
@@ -275,7 +275,7 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 		} else if(colorCodes.containsKey(channelName)) {
 			return colorCodes.get(channelName).getColor();
 		} else {
-			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_PCR_DEFAULT_COLOR));
+			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_PCR_DEFAULT_COLOR));
 		}
 	}
 

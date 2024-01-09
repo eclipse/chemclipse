@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -27,8 +27,8 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.PeaksChart;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaksAxes;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
@@ -150,8 +150,8 @@ public class QuantPeaksChartUI extends Composite implements IExtendedPartUI {
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			//
 			int counter = 1;
-			IColorScheme colors = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_PEAKS));
-			boolean enableArea = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_AREA_DISPLAY_PEAKS);
+			IColorScheme colors = Colors.getColorScheme(preferenceStore.getString(PreferenceSupplier.P_COLOR_SCHEME_DISPLAY_PEAKS));
+			boolean enableArea = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_AREA_DISPLAY_PEAKS);
 			//
 			for(Object object : quantitationCompound.getQuantitationPeaks()) {
 				if(object instanceof IQuantitationPeak quantitationPeak) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.preferences;
 
@@ -65,8 +65,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		 * Change perspectives dialog
 		 */
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_PERSPECTIVE_DIALOG, "Show the perspective dialog.", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_CHANGE_PERSPECTIVE_AUTOMATICALLY, "Change perspectives and views automatically.", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_PERSPECTIVE_DIALOG, "Show the perspective dialog.", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_CHANGE_PERSPECTIVE_AUTOMATICALLY, "Change perspectives and views automatically.", getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		/*
 		 * Profiles
@@ -81,7 +81,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		label.setText("Selected Profile:");
 		//
 		selectedProfileFieldEditor = new Label(composite, SWT.NONE);
-		selectedProfileFieldEditor.setText(getPreferenceStore().getString(PreferenceConstants.P_SELECTED_PROFILE));
+		selectedProfileFieldEditor.setText(getPreferenceStore().getString(PreferenceSupplier.P_SELECTED_PROFILE));
 		selectedProfileFieldEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		/*
 		 * Delete selected profile
@@ -203,8 +203,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		 * Set the preference
 		 */
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setValue(PreferenceConstants.P_SELECTED_PROFILE, name);
-		selectedProfileFieldEditor.setText(store.getString(PreferenceConstants.P_SELECTED_PROFILE));
+		store.setValue(PreferenceSupplier.P_SELECTED_PROFILE, name);
+		selectedProfileFieldEditor.setText(store.getString(PreferenceSupplier.P_SELECTED_PROFILE));
 		/*
 		 * Fill the combo list.
 		 * Clear the new profile text field.

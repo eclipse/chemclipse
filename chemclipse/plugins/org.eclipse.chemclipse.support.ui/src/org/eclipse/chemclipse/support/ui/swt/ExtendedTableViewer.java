@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.support.preferences.PreferenceSupplierSupport;
+import org.eclipse.chemclipse.support.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
@@ -78,8 +78,8 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	private final Set<KeyListener> userDefinedKeyListeners = new HashSet<>();
 	private final List<IColumnMoveListener> columnMoveListeners = new ArrayList<>();
 	private boolean editEnabled = true;
-	private boolean copyHeaderToClipboard = PreferenceSupplierSupport.DEF_CLIPBOARD_COPY_HEADER;
-	private String copyColumnsToClipboard = PreferenceSupplierSupport.DEF_CLIPBOARD_COPY_COLUMNS;
+	private boolean copyHeaderToClipboard = PreferenceSupplier.DEF_CLIPBOARD_COPY_HEADER;
+	private String copyColumnsToClipboard = PreferenceSupplier.DEF_CLIPBOARD_COPY_COLUMNS;
 	//
 	private ControlListener controlListener = null;
 
@@ -102,19 +102,19 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	@Override
 	public void resetColumnOrder() {
 
-		String pColumnOrder = getPreferenceName(PreferenceSupplierSupport.P_COLUMN_ORDER);
-		String columnOrder = PreferenceSupplierSupport.DEF_COLUMN_ORDER;
+		String pColumnOrder = getPreferenceName(PreferenceSupplier.P_COLUMN_ORDER);
+		String columnOrder = PreferenceSupplier.DEF_COLUMN_ORDER;
 		TableSupport.setColumnOrder(getTable(), columnOrder);
-		PreferenceSupplierSupport.setColumnOrder(pColumnOrder, columnOrder);
+		PreferenceSupplier.setColumnOrder(pColumnOrder, columnOrder);
 	}
 
 	@Override
 	public void resetColumnWidth() {
 
-		String pColumnWidth = getPreferenceName(PreferenceSupplierSupport.P_COLUMN_WIDTH);
-		String columnWidth = PreferenceSupplierSupport.DEF_COLUMN_WIDTH;
+		String pColumnWidth = getPreferenceName(PreferenceSupplier.P_COLUMN_WIDTH);
+		String columnWidth = PreferenceSupplier.DEF_COLUMN_WIDTH;
 		TableSupport.setColumnWidth(getTable(), columnWidth);
-		PreferenceSupplierSupport.setColumnWidth(pColumnWidth, columnWidth);
+		PreferenceSupplier.setColumnWidth(pColumnWidth, columnWidth);
 	}
 
 	public void setControlListener(ControlListener controlListener) {
@@ -268,8 +268,8 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	public void setCopyHeaderToClipboard(boolean copyHeaderToClipboard) {
 
 		this.copyHeaderToClipboard = copyHeaderToClipboard;
-		String pClipboardCopyHeader = getPreferenceName(PreferenceSupplierSupport.P_CLIPBOARD_COPY_HEADER);
-		PreferenceSupplierSupport.setClipboardCopyHeader(pClipboardCopyHeader, copyHeaderToClipboard);
+		String pClipboardCopyHeader = getPreferenceName(PreferenceSupplier.P_CLIPBOARD_COPY_HEADER);
+		PreferenceSupplier.setClipboardCopyHeader(pClipboardCopyHeader, copyHeaderToClipboard);
 	}
 
 	@Override
@@ -282,8 +282,8 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	public void setCopyColumnsToClipboard(String copyColumnsToClipboard) {
 
 		this.copyColumnsToClipboard = copyColumnsToClipboard;
-		String pClipboardCopyColumns = getPreferenceName(PreferenceSupplierSupport.P_CLIPBOARD_COPY_COLUMNS);
-		PreferenceSupplierSupport.setClipboardCopyColumns(pClipboardCopyColumns, copyColumnsToClipboard);
+		String pClipboardCopyColumns = getPreferenceName(PreferenceSupplier.P_CLIPBOARD_COPY_COLUMNS);
+		PreferenceSupplier.setClipboardCopyColumns(pClipboardCopyColumns, copyColumnsToClipboard);
 	}
 
 	/**
@@ -638,17 +638,17 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		/*
 		 * Handle the copy to clipboard settings
 		 */
-		String pClipboardCopyHeader = getPreferenceName(PreferenceSupplierSupport.P_CLIPBOARD_COPY_HEADER);
-		copyHeaderToClipboard = PreferenceSupplierSupport.isClipboardCopyHeader(pClipboardCopyHeader);
+		String pClipboardCopyHeader = getPreferenceName(PreferenceSupplier.P_CLIPBOARD_COPY_HEADER);
+		copyHeaderToClipboard = PreferenceSupplier.isClipboardCopyHeader(pClipboardCopyHeader);
 		//
-		String pClipboardCopyColumns = getPreferenceName(PreferenceSupplierSupport.P_CLIPBOARD_COPY_COLUMNS);
-		copyColumnsToClipboard = PreferenceSupplierSupport.getClipboardCopyColumns(pClipboardCopyColumns);
+		String pClipboardCopyColumns = getPreferenceName(PreferenceSupplier.P_CLIPBOARD_COPY_COLUMNS);
+		copyColumnsToClipboard = PreferenceSupplier.getClipboardCopyColumns(pClipboardCopyColumns);
 		/*
 		 * Move/Width Support for Columns
 		 */
 		Table table = getTable();
-		String pColumnOrder = getPreferenceName(PreferenceSupplierSupport.P_COLUMN_ORDER);
-		String pColumnWidth = getPreferenceName(PreferenceSupplierSupport.P_COLUMN_WIDTH);
+		String pColumnOrder = getPreferenceName(PreferenceSupplier.P_COLUMN_ORDER);
+		String pColumnWidth = getPreferenceName(PreferenceSupplier.P_COLUMN_WIDTH);
 		//
 		setControlListener(new ControlAdapter() {
 
@@ -656,14 +656,14 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 			public void controlMoved(ControlEvent e) {
 
 				String columnOrder = TableSupport.getColumnOrder(table);
-				PreferenceSupplierSupport.setColumnOrder(pColumnOrder, columnOrder);
+				PreferenceSupplier.setColumnOrder(pColumnOrder, columnOrder);
 			}
 
 			@Override
 			public void controlResized(ControlEvent e) {
 
 				String columnWidth = TableSupport.getColumnWidth(table);
-				PreferenceSupplierSupport.setColumnWidth(pColumnWidth, columnWidth);
+				PreferenceSupplier.setColumnWidth(pColumnWidth, columnWidth);
 			}
 		});
 	}
@@ -672,11 +672,11 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 
 		Table table = getTable();
 		//
-		String pColumnOrder = getPreferenceName(PreferenceSupplierSupport.P_COLUMN_ORDER);
-		TableSupport.setColumnOrder(table, PreferenceSupplierSupport.getColumnOrder(pColumnOrder));
+		String pColumnOrder = getPreferenceName(PreferenceSupplier.P_COLUMN_ORDER);
+		TableSupport.setColumnOrder(table, PreferenceSupplier.getColumnOrder(pColumnOrder));
 		//
-		String pColumnWidth = getPreferenceName(PreferenceSupplierSupport.P_COLUMN_WIDTH);
-		TableSupport.setColumnWidth(table, PreferenceSupplierSupport.getColumnWidth(pColumnWidth));
+		String pColumnWidth = getPreferenceName(PreferenceSupplier.P_COLUMN_WIDTH);
+		TableSupport.setColumnWidth(table, PreferenceSupplier.getColumnWidth(pColumnWidth));
 	}
 
 	private TableViewerColumn createTableColumn(String title, int width) {

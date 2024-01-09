@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
@@ -30,6 +29,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModelMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.e4.ui.di.Focus;
@@ -195,10 +195,10 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 					/*
 					 * Add the selected scan to the session MS.
 					 */
-					IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
-					CalculationType calculationType = PreferenceSupplier.getCalculationType();
+					IScanMSD massSpectrum1 = PreferenceSupplierModelMSD.getSessionSubtractMassSpectrum();
+					CalculationType calculationType = PreferenceSupplierModelMSD.getCalculationType();
 					IVendorMassSpectrum massSpectrum2 = chromatogramSelectionMSD.getSelectedScan();
-					boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan();
+					boolean useNormalize = PreferenceSupplierModelMSD.isUseNormalizedScan();
 					IScanMSD subtractMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize, calculationType);
 					saveSessionMassSpectrum(e.display, subtractMassSpectrum);
 				}
@@ -219,10 +219,10 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 			public void widgetSelected(SelectionEvent e) {
 
 				if(chromatogramSelectionMSD != null) {
-					boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
-					CalculationType calculationType = PreferenceSupplier.getCalculationType();
-					boolean usePeaksInsteadOfScans = PreferenceSupplier.isUsePeaksInsteadOfScans();
-					IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
+					boolean useNormalize = PreferenceSupplierModelMSD.isUseNormalizedScan();
+					CalculationType calculationType = PreferenceSupplierModelMSD.getCalculationType();
+					boolean usePeaksInsteadOfScans = PreferenceSupplierModelMSD.isUsePeaksInsteadOfScans();
+					IScanMSD massSpectrum1 = PreferenceSupplierModelMSD.getSessionSubtractMassSpectrum();
 					IScanMSD massSpectrum2 = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType, usePeaksInsteadOfScans);
 					IScanMSD subtractMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize, calculationType);
 					saveSessionMassSpectrum(e.display, subtractMassSpectrum);
@@ -267,7 +267,7 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				int maxCopyTraces = PreferenceSupplier.getCopyTracesClipboard();
+				int maxCopyTraces = PreferenceSupplierModelMSD.getCopyTracesClipboard();
 				String traces = ScanSupport.extractTracesText(scanMSD, maxCopyTraces);
 				TextTransfer textTransfer = TextTransfer.getInstance();
 				Object[] data = new Object[]{traces};
@@ -345,7 +345,7 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 
 	private void loadSessionMassSpectrum(Display display) {
 
-		PreferenceSupplier.loadSessionSubtractMassSpectrum();
+		PreferenceSupplierModelMSD.loadSessionSubtractMassSpectrum();
 		fireUpdateEvent(display);
 	}
 
@@ -357,8 +357,8 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 	 */
 	private void saveSessionMassSpectrum(Display display, IScanMSD scanMSD) {
 
-		PreferenceSupplier.setSessionSubtractMassSpectrum(scanMSD);
-		PreferenceSupplier.storeSessionSubtractMassSpectrum();
+		PreferenceSupplierModelMSD.setSessionSubtractMassSpectrum(scanMSD);
+		PreferenceSupplierModelMSD.storeSessionSubtractMassSpectrum();
 		//
 		if(display != null) {
 			fireUpdateEvent(display);

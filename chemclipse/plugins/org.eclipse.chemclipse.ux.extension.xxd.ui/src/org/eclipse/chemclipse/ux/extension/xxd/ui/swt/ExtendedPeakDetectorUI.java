@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - use {@link IPlotArea} instead of raw composite
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
@@ -43,8 +43,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.BoxSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ManualPeakDetector;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.BaselineSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
@@ -339,11 +339,11 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 			/*
 			 * Chromatogram
 			 */
-			Color colorChromatogram = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_DETECTOR_CHROMATOGRAM));
-			boolean enableAreaChromatogram = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK_DETECTOR_CHROMATOGRAM_AREA);
-			int scanMarkerSize = preferenceStore.getInt(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_SIZE);
-			Color scanMarkerColor = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_COLOR));
-			PlotSymbolType scanMarkerSymbol = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_TYPE));
+			Color colorChromatogram = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_DETECTOR_CHROMATOGRAM));
+			boolean enableAreaChromatogram = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_PEAK_DETECTOR_CHROMATOGRAM_AREA);
+			int scanMarkerSize = preferenceStore.getInt(PreferenceSupplier.P_PEAK_DETECTOR_SCAN_MARKER_SIZE);
+			Color scanMarkerColor = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_PEAK_DETECTOR_SCAN_MARKER_COLOR));
+			PlotSymbolType scanMarkerSymbol = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_PEAK_DETECTOR_SCAN_MARKER_TYPE));
 			//
 			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesDataChromatogram(chromatogramSelection, "Chromatogram", colorChromatogram);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
@@ -360,10 +360,10 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 				buttonAddPeak.setEnabled(true);
 				boolean includeBackground = true;
 				boolean mirrored = false;
-				Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_1));
+				Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_1));
 				lineSeriesDataList.add(peakChartSupport.getPeak(peak, includeBackground, mirrored, colorPeak, ID_PEAK));
 				if(includeBackground) {
-					Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BACKGROUND));
+					Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_BACKGROUND));
 					lineSeriesDataList.add(peakChartSupport.getPeakBackground(peak, mirrored, colorBackground, ID_BACKGROUND));
 				}
 			}

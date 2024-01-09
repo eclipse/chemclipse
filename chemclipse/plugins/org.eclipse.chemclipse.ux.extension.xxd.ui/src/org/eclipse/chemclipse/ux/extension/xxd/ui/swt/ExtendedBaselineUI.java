@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -28,8 +28,8 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageBaseline;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -57,8 +57,8 @@ public class ExtendedBaselineUI extends Composite implements IExtendedPartUI {
 	//
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private IColorScheme colorScheme = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_BASELINE));
-	private String compressionType = preferenceStore.getString(PreferenceConstants.DEF_BASELINE_CHART_COMPRESSION_TYPE);
+	private IColorScheme colorScheme = Colors.getColorScheme(preferenceStore.getString(PreferenceSupplier.P_COLOR_SCHEME_DISPLAY_BASELINE));
+	private String compressionType = preferenceStore.getString(PreferenceSupplier.DEF_BASELINE_CHART_COMPRESSION_TYPE);
 
 	public ExtendedBaselineUI(Composite parent, int style) {
 
@@ -158,8 +158,8 @@ public class ExtendedBaselineUI extends Composite implements IExtendedPartUI {
 
 	private void applySettings() {
 
-		colorScheme = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_BASELINE));
-		compressionType = preferenceStore.getString(PreferenceConstants.DEF_BASELINE_CHART_COMPRESSION_TYPE);
+		colorScheme = Colors.getColorScheme(preferenceStore.getString(PreferenceSupplier.P_COLOR_SCHEME_DISPLAY_BASELINE));
+		compressionType = preferenceStore.getString(PreferenceSupplier.DEF_BASELINE_CHART_COMPRESSION_TYPE);
 		refreshBaselineChart(chromatogram);
 	}
 

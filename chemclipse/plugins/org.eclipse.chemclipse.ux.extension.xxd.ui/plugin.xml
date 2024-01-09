@@ -10,12 +10,6 @@
       </fragment>
    </extension>
    <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>  
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"

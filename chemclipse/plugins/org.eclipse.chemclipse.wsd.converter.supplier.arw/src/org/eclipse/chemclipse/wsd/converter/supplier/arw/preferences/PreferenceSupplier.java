@@ -11,15 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.converter.supplier.arw.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.wsd.converter.supplier.arw.Activator;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -28,7 +22,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_NORMALIZATION_STEPS = "normalizationSteps";
 	public static final int DEF_NORMALIZATION_STEPS = 1;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -39,30 +33,16 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_NORMALIZE_SCANS, Boolean.toString(DEF_NORMALIZE_SCANS));
-		defaultValues.put(P_NORMALIZATION_STEPS, Integer.toString(DEF_NORMALIZATION_STEPS));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_NORMALIZE_SCANS, Boolean.toString(DEF_NORMALIZE_SCANS));
+		putDefault(P_NORMALIZATION_STEPS, Integer.toString(DEF_NORMALIZATION_STEPS));
 	}
 
 	public static boolean isNormalizeScans() {

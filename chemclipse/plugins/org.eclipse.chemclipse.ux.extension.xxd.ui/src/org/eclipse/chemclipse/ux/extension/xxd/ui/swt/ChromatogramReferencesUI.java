@@ -45,7 +45,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramEditorDial
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.DataTypeDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
@@ -455,7 +455,7 @@ public class ChromatogramReferencesUI extends Composite {
 	private void addReferences(IChromatogramSelection<?, ?> masterSelection, List<IChromatogramSelection<?, ?>> chromatogramSelections) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		HeaderField headerField = HeaderUtil.getHeaderField(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_NAME_TO_REFERENCES_HEADER_FIELD));
+		HeaderField headerField = HeaderUtil.getHeaderField(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_TRANSFER_NAME_TO_REFERENCES_HEADER_FIELD));
 		//
 		for(IChromatogramSelection<?, ?> chromatogramSelection : chromatogramSelections) {
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();

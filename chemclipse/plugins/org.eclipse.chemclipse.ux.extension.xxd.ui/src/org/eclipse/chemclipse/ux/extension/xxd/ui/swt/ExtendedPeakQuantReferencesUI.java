@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -24,8 +24,8 @@ import org.eclipse.chemclipse.support.validators.QuantReferenceValidator;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageQuantitation;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
@@ -318,11 +318,11 @@ public class ExtendedPeakQuantReferencesUI extends Composite implements IExtende
 	private void setComboQuantReferenceItems() {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		boolean useTargetList = preferenceStore.getBoolean(PreferenceConstants.P_USE_QUANTITATION_REFERENCE_LIST);
+		boolean useTargetList = preferenceStore.getBoolean(PreferenceSupplier.P_USE_QUANTITATION_REFERENCE_LIST);
 		//
 		String[] items;
 		if(useTargetList) {
-			items = quantReferencesUtil.parseString(preferenceStore.getString(PreferenceConstants.P_QUANTITATION_REFERENCE_LIST));
+			items = quantReferencesUtil.parseString(preferenceStore.getString(PreferenceSupplier.P_QUANTITATION_REFERENCE_LIST));
 			Arrays.sort(items);
 		} else {
 			items = new String[]{};

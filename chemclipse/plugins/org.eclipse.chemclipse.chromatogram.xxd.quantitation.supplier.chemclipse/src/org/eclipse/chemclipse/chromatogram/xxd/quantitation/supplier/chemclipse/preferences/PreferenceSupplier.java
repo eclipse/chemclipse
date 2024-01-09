@@ -12,17 +12,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.quantitation.supplier.chemclipse.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.chromatogram.xxd.quantitation.supplier.chemclipse.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.quantitation.supplier.chemclipse.settings.PeakDatabaseSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.quantitation.supplier.chemclipse.settings.PeakQuantifierSettings;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -61,7 +55,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_QUANTITATION_STRATEGY = "quantitationStrategy";
 	public static final String DEF_QUANTITATION_STRATEGY = QUANTITATION_STRATEGY_NONE;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -72,38 +66,22 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		//
-		defaultValues.put(P_USE_QUANTITATION_DATABASE_EDITOR, Boolean.toString(DEF_USE_QUANTITATION_DATABASE_EDITOR));
-		defaultValues.put(P_SELECTED_QUANTITATION_DATABASE, DEF_SELECTED_QUANTITATION_DATABASE);
-		defaultValues.put(P_FILTER_PATH_NEW_QUANT_DB, DEF_FILTER_PATH_NEW_QUANT_DB);
-		defaultValues.put(P_RETENTION_TIME_NEGATIVE_DEVIATION, Double.toString(DEF_RETENTION_TIME_NEGATIVE_DEVIATION));
-		defaultValues.put(P_RETENTION_TIME_POSITIVE_DEVIATION, Double.toString(DEF_RETENTION_TIME_POSITIVE_DEVIATION));
-		defaultValues.put(P_RETENTION_INDEX_NEGATIVE_DEVIATION, Float.toString(DEF_RETENTION_INDEX_NEGATIVE_DEVIATION));
-		defaultValues.put(P_RETENTION_INDEX_POSITIVE_DEVIATION, Float.toString(DEF_RETENTION_INDEX_POSITIVE_DEVIATION));
-		defaultValues.put(P_QUANTITATION_STRATEGY, DEF_QUANTITATION_STRATEGY);
-		//
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_USE_QUANTITATION_DATABASE_EDITOR, Boolean.toString(DEF_USE_QUANTITATION_DATABASE_EDITOR));
+		putDefault(P_SELECTED_QUANTITATION_DATABASE, DEF_SELECTED_QUANTITATION_DATABASE);
+		putDefault(P_FILTER_PATH_NEW_QUANT_DB, DEF_FILTER_PATH_NEW_QUANT_DB);
+		putDefault(P_RETENTION_TIME_NEGATIVE_DEVIATION, Double.toString(DEF_RETENTION_TIME_NEGATIVE_DEVIATION));
+		putDefault(P_RETENTION_TIME_POSITIVE_DEVIATION, Double.toString(DEF_RETENTION_TIME_POSITIVE_DEVIATION));
+		putDefault(P_RETENTION_INDEX_NEGATIVE_DEVIATION, Float.toString(DEF_RETENTION_INDEX_NEGATIVE_DEVIATION));
+		putDefault(P_RETENTION_INDEX_POSITIVE_DEVIATION, Float.toString(DEF_RETENTION_INDEX_POSITIVE_DEVIATION));
+		putDefault(P_QUANTITATION_STRATEGY, DEF_QUANTITATION_STRATEGY);
 	}
 
 	public static String getSelectedQuantitationDatabase() {

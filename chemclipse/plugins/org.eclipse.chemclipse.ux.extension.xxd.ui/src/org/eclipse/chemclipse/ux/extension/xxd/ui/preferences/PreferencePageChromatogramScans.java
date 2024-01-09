@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -38,22 +38,22 @@ public class PreferencePageChromatogramScans extends FieldEditorPreferencePage i
 	public void createFieldEditors() {
 
 		addField(new LabelFieldEditor("Selected Scan", getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN, "Color:", getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE, "Marker Size:", PreferenceConstants.MIN_SYMBOL_SIZE, PreferenceConstants.MAX_SYMBOL_SIZE, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE, "Marker Type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceSupplier.P_COLOR_CHROMATOGRAM_SELECTED_SCAN, "Color:", getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE, "Marker Size:", PreferenceSupplier.MIN_SYMBOL_SIZE, PreferenceSupplier.MAX_SYMBOL_SIZE, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE, "Marker Type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Scan Labels", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME, "Font Name:", getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE, "Font Size:", PreferenceConstants.MIN_FONT_SIZE, PreferenceConstants.MAX_FONT_SIZE, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE, "Font Style:", ChartOptions.FONT_STYLES, getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME, "Font Name:", getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE, "Font Size:", PreferenceSupplier.MIN_FONT_SIZE, PreferenceSupplier.MAX_FONT_SIZE, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE, "Font Style:", ChartOptions.FONT_STYLES, getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Scan", getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE, "Marker Size:", PreferenceConstants.MIN_SYMBOL_SIZE, PreferenceConstants.MAX_SYMBOL_SIZE, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_MARKER_TYPE, "Marker Type (Normal):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_IDENTIFIED_SCAN, "Color (Identified):", getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_IDENTIFIED_SCAN_MARKER_TYPE, "Marker Type (Identified):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE, "Marker Size:", PreferenceSupplier.MIN_SYMBOL_SIZE, PreferenceSupplier.MAX_SYMBOL_SIZE, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_SCAN_MARKER_TYPE, "Marker Type (Normal):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceSupplier.P_COLOR_CHROMATOGRAM_IDENTIFIED_SCAN, "Color (Identified):", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_IDENTIFIED_SCAN_MARKER_TYPE, "Marker Type (Identified):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
 	}
 
 	@Override

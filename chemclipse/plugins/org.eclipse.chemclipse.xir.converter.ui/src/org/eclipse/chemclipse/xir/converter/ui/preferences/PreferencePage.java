@@ -11,8 +11,26 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xir.converter.ui.preferences;
 
-/**
- * Constant definitions for plug-in preferences
- */
-public class PreferenceConstants {
+import org.eclipse.chemclipse.xir.converter.ui.Activator;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
+
+public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+
+	public PreferencePage() {
+		super(GRID);
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setDescription("XIR Converter");
+	}
+
+	@Override
+	protected void createFieldEditors() {
+
+	}
+
+	@Override
+	public void init(IWorkbench workbench) {
+
+	}
 }

@@ -11,15 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.tsd.converter.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.tsd.converter.Activator;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -57,7 +51,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_ADAPTER_MAX_TRACE_ISD = "adapterMaxTraceISD";
 	public static final int DEF_ADAPTER_MAX_TRACE_ISD = 600;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -68,40 +62,26 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_USE_ADAPTER_MSD, Boolean.toString(DEF_USE_ADAPTER_MSD));
-		defaultValues.put(P_USE_ADAPTER_FIXED_RANGE_MSD, Boolean.toString(DEF_USE_ADAPTER_FIXED_RANGE_MSD));
-		defaultValues.put(P_ADAPTER_MIN_TRACE_MSD, Integer.toString(DEF_ADAPTER_MIN_TRACE_MSD));
-		defaultValues.put(P_ADAPTER_MAX_TRACE_MSD, Integer.toString(DEF_ADAPTER_MAX_TRACE_MSD));
-		defaultValues.put(P_USE_ADAPTER_WSD, Boolean.toString(DEF_USE_ADAPTER_WSD));
-		defaultValues.put(P_USE_ADAPTER_FIXED_RANGE_WSD, Boolean.toString(DEF_USE_ADAPTER_FIXED_RANGE_WSD));
-		defaultValues.put(P_ADAPTER_MIN_TRACE_WSD, Integer.toString(DEF_ADAPTER_MIN_TRACE_WSD));
-		defaultValues.put(P_ADAPTER_MAX_TRACE_WSD, Integer.toString(DEF_ADAPTER_MAX_TRACE_WSD));
-		defaultValues.put(P_USE_ADAPTER_ISD, Boolean.toString(DEF_USE_ADAPTER_ISD));
-		defaultValues.put(P_USE_ADAPTER_FIXED_RANGE_ISD, Boolean.toString(DEF_USE_ADAPTER_FIXED_RANGE_ISD));
-		defaultValues.put(P_ADAPTER_MIN_TRACE_ISD, Integer.toString(DEF_ADAPTER_MIN_TRACE_ISD));
-		defaultValues.put(P_ADAPTER_MAX_TRACE_ISD, Integer.toString(DEF_ADAPTER_MAX_TRACE_ISD));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_USE_ADAPTER_MSD, Boolean.toString(DEF_USE_ADAPTER_MSD));
+		putDefault(P_USE_ADAPTER_FIXED_RANGE_MSD, Boolean.toString(DEF_USE_ADAPTER_FIXED_RANGE_MSD));
+		putDefault(P_ADAPTER_MIN_TRACE_MSD, Integer.toString(DEF_ADAPTER_MIN_TRACE_MSD));
+		putDefault(P_ADAPTER_MAX_TRACE_MSD, Integer.toString(DEF_ADAPTER_MAX_TRACE_MSD));
+		putDefault(P_USE_ADAPTER_WSD, Boolean.toString(DEF_USE_ADAPTER_WSD));
+		putDefault(P_USE_ADAPTER_FIXED_RANGE_WSD, Boolean.toString(DEF_USE_ADAPTER_FIXED_RANGE_WSD));
+		putDefault(P_ADAPTER_MIN_TRACE_WSD, Integer.toString(DEF_ADAPTER_MIN_TRACE_WSD));
+		putDefault(P_ADAPTER_MAX_TRACE_WSD, Integer.toString(DEF_ADAPTER_MAX_TRACE_WSD));
+		putDefault(P_USE_ADAPTER_ISD, Boolean.toString(DEF_USE_ADAPTER_ISD));
+		putDefault(P_USE_ADAPTER_FIXED_RANGE_ISD, Boolean.toString(DEF_USE_ADAPTER_FIXED_RANGE_ISD));
+		putDefault(P_ADAPTER_MIN_TRACE_ISD, Integer.toString(DEF_ADAPTER_MIN_TRACE_ISD));
+		putDefault(P_ADAPTER_MAX_TRACE_ISD, Integer.toString(DEF_ADAPTER_MAX_TRACE_ISD));
 	}
 
 	public static boolean isUseAdapterMSD() {

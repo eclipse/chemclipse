@@ -19,16 +19,9 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.converter.ui.converterPreferencePage"      
-            class="org.eclipse.chemclipse.csd.converter.ui.preferences.ConverterPreferencePage"
+            class="org.eclipse.chemclipse.csd.converter.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.csd.converter.ui.converterPreferencePage"
             name="Converter CSD">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.csd.converter.ui.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>   
-
 </plugin>

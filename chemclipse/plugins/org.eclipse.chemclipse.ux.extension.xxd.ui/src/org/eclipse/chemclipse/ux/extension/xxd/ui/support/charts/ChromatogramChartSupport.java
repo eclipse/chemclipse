@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - allow setting of the preference store via constructor
  * Matthias Mailänder - Add support for Max Plots
@@ -41,7 +41,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
@@ -97,9 +97,9 @@ public class ChromatogramChartSupport {
 	public void loadUserSettings() {
 
 		//
-		colorScheme = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY));
-		lineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_OVERLAY));
-		showArea = preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_SHOW_AREA);
+		colorScheme = Colors.getColorScheme(preferenceStore.getString(PreferenceSupplier.P_COLOR_SCHEME_DISPLAY_OVERLAY));
+		lineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceSupplier.P_LINE_STYLE_DISPLAY_OVERLAY));
+		showArea = preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_SHOW_AREA);
 		//
 		resetColorMaps();
 	}
@@ -236,7 +236,7 @@ public class ChromatogramChartSupport {
 		}
 		//
 		LineStyle lineStyle = getLineStyle(displayType);
-		boolean condenseCycleNumberScans = preferenceStore.getBoolean(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS);
+		boolean condenseCycleNumberScans = preferenceStore.getBoolean(PreferenceSupplier.P_CONDENSE_CYCLE_NUMBER_SCANS);
 		boolean handleScanCycleSeriesTIC = chromatogram.containsScanCycles() && condenseCycleNumberScans && displayType.equals(DisplayType.TIC);
 		//
 		double[] xSeries;
@@ -599,10 +599,10 @@ public class ChromatogramChartSupport {
 	 */
 	public static IPreferenceStore initializeDefaults(IPreferenceStore preferenceStore) {
 
-		preferenceStore.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_OVERLAY);
-		preferenceStore.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_OVERLAY);
-		preferenceStore.setDefault(PreferenceConstants.P_OVERLAY_SHOW_AREA, PreferenceConstants.DEF_OVERLAY_SHOW_AREA);
-		preferenceStore.setDefault(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS, PreferenceConstants.DEF_CONDENSE_CYCLE_NUMBER_SCANS);
+		preferenceStore.setDefault(PreferenceSupplier.P_COLOR_SCHEME_DISPLAY_OVERLAY, PreferenceSupplier.DEF_COLOR_SCHEME_DISPLAY_OVERLAY);
+		preferenceStore.setDefault(PreferenceSupplier.P_LINE_STYLE_DISPLAY_OVERLAY, PreferenceSupplier.DEF_LINE_STYLE_DISPLAY_OVERLAY);
+		preferenceStore.setDefault(PreferenceSupplier.P_OVERLAY_SHOW_AREA, PreferenceSupplier.DEF_OVERLAY_SHOW_AREA);
+		preferenceStore.setDefault(PreferenceSupplier.P_CONDENSE_CYCLE_NUMBER_SCANS, PreferenceSupplier.DEF_CONDENSE_CYCLE_NUMBER_SCANS);
 		return preferenceStore;
 	}
 }

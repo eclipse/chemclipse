@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.support.settings.ApplicationSettings;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.ux.extension.ui.l10n.Messages;
-import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.core.resources.ResourcesPlugin;
 
@@ -57,13 +56,13 @@ public enum DataExplorerTreeRoot {
 
 		switch(this) {
 			case DRIVES:
-				return PreferenceConstants.P_SELECTED_DRIVE_PATH;
+				return PreferenceSupplier.P_SELECTED_DRIVE_PATH;
 			case HOME:
-				return PreferenceConstants.P_SELECTED_HOME_PATH;
+				return PreferenceSupplier.P_SELECTED_HOME_PATH;
 			case WORKSPACE:
-				return PreferenceConstants.P_SELECTED_WORKSPACE_PATH;
+				return PreferenceSupplier.P_SELECTED_WORKSPACE_PATH;
 			case USER_LOCATION:
-				return PreferenceConstants.P_SELECTED_USER_LOCATION_PATH;
+				return PreferenceSupplier.P_SELECTED_USER_LOCATION_PATH;
 			case NONE:
 			default:
 				return "selected" + name() + "Path"; //$NON-NLS-1$ //$NON-NLS-2$

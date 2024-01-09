@@ -9,20 +9,20 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.csd.converter.ui.preferences;
-
-import org.eclipse.chemclipse.csd.converter.ui.Activator;
+package org.eclipse.chemclipse.wsd.converter.ui.preferences;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class ConverterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+import org.eclipse.chemclipse.wsd.converter.ui.Activator;
 
-	public ConverterPreferencePage() {
+public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+
+	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("FID Converter");
+		setDescription("WSD Converter");
 	}
 
 	@Override

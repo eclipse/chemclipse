@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TargetTemplateInputValidator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -294,10 +294,10 @@ public class TargetTemplatesUI extends Composite {
 					fileDialog.setText(IMPORT_TITLE);
 					fileDialog.setFilterExtensions(new String[]{TargetTemplates.FILTER_EXTENSION});
 					fileDialog.setFilterNames(new String[]{TargetTemplates.FILTER_NAME});
-					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATES_FOLDER));
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceSupplier.P_TARGET_TEMPLATES_FOLDER));
 					String path = fileDialog.open();
 					if(path != null) {
-						preferenceStore.setValue(PreferenceConstants.P_TARGET_TEMPLATES_FOLDER, fileDialog.getFilterPath());
+						preferenceStore.setValue(PreferenceSupplier.P_TARGET_TEMPLATES_FOLDER, fileDialog.getFilterPath());
 						File file = new File(path);
 						targetTemplates.importItems(file);
 						MessageDialog.openInformation(e.display.getActiveShell(), IMPORT_TITLE, MESSAGE_IMPORT_SUCCESSFUL);
@@ -328,10 +328,10 @@ public class TargetTemplatesUI extends Composite {
 					fileDialog.setFilterExtensions(new String[]{TargetTemplates.FILTER_EXTENSION});
 					fileDialog.setFilterNames(new String[]{TargetTemplates.FILTER_NAME});
 					fileDialog.setFileName(TargetTemplates.FILE_NAME);
-					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATES_FOLDER));
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceSupplier.P_TARGET_TEMPLATES_FOLDER));
 					String path = fileDialog.open();
 					if(path != null) {
-						preferenceStore.setValue(PreferenceConstants.P_TARGET_TEMPLATES_FOLDER, fileDialog.getFilterPath());
+						preferenceStore.setValue(PreferenceSupplier.P_TARGET_TEMPLATES_FOLDER, fileDialog.getFilterPath());
 						File file = new File(path);
 						if(targetTemplates.exportItems(file)) {
 							MessageDialog.openInformation(e.display.getActiveShell(), EXPORT_TITLE, MESSAGE_EXPORT_SUCCESSFUL);

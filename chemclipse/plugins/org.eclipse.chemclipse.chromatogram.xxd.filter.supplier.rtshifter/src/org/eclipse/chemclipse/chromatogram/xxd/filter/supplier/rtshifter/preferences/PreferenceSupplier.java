@@ -11,18 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsGapFiller;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsStretch;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -51,7 +45,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_LIMIT_FACTOR = "limitFactor";
 	public static final int DEF_LIMIT_FACTOR = 4;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -62,33 +56,19 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_SHIFT_ALL_SCANS, Boolean.toString(DEF_SHIFT_ALL_SCANS));
-		defaultValues.put(P_MILLISECONDS_SHIFT, Integer.toString(DEF_MILLISECONDS_SHIFT));
-		defaultValues.put(P_STRETCH_MILLISECONDS_SCAN_DELAY, Integer.toString(DEF_STRETCH_MILLISECONDS_SCAN_DELAY));
-		defaultValues.put(P_STRETCH_MILLISECONDS_LENGTH, Integer.toString(DEF_STRETCH_MILLISECONDS_LENGTH));
-		defaultValues.put(P_LIMIT_FACTOR, Integer.toString(DEF_LIMIT_FACTOR));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_SHIFT_ALL_SCANS, Boolean.toString(DEF_SHIFT_ALL_SCANS));
+		putDefault(P_MILLISECONDS_SHIFT, Integer.toString(DEF_MILLISECONDS_SHIFT));
+		putDefault(P_STRETCH_MILLISECONDS_SCAN_DELAY, Integer.toString(DEF_STRETCH_MILLISECONDS_SCAN_DELAY));
+		putDefault(P_STRETCH_MILLISECONDS_LENGTH, Integer.toString(DEF_STRETCH_MILLISECONDS_LENGTH));
+		putDefault(P_LIMIT_FACTOR, Integer.toString(DEF_LIMIT_FACTOR));
 	}
 
 	public static FilterSettingsShift getFilterSettingsShift() {

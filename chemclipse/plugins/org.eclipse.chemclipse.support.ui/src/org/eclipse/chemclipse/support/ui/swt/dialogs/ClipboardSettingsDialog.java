@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.preferences.PreferenceSupplierSupport;
+import org.eclipse.chemclipse.support.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.support.CopyColumnsSupport;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -74,7 +74,7 @@ public class ClipboardSettingsDialog extends Dialog {
 			}
 		}
 		//
-		return PreferenceSupplierSupport.DEF_CLIPBOARD_COPY_COLUMNS;
+		return PreferenceSupplier.DEF_CLIPBOARD_COPY_COLUMNS;
 	}
 
 	public void setExtendedTableViewer(ExtendedTableViewer extendedTableViewer) {

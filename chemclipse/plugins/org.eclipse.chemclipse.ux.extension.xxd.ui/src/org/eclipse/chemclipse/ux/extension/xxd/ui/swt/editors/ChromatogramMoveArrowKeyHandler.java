@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,16 +7,16 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
-import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.MoveDirection;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModel;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -61,7 +61,6 @@ public class ChromatogramMoveArrowKeyHandler extends AbstractHandledEventProcess
 		handleArrowMoveWindowSelection(keyCode);
 	}
 
-	
 	private void handleArrowMoveWindowSelection(int keyCode) {
 
 		IChromatogramSelection<?, ?> chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
@@ -71,7 +70,7 @@ public class ChromatogramMoveArrowKeyHandler extends AbstractHandledEventProcess
 				 * Left, Right
 				 * (Retention Time)
 				 */
-				boolean useAlternateWindowMoveDirection = preferenceStore.getBoolean(PreferenceConstants.P_ALTERNATE_WINDOW_MOVE_DIRECTION);
+				boolean useAlternateWindowMoveDirection = preferenceStore.getBoolean(PreferenceSupplier.P_ALTERNATE_WINDOW_MOVE_DIRECTION);
 				//
 				if(keyCode == SWT.ARROW_RIGHT) {
 					MoveDirection moveDirection = (useAlternateWindowMoveDirection) ? MoveDirection.LEFT : MoveDirection.RIGHT;
@@ -90,7 +89,7 @@ public class ChromatogramMoveArrowKeyHandler extends AbstractHandledEventProcess
 				 */
 				float stopAbundance = chromatogramSelection.getStopAbundance();
 				float newStopAbundance;
-				if(PreferenceSupplier.useAlternateWindowMoveDirection()) {
+				if(PreferenceSupplierModel.useAlternateWindowMoveDirection()) {
 					newStopAbundance = (keyCode == SWT.ARROW_UP) ? stopAbundance - stopAbundance / 20.0f : stopAbundance + stopAbundance / 20.0f;
 				} else {
 					newStopAbundance = (keyCode == SWT.ARROW_UP) ? stopAbundance + stopAbundance / 20.0f : stopAbundance - stopAbundance / 20.0f;

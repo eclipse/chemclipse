@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,7 +35,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.BarSeriesValue
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.BarSeriesYComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.LabelOption;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
@@ -200,7 +200,7 @@ public class ScanChartUI extends ScrollableChart {
 			modifyChart(scan, null);
 			//
 			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-			Color colorScan1 = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_SCAN_1));
+			Color colorScan1 = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_SCAN_1));
 			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
 				setChartType(ChartType.LINE);
@@ -242,8 +242,8 @@ public class ScanChartUI extends ScrollableChart {
 			String labelScan1 = "scan1";
 			String labelScan2 = "scan2";
 			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-			Color colorScan1 = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_SCAN_1));
-			Color colorScan2 = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_SCAN_2));
+			Color colorScan1 = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_SCAN_1));
+			Color colorScan2 = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_SCAN_2));
 			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
 				setChartType(ChartType.LINE);
@@ -477,14 +477,14 @@ public class ScanChartUI extends ScrollableChart {
 		 * Preferences
 		 */
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		String name = preferenceStore.getString(PreferenceConstants.P_SCAN_LABEL_FONT_NAME);
-		int height = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_FONT_SIZE);
-		int style = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_FONT_STYLE);
+		String name = preferenceStore.getString(PreferenceSupplier.P_SCAN_LABEL_FONT_NAME);
+		int height = preferenceStore.getInt(PreferenceSupplier.P_SCAN_LABEL_FONT_SIZE);
+		int style = preferenceStore.getInt(PreferenceSupplier.P_SCAN_LABEL_FONT_STYLE);
 		systemFont = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
 		//
-		labelHighestIntensities = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_HIGHEST_INTENSITIES);
-		addModuloLabels = preferenceStore.getBoolean(PreferenceConstants.P_SCAN_LABEL_MODULO_INTENSITIES);
-		boolean enableCompress = preferenceStore.getBoolean(PreferenceConstants.P_SCAN_CHART_ENABLE_COMPRESS);
+		labelHighestIntensities = preferenceStore.getInt(PreferenceSupplier.P_SCAN_LABEL_HIGHEST_INTENSITIES);
+		addModuloLabels = preferenceStore.getBoolean(PreferenceSupplier.P_SCAN_LABEL_MODULO_INTENSITIES);
+		boolean enableCompress = preferenceStore.getBoolean(PreferenceSupplier.P_SCAN_CHART_ENABLE_COMPRESS);
 		/*
 		 * Settings
 		 */

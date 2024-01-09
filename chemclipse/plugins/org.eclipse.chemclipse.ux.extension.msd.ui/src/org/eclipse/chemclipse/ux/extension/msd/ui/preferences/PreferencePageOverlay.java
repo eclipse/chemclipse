@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.preferences;
 
@@ -21,9 +21,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageOverlay extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageOverlay() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("MSD Overlay");
+		setTitle("MSD Overlay");
+		setDescription("");
 	}
 
 	/**
@@ -33,8 +35,8 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 	 */
 	public void createFieldEditors() {
 
-		addField(new RetentionTimeMinutesFieldEditor(PreferenceConstants.P_OVERLAY_X_OFFSET, "Retention time offset (minutes):", PreferenceConstants.MIN_X_OFFSET, PreferenceConstants.MAX_X_OFFSET, getFieldEditorParent()));
-		addField(new IntegerFieldEditor(PreferenceConstants.P_OVERLAY_Y_OFFSET, "Abundance offset:", getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_OVERLAY_X_OFFSET, "Retention time offset (minutes):", PreferenceSupplier.MIN_X_OFFSET, PreferenceSupplier.MAX_X_OFFSET, getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_OVERLAY_Y_OFFSET, "Abundance offset:", getFieldEditorParent()));
 	}
 
 	/*

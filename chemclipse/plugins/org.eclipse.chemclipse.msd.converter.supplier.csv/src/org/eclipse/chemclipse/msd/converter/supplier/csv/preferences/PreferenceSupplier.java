@@ -11,16 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.csv.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.model.settings.Delimiter;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.Activator;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -32,7 +26,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_EXPORT_USE_TIC = "exportUseTic";
 	public static final boolean DEF_EXPORT_USE_TIC = false;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -43,31 +37,17 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_IMPORT_DELIMITER, DEF_IMPORT_DELIMITER);
-		defaultValues.put(P_IMPORT_ZERO_MARKER, DEF_IMPORT_ZERO_MARKER);
-		defaultValues.put(P_EXPORT_USE_TIC, Boolean.toString(DEF_EXPORT_USE_TIC));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_IMPORT_DELIMITER, DEF_IMPORT_DELIMITER);
+		putDefault(P_IMPORT_ZERO_MARKER, DEF_IMPORT_ZERO_MARKER);
+		putDefault(P_EXPORT_USE_TIC, Boolean.toString(DEF_EXPORT_USE_TIC));
 	}
 
 	public static Delimiter getImportDelimiter() {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -58,10 +58,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.IRulerUpdateNotifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.RulerEvent;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageNamedTraces;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
@@ -160,7 +160,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	public void update(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(chromatogramSelection != null) {
-			if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION)) {
+			if(preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_FOCUS_SELECTION)) {
 				ChromatogramChart chromatogramChart = chartControl.get();
 				IAxisSet axisSet = chromatogramChart.getBaseChart().getAxisSet();
 				Range xrange = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
@@ -265,7 +265,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		NamedTracesUI namedTracesUI = new NamedTracesUI(parent, SWT.NONE);
 		namedTracesUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		namedTracesUI.setInput(new NamedTraces(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES)));
+		namedTracesUI.setInput(new NamedTraces(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES)));
 		namedTracesUI.setUpdateListener(new IUpdateListener() {
 
 			@Override
@@ -273,7 +273,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 				NamedTraces namedTraces = namedTracesUI.getNamedTraces();
 				if(namedTraces != null) {
-					preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES, namedTraces.save());
+					preferenceStore.setValue(PreferenceSupplier.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES, namedTraces.save());
 					chartControl.get().deleteSeries();
 					refreshUpdateOverlayChart();
 				}
@@ -313,14 +313,14 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
-		setButtonImage(button, IMAGE_ZOOM_LOCKED, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_ZOOM_LOCKED, preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_LOCK_ZOOM));
+		setButtonImage(button, IMAGE_ZOOM_LOCKED, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_ZOOM_LOCKED, preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_LOCK_ZOOM));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean active = !preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_LOCK_ZOOM);
-				preferenceStore.setValue(PreferenceConstants.P_OVERLAY_LOCK_ZOOM, active);
+				boolean active = !preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_LOCK_ZOOM);
+				preferenceStore.setValue(PreferenceSupplier.P_OVERLAY_LOCK_ZOOM, active);
 				setButtonImage(button, IMAGE_ZOOM_LOCKED, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_ZOOM_LOCKED, active);
 			}
 		});
@@ -332,14 +332,14 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
-		setButtonImage(button, IMAGE_FOCUS_SELECTION, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_FOCUS_SELECTION, preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION));
+		setButtonImage(button, IMAGE_FOCUS_SELECTION, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_FOCUS_SELECTION, preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_FOCUS_SELECTION));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean active = !preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION);
-				preferenceStore.setValue(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION, active);
+				boolean active = !preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_FOCUS_SELECTION);
+				preferenceStore.setValue(PreferenceSupplier.P_OVERLAY_FOCUS_SELECTION, active);
 				setButtonImage(button, IMAGE_FOCUS_SELECTION, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_FOCUS_SELECTION, active);
 			}
 		});
@@ -448,7 +448,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void createNewPart(String bundle, String classPath, String name) {
 
-		String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA);
+		String partStackId = preferenceStore.getString(PreferenceSupplier.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA);
 		if(!partStackId.equals(PartSupport.PARTSTACK_NONE)) {
 			/*
 			 * Services
@@ -501,8 +501,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void modifyButtons() {
 
-		setButtonImage(buttonLockControl.get(), IMAGE_ZOOM_LOCKED, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_ZOOM_LOCKED, preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_LOCK_ZOOM));
-		setButtonImage(buttonFocusControl.get(), IMAGE_FOCUS_SELECTION, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_FOCUS_SELECTION, preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION));
+		setButtonImage(buttonLockControl.get(), IMAGE_ZOOM_LOCKED, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_ZOOM_LOCKED, preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_LOCK_ZOOM));
+		setButtonImage(buttonFocusControl.get(), IMAGE_FOCUS_SELECTION, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_FOCUS_SELECTION, preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_FOCUS_SELECTION));
 	}
 
 	private void modifyWidgetStatus() {
@@ -513,7 +513,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		Set<DisplayType> types = getDisplayType();
 		comboOverlayType.get().setToolTipText(DisplayType.toDescription(types));
 		// comboOverlayType.setText(DisplayType.toShortcut(types));
-		if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS)) {
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS)) {
 			if(isExtractedIonsModusEnabled() || isExtractedWavelengthsModusEnabled() || isExtractedWavenumbersModusEnabled()) {
 				enableToolbar(toolbarNamedTraces, true);
 			} else {
@@ -557,7 +557,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void updateNamedTraces() {
 
-		toolbarNamedTraces.get().setInput(new NamedTraces(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES)));
+		toolbarNamedTraces.get().setInput(new NamedTraces(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES)));
 	}
 
 	private void createOverlayChart(Composite parent) {
@@ -690,7 +690,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			/*
 			 * Add the selected series
 			 */
-			String compressionType = preferenceStore.getString(PreferenceConstants.P_OVERLAY_CHART_COMPRESSION_TYPE);
+			String compressionType = preferenceStore.getString(PreferenceSupplier.P_OVERLAY_CHART_COMPRESSION_TYPE);
 			int compressionToLength = chromatogramChartSupport.getCompressionLength(compressionType, lineSeriesDataList.size());
 			chromatogramChart.addSeriesData(lineSeriesDataList, compressionToLength);
 			/*
@@ -710,7 +710,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			chromatogramChart.adjustRange(true);
 			//
 			if(!isEmpty) {
-				if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_LOCK_ZOOM)) {
+				if(preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_LOCK_ZOOM)) {
 					chromatogramChart.setRange(IExtendedChart.X_AXIS, xrange);
 					chromatogramChart.setRange(IExtendedChart.Y_AXIS, yrange);
 				}
@@ -749,7 +749,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		/*
 		 * References
 		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
 			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
@@ -806,7 +806,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		/*
 		 * References
 		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
 			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
@@ -856,7 +856,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		/*
 		 * References
 		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
 			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
@@ -914,7 +914,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		/*
 		 * References
 		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
 			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
@@ -943,7 +943,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void appendXWC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
 
-		boolean showOptimizedXWC = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_OPTIMIZED_CHROMATOGRAM_XWC);
+		boolean showOptimizedXWC = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_OPTIMIZED_CHROMATOGRAM_XWC);
 		/*
 		 * Master
 		 */
@@ -957,7 +957,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		/*
 		 * References
 		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
 			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
@@ -1027,8 +1027,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		BaseChart baseChart = chartControl.get().getBaseChart();
 		Derivative derivative = Derivative.NONE; // Always no derivative at the moment.
-		LineStyle lineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_OVERLAY));
-		boolean showArea = preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_SHOW_AREA);
+		LineStyle lineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceSupplier.P_LINE_STYLE_DISPLAY_OVERLAY));
+		boolean showArea = preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_SHOW_AREA);
 		//
 		if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
 			/*
@@ -1121,7 +1121,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
 		Color color = chromatogramChartSupport.getSeriesColor(chromatogramName, displayType);
 		String displayTypeInfo = " (" + displayType.getShortcut() + ")";
-		boolean addTypeInfo = preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_ADD_TYPE_INFO);
+		boolean addTypeInfo = preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_ADD_TYPE_INFO);
 		/*
 		 * BPC, XIC, TSC
 		 */
@@ -1146,7 +1146,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		/*
 		 * References
 		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
 			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
@@ -1197,7 +1197,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		/*
 		 * References
 		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
 			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
@@ -1226,7 +1226,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		Derivative derivative = getSelectedDerivative();
 		String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
 		Color color = chromatogramChartSupport.getSeriesColor(chromatogramName, displayType);
-		boolean addTypeInfo = preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_ADD_TYPE_INFO);
+		boolean addTypeInfo = preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_ADD_TYPE_INFO);
 		/*
 		 * TIC
 		 */
@@ -1242,7 +1242,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		/*
 		 * References
 		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
 			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -25,7 +25,7 @@ public class PreferencePageTaskOverlay extends AbstractPreferencePageTask {
 
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA, "Overlay Chromatogram Extra:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA, "Overlay Chromatogram Extra:", PreferenceSupplier.PART_STACKS, getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		super.createFieldEditors();
 	}

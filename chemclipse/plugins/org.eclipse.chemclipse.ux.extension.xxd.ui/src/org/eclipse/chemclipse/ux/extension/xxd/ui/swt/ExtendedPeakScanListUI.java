@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -66,11 +66,11 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeletePeaksOperatio
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteScanTargetsOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteTargetsOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMergePeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.IdentificationTargetSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
@@ -626,7 +626,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				} catch(ExecutionException e) {
 					logger.warn(e);
 				}
-				if(preferenceStore.getBoolean(PreferenceConstants.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL)) {
+				if(preferenceStore.getBoolean(PreferenceSupplier.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL)) {
 					IScan scan = getScan(object);
 					if(scan != null) {
 						IIdentificationTarget identificationTarget = IdentificationTargetSupport.getTargetUnknown(scan);
@@ -819,7 +819,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						 * Merge Peaks
 						 */
 						CalculationType calculationType = getCalculationTypeMerge();
-						boolean mergeIdentificationTargets = preferenceStore.getBoolean(PreferenceConstants.P_MERGE_PEAKS_IDENTIFICATION_TARGETS);
+						boolean mergeIdentificationTargets = preferenceStore.getBoolean(PreferenceSupplier.P_MERGE_PEAKS_IDENTIFICATION_TARGETS);
 						IPeakMSD peakMSD = PeakMergerMSD.mergePeaks(peaksToMerge, calculationType, mergeIdentificationTargets);
 						/*
 						 * Modify the chromatogram
@@ -829,7 +829,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						/*
 						 * Delete Origins on demand
 						 */
-						if(preferenceStore.getBoolean(PreferenceConstants.P_MERGE_PEAKS_DELETE_ORIGINS)) {
+						if(preferenceStore.getBoolean(PreferenceSupplier.P_MERGE_PEAKS_DELETE_ORIGINS)) {
 							chromatogramMSD.removePeaks(peaksToMerge);
 						}
 						/*
@@ -888,7 +888,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private CalculationType getCalculationTypeMerge() {
 
 		try {
-			return CalculationType.valueOf(preferenceStore.getString(PreferenceConstants.P_MERGE_PEAKS_CALCULATION_TYPE));
+			return CalculationType.valueOf(preferenceStore.getString(PreferenceSupplier.P_MERGE_PEAKS_CALCULATION_TYPE));
 		} catch(Exception e) {
 			/*
 			 * Default SUM on error
@@ -1145,12 +1145,12 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private void updateFromPreferences() {
 
 		if(preferenceStore != null) {
-			showPeaks = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_LIST);
-			showPeaksInRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
-			showScans = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_LIST);
-			showScansInRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE);
-			moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
-			showPeakProfilesSelectionAll = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK_PROFILES_SELECTION_ALL);
+			showPeaks = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_PEAKS_IN_LIST);
+			showPeaksInRange = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_PEAKS_IN_SELECTED_RANGE);
+			showScans = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_SCANS_IN_LIST);
+			showScansInRange = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_SCANS_IN_SELECTED_RANGE);
+			moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceSupplier.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
+			showPeakProfilesSelectionAll = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_PEAK_PROFILES_SELECTION_ALL);
 		}
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add support for tracking TileDefinitions
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui;
@@ -18,6 +18,7 @@ import java.util.MissingResourceException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
+import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -35,36 +36,26 @@ public class Activator extends AbstractActivatorUI {
 
 	public static final String INFO_PERSPECTIVES = "Perspectives";
 	public static final String PATH_PERSPECTIVES_INFO = "files/images/perspectives.png";
-	// The shared instance
+	//
 	private static Activator plugin;
 	private static final Logger logger = Logger.getLogger(Activator.class);
 	private ServiceTracker<TileDefinition, TileDefinition> tileServiceTracker;
 
-	/**
-	 * The constructor
-	 */
 	public Activator() {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 
 		super.start(context);
 		plugin = this;
+		initializePreferenceStore(PreferenceSupplier.INSTANCE());
 		initializeImageRegistry();
 		tileServiceTracker = new ServiceTracker<>(context, TileDefinition.class, null);
 		tileServiceTracker.open();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
 
@@ -74,11 +65,6 @@ public class Activator extends AbstractActivatorUI {
 		tileServiceTracker = null;
 	}
 
-	/**
-	 * Returns the shared instance
-	 * 
-	 * @return the shared instance
-	 */
 	public static Activator getDefault() {
 
 		return plugin;

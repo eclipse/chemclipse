@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskMiscellaneous;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferencePage;
 
 public class GroupHandlerMiscellaneous extends AbstractGroupHandler {
@@ -40,7 +40,7 @@ public class GroupHandlerMiscellaneous extends AbstractGroupHandler {
 
 		List<IPartHandler> partHandler = new ArrayList<>();
 		//
-		partHandler.add(new PartHandler("Measurement Results", PartSupport.PARTDESCRIPTOR_MEASUREMENT_RESULTS, PreferenceConstants.P_STACK_POSITION_MEASUREMENT_RESULTS));
+		partHandler.add(new PartHandler("Measurement Results", PartSupport.PARTDESCRIPTOR_MEASUREMENT_RESULTS, PreferenceSupplier.P_STACK_POSITION_MEASUREMENT_RESULTS));
 		//
 		return partHandler;
 	}

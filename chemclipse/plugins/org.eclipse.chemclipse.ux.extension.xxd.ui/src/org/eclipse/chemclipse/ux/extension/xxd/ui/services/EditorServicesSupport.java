@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class EditorServicesSupport {
@@ -27,7 +27,7 @@ public class EditorServicesSupport {
 
 		IEditorService editorService = null;
 		List<IEditorService> services = getEditorServices(type);
-		String contributionURI = preferenceStore.getString(PreferenceConstants.P_EDITOR_TSD);
+		String contributionURI = preferenceStore.getString(PreferenceSupplier.P_EDITOR_TSD);
 		/*
 		 * Selected Editor
 		 */

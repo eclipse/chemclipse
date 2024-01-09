@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -33,9 +33,9 @@ public class PreferencePagePeakTraces extends FieldEditorPreferencePage implemen
 	@Override
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_PEAK_TRACES, "Color Scheme", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceConstants.P_MAX_DISPLAY_PEAK_TRACES, "Display Traces", PreferenceConstants.MIN_TRACES, PreferenceConstants.MAX_TRACES, getFieldEditorParent()));
-		addField(new ExtendedIntegerFieldEditor(PreferenceConstants.P_PEAK_TRACES_OFFSET_RETENTION_TIME, "Offset Time [ms]", PreferenceConstants.MIN_OFFSET_RETENTION_TIME, PreferenceConstants.MAX_OFFSET_RETENTION_TIME, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_COLOR_SCHEME_PEAK_TRACES, "Color Scheme", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceSupplier.P_MAX_DISPLAY_PEAK_TRACES, "Display Traces", PreferenceSupplier.MIN_TRACES, PreferenceSupplier.MAX_TRACES, getFieldEditorParent()));
+		addField(new ExtendedIntegerFieldEditor(PreferenceSupplier.P_PEAK_TRACES_OFFSET_RETENTION_TIME, "Offset Time [ms]", PreferenceSupplier.MIN_OFFSET_RETENTION_TIME, PreferenceSupplier.MAX_OFFSET_RETENTION_TIME, getFieldEditorParent()));
 	}
 
 	@Override

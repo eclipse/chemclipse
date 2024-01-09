@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
@@ -15,12 +15,12 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.support.PeakClassifierSupport;
 import org.eclipse.chemclipse.model.targets.TargetSupport;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModel;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -143,7 +143,7 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 			case 17:
 				String name1 = TargetSupport.getBestTargetLibraryField(object1);
 				String name2 = TargetSupport.getBestTargetLibraryField(object2);
-				sortOrder = PreferenceSupplier.isSortCaseSensitive() ? name2.compareTo(name1) : name2.compareToIgnoreCase(name1);
+				sortOrder = PreferenceSupplierModel.isSortCaseSensitive() ? name2.compareTo(name1) : name2.compareToIgnoreCase(name1);
 				break;
 			case 18:
 				if(chromatogramPeakArea > 0) {
@@ -160,7 +160,7 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 			case 20:
 				String classifier1 = PeakClassifierSupport.getClassifier(object1);
 				String classifier2 = PeakClassifierSupport.getClassifier(object2);
-				sortOrder = PreferenceSupplier.isSortCaseSensitive() ? classifier2.compareTo(classifier1) : classifier2.compareToIgnoreCase(classifier1);
+				sortOrder = PreferenceSupplierModel.isSortCaseSensitive() ? classifier2.compareTo(classifier1) : classifier2.compareToIgnoreCase(classifier1);
 				break;
 		}
 		//

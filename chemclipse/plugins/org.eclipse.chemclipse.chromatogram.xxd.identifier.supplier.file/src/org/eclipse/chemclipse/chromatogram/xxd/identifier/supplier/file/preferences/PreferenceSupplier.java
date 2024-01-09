@@ -12,9 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.Activator;
@@ -35,9 +33,6 @@ import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.FileListUtil;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -130,7 +125,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_USE_PEAKS_INSTEAD_OF_SCANS = "usePeaksInsteadOfScans";
 	public static final boolean DEF_USE_PEAKS_INSTEAD_OF_SCANS = false;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -141,67 +136,53 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES);
-		defaultValues.put(P_MASS_SPECTRUM_COMPARATOR_ID, DEF_MASS_SPECTRUM_COMPARATOR_ID);
-		defaultValues.put(P_USE_PRE_OPTIMIZATION, Boolean.toString(DEF_USE_PRE_OPTIMIZATION));
-		defaultValues.put(P_THRESHOLD_PRE_OPTIMIZATION, Double.toString(DEF_THRESHOLD_PRE_OPTIMIZATION));
-		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
-		defaultValues.put(P_LIMIT_MATCH_FACTOR_FILE, Float.toString(DEF_LIMIT_MATCH_FACTOR_FILE));
-		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
-		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
+		putDefault(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES);
+		putDefault(P_MASS_SPECTRUM_COMPARATOR_ID, DEF_MASS_SPECTRUM_COMPARATOR_ID);
+		putDefault(P_USE_PRE_OPTIMIZATION, Boolean.toString(DEF_USE_PRE_OPTIMIZATION));
+		putDefault(P_THRESHOLD_PRE_OPTIMIZATION, Double.toString(DEF_THRESHOLD_PRE_OPTIMIZATION));
+		putDefault(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
+		putDefault(P_LIMIT_MATCH_FACTOR_FILE, Float.toString(DEF_LIMIT_MATCH_FACTOR_FILE));
+		putDefault(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
+		putDefault(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
 		//
-		setUnknownValues(defaultValues, POSTFIX_MSD);
-		setUnknownValues(defaultValues, POSTFIX_CSD);
-		setUnknownValues(defaultValues, POSTFIX_WSD);
+		setUnknownValues(POSTFIX_MSD);
+		setUnknownValues(POSTFIX_CSD);
+		setUnknownValues(POSTFIX_WSD);
 		//
-		defaultValues.put(P_DELTA_CALCULATION, DEF_DELTA_CALCULATION);
-		defaultValues.put(P_DELTA_WINDOW, Float.toString(DEF_DELTA_WINDOW));
-		defaultValues.put(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION);
-		defaultValues.put(P_PENALTY_WINDOW, Float.toString(DEF_PENALTY_WINDOW));
-		defaultValues.put(P_PENALTY_LEVEL_FACTOR, Float.toString(DEF_PENALTY_LEVEL_FACTOR));
-		defaultValues.put(P_MAX_PENALTY, Float.toString(DEF_MAX_PENALTY));
-		defaultValues.put(P_FILTER_PATH_IDENTIFIER_FILES, DEF_FILTER_PATH_IDENTIFIER_FILES);
+		putDefault(P_DELTA_CALCULATION, DEF_DELTA_CALCULATION);
+		putDefault(P_DELTA_WINDOW, Float.toString(DEF_DELTA_WINDOW));
+		putDefault(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION);
+		putDefault(P_PENALTY_WINDOW, Float.toString(DEF_PENALTY_WINDOW));
+		putDefault(P_PENALTY_LEVEL_FACTOR, Float.toString(DEF_PENALTY_LEVEL_FACTOR));
+		putDefault(P_MAX_PENALTY, Float.toString(DEF_MAX_PENALTY));
+		putDefault(P_FILTER_PATH_IDENTIFIER_FILES, DEF_FILTER_PATH_IDENTIFIER_FILES);
 		//
-		defaultValues.put(P_USE_NORMALIZED_SCAN, Boolean.toString(DEF_USE_NORMALIZED_SCAN));
-		defaultValues.put(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE);
-		defaultValues.put(P_USE_PEAKS_INSTEAD_OF_SCANS, Boolean.toString(DEF_USE_PEAKS_INSTEAD_OF_SCANS));
+		putDefault(P_USE_NORMALIZED_SCAN, Boolean.toString(DEF_USE_NORMALIZED_SCAN));
+		putDefault(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE);
+		putDefault(P_USE_PEAKS_INSTEAD_OF_SCANS, Boolean.toString(DEF_USE_PEAKS_INSTEAD_OF_SCANS));
 		//
-		return defaultValues;
 	}
 
-	private void setUnknownValues(Map<String, String> defaultValues, String postfix) {
+	private void setUnknownValues(String postfix) {
 
-		defaultValues.put(P_LIMIT_MATCH_FACTOR_UNKNOWN + postfix, Float.toString(DEF_LIMIT_MATCH_FACTOR_UNKOWN));
-		defaultValues.put(P_MATCH_QUALITY_UNKNOWN + postfix, Float.toString(DEF_MATCH_QUALITY_UNKNOWN));
-		defaultValues.put(P_TARGET_NAME_UNKNOWN + postfix, DEF_TARGET_NAME_UNKNOWN);
-		defaultValues.put(P_NUMBER_OF_MZ_UNKNOWN + postfix, Integer.toString(DEF_NUMBER_OF_MZ_UNKNOWN));
-		defaultValues.put(P_NUMBER_OF_WAVELENGTH_UNKNOWN + postfix, Integer.toString(DEF_NUMBER_OF_WAVELENGTH_UNKNOWN));
-		defaultValues.put(P_INCLUDE_INTENSITY_PERCENT_UNKNOWN + postfix, Boolean.toString(DEF_INCLUDE_INTENSITY_PERCENT_UNKNOWN));
-		defaultValues.put(P_MARKER_START_UNKNOWN + postfix, DEF_MARKER_START_UNKNOWN);
-		defaultValues.put(P_MARKER_STOP_UNKNOWN + postfix, DEF_MARKER_STOP_UNKNOWN);
-		defaultValues.put(P_INCLUDE_RETENTION_TIME_UNKNOWN + postfix, Boolean.toString(DEF_INCLUDE_RETENTION_TIME_UNKNOWN));
-		defaultValues.put(P_INCLUDE_RETENTION_INDEX_UNKNOWN + postfix, Boolean.toString(DEF_INCLUDE_RETENTION_INDEX_UNKNOWN));
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_LIMIT_MATCH_FACTOR_UNKNOWN + postfix, Float.toString(DEF_LIMIT_MATCH_FACTOR_UNKOWN));
+		putDefault(P_MATCH_QUALITY_UNKNOWN + postfix, Float.toString(DEF_MATCH_QUALITY_UNKNOWN));
+		putDefault(P_TARGET_NAME_UNKNOWN + postfix, DEF_TARGET_NAME_UNKNOWN);
+		putDefault(P_NUMBER_OF_MZ_UNKNOWN + postfix, Integer.toString(DEF_NUMBER_OF_MZ_UNKNOWN));
+		putDefault(P_NUMBER_OF_WAVELENGTH_UNKNOWN + postfix, Integer.toString(DEF_NUMBER_OF_WAVELENGTH_UNKNOWN));
+		putDefault(P_INCLUDE_INTENSITY_PERCENT_UNKNOWN + postfix, Boolean.toString(DEF_INCLUDE_INTENSITY_PERCENT_UNKNOWN));
+		putDefault(P_MARKER_START_UNKNOWN + postfix, DEF_MARKER_START_UNKNOWN);
+		putDefault(P_MARKER_STOP_UNKNOWN + postfix, DEF_MARKER_STOP_UNKNOWN);
+		putDefault(P_INCLUDE_RETENTION_TIME_UNKNOWN + postfix, Boolean.toString(DEF_INCLUDE_RETENTION_TIME_UNKNOWN));
+		putDefault(P_INCLUDE_RETENTION_INDEX_UNKNOWN + postfix, Boolean.toString(DEF_INCLUDE_RETENTION_INDEX_UNKNOWN));
 	}
 
 	public static MassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {

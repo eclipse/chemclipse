@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences;
 
-import org.eclipse.chemclipse.support.preferences.PreferenceSupplierSupport;
+import org.eclipse.chemclipse.support.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.Activator;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -26,14 +26,15 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription(SupportMessages.supportSettings);
+		setTitle(SupportMessages.supportSettings);
+		setDescription("");
 	}
 
 	@Override
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(PreferenceSupplierSupport.P_CLIPBOARD_TABLE_DEFAULT_SORTING, SupportMessages.clipboardTableDefaultSorting, getFieldEditorParent()));
-		addField(new IntegerFieldEditor(PreferenceSupplierSupport.P_UNDO_LIMIT, SupportMessages.maximumAllowedUndoSteps, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_CLIPBOARD_TABLE_DEFAULT_SORTING, SupportMessages.clipboardTableDefaultSorting, getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_UNDO_LIMIT, SupportMessages.maximumAllowedUndoSteps, getFieldEditorParent()));
 	}
 
 	@Override

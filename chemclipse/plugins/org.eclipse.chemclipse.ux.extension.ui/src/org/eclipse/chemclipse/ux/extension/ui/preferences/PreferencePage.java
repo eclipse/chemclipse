@@ -38,17 +38,17 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public void createFieldEditors() {
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_SELECTED_DRIVE_PATH, "Selected Drive Path", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_SELECTED_HOME_PATH, "Selected Home Path", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_SELECTED_WORKSPACE_PATH, "Selected Workspace Path", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH, "Selected User Location Path", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_USER_LOCATION_PATH, "User Location", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_OPEN_FIRST_DATA_MATCH_ONLY, "Open First Data Match Only", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_OPEN_EDITOR_MULTIPLE_TIMES, "Open Editor Multiple Times", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_SELECTED_DRIVE_PATH, "Selected Drive Path", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_SELECTED_HOME_PATH, "Selected Home Path", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_SELECTED_WORKSPACE_PATH, "Selected Workspace Path", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_SELECTED_USER_LOCATION_PATH, "Selected User Location Path", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_USER_LOCATION_PATH, "User Location", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_OPEN_FIRST_DATA_MATCH_ONLY, "Open First Data Match Only", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_OPEN_EDITOR_MULTIPLE_TIMES, "Open Editor Multiple Times", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Microsoft Windows", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_NETWORK_SHARES, "Show Network Shares (requires restart)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_NETWORK_SHARES, "Show Network Shares (requires restart)", getFieldEditorParent()));
 	}
 
 	/*

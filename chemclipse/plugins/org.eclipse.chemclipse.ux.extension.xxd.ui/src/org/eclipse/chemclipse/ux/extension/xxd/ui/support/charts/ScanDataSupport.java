@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Lorenz Gerber - fix integer overflow for signal label
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
@@ -18,7 +18,6 @@ import java.text.DecimalFormat;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
@@ -27,8 +26,9 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModel;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 
@@ -75,7 +75,7 @@ public class ScanDataSupport {
 			builder.append(decimalFormat.format(scan.getRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 			builder.append(" | ");
 			builder.append("RI: ");
-			if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+			if(PreferenceSupplierModel.showRetentionIndexWithoutDecimals()) {
 				builder.append(Integer.toString((int)scan.getRetentionIndex()));
 			} else {
 				builder.append(decimalFormat.format(scan.getRetentionIndex()));
@@ -129,7 +129,7 @@ public class ScanDataSupport {
 			builder.append(decimalFormat.format(scanMSD.getRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 			builder.append(" | ");
 			builder.append("RI: ");
-			if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+			if(PreferenceSupplierModel.showRetentionIndexWithoutDecimals()) {
 				builder.append(Integer.toString((int)scanMSD.getRetentionIndex()));
 			} else {
 				builder.append(decimalFormat.format(scanMSD.getRetentionIndex()));
@@ -169,9 +169,9 @@ public class ScanDataSupport {
 
 	public void setDataTypeMSD(IChartSettings chartSettings) {
 
-		String titleX = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MZ);
-		String titleY = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
-		String titleY1 = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		String titleX = preferenceStore.getString(PreferenceSupplier.P_TITLE_X_AXIS_MZ);
+		String titleY = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_INTENSITY);
+		String titleY1 = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
 		//
 		ChartSupport.setPrimaryAxisSet(chartSettings, titleX, true, titleY);
 		ChartSupport.clearSecondaryAxes(chartSettings);
@@ -180,10 +180,10 @@ public class ScanDataSupport {
 
 	public void setDataTypeCSD(IChartSettings chartSettings) {
 
-		String titleX = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS);
-		String titleX1 = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MINUTES);
-		String titleY = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
-		String titleY1 = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		String titleX = preferenceStore.getString(PreferenceSupplier.P_TITLE_X_AXIS_MILLISECONDS);
+		String titleX1 = preferenceStore.getString(PreferenceSupplier.P_TITLE_X_AXIS_MINUTES);
+		String titleY = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_INTENSITY);
+		String titleY1 = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
 		//
 		ChartSupport.setPrimaryAxisSet(chartSettings, titleX, false, titleY);
 		ChartSupport.clearSecondaryAxes(chartSettings);
@@ -193,9 +193,9 @@ public class ScanDataSupport {
 
 	public void setDataTypeWSD(IChartSettings chartSettings) {
 
-		String titleX = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_WAVELENGTH);
-		String titleY = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
-		String titleY1 = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		String titleX = preferenceStore.getString(PreferenceSupplier.P_TITLE_X_AXIS_WAVELENGTH);
+		String titleY = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_INTENSITY);
+		String titleY1 = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
 		//
 		ChartSupport.setPrimaryAxisSet(chartSettings, titleX, true, titleY);
 		ChartSupport.clearSecondaryAxes(chartSettings);
@@ -205,8 +205,8 @@ public class ScanDataSupport {
 	public void setDataTypeISD(IChartSettings chartSettings) {
 
 		String titleX = "Wavenumber";
-		String titleY = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
-		String titleY1 = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		String titleY = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_INTENSITY);
+		String titleY1 = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
 		//
 		ChartSupport.setPrimaryAxisSet(chartSettings, titleX, true, titleY);
 		ChartSupport.clearSecondaryAxes(chartSettings);

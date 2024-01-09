@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -51,10 +51,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteTargetsOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargetsList;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ChromatogramUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.IdentificationTargetSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
@@ -481,7 +481,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		/*
 		 * Sort the table
 		 */
-		targetListUI.setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SORTABLE));
+		targetListUI.setComparator(preferenceStore.getBoolean(PreferenceSupplier.P_TARGETS_TABLE_SORTABLE));
 		/*
 		 * Add the delete targets support.
 		 */
@@ -619,8 +619,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 		comboTargetControl.get().updateContentProposals();
 		//
-		targetListOther.get().setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SORTABLE));
-		targetListChromatogram.get().setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SORTABLE));
+		targetListOther.get().setComparator(preferenceStore.getBoolean(PreferenceSupplier.P_TARGETS_TABLE_SORTABLE));
+		targetListChromatogram.get().setComparator(preferenceStore.getBoolean(PreferenceSupplier.P_TARGETS_TABLE_SORTABLE));
 	}
 
 	private void updateInput(float retentionIndex) {
@@ -750,7 +750,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 				logger.warn(e);
 			}
 			updateTargetsModify(display);
-			if(preferenceStore.getBoolean(PreferenceConstants.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL)) {
+			if(preferenceStore.getBoolean(PreferenceSupplier.P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL)) {
 				addTargetUnknown(display);
 			}
 		}
@@ -804,7 +804,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		Table table = targetListUI.getTable();
 		if(table.getItemCount() > 0) {
 			table.setSelection(0);
-			boolean propagateTargetOnUpdate = preferenceStore.getBoolean(PreferenceConstants.P_PROPAGATE_TARGET_ON_UPDATE);
+			boolean propagateTargetOnUpdate = preferenceStore.getBoolean(PreferenceSupplier.P_PROPAGATE_TARGET_ON_UPDATE);
 			if(propagateTargetOnUpdate) {
 				propagateTarget(display);
 			}

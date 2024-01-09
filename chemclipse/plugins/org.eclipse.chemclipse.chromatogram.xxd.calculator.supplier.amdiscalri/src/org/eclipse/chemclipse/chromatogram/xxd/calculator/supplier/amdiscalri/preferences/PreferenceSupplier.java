@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalculatorStrategy;
@@ -24,9 +22,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.se
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.FileListUtil;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -89,7 +84,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_LIST_PATH_EXPORT = "listPathExport";
 	public static final String DEF_LIST_PATH_EXPORT = "";
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -100,45 +95,31 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_RETENTION_INDEX_FILES, DEF_RETENTION_INDEX_FILES);
-		defaultValues.put(P_CALCULATOR_STRATEGY, DEF_CALCULATOR_STRATEGY);
-		defaultValues.put(P_USE_DEFAULT_COLUMN, Boolean.toString(DEF_USE_DEFAULT_COLUMN));
-		defaultValues.put(P_PROCESS_REFERENCED_CHROMATOGRAMS, Boolean.toString(DEF_PROCESS_REFERENCED_CHROMATOGRAMS));
-		defaultValues.put(P_FILTER_PATH_INDEX_FILES, DEF_FILTER_PATH_INDEX_FILES);
-		defaultValues.put(P_FILTER_PATH_MODELS_MSD, DEF_FILTER_PATH_MODELS_MSD);
-		defaultValues.put(P_FILTER_PATH_MODELS_CSD, DEF_FILTER_PATH_MODELS_CSD);
-		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
-		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
-		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
-		defaultValues.put(P_LIST_PATH_IMPORT_FILE, DEF_LIST_PATH_IMPORT_FILE);
-		defaultValues.put(P_LIST_PATH_IMPORT_TEMPLATE, DEF_LIST_PATH_IMPORT_TEMPLATE);
-		defaultValues.put(P_LIST_PATH_EXPORT_TEMPLATE, DEF_LIST_PATH_EXPORT_TEMPLATE);
-		defaultValues.put(P_CALIBRATION_EXPORT_USE_CURATED_NAMES, Boolean.toString(DEF_CALIBRATION_EXPORT_USE_CURATED_NAMES));
-		defaultValues.put(P_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES, Boolean.toString(DEF_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES));
-		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
-		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_RETENTION_INDEX_FILES, DEF_RETENTION_INDEX_FILES);
+		putDefault(P_CALCULATOR_STRATEGY, DEF_CALCULATOR_STRATEGY);
+		putDefault(P_USE_DEFAULT_COLUMN, Boolean.toString(DEF_USE_DEFAULT_COLUMN));
+		putDefault(P_PROCESS_REFERENCED_CHROMATOGRAMS, Boolean.toString(DEF_PROCESS_REFERENCED_CHROMATOGRAMS));
+		putDefault(P_FILTER_PATH_INDEX_FILES, DEF_FILTER_PATH_INDEX_FILES);
+		putDefault(P_FILTER_PATH_MODELS_MSD, DEF_FILTER_PATH_MODELS_MSD);
+		putDefault(P_FILTER_PATH_MODELS_CSD, DEF_FILTER_PATH_MODELS_CSD);
+		putDefault(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
+		putDefault(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
+		putDefault(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
+		putDefault(P_LIST_PATH_IMPORT_FILE, DEF_LIST_PATH_IMPORT_FILE);
+		putDefault(P_LIST_PATH_IMPORT_TEMPLATE, DEF_LIST_PATH_IMPORT_TEMPLATE);
+		putDefault(P_LIST_PATH_EXPORT_TEMPLATE, DEF_LIST_PATH_EXPORT_TEMPLATE);
+		putDefault(P_CALIBRATION_EXPORT_USE_CURATED_NAMES, Boolean.toString(DEF_CALIBRATION_EXPORT_USE_CURATED_NAMES));
+		putDefault(P_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES, Boolean.toString(DEF_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES));
+		putDefault(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		putDefault(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 	}
 
 	public static PeakIdentifierAlkaneSettings getPeakIdentifierAlkaneSettings() {

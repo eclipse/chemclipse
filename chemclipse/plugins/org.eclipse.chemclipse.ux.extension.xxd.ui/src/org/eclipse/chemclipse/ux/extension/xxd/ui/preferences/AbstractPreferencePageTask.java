@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -45,7 +45,7 @@ public abstract class AbstractPreferencePageTask extends FieldEditorPreferencePa
 			addField(new LabelFieldEditor(ExtensionMessages.mandatory, getFieldEditorParent()));
 			List<IPartHandler> partHandlersMandatory = groupHandler.getPartHandlerMandatory();
 			for(IPartHandler partHandler : partHandlersMandatory) {
-				addField(new ComboFieldEditor(partHandler.getPartStackReference().getStackPositionKey(), partHandler.getName() + ":", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+				addField(new ComboFieldEditor(partHandler.getPartStackReference().getStackPositionKey(), partHandler.getName() + ":", PreferenceSupplier.PART_STACKS, getFieldEditorParent()));
 			}
 			//
 			List<IPartHandler> partHandlersAdditional = groupHandler.getPartHandlerAdditional();
@@ -53,7 +53,7 @@ public abstract class AbstractPreferencePageTask extends FieldEditorPreferencePa
 				addField(new SpacerFieldEditor(getFieldEditorParent()));
 				addField(new LabelFieldEditor(ExtensionMessages.additional, getFieldEditorParent()));
 				for(IPartHandler partHandler : partHandlersAdditional) {
-					addField(new ComboFieldEditor(partHandler.getPartStackReference().getStackPositionKey(), partHandler.getName() + ":", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+					addField(new ComboFieldEditor(partHandler.getPartStackReference().getStackPositionKey(), partHandler.getName() + ":", PreferenceSupplier.PART_STACKS, getFieldEditorParent()));
 				}
 			}
 		}

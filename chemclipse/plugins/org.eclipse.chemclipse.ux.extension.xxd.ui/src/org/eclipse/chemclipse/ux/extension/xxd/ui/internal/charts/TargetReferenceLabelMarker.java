@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,7 +35,7 @@ import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
@@ -417,18 +417,18 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
 	public static FontData getPeakFontData(IPreferenceStore preferenceStore) {
 
-		String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME);
-		int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
-		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
+		String name = preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME);
+		int height = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
+		int style = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
 		//
 		return new FontData(name, height, style);
 	}
 
 	public static FontData getScanFontData(IPreferenceStore preferenceStore) {
 
-		String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME);
-		int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE);
-		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE);
+		String name = preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME);
+		int height = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE);
+		int style = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE);
 		//
 		return new FontData(name, height, style);
 	}
@@ -436,24 +436,24 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	public static Color getActiveColor(IPreferenceStore preferenceStore) {
 
 		if(!PreferencesSupport.isDarkTheme())
-			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_ACTIVE_TARGET_LABEL_FONT_COLOR));
+			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_ACTIVE_TARGET_LABEL_FONT_COLOR));
 		else
-			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_ACTIVE_TARGET_LABEL_FONT_DARK_COLOR));
+			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_ACTIVE_TARGET_LABEL_FONT_DARK_COLOR));
 	}
 
 	public static Color getInactiveColor(IPreferenceStore preferenceStore) {
 
 		if(!PreferencesSupport.isDarkTheme())
-			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_INACTIVE_TARGET_LABEL_FONT_COLOR));
+			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_INACTIVE_TARGET_LABEL_FONT_COLOR));
 		else
-			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_INACTIVE_TARGET_LABEL_FONT_DARK_COLOR));
+			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_INACTIVE_TARGET_LABEL_FONT_DARK_COLOR));
 	}
 
 	public static Color getIdColor(IPreferenceStore preferenceStore) {
 
 		if(!PreferencesSupport.isDarkTheme())
-			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_ID_TARGET_LABEL_FONT_COLOR));
+			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_ID_TARGET_LABEL_FONT_COLOR));
 		else
-			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_ID_TARGET_LABEL_FONT_DARK_COLOR));
+			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_ID_TARGET_LABEL_FONT_DARK_COLOR));
 	}
 }

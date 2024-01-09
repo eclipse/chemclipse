@@ -12,17 +12,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.settings.ImageFormat;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.settings.ImageReportSettings;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -39,7 +33,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_FORMAT = "imageFormat";
 	public static final String DEF_FORMAT = ImageFormat.PNG.name();
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -50,34 +44,20 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<>();
-		defaultValues.put(P_APPEND_FILES, Boolean.toString(DEF_APPEND_FILES));
-		defaultValues.put(P_WIDTH, Integer.toString(DEF_WIDTH));
-		defaultValues.put(P_HEIGHT, Integer.toString(DEF_HEIGHT));
-		defaultValues.put(P_ADD_PEAKS, Boolean.toString(DEF_ADD_PEAKS));
-		defaultValues.put(P_ADD_SCANS, Boolean.toString(DEF_ADD_SCANS));
-		defaultValues.put(P_FORMAT, DEF_FORMAT);
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_APPEND_FILES, Boolean.toString(DEF_APPEND_FILES));
+		putDefault(P_WIDTH, Integer.toString(DEF_WIDTH));
+		putDefault(P_HEIGHT, Integer.toString(DEF_HEIGHT));
+		putDefault(P_ADD_PEAKS, Boolean.toString(DEF_ADD_PEAKS));
+		putDefault(P_ADD_SCANS, Boolean.toString(DEF_ADD_SCANS));
+		putDefault(P_FORMAT, DEF_FORMAT);
 	}
 
 	public static ImageReportSettings getReportSettings() {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.PeakTracesOffsetListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.PenaltyMarkerListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.PenaltyCalculationModel;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
@@ -108,7 +108,7 @@ public class PenaltyCalculationChart extends ChromatogramChart {
 			/*
 			 * Modify the peak series.
 			 */
-			int offsetRetentionTime = preferenceStore.getInt(PreferenceConstants.P_PEAK_TRACES_OFFSET_RETENTION_TIME);
+			int offsetRetentionTime = preferenceStore.getInt(PreferenceSupplier.P_PEAK_TRACES_OFFSET_RETENTION_TIME);
 			peakTracesOffsetListener.setOffsetRetentionTime(offsetRetentionTime);
 			int startRetentionTime = peakModel.getStartRetentionTime() - offsetRetentionTime;
 			int stopRetentionTime = peakModel.getStopRetentionTime() + offsetRetentionTime;

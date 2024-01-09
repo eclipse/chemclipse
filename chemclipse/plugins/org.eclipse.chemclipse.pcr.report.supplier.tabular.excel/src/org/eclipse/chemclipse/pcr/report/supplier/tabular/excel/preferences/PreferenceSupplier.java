@@ -12,9 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.preferences;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.Activator;
@@ -22,9 +20,6 @@ import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMappings;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.preferences.StringUtils;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -41,7 +36,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_OPEN_REPORT = "xlsx-pcr-open-report";
 	public static final boolean DEF_OPEN_REPORT = true;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -52,32 +47,18 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<>();
-		defaultValues.put(P_CHANNEL_MAPPING, DEF_CHANNEL_MAPPING);
-		defaultValues.put(P_IGNORE_SUBSETS, DEF_IGNORE_SUBSETS);
-		defaultValues.put(P_ANALYSIS_SEPARATOR, DEF_ANALYSIS_SEPARATOR);
-		defaultValues.put(P_OPEN_REPORT, Boolean.toString(DEF_OPEN_REPORT));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_CHANNEL_MAPPING, DEF_CHANNEL_MAPPING);
+		putDefault(P_IGNORE_SUBSETS, DEF_IGNORE_SUBSETS);
+		putDefault(P_ANALYSIS_SEPARATOR, DEF_ANALYSIS_SEPARATOR);
+		putDefault(P_OPEN_REPORT, Boolean.toString(DEF_OPEN_REPORT));
 	}
 
 	public static ChannelMappings getChannelMappings() {

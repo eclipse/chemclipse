@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,7 +34,7 @@ import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.process.comparators.NameComparator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -176,17 +176,17 @@ public class ProcessingWizardPage extends WizardPage {
 
 	private static void setDataTypeSelectionDefault(DataCategory dataCategory) {
 
-		preferenceStore.setDefault(PreferenceConstants.P_PROCESSOR_SELECTION_DATA_CATEGORY + dataCategory.name(), PreferenceConstants.DEF_PROCESSOR_SELECTION_DATA_CATEGORY);
+		preferenceStore.setDefault(PreferenceSupplier.P_PROCESSOR_SELECTION_DATA_CATEGORY + dataCategory.name(), PreferenceSupplier.DEF_PROCESSOR_SELECTION_DATA_CATEGORY);
 	}
 
 	private static boolean getDataTypeSelection(DataCategory dataCategory) {
 
-		return preferenceStore.getBoolean(PreferenceConstants.P_PROCESSOR_SELECTION_DATA_CATEGORY + dataCategory.name());
+		return preferenceStore.getBoolean(PreferenceSupplier.P_PROCESSOR_SELECTION_DATA_CATEGORY + dataCategory.name());
 	}
 
 	private static void setDataTypeSelection(DataCategory dataCategory, boolean selection) {
 
-		preferenceStore.setValue(PreferenceConstants.P_PROCESSOR_SELECTION_DATA_CATEGORY + dataCategory.name(), selection);
+		preferenceStore.setValue(PreferenceSupplier.P_PROCESSOR_SELECTION_DATA_CATEGORY + dataCategory.name(), selection);
 	}
 
 	public IProcessEntry getProcessEntry() {

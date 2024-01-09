@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
@@ -31,7 +31,7 @@ import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionTimeValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramSourceCombo;
 import org.eclipse.core.databinding.validation.IValidator;
@@ -238,7 +238,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 	private Text createTextTargetDelta(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER);
-		text.setText(Double.toString(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME)));
+		text.setText(Double.toString(preferenceStore.getDouble(PreferenceSupplier.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME)));
 		text.setToolTipText("Delta retention time in minutes.");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
@@ -256,7 +256,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 				 * open selected files button in the supplier file explorer.
 				 */
 				if(validate(retentionTimeValidator, controlDecoration, text)) {
-					preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, retentionTimeValidator.getRetentionTime());
+					preferenceStore.setValue(PreferenceSupplier.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, retentionTimeValidator.getRetentionTime());
 				}
 			}
 		});
@@ -268,7 +268,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 
 		Button button = new Button(parent, SWT.CHECK);
 		button.setText("Best Target Only");
-		button.setSelection(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY));
+		button.setSelection(preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY));
 		button.setToolTipText("Transfer only the best matching target.");
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -276,7 +276,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY, button.getSelection());
+				preferenceStore.setValue(PreferenceSupplier.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY, button.getSelection());
 			}
 		});
 		//
@@ -403,8 +403,8 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		//
 		List<? extends IPeak> peaksSource = ChromatogramDataSupport.getPeaks(chromatogramSelectionSource, true);
 		List<? extends IPeak> peaksSink = ChromatogramDataSupport.getPeaks(chromatogramSelectionSink, false);
-		int retentionTimeDelta = (int)(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
-		boolean useBestTargetOnly = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
+		int retentionTimeDelta = (int)(preferenceStore.getDouble(PreferenceSupplier.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+		boolean useBestTargetOnly = preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
 		//
 		String message = targetTransferSupport.transferPeakTargets(peaksSource, peaksSink, retentionTimeDelta, useBestTargetOnly);
 		if(message != null) {
@@ -420,7 +420,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		//
 		List<IScan> scansSource = ChromatogramDataSupport.getIdentifiedScans(chromatogramSelectionSource.getChromatogram(), chromatogramSelectionSource);
 		IChromatogram<?> chromatogramSink = chromatogramSelectionSink.getChromatogram();
-		boolean useBestTargetOnly = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
+		boolean useBestTargetOnly = preferenceStore.getBoolean(PreferenceSupplier.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
 		//
 		String message = targetTransferSupport.transferScanTargets(scansSource, chromatogramSink, useBestTargetOnly);
 		if(message != null) {

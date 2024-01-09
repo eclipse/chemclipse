@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Matthias Mailänder - adapted for MALDI
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
@@ -32,8 +32,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.IRulerUpdateNotifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.MassSpectrumRulerChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.RulerEvent;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -80,7 +80,7 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 	//
 	private List<IScanMSD> scanSelections = new ArrayList<>();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private IColorScheme colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY));
+	private IColorScheme colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceSupplier.P_COLOR_SCHEME_DISPLAY_OVERLAY));
 
 	@Inject
 	public ExtendedMassSpectrumOverlayUI(Composite parent, int style) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,14 +7,14 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.dialogs;
 
 import java.io.IOException;
 
 import org.eclipse.chemclipse.rcp.app.ui.Activator;
-import org.eclipse.chemclipse.rcp.app.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.rcp.app.ui.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
@@ -40,7 +40,7 @@ public class PerspectiveChooserDialog extends Dialog {
 
 	public PerspectiveChooserDialog(Shell parentShell, String title, String message) {
 
-		this(parentShell, title, message, Activator.getDefault().getPreferenceStore(), PreferenceConstants.P_CHANGE_PERSPECTIVE_AUTOMATICALLY);
+		this(parentShell, title, message, Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_CHANGE_PERSPECTIVE_AUTOMATICALLY);
 	}
 
 	public PerspectiveChooserDialog(Shell parentShell, String title, String message, IPreferenceStore preferenceStore, String preferenceKey) {

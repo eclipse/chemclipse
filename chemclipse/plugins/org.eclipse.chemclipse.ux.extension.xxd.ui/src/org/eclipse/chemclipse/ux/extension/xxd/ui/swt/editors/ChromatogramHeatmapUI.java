@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,8 +28,8 @@ import org.eclipse.chemclipse.tsd.model.core.IChromatogramTSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramHeatmapData;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramHeatmapSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IntensityScaleUI;
@@ -150,8 +150,8 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 	private IntensityScaleUI createIntensityScale(Composite parent, String tooltip) {
 
 		IntensityScaleUI intensityScaleUI = new IntensityScaleUI(parent, SWT.NONE);
-		intensityScaleUI.setMinimum(PreferenceConstants.MIN_HEATMAP_SCALE_INTENSITY);
-		intensityScaleUI.setMaximum(PreferenceConstants.MAX_HEATMAP_SCALE_INTENSITY);
+		intensityScaleUI.setMinimum(PreferenceSupplier.MIN_HEATMAP_SCALE_INTENSITY);
+		intensityScaleUI.setMaximum(PreferenceSupplier.MAX_HEATMAP_SCALE_INTENSITY);
 		intensityScaleUI.setToolTipText(tooltip);
 		intensityScaleUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		intensityScaleUI.setUpdateListener(new IScaleUpdateListener() {
@@ -293,20 +293,20 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 	private void setScaleValues() {
 
-		intensityScaleMin.setSelection(preferenceStore.getInt(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_TSD));
-		intensityScaleMax.setSelection(preferenceStore.getInt(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_TSD));
+		intensityScaleMin.setSelection(preferenceStore.getInt(PreferenceSupplier.P_HEATMAP_SCALE_INTENSITY_MIN_TSD));
+		intensityScaleMax.setSelection(preferenceStore.getInt(PreferenceSupplier.P_HEATMAP_SCALE_INTENSITY_MAX_TSD));
 	}
 
 	private void resetScaleValues() {
 
-		intensityScaleMin.setSelection(PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MIN_TSD);
-		intensityScaleMax.setSelection(PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MAX_TSD);
+		intensityScaleMin.setSelection(PreferenceSupplier.DEF_HEATMAP_SCALE_INTENSITY_MIN_TSD);
+		intensityScaleMax.setSelection(PreferenceSupplier.DEF_HEATMAP_SCALE_INTENSITY_MAX_TSD);
 	}
 
 	private void saveScaleValues(int scaleMin, int scaleMax) {
 
-		preferenceStore.setValue(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_TSD, scaleMin);
-		preferenceStore.setValue(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_TSD, scaleMax);
+		preferenceStore.setValue(PreferenceSupplier.P_HEATMAP_SCALE_INTENSITY_MIN_TSD, scaleMin);
+		preferenceStore.setValue(PreferenceSupplier.P_HEATMAP_SCALE_INTENSITY_MAX_TSD, scaleMax);
 	}
 
 	private void updateChromatogram() {

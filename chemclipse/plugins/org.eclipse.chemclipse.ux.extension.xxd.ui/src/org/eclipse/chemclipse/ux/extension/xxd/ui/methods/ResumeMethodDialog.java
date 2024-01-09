@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -160,13 +160,13 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 		button.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false));
 		button.setText(ExtensionMessages.rememberDecisionDontShowAgain);
 		button.setToolTipText(ExtensionMessages.revertDecisionInSettings);
-		button.setSelection(!Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_SHOW_RESUME_METHOD_DIALOG));
+		button.setSelection(!Activator.getDefault().getPreferenceStore().getBoolean(PreferenceSupplier.P_SHOW_RESUME_METHOD_DIALOG));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Activator.getDefault().getPreferenceStore().setValue(PreferenceConstants.P_SHOW_RESUME_METHOD_DIALOG, !button.getSelection());
+				Activator.getDefault().getPreferenceStore().setValue(PreferenceSupplier.P_SHOW_RESUME_METHOD_DIALOG, !button.getSelection());
 			}
 		});
 		//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - support setting the preference store
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
@@ -45,35 +45,35 @@ public class PreferencePageChromatogramPeaks extends FieldEditorPreferencePage i
 	public void createFieldEditors() {
 
 		addField(new LabelFieldEditor(FIELD_SELECTED_PEAK_SCAN_MARKER, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_PEAK, "Color:", getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_SIZE, "Marker Size:", PreferenceConstants.MIN_SYMBOL_SIZE, PreferenceConstants.MAX_SYMBOL_SIZE, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_TYPE, "Marker Type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceSupplier.P_COLOR_CHROMATOGRAM_SELECTED_PEAK, "Color:", getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_SIZE, "Marker Size:", PreferenceSupplier.MIN_SYMBOL_SIZE, PreferenceSupplier.MAX_SYMBOL_SIZE, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_TYPE, "Marker Type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor(FIELD_PEAK_LABELS, getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME, "Font Name:", getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE, "Font Size:", PreferenceConstants.MIN_FONT_SIZE, PreferenceConstants.MAX_FONT_SIZE, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE, "Font Style:", ChartOptions.FONT_STYLES, getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME, "Font Name:", getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE, "Font Size:", PreferenceSupplier.MIN_FONT_SIZE, PreferenceSupplier.MAX_FONT_SIZE, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE, "Font Style:", ChartOptions.FONT_STYLES, getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor(FIELD_PEAKS, getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE, "Symbol Size:", PreferenceConstants.MIN_SYMBOL_SIZE, PreferenceConstants.MAX_SYMBOL_SIZE, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE, "Marker Type (Selected Peak):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_MARKER_TYPE, "Marker Type (Active Normal):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL_MARKER_TYPE, "Marker Type (Inactive Normal):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_MARKER_TYPE, "Marker Type (Active ISTD):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE, "Marker Type (Inactive ISTD):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE, "Symbol Size:", PreferenceSupplier.MIN_SYMBOL_SIZE, PreferenceSupplier.MAX_SYMBOL_SIZE, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE, "Marker Type (Selected Peak):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_MARKER_TYPE, "Marker Type (Active Normal):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL_MARKER_TYPE, "Marker Type (Inactive Normal):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_MARKER_TYPE, "Marker Type (Active ISTD):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE, "Marker Type (Inactive ISTD):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL, "Color (Active Normal):", getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_TARGETS_HIDDEN, "Color (Active Normal - Targets Hidden):", getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL, "Color (Inactive Normal):", getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD, "Color (Active ISTD):", getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_TARGETS_HIDDEN, "Color (Active ISTD - Targets Hidden):", getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_ISTD, "Color (Inactive ISTD):", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceSupplier.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL, "Color (Active Normal):", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceSupplier.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_TARGETS_HIDDEN, "Color (Active Normal - Targets Hidden):", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceSupplier.P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL, "Color (Inactive Normal):", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceSupplier.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD, "Color (Active ISTD):", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceSupplier.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_TARGETS_HIDDEN, "Color (Active ISTD - Targets Hidden):", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceSupplier.P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_ISTD, "Color (Inactive ISTD):", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor(FIELD_MISCELLANEOUS, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION, "Move retention time on peak selection", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION, "Move retention time on peak selection", getFieldEditorParent()));
 	}
 
 	@Override

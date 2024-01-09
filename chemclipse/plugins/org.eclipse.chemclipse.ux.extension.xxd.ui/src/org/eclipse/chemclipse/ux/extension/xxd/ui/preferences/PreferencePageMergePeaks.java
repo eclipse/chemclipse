@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -31,9 +31,9 @@ public class PreferencePageMergePeaks extends FieldEditorPreferencePage implemen
 
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_MERGE_PEAKS_CALCULATION_TYPE, "Calculation Type", CalculationType.getOptions(), getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_MERGE_PEAKS_IDENTIFICATION_TARGETS, "Merge Identification Targets", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_MERGE_PEAKS_DELETE_ORIGINS, "Delete Origins", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_MERGE_PEAKS_CALCULATION_TYPE, "Calculation Type", CalculationType.getOptions(), getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_MERGE_PEAKS_IDENTIFICATION_TARGETS, "Merge Identification Targets", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_MERGE_PEAKS_DELETE_ORIGINS, "Delete Origins", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

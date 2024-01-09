@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.model.Activator;
 import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
@@ -21,9 +18,6 @@ import org.eclipse.chemclipse.model.support.HeaderUtil;
 import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -73,7 +67,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	 */
 	private static IonRoundMethod activeIonRoundMethod = null;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -84,47 +78,31 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getDefault().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		//
-		defaultValues.put(P_MISC_SEPARATOR, DEF_MISC_SEPARATOR);
-		defaultValues.put(P_MISC_SEPARATED_DELIMITER, DEF_MISC_SEPARATED_DELIMITER);
-		defaultValues.put(P_ALTERNATE_WINDOW_MOVE_DIRECTION, Boolean.toString(DEF_ALTERNATE_WINDOW_MOVE_DIRECTION));
-		defaultValues.put(P_CONDENSE_CYCLE_NUMBER_SCANS, Boolean.toString(DEF_CONDENSE_CYCLE_NUMBER_SCANS));
-		defaultValues.put(P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS, Boolean.toString(DEF_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS));
-		defaultValues.put(P_SHOW_AREA_WITHOUT_DECIMALS, Boolean.toString(DEF_SHOW_AREA_WITHOUT_DECIMALS));
-		defaultValues.put(P_SORT_CASE_SENSITIVE, Boolean.toString(DEF_SORT_CASE_SENSITIVE));
-		defaultValues.put(P_SEARCH_CASE_SENSITIVE, Boolean.toString(DEF_SEARCH_CASE_SENSITIVE));
-		defaultValues.put(P_USE_RETENTION_INDEX_QC, Boolean.toString(DEF_USE_RETENTION_INDEX_QC));
-		defaultValues.put(P_BEST_TARGET_LIBRARY_FIELD, DEF_BEST_TARGET_LIBRARY_FIELD);
-		defaultValues.put(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD);
-		defaultValues.put(P_SKIP_PEAK_WIDTH_CHECK, Boolean.toString(DEF_SKIP_PEAK_WIDTH_CHECK));
-		defaultValues.put(P_PARSE_SEPARATION_COLUMN_FROM_HEADER, Boolean.toString(DEF_PARSE_SEPARATION_COLUMN_FROM_HEADER));
-		defaultValues.put(P_SEPARATION_COLUMN_HEADER_FIELD, DEF_SEPARATION_COLUMN_HEADER_FIELD);
-		defaultValues.put(P_SEPARATION_COLUMN_MAPPINGS, DEF_SEPARATION_COLUMN_MAPPINGS);
-		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
-		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
-		//
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_MISC_SEPARATOR, DEF_MISC_SEPARATOR);
+		putDefault(P_MISC_SEPARATED_DELIMITER, DEF_MISC_SEPARATED_DELIMITER);
+		putDefault(P_ALTERNATE_WINDOW_MOVE_DIRECTION, Boolean.toString(DEF_ALTERNATE_WINDOW_MOVE_DIRECTION));
+		putDefault(P_CONDENSE_CYCLE_NUMBER_SCANS, Boolean.toString(DEF_CONDENSE_CYCLE_NUMBER_SCANS));
+		putDefault(P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS, Boolean.toString(DEF_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS));
+		putDefault(P_SHOW_AREA_WITHOUT_DECIMALS, Boolean.toString(DEF_SHOW_AREA_WITHOUT_DECIMALS));
+		putDefault(P_SORT_CASE_SENSITIVE, Boolean.toString(DEF_SORT_CASE_SENSITIVE));
+		putDefault(P_SEARCH_CASE_SENSITIVE, Boolean.toString(DEF_SEARCH_CASE_SENSITIVE));
+		putDefault(P_USE_RETENTION_INDEX_QC, Boolean.toString(DEF_USE_RETENTION_INDEX_QC));
+		putDefault(P_BEST_TARGET_LIBRARY_FIELD, DEF_BEST_TARGET_LIBRARY_FIELD);
+		putDefault(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD);
+		putDefault(P_SKIP_PEAK_WIDTH_CHECK, Boolean.toString(DEF_SKIP_PEAK_WIDTH_CHECK));
+		putDefault(P_PARSE_SEPARATION_COLUMN_FROM_HEADER, Boolean.toString(DEF_PARSE_SEPARATION_COLUMN_FROM_HEADER));
+		putDefault(P_SEPARATION_COLUMN_HEADER_FIELD, DEF_SEPARATION_COLUMN_HEADER_FIELD);
+		putDefault(P_SEPARATION_COLUMN_MAPPINGS, DEF_SEPARATION_COLUMN_MAPPINGS);
+		putDefault(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		putDefault(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 	}
 
 	public static String getMiscSeparator() {

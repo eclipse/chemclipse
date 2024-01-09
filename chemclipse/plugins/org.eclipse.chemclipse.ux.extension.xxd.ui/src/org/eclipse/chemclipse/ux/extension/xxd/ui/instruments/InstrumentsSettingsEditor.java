@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,7 +31,7 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.InstrumentListUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.validation.InstrumentInputValidator;
@@ -329,12 +329,12 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 				fileDialog.setText(ExtensionMessages.instrumentList);
 				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{FILTER_NAME});
-				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_INSTRUMENTS_TEMPLATE_FOLDER));
+				fileDialog.setFilterPath(preferenceStore.getString(PreferenceSupplier.P_INSTRUMENTS_TEMPLATE_FOLDER));
 				String pathname = fileDialog.open();
 				if(pathname != null) {
 					File file = new File(pathname);
 					String path = file.getParentFile().getAbsolutePath();
-					preferenceStore.setValue(PreferenceConstants.P_INSTRUMENTS_TEMPLATE_FOLDER, path);
+					preferenceStore.setValue(PreferenceSupplier.P_INSTRUMENTS_TEMPLATE_FOLDER, path);
 					settings.importItems(file);
 					setTableViewerInput();
 				}
@@ -361,12 +361,12 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{FILTER_NAME});
 				fileDialog.setFileName(FILE_NAME);
-				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_INSTRUMENTS_TEMPLATE_FOLDER));
+				fileDialog.setFilterPath(preferenceStore.getString(PreferenceSupplier.P_INSTRUMENTS_TEMPLATE_FOLDER));
 				String pathname = fileDialog.open();
 				if(pathname != null) {
 					File file = new File(pathname);
 					String path = file.getParentFile().getAbsolutePath();
-					preferenceStore.setValue(PreferenceConstants.P_INSTRUMENTS_TEMPLATE_FOLDER, path);
+					preferenceStore.setValue(PreferenceSupplier.P_INSTRUMENTS_TEMPLATE_FOLDER, path);
 					if(settings.exportItems(file)) {
 						MessageDialog.openInformation(button.getShell(), TITLE, ExtensionMessages.instrumentListExported);
 					} else {

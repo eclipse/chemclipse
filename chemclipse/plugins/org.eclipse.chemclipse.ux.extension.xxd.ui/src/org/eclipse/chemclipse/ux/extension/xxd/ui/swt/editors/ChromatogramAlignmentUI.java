@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramLengthModifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramSourceCombo;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -237,7 +237,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 			int stopRetentionTime = chromatogramSelectionSource.getStopRetentionTime();
 			float startAbundance = chromatogramSelectionSource.getStartAbundance();
 			float stopAbundance = chromatogramSelectionSource.getStopAbundance();
-			boolean setChromatogramIntensityRange = preferenceStore.getBoolean(PreferenceConstants.P_SET_CHROMATOGRAM_INTENSITY_RANGE);
+			boolean setChromatogramIntensityRange = preferenceStore.getBoolean(PreferenceSupplier.P_SET_CHROMATOGRAM_INTENSITY_RANGE);
 			/*
 			 * Editor
 			 */
@@ -275,13 +275,13 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 				int scanDelay;
 				int chromatogramLength;
 				if(MODIFY_LENGTH_ADJUST.equals(modifyLengthType)) {
-					scanDelay = preferenceStore.getInt(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY);
-					chromatogramLength = preferenceStore.getInt(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH);
+					scanDelay = preferenceStore.getInt(PreferenceSupplier.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY);
+					chromatogramLength = preferenceStore.getInt(PreferenceSupplier.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH);
 				} else {
 					scanDelay = chromatogram.getScanDelay();
 					chromatogramLength = chromatogram.getStopRetentionTime();
-					preferenceStore.setValue(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, scanDelay);
-					preferenceStore.setValue(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, chromatogramLength);
+					preferenceStore.setValue(PreferenceSupplier.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, scanDelay);
+					preferenceStore.setValue(PreferenceSupplier.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, chromatogramLength);
 				}
 				/*
 				 * Modify chromatograms.

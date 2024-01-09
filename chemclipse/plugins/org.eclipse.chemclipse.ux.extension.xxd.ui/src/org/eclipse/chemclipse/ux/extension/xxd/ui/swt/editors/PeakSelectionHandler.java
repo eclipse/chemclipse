@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
@@ -66,7 +66,7 @@ public class PeakSelectionHandler extends AbstractHandledEventProcessor implemen
 		if(chromatogramSelection != null) {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			int retentionTime = (int)baseChart.getSelectedPrimaryAxisValue(event.x, IExtendedChart.X_AXIS);
-			int retentionTimeDelta = preferenceStore.getInt(PreferenceConstants.P_DELTA_MILLISECONDS_PEAK_SELECTION);
+			int retentionTimeDelta = preferenceStore.getInt(PreferenceSupplier.P_DELTA_MILLISECONDS_PEAK_SELECTION);
 			int startRetentionTime = retentionTime - retentionTimeDelta;
 			int stopRetentiontime = retentionTime + retentionTimeDelta;
 			List<IPeak> peaks = chromatogram.getPeaks(startRetentionTime, stopRetentiontime);
@@ -80,7 +80,7 @@ public class PeakSelectionHandler extends AbstractHandledEventProcessor implemen
 					chromatogramSelection.setSelectedPeak(peak);
 					extendedChromatogramUI.updateSelectedPeak();
 					//
-					boolean moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
+					boolean moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceSupplier.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
 					if(moveRetentionTimeOnPeakSelection) {
 						ChromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
 					}

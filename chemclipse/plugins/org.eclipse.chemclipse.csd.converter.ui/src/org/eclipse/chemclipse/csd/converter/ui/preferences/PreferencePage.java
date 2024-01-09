@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2018 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -9,19 +9,20 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xir.converter.ui.preferences;
+package org.eclipse.chemclipse.csd.converter.ui.preferences;
 
-import org.eclipse.chemclipse.xir.converter.ui.Activator;
+import org.eclipse.chemclipse.csd.converter.ui.Activator;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class ConverterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public ConverterPreferencePage() {
+	public PreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("XIR Converter");
+		setDescription("FID Converter");
 	}
 
 	@Override

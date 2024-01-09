@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizardListener;
@@ -93,7 +93,7 @@ public class TargetLabelEditAction {
 			/*
 			 * References
 			 */
-			TargetReferenceLabelMarker targetReferenceLabelMarker = new TargetReferenceLabelMarker(true, PreferenceConstants.DEF_SYMBOL_SIZE * 2);
+			TargetReferenceLabelMarker targetReferenceLabelMarker = new TargetReferenceLabelMarker(true, PreferenceSupplier.DEF_SYMBOL_SIZE * 2);
 			ChromatogramChart chromatogramChart = labelEditSettings.getChromatogramUI().getChromatogramChart();
 			chromatogramChart.getBaseChart().getPlotArea().addCustomPaintListener(targetReferenceLabelMarker);
 			TargetDisplaySettingsWizardListener settingsWizardListener = new TargetDisplaySettingsWizardListener() {

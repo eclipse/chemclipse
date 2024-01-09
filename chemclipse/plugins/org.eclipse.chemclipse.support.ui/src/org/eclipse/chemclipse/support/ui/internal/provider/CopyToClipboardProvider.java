@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import org.eclipse.chemclipse.support.preferences.PreferenceSupplierSupport;
+import org.eclipse.chemclipse.support.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.ui.support.CopyColumnsSupport;
@@ -118,7 +118,7 @@ public class CopyToClipboardProvider {
 		int[] columns;
 		String copyColumnsToClipBoard = extendedTableViewer.getCopyColumnsToClipboard();
 		if(copyColumnsToClipBoard.isEmpty()) {
-			if(PreferenceSupplierSupport.isClipboardDefaultSorting()) {
+			if(PreferenceSupplier.isClipboardDefaultSorting()) {
 				int size = extendedTableViewer.getTableViewerColumns().size();
 				columns = IntStream.range(0, size).toArray();
 			} else {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add support for name editing, improve classifier support
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
-import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.support.PeakClassifierSupport;
 import org.eclipse.chemclipse.model.targets.TargetSupport;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -33,6 +32,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModel;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.swt.graphics.Color;
@@ -197,7 +197,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = decimalFormat.format(peakModel.getPeakMaximum().getRelativeRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 				break;
 			case 4:
-				if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+				if(PreferenceSupplierModel.showRetentionIndexWithoutDecimals()) {
 					DecimalFormat integerFormat = getIntegerDecimalFormatInstance();
 					text = integerFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
 				} else {
@@ -205,7 +205,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				}
 				break;
 			case 5:
-				if(PreferenceSupplier.showAreaWithoutDecimals()) {
+				if(PreferenceSupplierModel.showAreaWithoutDecimals()) {
 					DecimalFormat integerFormat = getIntegerDecimalFormatInstance();
 					text = integerFormat.format(peak.getIntegratedArea());
 				} else {
@@ -313,7 +313,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = decimalFormat.format(scan.getRelativeRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 				break;
 			case 4:
-				if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+				if(PreferenceSupplierModel.showRetentionIndexWithoutDecimals()) {
 					DecimalFormat integerFormat = getIntegerDecimalFormatInstance();
 					text = integerFormat.format(scan.getRetentionIndex());
 				} else {

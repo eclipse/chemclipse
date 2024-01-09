@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
@@ -16,11 +16,11 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModel;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -74,7 +74,7 @@ public class RetentionIndexLabelProvider extends LabelProvider implements ITable
 					text = decimalFormat.format(retentionIndexEntry.getRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 1:
-					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+					if(PreferenceSupplierModel.showRetentionIndexWithoutDecimals()) {
 						text = Integer.toString((int)retentionIndexEntry.getRetentionIndex());
 					} else {
 						text = decimalFormat.format(retentionIndexEntry.getRetentionIndex());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -43,6 +42,7 @@ import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.services.IScanIdentifierService;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModelMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
@@ -118,11 +118,11 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			chromatogramSelection = null;
 			combinedScan = null;
 			//
-			CalculationType calculationType = PreferenceSupplier.getCalculationType();
+			CalculationType calculationType = PreferenceSupplierModelMSD.getCalculationType();
 			if(object instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 				this.chromatogramSelection = chromatogramSelectionMSD;
-				boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
-				boolean usePeaksInsteadOfScans = PreferenceSupplier.isUsePeaksInsteadOfScans();
+				boolean useNormalize = PreferenceSupplierModelMSD.isUseNormalizedScan();
+				boolean usePeaksInsteadOfScans = PreferenceSupplierModelMSD.isUsePeaksInsteadOfScans();
 				combinedScan = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType, usePeaksInsteadOfScans);
 			} else if(object instanceof IChromatogramSelectionISD chromatogramSelectionISD) {
 				this.chromatogramSelection = chromatogramSelectionISD;
@@ -380,9 +380,9 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			public void widgetSelected(SelectionEvent e) {
 
 				if(combinedScan instanceof ICombinedMassSpectrum combinedMassSpectrum) {
-					boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
-					CalculationType calculationType = PreferenceSupplier.getCalculationType();
-					IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
+					boolean useNormalize = PreferenceSupplierModelMSD.isUseNormalizedScan();
+					CalculationType calculationType = PreferenceSupplierModelMSD.getCalculationType();
+					IScanMSD massSpectrum1 = PreferenceSupplierModelMSD.getSessionSubtractMassSpectrum();
 					IScanMSD massSpectrum2 = combinedMassSpectrum;
 					IScanMSD subtractMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize, calculationType);
 					saveSessionMassSpectrum(e.display, subtractMassSpectrum);
@@ -399,8 +399,8 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 	 */
 	private void saveSessionMassSpectrum(Display display, IScanMSD scanMSD) {
 
-		PreferenceSupplier.setSessionSubtractMassSpectrum(scanMSD);
-		PreferenceSupplier.storeSessionSubtractMassSpectrum();
+		PreferenceSupplierModelMSD.setSessionSubtractMassSpectrum(scanMSD);
+		PreferenceSupplierModelMSD.storeSessionSubtractMassSpectrum();
 		//
 		if(display != null) {
 			fireUpdateEvent(display);
@@ -521,7 +521,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			builder.append("–");
 			builder.append(decimalFormat.format(stopRetentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 			builder.append(" | Calculation Type: ");
-			builder.append(PreferenceSupplier.getCalculationType().toString());
+			builder.append(PreferenceSupplierModelMSD.getCalculationType().toString());
 		} else {
 			builder.append("No chromatogram selected.");
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - remove reference to IapplicationImageProvider
  *******************************************************************************/
@@ -32,7 +32,7 @@ import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramEditorActionExtension;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.IChromatogramEditorAction;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -138,7 +138,7 @@ public class ChromatogramActionUI extends Composite {
 					combo.setToolTipText(extension.getDescription());
 					buttonChromatogramAction.setEnabled(true);
 					String id = extension.getUniqueId();
-					preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID, id);
+					preferenceStore.setValue(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_ACTION_ID, id);
 					selectedActionId = id;
 				}
 			}
@@ -204,7 +204,7 @@ public class ChromatogramActionUI extends Composite {
 		 * Get the stored action id and set the selected entry and the description.
 		 */
 		boolean success = false;
-		selectedActionId = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID);
+		selectedActionId = preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_SELECTED_ACTION_ID);
 		ChromatogramEditorActionExtension extension = actionHashMap.get(selectedActionId);
 		if(extension != null) {
 			Combo combo = comboChromatogramAction.getCombo();

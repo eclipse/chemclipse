@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.ShiftValidator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.DisplayModus;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
@@ -389,7 +389,7 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 						 */
 						displayModus = DisplayModus.MIRROR;
 						int i = 0;
-						int modulo = preferences.getInt(PreferenceConstants.P_MODULO_AUTO_MIRROR_CHROMATOGRAMS);
+						int modulo = preferences.getInt(PreferenceSupplier.P_MODULO_AUTO_MIRROR_CHROMATOGRAMS);
 						for(ISeries<?> series : baseChart.getSeriesSet().getSeries()) {
 							if(i % modulo == 1) {
 								String seriesId = series.getId();

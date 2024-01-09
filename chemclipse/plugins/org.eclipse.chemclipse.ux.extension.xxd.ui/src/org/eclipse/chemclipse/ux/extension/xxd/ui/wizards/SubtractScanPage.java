@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,15 +7,15 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
-import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModelMSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -33,6 +33,7 @@ public class SubtractScanPage extends WizardPage {
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public SubtractScanPage() {
+
 		super(SubtractScanPage.class.getName());
 	}
 
@@ -66,14 +67,14 @@ public class SubtractScanPage extends WizardPage {
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.setText("Nominal m/z");
 		button.setToolTipText("Select to use nomimal m/z.");
-		button.setSelection(PreferenceSupplier.isUseNominalMZ());
+		button.setSelection(PreferenceSupplierModelMSD.isUseNominalMZ());
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				boolean useNominalMZ = button.getSelection();
-				PreferenceSupplier.setUseNominalMZ(useNominalMZ);
+				PreferenceSupplierModelMSD.setUseNominalMZ(useNominalMZ);
 			}
 		});
 		//
@@ -86,14 +87,14 @@ public class SubtractScanPage extends WizardPage {
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.setText("Normalize Intensities");
 		button.setToolTipText("Select to use normalize the intensities.");
-		button.setSelection(PreferenceSupplier.isUseNormalizedScan());
+		button.setSelection(PreferenceSupplierModelMSD.isUseNormalizedScan());
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				boolean useNormalizedScan = button.getSelection();
-				PreferenceSupplier.setUseNormalizedScan(useNormalizedScan);
+				PreferenceSupplierModelMSD.setUseNormalizedScan(useNormalizedScan);
 			}
 		});
 		//
@@ -104,7 +105,7 @@ public class SubtractScanPage extends WizardPage {
 
 		Image imageSubtractOne = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_SUBTRACT_SCAN_ONE, IApplicationImage.SIZE_128x68);
 		Image imageSubtractMany = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_SUBTRACT_SCAN_MANY, IApplicationImage.SIZE_128x68);
-		boolean isSubtractMany = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT);
+		boolean isSubtractMany = preferenceStore.getBoolean(PreferenceSupplier.P_ENABLE_MULTI_SUBTRACT);
 		String textSubtractOne = "Modus: One Scan Subtract";
 		String textSubtractMany = "Modus: Multi Scan Subtract";
 		//
@@ -120,7 +121,7 @@ public class SubtractScanPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				boolean isSubtractMany = button.getSelection();
-				preferenceStore.setValue(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT, isSubtractMany);
+				preferenceStore.setValue(PreferenceSupplier.P_ENABLE_MULTI_SUBTRACT, isSubtractMany);
 				button.setText(isSubtractMany ? textSubtractMany : textSubtractOne);
 				button.setImage(isSubtractMany ? imageSubtractMany : imageSubtractOne);
 			}
@@ -134,13 +135,13 @@ public class SubtractScanPage extends WizardPage {
 		Button button = new Button(parent, SWT.CHECK);
 		button.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, true));
 		button.setText("Show this dialog");
-		button.setSelection(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG));
+		button.setSelection(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_SUBTRACT_DIALOG));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				preferenceStore.setValue(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG, button.getSelection());
+				preferenceStore.setValue(PreferenceSupplier.P_SHOW_SUBTRACT_DIALOG, button.getSelection());
 			}
 		});
 		//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,8 +28,8 @@ import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
 import org.eclipse.chemclipse.swt.ui.services.ImageServiceInput;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMolecule;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -140,7 +140,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			comboViewerServices.setInput(moleculeImageServices);
 			if(moleculeImageServices.length >= 1) {
 				int preferredService = 0;
-				if(preferenceStore.getBoolean(PreferenceConstants.P_PREFER_OFFLINE_MOLECULE)) {
+				if(preferenceStore.getBoolean(PreferenceSupplier.P_PREFER_OFFLINE_MOLECULE)) {
 					for(int i = 0; i < moleculeImageServices.length; i++) {
 						IMoleculeImageService service = (IMoleculeImageService)moleculeImageServices[i];
 						if(!service.isOnline()) {
@@ -440,11 +440,11 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 					fileDialog.setFilterExtensions(new String[]{"*.png"});
 					fileDialog.setFilterNames(new String[]{"Portable Network Graphics  (*.png)"});
 					fileDialog.setFileName(getExportName());
-					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_MOLECULE_PATH_EXPORT));
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceSupplier.P_MOLECULE_PATH_EXPORT));
 					//
 					String pathname = fileDialog.open();
 					if(pathname != null) {
-						preferenceStore.setValue(PreferenceConstants.P_MOLECULE_PATH_EXPORT, fileDialog.getFilterPath());
+						preferenceStore.setValue(PreferenceSupplier.P_MOLECULE_PATH_EXPORT, fileDialog.getFilterPath());
 						ImageData data = imageMolecule.getImageData();
 						ImageLoader loader = new ImageLoader();
 						loader.data = new ImageData[]{data};
@@ -703,8 +703,8 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		String input = textInput.getText().trim();
 		String name = input.replace(":", "");
 		name = name.isEmpty() ? "Unkown" : name;
-		int length = preferenceStore.getInt(PreferenceConstants.P_LENGTH_MOLECULE_NAME_EXPORT);
-		if(length >= PreferenceConstants.MIN_LENGTH_NAME_EXPORT && name.length() > length) {
+		int length = preferenceStore.getInt(PreferenceSupplier.P_LENGTH_MOLECULE_NAME_EXPORT);
+		if(length >= PreferenceSupplier.MIN_LENGTH_NAME_EXPORT && name.length() > length) {
 			return name.substring(0, 20);
 		} else {
 			return name;

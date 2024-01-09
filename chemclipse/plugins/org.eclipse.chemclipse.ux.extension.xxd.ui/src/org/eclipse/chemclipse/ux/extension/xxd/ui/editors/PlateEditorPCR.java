@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Matthias Mailänder - remember save location
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
@@ -36,7 +36,7 @@ import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.PCRFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.PCRImportRunnable;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedPCRPlateUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -128,7 +128,7 @@ public class PlateEditorPCR implements IChemClipseEditor {
 
 	private String getFilterPath() {
 
-		String filterPath = preferenceStore.getString(PreferenceConstants.P_PCR_SAVE_AS_FOLDER);
+		String filterPath = preferenceStore.getString(PreferenceSupplier.P_PCR_SAVE_AS_FOLDER);
 		if(filterPath.isEmpty()) {
 			return UserManagement.getUserHome();
 		}
@@ -145,7 +145,7 @@ public class PlateEditorPCR implements IChemClipseEditor {
 				File file = PCRFileSupport.savePlate(shell, plate, path);
 				saveSuccessful = file != null;
 				if(saveSuccessful) {
-					preferenceStore.setValue(PreferenceConstants.P_PCR_SAVE_AS_FOLDER, file.getParent());
+					preferenceStore.setValue(PreferenceSupplier.P_PCR_SAVE_AS_FOLDER, file.getParent());
 				}
 				dirtyable.setDirty(!saveSuccessful);
 			} catch(Exception e) {

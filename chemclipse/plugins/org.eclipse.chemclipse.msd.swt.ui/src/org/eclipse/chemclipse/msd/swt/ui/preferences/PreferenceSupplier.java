@@ -11,15 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.msd.swt.ui.Activator;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -41,7 +35,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final int MIN_LIBRARY_MSD_LIMIT_SORTING = 500;
 	public static final int MAX_LIBRARY_MSD_LIMIT_SORTING = 30000;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -52,32 +46,18 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getDefault().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_FILTER_MASS_SPECTRUM, Boolean.toString(DEF_FILTER_MASS_SPECTRUM));
-		defaultValues.put(P_FILTER_LIMIT_IONS, Integer.toString(DEF_FILTER_LIMIT_IONS));
-		defaultValues.put(P_PATH_MASS_SPECTRUM_LIBRARIES, DEF_PATH_MASS_SPECTRUM_LIBRARIES);
-		defaultValues.put(P_LIBRARY_MSD_LIMIT_SORTING, Integer.toString(DEF_LIBRARY_MSD_LIMIT_SORTING));
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_FILTER_MASS_SPECTRUM, Boolean.toString(DEF_FILTER_MASS_SPECTRUM));
+		putDefault(P_FILTER_LIMIT_IONS, Integer.toString(DEF_FILTER_LIMIT_IONS));
+		putDefault(P_PATH_MASS_SPECTRUM_LIBRARIES, DEF_PATH_MASS_SPECTRUM_LIBRARIES);
+		putDefault(P_LIBRARY_MSD_LIMIT_SORTING, Integer.toString(DEF_LIBRARY_MSD_LIMIT_SORTING));
 	}
 
 	public static String getPathMassSpectrumLibraries() {

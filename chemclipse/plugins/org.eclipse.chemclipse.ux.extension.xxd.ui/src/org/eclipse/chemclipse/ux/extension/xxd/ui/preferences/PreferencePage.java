@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -34,8 +34,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	public void createFieldEditors() {
 
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, ExtensionMessages.timeRangePath, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_EDITOR_TSD, ExtensionMessages.editorTSD, EditorServicesSupport.getAvailableEditors(ISupplierFileIdentifier.TYPE_TSD), getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_TIME_RANGE_TEMPLATE_FOLDER, ExtensionMessages.timeRangePath, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_EDITOR_TSD, ExtensionMessages.editorTSD, EditorServicesSupport.getAvailableEditors(ISupplierFileIdentifier.TYPE_TSD), getFieldEditorParent()));
 	}
 
 	@Override

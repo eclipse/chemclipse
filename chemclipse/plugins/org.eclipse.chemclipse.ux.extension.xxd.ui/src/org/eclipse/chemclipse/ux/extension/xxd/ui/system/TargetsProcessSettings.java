@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.system;
 import org.eclipse.chemclipse.processing.system.ISystemProcessSettings;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -42,19 +42,19 @@ public class TargetsProcessSettings implements ISystemProcessSettings {
 	private boolean useAbsoluteDeviationRetentionTime = false;
 	@JsonProperty(value = "Allowed Deviation RT [%]", defaultValue = "20")
 	@JsonPropertyDescription(value = "Percentage of allowed deviation (OK).")
-	@FloatSettingsProperty(minValue = PreferenceConstants.MIN_DEVIATION_RELATIVE, maxValue = PreferenceConstants.MAX_DEVIATION_RELATIVE)
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_DEVIATION_RELATIVE, maxValue = PreferenceSupplier.MAX_DEVIATION_RELATIVE)
 	private float retentionTimeDeviationRelOK = 20.0f;
 	@JsonProperty(value = "Warn Deviation RT [%]", defaultValue = "40")
 	@JsonPropertyDescription(value = "Percentage of allowed deviation (Warn).")
-	@FloatSettingsProperty(minValue = PreferenceConstants.MIN_DEVIATION_RELATIVE, maxValue = PreferenceConstants.MAX_DEVIATION_RELATIVE)
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_DEVIATION_RELATIVE, maxValue = PreferenceSupplier.MAX_DEVIATION_RELATIVE)
 	private float retentionTimeDeviationRelWarn = 40.0f;
 	@JsonProperty(value = "Allowed Deviation RT [ms]", defaultValue = "1000")
 	@JsonPropertyDescription(value = "Absolute deviation retention time in milliseconds (OK)")
-	@IntSettingsProperty(minValue = PreferenceConstants.MIN_DEVIATION_RETENTION_TIME, maxValue = PreferenceConstants.MAX_DEVIATION_RETENTION_TIME)
+	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_DEVIATION_RETENTION_TIME, maxValue = PreferenceSupplier.MAX_DEVIATION_RETENTION_TIME)
 	private int retentionTimeDeviationAbsOK = 1000;
 	@JsonProperty(value = "Warn Deviation RT [ms]", defaultValue = "2000")
 	@JsonPropertyDescription(value = "Absolute deviation retention time in milliseconds (Warn)")
-	@IntSettingsProperty(minValue = PreferenceConstants.MIN_DEVIATION_RETENTION_TIME, maxValue = PreferenceConstants.MAX_DEVIATION_RETENTION_TIME)
+	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_DEVIATION_RETENTION_TIME, maxValue = PreferenceSupplier.MAX_DEVIATION_RETENTION_TIME)
 	private int retentionTimeDeviationAbsWarn = 2000;
 	//
 	@JsonProperty(value = "Retention Index: Use absolute deviation", defaultValue = "false")
@@ -62,19 +62,19 @@ public class TargetsProcessSettings implements ISystemProcessSettings {
 	private boolean useAbsoluteDeviationRetentionIndex = false;
 	@JsonProperty(value = "Allowed Deviation RI [%]", defaultValue = "20")
 	@JsonPropertyDescription(value = "Percentage of allowed deviation (OK).")
-	@FloatSettingsProperty(minValue = PreferenceConstants.MIN_DEVIATION_RELATIVE, maxValue = PreferenceConstants.MAX_DEVIATION_RELATIVE)
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_DEVIATION_RELATIVE, maxValue = PreferenceSupplier.MAX_DEVIATION_RELATIVE)
 	private float retentionIndexDeviationRelOK = 20.0f;
 	@JsonProperty(value = "Warn Deviation RI [%]", defaultValue = "40")
 	@JsonPropertyDescription(value = "Percentage of allowed deviation (Warn).")
-	@FloatSettingsProperty(minValue = PreferenceConstants.MIN_DEVIATION_RELATIVE, maxValue = PreferenceConstants.MAX_DEVIATION_RELATIVE)
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_DEVIATION_RELATIVE, maxValue = PreferenceSupplier.MAX_DEVIATION_RELATIVE)
 	private float retentionIndexDeviationRelWarn = 40.0f;
 	@JsonProperty(value = "Allowed Deviation RI [abs]", defaultValue = "20")
 	@JsonPropertyDescription(value = "Absolute deviation retention index (OK)")
-	@FloatSettingsProperty(minValue = PreferenceConstants.MIN_DEVIATION_RETENTION_INDEX, maxValue = PreferenceConstants.MAX_DEVIATION_RETENTION_INDEX)
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_DEVIATION_RETENTION_INDEX, maxValue = PreferenceSupplier.MAX_DEVIATION_RETENTION_INDEX)
 	private float retentionIndexDeviationAbsOK = 20.0f;
 	@JsonProperty(value = "Warn Deviation RI [abs]", defaultValue = "40")
 	@JsonPropertyDescription(value = "Absolute deviation retention index (Warn)")
-	@FloatSettingsProperty(minValue = PreferenceConstants.MIN_DEVIATION_RETENTION_INDEX, maxValue = PreferenceConstants.MAX_DEVIATION_RETENTION_INDEX)
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_DEVIATION_RETENTION_INDEX, maxValue = PreferenceSupplier.MAX_DEVIATION_RETENTION_INDEX)
 	private float retentionIndexDeviationAbsWarn = 40.0f;
 
 	public boolean isUseTargetList() {

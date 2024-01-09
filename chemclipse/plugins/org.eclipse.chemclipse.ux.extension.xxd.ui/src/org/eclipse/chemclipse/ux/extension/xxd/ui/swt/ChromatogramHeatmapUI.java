@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Matthias Mailänder - add a wavelength selection mode
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
@@ -29,8 +29,8 @@ import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramHeatmapData;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramHeatmapSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IntensityScaleUI.IScaleUpdateListener;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
@@ -135,7 +135,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 			if(heatmapData.isPresent()) {
 				saveScaleValues(scaleMin, scaleMax);
 				toolbarInfo.get().setText(ChromatogramDataSupport.getChromatogramSelectionLabel(chromatogramSelection));
-				boolean zoom = preferenceStore.getBoolean(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM);
+				boolean zoom = preferenceStore.getBoolean(PreferenceSupplier.P_HEATMAP_ENABLE_ZOOM);
 				intensityGraphFigure = createIntensityGraphFigure(zoom);
 				boolean isWavelengthData = chromatogramSelection instanceof IChromatogramSelectionWSD;
 				setHeatMap(heatmapData.get(), isWavelengthData);
@@ -154,33 +154,33 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 	private void setScaleValues() {
 
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			intensityScaleMin.setSelection(preferenceStore.getInt(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_MSD));
-			intensityScaleMax.setSelection(preferenceStore.getInt(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_MSD));
+			intensityScaleMin.setSelection(preferenceStore.getInt(PreferenceSupplier.P_HEATMAP_SCALE_INTENSITY_MIN_MSD));
+			intensityScaleMax.setSelection(preferenceStore.getInt(PreferenceSupplier.P_HEATMAP_SCALE_INTENSITY_MAX_MSD));
 		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-			intensityScaleMin.setSelection(preferenceStore.getInt(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_WSD));
-			intensityScaleMax.setSelection(preferenceStore.getInt(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_WSD));
+			intensityScaleMin.setSelection(preferenceStore.getInt(PreferenceSupplier.P_HEATMAP_SCALE_INTENSITY_MIN_WSD));
+			intensityScaleMax.setSelection(preferenceStore.getInt(PreferenceSupplier.P_HEATMAP_SCALE_INTENSITY_MAX_WSD));
 		}
 	}
 
 	private void resetScaleValues() {
 
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			intensityScaleMin.setSelection(PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MIN_MSD);
-			intensityScaleMax.setSelection(PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MAX_MSD);
+			intensityScaleMin.setSelection(PreferenceSupplier.DEF_HEATMAP_SCALE_INTENSITY_MIN_MSD);
+			intensityScaleMax.setSelection(PreferenceSupplier.DEF_HEATMAP_SCALE_INTENSITY_MAX_MSD);
 		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-			intensityScaleMin.setSelection(PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MIN_WSD);
-			intensityScaleMax.setSelection(PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MAX_WSD);
+			intensityScaleMin.setSelection(PreferenceSupplier.DEF_HEATMAP_SCALE_INTENSITY_MIN_WSD);
+			intensityScaleMax.setSelection(PreferenceSupplier.DEF_HEATMAP_SCALE_INTENSITY_MAX_WSD);
 		}
 	}
 
 	private void saveScaleValues(int scaleMin, int scaleMax) {
 
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			preferenceStore.setValue(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_MSD, scaleMin);
-			preferenceStore.setValue(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_MSD, scaleMax);
+			preferenceStore.setValue(PreferenceSupplier.P_HEATMAP_SCALE_INTENSITY_MIN_MSD, scaleMin);
+			preferenceStore.setValue(PreferenceSupplier.P_HEATMAP_SCALE_INTENSITY_MAX_MSD, scaleMax);
 		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-			preferenceStore.setValue(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_WSD, scaleMin);
-			preferenceStore.setValue(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_WSD, scaleMax);
+			preferenceStore.setValue(PreferenceSupplier.P_HEATMAP_SCALE_INTENSITY_MIN_WSD, scaleMin);
+			preferenceStore.setValue(PreferenceSupplier.P_HEATMAP_SCALE_INTENSITY_MAX_WSD, scaleMax);
 		}
 	}
 
@@ -250,7 +250,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
 		enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
-		enableButton(buttonZoom, IMAGE_ZOOM, TOOLTIP_ZOOM, preferenceStore.getBoolean(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM));
+		enableButton(buttonZoom, IMAGE_ZOOM, TOOLTIP_ZOOM, preferenceStore.getBoolean(PreferenceSupplier.P_HEATMAP_ENABLE_ZOOM));
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -299,8 +299,8 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean zoom = preferenceStore.getBoolean(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM);
-				preferenceStore.setValue(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM, !zoom);
+				boolean zoom = preferenceStore.getBoolean(PreferenceSupplier.P_HEATMAP_ENABLE_ZOOM);
+				preferenceStore.setValue(PreferenceSupplier.P_HEATMAP_ENABLE_ZOOM, !zoom);
 				updateHeatmap();
 				updateButtonZoom();
 			}
@@ -311,7 +311,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 	private void updateButtonZoom() {
 
-		enableButton(buttonZoom, IMAGE_ZOOM, TOOLTIP_ZOOM, preferenceStore.getBoolean(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM));
+		enableButton(buttonZoom, IMAGE_ZOOM, TOOLTIP_ZOOM, preferenceStore.getBoolean(PreferenceSupplier.P_HEATMAP_ENABLE_ZOOM));
 	}
 
 	private void createButtonSettings(Composite parent) {
@@ -350,8 +350,8 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 	private IntensityScaleUI createIntensityScale(Composite parent, String tooltip) {
 
 		IntensityScaleUI intensityScaleUI = new IntensityScaleUI(parent, SWT.NONE);
-		intensityScaleUI.setMinimum(PreferenceConstants.MIN_HEATMAP_SCALE_INTENSITY);
-		intensityScaleUI.setMaximum(PreferenceConstants.MAX_HEATMAP_SCALE_INTENSITY);
+		intensityScaleUI.setMinimum(PreferenceSupplier.MIN_HEATMAP_SCALE_INTENSITY);
+		intensityScaleUI.setMaximum(PreferenceSupplier.MAX_HEATMAP_SCALE_INTENSITY);
 		intensityScaleUI.setToolTipText(tooltip);
 		intensityScaleUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		intensityScaleUI.setUpdateListener(new IScaleUpdateListener() {

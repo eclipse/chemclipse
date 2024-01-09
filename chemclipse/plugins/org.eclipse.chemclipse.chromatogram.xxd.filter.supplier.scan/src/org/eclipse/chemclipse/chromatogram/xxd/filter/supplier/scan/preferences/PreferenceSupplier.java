@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.model.ScanSelectorOption;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsCleaner;
@@ -25,9 +22,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.Fil
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsScanSelector;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -50,7 +44,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_CLIP_SCAN_NUMBER_PATTERN = "clipScanNumberPattern";
 	public static final String DEF_CLIP_SCAN_NUMBER_PATTERN = "1";
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -61,33 +55,19 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_REMOVER_PATTERN, DEF_REMOVER_PATTERN);
-		defaultValues.put(P_SCAN_SELECTOR_OPTION, DEF_SCAN_SELECTOR_OPTION);
-		defaultValues.put(P_SCAN_SELECTOR_VALUE, Double.toString(DEF_SCAN_SELECTOR_VALUE));
-		defaultValues.put(P_MERGE_SCANS, Boolean.toString(DEF_MERGE_SCANS));
-		defaultValues.put(P_CLIP_SCAN_NUMBER_PATTERN, DEF_CLIP_SCAN_NUMBER_PATTERN);
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
+		putDefault(P_REMOVER_PATTERN, DEF_REMOVER_PATTERN);
+		putDefault(P_SCAN_SELECTOR_OPTION, DEF_SCAN_SELECTOR_OPTION);
+		putDefault(P_SCAN_SELECTOR_VALUE, Double.toString(DEF_SCAN_SELECTOR_VALUE));
+		putDefault(P_MERGE_SCANS, Boolean.toString(DEF_MERGE_SCANS));
+		putDefault(P_CLIP_SCAN_NUMBER_PATTERN, DEF_CLIP_SCAN_NUMBER_PATTERN);
 	}
 
 	public static FilterSettingsCleaner getCleanerFilterSettings() {

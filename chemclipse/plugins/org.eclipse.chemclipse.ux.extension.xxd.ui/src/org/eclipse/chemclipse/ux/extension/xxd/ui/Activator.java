@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,21 +7,22 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - init DataUpdateSupport on first access
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui;
 
 import java.util.Map;
 
-import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
 import org.eclipse.chemclipse.swt.ui.services.IScanIdentifierService;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierModelMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.IAnnotationWidgetService;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.services.IEditorService;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.service.datalocation.Location;
@@ -55,7 +56,8 @@ public class Activator extends AbstractActivatorUI {
 		super.start(context);
 		Activator.context = context;
 		plugin = this;
-		initializePreferenceStoreSubtract(PreferenceSupplier.INSTANCE());
+		initializePreferenceStore(PreferenceSupplier.INSTANCE());
+		initializePreferenceStoreSubtract(PreferenceSupplierModelMSD.INSTANCE());
 		startServices(context);
 		/*
 		 * Don't call here:

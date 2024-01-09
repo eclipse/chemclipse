@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.impl.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.chromatogram.filter.Activator;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsReset;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsSelection;
@@ -27,9 +24,6 @@ import org.eclipse.chemclipse.chromatogram.filter.system.SettingsRetentionIndexQ
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -81,7 +75,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_TRANSFORM_MZ = "transformMZ";
 	public static final int DEF_TRANSFORM_MZ = 28;
 	//
-	private static IPreferenceSupplier preferenceSupplier;
+	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -92,49 +86,35 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	}
 
 	@Override
-	public IScopeContext getScopeContext() {
-
-		return InstanceScope.INSTANCE;
-	}
-
-	@Override
 	public String getPreferenceNode() {
 
 		return Activator.getContext().getBundle().getSymbolicName();
 	}
 
 	@Override
-	public Map<String, String> getDefaultValues() {
+	public void initializeDefaults() {
 
-		Map<String, String> defaultValues = new HashMap<>();
-		defaultValues.put(P_START_RETENTION_TIME_MINUTES, Double.toString(DEF_START_RETENTION_TIME_MINUTES));
-		defaultValues.put(P_STOP_RETENTION_TIME_MINUTES, Double.toString(DEF_STOP_RETENTION_TIME_MINUTES));
+		putDefault(P_START_RETENTION_TIME_MINUTES, Double.toString(DEF_START_RETENTION_TIME_MINUTES));
+		putDefault(P_STOP_RETENTION_TIME_MINUTES, Double.toString(DEF_STOP_RETENTION_TIME_MINUTES));
 		//
-		defaultValues.put(P_STTP_TRANSFER_CLOSEST_SCAN, Boolean.toString(DEF_STTP_TRANSFER_CLOSEST_SCAN));
-		defaultValues.put(P_STTP_USE_BEST_TARGET_ONLY, Boolean.toString(DEF_STTP_USE_BEST_TARGET_ONLY));
+		putDefault(P_STTP_TRANSFER_CLOSEST_SCAN, Boolean.toString(DEF_STTP_TRANSFER_CLOSEST_SCAN));
+		putDefault(P_STTP_USE_BEST_TARGET_ONLY, Boolean.toString(DEF_STTP_USE_BEST_TARGET_ONLY));
 		//
-		defaultValues.put(P_PTTR_USE_BEST_TARGET_ONLY, Boolean.toString(DEF_PTTR_USE_BEST_TARGET_ONLY));
-		defaultValues.put(P_DELTA_RETENTION_TIME_MINUTES, Double.toString(DEF_DELTA_RETENTION_TIME_MINUTES));
+		putDefault(P_PTTR_USE_BEST_TARGET_ONLY, Boolean.toString(DEF_PTTR_USE_BEST_TARGET_ONLY));
+		putDefault(P_DELTA_RETENTION_TIME_MINUTES, Double.toString(DEF_DELTA_RETENTION_TIME_MINUTES));
 		//
-		defaultValues.put(P_STTR_USE_BEST_TARGET_ONLY, Boolean.toString(DEF_STTR_USE_BEST_TARGET_ONLY));
+		putDefault(P_STTR_USE_BEST_TARGET_ONLY, Boolean.toString(DEF_STTR_USE_BEST_TARGET_ONLY));
 		//
-		defaultValues.put(P_USE_RETENTION_INDEX_QC, Boolean.toString(DEF_USE_RETENTION_INDEX_QC));
-		defaultValues.put(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD);
+		putDefault(P_USE_RETENTION_INDEX_QC, Boolean.toString(DEF_USE_RETENTION_INDEX_QC));
+		putDefault(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD);
 		//
-		defaultValues.put(P_MAX_DETECTOR_TARGET_NAME, DEF_MAX_DETECTOR_TARGET_NAME);
-		defaultValues.put(P_MAX_DETECTOR_MATCH_FACTOR, Float.toString(DEF_MAX_DETECTOR_MATCH_FACTOR));
-		defaultValues.put(P_MAX_DETECTOR_MINIMA, Boolean.toString(DEF_MAX_DETECTOR_MINIMA));
-		defaultValues.put(P_MAX_DETECTOR_COUNT, Integer.toString(DEF_MAX_DETECTOR_COUNT));
+		putDefault(P_MAX_DETECTOR_TARGET_NAME, DEF_MAX_DETECTOR_TARGET_NAME);
+		putDefault(P_MAX_DETECTOR_MATCH_FACTOR, Float.toString(DEF_MAX_DETECTOR_MATCH_FACTOR));
+		putDefault(P_MAX_DETECTOR_MINIMA, Boolean.toString(DEF_MAX_DETECTOR_MINIMA));
+		putDefault(P_MAX_DETECTOR_COUNT, Integer.toString(DEF_MAX_DETECTOR_COUNT));
 		//
-		defaultValues.put(P_TRANSFORM_MZ, Integer.toString(DEF_TRANSFORM_MZ));
+		putDefault(P_TRANSFORM_MZ, Integer.toString(DEF_TRANSFORM_MZ));
 		//
-		return defaultValues;
-	}
-
-	@Override
-	public IEclipsePreferences getPreferences() {
-
-		return getScopeContext().getNode(getPreferenceNode());
 	}
 
 	public static FilterSettingsSelection getFilterSettingsSelection() {

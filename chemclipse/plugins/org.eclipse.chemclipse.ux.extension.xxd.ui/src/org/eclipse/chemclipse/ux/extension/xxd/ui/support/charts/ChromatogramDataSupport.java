@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - make methods static, fix warnings
  *******************************************************************************/
@@ -35,7 +35,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
@@ -310,7 +310,7 @@ public class ChromatogramDataSupport {
 	public static String getReferenceLabel(IChromatogram<?> chromatogram, int index, boolean addTypeInfo) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		HeaderField referencesLabel = HeaderUtil.getHeaderField(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL));
+		HeaderField referencesLabel = HeaderUtil.getHeaderField(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_REFERENCE_LABEL));
 		//
 		return getReferenceLabel(chromatogram, referencesLabel, index, addTypeInfo);
 	}

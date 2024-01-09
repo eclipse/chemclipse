@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - preference initialization
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -24,7 +25,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -136,7 +137,7 @@ public class ScanWebIdentifierUI extends Composite {
 				public void widgetSelected(SelectionEvent e) {
 
 					button.setToolTipText(identifierSupplier.getIdentifierName());
-					preferenceStore.setValue(PreferenceConstants.P_SCAN_IDENTIFER, identifierSupplier.getId());
+					preferenceStore.setValue(PreferenceSupplier.P_SCAN_IDENTIFER, identifierSupplier.getId());
 					scanIdentifierSupplier = identifierSupplier;
 					launchBrowser();
 				}
@@ -148,7 +149,7 @@ public class ScanWebIdentifierUI extends Composite {
 
 	private void activateDefaultIdentifier(List<IScanIdentifierSupplier> identifierSuppliers) {
 
-		String id = preferenceStore.getString(PreferenceConstants.P_SCAN_IDENTIFER);
+		String id = preferenceStore.getString(PreferenceSupplier.P_SCAN_IDENTIFER);
 		if(!id.isEmpty()) {
 			for(IScanIdentifierSupplier identifierSupplier : identifierSuppliers) {
 				if(id.equals(identifierSupplier.getId())) {

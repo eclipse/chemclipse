@@ -23,11 +23,4 @@
             name="MSD Overlay">
       </page> 
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
-
 </plugin>

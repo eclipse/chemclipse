@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskESTD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferencePage;
 
 public class GroupHandlerESTD extends AbstractGroupHandler {
@@ -40,11 +40,11 @@ public class GroupHandlerESTD extends AbstractGroupHandler {
 
 		List<IPartHandler> partHandler = new ArrayList<>();
 		//
-		partHandler.add(new PartHandler("Quant Peak List", PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_LIST, PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_LIST));
-		partHandler.add(new PartHandler("Quant Peak Chart", PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_CHART, PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_CHART));
-		partHandler.add(new PartHandler("Quant Signals List", PartSupport.PARTDESCRIPTOR_QUANT_SIGNALS_LIST, PreferenceConstants.P_STACK_POSITION_QUANT_SIGNALS_LIST));
-		partHandler.add(new PartHandler("Quant Response List", PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_LIST, PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_LIST));
-		partHandler.add(new PartHandler("Quant Response Chart", PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_CHART, PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_CHART));
+		partHandler.add(new PartHandler("Quant Peak List", PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_LIST, PreferenceSupplier.P_STACK_POSITION_QUANT_PEAKS_LIST));
+		partHandler.add(new PartHandler("Quant Peak Chart", PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_CHART, PreferenceSupplier.P_STACK_POSITION_QUANT_PEAKS_CHART));
+		partHandler.add(new PartHandler("Quant Signals List", PartSupport.PARTDESCRIPTOR_QUANT_SIGNALS_LIST, PreferenceSupplier.P_STACK_POSITION_QUANT_SIGNALS_LIST));
+		partHandler.add(new PartHandler("Quant Response List", PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_LIST, PreferenceSupplier.P_STACK_POSITION_QUANT_RESPONSE_LIST));
+		partHandler.add(new PartHandler("Quant Response Chart", PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_CHART, PreferenceSupplier.P_STACK_POSITION_QUANT_RESPONSE_CHART));
 		//
 		return partHandler;
 	}
@@ -54,7 +54,7 @@ public class GroupHandlerESTD extends AbstractGroupHandler {
 
 		List<IPartHandler> partHandler = new ArrayList<>();
 		//
-		partHandler.add(new PartHandler("Quantitation", PartSupport.PARTDESCRIPTOR_QUANTITATION, PreferenceConstants.P_STACK_POSITION_QUANTITATION));
+		partHandler.add(new PartHandler("Quantitation", PartSupport.PARTDESCRIPTOR_QUANTITATION, PreferenceSupplier.P_STACK_POSITION_QUANTITATION));
 		//
 		return partHandler;
 	}
