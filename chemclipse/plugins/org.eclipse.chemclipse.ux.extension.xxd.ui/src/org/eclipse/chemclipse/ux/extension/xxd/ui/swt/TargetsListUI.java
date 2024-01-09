@@ -97,9 +97,20 @@ public class TargetsListUI extends ExtendedTableViewer {
 		/*
 		 * https://github.com/eclipse/chemclipse/issues/1354
 		 */
-		if(!OperatingSystemUtils.isWindows()) {
+		if(useDragAndDrop()) {
 			createDragAndDropProvider();
 		}
+	}
+
+	private boolean useDragAndDrop() {
+
+		if(OperatingSystemUtils.isWindows()) {
+			if(!PreferenceSupplier.isActivateTargetDragAndDropWindows()) {
+				return false;
+			}
+		}
+		//
+		return true;
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {

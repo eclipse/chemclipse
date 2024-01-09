@@ -448,6 +448,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final float DEF_RETENTION_INDEX_DEVIATION_ABS_OK = 20.0f;
 	public static final String P_RETENTION_INDEX_DEVIATION_ABS_WARN = "retentionIndexDeviationAbsoluteWARN";
 	public static final float DEF_RETENTION_INDEX_DEVIATION_ABS_WARN = 40.0f;
+	public static final String P_ACTIVATE_TARGET_DND_WINDOWS = "activateTargetDragAndDropWindows";
+	public static final boolean DEF_ACTIVATE_TARGET_DND_WINDOWS = false;
 	//
 	public static final String P_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL = "addUnknownAfterDeleteTargetsAll";
 	public static final boolean DEF_ADD_UNKNOWN_AFTER_DELETE_TARGETS_ALL = false;
@@ -1165,6 +1167,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_MATCH_QUALITY_UNKNOWN_TARGET, DEF_MATCH_QUALITY_UNKNOWN_TARGET);
 		putDefault(P_UNKNOWN_TARGET_ADD_RETENTION_INDEX, DEF_UNKNOWN_TARGET_ADD_RETENTION_INDEX);
 		putDefault(P_VERIFY_UNKNOWN_TARGET, DEF_VERIFY_UNKNOWN_TARGET);
+		putDefault(P_ACTIVATE_TARGET_DND_WINDOWS, DEF_ACTIVATE_TARGET_DND_WINDOWS);
 		//
 		initializeChromatogramDefaults();
 		/*
@@ -1487,5 +1490,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS, DEF_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS);
 		putDefault(P_OVERLAY_LOCK_ZOOM, DEF_OVERLAY_LOCK_ZOOM);
 		putDefault(P_OVERLAY_FOCUS_SELECTION, DEF_OVERLAY_FOCUS_SELECTION);
+	}
+
+	public static boolean isActivateTargetDragAndDropWindows() {
+
+		return INSTANCE().getBoolean(P_ACTIVATE_TARGET_DND_WINDOWS, DEF_ACTIVATE_TARGET_DND_WINDOWS);
 	}
 }

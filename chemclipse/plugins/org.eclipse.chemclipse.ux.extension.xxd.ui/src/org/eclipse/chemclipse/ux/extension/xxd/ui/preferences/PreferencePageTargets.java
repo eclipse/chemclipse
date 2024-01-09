@@ -65,6 +65,9 @@ public class PreferencePageTargets extends FieldEditorPreferencePage implements 
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MATCH_QUALITY_UNKNOWN_TARGET, "Match Quality (Unknown Target)", PreferenceSupplier.MIN_MATCH_QUALITY, PreferenceSupplier.MAX_MATCH_QUALITY, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_UNKNOWN_TARGET_ADD_RETENTION_INDEX, "Add Retention Index (Unknown Target)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_VERIFY_UNKNOWN_TARGET, "Verify (Unknown Target)", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_ACTIVATE_TARGET_DND_WINDOWS, "Activate Target Drag and Drop for Windows (experimental)", getFieldEditorParent()));
 	}
 
 	@Override
