@@ -35,15 +35,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final boolean DEF_USE_RETENTION_INDEX_QC = false;
 	public static final String P_ADD_PEAK_AREA = "addPeakArea";
 	public static final boolean DEF_ADD_PEAK_AREA = false;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

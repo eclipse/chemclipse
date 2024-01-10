@@ -22,15 +22,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final boolean DEF_SHOW_PERSPECTIVE_DIALOG = true;
 	public static final String P_CHANGE_PERSPECTIVE_AUTOMATICALLY = "changePerspectiveAutomatically";
 	public static final boolean DEF_CHANGE_PERSPECTIVE_AUTOMATICALLY = true;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

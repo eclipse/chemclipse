@@ -39,15 +39,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String DEF_SAMPLEQUANT_SCAN_IDENTIFIER = "";
 	public static final String P_SAMPLEQUANT_SEARCH_CASE_SENSITIVE = "samplequantSearchCaseSensitive"; // $NON-NLS-1$
 	public static final boolean DEF_SAMPLEQUANT_SEARCH_CASE_SENSITIVE = false; // $NON-NLS-1$
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

@@ -21,15 +21,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final boolean DEF_NORMALIZE_SCANS = true;
 	public static final String P_NORMALIZATION_STEPS = "normalizationSteps";
 	public static final int DEF_NORMALIZATION_STEPS = 1;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

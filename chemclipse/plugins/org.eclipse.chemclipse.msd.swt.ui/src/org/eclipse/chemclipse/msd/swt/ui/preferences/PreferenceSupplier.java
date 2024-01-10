@@ -34,15 +34,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final int DEF_LIBRARY_MSD_LIMIT_SORTING = 10000;
 	public static final int MIN_LIBRARY_MSD_LIMIT_SORTING = 500;
 	public static final int MAX_LIBRARY_MSD_LIMIT_SORTING = 30000;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

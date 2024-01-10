@@ -66,15 +66,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	 * Call clearCacheActiveIonRoundMethod to force a reload.
 	 */
 	private static IonRoundMethod activeIonRoundMethod = null;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

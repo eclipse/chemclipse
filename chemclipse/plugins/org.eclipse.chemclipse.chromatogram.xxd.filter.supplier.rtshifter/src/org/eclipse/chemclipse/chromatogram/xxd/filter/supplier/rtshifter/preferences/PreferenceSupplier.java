@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
-	//
 	public static final int MIN_MILLISECONDS_SHIFT = Integer.MIN_VALUE;
 	public static final int MAX_MILLISECONDS_SHIFT = Integer.MAX_VALUE;
 	//
@@ -44,15 +43,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	//
 	public static final String P_LIMIT_FACTOR = "limitFactor";
 	public static final int DEF_LIMIT_FACTOR = 4;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

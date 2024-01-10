@@ -20,15 +20,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 
 	public static final String P_REPORT_EXPORT_FOLDER = "reportExportFolder";
 	public static final String DEF_REPORT_EXPORT_FOLDER = "";
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

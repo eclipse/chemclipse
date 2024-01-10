@@ -68,15 +68,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final float DEF_MIN_SN_RATIO_WSD = 0.0f; // 0 = all peaks will be added
 	public static final String P_MOVING_AVERAGE_WINDOW_SIZE_WSD = "movingAverageWindowSizeWSD";
 	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE_WSD = String.valueOf(3);
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

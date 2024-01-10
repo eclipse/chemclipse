@@ -20,15 +20,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 
 	public static final String P_SELECTED_IONS = "selectedIons";
 	public static final String DEF_SELECTED_IONS = ""; // none selected means integrate all ion
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

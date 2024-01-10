@@ -47,15 +47,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	 * It is the mass spectrum that is used only by the session.
 	 */
 	private static IScanMSD sessionSubtractMassSpectrum;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

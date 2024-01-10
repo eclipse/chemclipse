@@ -25,15 +25,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String DEF_DELIMITER_FORMAT = DelimiterFormat.TAB.name();
 	public static final String P_RETENTION_TIME_FORMAT = "timeFormat";
 	public static final String DEF_RETENTION_TIME_FORMAT = RetentionTimeFormat.MINUTES.name();
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	public static boolean isAvailable() {

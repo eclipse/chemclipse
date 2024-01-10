@@ -29,15 +29,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final float DEF_LIMIT_MATCH_FACTOR = 80.0f;
 	public static final String P_MATCH_QUALITY = "matchQuality";
 	public static final float DEF_MATCH_QUALITY = 80.0f;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

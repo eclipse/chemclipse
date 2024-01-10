@@ -29,15 +29,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final int DEF_NUMBER_HIGHEST = 5;
 	public static final int MIN_NUMBER_HIGHEST = 1;
 	public static final int MAX_NUMBER_HIGHEST = Integer.MAX_VALUE;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

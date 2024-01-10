@@ -29,15 +29,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String DEF_SEGMENT_WIDTH = String.valueOf(9);
 	public static final int MIN_SEGMENT_SIZE = 5;
 	public static final int MAX_SEGMENT_SIZE = 19;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	public static boolean isAvailable() {

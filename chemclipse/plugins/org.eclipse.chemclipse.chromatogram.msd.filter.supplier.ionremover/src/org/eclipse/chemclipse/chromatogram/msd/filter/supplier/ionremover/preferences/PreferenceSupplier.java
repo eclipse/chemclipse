@@ -23,15 +23,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 
 	public static final String P_IONS_TO_REMOVE = "ionsToRemove";
 	public static final String DEF_IONS_TO_REMOVE = "18 28 84 207";
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override
@@ -56,9 +51,6 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static PeakFilterSettings getPeakFilterSettings() {
 
 		PeakFilterSettings peakFilterSettings = new PeakFilterSettings();
-		/*
-		 * Set the ions that shall be removed in every case.
-		 */
 		peakFilterSettings.setIonsToRemove(INSTANCE().get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
 		return peakFilterSettings;
 	}

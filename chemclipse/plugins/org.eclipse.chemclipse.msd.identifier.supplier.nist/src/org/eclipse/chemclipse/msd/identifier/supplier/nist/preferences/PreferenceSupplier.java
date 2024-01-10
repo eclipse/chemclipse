@@ -51,15 +51,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final float DEF_MIN_MATCH_FACTOR = 80.0f;
 	public static final String P_MIN_REVERSE_MATCH_FACTOR = "minReverseMatchFactor";
 	public static final float DEF_MIN_REVERSE_MATCH_FACTOR = 80.0f;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

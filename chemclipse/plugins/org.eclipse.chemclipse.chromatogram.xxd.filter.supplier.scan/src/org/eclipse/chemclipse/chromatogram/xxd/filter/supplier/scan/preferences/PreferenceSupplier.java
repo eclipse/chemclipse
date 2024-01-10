@@ -43,15 +43,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final boolean DEF_MERGE_SCANS = true;
 	public static final String P_CLIP_SCAN_NUMBER_PATTERN = "clipScanNumberPattern";
 	public static final String DEF_CLIP_SCAN_NUMBER_PATTERN = "1";
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

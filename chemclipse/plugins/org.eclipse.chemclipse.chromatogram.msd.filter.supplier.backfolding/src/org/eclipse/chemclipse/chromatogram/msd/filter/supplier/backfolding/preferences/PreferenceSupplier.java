@@ -26,15 +26,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final int MIN_RETENTION_TIME_SHIFT = 500; // 0.008 minutes
 	public static final int MAX_RETENTION_TIME_SHIFT = 25000; // 0.416 minutes
 	public static final int DEF_RETENTION_TIME_SHIFT = 5000; // 0.08 minutes
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

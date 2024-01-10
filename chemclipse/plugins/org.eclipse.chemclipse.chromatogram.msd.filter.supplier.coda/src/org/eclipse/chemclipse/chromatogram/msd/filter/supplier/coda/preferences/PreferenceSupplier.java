@@ -23,15 +23,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final float DEF_CODA_THRESHOLD = 0.75f;
 	public static final float CODA_THRESHOLD_MIN_VALUE = 0.0f;
 	public static final float CODA_THRESHOLD_MAX_VALUE = 1.0f;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override

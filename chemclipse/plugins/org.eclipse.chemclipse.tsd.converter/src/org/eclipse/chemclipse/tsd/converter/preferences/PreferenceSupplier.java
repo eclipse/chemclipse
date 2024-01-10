@@ -50,15 +50,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final int DEF_ADAPTER_MIN_TRACE_ISD = 18;
 	public static final String P_ADAPTER_MAX_TRACE_ISD = "adapterMaxTraceISD";
 	public static final int DEF_ADAPTER_MAX_TRACE_ISD = 600;
-	//
-	private static IPreferenceSupplier preferenceSupplier = null;
 
 	public static IPreferenceSupplier INSTANCE() {
 
-		if(preferenceSupplier == null) {
-			preferenceSupplier = new PreferenceSupplier();
-		}
-		return preferenceSupplier;
+		return INSTANCE(PreferenceSupplier.class);
 	}
 
 	@Override
