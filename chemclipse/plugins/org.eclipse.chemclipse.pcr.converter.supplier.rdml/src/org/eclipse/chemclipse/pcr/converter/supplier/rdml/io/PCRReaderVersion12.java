@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -90,6 +90,7 @@ public class PCRReaderVersion12 implements IPCRReader {
 			vendorPlate.setName(experiment.getId());
 			vendorPlate.setDetailedInfo(experiment.getDescription());
 			for(RunType run : experiment.getRun()) {
+				vendorPlate.setInstrument(run.getInstrument());
 				PcrFormatType pcrFormatType = run.getPcrFormat();
 				int w = 0;
 				for(ReactType react : run.getReact()) {

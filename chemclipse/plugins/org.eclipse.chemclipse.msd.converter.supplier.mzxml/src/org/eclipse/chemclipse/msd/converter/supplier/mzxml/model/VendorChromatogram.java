@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,18 +22,6 @@ public class VendorChromatogram extends AbstractChromatogramMSD implements IVend
 	public String getName() {
 
 		return extractNameFromFile("mzXMLChromatogram");
-	}
-
-	@Override
-	public String getInstrument() {
-
-		return getHeaderDataOrDefault("Instrument", "");
-	}
-
-	@Override
-	public void setInstrument(String instrument) {
-
-		putHeaderData("Instrument", instrument);
 	}
 
 	@Override
