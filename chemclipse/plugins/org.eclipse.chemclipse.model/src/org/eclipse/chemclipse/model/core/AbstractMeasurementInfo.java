@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,6 +30,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	private static final long serialVersionUID = 4247159773898302231L;
 	private static final Logger logger = Logger.getLogger(AbstractMeasurementInfo.class);
 	//
+	private static final String INSTRUMENT = "Instrument";
 	private static final String OPERATOR = "Operator";
 	private static final String DATE = "Date";
 	private static final String MISC_INFO = "Misc Info";
@@ -64,6 +65,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 		headerMap.put(SAMPLE_WEIGHT, Double.toString(0.0d));
 		headerMap.put(SAMPLE_WEIGHT_UNIT, "");
 		headerMap.put(DATA_NAME, "");
+		headerMap.put(INSTRUMENT, "");
 		//
 		protectKeys.addAll(headerMap.keySet());
 	}
@@ -126,6 +128,18 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	public Map<String, String> getHeaderDataMap() {
 
 		return Collections.unmodifiableMap(headerMap);
+	}
+
+	@Override
+	public String getInstrument() {
+
+		return getHeaderData(INSTRUMENT);
+	}
+
+	@Override
+	public void setInstrument(String instrument) {
+
+		putHeaderData(INSTRUMENT, instrument);
 	}
 
 	@Override
