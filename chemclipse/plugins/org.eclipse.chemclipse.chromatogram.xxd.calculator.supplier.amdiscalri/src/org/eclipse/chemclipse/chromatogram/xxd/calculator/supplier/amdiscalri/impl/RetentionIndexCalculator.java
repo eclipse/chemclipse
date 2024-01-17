@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -326,7 +326,7 @@ public class RetentionIndexCalculator {
 	 * @param chromatogram
 	 * @param separationColumnIndices
 	 */
-	private static void calculateIndex(IChromatogram<? extends IPeak> chromatogram, ISeparationColumnIndices separationColumnIndices) {
+	public static void calculateIndex(IChromatogram<? extends IPeak> chromatogram, ISeparationColumnIndices separationColumnIndices) {
 
 		if(separationColumnIndices != null) {
 			/*

@@ -50,6 +50,7 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdi
  org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.validators
 Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramIndexAssigner.xml,
  OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramIndexCurator.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramRetentionIndexRecalculator.xml,
  OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramRetentionIndexer.xml,
  OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.service.RetentionIndexAssignerSerializationService.xml,
  OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.service.RetentionIndexMarkerSerializationService.xml,
