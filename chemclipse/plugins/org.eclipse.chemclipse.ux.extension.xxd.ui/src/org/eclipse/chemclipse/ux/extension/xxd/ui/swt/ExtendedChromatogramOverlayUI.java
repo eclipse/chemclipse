@@ -274,8 +274,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 				NamedTraces namedTraces = namedTracesUI.getNamedTraces();
 				if(namedTraces != null) {
 					preferenceStore.setValue(PreferenceSupplier.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES, namedTraces.save());
-					chartControl.get().deleteSeries();
-					refreshUpdateOverlayChart();
+					refreshUpdateOverlayChart(true);
 				}
 			}
 		});
@@ -548,8 +547,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		updateNamedTraces();
 		chromatogramChartSupport.loadUserSettings();
-		chartControl.get().deleteSeries();
-		refreshUpdateOverlayChart();
+		refreshUpdateOverlayChart(true);
 		modifyWidgetStatus();
 		modifyDataStatusLabel();
 		modifyButtons();
@@ -599,8 +597,28 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void refreshUpdateOverlayChart() {
 
+		refreshUpdateOverlayChart(false);
+	}
+
+	private void refreshUpdateOverlayChart(boolean forceRedraw) {
+
 		ChromatogramChart chromatogramChart = chartControl.get();
 		if(chromatogramSelections.size() > 0) {
+			/*
+			 * X|Y range
+			 */
+			boolean overlayLockZoom = preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_LOCK_ZOOM);
+			BaseChart baseChart = chromatogramChart.getBaseChart();
+			boolean isEmpty = baseChart.getSeriesIds().isEmpty();
+			IAxisSet axisSet = chromatogramChart.getBaseChart().getAxisSet();
+			Range rangeX = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
+			Range rangeY = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
+			/*
+			 * Delete Series?
+			 */
+			if(forceRedraw) {
+				chartControl.get().deleteSeries();
+			}
 			/*
 			 * Reset the range restriction
 			 */
@@ -612,11 +630,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			rangeRestriction.setExtendMaxY(0.0d);
 			chromatogramChart.applySettings(chartSettings);
 			//
-			BaseChart baseChart = chromatogramChart.getBaseChart();
-			boolean isEmpty = baseChart.getSeriesIds().isEmpty();
-			IAxisSet axisSet = chromatogramChart.getBaseChart().getAxisSet();
-			Range xrange = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
-			Range yrange = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
 			Set<String> availableSeriesIds = new HashSet<>();
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			LinkedHashSet<String> usefulTypes = new LinkedHashSet<>();
@@ -710,9 +723,9 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			chromatogramChart.adjustRange(true);
 			//
 			if(!isEmpty) {
-				if(preferenceStore.getBoolean(PreferenceSupplier.P_OVERLAY_LOCK_ZOOM)) {
-					chromatogramChart.setRange(IExtendedChart.X_AXIS, xrange);
-					chromatogramChart.setRange(IExtendedChart.Y_AXIS, yrange);
+				if(overlayLockZoom) {
+					chromatogramChart.setRange(IExtendedChart.X_AXIS, rangeX);
+					chromatogramChart.setRange(IExtendedChart.Y_AXIS, rangeY);
 				}
 			}
 		}
