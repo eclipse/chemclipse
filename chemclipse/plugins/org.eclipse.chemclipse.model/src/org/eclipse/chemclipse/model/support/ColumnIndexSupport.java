@@ -21,12 +21,13 @@ import org.eclipse.chemclipse.model.identifier.IColumnIndexMarker;
 public class ColumnIndexSupport {
 
 	public static final String COLUMN_TYPE_CHROMATOGRAM = "{chromatogram}";
-	public static final String COLUMN_TYPE_DESCRIPTION = "Select the column that shall be used to select the retention index. Use e.g.:\n" + //
-			COLUMN_TYPE_CHROMATOGRAM + "\n" + //
-			"polar" + "\n" + //
+	public static final String COLUMN_TYPES = "polar" + "\n" + //
 			"semi-polar" + "\n" + //
 			"non-polar (apolar)" + "\n" + //
 			"DB-5";
+	public static final String COLUMN_TYPE_DESCRIPTION = "Select the column that shall be used to select the retention index. Use e.g.:\n" + //
+			COLUMN_TYPE_CHROMATOGRAM + "\n" + //
+			COLUMN_TYPES;
 
 	public static float getRetentionIndex(List<IColumnIndexMarker> columnIndexMarkers, String searchColumn, boolean caseSensitive, boolean removeWhiteSpace) {
 
