@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -82,5 +82,20 @@ public class RetentionIndexMap_3_Test extends TestCase {
 	public void test7() {
 
 		assertEquals(3676500, retentionIndexMap.getRetentionTime(5400)); // C54
+	}
+
+	public void test8() {
+
+		assertFalse(retentionIndexMap.isEmpty());
+	}
+
+	public void test9() {
+
+		assertEquals(499, retentionIndexMap.getRetentionIndexStart());
+	}
+
+	public void test10() {
+
+		assertEquals(5497, retentionIndexMap.getRetentionIndexStop());
 	}
 }

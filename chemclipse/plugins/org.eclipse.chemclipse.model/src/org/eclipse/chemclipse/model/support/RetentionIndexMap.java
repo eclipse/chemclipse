@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,8 @@ import org.eclipse.chemclipse.model.core.IScan;
 
 public class RetentionIndexMap {
 
+	private static final int RETENTION_INDEX_MISSING = -1;
+	//
 	private ISeparationColumnIndices separationColumnIndices = new SeparationColumnIndices(); // Retention Time, Retention Index
 	private TreeMap<Integer, Integer> retentionIndexMap = new TreeMap<>(); // Retention Index, Retention Time
 
@@ -41,7 +43,6 @@ public class RetentionIndexMap {
 		 * Map the available retention indices.
 		 */
 		TreeMap<Integer, Integer> treeMap = new TreeMap<>();
-		//
 		if(chromatogram != null) {
 			for(IScan scan : chromatogram.getScans()) {
 				int retentionIndex = Math.round(scan.getRetentionIndex());
@@ -58,6 +59,29 @@ public class RetentionIndexMap {
 	public ISeparationColumnIndices getSeparationColumnIndices() {
 
 		return separationColumnIndices;
+	}
+
+	public boolean isEmpty() {
+
+		return retentionIndexMap.isEmpty();
+	}
+
+	public int getRetentionIndexStart() {
+
+		if(isEmpty()) {
+			return RETENTION_INDEX_MISSING;
+		} else {
+			return retentionIndexMap.firstKey();
+		}
+	}
+
+	public int getRetentionIndexStop() {
+
+		if(isEmpty()) {
+			return RETENTION_INDEX_MISSING;
+		} else {
+			return retentionIndexMap.lastKey();
+		}
 	}
 
 	/**
