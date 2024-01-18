@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,14 @@ import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.identifier.IColumnIndexMarker;
 
 public class ColumnIndexSupport {
+
+	public static final String COLUMN_TYPE_CHROMATOGRAM = "{chromatogram}";
+	public static final String COLUMN_TYPE_DESCRIPTION = "Select the column that shall be used to select the retention index. Use e.g.:\n" + //
+			COLUMN_TYPE_CHROMATOGRAM + "\n" + //
+			"polar" + "\n" + //
+			"semi-polar" + "\n" + //
+			"non-polar (apolar)" + "\n" + //
+			"DB-5";
 
 	public static float getRetentionIndex(List<IColumnIndexMarker> columnIndexMarkers, String searchColumn, boolean caseSensitive, boolean removeWhiteSpace) {
 

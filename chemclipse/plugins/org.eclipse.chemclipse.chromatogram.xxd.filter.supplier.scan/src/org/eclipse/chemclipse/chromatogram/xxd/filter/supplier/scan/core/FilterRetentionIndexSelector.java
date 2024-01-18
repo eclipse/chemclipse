@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,7 +32,6 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
-
 
 public class FilterRetentionIndexSelector extends AbstractChromatogramFilter {
 
@@ -68,7 +67,7 @@ public class FilterRetentionIndexSelector extends AbstractChromatogramFilter {
 			boolean caseSensitive = settings.isCaseSensitive();
 			boolean removeWhiteSpace = settings.isRemoveWhiteSpace();
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-			if(FilterSettingsRetentionIndexSelector.CHROMATOGRAM_COLUMN_TYPE.equals(searchColumn)) {
+			if(ColumnIndexSupport.COLUMN_TYPE_CHROMATOGRAM.equals(searchColumn)) {
 				searchColumn = chromatogram.getSeparationColumnIndices().getSeparationColumn().getSeparationColumnType().label();
 			}
 			/*

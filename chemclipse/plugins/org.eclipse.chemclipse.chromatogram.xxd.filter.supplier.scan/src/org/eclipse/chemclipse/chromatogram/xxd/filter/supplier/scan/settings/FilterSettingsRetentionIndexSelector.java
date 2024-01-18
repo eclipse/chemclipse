@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
+import org.eclipse.chemclipse.model.support.ColumnIndexSupport;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,17 +20,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class FilterSettingsRetentionIndexSelector extends AbstractChromatogramFilterSettings {
 
-	public static final String CHROMATOGRAM_COLUMN_TYPE = "{chromatogram}";
-	//
-	@JsonProperty(value = "Search Column", defaultValue = CHROMATOGRAM_COLUMN_TYPE)
-	@JsonPropertyDescription(value = "Select the column that shall be used to select the retention index. Use e.g.:\n" + //
-			CHROMATOGRAM_COLUMN_TYPE + "\n" + //
-			"polar" + "\n" + //
-			"semi-polar" + "\n" + //
-			"non-polar (apolar)" + "\n" + //
-			"DB 5")
+	@JsonProperty(value = "Search Column", defaultValue = ColumnIndexSupport.COLUMN_TYPE_CHROMATOGRAM)
+	@JsonPropertyDescription(value = ColumnIndexSupport.COLUMN_TYPE_DESCRIPTION)
 	@StringSettingsProperty(allowEmpty = false)
-	private String searchColumn = CHROMATOGRAM_COLUMN_TYPE;
+	private String searchColumn = ColumnIndexSupport.COLUMN_TYPE_CHROMATOGRAM;
 	@JsonProperty(value = "Case Sensitive", defaultValue = "false")
 	@JsonPropertyDescription(value = "Search case sensitive")
 	private boolean caseSensitive = false;
