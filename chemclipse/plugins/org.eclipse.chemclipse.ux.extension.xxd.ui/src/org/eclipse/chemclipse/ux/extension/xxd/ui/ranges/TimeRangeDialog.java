@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -71,6 +71,12 @@ public class TimeRangeDialog extends Dialog {
 	protected Point getInitialSize() {
 
 		return new Point(450, 150);
+	}
+
+	@Override
+	protected boolean isResizable() {
+
+		return true;
 	}
 
 	@Override
