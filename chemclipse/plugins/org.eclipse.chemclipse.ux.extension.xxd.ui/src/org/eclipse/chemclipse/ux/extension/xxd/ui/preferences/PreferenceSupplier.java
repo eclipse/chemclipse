@@ -973,6 +973,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String DEF_FILTER_PATH_CHROMATOGRAM_CSD = "";
 	public static final String P_FILTER_PATH_CHROMATOGRAM_WSD = "filterPathChromatogramWSD";
 	public static final String DEF_FILTER_PATH_CHROMATOGRAM_WSD = "";
+	public static final String P_FILTER_PATH_RETENTION_INDICES = "filterPathRetentionIndices";
+	public static final String DEF_FILTER_PATH_RETENTION_INDICES = "";
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -1255,6 +1257,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_FILTER_PATH_CHROMATOGRAM_MSD, DEF_FILTER_PATH_CHROMATOGRAM_MSD);
 		putDefault(P_FILTER_PATH_CHROMATOGRAM_CSD, DEF_FILTER_PATH_CHROMATOGRAM_CSD);
 		putDefault(P_FILTER_PATH_CHROMATOGRAM_WSD, DEF_FILTER_PATH_CHROMATOGRAM_WSD);
+		putDefault(P_FILTER_PATH_RETENTION_INDICES, DEF_FILTER_PATH_RETENTION_INDICES);
 	}
 
 	private void initializeChromatogramDefaults() {
@@ -1490,5 +1493,15 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static boolean isActivateTargetDragAndDropWindows() {
 
 		return INSTANCE().getBoolean(P_ACTIVATE_TARGET_DND_WINDOWS, DEF_ACTIVATE_TARGET_DND_WINDOWS);
+	}
+
+	public static String getFilterPathRetentionIndices() {
+
+		return INSTANCE().get(P_FILTER_PATH_RETENTION_INDICES);
+	}
+
+	public static void setFilterPathRetentionIndices(String path) {
+
+		INSTANCE().put(P_FILTER_PATH_RETENTION_INDICES, path);
 	}
 }

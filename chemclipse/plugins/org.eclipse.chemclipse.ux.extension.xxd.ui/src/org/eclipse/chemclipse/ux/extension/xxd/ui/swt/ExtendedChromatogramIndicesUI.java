@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,14 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalibrationFile;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileWriter;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.RetentionIndexUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -28,6 +36,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swtchart.extensions.preferences.PreferencePage;
 
 public class ExtendedChromatogramIndicesUI extends Composite implements IExtendedPartUI {
@@ -74,11 +83,12 @@ public class ExtendedChromatogramIndicesUI extends Composite implements IExtende
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarSearch(composite);
 		createButtonToggleToolbarEdit(composite);
+		createButtonSave(composite);
 		createButtonHelp(composite);
 		createButtonSettings(composite);
 		//
@@ -119,6 +129,39 @@ public class ExtendedChromatogramIndicesUI extends Composite implements IExtende
 
 				boolean enabled = retentionIndexControl.get().toggleEditVisibility();
 				setButtonImage(button, IMAGE_EDIT, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_EDIT, enabled);
+			}
+		});
+	}
+
+	private void createButtonSave(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Save the calibration data.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImageProvider.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(chromatogramSelection != null) {
+					FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+					fileDialog.setOverwrite(true);
+					fileDialog.setText("Save Calibation Data");
+					fileDialog.setFilterExtensions(new String[]{CalibrationFile.FILTER_EXTENSION});
+					fileDialog.setFilterNames(new String[]{CalibrationFile.FILTER_NAME});
+					fileDialog.setFileName(CalibrationFile.FILE_NAME);
+					fileDialog.setFilterPath(PreferenceSupplier.getFilterPathRetentionIndices());
+					String path = fileDialog.open();
+					if(path != null) {
+						PreferenceSupplier.setFilterPathRetentionIndices(fileDialog.getFilterPath());
+						IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+						ISeparationColumnIndices separationColumnIndices = chromatogram.getSeparationColumnIndices();
+						File file = new File(path);
+						CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
+						calibrationFileWriter.write(file, separationColumnIndices);
+					}
+				}
 			}
 		});
 	}
