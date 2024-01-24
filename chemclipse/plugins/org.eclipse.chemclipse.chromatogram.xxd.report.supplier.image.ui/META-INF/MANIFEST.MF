@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image
+Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: ChemClipse
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui;singleton:=true
