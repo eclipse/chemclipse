@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.xxd.report.chromatogramReportSupplier">
+      <ChromatogramReportSupplier
+            description="Reports the whole chromatogram as PDF."
+            fileExtension=".pdf"
+            fileName="Report"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.pdf"
+            reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.pdf.core.ChromatogramReportGenerator"
+            reportName="Chromatogram Report (*.pdf)"
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.pdf.settings.ReportSettings">
+      </ChromatogramReportSupplier>
+   </extension>
+</plugin>
