@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.io.IColumnFormat;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -31,8 +34,7 @@ public class CalibrationFileWriter {
 
 	public void write(File file, ISeparationColumnIndices separationColumnIndices) {
 
-		try {
-			PrintWriter printWriter = new PrintWriter(file);
+		try (PrintWriter printWriter = new PrintWriter(file)) {
 			/*
 			 * Column data
 			 * #COLUMN_NAME=DB5
@@ -48,7 +50,9 @@ public class CalibrationFileWriter {
 			/*
 			 * RI data
 			 */
-			for(IRetentionIndexEntry retentionIndexEntry : separationColumnIndices.values()) {
+			List<IRetentionIndexEntry> retentionIndexEntries = new ArrayList<>(separationColumnIndices.values());
+			Collections.sort(retentionIndexEntries, (r1, r2) -> Integer.compare(r1.getRetentionTime(), r2.getRetentionTime()));
+			for(IRetentionIndexEntry retentionIndexEntry : retentionIndexEntries) {
 				/*
 				 * e.g.
 				 * 11.336 1700.0 100 937 Heptadecane
@@ -64,7 +68,6 @@ public class CalibrationFileWriter {
 				printWriter.println(retentionIndexEntry.getName());
 			}
 			printWriter.flush();
-			printWriter.close();
 		} catch(FileNotFoundException e) {
 			logger.warn(e);
 		}
