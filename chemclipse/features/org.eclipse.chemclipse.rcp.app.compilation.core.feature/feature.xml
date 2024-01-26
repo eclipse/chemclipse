@@ -308,4 +308,8 @@
          id="org.eclipse.chemclipse.pcr.converter.supplier.rdes.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.pdf.feature"
+         version="0.0.0"/>
+
 </feature>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,7 +28,6 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 	 * 
 	 * @return {@link IChromatogram}
 	 */
-	
 	IChromatogram<?> getChromatogram();
 
 	/**
@@ -57,8 +56,7 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 	 */
 	default ITotalScanSignal getNextTotalScanSignal(int scan) {
 
-		ITotalScanSignal signal = getTotalScanSignal(++scan);
-		return signal;
+		return getTotalScanSignal(++scan);
 	}
 
 	/**
@@ -70,8 +68,7 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 	 */
 	default ITotalScanSignal getPreviousTotalScanSignal(int scan) {
 
-		ITotalScanSignal signal = getTotalScanSignal(--scan);
-		return signal;
+		return getTotalScanSignal(--scan);
 	}
 
 	/**
@@ -127,8 +124,7 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 		 * Get the highest value.
 		 */
 		float[] values = getValues();
-		float max = Calculations.getMax(values);
-		return max;
+		return Calculations.getMax(values);
 	}
 
 	/**
@@ -145,8 +141,7 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 		 * Get the lowest value.
 		 */
 		float[] values = getValues();
-		float min = Calculations.getMin(values);
-		return min;
+		return Calculations.getMin(values);
 	}
 
 	/**
@@ -221,9 +216,8 @@ public interface ITotalScanSignals extends Iterable<Integer> {
 	 */
 	default void setTotalSignalsAsAbsoluteValues() {
 
-		float abundance = 0.0f;
 		for(ITotalScanSignal signal : getTotalScanSignalList()) {
-			abundance = Math.abs(signal.getTotalSignal());
+			float abundance = Math.abs(signal.getTotalSignal());
 			signal.setTotalSignal(abundance);
 		}
 	}
