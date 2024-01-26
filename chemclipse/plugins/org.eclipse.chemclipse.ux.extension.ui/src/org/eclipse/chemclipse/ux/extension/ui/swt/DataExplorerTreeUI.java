@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -167,7 +167,10 @@ public class DataExplorerTreeUI {
 		treeViewer.setUseHashlookup(true);
 		treeViewer.setExpandPreCheckFilters(true);
 		treeViewer.setContentProvider(new DataExplorerContentProvider(identifier));
-		treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
+		DisplayUtils.getDisplay().asyncExec(() -> {
+			// Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
+			treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
+		});
 		setInput(treeViewer);
 		//
 		treeViewerControl.set(treeViewer);
@@ -175,21 +178,11 @@ public class DataExplorerTreeUI {
 
 	private void setInput(TreeViewer treeViewer) {
 
-		/*
-		 * Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
-		 */
-		DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-
-				treeViewer.setInput(dataExplorerTreeRoot.getRootContent());
-				updateDirectory();
-				if(preferenceStore != null && preferenceKey != null) {
-					expandLastDirectoryPath(preferenceStore, preferenceKey);
-				}
-			}
-		});
+		treeViewer.setInput(dataExplorerTreeRoot.getRootContent());
+		updateDirectory();
+		if(preferenceStore != null && preferenceKey != null) {
+			expandLastDirectoryPath(preferenceStore, preferenceKey);
+		}
 	}
 
 	private void updateDirectory() {
