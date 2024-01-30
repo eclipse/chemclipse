@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - Fix method for NMR
  * Matthias Mailänder - add support for MS
  *******************************************************************************/
@@ -67,34 +67,20 @@ public class EditorUpdateSupport {
 
 	public List<IChromatogramSelection<?, ?>> getChromatogramSelections() {
 
+		return getChromatogramSelections(false);
+	}
+
+	public List<IChromatogramSelection<?, ?>> getChromatogramSelections(boolean forceByApplication) {
+
 		List<IChromatogramSelection<?, ?>> chromatogramSelections = new ArrayList<>();
 		if(partService != null) {
-			try {
-				Collection<MPart> parts = partService.getParts();
-				if(parts != null) {
-					for(MPart part : parts) {
-						chromatogramSelections.addAll(extractChromatogramSelections(part.getObject()));
-					}
-				}
-			} catch(Exception e) {
-				/*
-				 * Error like "Application does not have an active window" occur if this method
-				 * is called by a modal dialog. In such a case, try to resolve the chromatogram
-				 * selections via the application.
-				 */
-				MApplication application = Activator.getDefault().getApplication();
-				if(application != null) {
-					EModelService service = Activator.getDefault().getModelService();
-					if(service != null) {
-						List<MPart> parts = service.findElements(application, null, MPart.class, null);
-						if(parts != null) {
-							for(MPart part : parts) {
-								if(!extractChromatogramSelections(part.getObject()).isEmpty()) {
-									chromatogramSelections.addAll(extractChromatogramSelections(part.getObject()));
-								}
-							}
-						}
-					}
+			if(forceByApplication) {
+				chromatogramSelections.addAll(getChromatogramSelectionsByApplication());
+			} else {
+				try {
+					chromatogramSelections.addAll(getChromatogramSelectionsByPart(partService));
+				} catch(Exception e) {
+					chromatogramSelections.addAll(getChromatogramSelectionsByApplication());
 				}
 			}
 		}
@@ -217,6 +203,45 @@ public class EditorUpdateSupport {
 		 * contains 0 elements.
 		 */
 		return quantitationDatabases;
+	}
+
+	private List<IChromatogramSelection<?, ?>> getChromatogramSelectionsByPart(EPartService partService) {
+
+		List<IChromatogramSelection<?, ?>> chromatogramSelections = new ArrayList<>();
+		//
+		Collection<MPart> parts = partService.getParts();
+		if(parts != null) {
+			for(MPart part : parts) {
+				chromatogramSelections.addAll(extractChromatogramSelections(part.getObject()));
+			}
+		}
+		//
+		return chromatogramSelections;
+	}
+
+	private List<IChromatogramSelection<?, ?>> getChromatogramSelectionsByApplication() {
+
+		List<IChromatogramSelection<?, ?>> chromatogramSelections = new ArrayList<>();
+		/*
+		 * Error like "Application does not have an active window" occur if this method
+		 * is called by a modal dialog.
+		 */
+		MApplication application = Activator.getDefault().getApplication();
+		if(application != null) {
+			EModelService service = Activator.getDefault().getModelService();
+			if(service != null) {
+				List<MPart> parts = service.findElements(application, null, MPart.class, null);
+				if(parts != null) {
+					for(MPart part : parts) {
+						if(!extractChromatogramSelections(part.getObject()).isEmpty()) {
+							chromatogramSelections.addAll(extractChromatogramSelections(part.getObject()));
+						}
+					}
+				}
+			}
+		}
+		//
+		return chromatogramSelections;
 	}
 
 	private void addChromatogramSelection(List<IChromatogramSelection<?, ?>> chromatogramSelections, IChromatogramSelection<?, ?> selection) {
