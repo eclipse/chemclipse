@@ -3,6 +3,5 @@
    <service>
       <provide interface="org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier"/>
    </service>
-   <reference bind="setLogService" cardinality="0..1" interface="org.osgi.service.log.LogService" name="LogService" policy="dynamic" unbind="unsetLogService"/>
    <implementation class="org.eclipse.chemclipse.converter.methods.MethodProcessTypeSupplier"/>
 </scr:component>

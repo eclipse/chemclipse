@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
 import java.util.Collection;
 import java.util.Collections;
-
-import javax.inject.Inject;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -35,6 +33,8 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.osgi.service.component.annotations.Component;
+
+import jakarta.inject.Inject;
 
 @Component(service = {IProcessTypeSupplier.class})
 public class EditorProcessTypeSupplier implements IProcessTypeSupplier {

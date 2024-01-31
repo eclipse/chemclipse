@@ -112,8 +112,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri;bundle-version="0.9.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
-Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
- javax.inject;version="1.0.0",
+Import-Package: jakarta.annotation;version="2.1.1",
+ jakarta.inject;version="2.0.1",
  org.eclipse.chemclipse.rcp.app.ui.handlers,
  org.osgi.service.component.annotations;version="1.2.0",
  org.osgi.service.event;version="[1.0.0,2.0.0)"

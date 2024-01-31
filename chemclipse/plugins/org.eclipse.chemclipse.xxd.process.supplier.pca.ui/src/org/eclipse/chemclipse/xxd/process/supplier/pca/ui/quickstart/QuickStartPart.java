@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,9 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.quickstart;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
 import org.eclipse.chemclipse.ux.extension.ui.swt.TaskTileContainer;
 import org.eclipse.chemclipse.ux.extension.ui.views.WelcomeViewExtensionHandler;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.Activator;
@@ -23,12 +20,13 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
 
+import jakarta.inject.Inject;
+
 public class QuickStartPart {
 
 	@Inject
 	private IEclipseContext context;
 
-	@PostConstruct
 	public void create(Composite parent) {
 
 		TaskTileContainer tileContainer = new TaskTileContainer(parent, 3, () -> context);
