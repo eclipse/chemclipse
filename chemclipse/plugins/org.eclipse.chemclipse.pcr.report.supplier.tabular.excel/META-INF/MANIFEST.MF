@@ -20,7 +20,7 @@ Require-Bundle: org.eclipse.core.runtime,
  wrapped.org.apache.poi.poi;bundle-version="4.1.1",
  wrapped.org.apache.poi.poi-ooxml;bundle-version="4.1.1",
  org.apache.commons.commons-io;bundle-version="2.11.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.chemclipse.pcr.report.supplier.tabular
 Export-Package: org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.preferences

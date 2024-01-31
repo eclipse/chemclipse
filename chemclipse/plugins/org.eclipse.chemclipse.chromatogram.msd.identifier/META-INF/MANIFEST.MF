@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.6.2",
  org.eclipse.chemclipse.chromatogram.msd.comparison
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram,
  org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions,
  org.eclipse.chemclipse.chromatogram.msd.identifier.library,
