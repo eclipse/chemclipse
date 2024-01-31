@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.chromatogram.filter;bundle-version="0.8.0",
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.6.2"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.detector,
  org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.exceptions,

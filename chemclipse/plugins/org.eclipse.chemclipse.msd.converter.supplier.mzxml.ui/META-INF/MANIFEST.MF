@@ -13,5 +13,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.support.ui,
  org.eclipse.chemclipse.xxd.process.ui,
  org.eclipse.chemclipse.rcp.ui.icons
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy

@@ -6,7 +6,7 @@ Bundle-SymbolicName: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.ui;s
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.ui.Activator
 Bundle-Vendor: ChemClipse
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

@@ -7,4 +7,4 @@ Bundle-Vendor: ChemClipse
 Fragment-Host: org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri;bundle-version="0.9.0"
 Require-Bundle: org.junit;bundle-version="4.13.2"
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.fragment.test
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21

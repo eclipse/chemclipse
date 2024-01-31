@@ -8,7 +8,7 @@ Export-Package: org.eclipse.swt.internal.ole.win32,
  org.eclipse.swt.internal.win32,
  org.eclipse.swt.ole.win32
 Require-Bundle: org.eclipse.osgi
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.chemclipse.swt.win32.Activator
 Bundle-Vendor: ChemClipse

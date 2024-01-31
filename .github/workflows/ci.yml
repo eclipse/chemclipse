@@ -30,11 +30,11 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: '17'
+        java-version: '21'
         cache: 'maven'
     - name: Set up Maven
       uses: stCarolas/setup-maven@v4.5
       with:
-        maven-version: 3.9.2
+        maven-version: 3.9.4
     - name: Build with Maven
       run: mvn -f chemclipse/releng/org.eclipse.chemclipse.aggregator/pom.xml -T 1C clean verify --batch-mode --no-transfer-progress

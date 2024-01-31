@@ -56,7 +56,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.core.contexts;bundle-version="1.5.1",
  org.eclipse.e4.core.commands,
  org.apache.commons.commons-io;bundle-version="2.11.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
  javax.inject;version="1.0.0",
  org.osgi.service.component.annotations;version="1.2.0"

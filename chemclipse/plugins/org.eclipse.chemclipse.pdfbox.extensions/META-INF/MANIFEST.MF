@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.commons.logging;bundle-version="1.2.0",
  org.eclipse.chemclipse.logging;bundle-version="0.8.0",
  org.apache.pdfbox
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.pdfbox.extensions.core,
  org.eclipse.chemclipse.pdfbox.extensions.elements,

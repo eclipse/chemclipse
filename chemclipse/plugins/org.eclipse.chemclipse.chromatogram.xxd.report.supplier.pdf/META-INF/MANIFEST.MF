@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.wsd.model;bundle-version="0.8.0",
  org.apache.pdfbox,
  org.eclipse.chemclipse.pdfbox.extensions
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.pdf.core,
  org.eclipse.chemclipse.chromatogram.xxd.report.supplier.pdf.io,

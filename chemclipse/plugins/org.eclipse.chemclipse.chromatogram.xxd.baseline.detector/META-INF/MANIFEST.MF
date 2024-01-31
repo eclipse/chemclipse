@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.wsd.model;bundle-version="0.8.0",
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.9"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core,
  org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.exceptions,
  org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings

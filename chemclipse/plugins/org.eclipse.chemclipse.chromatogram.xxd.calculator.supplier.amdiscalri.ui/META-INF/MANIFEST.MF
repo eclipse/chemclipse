@@ -46,7 +46,7 @@ Require-Bundle: org.eclipse.ui,
  com.fasterxml.jackson.core.jackson-core;bundle-version="2.9.2",
  com.fasterxml.jackson.core.jackson-databind;bundle-version="2.9.2", 
  org.eclipse.chemclipse.xxd.process.ui;bundle-version="0.8.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: OSGI-INF/l10n/bundle
 Import-Package: javax.annotation;version="1.1.0",

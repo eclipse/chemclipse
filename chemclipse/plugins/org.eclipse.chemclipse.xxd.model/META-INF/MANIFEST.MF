@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.model,
  org.eclipse.chemclipse.msd.model,
  org.eclipse.chemclipse.support
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.xxd.model.quantitation
 Import-Package: com.google.common.collect,
