@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (c) 2021, 2022 Eclipse contributors
+# Copyright (c) 2021, 2024 Eclipse contributors
 #
 # This program and the accompanying materials are made available under the
 # terms of the Eclipse Public License 2.0 which is available at
@@ -8,8 +8,8 @@
 # SPDX-License-Identifier: EPL-2.0
 #
 # Contributors:
-#     Alexander Fedorov (ArSysOp) - initial API and implementation
-#     Matthias Mailänder - adapted for OpenChrom
+#     Alexander Fedorov - initial API and implementation
+#     Matthias Mailänder - adapted for ChemClipse
 ###############################################################################
 
 name: Continuous Integration
@@ -22,19 +22,11 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: maven:3.9.2-eclipse-temurin-17
 
     steps:
     - name: Checkout ChemClipse
       uses: actions/checkout@v3
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-        cache: 'maven'
-    - name: Set up Maven
-      uses: stCarolas/setup-maven@v4.5
-      with:
-        maven-version: 3.9.2
     - name: Build with Maven
       run: mvn -f chemclipse/releng/org.eclipse.chemclipse.aggregator/pom.xml -T 1C clean verify --batch-mode --no-transfer-progress
