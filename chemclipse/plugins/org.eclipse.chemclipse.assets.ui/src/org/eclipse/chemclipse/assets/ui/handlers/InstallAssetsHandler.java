@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Christoph Läubrich.
+ * Copyright (c) 2020, 2024 Christoph Läubrich.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.eclipse.chemclipse.assets.core.AssetItem;
 import org.eclipse.chemclipse.assets.ui.wizards.AssetInstallPage;

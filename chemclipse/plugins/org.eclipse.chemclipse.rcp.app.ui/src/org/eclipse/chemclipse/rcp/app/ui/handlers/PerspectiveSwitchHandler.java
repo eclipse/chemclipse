@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.rcp.app.ui.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.eclipse.chemclipse.rcp.app.ui.Activator;
 import org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveChooserDialog;
