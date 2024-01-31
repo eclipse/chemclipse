@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -122,7 +122,7 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 			 * Fallback
 			 */
 			if(descriptor != null) {
-				return (Image)resourceManager.get(descriptor);
+				return resourceManager.get(descriptor);
 			}
 		}
 		return null;

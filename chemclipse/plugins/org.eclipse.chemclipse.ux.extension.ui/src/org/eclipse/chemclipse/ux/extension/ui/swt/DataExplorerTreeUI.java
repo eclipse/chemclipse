@@ -21,7 +21,6 @@ import java.util.function.Function;
 
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.l10n.Messages;
 import org.eclipse.chemclipse.ux.extension.ui.listener.DataExplorerDragListener;
@@ -39,6 +38,9 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.TreeItem;
 
 public class DataExplorerTreeUI {
 
@@ -48,6 +50,7 @@ public class DataExplorerTreeUI {
 	private File directory = null;
 	private IPreferenceStore preferenceStore = null;
 	private String preferenceKey = null;
+	private DataExplorerLabelProvider labelProvider;
 
 	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot dataExplorerTreeRoot, Collection<? extends ISupplierFileIdentifier> identifier) {
 
@@ -167,13 +170,33 @@ public class DataExplorerTreeUI {
 		treeViewer.setUseHashlookup(true);
 		treeViewer.setExpandPreCheckFilters(true);
 		treeViewer.setContentProvider(new DataExplorerContentProvider(identifier));
-		DisplayUtils.getDisplay().asyncExec(() -> {
-			// Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
-			treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
-		});
+		labelProvider = new DataExplorerLabelProvider(identifier);
+		treeViewer.getTree().addListener(SWT.SetData, createLabelListener());
+		treeViewer.getTree().addListener(SWT.Selection, createLabelListener());
 		setInput(treeViewer);
-		//
 		treeViewerControl.set(treeViewer);
+	}
+
+	private Listener createLabelListener() {
+
+		return new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				TreeItem item = (TreeItem)event.item;
+				item.setText(labelProvider.getText(item.getData()));
+				// Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
+				Display.getDefault().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						item.setImage(labelProvider.getImage(item.getData()));
+					}
+				});
+			}
+		};
 	}
 
 	private void setInput(TreeViewer treeViewer) {
