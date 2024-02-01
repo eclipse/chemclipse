@@ -185,6 +185,9 @@ public class DataExplorerTreeUI {
 			public void handleEvent(Event event) {
 
 				TreeItem item = (TreeItem)event.item;
+				if(item == null || item.getData() == null) {
+					return;
+				}
 				item.setText(labelProvider.getText(item.getData()));
 				// Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
 				Display.getDefault().asyncExec(new Runnable() {
