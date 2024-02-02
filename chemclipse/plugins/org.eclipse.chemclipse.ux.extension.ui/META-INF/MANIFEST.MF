@@ -7,7 +7,6 @@ Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.ux.extension.ui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime;bundle-version="3.11.1",
- jakarta.inject.jakarta.inject-api;bundle-version="1.0.0",
  org.eclipse.e4.core.di;bundle-version="1.5.0",
  org.eclipse.e4.ui.workbench;bundle-version="1.3.0",
  org.eclipse.e4.ui.di;bundle-version="1.1.0",
@@ -55,6 +54,7 @@ Export-Package: org.eclipse.chemclipse.ux.extension.ui.definitions,
  org.eclipse.chemclipse.ux.extension.ui.swt,
  org.eclipse.chemclipse.ux.extension.ui.views
 Import-Package: jakarta.annotation;version="2.1.1",
+ jakarta.inject;version="2.0.1",
  org.osgi.framework;version="[1.0.0,2.0.0)",
  org.osgi.service.event;version="[1.0.0,2.0.0)"
 Service-Component: OSGI-INF/chromatogramTypeXXD.xml, 
