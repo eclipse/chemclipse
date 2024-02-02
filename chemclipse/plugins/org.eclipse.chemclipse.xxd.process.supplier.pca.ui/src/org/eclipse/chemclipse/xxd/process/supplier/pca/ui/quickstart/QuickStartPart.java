@@ -20,16 +20,14 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
 
-import jakarta.inject.Inject;
+import jakarta.annotation.PostConstruct;
 
 public class QuickStartPart {
 
-	@Inject
-	private IEclipseContext context;
+	@PostConstruct
+	public void initializeContent(Composite parent, IEclipseContext eclipseContext) {
 
-	public void create(Composite parent) {
-
-		TaskTileContainer tileContainer = new TaskTileContainer(parent, 3, () -> context);
+		TaskTileContainer tileContainer = new TaskTileContainer(parent, 3, () -> eclipseContext);
 		/*
 		 * Default
 		 */
