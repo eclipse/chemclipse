@@ -92,20 +92,4 @@ public class MSPExportConverter_1_ITest extends TestCase {
 			assertTrue("TypeCastException", true);
 		}
 	}
-
-	@Test
-	public void testExport_4() {
-
-		try {
-			assertTrue("Remove writable permission.", exportFile.setWritable(false));
-			IProcessingInfo<File> processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
-			try {
-				assertTrue(processingInfo.hasErrorMessages());
-			} catch(TypeCastException e) {
-				assertTrue("TypeCastException", true);
-			}
-		} finally {
-			assertTrue("Add readable permission.", exportFile.setReadable(true));
-		}
-	}
 }

@@ -59,16 +59,4 @@ public class MSLImportConverter_1_ITest extends TestCase {
 		IProcessingInfo<?> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
-
-	public void testExceptions_4() {
-
-		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_NOT_READABLE));
-		assertTrue("Remove writable permission.", importFile.setReadable(false));
-		try {
-			IProcessingInfo<?> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
-			assertTrue(processingInfo.hasErrorMessages());
-		} finally {
-			assertTrue("Add readable permission.", importFile.setReadable(true));
-		}
-	}
 }

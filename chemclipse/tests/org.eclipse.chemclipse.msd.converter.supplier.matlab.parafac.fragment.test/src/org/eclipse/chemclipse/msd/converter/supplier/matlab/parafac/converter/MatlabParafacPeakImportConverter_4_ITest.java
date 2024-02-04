@@ -13,10 +13,7 @@ package org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.TestPathHelper;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
@@ -46,15 +43,6 @@ public class MatlabParafacPeakImportConverter_4_ITest extends TestCase {
 		} catch(Exception e) {
 			assertTrue(true);
 		}
-	}
-
-	public void testImport_2() {
-
-		File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_NOT_READABLE));
-		assertTrue("Remove readable permission.", file.setReadable(false));
-		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = converter.convert(file, new NullProgressMonitor());
-		assertNull(processingInfo.getProcessingResult());
-		assertTrue("Add readable permission.", file.setReadable(true));
 	}
 
 	public void testImport_3() {

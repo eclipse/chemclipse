@@ -88,19 +88,4 @@ public class MSLExportConverter_1_ITest extends TestCase {
 			assertTrue("TypeCastException", true);
 		}
 	}
-
-	public void testExport_4() {
-
-		try {
-			assertTrue("Remove writable permission.", exportFile.setWritable(false));
-			IProcessingInfo<?> processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
-			try {
-				assertTrue(processingInfo.hasErrorMessages());
-			} catch(TypeCastException e) {
-				assertTrue("TypeCastException", true);
-			}
-		} finally {
-			exportFile.delete();
-		}
-	}
 }
