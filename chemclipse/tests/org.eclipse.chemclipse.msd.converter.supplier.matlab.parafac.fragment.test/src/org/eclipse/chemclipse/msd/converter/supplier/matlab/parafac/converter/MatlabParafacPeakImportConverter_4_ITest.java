@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -51,10 +51,10 @@ public class MatlabParafacPeakImportConverter_4_ITest extends TestCase {
 	public void testImport_2() {
 
 		File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_NOT_READABLE));
-		file.setReadable(false);
+		assertTrue("Remove readable permission.", file.setReadable(false));
 		IProcessingInfo<IPeaks<IPeakMSD>> processingInfo = converter.convert(file, new NullProgressMonitor());
 		assertNull(processingInfo.getProcessingResult());
-		file.setReadable(true);
+		assertTrue("Add readable permission.", file.setReadable(true));
 	}
 
 	public void testImport_3() {

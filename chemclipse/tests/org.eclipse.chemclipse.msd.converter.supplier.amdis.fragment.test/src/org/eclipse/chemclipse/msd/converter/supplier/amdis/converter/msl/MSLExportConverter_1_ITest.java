@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -92,7 +92,7 @@ public class MSLExportConverter_1_ITest extends TestCase {
 	public void testExport_4() {
 
 		try {
-			exportFile.setWritable(false);
+			assertTrue("Remove writable permission.", exportFile.setWritable(false));
 			IProcessingInfo<?> processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
 			try {
 				assertTrue(processingInfo.hasErrorMessages());

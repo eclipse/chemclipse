@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -63,12 +63,12 @@ public class MSLImportConverter_1_ITest extends TestCase {
 	public void testExceptions_4() {
 
 		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_NOT_READABLE));
-		importFile.setReadable(false);
+		assertTrue("Remove writable permission.", importFile.setReadable(false));
 		try {
 			IProcessingInfo<?> processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} finally {
-			importFile.setReadable(true);
+			assertTrue("Add readable permission.", importFile.setReadable(true));
 		}
 	}
 }
