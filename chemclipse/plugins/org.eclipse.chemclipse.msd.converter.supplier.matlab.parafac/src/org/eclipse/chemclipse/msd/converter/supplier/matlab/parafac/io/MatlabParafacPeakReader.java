@@ -159,6 +159,8 @@ public class MatlabParafacPeakReader implements IPeakReader {
 			 * Parse the values.
 			 */
 			String[] values = line.split(IConstants.VALUE_DELIMITER);
+			if(parseStatus == null)
+				return;
 			switch(parseStatus) {
 				case DESCRIPTION:
 					if(values[0] != null && values[0].equals(IConstants.DESCRIPTION)) {
