@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import java.nio.ByteOrder;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.util.Date;
+import java.util.List;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -43,6 +44,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.Polarity;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -95,12 +97,21 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 				Software software = processing.getSoftware();
 				chromatogram.getEditHistory().add(new EditInformation(software.getType(), software.getName() + " " + software.getVersion()));
 			}
-			//
-			for(Scan scan : msrun.getScan()) {
+			List<Scan> scans = msrun.getScan();
+			monitor.beginTask("Read scans", scans.size());
+			for(Scan scan : scans) {
 				/*
 				 * Get the mass spectra.
 				 */
 				IVendorScan massSpectrum = new VendorScan();
+				String polarity = scan.getPolarity();
+				if(polarity != null && !polarity.isEmpty()) {
+					if(polarity.equals("+")) {
+						massSpectrum.setPolarity(Polarity.POSITIVE);
+					} else if(polarity.equals("-")) {
+						massSpectrum.setPolarity(Polarity.NEGATIVE);
+					}
+				}
 				long retentionTime = scan.getRetentionTime().getTimeInMillis(new Date());
 				// MS, MS/MS
 				short msLevel = scan.getMsLevel().shortValue();
@@ -196,6 +207,7 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 					}
 				}
 				chromatogram.addScan(massSpectrum);
+				monitor.worked(1);
 			}
 		} catch(SAXException e) {
 			logger.warn(e);

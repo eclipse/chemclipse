@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,6 +19,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -78,8 +79,9 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 			for(DataProcessing dataProcessing : msrun.getDataProcessing()) {
 				massSpectrum.setMassSpectrumType((short)(Boolean.TRUE.equals(dataProcessing.isCentroided()) ? 0 : 1));
 			}
-			//
-			for(Scan scan : msrun.getScan()) {
+			List<Scan> scans = msrun.getScan();
+			monitor.beginTask("Read scans", scans.size());
+			for(Scan scan : scans) {
 				/*
 				 * Get the ions.
 				 */
@@ -130,6 +132,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 						logger.warn(e);
 					}
 				}
+				monitor.worked(1);
 			}
 		} catch(SAXException e) {
 			logger.warn(e);
