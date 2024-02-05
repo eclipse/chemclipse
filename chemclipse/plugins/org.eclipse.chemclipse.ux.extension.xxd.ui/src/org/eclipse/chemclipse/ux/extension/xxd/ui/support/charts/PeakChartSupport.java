@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - use more generic collection instead of list as parameter
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
@@ -37,59 +37,61 @@ public class PeakChartSupport {
 	public ILineSeriesData getPeaks(Collection<? extends IPeak> peaks, boolean includeBackground, boolean mirrored, Color color, String id) {
 
 		ISeriesData seriesData = getPeakSeriesData(peaks, includeBackground, mirrored, id);
-		return getLineSeriesData(seriesData, color, true);
+		return getLineSeriesData(seriesData, color, true, true);
 	}
 
 	public ILineSeriesData getPeak(IPeak peak, boolean includeBackground, boolean mirrored, Color color, String id) {
 
 		ISeriesData seriesData = getPeakSeriesData(peak, includeBackground, mirrored, id);
-		return getLineSeriesData(seriesData, color, true);
+		return getLineSeriesData(seriesData, color, true, true);
 	}
 
 	public ILineSeriesData getIncreasingTangent(IPeak peak, boolean includeBackground, boolean mirrored, Color color, String postfix) {
 
 		ISeriesData seriesData = getIncreasingInflectionData(peak, includeBackground, mirrored, postfix);
-		return getLineSeriesData(seriesData, color, false);
+		return getLineSeriesData(seriesData, color, false, false);
 	}
 
 	public ILineSeriesData getDecreasingTangent(IPeak peak, boolean includeBackground, boolean mirrored, Color color, String postfix) {
 
 		ISeriesData seriesData = getDecreasingInflectionData(peak, includeBackground, mirrored, postfix);
-		return getLineSeriesData(seriesData, color, false);
+		return getLineSeriesData(seriesData, color, false, false);
 	}
 
 	public ILineSeriesData getPeakPerpendicular(IPeak peak, boolean includeBackground, boolean mirrored, Color color, String postfix) {
 
 		ISeriesData seriesData = getPeakPerpendicularData(peak, includeBackground, mirrored, postfix);
-		return getLineSeriesData(seriesData, color, false);
+		return getLineSeriesData(seriesData, color, false, false);
 	}
 
 	public ILineSeriesData getPeakWidth(IPeak peak, boolean includeBackground, float height, boolean mirrored, Color color, String postfix) {
 
 		ISeriesData seriesData = getPeakWidthByInflectionData(peak, includeBackground, height, mirrored, postfix);
-		return getLineSeriesData(seriesData, color, false);
+		return getLineSeriesData(seriesData, color, false, false);
 	}
 
 	public ILineSeriesData getPeakBaseline(IPeak peak, boolean mirrored, Color color, String id) {
 
 		ISeriesData seriesData = getPeakBaselineData(peak, mirrored, id);
-		return getLineSeriesData(seriesData, color, false);
+		return getLineSeriesData(seriesData, color, false, false);
 	}
 
 	public ILineSeriesData getPeakBackground(IPeak peak, boolean mirrored, Color color, String id) {
 
 		ISeriesData seriesData = getPeakBaselineData(peak, mirrored, id);
-		return getLineSeriesData(seriesData, color, true);
+		return getLineSeriesData(seriesData, color, true, false);
 	}
 
-	private ILineSeriesData getLineSeriesData(ISeriesData seriesData, Color color, boolean enableArea) {
+	private ILineSeriesData getLineSeriesData(ISeriesData seriesData, Color color, boolean enableArea, boolean areaStrict) {
 
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 		lineSeriesSettings.setLineColor(color);
 		lineSeriesSettings.setEnableArea(enableArea);
+		lineSeriesSettings.setAreaStrict(areaStrict);
 		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
 		lineSeriesSettingsHighlight.setLineWidth(2);
+		//
 		return lineSeriesData;
 	}
 

@@ -212,7 +212,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private static final String SERIES_ID_PEAKS_ISTD_INACTIVE = "Peaks ISTD [Inactive]";
 	private static final String SERIES_ID_SELECTED_PEAK_MARKER = "Selected Peak Marker";
 	private static final String SERIES_ID_SELECTED_PEAK_SHAPE = "Selected Peak Shape";
-	private static final String SERIES_ID_SELECTED_PEAK_BACKGROUND = "Selected Peak Background";
 	private static final String SERIES_ID_SELECTED_SCAN = "Selected Scan";
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scans Selected";
@@ -471,7 +470,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			//
 			chromatogramChartControl.get().deleteSeries(SERIES_ID_SELECTED_PEAK_MARKER);
 			for(String seriesId : seriesIds) {
-				if(seriesId.startsWith(SERIES_ID_SELECTED_PEAK_SHAPE) || seriesId.startsWith(SERIES_ID_SELECTED_PEAK_BACKGROUND)) {
+				if(seriesId.startsWith(SERIES_ID_SELECTED_PEAK_SHAPE)) {
 					chromatogramChartControl.get().deleteSeries(seriesId);
 				}
 			}
@@ -1008,13 +1007,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				lineSeriesSettings.setSymbolColor(colorPeak);
 				lineSeriesSettings.setSymbolSize(scanMarkerSize);
 				lineSeriesDataList.add(lineSeriesData);
-				/*
-				 * Background
-				 */
-				Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_BACKGROUND));
-				lineSeriesData = peakChartSupport.getPeakBackground(peak, mirrored, colorBackground, SERIES_ID_SELECTED_PEAK_BACKGROUND + i);
-				lineSeriesDataList.add(lineSeriesData);
-				//
 				i++;
 			}
 		}
