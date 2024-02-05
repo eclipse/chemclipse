@@ -44,6 +44,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.Polarity;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -103,6 +104,14 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 				 * Get the mass spectra.
 				 */
 				IVendorScan massSpectrum = new VendorScan();
+				String polarity = scan.getPolarity();
+				if(polarity != null && !polarity.isEmpty()) {
+					if(polarity.equals("+")) {
+						massSpectrum.setPolarity(Polarity.POSITIVE);
+					} else if(polarity.equals("-")) {
+						massSpectrum.setPolarity(Polarity.NEGATIVE);
+					}
+				}
 				long retentionTime = scan.getRetentionTime().getTimeInMillis(new Date());
 				// MS, MS/MS
 				short msLevel = scan.getMsLevel().shortValue();

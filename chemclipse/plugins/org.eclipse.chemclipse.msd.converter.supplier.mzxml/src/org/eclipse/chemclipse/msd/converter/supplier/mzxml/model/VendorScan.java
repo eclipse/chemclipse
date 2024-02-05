@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.msd.model.core.Polarity;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 public class VendorScan extends AbstractVendorStandaloneMassSpectrum implements IVendorScan {
@@ -25,6 +26,8 @@ public class VendorScan extends AbstractVendorStandaloneMassSpectrum implements 
 	public static final int MAX_IONS = 65535;
 	public static final int MIN_RETENTION_TIME = 0;
 	public static final int MAX_RETENTION_TIME = Integer.MAX_VALUE;
+	//
+	private Polarity polarity;
 
 	@Override
 	public int getMaxPossibleIons() {
@@ -42,6 +45,21 @@ public class VendorScan extends AbstractVendorStandaloneMassSpectrum implements 
 	public int getMinPossibleRetentionTime() {
 
 		return MIN_RETENTION_TIME;
+	}
+
+	@Override
+	public Polarity getPolarity() {
+
+		if(polarity != null) {
+			return polarity;
+		}
+		return Polarity.NONE;
+	}
+
+	@Override
+	public void setPolarity(Polarity polarity) {
+
+		this.polarity = polarity;
 	}
 
 	@Override
