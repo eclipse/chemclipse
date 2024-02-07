@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - adjust to new API
  *******************************************************************************/
 package org.eclipse.chemclipse.model.targets;
@@ -28,6 +28,26 @@ public class TargetSupport {
 	 */
 	public static String getBestTargetLibraryField(Object object) {
 
+		IIdentificationTarget identificationTarget = getBestIdentificationTarget(object);
+		if(identificationTarget != null) {
+			LibraryField libraryField = PreferenceSupplier.getBestTargetLibraryField();
+			String name = libraryField.getTransformer().apply(identificationTarget);
+			if(name != null) {
+				return name;
+			}
+		}
+		//
+		return "";
+	}
+
+	/**
+	 * Return the best identification target. May return null.
+	 * 
+	 * @param object
+	 * @return {@link IIdentificationTarget}
+	 */
+	public static IIdentificationTarget getBestIdentificationTarget(Object object) {
+
 		if(object instanceof ITargetSupplier targetSupplier) {
 			/*
 			 * Is Retention Index used for QC?
@@ -43,14 +63,9 @@ public class TargetSupport {
 			/*
 			 * Best Match
 			 */
-			IIdentificationTarget identificationTarget = IIdentificationTarget.getIdentificationTarget(targetSupplier.getTargets(), retentionIndex);
-			LibraryField libraryField = PreferenceSupplier.getBestTargetLibraryField();
-			String name = libraryField.getTransformer().apply(identificationTarget);
-			if(name != null) {
-				return name;
-			}
+			return IIdentificationTarget.getIdentificationTarget(targetSupplier.getTargets(), retentionIndex);
 		}
 		//
-		return "";
+		return null;
 	}
 }
