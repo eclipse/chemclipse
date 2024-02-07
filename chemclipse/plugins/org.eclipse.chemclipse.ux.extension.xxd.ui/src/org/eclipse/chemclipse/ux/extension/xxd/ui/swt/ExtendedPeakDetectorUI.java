@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import jakarta.inject.Inject;
-
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
@@ -81,12 +79,13 @@ import org.eclipse.swtchart.extensions.linecharts.ICompressionSupport;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 
+import jakarta.inject.Inject;
+
 public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakDetectorUI.class);
 	//
 	private static final String ID_PEAK = "Peak";
-	private static final String ID_BACKGROUND = "Background";
 	/*
 	 * Detection Types
 	 */
@@ -358,14 +357,9 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 				 * Peak
 				 */
 				buttonAddPeak.setEnabled(true);
-				boolean includeBackground = true;
 				boolean mirrored = false;
 				Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_1));
-				lineSeriesDataList.add(peakChartSupport.getPeak(peak, includeBackground, mirrored, colorPeak, ID_PEAK));
-				if(includeBackground) {
-					Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_BACKGROUND));
-					lineSeriesDataList.add(peakChartSupport.getPeakBackground(peak, mirrored, colorBackground, ID_BACKGROUND));
-				}
+				lineSeriesDataList.add(peakChartSupport.getPeak(peak, true, mirrored, colorPeak, ID_PEAK));
 			}
 			//
 			chartControl.get().addSeriesData(lineSeriesDataList, ICompressionSupport.LOW_COMPRESSION);

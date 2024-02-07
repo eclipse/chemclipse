@@ -320,10 +320,6 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	/*
 	 * Peaks
 	 */
-	public static final String P_SHOW_PEAK_BACKGROUND = "showPeakBackground";
-	public static final boolean DEF_SHOW_PEAK_BACKGROUND = true;
-	public static final String P_COLOR_PEAK_BACKGROUND = "colorPeakBackground";
-	public static final String DEF_COLOR_PEAK_BACKGROUND = "0,0,0";
 	public static final String P_SHOW_PEAK_BASELINE = "showPeakBaseline";
 	public static final boolean DEF_SHOW_PEAK_BASELINE = true;
 	public static final String P_COLOR_PEAK_BASELINE = "colorPeakBaseline";
@@ -1091,8 +1087,6 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		/*
 		 * Peaks
 		 */
-		putDefault(P_SHOW_PEAK_BACKGROUND, DEF_SHOW_PEAK_BACKGROUND);
-		putDefault(P_COLOR_PEAK_BACKGROUND, DEF_COLOR_PEAK_BACKGROUND);
 		putDefault(P_SHOW_PEAK_BASELINE, DEF_SHOW_PEAK_BASELINE);
 		putDefault(P_COLOR_PEAK_BASELINE, DEF_COLOR_PEAK_BASELINE);
 		putDefault(P_SHOW_PEAK, DEF_SHOW_PEAK);

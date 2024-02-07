@@ -126,24 +126,41 @@ public class PeakChartSupport {
 
 		IPeakModel peakModel = peak.getPeakModel();
 		List<Integer> retentionTimes = peakModel.getRetentionTimes();
-		int size = retentionTimes.size();
+		int size = includeBackground ? retentionTimes.size() + 2 : retentionTimes.size();
 		double[] xSeries = new double[size];
 		double[] ySeries = new double[size];
-		int index = 0;
-		for(int retentionTime : retentionTimes) {
-			//
+		int offset = includeBackground ? 1 : 0;
+		/*
+		 * Data
+		 */
+		for(int i = 0; i < retentionTimes.size(); i++) {
+			int retentionTime = retentionTimes.get(i);
+			int index = i + offset;
 			xSeries[index] = retentionTime;
 			if(includeBackground) {
 				ySeries[index] = peakModel.getBackgroundAbundance(retentionTime) + peakModel.getPeakAbundance(retentionTime);
 			} else {
 				ySeries[index] = peakModel.getPeakAbundance(retentionTime);
 			}
-			//
-			if(mirrored) {
-				ySeries[index] = ySeries[index] * -1;
+		}
+		/*
+		 * Background
+		 */
+		if(includeBackground) {
+			int retentionTimeStart = retentionTimes.get(0);
+			xSeries[0] = retentionTimeStart;
+			ySeries[0] = peakModel.getBackgroundAbundance(retentionTimeStart);
+			int retentionTimeStop = retentionTimes.get(retentionTimes.size() - 1);
+			xSeries[size - 1] = retentionTimeStop;
+			ySeries[size - 1] = peakModel.getBackgroundAbundance(retentionTimeStop);
+		}
+		/*
+		 * Mirror
+		 */
+		if(mirrored) {
+			for(int i = 0; i < ySeries.length; i++) {
+				ySeries[i] *= -1;
 			}
-			//
-			index++;
 		}
 		//
 		return new SeriesData(xSeries, ySeries, id);

@@ -530,7 +530,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 
 	private void updateButtons() {
 
-		boolean enabled = combinedScan instanceof ICombinedMassSpectrum combinedMassSpectrum;
+		boolean enabled = combinedScan instanceof ICombinedMassSpectrum;
 		buttonCopyTraces.setEnabled(enabled);
 	}
 }

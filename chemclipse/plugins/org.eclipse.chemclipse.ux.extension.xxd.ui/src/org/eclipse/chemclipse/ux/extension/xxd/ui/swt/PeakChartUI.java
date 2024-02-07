@@ -129,60 +129,44 @@ public class PeakChartUI extends ScrollableChart {
 	private List<ILineSeriesData> getPeakSeriesData(IPeak peak, boolean mirrored, String postfix) {
 
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		boolean includeBackground = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_PEAK_BACKGROUND);
 		/*
 		 * Peak
 		 */
 		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_PEAK)) {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_1));
-			lineSeriesDataList.add(peakChartSupport.getPeak(peak, includeBackground, mirrored, color, "Peak" + postfix));
+			lineSeriesDataList.add(peakChartSupport.getPeak(peak, false, mirrored, color, "Peak" + postfix));
 		}
 		/*
 		 * Tangents
 		 */
 		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_PEAK_TANGENTS)) {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_TANGENTS));
-			lineSeriesDataList.add(peakChartSupport.getIncreasingTangent(peak, includeBackground, mirrored, color, postfix));
-			lineSeriesDataList.add(peakChartSupport.getDecreasingTangent(peak, includeBackground, mirrored, color, postfix));
-			if(!includeBackground) {
-				lineSeriesDataList.add(peakChartSupport.getPeakPerpendicular(peak, includeBackground, mirrored, color, postfix));
-			}
+			lineSeriesDataList.add(peakChartSupport.getIncreasingTangent(peak, false, mirrored, color, postfix));
+			lineSeriesDataList.add(peakChartSupport.getDecreasingTangent(peak, false, mirrored, color, postfix));
 		}
 		/*
 		 * Width 50%
 		 */
 		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_PEAK_WIDTH_0)) {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_WIDTH_0));
-			lineSeriesDataList.add(peakChartSupport.getPeakWidth(peak, includeBackground, HEIGHT_0, mirrored, color, postfix));
+			lineSeriesDataList.add(peakChartSupport.getPeakWidth(peak, false, HEIGHT_0, mirrored, color, postfix));
 		}
 		/*
 		 * Width 0%
 		 */
 		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_PEAK_WIDTH_50)) {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_WIDTH_50));
-			lineSeriesDataList.add(peakChartSupport.getPeakWidth(peak, includeBackground, HEIGHT_50, mirrored, color, postfix));
+			lineSeriesDataList.add(peakChartSupport.getPeakWidth(peak, false, HEIGHT_50, mirrored, color, postfix));
 		}
 		/*
 		 * Width Condal-Bosh
 		 */
 		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_PEAK_WIDTH_CONDAL_BOSH)) {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_WIDTH_CONDAL_BOSH));
-			lineSeriesDataList.add(peakChartSupport.getPeakWidth(peak, includeBackground, HEIGHT_85, mirrored, color, postfix));
-			lineSeriesDataList.add(peakChartSupport.getPeakWidth(peak, includeBackground, HEIGHT_15, mirrored, color, postfix));
+			lineSeriesDataList.add(peakChartSupport.getPeakWidth(peak, false, HEIGHT_85, mirrored, color, postfix));
+			lineSeriesDataList.add(peakChartSupport.getPeakWidth(peak, false, HEIGHT_15, mirrored, color, postfix));
 		}
-		/*
-		 * Include Baseline
-		 */
-		if(includeBackground) {
-			if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_PEAK_BASELINE)) {
-				Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_BASELINE));
-				lineSeriesDataList.add(peakChartSupport.getPeakBaseline(peak, mirrored, color, "Peak Baseline" + postfix));
-			}
-			//
-			Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_BACKGROUND));
-			lineSeriesDataList.add(peakChartSupport.getPeakBackground(peak, mirrored, color, "Peak Background" + postfix));
-		}
+		//
 		return lineSeriesDataList;
 	}
 

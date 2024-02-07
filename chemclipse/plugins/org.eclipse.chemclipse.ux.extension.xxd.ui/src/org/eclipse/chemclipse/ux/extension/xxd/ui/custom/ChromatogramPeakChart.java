@@ -71,7 +71,6 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	private static final String SERIES_ID_PEAKS_ISTD_INACTIVE = "Peaks ISTD [Inactive]";
 	private static final String SERIES_ID_PEAKS_SELECTED_MARKER = "Peaks Selected Marker";
 	private static final String SERIES_ID_PEAKS_SELECTED_SHAPE = "Peaks Selected Shape";
-	private static final String SERIES_ID_PEAKS_SELECTED_BACKGROUND = "Peaks Selected Background";
 	private static final String SERIES_ID_SELECTED_SCAN = "Selected Scan";
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scans Selected";
@@ -471,14 +470,6 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 			lineSeriesSettings.setSymbolSize(scanMarkerSize);
 			lineSeriesDataList.add(lineSeriesData);
 			selectedPeakIds.add(peakShapeId);
-			/*
-			 * Background
-			 */
-			String peakBackgroundId = getSelectedPeakSerieId(SERIES_ID_PEAKS_SELECTED_BACKGROUND, index);
-			Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_PEAK_BACKGROUND));
-			lineSeriesData = peakChartSupport.getPeakBackground(peak, mirrored, colorBackground, peakBackgroundId);
-			lineSeriesDataList.add(lineSeriesData);
-			selectedPeakIds.add(peakBackgroundId);
 		}
 	}
 
