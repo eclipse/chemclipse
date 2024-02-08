@@ -118,5 +118,6 @@ Import-Package: jakarta.annotation;version="2.1.1",
  org.osgi.service.component.annotations;version="1.2.0",
  org.osgi.service.event;version="[1.0.0,2.0.0)"
 Service-Component: OSGI-INF/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier.xml,
+ OSGI-INF/org.eclipse.chemclipse.ux.extension.xxd.ui.filter.ChromatogramFilterAdjust.xml,
  OSGI-INF/org.eclipse.chemclipse.ux.extension.xxd.ui.services.EditorServiceTSD.xml,
  OSGI-INF/org.eclipse.chemclipse.ux.extension.xxd.ui.system.TargetsProcessSupplier.xml

@@ -32,13 +32,6 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.removescanidentifications">
       </ChromatogramFilterSupplier>
       <ChromatogramFilterSupplier
-            description="This filters selects a scan in the chromatogram."
-            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core.FilterScanSelector"
-            filterName="Scan Selector"
-            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsScanSelector"
-            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanselector">
-      </ChromatogramFilterSupplier>
-      <ChromatogramFilterSupplier
             description="This filter duplicates series of scans."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core.FilterDuplicator"
             filterName="Scan Duplicator"
