@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,7 +30,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	private final Map<String, String> metadata = new LinkedHashMap<>();
 	private final Set<DataCategory> catgories;
 	//
-	private String UUID = java.util.UUID.randomUUID().toString();
+	private String uuid = java.util.UUID.randomUUID().toString();
 	private String operator = "";
 	private String category = "";
 	/*
@@ -132,12 +132,12 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	@Override
 	public String getUUID() {
 
-		return UUID;
+		return uuid;
 	}
 
-	public void setUUID(String UUID) {
+	public void setUUID(String uuid) {
 
-		this.UUID = UUID;
+		this.uuid = uuid;
 	}
 
 	@Override
