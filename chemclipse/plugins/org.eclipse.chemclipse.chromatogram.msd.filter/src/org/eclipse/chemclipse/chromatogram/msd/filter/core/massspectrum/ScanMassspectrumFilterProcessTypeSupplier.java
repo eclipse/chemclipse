@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.osgi.service.component.annotations.Component;
 
@@ -27,7 +28,7 @@ public class ScanMassspectrumFilterProcessTypeSupplier extends AbstractMassspect
 
 	public ScanMassspectrumFilterProcessTypeSupplier() {
 
-		super("Scan Massspectrum Filter", "mzfilter.msd.scan.", new Function<IChromatogramSelection<?, ?>, List<IScanMSD>>() {
+		super(ICategories.SCAN_MASS_SPECTRUM_FILTER, "mzfilter.msd.scan.", new Function<IChromatogramSelection<?, ?>, List<IScanMSD>>() {
 
 			@Override
 			public List<IScanMSD> apply(IChromatogramSelection<?, ?> chromatogramSelection) {

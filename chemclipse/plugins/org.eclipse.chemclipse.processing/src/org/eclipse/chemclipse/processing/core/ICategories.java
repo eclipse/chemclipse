@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,32 +15,33 @@ import org.eclipse.chemclipse.processing.l10n.Messages;
 
 public interface ICategories {
 
-	String BASELINE_DETECTOR = "Baseline Detector";
-	String CHROMATOGRAM_CALCULATOR = "Chromatogram Calculator";
+	String BASELINE_DETECTOR = Messages.baselineDetector;
+	String CHROMATOGRAM_CALCULATOR = Messages.chromatogramCalculator;
 	String CHROMATOGRAM_CLASSIFIER = Messages.chromatogramClassifier;
-	String CHROMATOGRAM_EXPORT = "Chromatogram Export";
+	String CHROMATOGRAM_EXPORT = Messages.chromatogramExport;
 	String CHROMATOGRAM_FILTER = Messages.chromatogramFilter;
-	String CHROMATOGRAM_IDENTIFIER = "Chromatogram Identifier";
-	String CHROMATOGRAM_INTEGRATOR = "Chromatogram Integrator";
-	String CHROMATOGRAM_REPORTS = "Chromatogram Reports";
+	String CHROMATOGRAM_IDENTIFIER = Messages.chromatogramIdentifier;
+	String CHROMATOGRAM_INTEGRATOR = Messages.chromatogramIntegrator;
+	String CHROMATOGRAM_REPORTS = Messages.chromatogramReports;
+	String COMBINED_CHROMATOGRAM_PEAK_INTEGRATOR = Messages.combinedChromatogramPeakIntegrator;
 	String PEAK_DETECTOR = Messages.peakDetector;
-	String PEAK_EXPORT = "Peak Export";
+	String PEAK_EXPORT = Messages.peakExport;
 	String PEAK_FILTER = Messages.peakFilter;
 	String PEAK_IDENTIFIER = Messages.peakIdentifier;
-	String PEAK_INTEGRATOR = "Peak Integrator";
-	String PEAK_QUANTIFIER = "Peak Quantifier";
-	String PROCESS = "Process";
-	String SCAN_FILTER = "Scan Filter";
-	String SCAN_IDENTIFIER = "Scan Identifier";
-	String PEAK_MASSSPECTRUM_FILTER = "Peak Massspectrum Filter";
-	String SCAN_MASSSPECTRUM_FILTER = "Scan Massspectrum Filter";
-	String SYSTEM = "System";
-	String USER_METHODS = "User Methods";
-	String USER_INTERFACE = "User Interface";
-	String FILTER = "Filter";
-	String EXTERNAL_PROGRAMS = "External Programs";
-	String MASS_SPECTRUM = "Mass Spectrum";
-	String PROCEDURES = "Procedures";
-	String IDENTIFIER = "Identifier";
-	String EXPORT = "Export";
+	String PEAK_INTEGRATOR = Messages.peakIntegrator;
+	String PEAK_QUANTIFIER = Messages.peakQuantifier;
+	String PROCESS = Messages.process;
+	String SCAN_FILTER = Messages.scanFilter;
+	String SCAN_IDENTIFIER = Messages.scanIdentifier;
+	String PEAK_MASS_SPECTRUM_FILTER = Messages.peakMassSpectrumFilter;
+	String SCAN_MASS_SPECTRUM_FILTER = Messages.scanMassSpectrumFilter;
+	String SYSTEM = Messages.system;
+	String USER_METHODS = Messages.userMethods;
+	String USER_INTERFACE = Messages.userInterface;
+	String FILTER = Messages.filter;
+	String EXTERNAL_PROGRAMS = Messages.externalPrograms;
+	String MASS_SPECTRUM = Messages.massSpectrum;
+	String PROCEDURES = Messages.procedures;
+	String IDENTIFIER = Messages.identifier;
+	String EXPORT = Messages.export;
 }
