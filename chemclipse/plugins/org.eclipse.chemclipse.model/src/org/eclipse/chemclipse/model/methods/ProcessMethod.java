@@ -17,8 +17,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 
@@ -26,6 +29,8 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 
 	public static final Set<DataCategory> CHROMATOGRAPHY = Collections.unmodifiableSet(Set.of(DataCategory.chromatographyCategories()));
 	public static final Set<DataCategory> NMR = Collections.unmodifiableSet(Set.of(DataCategory.spectroscopyCategories()));
+	//
+	private static final Logger logger = Logger.getLogger(ProcessMethod.class);
 	//
 	private final Map<String, String> metadata = new LinkedHashMap<>();
 	private final Set<DataCategory> catgories;
@@ -37,10 +42,17 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	 * Transient
 	 */
 	private File sourceFile = null;
+	private ResourceBundle resourceBundle;
 
 	public ProcessMethod(Set<DataCategory> categories) {
 
 		this.catgories = Collections.unmodifiableSet(categories);
+		try {
+			// TODO: inconsistent API, category and translations are stored in processing and not in model
+			resourceBundle = ResourceBundle.getBundle("org.eclipse.chemclipse.processing.l10n.messages");
+		} catch(MissingResourceException e) {
+			logger.warn(e);
+		}
 	}
 
 	/**
@@ -110,7 +122,15 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 		if(category == null) {
 			return "";
 		}
-		return category;
+		if(resourceBundle == null) {
+			return category;
+		}
+		try {
+			return resourceBundle.getString(category);
+		} catch(MissingResourceException e) {
+			logger.warn(e);
+			return category;
+		}
 	}
 
 	public void setCategory(String category) throws IllegalStateException {
