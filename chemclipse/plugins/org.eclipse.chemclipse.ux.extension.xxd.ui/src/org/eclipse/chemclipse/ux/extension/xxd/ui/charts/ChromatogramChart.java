@@ -15,28 +15,37 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
 import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.custom.IRangeSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IAxisSet;
+import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToMinuteConverter;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToSecondsConverter;
 import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
+import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
-public class ChromatogramChart extends LineChart {
+public class ChromatogramChart extends LineChart implements IRangeSupport {
 
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
 	private String titleSeconds = "";
 	private String titleMinutes = "";
 	private String titleRelativeIntensity = "";
+	//
+	private Range selectedRangeX = null;
+	private Range selectedRangeY = null;
 
 	public ChromatogramChart() {
 
@@ -48,6 +57,67 @@ public class ChromatogramChart extends LineChart {
 
 		super(parent, style);
 		initialize();
+	}
+
+	@Override
+	public void clearSelectedRange() {
+
+		selectedRangeX = null;
+		selectedRangeY = null;
+	}
+
+	@Override
+	public void assignCurrentRangeSelection() {
+
+		BaseChart baseChart = getBaseChart();
+		selectedRangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
+		selectedRangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
+	}
+
+	@Override
+	public Range getCurrentRangeX() {
+
+		BaseChart baseChart = getBaseChart();
+		IAxisSet axisSet = baseChart.getAxisSet();
+		IAxis xAxis = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+		return new Range(xAxis.getRange().lower, xAxis.getRange().upper);
+	}
+
+	@Override
+	public void updateRangeX(Range selectedRangeX) {
+
+		updateRange(selectedRangeX, selectedRangeY);
+	}
+
+	@Override
+	public Range getCurrentRangeY() {
+
+		BaseChart baseChart = getBaseChart();
+		IAxisSet axisSet = baseChart.getAxisSet();
+		IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
+		return new Range(yAxis.getRange().lower, yAxis.getRange().upper);
+	}
+
+	@Override
+	public void updateRangeY(Range selectedRangeY) {
+
+		updateRange(selectedRangeX, selectedRangeY);
+	}
+
+	@Override
+	public void updateRange(Range selectedRangeX, Range selectedRangeY) {
+
+		this.selectedRangeX = selectedRangeX;
+		this.selectedRangeY = selectedRangeY;
+		adjustChartRange();
+	}
+
+	@Override
+	public void adjustChartRange() {
+
+		setRange(IExtendedChart.X_AXIS, selectedRangeX);
+		setRange(IExtendedChart.Y_AXIS, selectedRangeY);
+		redrawChart();
 	}
 
 	/**
@@ -73,6 +143,16 @@ public class ChromatogramChart extends LineChart {
 	public String getTitleAxisRelativeIntensity() {
 
 		return titleRelativeIntensity;
+	}
+
+	public ISecondaryAxisSettings getAxisSettingsSeconds(IChartSettings chartSettings) {
+
+		return ChartSupport.getSecondaryAxisSettingsX(titleSeconds, chartSettings);
+	}
+
+	public ISecondaryAxisSettings getAxisSettingsMinutes(IChartSettings chartSettings) {
+
+		return ChartSupport.getSecondaryAxisSettingsX(titleMinutes, chartSettings);
 	}
 
 	private void initialize() {
@@ -201,7 +281,7 @@ public class ChromatogramChart extends LineChart {
 	private void adjustAxisSeconds() {
 
 		IChartSettings chartSettings = getChartSettings();
-		ISecondaryAxisSettings axisSettings = ChartSupport.getSecondaryAxisSettingsX(titleSeconds, chartSettings);
+		ISecondaryAxisSettings axisSettings = getAxisSettingsSeconds(chartSettings);
 		//
 		String positionNode = PreferenceSupplier.P_POSITION_X_AXIS_SECONDS;
 		String patternNode = PreferenceSupplier.P_FORMAT_X_AXIS_SECONDS;
@@ -248,7 +328,7 @@ public class ChromatogramChart extends LineChart {
 	private void adjustAxisMinutes() {
 
 		IChartSettings chartSettings = getChartSettings();
-		ISecondaryAxisSettings axisSettings = ChartSupport.getSecondaryAxisSettingsX(titleMinutes, chartSettings);
+		ISecondaryAxisSettings axisSettings = getAxisSettingsMinutes(chartSettings);
 		//
 		String positionNode = PreferenceSupplier.P_POSITION_X_AXIS_MINUTES;
 		String patternNode = PreferenceSupplier.P_FORMAT_X_AXIS_MINUTES;
@@ -298,5 +378,10 @@ public class ChromatogramChart extends LineChart {
 		 * Update the title to retrieve the correct axis.
 		 */
 		titleMinutes = title;
+	}
+
+	private void redrawChart() {
+
+		getBaseChart().redraw();
 	}
 }

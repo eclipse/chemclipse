@@ -11,23 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.custom;
 
-import org.eclipse.swtchart.Range;
+public interface ITraceSupport extends IRangeSupport {
 
-public interface IRangeSupport {
-
-	void clearSelectedRange();
-
-	void assignCurrentRangeSelection();
-
-	Range getCurrentRangeX();
-
-	void updateRangeX(Range selectedRangeX);
-
-	Range getCurrentRangeY();
-
-	void updateRangeY(Range selectedRangeY);
-
-	void updateRange(Range selectedRangeX, Range selectedRangeY);
-
-	void adjustChartRange();
+	void focusTraces(int percentOffset);
 }

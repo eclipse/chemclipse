@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorTSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesExportOption;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
@@ -975,6 +976,11 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static IPreferenceSupplier INSTANCE() {
 
 		return INSTANCE(PreferenceSupplier.class);
+	}
+
+	public static IPreferenceStore getPreferenceStore() {
+
+		return Activator.getDefault().getPreferenceStore();
 	}
 
 	@Override

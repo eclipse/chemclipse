@@ -53,13 +53,12 @@ import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
-import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.core.ISeriesSettings;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 
-public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSupport {
+public class ChromatogramPeakChart extends ChromatogramChart implements ITraceSupport {
 
 	private static final String SERIES_ID_CHROMATOGRAM_TIC = "Chromatogram";
 	private static final String SERIES_ID_CHROMATOGRAM_XIC = "Chromatogram (XIC)";
@@ -86,9 +85,6 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	//
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private PeakChartSettings peakChartSettingsDefault = new PeakChartSettings();
-	//
-	private Range selectedRangeX = null;
-	private Range selectedRangeY = null;
 	//
 	private ITargetDisplaySettings targetDisplaySettings = null;
 	private DisplayType displayType = DisplayType.TIC;
@@ -179,59 +175,6 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	}
 
 	@Override
-	public void clearSelectedRange() {
-
-		selectedRangeX = null;
-		selectedRangeY = null;
-	}
-
-	@Override
-	public void assignCurrentRangeSelection() {
-
-		BaseChart baseChart = getBaseChart();
-		selectedRangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
-		selectedRangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
-	}
-
-	@Override
-	public Range getCurrentRangeX() {
-
-		BaseChart baseChart = getBaseChart();
-		IAxisSet axisSet = baseChart.getAxisSet();
-		IAxis xAxis = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
-		return new Range(xAxis.getRange().lower, xAxis.getRange().upper);
-	}
-
-	@Override
-	public void updateRangeX(Range selectedRangeX) {
-
-		updateRange(selectedRangeX, selectedRangeY);
-	}
-
-	@Override
-	public Range getCurrentRangeY() {
-
-		BaseChart baseChart = getBaseChart();
-		IAxisSet axisSet = baseChart.getAxisSet();
-		IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
-		return new Range(yAxis.getRange().lower, yAxis.getRange().upper);
-	}
-
-	@Override
-	public void updateRangeY(Range selectedRangeY) {
-
-		updateRange(selectedRangeX, selectedRangeY);
-	}
-
-	@Override
-	public void updateRange(Range selectedRangeX, Range selectedRangeY) {
-
-		this.selectedRangeX = selectedRangeX;
-		this.selectedRangeY = selectedRangeY;
-		adjustChartRange();
-	}
-
-	@Override
 	public void focusTraces(int percentOffset) {
 
 		BaseChart baseChart = getBaseChart();
@@ -254,6 +197,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 	private double getMaxY(ISeries<?> series) {
 
+		Range selectedRangeX = getCurrentRangeX();
 		if(selectedRangeX == null) {
 			return Calculations.getMax(series.getYSeries());
 		} else {
@@ -272,14 +216,6 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 			//
 			return maxY;
 		}
-	}
-
-	@Override
-	public void adjustChartRange() {
-
-		setRange(IExtendedChart.X_AXIS, selectedRangeX);
-		setRange(IExtendedChart.Y_AXIS, selectedRangeY);
-		redrawChart();
 	}
 
 	private void initialize() {
@@ -640,10 +576,5 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		if(seriesSettings != null) {
 			seriesSettings.setVisible(visibile);
 		}
-	}
-
-	private void redrawChart() {
-
-		getBaseChart().redraw();
 	}
 }
