@@ -32,8 +32,8 @@ public interface ICategories {
 	String PROCESS = "Process";
 	String SCAN_FILTER = "Scan Filter";
 	String SCAN_IDENTIFIER = "Scan Identifier";
-	String PEAK_MASSSPECTRUM_FILTER = "Peak Massspectrum Filter";
-	String SCAN_MASSSPECTRUM_FILTER = "Scan Massspectrum Filter";
+	String PEAK_MASSSPECTRUM_FILTER = "Peak Mass Spectrum Filter";
+	String SCAN_MASSSPECTRUM_FILTER = "Scan Mass Spectrum Filter";
 	String SYSTEM = "System";
 	String USER_METHODS = "User Methods";
 	String USER_INTERFACE = "User Interface";
