@@ -32,7 +32,11 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = {IProcessTypeSupplier.class})
 public class ChromatogramFilterAdjust implements IProcessTypeSupplier {
 
-	private static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.filter.adjustChromatogramSelection";
+	/*
+	 * Legacy Prefix:
+	 * ChromatogramFilter
+	 */
+	private static final String ID = "ChromatogramFilter.org.eclipse.chemclipse.ux.extension.xxd.ui.filter.adjustChromatogramSelection";
 	private static final String NAME = "Chromatogram Editor UI (Adjust)";
 	private static final String DESCRIPTION = "This filter adjusts the chromatogram editor range.";
 

@@ -34,7 +34,11 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = {IProcessTypeSupplier.class})
 public class FilterScanSelector implements IProcessTypeSupplier {
 
-	private static final String ID = "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanselector";
+	/*
+	 * Legacy Prefix:
+	 * ChromatogramFilter
+	 */
+	private static final String ID = "ChromatogramFilter.org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanselector";
 	private static final String NAME = "Scan Selector";
 	private static final String DESCRIPTION = "This filters selects a scan in the chromatogram.";
 

@@ -30,7 +30,11 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = {IProcessTypeSupplier.class})
 public class ChromatogramFilterResetRange implements IProcessTypeSupplier {
 
-	private static final String ID = "org.eclipse.chemclipse.chromatogram.filter.resetChromatogramSelection";
+	/*
+	 * Legacy Prefix:
+	 * ChromatogramFilter
+	 */
+	private static final String ID = "ChromatogramFilter.org.eclipse.chemclipse.chromatogram.filter.resetChromatogramSelection";
 	private static final String NAME = "Chromatogram Selection (1:1)";
 	private static final String DESCRIPTION = "This filter reset the chromatogram range.";
 
