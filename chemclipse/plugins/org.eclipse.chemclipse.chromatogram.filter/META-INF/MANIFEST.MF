@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.core.runtime,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.6.2",
  org.eclipse.chemclipse.msd.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.wsd.model;bundle-version="0.8.0",
- org.eclipse.chemclipse.csd.model;bundle-version="0.8.0"
+ org.eclipse.chemclipse.csd.model;bundle-version="0.8.0",
+ org.eclipse.swtchart.extensions
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.chromatogram.filter.core.chromatogram,
@@ -26,6 +27,8 @@ Export-Package: org.eclipse.chemclipse.chromatogram.filter.core.chromatogram,
  org.eclipse.chemclipse.chromatogram.filter.settings
 Import-Package: org.osgi.service.component.annotations;version="1.2.0"
 Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilterProcessSupplier.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.filter.range.ChromatogramFilterResetRange.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.filter.range.ChromatogramFilterSelectRange.xml,
  OSGI-INF/org.eclipse.chemclipse.chromatogram.filter.system.FilterIonRounding.xml,
  OSGI-INF/org.eclipse.chemclipse.chromatogram.filter.system.FilterRetentionIndexQC.xml
 Bundle-Localization: OSGI-INF/l10n/bundle

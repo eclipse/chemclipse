@@ -5,20 +5,6 @@
    <extension
          point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
       <ChromatogramFilterSupplier
-            description="This filter selects the chromatogram range."
-            filter="org.eclipse.chemclipse.chromatogram.filter.impl.ChromatogramFilterSelection"
-            filterName="Chromatogram Selection (Select Range)"
-            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsSelection"
-            id="org.eclipse.chemclipse.chromatogram.filter.setChromatogramSelection">
-      </ChromatogramFilterSupplier>
-      <ChromatogramFilterSupplier
-            description="This filter reset the chromatogram range."
-            filter="org.eclipse.chemclipse.chromatogram.filter.impl.ChromatogramFilterReset"
-            filterName="Chromatogram Selection (1:1)"
-            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsReset"
-            id="org.eclipse.chemclipse.chromatogram.filter.resetChromatogramSelection">
-      </ChromatogramFilterSupplier>      
-      <ChromatogramFilterSupplier
             description="This filter transfers identification targets to peaks."
             filter="org.eclipse.chemclipse.chromatogram.filter.impl.ScanTargetsToPeakFilter"
             filterName="Scan Target to Peak Transfer"

@@ -285,16 +285,6 @@
       </WelcomeTile>
    </extension>
    <extension
-         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
-      <ChromatogramFilterSupplier
-            description="This filter adjusts the chromatogram editor range."
-            filter="org.eclipse.chemclipse.ux.extension.xxd.ui.filter.ChromatogramFilterAdjust"
-            filterName="Chromatogram Editor UI (Adjust)"
-            filterSettings="org.eclipse.chemclipse.ux.extension.xxd.ui.filter.FilterSettingsAdjust"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.filter.adjustChromatogramSelection">
-      </ChromatogramFilterSupplier>                
-   </extension>
-   <extension
          point="org.eclipse.help.toc">
       <toc
             file="controls.xml">
