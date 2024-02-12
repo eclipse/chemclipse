@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,6 +40,11 @@ public final class MessageConsoleAppender {
 		printLine(text, Colors.RED);
 	}
 
+	public static void printWarn(String text) {
+
+		printLine(text, Colors.DARK_YELLOW);
+	}
+
 	public static void printDone(String text) {
 
 		printLine(text, Colors.GREEN);
@@ -48,8 +53,9 @@ public final class MessageConsoleAppender {
 	public static void printLine(String text, Color color) {
 
 		IConsole[] consoles = ConsolePlugin.getDefault().getConsoleManager().getConsoles();
-		if(consoles.length == 0)
+		if(consoles.length == 0) {
 			return;
+		}
 		if(consoles[0] instanceof MessageConsole messageConsole) {
 			try (MessageConsoleStream consoleStream = messageConsole.newMessageStream()) {
 				consoleStream.setColor(color);

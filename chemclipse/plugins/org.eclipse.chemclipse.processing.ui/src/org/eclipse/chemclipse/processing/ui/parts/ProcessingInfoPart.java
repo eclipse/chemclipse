@@ -14,9 +14,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.parts;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.inject.Inject;
-
 import org.eclipse.chemclipse.processing.core.IMessageProvider;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
@@ -40,6 +37,9 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 
 public class ProcessingInfoPart {
 
@@ -130,6 +130,9 @@ public class ProcessingInfoPart {
 				if(message.getMessageType() == MessageType.ERROR) {
 					StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, message.getMessage());
 					MessageConsoleAppender.printError(message.getMessage());
+				} else if(message.getMessageType() == MessageType.WARN) {
+					StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, message.getMessage());
+					MessageConsoleAppender.printWarn(message.getMessage());
 				} else {
 					StatusLineLogger.setInfo(InfoType.MESSAGE, message.getMessage());
 					MessageConsoleAppender.printDone(message.getMessage());

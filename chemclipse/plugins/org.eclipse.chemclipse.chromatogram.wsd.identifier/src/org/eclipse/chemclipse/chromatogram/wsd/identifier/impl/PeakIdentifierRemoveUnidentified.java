@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,10 +43,9 @@ public class PeakIdentifierRemoveUnidentified<T> extends AbstractPeakIdentifierW
 					}
 				}
 			}
-			processingInfo.addInfoMessage("Identifier", "Done - unidentified peaks have been removed.");
+			processingInfo.addInfoMessage("Identifier", "Unidentified peaks have been removed.");
 		} catch(Exception e) {
-			e.printStackTrace();
-			processingInfo.addErrorMessage("Identifier", "Something has gone wrong.");
+			processingInfo.addErrorMessage("Identifier", "Failed to remove unidentified peaks.", e);
 		}
 		return processingInfo;
 	}

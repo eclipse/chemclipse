@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.core;
 
 import java.io.FileNotFoundException;
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierMSD;
@@ -40,7 +41,8 @@ public class PeakIdentifierFile implements IPeakIdentifierMSD<IPeakIdentificatio
 				FileIdentifier fileIdentifier = new FileIdentifier();
 				IPeakIdentificationResults peakIdentificationResults = fileIdentifier.runPeakIdentification(peaks, peakIdentifierSettings, processingInfo, monitor);
 				processingInfo.setProcessingResult(peakIdentificationResults);
-				processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, "Done - peaks have been identified.");
+				int results = peakIdentificationResults.getIdentificationResults().size();
+				processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, MessageFormat.format("{0} peaks have been identified.", results));
 			} catch(FileNotFoundException e) {
 				processingInfo.addErrorMessage(FileIdentifier.IDENTIFIER, "An I/O error ocurred.");
 			}
