@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.eclipse.chemclipse.converter.core.IImportConverter;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.ProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IMethodImportConverter extends IImportConverter {

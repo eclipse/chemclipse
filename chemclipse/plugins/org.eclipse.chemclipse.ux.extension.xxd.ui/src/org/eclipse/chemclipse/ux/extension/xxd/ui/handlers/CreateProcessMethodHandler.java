@@ -15,10 +15,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.handlers;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
-import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategoryGroup;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.methods.ProcessMethod;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
