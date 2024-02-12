@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -10,7 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - refactoring to new object hierarchy
  *******************************************************************************/
-package org.eclipse.chemclipse.model.methods;
+package org.eclipse.chemclipse.processing.methods;
 
 import java.util.Collections;
 import java.util.EnumSet;
@@ -19,8 +19,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.processing.DataCategory;
-import org.eclipse.chemclipse.processing.methods.IProcessEntry;
-import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 
 public final class ProcessEntry extends ListProcessEntryContainer implements IProcessEntry {
 

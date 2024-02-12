@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,7 +10,7 @@
  * Christoph Läubrich - initial API and implementation
  * Philip Wenig - support instruments
  *******************************************************************************/
-package org.eclipse.chemclipse.model.methods;
+package org.eclipse.chemclipse.processing.methods;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,9 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.processing.methods.AbstractProcessEntryContainer;
-import org.eclipse.chemclipse.processing.methods.IProcessEntry;
-import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 
 public class ListProcessEntryContainer extends AbstractProcessEntryContainer {

@@ -10,7 +10,7 @@
  * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add equals method, add copy constructor, extend for new methods
  *******************************************************************************/
-package org.eclipse.chemclipse.model.methods;
+package org.eclipse.chemclipse.processing.methods;
 
 import java.io.File;
 import java.util.Collections;
@@ -23,7 +23,6 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.DataCategory;
-import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 
 public class ProcessMethod extends ListProcessEntryContainer implements IProcessMethod {
 
@@ -48,7 +47,6 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 
 		this.catgories = Collections.unmodifiableSet(categories);
 		try {
-			// TODO: inconsistent API, category and translations are stored in processing and not in model
 			resourceBundle = ResourceBundle.getBundle("org.eclipse.chemclipse.processing.l10n.messages");
 		} catch(MissingResourceException e) {
 			logger.warn(e);

@@ -24,9 +24,9 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
-import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.ProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
