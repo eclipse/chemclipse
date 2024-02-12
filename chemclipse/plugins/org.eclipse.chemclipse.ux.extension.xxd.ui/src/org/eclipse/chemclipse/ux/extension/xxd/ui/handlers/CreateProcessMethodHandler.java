@@ -8,12 +8,11 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring shortcuts
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.handlers;
 
 import java.io.File;
-
-import jakarta.inject.Named;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
@@ -33,24 +32,24 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
-public class CreateProcessMethodHandler {
+import jakarta.inject.Named;
 
-	private static final String FILTER_EXTENSION = "*.ocm";
-	private static final String PROCESS_METHOD = ExtensionMessages.processMethod;
-	private static final String FILTER_NAME = PROCESS_METHOD + "(" + FILTER_EXTENSION + ")";
-	private static final String FILE_NAME = PROCESS_METHOD + FILTER_EXTENSION;
+public class CreateProcessMethodHandler {
 
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell, IEclipseContext eclipseContext) {
 
 		DataCategoryGroup dataCategoryGroup = DataTypeTypeSelectionWizard.open(shell, ExtensionMessages.chooseDesiredCategoriesToCreateNewMethod, Activator.getDefault().getPreferenceStore());
 		if(dataCategoryGroup != null) {
+			/*
+			 * File
+			 */
 			FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
 			fileDialog.setOverwrite(true);
-			fileDialog.setText(PROCESS_METHOD);
-			fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-			fileDialog.setFilterNames(new String[]{FILTER_NAME});
-			fileDialog.setFileName(FILE_NAME);
+			fileDialog.setText(ExtensionMessages.processMethod);
+			fileDialog.setFilterExtensions(new String[]{MethodConverter.FILTER_EXTENSION});
+			fileDialog.setFilterNames(new String[]{MethodConverter.FILTER_NAME});
+			fileDialog.setFileName(MethodConverter.FILE_NAME);
 			fileDialog.setFilterPath(MethodConverter.getUserMethodDirectory().getAbsolutePath());
 			//
 			String pathname = fileDialog.open();
