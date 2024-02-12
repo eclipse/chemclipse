@@ -43,7 +43,7 @@ public class PeakIdentifierRemoveUnidentified<T> extends AbstractPeakIdentifierW
 					}
 				}
 			}
-			processingInfo.addInfoMessage("Identifier", "Done - unidentified peaks have been removed.");
+			processingInfo.addInfoMessage("Identifier", "Unidentified peaks have been removed.");
 		} catch(Exception e) {
 			processingInfo.addErrorMessage("Identifier", "Failed to remove unidentified peaks.", e);
 		}
