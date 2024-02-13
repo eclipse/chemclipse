@@ -5,18 +5,18 @@
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_6h3_kDPDEeKN2qL8NSaklg" elementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main"/>
     <mainMenu xmi:id="_h0BcQTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.main">
       <children xsi:type="menu:Menu" xmi:id="_h0BcQjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" label="%File">
+        <children xsi:type="menu:MenuSeparator" xmi:id="_oQhFQArfEeqMVtWeZukEuw" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.new"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_cPBJQL7lEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.openChromatogram"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_ouvAQEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.0"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_oiu1oLiaEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.close"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_ouvAQEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.1"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_k-VQwDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.save" label="%Save" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/save_edit.png" mnemonics="S" command="_SkvDQDgEEeKBGer45Yb2dA"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_padd0DgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.saveAll" label="%SaveAll" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/saveall_edit.png" command="_ZgJ9QDgEEeKBGer45Yb2dA"/>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_oQhFQArfEeqMVtWeZukEuw" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.new"/>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_ouvAQEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.0"/>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_cPBJQL7lEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.openChromatogram"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_pliscEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.2"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_08BOgL7lEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.1"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_q2y48EaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.import" label="%Import" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/import_wiz.png" command="_w-HcgEaqEeKL9t3RgmYB_g"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_tZ1dcEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.export" label="%Export" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/export_wiz.png" command="_zmfM8EaqEeKL9t3RgmYB_g"/>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_oiu1oLiaEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.2"/>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_pliscEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.2"/>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_KMcBILfgEeuq4LYKjrje2g" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.3"/>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_ky5jULiZEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.4"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_ky5jULiZEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.3"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_h0BcRTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.quit" label="%Quit" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/delete.png" command="_h0A1OjLzEeKMEOdllHiEaA"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_QrQhQDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.plugins" label="%Plugins">

@@ -91,7 +91,7 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_9O66YK1-EeeOj_frlqyeaw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.menu">
     <elements xsi:type="menu:Menu" xmi:id="_9qTloDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.process" label="%Processors"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_QC5CoLiaEeu05KeOzWexnw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menuseparator.2">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_QC5CoLiaEeu05KeOzWexnw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menuseparator.close">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_9FhHwLibEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.closeall" label="%CloseAll" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/close_all.png" command="_pJXCsLiYEeu05KeOzWexnw"/>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_juofYLiYEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.close" label="%Close" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/close.png" command="_4lggQLibEeu05KeOzWexnw"/>
   </fragments>
