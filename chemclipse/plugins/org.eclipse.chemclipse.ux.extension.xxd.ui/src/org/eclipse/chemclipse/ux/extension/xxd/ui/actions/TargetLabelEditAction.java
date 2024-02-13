@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceSettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizard;
@@ -93,7 +94,8 @@ public class TargetLabelEditAction {
 			/*
 			 * References
 			 */
-			TargetReferenceLabelMarker targetReferenceLabelMarker = new TargetReferenceLabelMarker(true, PreferenceSupplier.DEF_SYMBOL_SIZE * 2);
+			TargetReferenceSettings targetReferenceSettings = new TargetReferenceSettings(true, PreferenceSupplier.DEF_SYMBOL_SIZE * 2);
+			TargetReferenceLabelMarker targetReferenceLabelMarker = new TargetReferenceLabelMarker(targetReferenceSettings);
 			ChromatogramChart chromatogramChart = labelEditSettings.getChromatogramUI().getChromatogramChart();
 			chromatogramChart.getBaseChart().getPlotArea().addCustomPaintListener(targetReferenceLabelMarker);
 			TargetDisplaySettingsWizardListener settingsWizardListener = new TargetDisplaySettingsWizardListener() {

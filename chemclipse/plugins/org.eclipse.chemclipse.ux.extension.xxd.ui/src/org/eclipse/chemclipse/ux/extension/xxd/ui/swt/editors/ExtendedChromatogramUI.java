@@ -92,6 +92,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceSettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers.DynamicHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.marker.PositionMarker;
@@ -918,8 +919,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				BaseChart baseChart = chromatogramChartControl.get().getBaseChart();
 				IPlotArea plotArea = baseChart.getPlotArea();
 				List<TargetReference> peakReferences = TargetReference.getPeakReferences(peaks, targetDisplaySettings);
-				//
-				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(peakReferences, displaySettings, symbolSize * 2, baseChart, label, description);
+				TargetReferenceSettings targetReferenceSettings = new TargetReferenceSettings(peakReferences, targetDisplaySettings, symbolSize * 2);
+				targetReferenceSettings.setBaseChart(baseChart);
+				targetReferenceSettings.setLabel(label);
+				targetReferenceSettings.setDescription(description);
+				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(targetReferenceSettings);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -942,7 +946,12 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				ITargetDisplaySettings targetDisplaySettings = chromatogramSelection.getChromatogram();
 				BaseChart baseChart = chromatogramChartControl.get().getBaseChart();
 				IPlotArea plotArea = baseChart.getPlotArea();
-				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(TargetReference.getScanReferences(scans, targetDisplaySettings), displaySettings, symbolSize * 2, baseChart, LABEL_SCAN_TARGETS, "Identified Scans");
+				Collection<? extends TargetReference> scanReferences = TargetReference.getScanReferences(scans, targetDisplaySettings);
+				TargetReferenceSettings targetReferenceSettings = new TargetReferenceSettings(scanReferences, targetDisplaySettings, symbolSize * 2);
+				targetReferenceSettings.setBaseChart(baseChart);
+				targetReferenceSettings.setLabel(LABEL_SCAN_TARGETS);
+				targetReferenceSettings.setDescription("Identified Scans");
+				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(targetReferenceSettings);
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
 			}

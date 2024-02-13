@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -30,14 +29,7 @@ import org.eclipse.chemclipse.model.targets.ITargetReference;
 import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.model.targets.TargetReference;
 import org.eclipse.chemclipse.model.targets.TargetReferenceType;
-import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
@@ -62,42 +54,26 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
 	private static final int NO_ALPHA = 255;
 	//
-	private final int offset;
-	private final List<TargetLabel> targetLabels = new ArrayList<>();
-	private ITargetDisplaySettings targetDisplaySettings;
-	private boolean visible = true;
-	private final boolean showReferenceId;
-	private int rotation;
-	private int detectionDepth;
-	//
-	private DecimalFormat decimalFormatRetentionIndex = ValueFormat.getDecimalFormatEnglish("0.00");
-	private DecimalFormat decimalFormatAreaPercent = ValueFormat.getDecimalFormatEnglish("0.000");
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	//
+	private TargetReferenceSettings targetReferenceSettings;
+	private List<TargetLabel> targetLabels = new ArrayList<>();
 	private ICustomSeries customSeries = null;
+	//
+	private boolean visible = true;
+	private int rotation = 0;
+	private int detectionDepth = 0;
 
-	public TargetReferenceLabelMarker(boolean showReferenceId, int offset) {
+	public TargetReferenceLabelMarker(TargetReferenceSettings targetReferenceSettings) {
 
-		this.showReferenceId = showReferenceId;
-		this.offset = offset;
-	}
-
-	public TargetReferenceLabelMarker(Collection<? extends TargetReference> targetReferences, ITargetDisplaySettings targetDisplaySettings, int offset) {
-
-		this(targetReferences, targetDisplaySettings, offset, null, null, null);
-	}
-
-	public TargetReferenceLabelMarker(Collection<? extends TargetReference> targetReferences, ITargetDisplaySettings targetDisplaySettings, int offset, BaseChart baseChart, String label, String description) {
-
-		this.showReferenceId = false;
-		this.offset = offset;
-		this.targetDisplaySettings = targetDisplaySettings;
+		this.targetReferenceSettings = targetReferenceSettings;
 		//
+		BaseChart baseChart = targetReferenceSettings.getBaseChart();
 		if(baseChart != null) {
+			String label = targetReferenceSettings.getLabel();
+			String description = targetReferenceSettings.getDescription();
 			this.customSeries = baseChart.createCustomSeries(label, description);
 		}
 		//
-		setTargetReferences(targetReferences);
+		setTargetReferences(targetReferenceSettings.getTargetReferences());
 	}
 
 	public ICustomSeries getCustomSeries() {
@@ -127,16 +103,6 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		}
 	}
 
-	/**
-	 * 
-	 * @param chart
-	 * @return the series for the given chart to use as a reference
-	 */
-	protected ISeries<?> getReferenceSeries(Chart chart) {
-
-		return chart.getSeriesSet().getSeries(ExtendedChromatogramUI.SERIES_ID_CHROMATOGRAM);
-	}
-
 	public boolean isVisible() {
 
 		return visible;
@@ -147,8 +113,21 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		this.visible = visible;
 	}
 
+	/**
+	 * Returns the series reference.
+	 * 
+	 * @param chart
+	 * @return the series for the given chart to use as a reference
+	 */
+	private ISeries<?> getReferenceSeries(Chart chart) {
+
+		return chart.getSeriesSet().getSeries(targetReferenceSettings.getReferenceSeriesId());
+	}
+
 	private void paintLabels(GC gc, IAxis xAxis, IAxis yAxis) {
 
+		int offset = targetReferenceSettings.getOffset();
+		//
 		Transform transform = new Transform(gc.getDevice());
 		Transform oldTransform = new Transform(gc.getDevice());
 		gc.getTransform(oldTransform);
@@ -159,9 +138,9 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		oldTransform.getElements(identityMatrix);
 		//
 		try {
-			Color colorActive = getActiveColor(preferenceStore);
-			Color colorInactive = getInactiveColor(preferenceStore);
-			Color colorId = getIdColor(preferenceStore);
+			Color colorActive = TargetReferencesSupport.getActiveColor();
+			Color colorInactive = TargetReferencesSupport.getInactiveColor();
+			Color colorId = TargetReferencesSupport.getIdColor();
 			//
 			Rectangle clipping = gc.getClipping();
 			TargetLabel lastReference = null;
@@ -210,17 +189,25 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 					if(lastReference != null && lastReference.getBounds() != null) {
 						if(lastReference.getBounds().getCx() > reference.getBounds().getCx() || lastReference.getBounds().intersects(reference.getBounds())) {
 							collisions++;
-							// first guess is to move the label up
+							/*
+							 * first guess is to move the label up
+							 */
 							float yoffset = lastReference.getBounds().offsetY(reference.getBounds());
 							setTransform(transform, Math.max(x, lastReference.getBounds().getCx()) + offset - identityMatrix[4], y - yoffset - offset, reference, identityMatrix);
-							// check if the label is not cut of
+							/*
+							 * check if the label is not cut of
+							 */
 							if(clipping.contains(Math.round(reference.getBounds().getTopX()), Math.round(reference.getBounds().getTopY()))) {
 								gc.setTransform(oldTransform);
 								drawHandle(gc, reference, x, y, true, identityMatrix);
 							} else {
-								// reset values
+								/*
+								 * reset values
+								 */
 								setTransform(transform, x, y, reference, identityMatrix);
-								// then move it to the right... (might still be cut of but that is the default behavior of current charting)
+								/*
+								 * then move it to the right... (might still be cut of but that is the default behavior of current charting)
+								 */
 								float xoffset = lastReference.getBounds().offsetX(reference.getBounds());
 								setTransform(transform, x + xoffset + offset, y, reference, identityMatrix);
 								gc.setTransform(oldTransform);
@@ -241,6 +228,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				//
 				gc.setTransform(transform);
 				gc.drawText(label, 0, 0, true);
+				//
 				if(reference.getId() != null && reference.isActive()) {
 					gc.setForeground(colorId);
 					gc.drawText(reference.getId(), reference.getBounds().getWidth() + offset / 2, 0, true);
@@ -266,6 +254,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
 	private int setTransform(Transform transform, float x, float y, TargetLabel reference, float[] identityMatrix) {
 
+		int offset = targetReferenceSettings.getOffset();
 		int h = reference.getBounds().getHeight();
 		transform.setElements(identityMatrix[0], identityMatrix[1], identityMatrix[2], identityMatrix[3], identityMatrix[4], identityMatrix[5]);
 		transform.translate(x, y - offset);
@@ -278,6 +267,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
 	private void drawHandle(GC gc, TargetLabel reference, int x, int y, boolean upsideDown, float[] identityMatrix) {
 
+		int offset = targetReferenceSettings.getOffset();
 		float cx = reference.getBounds().getCx() - identityMatrix[4];
 		float cy = reference.getBounds().getCy() - identityMatrix[5] + offset;
 		gc.setLineStyle(SWT.LINE_DASHDOT);
@@ -302,7 +292,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		gc.fillOval((int)(cx - ow), (int)(cy - ow), ow * 2, ow * 2);
 	}
 
-	public Predicate<ITargetReference> setTargetReferences(Collection<? extends TargetReference> targetReferences) {
+	private Predicate<ITargetReference> setTargetReferences(Collection<? extends TargetReference> targetReferences) {
 
 		return setTargetReferences(targetReferences, always -> true);
 	}
@@ -310,6 +300,8 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	private Predicate<ITargetReference> setTargetReferences(Collection<? extends TargetReference> targetReferences, Predicate<ITargetReference> activeFilter) {
 
 		targetLabels.clear();
+		//
+		ITargetDisplaySettings targetDisplaySettings = targetReferenceSettings.getTargetDisplaySettings();
 		Predicate<ITargetReference> visibilityFilter = TargetReference.createVisibilityFilter(targetDisplaySettings);
 		//
 		if(targetDisplaySettings != null) {
@@ -320,8 +312,8 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			detectionDepth = targetDisplaySettings.getCollisionDetectionDepth();
 			DisplayOption displayOption = targetDisplaySettings.getDisplayOption();
 			LibraryField libraryField = targetDisplaySettings.getLibraryField();
-			FontData peakFontData = getPeakFontData(preferenceStore);
-			FontData scanFontData = getScanFontData(preferenceStore);
+			FontData peakFontData = TargetReferencesSupport.getPeakFontData();
+			FontData scanFontData = TargetReferencesSupport.getScanFontData();
 			//
 			int number = 1;
 			for(ITargetReference targetReference : targetReferences) {
@@ -346,10 +338,10 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 							labelDisplay = getConcatenatedLabel(targetReference.getRetentionTimeMinutes(), labelStandard);
 							break;
 						case RETENTION_INDEX:
-							labelDisplay = decimalFormatRetentionIndex.format(targetReference.getRetentionIndex());
+							labelDisplay = TargetReferencesSupport.DECIMAL_FORMAT_RI.format(targetReference.getRetentionIndex());
 							break;
 						case RETENTION_INDEX_STANDARD:
-							labelDisplay = getConcatenatedLabel(decimalFormatRetentionIndex.format(targetReference.getRetentionIndex()), labelStandard);
+							labelDisplay = getConcatenatedLabel(TargetReferencesSupport.DECIMAL_FORMAT_RI.format(targetReference.getRetentionIndex()), labelStandard);
 							break;
 						case AREA_PERCENT:
 							labelDisplay = getAreaPercent(targetReference);
@@ -379,7 +371,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 						fontData = null;
 					}
 					//
-					TargetLabel targetLabel = new TargetLabel(labelDisplay, showReferenceId ? targetReference.getRetentionTimeMinutes() : null, fontData, isActive, scan.getX(), scan.getY());
+					TargetLabel targetLabel = new TargetLabel(labelDisplay, targetReferenceSettings.isShowReferenceId() ? targetReference.getRetentionTimeMinutes() : null, fontData, isActive, scan.getX(), scan.getY());
 					targetLabels.add(targetLabel);
 				}
 			}
@@ -407,53 +399,11 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				double chromatogramPeakArea = chromatogram.getPeakIntegratedArea();
 				if(chromatogramPeakArea > 0) {
 					double peakAreaPercent = (100.0d / chromatogramPeakArea) * chromatogramPeak.getIntegratedArea();
-					return decimalFormatAreaPercent.format(peakAreaPercent);
+					return TargetReferencesSupport.DECIMAL_FORMAT_AREA_PERCENT.format(peakAreaPercent);
 				}
 			}
 		}
 		//
 		return "";
-	}
-
-	public static FontData getPeakFontData(IPreferenceStore preferenceStore) {
-
-		String name = preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME);
-		int height = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
-		int style = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
-		//
-		return new FontData(name, height, style);
-	}
-
-	public static FontData getScanFontData(IPreferenceStore preferenceStore) {
-
-		String name = preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME);
-		int height = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE);
-		int style = preferenceStore.getInt(PreferenceSupplier.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE);
-		//
-		return new FontData(name, height, style);
-	}
-
-	public static Color getActiveColor(IPreferenceStore preferenceStore) {
-
-		if(!PreferencesSupport.isDarkTheme())
-			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_ACTIVE_TARGET_LABEL_FONT_COLOR));
-		else
-			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_ACTIVE_TARGET_LABEL_FONT_DARK_COLOR));
-	}
-
-	public static Color getInactiveColor(IPreferenceStore preferenceStore) {
-
-		if(!PreferencesSupport.isDarkTheme())
-			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_INACTIVE_TARGET_LABEL_FONT_COLOR));
-		else
-			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_INACTIVE_TARGET_LABEL_FONT_DARK_COLOR));
-	}
-
-	public static Color getIdColor(IPreferenceStore preferenceStore) {
-
-		if(!PreferencesSupport.isDarkTheme())
-			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_ID_TARGET_LABEL_FONT_COLOR));
-		else
-			return Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_CHROMATOGRAM_ID_TARGET_LABEL_FONT_DARK_COLOR));
 	}
 }
