@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -203,10 +203,6 @@ public class ProcessorSupport {
 			}
 		} else if(processSupplier.getCategory().equals("Chromatogram Reports")) {
 			imageFileName = IApplicationImage.IMAGE_CHROMATOGRAM_REPORT;
-		} else if(processSupplier.getCategory().equals("External Programs")) {
-			if(processSupplier.getName().contains("NIST")) {
-				imageFileName = IApplicationImage.IMAGE_NIST;
-			}
 		} else if(processSupplier.getCategory().equals("Combined Chromatogram and Peak Integrator")) {
 			imageFileName = IApplicationImage.IMAGE_COMBINED_INTEGRATOR;
 		} else if(processSupplier.getCategory().equals("Peak Detector")) {
