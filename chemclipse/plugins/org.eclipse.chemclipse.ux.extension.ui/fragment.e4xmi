@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Jm8iUDL1EeKMEOdllHiEaA">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_Jm8iUDL1EeKMEOdllHiEaA">
   <imports xsi:type="advanced:Area" xmi:id="_I3_u0KuOEeSKQ7OYnQVHjQ" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_WF1aADL3EeKMEOdllHiEaA" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Command" xmi:id="_hheJ4DhoEeKHL-DfrT7KNQ" elementId="org.eclipse.chemclipse.ux.extension.ui.command.createSnapshot" commandName="Create Snapshot"/>
@@ -22,41 +22,36 @@
     <elements xsi:type="commands:Handler" xmi:id="_6Y7lsLibEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.close" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.CloseHandler" command="_4lggQLibEeu05KeOzWexnw"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_yuL6gDL3EeKMEOdllHiEaA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menu.file">
-    <elements xsi:type="menu:Menu" xmi:id="_QKMFgDL4EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu" label="%Chromatogram">
-      <children xsi:type="menu:Menu" xmi:id="_6R6_cDL8EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.classifier" label="%Classifier"/>
-      <children xsi:type="menu:MenuSeparator" xmi:id="_fmoWoDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.2"/>
-      <children xsi:type="menu:Menu" xmi:id="_d5hUkDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter" label="%Filter">
-        <children xsi:type="menu:MenuSeparator" xmi:id="_V9Q6sMucEeOtT4qEJiN-Qw" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.0"/>
-        <children xsi:type="menu:Menu" xmi:id="_tcotcAPsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.chromatogram" label="Chromatogram"/>
-        <children xsi:type="menu:Menu" xmi:id="_vrBQkAPsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.peaks" label="Peaks"/>
+    <elements xsi:type="menu:Menu" xmi:id="_9qTloDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.process" label="%Processors"/>
+    <elements xsi:type="menu:Menu" xmi:id="_kLSEIMqDEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.scan" label="%Scan">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_pYFlkMqWEe6-T8qSe20OHg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isScanTypeXXD"/>
+      <children xsi:type="menu:Menu" xmi:id="_kLSEJsqDEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.scan.ms.filter" label="%Filter"/>
+      <children xsi:type="menu:Menu" xmi:id="_kLSEJcqDEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.scan.identifier" label="%Identifier"/>
+      <children xsi:type="menu:Menu" xmi:id="_0hwlgMqSEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.scan.ms.filter" label="%MassSpectrumFilter">
+        <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_1m658MqWEe6-T8qSe20OHg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isScanTypeMSD"/>
       </children>
-      <children xsi:type="menu:MenuSeparator" xmi:id="_DEcqwAPqEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.1"/>
-      <children xsi:type="menu:Menu" xmi:id="_BJuDcAPqEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.calculators" label="%Calculators">
-        <children xsi:type="menu:Menu" xmi:id="_xaKS8APsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.calculators.chromatogram" label="Chromatogram"/>
-        <children xsi:type="menu:Menu" xmi:id="_32iggAPsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.calculators.peaks" label="Peaks"/>
+    </elements>
+    <elements xsi:type="menu:Menu" xmi:id="_-j9sQMp8Ee6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peak" label="%Peak">
+      <children xsi:type="menu:Menu" xmi:id="_-j9sRcp8Ee6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peak.detector" label="%Detector"/>
+      <children xsi:type="menu:Menu" xmi:id="_VP0ZIMp9Ee6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peak.export" label="Export"/>
+      <children xsi:type="menu:Menu" xmi:id="_YJ9PAMp9Ee6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peak.filter" label="%Filter"/>
+      <children xsi:type="menu:Menu" xmi:id="_-j9sSMp8Ee6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peak.integrators" label="%Integrator"/>
+      <children xsi:type="menu:Menu" xmi:id="_-j9sS8p8Ee6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peak.identifier" label="%Identifier"/>
+      <children xsi:type="menu:Menu" xmi:id="_-j9sTsp8Ee6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peak.quantifier" label="%Quantifier"/>
+      <children xsi:type="menu:Menu" xmi:id="_zBNH0MqJEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peak.ms.filter" label="%MassSpectrumFilter">
+        <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_xBeY0MqWEe6-T8qSe20OHg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isPeakTypeMSD"/>
       </children>
-      <children xsi:type="menu:MenuSeparator" xmi:id="_mX-uoDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.3"/>
-      <children xsi:type="menu:Menu" xmi:id="_eTFrIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector" label="%BaselineDetectors"/>
-      <children xsi:type="menu:MenuSeparator" xmi:id="_oB89IDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.4"/>
-      <children xsi:type="menu:Menu" xmi:id="_eoc3IDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors" label="%PeakDetectors">
-        <children xsi:type="menu:MenuSeparator" xmi:id="_RUrE4MIBEeKzppesdjCSCQ" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.separator.misc"/>
-      </children>
-      <children xsi:type="menu:MenuSeparator" xmi:id="_pQOuIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.5"/>
-      <children xsi:type="menu:Menu" xmi:id="_fGgsIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.integrators" label="%Integrators">
-        <children xsi:type="menu:MenuSeparator" xmi:id="_ioauoBZOEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.integrators.separator.misc"/>
-      </children>
-      <children xsi:type="menu:MenuSeparator" xmi:id="_FqiyoDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.6"/>
-      <children xsi:type="menu:Menu" xmi:id="_59QsIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier" label="%Identifier">
-        <children xsi:type="menu:MenuSeparator" xmi:id="_jcXzwBZREeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier.separator.misc"/>
-      </children>
-      <children xsi:type="menu:MenuSeparator" xmi:id="_m-uNMJVkEeK9SdEQujNeFg" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.identifier"/>
-      <children xsi:type="menu:Menu" xmi:id="_j0o20JVkEeK9SdEQujNeFg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.quantifier" label="%Quantifier">
-        <children xsi:type="menu:MenuSeparator" xmi:id="_U9T_gMIBEeKzppesdjCSCQ" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.quantifier.separator.misc"/>
-      </children>
-      <children xsi:type="menu:MenuSeparator" xmi:id="_K5F7IDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.9"/>
-      <children xsi:type="menu:Menu" xmi:id="_AxvQoDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.reports" label="%Reports"/>
-      <children xsi:type="menu:MenuSeparator" xmi:id="_OxxwkExJEeOWprdBMj2r0w" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.10"/>
-      <children xsi:type="menu:Menu" xmi:id="_VC2tEExJEeOWprdBMj2r0w" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.miscellaneous" label="%Miscellaneous"/>
+    </elements>
+    <elements xsi:type="menu:Menu" xmi:id="_QKMFgDL4EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.chromatogram" label="%Chromatogram">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_u2iyUMqWEe6-T8qSe20OHg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
+      <children xsi:type="menu:Menu" xmi:id="_eTFrIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.chromatogram.baselinedetector" label="%BaselineDetectors"/>
+      <children xsi:type="menu:Menu" xmi:id="_BJuDcAPqEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.chromatogram.calculators" label="%Calculators"/>
+      <children xsi:type="menu:Menu" xmi:id="_6R6_cDL8EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.chromatogram.classifier" label="%Classifier"/>
+      <children xsi:type="menu:Menu" xmi:id="_92ieMMp_Ee6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.chromatogram.export" label="%Export"/>
+      <children xsi:type="menu:Menu" xmi:id="_d5hUkDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.chromatogram.filter" label="%Filter"/>
+      <children xsi:type="menu:Menu" xmi:id="_RT0O4MqDEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.chromatogram.identifier" label="%Identifier"/>
+      <children xsi:type="menu:Menu" xmi:id="_TqJ0IMqDEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.chromatogram.integrator" label="%Integrator"/>
+      <children xsi:type="menu:Menu" xmi:id="_VS56oMqDEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.chromatogram.reports" label="%Reports" mnemonics=""/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_0O4XkDL_EeKMEOdllHiEaA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.top" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.toolbar.main">

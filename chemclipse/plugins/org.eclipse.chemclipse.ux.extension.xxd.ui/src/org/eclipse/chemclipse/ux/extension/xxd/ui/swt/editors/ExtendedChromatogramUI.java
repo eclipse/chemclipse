@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -53,6 +54,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
+import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IMessageProvider;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -141,8 +143,17 @@ import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageChromatog
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
 import org.eclipse.core.commands.Category;
 import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.commands.MCommand;
+import org.eclipse.e4.ui.model.application.commands.MCommandsFactory;
+import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
+import org.eclipse.e4.ui.model.application.ui.menu.MHandledMenuItem;
+import org.eclipse.e4.ui.model.application.ui.menu.MMenu;
+import org.eclipse.e4.ui.model.application.ui.menu.MMenuElement;
+import org.eclipse.e4.ui.model.application.ui.menu.MMenuFactory;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -217,6 +228,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scans Selected";
 	//
+	private static final String MAIN_MENU_CHROMATOGRAM = "org.eclipse.chemclipse.ux.extension.ui.menu.chromatogram";
+	private static final String MAIN_MENU_PEAK = "org.eclipse.chemclipse.ux.extension.ui.menu.peak";
+	private static final String MAIN_MENU_SCAN = "org.eclipse.chemclipse.ux.extension.ui.menu.scan";
+	private static final String MENU_CONTRIBUTOR_URI = "org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI";
+	//
 	private String titleScans = Activator.getDefault().getPreferenceStore().getString(PreferenceSupplier.P_TITLE_X_AXIS_SCANS);
 	private ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
 	//
@@ -262,6 +278,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private List<ISeparationColumn> separationColumns = SeparationColumnFactory.getSeparationColumns();
 	private RetentionIndexMarker retentionIndexMarker;
 	//
+	private MApplication application = Activator.getDefault().getApplication();
 	private IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private ChartGridSupport chartGridSupport = new ChartGridSupport();
@@ -576,12 +593,117 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		toolbarMethodControl.get().updateInput();
 	}
 
+	public void updateCommands() {
+
+		List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(this::isValidSupplier));
+		Collections.sort(suplierList, new CategoryNameComparator());
+		for(IProcessSupplier<?> supplier : suplierList) {
+			IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(supplier, processTypeSupport, this::executeSupplier);
+			addCommand(supplier, cachedEntry);
+		}
+	}
+
 	private void addCommand(IProcessSupplier<?> supplier, IChartMenuEntry cachedEntry) {
 
 		Command command = commandService.getCommand(supplier.getId());
 		Category category = commandService.getCategory(supplier.getCategory());
 		command.define(supplier.getName(), supplier.getDescription(), category);
 		command.setHandler(new DynamicHandler(cachedEntry, chromatogramChartControl.get()));
+		addMainMenu(supplier, command);
+	}
+
+	private void addMainMenu(IProcessSupplier<?> supplier, Command command) {
+
+		try {
+			if(supplier.getCategory().equals(ICategories.BASELINE_DETECTOR)) {
+				createMenuEntry(MAIN_MENU_CHROMATOGRAM, MAIN_MENU_CHROMATOGRAM + ".baselinedetector", command);
+			} else if(supplier.getCategory().equals(ICategories.CHROMATOGRAM_CALCULATOR)) {
+				createMenuEntry(MAIN_MENU_CHROMATOGRAM, MAIN_MENU_CHROMATOGRAM + ".calculators", command);
+			} else if(supplier.getCategory().equals(ICategories.CHROMATOGRAM_CLASSIFIER)) {
+				createMenuEntry(MAIN_MENU_CHROMATOGRAM, MAIN_MENU_CHROMATOGRAM + ".classifier", command);
+			} else if(supplier.getCategory().equals(ICategories.CHROMATOGRAM_EXPORT)) {
+				createMenuEntry(MAIN_MENU_CHROMATOGRAM, MAIN_MENU_CHROMATOGRAM + ".export", command);
+			} else if(supplier.getCategory().equals(ICategories.CHROMATOGRAM_FILTER)) {
+				createMenuEntry(MAIN_MENU_CHROMATOGRAM, MAIN_MENU_CHROMATOGRAM + ".filter", command);
+			} else if(supplier.getCategory().equals(ICategories.CHROMATOGRAM_IDENTIFIER)) {
+				createMenuEntry(MAIN_MENU_CHROMATOGRAM, MAIN_MENU_CHROMATOGRAM + ".identifier", command);
+			} else if(supplier.getCategory().equals(ICategories.CHROMATOGRAM_INTEGRATOR)) {
+				createMenuEntry(MAIN_MENU_CHROMATOGRAM, MAIN_MENU_CHROMATOGRAM + ".integrator", command);
+			} else if(supplier.getCategory().equals(ICategories.CHROMATOGRAM_REPORTS)) {
+				createMenuEntry(MAIN_MENU_CHROMATOGRAM, MAIN_MENU_CHROMATOGRAM + ".reports", command);
+			} else if(supplier.getCategory().equals(ICategories.PEAK_DETECTOR)) {
+				createMenuEntry(MAIN_MENU_PEAK, MAIN_MENU_PEAK + ".detector", command);
+			} else if(supplier.getCategory().equals(ICategories.PEAK_EXPORT)) {
+				createMenuEntry(MAIN_MENU_PEAK, MAIN_MENU_PEAK + ".export", command);
+			} else if(supplier.getCategory().equals(ICategories.PEAK_FILTER)) {
+				createMenuEntry(MAIN_MENU_PEAK, MAIN_MENU_PEAK + ".filter", command);
+			} else if(supplier.getCategory().equals(ICategories.PEAK_IDENTIFIER)) {
+				createMenuEntry(MAIN_MENU_PEAK, MAIN_MENU_PEAK + ".identifier", command);
+			} else if(supplier.getCategory().equals(ICategories.PEAK_INTEGRATOR)) {
+				createMenuEntry(MAIN_MENU_PEAK, MAIN_MENU_PEAK + ".integrators", command);
+			} else if(supplier.getCategory().equals(ICategories.PEAK_MASS_SPECTRUM_FILTER)) {
+				createMenuEntry(MAIN_MENU_PEAK, MAIN_MENU_PEAK + ".ms.filter", command);
+			} else if(supplier.getCategory().equals(ICategories.PEAK_QUANTIFIER)) {
+				createMenuEntry(MAIN_MENU_PEAK, MAIN_MENU_PEAK + ".quantifier", command);
+			} else if(supplier.getCategory().equals(ICategories.SCAN_FILTER)) {
+				createMenuEntry(MAIN_MENU_SCAN, MAIN_MENU_SCAN + ".filter", command);
+			} else if(supplier.getCategory().equals(ICategories.SCAN_IDENTIFIER)) {
+				createMenuEntry(MAIN_MENU_SCAN, MAIN_MENU_SCAN + ".identifier", command);
+			} else if(supplier.getCategory().equals(ICategories.SCAN_MASS_SPECTRUM_FILTER)) {
+				createMenuEntry(MAIN_MENU_SCAN, MAIN_MENU_SCAN + ".ms.filter", command);
+			}
+		} catch(NotDefinedException e) {
+			logger.warn(e);
+		}
+	}
+
+	private MMenu getSubMenu(String parent) throws NotDefinedException {
+
+		MWindow window = application.getChildren().get(0);
+		MMenu mainMenu = window.getMainMenu();
+		Optional<MMenuElement> element = mainMenu.getChildren().stream().filter(c -> c.getElementId().equals(parent)).findFirst();
+		if(element.isPresent() && element.get() instanceof MMenu mMenu) {
+			return mMenu;
+		}
+		throw new NotDefinedException(parent);
+	}
+
+	private void createMenuEntry(String parent, String id, Command command) throws NotDefinedException {
+
+		MMenu mMenu = getSubMenu(parent);
+		createSubMenuEntry(mMenu, id, command);
+	}
+
+	private void createSubMenuEntry(MMenu subMenu, String id, Command command) throws NotDefinedException {
+
+		Optional<MMenuElement> element = subMenu.getChildren().stream().filter(c -> c.getElementId().equals(id)).findFirst();
+		if(element.isPresent() && element.get() instanceof MMenu mMenu) {
+			Optional<MMenuElement> previous = mMenu.getChildren().stream().filter(c -> c.getElementId().equals(command.getId())).findAny();
+			if(previous.isPresent() && previous.get() instanceof MHandledMenuItem handledMenuItem) {
+				handledMenuItem.setCommand(createModelCommand(command)); // reroute to this widget
+			} else {
+				MHandledMenuItem menuItem = MMenuFactory.INSTANCE.createHandledMenuItem();
+				menuItem.setElementId(command.getId());
+				menuItem.setLabel(command.getName());
+				menuItem.setCommand(createModelCommand(command));
+				menuItem.setContributorURI(MENU_CONTRIBUTOR_URI);
+				mMenu.getChildren().add(menuItem);
+			}
+		} else {
+			throw new NotDefinedException(id);
+		}
+	}
+
+	private MCommand createModelCommand(Command command) {
+
+		MCommand mCommand = MCommandsFactory.INSTANCE.createCommand();
+		mCommand.setElementId(command.getId());
+		try {
+			mCommand.setCommandName(command.getName());
+		} catch(NotDefinedException e) {
+			logger.warn(e);
+		}
+		return mCommand;
 	}
 
 	private <C> void executeSupplier(IProcessSupplier<C> processSupplier, IProcessSupplierContext processSupplierContext) {
