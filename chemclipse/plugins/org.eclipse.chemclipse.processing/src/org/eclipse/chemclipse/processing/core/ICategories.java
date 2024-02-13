@@ -39,7 +39,6 @@ public interface ICategories {
 	String USER_METHODS = Messages.userMethods;
 	String USER_INTERFACE = Messages.userInterface;
 	String FILTER = Messages.filter;
-	String EXTERNAL_PROGRAMS = Messages.externalPrograms;
 	String MASS_SPECTRUM = Messages.massSpectrum;
 	String PROCEDURES = Messages.procedures;
 	String IDENTIFIER = Messages.identifier;

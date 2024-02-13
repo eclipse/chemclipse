@@ -42,7 +42,6 @@ public class Messages extends NLS {
 	public static String userMethods;
 	public static String userInterface;
 	public static String filter;
-	public static String externalPrograms;
 	public static String massSpectrum;
 	public static String procedures;
 	public static String identifier;
