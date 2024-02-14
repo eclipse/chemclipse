@@ -34,7 +34,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	private final Map<String, String> metadata = new LinkedHashMap<>();
 	private final Set<DataCategory> catgories;
 	//
-	private String uuid = java.util.UUID.randomUUID().toString();
+	private String uuid = "";
 	private String operator = "";
 	private String category = "";
 	/*
@@ -45,6 +45,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 
 	public ProcessMethod(Set<DataCategory> categories) {
 
+		uuid = java.util.UUID.randomUUID().toString();
 		this.catgories = Collections.unmodifiableSet(categories);
 		try {
 			resourceBundle = ResourceBundle.getBundle("org.eclipse.chemclipse.processing.l10n.messages");
@@ -65,6 +66,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 			/*
 			 * Settings
 			 */
+			setUUID(other.getUUID());
 			this.operator = other.getOperator();
 			setDescription(other.getDescription());
 			this.category = other.getCategory();
