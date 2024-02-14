@@ -6,7 +6,7 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_2-QBMECPEeKbmYL7tP6V9g" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Handler" xmi:id="_4UxIMECPEeKbmYL7tP6V9g" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.handler.batchProcess" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui/org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.handlers.BatchHandler" command="_vTiYQECPEeKbmYL7tP6V9g"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_BFiaQECQEeKbmYL7tP6V9g" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_Cz7OsECQEeKbmYL7tP6V9g" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.handledmenuitem.batchProcess" label="%PeakIdentificationBatchProcess" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocessPeakIdent.gif" command="_vTiYQECPEeKbmYL7tP6V9g"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_BFiaQECQEeKbmYL7tP6V9g" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.peak.identifier">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_Cz7OsECQEeKbmYL7tP6V9g" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.handledmenuitem.batchProcess" label="%BatchProcess" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocessPeakIdent.gif" command="_vTiYQECPEeKbmYL7tP6V9g"/>
   </fragments>
 </fragment:ModelFragments>

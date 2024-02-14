@@ -160,6 +160,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 				public void run() {
 
 					extendedChromatogramUI.updateToolbar();
+					extendedChromatogramUI.updateCommands();
 				}
 			});
 		}
