@@ -117,7 +117,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	@Override
 	public String getCategory() {
 
-		if(category == null) {
+		if(category == null || category.isEmpty()) {
 			return "";
 		}
 		if(resourceBundle == null) {
