@@ -25,7 +25,7 @@
     <elements xsi:type="menu:Menu" xmi:id="_9qTloDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.process" label="%Processors"/>
     <elements xsi:type="menu:Menu" xmi:id="_kLSEIMqDEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.scan" label="%Scan">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_pYFlkMqWEe6-T8qSe20OHg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isScanTypeXXD"/>
-      <children xsi:type="menu:Menu" xmi:id="_kLSEJsqDEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.scan.ms.filter" label="%Filter"/>
+      <children xsi:type="menu:Menu" xmi:id="_kLSEJsqDEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.scan.filter" label="%Filter"/>
       <children xsi:type="menu:Menu" xmi:id="_kLSEJcqDEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.scan.identifier" label="%Identifier"/>
       <children xsi:type="menu:Menu" xmi:id="_0hwlgMqSEe6-T8qSe20OHg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.scan.ms.filter" label="%MassSpectrumFilter">
         <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_1m658MqWEe6-T8qSe20OHg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isScanTypeMSD"/>
