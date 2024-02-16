@@ -21,6 +21,7 @@ import java.util.function.Function;
 
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.l10n.Messages;
 import org.eclipse.chemclipse.ux.extension.ui.listener.DataExplorerDragListener;
@@ -50,7 +51,6 @@ public class DataExplorerTreeUI {
 	private File directory = null;
 	private IPreferenceStore preferenceStore = null;
 	private String preferenceKey = null;
-	private DataExplorerLabelProvider labelProvider;
 
 	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot dataExplorerTreeRoot, Collection<? extends ISupplierFileIdentifier> identifier) {
 
@@ -170,13 +170,18 @@ public class DataExplorerTreeUI {
 		treeViewer.setUseHashlookup(true);
 		treeViewer.setExpandPreCheckFilters(true);
 		treeViewer.setContentProvider(new DataExplorerContentProvider(identifier));
-		labelProvider = new DataExplorerLabelProvider(identifier);
-		treeViewer.getTree().addListener(SWT.PaintItem, createLabelListener());
+		if(OperatingSystemUtils.isLinux()) {
+			// Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
+			DataExplorerLabelProvider labelProvider = new DataExplorerLabelProvider(identifier);
+			treeViewer.getTree().addListener(SWT.PaintItem, createLabelListener(labelProvider));
+		} else {
+			treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
+		}
 		setInput(treeViewer);
 		treeViewerControl.set(treeViewer);
 	}
 
-	private Listener createLabelListener() {
+	private Listener createLabelListener(DataExplorerLabelProvider labelProvider) {
 
 		return new Listener() {
 
@@ -188,15 +193,6 @@ public class DataExplorerTreeUI {
 					return;
 				}
 				item.setText(labelProvider.getText(item.getData()));
-				// Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
-				Display.getDefault().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-
-						item.setImage(labelProvider.getImage(item.getData()));
-					}
-				});
 			}
 		};
 	}
