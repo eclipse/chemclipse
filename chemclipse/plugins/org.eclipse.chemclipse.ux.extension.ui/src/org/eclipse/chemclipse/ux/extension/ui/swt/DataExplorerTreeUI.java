@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.l10n.Messages;
 import org.eclipse.chemclipse.ux.extension.ui.listener.DataExplorerDragListener;
+import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.core.runtime.IStatus;
@@ -171,9 +172,15 @@ public class DataExplorerTreeUI {
 		treeViewer.setExpandPreCheckFilters(true);
 		treeViewer.setContentProvider(new DataExplorerContentProvider(identifier));
 		if(OperatingSystemUtils.isLinux()) {
-			// Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
-			DataExplorerLabelProvider labelProvider = new DataExplorerLabelProvider(identifier);
-			treeViewer.getTree().addListener(SWT.PaintItem, createLabelListener(labelProvider));
+			if(PreferenceSupplier.isLinuxUseTreeViewerLabelProvider()) {
+				treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
+			} else {
+				/*
+				 * Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
+				 */
+				DataExplorerLabelProvider labelProvider = new DataExplorerLabelProvider(identifier);
+				treeViewer.getTree().addListener(SWT.PaintItem, createLabelListener(labelProvider));
+			}
 		} else {
 			treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
 		}

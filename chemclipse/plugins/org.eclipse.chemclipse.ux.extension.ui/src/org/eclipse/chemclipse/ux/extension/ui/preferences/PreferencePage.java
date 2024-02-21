@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.preferences;
 
@@ -45,6 +45,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_USER_LOCATION_PATH, "User Location", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_OPEN_FIRST_DATA_MATCH_ONLY, "Open First Data Match Only", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_OPEN_EDITOR_MULTIPLE_TIMES, "Open Editor Multiple Times", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_LINUX_USE_TREE_VIEWER_LABEL_PROVIDER, "Linux TreeViewer Labels (Danger Zone: SIGSEGV - requires restart)", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Microsoft Windows", getFieldEditorParent()));
