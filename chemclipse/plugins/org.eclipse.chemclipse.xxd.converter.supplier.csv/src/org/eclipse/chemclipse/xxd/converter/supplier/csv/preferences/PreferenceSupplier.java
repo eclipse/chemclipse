@@ -25,6 +25,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	//
 	public static final String P_EXPORT_USE_TIC = "exportUseTic";
 	public static final boolean DEF_EXPORT_USE_TIC = false;
+	public static final String P_EXPORT_REFERENCES = "exportReferences";
+	public static final boolean DEF_EXPORT_REFERENCES = false;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -42,7 +44,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 
 		putDefault(P_IMPORT_DELIMITER, DEF_IMPORT_DELIMITER);
 		putDefault(P_IMPORT_ZERO_MARKER, DEF_IMPORT_ZERO_MARKER);
-		putDefault(P_EXPORT_USE_TIC, Boolean.toString(DEF_EXPORT_USE_TIC));
+		putDefault(P_EXPORT_USE_TIC, DEF_EXPORT_USE_TIC);
+		putDefault(P_EXPORT_REFERENCES, DEF_EXPORT_REFERENCES);
 	}
 
 	public static Delimiter getImportDelimiter() {
@@ -77,5 +80,15 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static void setExportUseTic(boolean useTic) {
 
 		INSTANCE().putBoolean(P_EXPORT_USE_TIC, useTic);
+	}
+
+	public static boolean isExportReferences() {
+
+		return INSTANCE().getBoolean(P_EXPORT_REFERENCES, DEF_EXPORT_REFERENCES);
+	}
+
+	public static void setExportReferences(boolean selection) {
+
+		INSTANCE().putBoolean(P_EXPORT_REFERENCES, selection);
 	}
 }

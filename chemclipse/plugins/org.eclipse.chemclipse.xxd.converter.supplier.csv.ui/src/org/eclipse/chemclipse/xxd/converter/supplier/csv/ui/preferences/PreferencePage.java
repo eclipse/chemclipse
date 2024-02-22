@@ -47,6 +47,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Export", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_EXPORT_USE_TIC, "Export only TIC values.", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_EXPORT_USE_TIC, "TIC (only)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_EXPORT_REFERENCES, "References", getFieldEditorParent()));
 	}
 }

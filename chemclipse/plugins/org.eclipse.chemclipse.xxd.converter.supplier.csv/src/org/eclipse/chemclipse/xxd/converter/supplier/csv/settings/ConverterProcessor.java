@@ -26,6 +26,9 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = {IProcessTypeSupplier.class})
 public class ConverterProcessor extends AbstractSystemProcessSettings {
 
+	/*
+	 * Keep ID for legacy reasons.
+	 */
 	private static final String ID = "org.eclipse.chemclipse.msd.converter.supplier.csv.system.converterProcessor";
 	private static final String NAME = "CSV Converter";
 	private static final String DESCRIPTION = "CSV converter preferences.";
@@ -50,6 +53,7 @@ public class ConverterProcessor extends AbstractSystemProcessSettings {
 				PreferenceSupplier.setImportDelimiter(processSettings.getImportDelimiter());
 				PreferenceSupplier.setImportZeroMarker(processSettings.getImportZeroMarker());
 				PreferenceSupplier.setExportUseTic(processSettings.isExportUseTic());
+				PreferenceSupplier.setExportReferences(processSettings.isExportReferences());
 			}
 		}
 	}

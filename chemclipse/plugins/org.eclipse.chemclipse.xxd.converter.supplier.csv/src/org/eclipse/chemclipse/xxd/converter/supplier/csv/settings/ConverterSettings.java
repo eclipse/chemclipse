@@ -30,6 +30,9 @@ public class ConverterSettings implements ISystemProcessSettings {
 	@JsonProperty(value = "Export Use TIC", defaultValue = "false")
 	@JsonPropertyDescription(value = "Export only TIC values.")
 	private boolean exportUseTic = false;
+	@JsonProperty(value = "Export References", defaultValue = "false")
+	@JsonPropertyDescription(value = "Export all reference chromatograms.")
+	private boolean exportReferences = false;
 
 	public Delimiter getImportDelimiter() {
 
@@ -59,5 +62,15 @@ public class ConverterSettings implements ISystemProcessSettings {
 	public void setExportUseTic(boolean exportUseTic) {
 
 		this.exportUseTic = exportUseTic;
+	}
+
+	public boolean isExportReferences() {
+
+		return exportReferences;
+	}
+
+	public void setExportReferences(boolean exportReferences) {
+
+		this.exportReferences = exportReferences;
 	}
 }

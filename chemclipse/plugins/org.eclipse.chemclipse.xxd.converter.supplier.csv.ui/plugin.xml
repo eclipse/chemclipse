@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="org.eclipse.chemclipse.msd.converter.ui.converterPreferencePage"
+            category="org.eclipse.chemclipse.converter.ui.converterPreferencePage"
             class="org.eclipse.chemclipse.xxd.converter.supplier.csv.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.xxd.converter.supplier.csv.ui.preferences.converterPreferencePage"
             name="CSV Converter">

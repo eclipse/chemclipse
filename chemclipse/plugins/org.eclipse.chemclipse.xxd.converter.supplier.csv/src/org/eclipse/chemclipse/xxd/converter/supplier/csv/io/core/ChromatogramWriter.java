@@ -57,6 +57,43 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 
 	public void writeChromatogram(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) throws IOException {
 
+		/*
+		 * Master / References
+		 */
+		writeChromatogramByType(file, chromatogram, monitor);
+		if(PreferenceSupplier.isExportReferences()) {
+			writeChromatogramReferencesOnDemand(file, chromatogram, monitor);
+		}
+	}
+
+	private void writeChromatogramReferencesOnDemand(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) throws IOException {
+
+		if(PreferenceSupplier.isExportReferences()) {
+			/*
+			 * Name
+			 */
+			String directory = file.getParentFile().getAbsolutePath();
+			String name = file.getName();
+			name = name.substring(0, name.length() - FILE_EXTENSION.length());
+			//
+			int i = 1;
+			for(IChromatogram<? extends IPeak> chromatogramReference : chromatogram.getReferencedChromatograms()) {
+				StringBuilder builder = new StringBuilder();
+				builder.append(directory);
+				builder.append(File.separator);
+				builder.append(name);
+				builder.append("_REF");
+				builder.append(i);
+				builder.append(FILE_EXTENSION);
+				File fileReference = new File(builder.toString());
+				writeChromatogramByType(fileReference, chromatogramReference, monitor);
+				i++;
+			}
+		}
+	}
+
+	private void writeChromatogramByType(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) throws IOException {
+
 		if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 			writeChromatogram(file, chromatogramCSD, monitor);
 		} else if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
