@@ -78,20 +78,20 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private static final double SCALE_DEFAULT = 1.0d;
 	private static final double SCALE_DELTA = 0.1d;
 	//
-	private Button buttonToolbarInfo;
+	private AtomicReference<Button> buttonToolbarInfo = new AtomicReference<>();
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
-	private Button buttonToolbarEdit;
+	private AtomicReference<Button> buttonToolbarEdit = new AtomicReference<>();
 	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
-	private ComboViewer comboViewerServices;
-	private Text textInput;
-	private ComboViewer comboViewerInput;
-	private Canvas canvasMolecule;
-	private Text textMolecule;
+	private AtomicReference<ComboViewer> comboViewerServices = new AtomicReference<>();
+	private AtomicReference<Text> textInput = new AtomicReference<>();
+	private AtomicReference<ComboViewer> comboViewerInput = new AtomicReference<>();
+	private AtomicReference<Canvas> canvasMolecule = new AtomicReference<>();
+	private AtomicReference<Text> textMolecule = new AtomicReference<>();
 	//
-	private ILibraryInformation libraryInformation;
 	//
 	private double scaleFactor = SCALE_DEFAULT;
 	private Image imageMolecule = null;
+	private ILibraryInformation libraryInformation;
 	private ILibraryInformation renderedLibraryInformation;
 	private Point renderedSize;
 	//
@@ -131,8 +131,8 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private void initialize() {
 
-		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
-		enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
+		enableToolbar(toolbarInfo, buttonToolbarInfo.get(), IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarEdit, buttonToolbarEdit.get(), IMAGE_EDIT, TOOLTIP_EDIT, false);
 		/*
 		 * Molecule Services / Types
 		 */
@@ -152,12 +152,22 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(6, false));
 		//
-		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
-		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
-		comboViewerServices = createComboViewerServices(composite);
+		createButtonToggleInfo(composite);
+		createButtonToggleEdit(composite);
+		createComboViewerServices(composite);
 		createButtonReset(composite);
 		createButtonExport(composite);
 		createSettingsButton(composite);
+	}
+
+	private void createButtonToggleInfo(Composite parent) {
+
+		buttonToolbarInfo.set(createButtonToggleToolbar(parent, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO));
+	}
+
+	private void createButtonToggleEdit(Composite parent) {
+
+		buttonToolbarEdit.set(createButtonToggleToolbar(parent, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT));
 	}
 
 	private void createToolbarInfo(Composite parent) {
@@ -175,14 +185,14 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		//
-		textInput = createTextInput(composite);
-		comboViewerInput = createComboViewerInput(composite);
+		createTextInput(composite);
+		createComboViewerInput(composite);
 		createButtonCalculate(composite);
 		//
 		toolbarEdit.set(composite);
 	}
 
-	private Text createTextInput(Composite parent) {
+	private void createTextInput(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setToolTipText("Input");
@@ -199,10 +209,10 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			}
 		});
 		//
-		return text;
+		textInput.set(text);
 	}
 
-	private ComboViewer createComboViewerInput(Composite composite) {
+	private void createComboViewerInput(Composite composite) {
 
 		ComboViewer comboViewer = new EnhancedComboViewer(composite, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
@@ -235,7 +245,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			}
 		});
 		//
-		return comboViewer;
+		comboViewerInput.set(comboViewer);
 	}
 
 	private Button createButtonCalculate(Composite parent) {
@@ -263,11 +273,11 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		tabFolder.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		canvasMolecule = createMoleculeImage(tabFolder);
-		textMolecule = createMoleculeContent(tabFolder);
+		createMoleculeImage(tabFolder);
+		createMoleculeContent(tabFolder);
 	}
 
-	private Canvas createMoleculeImage(TabFolder tabFolder) {
+	private void createMoleculeImage(TabFolder tabFolder) {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Molecule");
@@ -278,7 +288,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		Canvas canvas = createCanvasMolecule(composite);
 		tabItem.setControl(composite);
 		//
-		return canvas;
+		canvasMolecule.set(canvas);
 	}
 
 	private Canvas createCanvasMolecule(Composite parent) {
@@ -319,7 +329,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		return canvas;
 	}
 
-	private Text createMoleculeContent(TabFolder tabFolder) {
+	private void createMoleculeContent(TabFolder tabFolder) {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Content");
@@ -328,7 +338,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		text.setEditable(false);
 		tabItem.setControl(text);
 		//
-		return text;
+		textMolecule.set(text);
 	}
 
 	private Text createTextMolecule(Composite parent) {
@@ -340,7 +350,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		return text;
 	}
 
-	private ComboViewer createComboViewerServices(Composite composite) {
+	private void createComboViewerServices(Composite composite) {
 
 		ComboViewer comboViewer = new EnhancedComboViewer(composite, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
@@ -382,7 +392,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			}
 		});
 		//
-		return comboViewer;
+		comboViewerServices.set(comboViewer);
 	}
 
 	private Button createButtonReset(Composite parent) {
@@ -501,7 +511,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			if(libraryInformation == null) {
 				libraryInformation = new LibraryInformation();
 				ImageServiceInput imageInput = getImageInput();
-				String text = textInput.getText().trim();
+				String text = textInput.get().getText().trim();
 				switch(imageInput) {
 					case SMILES:
 						libraryInformation.setSmiles(text);
@@ -542,7 +552,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private Point calculateImageSize() {
 
-		Point size = canvasMolecule.getSize();
+		Point size = canvasMolecule.get().getSize();
 		int width = size.x;
 		int height = size.y;
 		//
@@ -604,7 +614,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 				if(scaleFactor != 1.0d) {
 					destWidth = (int)(bounds.width * scaleFactor);
 					destHeight = (int)(bounds.height * scaleFactor);
-					Point size = canvasMolecule.getSize();
+					Point size = canvasMolecule.get().getSize();
 					int corrwidth = (int)(size.x * scaleFactor);
 					int corrheight = (int)(size.y * scaleFactor);
 					destX = (int)(srcWidth / 2.0d - destWidth / 2.0d - corrwidth / 2.0d);
@@ -667,7 +677,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private IMoleculeImageService getMoleculeImageService() {
 
-		Object object = comboViewerServices.getStructuredSelection().getFirstElement();
+		Object object = comboViewerServices.get().getStructuredSelection().getFirstElement();
 		if(object instanceof IMoleculeImageService moleculeImageService) {
 			return moleculeImageService;
 		}
@@ -677,7 +687,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private ImageServiceInput getImageInput() {
 
-		Object object = comboViewerInput.getStructuredSelection().getFirstElement();
+		Object object = comboViewerInput.get().getStructuredSelection().getFirstElement();
 		if(object instanceof ImageServiceInput imageServiceInput) {
 			return imageServiceInput;
 		}
@@ -689,7 +699,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private String getExportName() {
 
-		String input = textInput.getText().trim();
+		String input = textInput.get().getText().trim();
 		String name = input.replace(":", "");
 		name = name.isEmpty() ? "Unkown" : name;
 		int length = preferenceStore.getInt(PreferenceSupplier.P_LENGTH_MOLECULE_NAME_EXPORT);
@@ -703,7 +713,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private void updateContent() {
 
 		updateWidgets();
-		canvasMolecule.redraw();
+		canvasMolecule.get().redraw();
 	}
 
 	private void updateWidgets() {
@@ -715,9 +725,9 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private void setTextMolecule() {
 
 		if(libraryInformation != null) {
-			textMolecule.setText(libraryInformation.getMoleculeStructure());
+			textMolecule.get().setText(libraryInformation.getMoleculeStructure());
 		} else {
-			textMolecule.setText("");
+			textMolecule.get().setText("");
 		}
 	}
 
@@ -729,18 +739,18 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 				case SMILES:
 					String smiles = libraryInformation.getSmiles();
 					if(!smiles.isEmpty()) {
-						textInput.setText(smiles);
+						textInput.get().setText(smiles);
 					}
 					break;
 				default:
 					String name = libraryInformation.getName();
 					if(!name.isEmpty()) {
-						textInput.setText(name);
+						textInput.get().setText(name);
 					}
 					break;
 			}
 		} else {
-			textInput.setText("");
+			textInput.get().setText("");
 		}
 	}
 
@@ -749,7 +759,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		ILibraryInformation libraryInformationByInput = new LibraryInformation();
 		//
 		ImageServiceInput imageInput = getImageInput();
-		String text = textInput.getText().trim();
+		String text = textInput.get().getText().trim();
 		switch(imageInput) {
 			case SMILES:
 				libraryInformationByInput.setSmiles(text);
@@ -766,13 +776,13 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 		Object[] moleculeImageServices = Activator.getDefault().getMoleculeImageServices();
 		if(moleculeImageServices != null) {
-			comboViewerServices.setInput(moleculeImageServices);
+			comboViewerServices.get().setInput(moleculeImageServices);
 			IMoleculeImageService moleculeImageServiceSelection = getMoleculeImageServiceSelection(moleculeImageServices);
 			if(moleculeImageServiceSelection != null) {
-				comboViewerServices.setSelection(new StructuredSelection(moleculeImageServiceSelection));
+				comboViewerServices.get().setSelection(new StructuredSelection(moleculeImageServiceSelection));
 			}
 		} else {
-			comboViewerServices.setInput(null);
+			comboViewerServices.get().setInput(null);
 		}
 	}
 
@@ -827,7 +837,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private void updateComboViewerInputTypes() {
 
-		comboViewerInput.setInput(ImageServiceInput.values());
-		comboViewerInput.getCombo().select(0);
+		comboViewerInput.get().setInput(ImageServiceInput.values());
+		comboViewerInput.get().getCombo().select(0);
 	}
 }
