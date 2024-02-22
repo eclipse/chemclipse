@@ -39,6 +39,7 @@ import org.eclipse.chemclipse.wsd.model.xwc.ExtractedWavelengthSignalExtractor;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignalExtractor;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
+import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -100,6 +101,8 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 			writeChromatogram(file, chromatogramMSD, monitor);
 		} else if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
 			writeChromatogram(file, chromatogramWSD, monitor);
+		} else if(chromatogram instanceof IChromatogramISD chromatogramISD) {
+			writeChromatogram(file, chromatogramISD, monitor);
 		}
 	}
 
@@ -149,6 +152,15 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 				writeHeaderXIC(csvPrinter, startWavelength, stopWavelength);
 				writeScansXIC(csvPrinter, extractedSignals, startWavelength, stopWavelength);
 			}
+		} catch(ChromatogramIsNullException e) {
+			throw new IOException("The chromatogram is null.");
+		}
+	}
+
+	private void writeChromatogram(File file, IChromatogramISD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(file), CSVFormat.EXCEL)) {
+			writeTIC(csvPrinter, chromatogram);
 		} catch(ChromatogramIsNullException e) {
 			throw new IOException("The chromatogram is null.");
 		}
