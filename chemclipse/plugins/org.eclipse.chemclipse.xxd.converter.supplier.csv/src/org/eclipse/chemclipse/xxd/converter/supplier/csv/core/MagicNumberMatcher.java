@@ -15,12 +15,13 @@ import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.xxd.converter.supplier.csv.io.core.ChromatogramWriter;
 
 public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
 
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		return checkFileExtension(file, ".csv");
+		return checkFileExtension(file, ChromatogramWriter.FILE_EXTENSION);
 	}
 }

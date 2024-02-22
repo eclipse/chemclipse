@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.io.core.ChromatogramReader;
+import org.eclipse.chemclipse.xxd.converter.supplier.csv.io.core.ChromatogramWriter;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramImportConverter extends AbstractChromatogramImportConverter<IChromatogramMSD> {
@@ -35,7 +36,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 		IProcessingInfo<IChromatogramMSD> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
 			try {
-				if(file.getName().toLowerCase().endsWith(".csv")) {
+				if(file.getName().toLowerCase().endsWith(ChromatogramWriter.FILE_EXTENSION)) {
 					IChromatogramMSDReader reader = new ChromatogramReader();
 					IChromatogramMSD chromatogram = reader.read(file, monitor);
 					processingInfo.setProcessingResult(chromatogram);
@@ -58,7 +59,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 		IProcessingInfo<IChromatogramOverview> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
 			try {
-				if(file.getName().toLowerCase().endsWith(".csv")) {
+				if(file.getName().toLowerCase().endsWith(ChromatogramWriter.FILE_EXTENSION)) {
 					IChromatogramMSDReader reader = new ChromatogramReader();
 					IChromatogramOverview chromatogramOverview = reader.readOverview(file, monitor);
 					processingInfo.setProcessingResult(chromatogramOverview);

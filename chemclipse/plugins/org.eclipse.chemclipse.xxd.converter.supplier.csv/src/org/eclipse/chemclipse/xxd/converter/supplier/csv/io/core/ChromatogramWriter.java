@@ -44,6 +44,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramWriter extends AbstractChromatogramWriter {
 
+	public static final String DESCRIPTION = "Chromatogram";
+	public static final String FILE_EXTENSION = ".csv";
+	public static final String FILE_NAME = DESCRIPTION.replaceAll("\\s", "") + FILE_EXTENSION;
+	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
+	public static final String FILTER_NAME = DESCRIPTION + " (*" + FILE_EXTENSION + ")";
+	//
 	public static final String RT_MILLISECONDS_COLUMN = "RT(milliseconds)";
 	public static final String RT_MINUTES_COLUMN = "RT(minutes) - NOT USED BY IMPORT";
 	public static final String RI_COLUMN = "RI";
