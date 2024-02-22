@@ -941,8 +941,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String DEF_MOLECULE_PATH_EXPORT = "";
 	public static final String P_LENGTH_MOLECULE_NAME_EXPORT = "lengthMoleculeNameExport";
 	public static final int DEF_LENGTH_MOLECULE_NAME_EXPORT = 40;
-	public static final String P_PREFER_OFFLINE_MOLECULE = "preferOfflineMolecule";
-	public static final boolean DEF_PREFER_OFFLINE_MOLECULE = true;
+	public static final String P_MOLECULE_IMAGE_SERVICE_ID = "moleculeImageServiceId";
+	public static final String DEF_MOLECULE_IMAGE_SERVICE_ID = "";
 	/*
 	 * Peaks Merge
 	 */
@@ -1246,7 +1246,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		 */
 		putDefault(P_MOLECULE_PATH_EXPORT, DEF_MOLECULE_PATH_EXPORT);
 		putDefault(P_LENGTH_MOLECULE_NAME_EXPORT, DEF_LENGTH_MOLECULE_NAME_EXPORT);
-		putDefault(P_PREFER_OFFLINE_MOLECULE, DEF_PREFER_OFFLINE_MOLECULE);
+		putDefault(P_MOLECULE_IMAGE_SERVICE_ID, DEF_MOLECULE_IMAGE_SERVICE_ID);
 		/*
 		 * Merge Peaks
 		 */
@@ -1503,5 +1503,15 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static void setFilterPathRetentionIndices(String path) {
 
 		INSTANCE().put(P_FILTER_PATH_RETENTION_INDICES, path);
+	}
+
+	public static String getMoleculeImageServiceId() {
+
+		return INSTANCE().get(P_MOLECULE_IMAGE_SERVICE_ID);
+	}
+
+	public static void setMoleculeImageServiceId(String selection) {
+
+		INSTANCE().put(P_MOLECULE_IMAGE_SERVICE_ID, selection);
 	}
 }

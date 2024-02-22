@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -33,7 +32,6 @@ public class PreferencePageMolecule extends FieldEditorPreferencePage implements
 
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_MOLECULE_PATH_EXPORT, "Molecule Path Export", getFieldEditorParent()));
 		addField(new ExtendedIntegerFieldEditor(PreferenceSupplier.P_LENGTH_MOLECULE_NAME_EXPORT, "Molecule Name Length", PreferenceSupplier.MIN_LENGTH_NAME_EXPORT, PreferenceSupplier.MAX_LENGTH_NAME_EXPORT, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_PREFER_OFFLINE_MOLECULE, "Prefer Offline Libraries", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

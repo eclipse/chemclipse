@@ -34,6 +34,7 @@ import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -133,29 +134,10 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
 		enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
 		/*
-		 * Services
+		 * Molecule Services / Types
 		 */
-		Object[] moleculeImageServices = Activator.getDefault().getMoleculeImageServices();
-		if(moleculeImageServices != null) {
-			comboViewerServices.setInput(moleculeImageServices);
-			if(moleculeImageServices.length >= 1) {
-				int preferredService = 0;
-				if(preferenceStore.getBoolean(PreferenceSupplier.P_PREFER_OFFLINE_MOLECULE)) {
-					for(int i = 0; i < moleculeImageServices.length; i++) {
-						IMoleculeImageService service = (IMoleculeImageService)moleculeImageServices[i];
-						if(!service.isOnline()) {
-							preferredService = i;
-						}
-					}
-				}
-				comboViewerServices.getCombo().select(preferredService);
-			}
-		}
-		/*
-		 * Input Types
-		 */
-		comboViewerInput.setInput(ImageServiceInput.values());
-		comboViewerInput.getCombo().select(0);
+		updateComboViewerImageServices();
+		updateComboViewerInputTypes();
 		/*
 		 * Create the image
 		 */
@@ -370,10 +352,14 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 				if(element instanceof IMoleculeImageService moleculeImageService) {
 					combo.setToolTipText(moleculeImageService.getDescription());
-					return moleculeImageService.getName();
+					StringBuilder builder = new StringBuilder();
+					builder.append(moleculeImageService.getName());
+					builder.append(" (");
+					builder.append(moleculeImageService.isOnline() ? "online" : "offline");
+					builder.append(")");
+					return builder.toString();
 				}
 				//
-				combo.setToolTipText("");
 				return null;
 			}
 		});
@@ -389,6 +375,9 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				if(comboViewer.getStructuredSelection().getFirstElement() instanceof IMoleculeImageService moleculeImageService) {
+					PreferenceSupplier.setMoleculeImageServiceId(moleculeImageService.getClass().getName());
+				}
 				reset(e.display);
 			}
 		});
@@ -771,5 +760,74 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		}
 		//
 		return libraryInformationByInput;
+	}
+
+	private void updateComboViewerImageServices() {
+
+		Object[] moleculeImageServices = Activator.getDefault().getMoleculeImageServices();
+		if(moleculeImageServices != null) {
+			comboViewerServices.setInput(moleculeImageServices);
+			IMoleculeImageService moleculeImageServiceSelection = getMoleculeImageServiceSelection(moleculeImageServices);
+			if(moleculeImageServiceSelection != null) {
+				comboViewerServices.setSelection(new StructuredSelection(moleculeImageServiceSelection));
+			}
+		} else {
+			comboViewerServices.setInput(null);
+		}
+	}
+
+	private IMoleculeImageService getMoleculeImageServiceSelection(Object[] moleculeImageServices) {
+
+		IMoleculeImageService moleculeImageServiceSelection = null;
+		if(moleculeImageServices.length > 0) {
+			/*
+			 * Get the stored service preference or the
+			 * first available offline service.
+			 */
+			moleculeImageServiceSelection = getMoleculeImageServicesPreference(moleculeImageServices);
+			if(moleculeImageServiceSelection == null) {
+				List<IMoleculeImageService> moleculeImageServicesOffline = getMoleculeImageServicesOffline(moleculeImageServices);
+				if(!moleculeImageServicesOffline.isEmpty()) {
+					moleculeImageServiceSelection = moleculeImageServicesOffline.get(0);
+				}
+			}
+		}
+		//
+		return moleculeImageServiceSelection;
+	}
+
+	/*
+	 * May return null.
+	 */
+	private IMoleculeImageService getMoleculeImageServicesPreference(Object[] moleculeImageServices) {
+
+		String imageServiceSelection = PreferenceSupplier.getMoleculeImageServiceId();
+		for(int i = 0; i < moleculeImageServices.length; i++) {
+			IMoleculeImageService moleculeImageService = (IMoleculeImageService)moleculeImageServices[i];
+			if(moleculeImageService.getClass().getName().equals(imageServiceSelection)) {
+				return moleculeImageService;
+			}
+		}
+		//
+		return null;
+	}
+
+	private List<IMoleculeImageService> getMoleculeImageServicesOffline(Object[] moleculeImageServices) {
+
+		List<IMoleculeImageService> moleculeImageServicesOffline = new ArrayList<IMoleculeImageService>();
+		for(int i = 0; i < moleculeImageServices.length; i++) {
+			IMoleculeImageService moleculeImageService = (IMoleculeImageService)moleculeImageServices[i];
+			if(!moleculeImageService.isOnline()) {
+				moleculeImageServicesOffline.add(moleculeImageService);
+			}
+		}
+		//
+		return moleculeImageServicesOffline;
+	}
+
+	private void updateComboViewerInputTypes() {
+
+		comboViewerInput.setInput(ImageServiceInput.values());
+		comboViewerInput.getCombo().select(0);
 	}
 }
