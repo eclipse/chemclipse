@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads and Writes Chromatograms to CSV."
+            exportConverter="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.ChromatogramExportConverter"
+            fileExtension=".csv"
+            filterName="CSV Chromatogram (*.csv)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.csv"
+            importContentMatcher="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.FileContentMatcherChromatogram"
+            importConverter="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="true">
+      </ChromatogramSupplier>
+      <ChromatogramSupplier
+            description="Writes Chromatogram Results to Heatmap CSV."
+            exportConverter="org.eclipse.chemclipse.xxd.converter.supplier.csv.heatmap.ChromatogramExportConverter"
+            fileExtension=".mzrt.csv"
+            filterName="CSV Heatmap Result (*.mzrt.csv)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.csv.heatmap"
+            importConverter="org.eclipse.chemclipse.xxd.converter.supplier.csv.heatmap.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>      
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.csd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads and Writes Chromatograms to CSV."
+            exportConverter="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.ChromatogramExportConverter"
+            fileExtension=".csv"
+            filterName="CSV Chromatogram (*.csv)"
+            id="org.eclipse.chemclipse.csd.converter.supplier.csv"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.wsd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads and Writes Chromatograms to CSV."
+            exportConverter="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.ChromatogramExportConverter"
+            fileExtension=".csv"
+            filterName="CSV Chromatogram (*.csv)"
+            id="org.eclipse.chemclipse.csd.converter.supplier.csv"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.databaseSupplier">
+      <DatabaseSupplier
+            description="Writes mass spectra into character separated value (csv) files."
+            exportConverter="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.DatabaseExportConverter"
+            fileExtension=".csv"
+            filterName="CSV Mass Spectrum Peak List (*.csv)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.csv"
+            importConverter="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.DatabaseImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </DatabaseSupplier>
+      <DatabaseSupplier
+            description="Writes mass spectra identification values (*.csv)."
+            exportConverter="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.MassSpectrumIdentificationExportConverter"
+            fileExtension=".csv"
+            filterName="CSV Mass Spectrum Identification List (*.csv)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.csv.identification"
+            importConverter="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.MassSpectrumIdentificationImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </DatabaseSupplier>      
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.peakSupplier">
+      <PeakSupplier
+            description="Export Peaks as in CSV Format"
+            exportConverter="org.eclipse.chemclipse.xxd.converter.supplier.csv.io.core.CSVPeakConverter"
+            fileExtension=".csv"
+            filterName="CSV Peak Export (*.csv)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.csv.PeakSupplierCSV"
+            importContentMatcher="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.FileContentMatcherPeak"
+            importConverter="org.eclipse.chemclipse.xxd.converter.supplier.csv.io.core.CSVPeakConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.csv.core.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="true">
+      </PeakSupplier>
+   </extension>
+</plugin>

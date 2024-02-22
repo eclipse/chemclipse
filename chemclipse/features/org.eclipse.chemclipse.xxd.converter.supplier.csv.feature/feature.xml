@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.chemclipse.xxd.converter.supplier.csv.feature"
+      label="CSV Converter"
+      version="0.9.0.qualifier"
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding"
+      license-feature="org.eclipse.license"
+      license-feature-version="1.0.0.qualifier">
+
+   <description url="http://www.openchrom.net/plugins/converter/csv/">
+      This is a CSV chromatogram converter.
+   </description>
+
+   <copyright url="http://www.chemclipse.net">
+      Copyright (c) 2011, 2024 Lablicate GmbH.
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <plugin
+         id="org.eclipse.chemclipse.xxd.converter.supplier.csv"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.xxd.converter.supplier.csv.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

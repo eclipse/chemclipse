@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.internal.core.support;
@@ -21,11 +21,11 @@ import java.util.zip.ZipInputStream;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.TestPathHelper;
 import org.eclipse.chemclipse.model.settings.Delimiter;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-import org.eclipse.chemclipse.msd.converter.supplier.csv.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.xxd.converter.supplier.csv.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.Ignore;
 
