@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 Michael Chang.
+ * Copyright (c) 2015, 2024 Michael Chang.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -47,7 +47,7 @@ public class ChromatogramWriterWSD extends AbstractChromatogramWriter implements
 	public void writeChromatogram(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramWSDZipWriter chromatogramWriter = getChromatogramWriter(chromatogram, monitor);
-		chromatogramWriter.writeChromatogram(zipOutputStream, "", chromatogram, monitor);
+		chromatogramWriter.writeChromatogram(zipOutputStream, directoryPrefix, chromatogram, monitor);
 	}
 
 	private IChromatogramWSDZipWriter getChromatogramWriter(IChromatogramWSD chromatogram, IProgressMonitor monitor) {
