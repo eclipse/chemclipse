@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - refactor to use a TileDefinition as model
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.swt;
@@ -118,7 +118,7 @@ public class TaskTile extends Composite {
 
 		setLayout(new GridLayout(1, true));
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setBackgroundMode(SWT.INHERIT_FORCE);
+		composite.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		composite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
 		composite.setLayout(new GridLayout(2, true));
 		addControlListener(composite);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -70,7 +70,7 @@ public class TargetSettingEditor {
 	private void createControl(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackgroundMode(SWT.INHERIT_FORCE);
+		composite.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		composite.setLayout(new GridLayout(9, false));
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
@@ -275,7 +275,7 @@ public class TargetSettingEditor {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 9;
 		composite.setLayoutData(gridData);
-		composite.setBackgroundMode(SWT.INHERIT_FORCE);
+		composite.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		composite.setLayout(new GridLayout(4, false));
 		//
 		createButtonCheckOperation(composite, true);

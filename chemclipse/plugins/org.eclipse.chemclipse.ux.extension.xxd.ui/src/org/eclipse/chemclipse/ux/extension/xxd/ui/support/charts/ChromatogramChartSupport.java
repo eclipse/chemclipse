@@ -371,6 +371,8 @@ public class ChromatogramChartSupport {
 					compressionToLength = ICompressionSupport.HIGH_COMPRESSION;
 				} else if(sizeLineSeries >= 5) {
 					compressionToLength = ICompressionSupport.MEDIUM_COMPRESSION;
+				} else {
+					compressionToLength = ICompressionSupport.MEDIUM_COMPRESSION;
 				}
 				break;
 			case ICompressionSupport.COMPRESSION_NONE:
