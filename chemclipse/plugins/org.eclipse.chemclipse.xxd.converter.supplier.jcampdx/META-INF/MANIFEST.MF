@@ -22,4 +22,7 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse
-Export-Package: org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.support
+Export-Package: org.eclipse.chemclipse.csd.converter.supplier.jcampdx.io,
+ org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io,
+ org.eclipse.chemclipse.xir.converter.supplier.jcampdx.io,
+ org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.support
