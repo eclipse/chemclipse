@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2023 Lablicate GmbH.
+ * Copyright (c) 2010, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -76,7 +76,7 @@ public interface ILibraryInformation extends IClassifier, Serializable {
 	List<String> getCasNumbers();
 
 	/**
-	 * Clear cas numbers.
+	 * Clear CAS numbers.
 	 */
 	void clearCasNumbers();
 
