@@ -54,8 +54,8 @@ public class SelectViewDialog extends Dialog implements ISelectionChangedListene
 	/*
 	 * Initial table height and weight
 	 */
-	private final static int LIST_HEIGHT = 300;
-	private final static int LIST_WIDTH = 300;
+	private static final int LIST_HEIGHT = 300;
+	private static final int LIST_WIDTH = 300;
 	/*
 	 * The SWT elements
 	 */

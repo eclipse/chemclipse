@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,10 +20,10 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 @XmlRegistry
 public class ObjectFactory {
 
-	private final static QName _MzML_QNAME = new QName("http://psi.hupo.org/schema_revision/mzML_1.0.0", "mzML");
-	private final static QName _ComponentListTypeDetector_QNAME = new QName("http://psi.hupo.org/schema_revision/mzML_1.0.0", "detector");
-	private final static QName _ComponentListTypeSource_QNAME = new QName("http://psi.hupo.org/schema_revision/mzML_1.0.0", "source");
-	private final static QName _ComponentListTypeAnalyzer_QNAME = new QName("http://psi.hupo.org/schema_revision/mzML_1.0.0", "analyzer");
+	private static final QName _MzML_QNAME = new QName("http://psi.hupo.org/schema_revision/mzML_1.0.0", "mzML");
+	private static final QName _ComponentListTypeDetector_QNAME = new QName("http://psi.hupo.org/schema_revision/mzML_1.0.0", "detector");
+	private static final QName _ComponentListTypeSource_QNAME = new QName("http://psi.hupo.org/schema_revision/mzML_1.0.0", "source");
+	private static final QName _ComponentListTypeAnalyzer_QNAME = new QName("http://psi.hupo.org/schema_revision/mzML_1.0.0", "analyzer");
 
 	public ObjectFactory() {
 

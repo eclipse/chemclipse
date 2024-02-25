@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,7 @@ import javax.xml.datatype.Duration;
 @XmlRootElement(name = "scan")
 public class Scan implements Serializable {
 
-	private final static long serialVersionUID = 200L;
+	private static final long serialVersionUID = 200L;
 	private List<ScansIntegration> scansIntegration;
 	private List<PrecursorMz> precursorMz;
 	private Maldi maldi;

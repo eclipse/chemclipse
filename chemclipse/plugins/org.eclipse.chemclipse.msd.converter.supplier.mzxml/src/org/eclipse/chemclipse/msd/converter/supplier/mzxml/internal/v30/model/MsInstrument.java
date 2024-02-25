@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {"msManufacturer", "msModel", "msIonisation", "msMassAnalyzer", "msDetector", "software", "msResolution", "operator", "nameValueAndComment"})
 public class MsInstrument implements Serializable {
 
-	private final static long serialVersionUID = 300L;
+	private static final long serialVersionUID = 300L;
 	@XmlElement(required = true)
 	private MsManufacturer msManufacturer;
 	@XmlElement(required = true)

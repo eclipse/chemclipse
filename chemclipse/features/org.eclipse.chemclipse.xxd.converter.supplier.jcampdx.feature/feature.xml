@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.feature"
-      label="MSD JCAMP-DX"
+      label="JCAMP-DX"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding"
+      provider-name="ChemClipse"
+      plugin="org.eclipse.chemclipse.feature.branding"
       license-feature="org.eclipse.license"
       license-feature-version="1.0.0.qualifier">
 
@@ -21,16 +22,10 @@
 
    <plugin
          id="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
 </feature>

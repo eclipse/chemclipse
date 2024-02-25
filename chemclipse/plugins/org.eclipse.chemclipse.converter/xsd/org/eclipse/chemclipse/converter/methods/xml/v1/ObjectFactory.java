@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,7 +36,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-	private final static QName _ProcessMethod_QNAME = new QName("https://github.com/eclipse/chemclipse/processmethods/v1", "ProcessMethod");
+	private static final QName _ProcessMethod_QNAME = new QName("https://github.com/eclipse/chemclipse/processmethods/v1", "ProcessMethod");
 
 	/**
 	 * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.eclipse.chemclipse.converter.methods.xml.v1
