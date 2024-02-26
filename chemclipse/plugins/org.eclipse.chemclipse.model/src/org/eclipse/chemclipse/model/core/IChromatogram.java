@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.model.baseline.IChromatogramBaseline;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
@@ -35,6 +36,13 @@ public interface IChromatogram<T extends IPeak> extends SegmentedMeasurement, IM
 	int MAX_SCANINTERVAL = 3600000; // 1min = 1000ms * 60 (-> 1sec) * 60 (-> 1min)
 	float MIN_SCANS_PER_SECOND = 0.1f;
 	float MAX_SCANS_PER_SECOND = 20.0f;
+
+	/**
+	 * Use this map to store references to objects that are
+	 * related to the chromatogram by external processes.
+	 * The data is not saved and only valid for the current session.
+	 */
+	Map<String, Object> getProcessDataMap();
 
 	boolean isFinalized();
 

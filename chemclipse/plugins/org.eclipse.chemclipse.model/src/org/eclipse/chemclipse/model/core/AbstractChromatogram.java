@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -108,6 +108,10 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	private final PeakRTMap<T> peaks = new PeakRTMap<>();
 	private final Set<IIdentificationTarget> identificationTargets = new HashSet<>();
 	private int modCount;
+	/*
+	 * Transient
+	 */
+	private Map<String, Object> processDataMap = new HashMap<>();
 
 	/**
 	 * Constructs a normal chromatogram.
@@ -120,6 +124,12 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		baselineModelMap.put(DEFAULT_BASELINE_ID, new BaselineModel(this));
 		method = new TripleQuadMethod();
 		separationColumnIndices = SeparationColumnFactory.getSeparationColumnIndices(SeparationColumnType.DEFAULT);
+	}
+
+	@Override
+	public Map<String, Object> getProcessDataMap() {
+
+		return processDataMap;
 	}
 
 	@Override
