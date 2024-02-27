@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,38 +28,53 @@ public class MethodProcessSupport {
 		if(qualifier != null) {
 			return id + ":" + qualifier;
 		}
+		//
 		return id;
 	}
 
-	public static DataCategory[] getDataTypes(IProcessMethod method) {
+	public static DataCategory[] getDataTypes(IProcessMethod processMethod) {
 
-		Set<DataCategory> categories = method.getDataCategories();
+		Set<DataCategory> categories = processMethod.getDataCategories();
 		if(categories.isEmpty()) {
 			/*
-			 * backward compatibility
+			 * Backward Compatibility
+			 * CSD, MSD, WSD, ISD
 			 */
 			categories = Set.of(DataCategory.chromatographyCategories());
 		}
-		//
-		if(method.getNumberOfEntries() == 0) {
-			/*
-			 * When there are no entries, return the categories of the method even though this will be a noop when executed.
-			 */
-			return categories.toArray(new DataCategory[0]);
+		/*
+		 * When there are no entries, return the categories of the method
+		 * even though this will be a no operation when executed.
+		 */
+		if(processMethod.getNumberOfEntries() == 0) {
+			DataCategory[] dataCategories = categories.toArray(new DataCategory[categories.size()]);
+			Arrays.sort(dataCategories, (c1, c2) -> c1.name().compareTo(c2.name()));
+			return dataCategories;
 		}
 		/*
-		 * now we search if maybe only entries of a given type are in this method, e.g. it is possible to create a processmethod
-		 * with MSD+WSD type, but only add processors that are valid for WSD, then we want to return only WSD...
+		 * A process method could contain process entries for various scopes (single category/multiple categories):
+		 * ---
+		 * CSD (only CSD)
+		 * MSD (only MSD)
+		 * CSD, MSD
+		 * CSD, MSD, WSD
 		 */
-		Set<DataCategory> entryCategories = new HashSet<>();
-		for(IProcessEntry entry : method) {
-			for(DataCategory entryDataCategory : entry.getDataCategories()) {
-				if(categories.contains(entryDataCategory)) {
-					entryCategories.add(entryDataCategory);
+		Set<DataCategory> categorySet = new HashSet<>();
+		for(IProcessEntry processEntry : processMethod) {
+			Set<DataCategory> dataCategories = processEntry.getDataCategories();
+			if(dataCategories.size() == 1) {
+				return new DataCategory[]{dataCategories.iterator().next()};
+			} else {
+				for(DataCategory dataCategory : dataCategories) {
+					if(categories.contains(dataCategory)) {
+						categorySet.add(dataCategory);
+					}
 				}
 			}
 		}
 		//
-		return categories.toArray(new DataCategory[0]);
+		DataCategory[] dataCategories = categorySet.toArray(new DataCategory[categorySet.size()]);
+		Arrays.sort(dataCategories, (c1, c2) -> c1.name().compareTo(c2.name()));
+		return dataCategories;
 	}
 }
