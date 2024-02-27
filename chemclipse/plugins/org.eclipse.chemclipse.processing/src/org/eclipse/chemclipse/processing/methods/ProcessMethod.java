@@ -122,13 +122,15 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 		if(category == null || category.isEmpty()) {
 			return "";
 		}
+		//
 		if(resourceBundle == null) {
 			return category;
 		}
+		//
 		try {
 			return resourceBundle.getString(category);
 		} catch(MissingResourceException e) {
-			logger.warn(e);
+			// logger.warn(e);
 			return category;
 		}
 	}

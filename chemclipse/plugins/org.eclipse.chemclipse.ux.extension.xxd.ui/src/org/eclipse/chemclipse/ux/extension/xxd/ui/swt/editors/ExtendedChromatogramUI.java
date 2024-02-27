@@ -572,13 +572,13 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			/*
 			 * Dynamic Menu Items
 			 */
-			List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(this::isValidSupplier));
-			Collections.sort(suplierList, new CategoryNameComparator());
-			for(IProcessSupplier<?> supplier : suplierList) {
-				IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(supplier, processTypeSupport, this::executeSupplier);
-				cachedMenuEntries.add(cachedEntry);
-				chartSettings.addMenuEntry(cachedEntry);
-				addCommand(supplier, cachedEntry);
+			List<IProcessSupplier<?>> processSupplierList = new ArrayList<>(processTypeSupport.getSupplier(this::isValidSupplier));
+			Collections.sort(processSupplierList, new CategoryNameComparator());
+			for(IProcessSupplier<?> processSupplier : processSupplierList) {
+				IChartMenuEntry chartMenuEntry = new ProcessorSupplierMenuEntry<>(processSupplier, processTypeSupport, this::executeSupplier);
+				cachedMenuEntries.add(chartMenuEntry);
+				chartSettings.addMenuEntry(chartMenuEntry);
+				addCommand(processSupplier, chartMenuEntry);
 			}
 			/*
 			 * Apply the menu items.

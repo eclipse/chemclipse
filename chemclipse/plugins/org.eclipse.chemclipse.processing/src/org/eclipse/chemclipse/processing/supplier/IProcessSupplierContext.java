@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -58,8 +58,8 @@ public interface IProcessSupplierContext {
 			@Override
 			public boolean test(IProcessSupplier<?> processSupplier) {
 
-				for(DataCategory category : dataTypes) {
-					if(processSupplier.getSupportedDataTypes().contains(category)) {
+				for(DataCategory dataType : dataTypes) {
+					if(processSupplier.getSupportedDataTypes().contains(dataType)) {
 						return true;
 					}
 				}
@@ -68,7 +68,7 @@ public interface IProcessSupplierContext {
 		};
 	}
 
-	static Predicate<IProcessSupplier<?>> createDataCategoryPredicate(DataCategory... categories) {
+	static Predicate<IProcessSupplier<?>> createDataCategoryPredicate(DataCategory... dataCategories) {
 
 		return supplier -> {
 			if(supplier == null) {
@@ -76,7 +76,7 @@ public interface IProcessSupplierContext {
 			}
 			//
 			Set<DataCategory> supportedDataTypes = supplier.getSupportedDataTypes();
-			for(DataCategory dataCategory : categories) {
+			for(DataCategory dataCategory : dataCategories) {
 				if(supportedDataTypes.contains(dataCategory)) {
 					return true;
 				}
