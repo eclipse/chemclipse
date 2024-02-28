@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,9 +30,10 @@ import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.nebula.widgets.richtext.RichTextEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -50,19 +51,19 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 
 	private static final String MENU_CATEGORY_HEADER_ENTRIES = "Header Entries";
 	//
-	private Button buttonToolbarInfo;
+	private AtomicReference<Button> buttonToolbarInfo = new AtomicReference<>();
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
-	private Button buttonToolbarSearch;
+	private AtomicReference<Button> buttonToolbarSearch = new AtomicReference<>();
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
-	private Button buttonToolbarEdit;
+	private AtomicReference<Button> buttonToolbarEdit = new AtomicReference<>();
 	private AtomicReference<DataMapSupportUI> toolbarEdit = new AtomicReference<>();
-	private Button buttonTableEdit;
-	private Button buttonDelete;
-	//
+	private AtomicReference<Button> buttonTableEdit = new AtomicReference<>();
+	private AtomicReference<Button> buttonDelete = new AtomicReference<>();
 	private AtomicReference<HeaderDataListUI> tableViewer = new AtomicReference<>();
-	private Text textMiscellaneous;
+	private AtomicReference<Text> miscellaneousControl = new AtomicReference<>();
+	private AtomicReference<RichTextEditor> findingsControl = new AtomicReference<>();
 	//
-	private IMeasurementInfo measurementInfo;
+	private IMeasurementInfo measurementInfo = null;
 
 	public ExtendedHeaderDataUI(Composite parent, int style) {
 
@@ -91,10 +92,10 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 
 	private void initialize() {
 
-		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
-		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_EDIT, false);
-		enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
-		enableEdit(tableViewer, buttonTableEdit, IMAGE_EDIT_ENTRY, false);
+		enableToolbar(toolbarInfo, buttonToolbarInfo.get(), IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarSearch, buttonToolbarSearch.get(), IMAGE_SEARCH, TOOLTIP_EDIT, false);
+		enableToolbar(toolbarEdit, buttonToolbarEdit.get(), IMAGE_EDIT, TOOLTIP_EDIT, false);
+		enableEdit(tableViewer, buttonTableEdit.get(), IMAGE_EDIT_ENTRY, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -105,11 +106,31 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(5, false));
 		//
-		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
-		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
-		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
-		buttonTableEdit = createButtonToggleEditTable(composite, tableViewer, IMAGE_EDIT_ENTRY);
-		buttonDelete = createButtonDelete(composite);
+		createButtonToggleInfo(composite);
+		createButtonToggleSearch(composite);
+		createButtonToggleEdit(composite);
+		createButtonToggleTableEdit(composite);
+		createButtonDelete(composite);
+	}
+
+	private void createButtonToggleInfo(Composite parent) {
+
+		buttonToolbarInfo.set(createButtonToggleToolbar(parent, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO));
+	}
+
+	private void createButtonToggleSearch(Composite parent) {
+
+		buttonToolbarSearch.set(createButtonToggleToolbar(parent, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH));
+	}
+
+	private void createButtonToggleEdit(Composite parent) {
+
+		buttonToolbarEdit.set(createButtonToggleToolbar(parent, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT));
+	}
+
+	private void createButtonToggleTableEdit(Composite parent) {
+
+		buttonTableEdit.set(createButtonToggleEditTable(parent, tableViewer, IMAGE_EDIT_ENTRY));
 	}
 
 	private void createToolbarInfo(Composite parent) {
@@ -153,7 +174,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 		toolbarEdit.set(headerMapSupportUI);
 	}
 
-	private Button createButtonDelete(Composite parent) {
+	private void createButtonDelete(Composite parent) {
 
 		Button button = createButton(parent, "", "Delete the selected header entries.", IApplicationImage.IMAGE_DELETE);
 		button.addSelectionListener(new SelectionAdapter() {
@@ -165,7 +186,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 			}
 		});
 		//
-		return button;
+		buttonDelete.set(button);
 	}
 
 	private void createTabFolderSection(Composite parent) {
@@ -181,9 +202,12 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 				updateInput();
 			}
 		});
-		//
+		/*
+		 * Tabs
+		 */
 		createHeaderDataTable(tabFolder);
-		textMiscellaneous = createTextMiscellaneous(tabFolder);
+		createTextMiscellaneous(tabFolder);
+		createTextFindings(tabFolder);
 	}
 
 	private void createHeaderDataTable(TabFolder tabFolder) {
@@ -225,25 +249,45 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 		tableViewer.set(headerDataListUI);
 	}
 
-	private Text createTextMiscellaneous(TabFolder tabFolder) {
+	private void createTextMiscellaneous(TabFolder tabFolder) {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Miscellaneous");
 		//
 		Text text = new Text(tabFolder, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.WRAP);
-		text.addKeyListener(new KeyAdapter() {
+		text.addModifyListener(new ModifyListener() {
 
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void modifyText(ModifyEvent e) {
 
 				if(measurementInfo != null) {
 					measurementInfo.setMiscInfo(text.getText().trim());
 				}
 			}
 		});
-		tabItem.setControl(text);
 		//
-		return text;
+		tabItem.setControl(text);
+		miscellaneousControl.set(text);
+	}
+
+	private void createTextFindings(TabFolder tabFolder) {
+
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Findings");
+		//
+		RichTextEditor richTextEditor = new RichTextEditor(tabFolder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.WRAP);
+		richTextEditor.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+
+				if(measurementInfo != null) {
+					measurementInfo.setFindings(richTextEditor.getText().trim());
+				}
+			}
+		});
+		tabItem.setControl(richTextEditor);
+		findingsControl.set(richTextEditor);
 	}
 
 	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
@@ -337,12 +381,14 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 				tableViewer.get().getTable().select(selectionIndex);
 			}
 			/*
-			 * Miscellaneous Section
+			 * Tabs
 			 */
-			textMiscellaneous.setText(measurementInfo.getMiscInfo());
+			miscellaneousControl.get().setText(measurementInfo.getMiscInfo());
+			findingsControl.get().setText(measurementInfo.getFindings());
 		} else {
 			tableViewer.get().setInput(null);
-			textMiscellaneous.setText("");
+			miscellaneousControl.get().setText("");
+			findingsControl.get().setText("");
 		}
 	}
 
@@ -363,12 +409,12 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 
 	private void enableButtonDelete() {
 
-		buttonDelete.setEnabled(false);
+		buttonDelete.get().setEnabled(false);
 		if(measurementInfo != null) {
 			Object object = tableViewer.get().getStructuredSelection().getFirstElement();
 			if(object instanceof Map.Entry<?, ?> entry) {
 				boolean enabled = !measurementInfo.isKeyProtected(entry.getKey().toString());
-				buttonDelete.setEnabled(enabled);
+				buttonDelete.get().setEnabled(enabled);
 			}
 		}
 	}

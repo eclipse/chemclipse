@@ -109,7 +109,8 @@ Require-Bundle: org.eclipse.ui,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.13.2",
  org.apache.commons.commons-io;bundle-version="2.11.0",
  org.eclipse.chemclipse.rcp.app.ui,
- org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri;bundle-version="0.9.0"
+ org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri;bundle-version="0.9.0",
+ org.eclipse.nebula.widgets.richtext;bundle-version="1.5.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Import-Package: jakarta.annotation;version="2.1.1",

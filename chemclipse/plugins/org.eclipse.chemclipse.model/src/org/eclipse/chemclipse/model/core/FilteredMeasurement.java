@@ -64,6 +64,8 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	private Date date;
 	private String instrument;
 	private String operator;
+	private String findings;
+	//
 	private final Map<String, IMeasurementResult<?>> measurementResults = new HashMap<>(1);
 	private final Map<String, String> headerMap = new HashMap<>(1);
 	//
@@ -416,6 +418,21 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	public void setDataName(String dataName) {
 
 		this.dataName = dataName;
+	}
+
+	@Override
+	public String getFindings() {
+
+		if(findings != null) {
+			return findings;
+		}
+		return measurement.getFindings();
+	}
+
+	@Override
+	public void setFindings(String findings) {
+
+		this.findings = findings;
 	}
 
 	private void writeObject(java.io.ObjectOutputStream out) throws IOException {

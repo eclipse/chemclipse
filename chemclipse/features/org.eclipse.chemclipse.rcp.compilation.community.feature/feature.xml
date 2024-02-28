@@ -11,11 +11,11 @@
    </description>
 
    <copyright url="http://www.chemclipse.net">
-      Copyright (c) 2014, 2022 Lablicate GmbH.
+      Copyright (c) 2014, 2024 Lablicate GmbH.
    </copyright>
 
    <license url="http://www.eclipse.org/legal/epl-v10.html">
-      Copyright (c) 2014, 2022 Lablicate GmbH.
+      Copyright (c) 2014, 2024 Lablicate GmbH.
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the Eclipse Public License
 v1.0 which accompanies this distribution, and is available at
@@ -352,6 +352,10 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <plugin
          id="slf4j.api"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.nebula.widgets.richtext"
          version="0.0.0"/>
 
 </feature>
