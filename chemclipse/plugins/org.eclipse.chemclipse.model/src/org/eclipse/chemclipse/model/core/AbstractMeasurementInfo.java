@@ -29,7 +29,9 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 
 	private static final long serialVersionUID = 4247159773898302231L;
 	private static final Logger logger = Logger.getLogger(AbstractMeasurementInfo.class);
-	//
+	/*
+	 * Harmonized Header Data
+	 */
 	private static final String INSTRUMENT = "Instrument";
 	private static final String OPERATOR = "Operator";
 	private static final String DATE = "Date";
@@ -44,6 +46,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	private static final String SAMPLE_WEIGHT = "Sample Weight";
 	private static final String SAMPLE_WEIGHT_UNIT = "Sample Weight Unit";
 	private static final String DATA_NAME = "Data Name";
+	private static final String FINDINGS = "Findings";
 	//
 	private Set<String> protectKeys = new HashSet<>();
 	private Map<String, String> headerMap = new HashMap<>();
@@ -52,6 +55,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 
 	public AbstractMeasurementInfo() {
 
+		headerMap.put(INSTRUMENT, "");
 		headerMap.put(OPERATOR, "");
 		headerMap.put(DATE, dateFormat.format(new Date()));
 		headerMap.put(MISC_INFO, "");
@@ -65,7 +69,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 		headerMap.put(SAMPLE_WEIGHT, Double.toString(0.0d));
 		headerMap.put(SAMPLE_WEIGHT_UNIT, "");
 		headerMap.put(DATA_NAME, "");
-		headerMap.put(INSTRUMENT, "");
+		headerMap.put(FINDINGS, "");
 		//
 		protectKeys.addAll(headerMap.keySet());
 	}
@@ -361,5 +365,17 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 		} else {
 			putHeaderData(DATA_NAME, "");
 		}
+	}
+
+	@Override
+	public String getFindings() {
+
+		return getHeaderData(FINDINGS);
+	}
+
+	@Override
+	public void setFindings(String findings) {
+
+		putHeaderData(FINDINGS, findings != null ? findings : "");
 	}
 }

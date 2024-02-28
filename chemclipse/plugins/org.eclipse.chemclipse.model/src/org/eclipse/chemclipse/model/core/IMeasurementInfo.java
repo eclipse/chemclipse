@@ -8,7 +8,6 @@
  * 
  * Contributors:
  * Philip Wenig - initial API and implementation
- * Philip Wenig - reverted to version from 2018 ... the map must not be replaced by other map!
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -105,4 +104,8 @@ public interface IMeasurementInfo extends Serializable {
 	String getDataName();
 
 	void setDataName(String dataName);
+
+	String getFindings();
+
+	void setFindings(String findings);
 }
