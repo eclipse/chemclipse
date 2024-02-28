@@ -24,8 +24,8 @@
 </location>
 	<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 		<repository location="https://download.eclipse.org/nebula/releases/3.1.1/"/>
-		<unit id="org.eclipse.nebula.feature.feature.group" version="3.1.1.202402011804"/>
-		<unit id="org.eclipse.nebula.widgets.richtext.feature.feature.group" version="1.5.1.202402011804"/>
+		<unit id="org.eclipse.nebula.feature.feature.group" version="0.0.0"/>
+		<unit id="org.eclipse.nebula.widgets.richtext.feature.feature.group" version="0.0.0"/>
 	</location>
 	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" label="org.apache.commons" missingManifest="generate" type="Maven">
 		<dependencies>
