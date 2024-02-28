@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.xxd.converter.supplier.cml.model.v3;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
@@ -22,6 +23,8 @@ public class Yaxis {
 
 	@XmlElement(name = "array")
 	protected Array array;
+	@XmlAttribute(name = "multiplierToData")
+	protected Double multiplierToData;
 
 	public Array getArray() {
 
@@ -31,5 +34,15 @@ public class Yaxis {
 	public void setArray(Array array) {
 
 		this.array = array;
+	}
+
+	public Double getMultiplierToData() {
+
+		return multiplierToData;
+	}
+
+	public void setMultiplierToData(Double multiplierToData) {
+
+		this.multiplierToData = multiplierToData;
 	}
 }

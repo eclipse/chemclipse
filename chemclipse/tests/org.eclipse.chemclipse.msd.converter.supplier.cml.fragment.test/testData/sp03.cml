@@ -1,0 +1,25 @@
+<?xml version="1.0" standalone="yes"?>
+<spectrum id="sp03" type="massSpectrum"
+   xmlns="http://www.xml-cml.org/schema"
+   xsi:schemaLocation="http://www.xml-cml.org/schema ../../schema.xsd"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+    <metadataList>
+        <metadata name="dc:origin">D.HENNEBERG, MAX-PLANCK INSTITUTE, MULHEIM, WEST GERMANY</metadata>
+        <metadata name="dc:owner">NIST Mass Spectrometry Data Center</metadata>
+    </metadataList>
+    <sample>
+        <molecule>
+            <name convention="cas:regno">109-99-9</name>
+            <formula concise="C 4 H 8 O 1"/>
+        </molecule>
+    </sample>
+    <spectrumData>
+    <xaxis>
+        <array dataType="xsd:double" units="unit:mz">24 25 26 27 29 30 31 33 34 35 37 38 39 40 41 42 43 44 45 46 49 50 51 53 54 55 68 69 70 71 72 73 </array>
+    </xaxis>
+    <yaxis multiplierToData="1.0">
+        <array dataType="xsd:double" units="cmls:relativeAbundance">4 30 171 1545 792 21 258 5 26 10 105 165 1182 906 4060 9999 1586 325 100 3 7 11 19 27 10 6 7 20 107 2557 2868 147 </array>
+    </yaxis>
+    </spectrumData>
+</spectrum>

@@ -7,7 +7,7 @@
             description="Reads Chemical Markup Language Scans."
             exportConverter="org.eclipse.chemclipse.xir.converter.supplier.cml.converter.ScanExportConverter"
             fileExtension=".cml"
-            filterName="IR Spectroscopy (*.cml)"
+            filterName="Chemical Markup Language (*.cml)"
             id="org.eclipse.chemclipse.xir.converter.supplier.cml"
             importConverter="org.eclipse.chemclipse.xir.converter.supplier.cml.converter.ScanImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.cml.converter.MagicNumberMatcher"
