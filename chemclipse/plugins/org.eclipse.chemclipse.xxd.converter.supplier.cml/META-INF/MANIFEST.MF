@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.xxd.converter.supplier.jcampdx
+Bundle-ManifestVersion: 2
+Bundle-Name: CML
+Bundle-SymbolicName: org.eclipse.chemclipse.xxd.converter.supplier.cml;singleton:=true
+Bundle-Version: 0.9.0.qualifier
+Export-Package: org.eclipse.chemclipse.xxd.converter.supplier.cml.model.v3
+Import-Package: jakarta.xml.bind;version="4.0.0",
+ jakarta.xml.bind.annotation;version="4.0.0"
+Bundle-Activator: org.eclipse.chemclipse.xxd.converter.supplier.cml.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.chemclipse.converter
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: ChemClipse

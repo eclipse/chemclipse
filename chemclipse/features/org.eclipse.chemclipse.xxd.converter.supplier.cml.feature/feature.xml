@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.chemclipse.xxd.converter.supplier.cml.feature"
+      label="Chemical Markup Language"
+      version="0.9.0.qualifier"
+      provider-name="ChemClipse"
+      plugin="org.eclipse.chemclipse.feature.branding"
+      license-feature="org.eclipse.license"
+      license-feature-version="1.0.0.qualifier">
+
+   <description url="http://www.chemclipse.net">
+      This is a CML converter supplier.
+   </description>
+
+   <copyright url="http://www.chemclipse.net">
+      Copyright (c) 2024 Lablicate GmbH.
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <discovery label="Chemical Markup Language" url="https://xml-cml.org"/>
+   </url>
+
+   <plugin
+         id="org.eclipse.chemclipse.xxd.converter.supplier.cml"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.xir.converter.supplier.cml"
+         version="0.0.0"/>
+
+</feature>
