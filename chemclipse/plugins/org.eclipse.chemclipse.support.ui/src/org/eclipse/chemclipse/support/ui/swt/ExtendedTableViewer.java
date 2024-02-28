@@ -651,6 +651,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		 * Handle the copy to clipboard settings
 		 */
 		copyHeaderToClipboard = PreferenceSupplier.isClipboardCopyHeader(getPreferenceName(PreferenceSupplier.P_CLIPBOARD_COPY_HEADER));
+		copyValueDelimiterClipboard = getValueDelimiter();
 		copyColumnsToClipboard = PreferenceSupplier.getClipboardCopyColumns(getPreferenceName(PreferenceSupplier.P_CLIPBOARD_COPY_COLUMNS));
 		/*
 		 * Move/Width Support for Columns
@@ -705,5 +706,15 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 
 		String postfix = getClass().getName();
 		return prefix + postfix;
+	}
+
+	private ValueDelimiter getValueDelimiter() {
+
+		try {
+			String name = PreferenceSupplier.getClipboardValueDelimiter(getPreferenceName(PreferenceSupplier.P_CLIPBOARD_COPY_VALUE_DELIMITER));
+			return ValueDelimiter.valueOf(name);
+		} catch(Exception e) {
+			return ValueDelimiter.TAB;
+		}
 	}
 }
