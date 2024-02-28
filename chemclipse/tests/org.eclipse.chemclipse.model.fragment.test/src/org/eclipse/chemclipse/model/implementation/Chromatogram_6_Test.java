@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.implementation;
 
@@ -40,7 +40,7 @@ public class Chromatogram_6_Test extends TestCase {
 
 	public void test_2() {
 
-		assertEquals(14, chromatogram.getHeaderDataMap().size());
+		assertEquals(15, chromatogram.getHeaderDataMap().size());
 	}
 
 	public void test_3() {
