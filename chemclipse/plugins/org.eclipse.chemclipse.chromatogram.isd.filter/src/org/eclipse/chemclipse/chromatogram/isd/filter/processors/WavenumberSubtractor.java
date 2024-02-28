@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.isd.filter.model.WavenumberSignal;
+import org.eclipse.chemclipse.chromatogram.isd.filter.model.WavenumberSignals;
 import org.eclipse.chemclipse.chromatogram.isd.filter.settings.WavenumberSubtractorSettings;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -29,7 +31,6 @@ import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
 import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
@@ -47,8 +48,6 @@ public class WavenumberSubtractor implements IProcessTypeSupplier {
 	private static final String NAME = "Wavenumber Subtractor";
 	private static final String DESCRIPTION = "Cleans the spectra of an ISD chromatogram.";
 	//
-	private static final String LINE_DELIMITER = "\n";
-	private static final String VALUE_DELIMITER = "\t";
 	private static final double NORMALIZED_INTENSITY = 100.0d;
 
 	@Override
@@ -80,7 +79,7 @@ public class WavenumberSubtractor implements IProcessTypeSupplier {
 				SignalType signalType = getSignalType(chromatogramSelectionISD);
 				boolean nominalizeWavenumber = processSettings.isNominalizeWavenumber();
 				boolean normalizeIntensity = processSettings.isNormalizeIntensity();
-				List<ISignalXIR> subtractSignals = getSubtractSignals(processSettings.getSubtractSignals(), signalType, nominalizeWavenumber);
+				List<ISignalXIR> subtractSignals = getSubtractSignals(processSettings.getWavenumberSignals(), signalType, nominalizeWavenumber);
 				if(normalizeIntensity) {
 					normalizeIntensities(subtractSignals);
 				}
@@ -181,44 +180,32 @@ public class WavenumberSubtractor implements IProcessTypeSupplier {
 			}
 		}
 
-		private List<ISignalXIR> getSubtractSignals(String selection, SignalType signalType, boolean nominalizeWavenumber) {
+		private List<ISignalXIR> getSubtractSignals(WavenumberSignals wavenumberSignals, SignalType signalType, boolean nominalizeWavenumber) {
 
 			List<ISignalXIR> signals = new ArrayList<>();
 			//
-			String lineDelimiter = OperatingSystemUtils.getLineDelimiter();
-			String delimiter = selection.contains(lineDelimiter) ? lineDelimiter : LINE_DELIMITER;
-			String[] lines = selection.split(delimiter);
-			for(String line : lines) {
-				String[] values = line.trim().split(" ");
-				for(String value : values) {
-					String[] parts = value.trim().split(VALUE_DELIMITER);
-					if(parts.length == 2) {
-						try {
-							/*
-							 * Extract
-							 */
-							double wavenumber = Double.parseDouble(parts[0].trim());
-							double intensity = Double.parseDouble(parts[1].trim());
-							if(nominalizeWavenumber) {
-								wavenumber = CombinedScanCalculator.getWavenumber(wavenumber);
-							}
-							/*
-							 * Create Signal
-							 */
-							ISignalXIR signal;
-							switch(signalType) {
-								case FTIR:
-									signal = new SignalInfrared(wavenumber, intensity);
-									break;
-								default:
-									signal = new SignalRaman(wavenumber, intensity);
-									break;
-							}
-							signals.add(signal);
-						} catch(NumberFormatException e) {
-						}
-					}
+			for(WavenumberSignal wavenumberSignal : wavenumberSignals) {
+				/*
+				 * Optimize
+				 */
+				double wavenumber = wavenumberSignal.getWavenumber();
+				double intensity = wavenumberSignal.getIntensity();
+				if(nominalizeWavenumber) {
+					wavenumber = CombinedScanCalculator.getWavenumber(wavenumber);
 				}
+				/*
+				 * Create Signal
+				 */
+				ISignalXIR signal;
+				switch(signalType) {
+					case FTIR:
+						signal = new SignalInfrared(wavenumber, intensity);
+						break;
+					default:
+						signal = new SignalRaman(wavenumber, intensity);
+						break;
+				}
+				signals.add(signal);
 			}
 			//
 			return signals;

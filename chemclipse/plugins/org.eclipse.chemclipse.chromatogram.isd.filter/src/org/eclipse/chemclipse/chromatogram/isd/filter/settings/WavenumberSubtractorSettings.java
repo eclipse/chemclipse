@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.isd.filter.settings;
 
-import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
+import org.eclipse.chemclipse.chromatogram.isd.filter.model.WavenumberSignals;
+import org.eclipse.chemclipse.chromatogram.isd.filter.validators.WavenumberSignalsValidator;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
+import org.eclipse.chemclipse.support.settings.ValidatorSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -27,10 +29,10 @@ public class WavenumberSubtractorSettings {
 	@JsonProperty(value = "Normalize Intensity", defaultValue = "false")
 	@JsonPropertyDescription(value = "If true, the intensities are normalized first and then subtracted.")
 	private boolean normalizeIntensity = false;
-	@JsonProperty(value = "Subtract Signals", defaultValue = "")
+	@JsonProperty(value = "Wavenumber Signals", defaultValue = "")
 	@JsonPropertyDescription(value = "Use the following signals to clean the chromatogram.")
-	@StringSettingsProperty(isMultiLine = true, allowEmpty = false)
-	private String subtractSignals = "";
+	@ValidatorSettingsProperty(validator = WavenumberSignalsValidator.class)
+	private WavenumberSignals wavenumberSignals;
 
 	public boolean isNominalizeWavenumber() {
 
@@ -52,13 +54,13 @@ public class WavenumberSubtractorSettings {
 		this.normalizeIntensity = normalizeIntensity;
 	}
 
-	public String getSubtractSignals() {
+	public WavenumberSignals getWavenumberSignals() {
 
-		return subtractSignals;
+		return wavenumberSignals;
 	}
 
-	public void setSubtractSignals(String subtractSignals) {
+	public void setWavenumberSignals(WavenumberSignals wavenumberSignals) {
 
-		this.subtractSignals = subtractSignals;
+		this.wavenumberSignals = wavenumberSignals;
 	}
 }
