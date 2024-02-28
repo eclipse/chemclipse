@@ -30,26 +30,30 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class CopyToClipboardProvider {
 
-	private static final String DELIMITER = "\t"; //$NON-NLS-1$
 	private static final String LINE_BREAK = "\n"; //$NON-NLS-1$
 
 	public void copyToClipboard(Clipboard clipboard, ExtendedTableViewer extendedTableViewer) {
 
+		String valueDelimiter = extendedTableViewer.getCopyValueDelimiterClipboard().delimiter();
+		String lineDelimiter = OperatingSystemUtils.getLineDelimiter();
 		StringBuilder builder = new StringBuilder();
 		int[] columns = getColumns(extendedTableViewer);
 		/*
 		 * Header
 		 */
 		if(extendedTableViewer.isCopyHeaderToClipboard()) {
-			addHeader(extendedTableViewer, builder, columns);
+			addHeader(extendedTableViewer, builder, columns, valueDelimiter, lineDelimiter);
 		}
-		addContent(extendedTableViewer, builder, columns);
+		/*
+		 * Data
+		 */
+		addContent(extendedTableViewer, builder, columns, valueDelimiter, lineDelimiter);
 		addNoContentMessageOnDemand(builder);
 		//
 		transferToClipboard(clipboard, builder.toString());
 	}
 
-	private int[] addHeader(ExtendedTableViewer extendedTableViewer, StringBuilder builder, int[] columns) {
+	private int[] addHeader(ExtendedTableViewer extendedTableViewer, StringBuilder builder, int[] columns, String valueDelimiter, String lineDelimiter) {
 
 		String[] titles = getTitles(extendedTableViewer);
 		int size = titles.length;
@@ -60,17 +64,17 @@ public class CopyToClipboardProvider {
 				elements.add(optimizeText(titles[column]));
 			}
 		}
-		print(builder, elements, true);
+		print(builder, elements, valueDelimiter, lineDelimiter);
 		//
 		return columns;
 	}
 
-	private void addContent(ExtendedTableViewer extendedTableViewer, StringBuilder builder, int[] columns) {
+	private void addContent(ExtendedTableViewer extendedTableViewer, StringBuilder builder, int[] columns, String valueDelimiter, String lineDelimiter) {
 
 		Table table = extendedTableViewer.getTable();
 		int size = table.getColumnCount();
 		int[] indices = table.getSelectionIndices();
-		boolean addLineDelimiter = indices.length > 1;
+		lineDelimiter = indices.length > 1 ? lineDelimiter : null;
 		//
 		TableItem selection;
 		for(int index : table.getSelectionIndices()) {
@@ -84,7 +88,7 @@ public class CopyToClipboardProvider {
 					elements.add(optimizeText(selection.getText(column)));
 				}
 			}
-			print(builder, elements, addLineDelimiter);
+			print(builder, elements, valueDelimiter, lineDelimiter);
 		}
 	}
 
@@ -143,18 +147,20 @@ public class CopyToClipboardProvider {
 		return titles;
 	}
 
-	private void print(StringBuilder builder, List<String> elements, boolean addLineDelimiter) {
+	private void print(StringBuilder builder, List<String> elements, String delimiter, String lineDelimiter) {
 
 		Iterator<String> iterator = elements.iterator();
 		while(iterator.hasNext()) {
 			builder.append(iterator.next());
 			if(iterator.hasNext()) {
-				builder.append(DELIMITER);
+				builder.append(delimiter);
 			}
 		}
-		//
-		if(addLineDelimiter) {
-			builder.append(OperatingSystemUtils.getLineDelimiter());
+		/*
+		 * Line Break
+		 */
+		if(lineDelimiter != null) {
+			builder.append(lineDelimiter);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,13 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - extend API
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.support.settings.ValueDelimiter;
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -35,6 +36,10 @@ public interface IExtendedTableViewer {
 	boolean isCopyHeaderToClipboard();
 
 	void setCopyHeaderToClipboard(boolean copyHeaderToClipboard);
+
+	ValueDelimiter getCopyValueDelimiterClipboard();
+
+	void setCopyValueDelimiterClipboard(ValueDelimiter valueDelimiter);
 
 	String getCopyColumnsToClipboard();
 

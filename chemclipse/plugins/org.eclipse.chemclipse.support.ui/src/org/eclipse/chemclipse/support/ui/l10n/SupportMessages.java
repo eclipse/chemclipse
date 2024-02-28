@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Matthias Mailänder - new API and re-implementation
  * Lorenz Gerber - added wavelength entries
  *******************************************************************************/
@@ -26,6 +26,7 @@ public class SupportMessages extends NLS {
 	public static String clipboardSettings;
 	public static String copyHeaderToClipboard;
 	public static String copyHeaderToolTip;
+	public static String valueDelimiterToolTip;
 	public static String noClipboardSettingsAvailable;
 	public static String tableColumns;
 	public static String deselectAll;

@@ -20,10 +20,16 @@ import java.util.function.Consumer;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.ValueDelimiter;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
+import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.support.CopyColumnsSupport;
+import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -32,6 +38,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -46,7 +53,8 @@ public class ClipboardSettingsDialog extends Dialog {
 	private ExtendedTableViewer extendedTableViewer;
 	private List<Button> columnCheckBoxes = new ArrayList<>();
 	//
-	private boolean copyHeaderToClipboard = true;
+	private boolean copyHeader = true;
+	private ValueDelimiter valueDelimiter = ValueDelimiter.TAB;
 	private Set<Integer> columnSelections = new HashSet<>();
 
 	public ClipboardSettingsDialog(Shell shell) {
@@ -54,12 +62,17 @@ public class ClipboardSettingsDialog extends Dialog {
 		super(shell);
 	}
 
-	public boolean isCopyHeaderToClipboard() {
+	public boolean isCopyHeader() {
 
-		return copyHeaderToClipboard;
+		return copyHeader;
 	}
 
-	public String getCopyColumnsToClipboard() {
+	public ValueDelimiter getValueDelimiter() {
+
+		return valueDelimiter;
+	}
+
+	public String getColumnsSelection() {
 
 		/*
 		 * If the viewer is null or all columns are selected
@@ -108,12 +121,19 @@ public class ClipboardSettingsDialog extends Dialog {
 		composite.setLayout(new GridLayout(1, true));
 		//
 		if(extendedTableViewer != null) {
+			initialize();
 			createSettingsSection(composite);
 		} else {
 			createInfoSection(composite);
 		}
 		//
 		return composite;
+	}
+
+	private void initialize() {
+
+		copyHeader = extendedTableViewer.isCopyHeaderToClipboard();
+		valueDelimiter = extendedTableViewer.getCopyValueDelimiterClipboard();
 	}
 
 	private void createInfoSection(Composite parent) {
@@ -130,13 +150,12 @@ public class ClipboardSettingsDialog extends Dialog {
 
 	private void createButtonCopyHeader(Composite parent) {
 
-		copyHeaderToClipboard = extendedTableViewer.isCopyHeaderToClipboard();
-		createButtonCheck(parent, SupportMessages.copyHeaderToClipboard, SupportMessages.copyHeaderToolTip, copyHeaderToClipboard, new Consumer<Boolean>() {
+		createButtonCheck(parent, SupportMessages.copyHeaderToClipboard, SupportMessages.copyHeaderToolTip, copyHeader, new Consumer<Boolean>() {
 
 			@Override
 			public void accept(Boolean selection) {
 
-				copyHeaderToClipboard = selection;
+				copyHeader = selection;
 			}
 		});
 	}
@@ -145,11 +164,12 @@ public class ClipboardSettingsDialog extends Dialog {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		createLabel(composite, SupportMessages.tableColumns);
 		createButtonSelectAll(composite);
 		createButtonDeselectAll(composite);
+		createComboViewerDelimiter(composite);
 	}
 
 	private void createTableColumnsSection(Composite parent) {
@@ -278,6 +298,42 @@ public class ClipboardSettingsDialog extends Dialog {
 		});
 		//
 		return button;
+	}
+
+	private ComboViewer createComboViewerDelimiter(Composite parent) {
+
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof ValueDelimiter valueDelimiter) {
+					return valueDelimiter.label();
+				}
+				return null;
+			}
+		});
+		//
+		combo.setToolTipText(SupportMessages.valueDelimiterToolTip);
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(comboViewer.getStructuredSelection().getFirstElement() instanceof ValueDelimiter delimiter) {
+					valueDelimiter = delimiter;
+				}
+			}
+		});
+		//
+		comboViewer.setInput(ValueDelimiter.values());
+		comboViewer.setSelection(new StructuredSelection(valueDelimiter));
+		//
+		return comboViewer;
 	}
 
 	private void updateButtons(boolean selected) {

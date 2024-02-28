@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.support.preferences;
 
 import org.eclipse.chemclipse.support.Activator;
+import org.eclipse.chemclipse.support.settings.ValueDelimiter;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -26,6 +27,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	 */
 	public static final String P_CLIPBOARD_COPY_HEADER = "clipboardCopyHeader_";
 	public static final boolean DEF_CLIPBOARD_COPY_HEADER = true;
+	public static final String P_CLIPBOARD_COPY_VALUE_DELIMITER = "clipboardCopyValueDelimiter_";
+	public static final String DEF_CLIPBOARD_COPY_VALUE_DELIMITER = ValueDelimiter.TAB.name();
 	public static final String P_CLIPBOARD_COPY_COLUMNS = "clipboardCopyColumns_";
 	public static final String DEF_CLIPBOARD_COPY_COLUMNS = "";
 	public static final String P_COLUMN_ORDER = "columnOrder_";
@@ -59,6 +62,16 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static void setClipboardCopyHeader(String key, boolean value) {
 
 		INSTANCE().putBoolean(key, value);
+	}
+
+	public static String getClipboardValueDelimiter(String key) {
+
+		return INSTANCE().get(key, DEF_CLIPBOARD_COPY_VALUE_DELIMITER);
+	}
+
+	public static void setClipboardValueDelimiter(String key, String value) {
+
+		INSTANCE().put(key, value);
 	}
 
 	public static String getClipboardCopyColumns(String key) {

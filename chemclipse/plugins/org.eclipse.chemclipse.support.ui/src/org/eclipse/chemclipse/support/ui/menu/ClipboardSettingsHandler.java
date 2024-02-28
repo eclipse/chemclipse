@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,8 +37,9 @@ public class ClipboardSettingsHandler extends AbstractTableMenuEntry implements 
 		ClipboardSettingsDialog clipboardSettingsDialog = new ClipboardSettingsDialog(Display.getDefault().getActiveShell());
 		clipboardSettingsDialog.setExtendedTableViewer(extendedTableViewer);
 		if(clipboardSettingsDialog.open() == Dialog.OK) {
-			extendedTableViewer.setCopyHeaderToClipboard(clipboardSettingsDialog.isCopyHeaderToClipboard());
-			extendedTableViewer.setCopyColumnsToClipboard(clipboardSettingsDialog.getCopyColumnsToClipboard());
+			extendedTableViewer.setCopyHeaderToClipboard(clipboardSettingsDialog.isCopyHeader());
+			extendedTableViewer.setCopyValueDelimiterClipboard(clipboardSettingsDialog.getValueDelimiter());
+			extendedTableViewer.setCopyColumnsToClipboard(clipboardSettingsDialog.getColumnsSelection());
 		}
 	}
 }
