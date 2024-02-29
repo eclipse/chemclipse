@@ -30,6 +30,7 @@ import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.Chromatogra
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.ChromatogramWriter_1500;
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.ChromatogramWriter_1501;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.ChromatogramReferencesSupport;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -41,6 +42,12 @@ public class ChromatogramWriterWSD extends AbstractChromatogramWriter implements
 
 		IChromatogramWSDZipWriter chromatogramWriter = getChromatogramWriter(chromatogram, monitor);
 		chromatogramWriter.writeChromatogram(file, chromatogram, monitor);
+		/*
+		 * Export References
+		 */
+		if(PreferenceSupplier.isChromatogramExportReferencesSeparately()) {
+			ChromatogramReferencesSupport.exportReferences(file, chromatogram, monitor);
+		}
 	}
 
 	@Override

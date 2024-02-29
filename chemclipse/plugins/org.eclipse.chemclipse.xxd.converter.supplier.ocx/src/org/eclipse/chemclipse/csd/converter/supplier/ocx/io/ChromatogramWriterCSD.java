@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.Chromatogra
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramWriter_1500;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramWriter_1501;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.ChromatogramReferencesSupport;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -44,6 +45,12 @@ public class ChromatogramWriterCSD extends AbstractChromatogramWriter implements
 
 		IChromatogramCSDZipWriter chromatogramWriter = getChromatogramWriter(chromatogram, monitor);
 		chromatogramWriter.writeChromatogram(file, chromatogram, monitor);
+		/*
+		 * Export References
+		 */
+		if(PreferenceSupplier.isChromatogramExportReferencesSeparately()) {
+			ChromatogramReferencesSupport.exportReferences(file, chromatogram, monitor);
+		}
 	}
 
 	@Override

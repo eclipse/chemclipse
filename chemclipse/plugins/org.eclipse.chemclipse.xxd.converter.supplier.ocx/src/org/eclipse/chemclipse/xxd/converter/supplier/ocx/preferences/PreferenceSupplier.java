@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences;
 
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.Activator;
@@ -21,6 +22,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 
 	public static final int MIN_COMPRESSION_LEVEL = 0;
 	public static final int MAX_COMPRESSION_LEVEL = 9;
+	//
+	public static final HeaderField DEF_HEADER_FIELD = HeaderField.DATA_NAME;
 	/*
 	 * *.ocb (measurement data container)
 	 */
@@ -28,6 +31,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = IFormat.CHROMATOGRAM_VERSION_LATEST;
 	public static final String P_CHROMATOGRAM_COMPRESSION_LEVEL = "chromatogramCompressionLevel";
 	public static final int DEF_CHROMATOGRAM_COMPRESSION_LEVEL = IFormat.CHROMATOGRAM_COMPRESSION_LEVEL;
+	public static final String P_CHROMATGRAM_EXPORT_REFERENCES_SEPARATELY = "chromatogramExportReferencesSeparately";
+	public static final boolean DEF_CHROMATGRAM_EXPORT_REFERENCES_SEPARATELY = false;
+	public static final String P_CHROMATGRAM_EXPORT_REFERENCES_HEADER_FIELD = "chromatogramExportReferencesHeaderField";
+	public static final String DEF_CHROMATGRAM_EXPORT_REFERENCES_HEADER_FIELD = DEF_HEADER_FIELD.name();
 	//
 	public static final String P_FORCE_LOAD_ALTERNATE_DETECTOR = "forceLoadAlternateDetector"; // TODO REMOVE
 	public static final boolean DEF_FORCE_LOAD_ALTERNATE_DETECTOR = false;
@@ -76,6 +83,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 
 		putDefault(P_CHROMATOGRAM_VERSION_SAVE, DEF_CHROMATOGRAM_VERSION_SAVE);
 		putDefault(P_CHROMATOGRAM_COMPRESSION_LEVEL, Integer.toString(DEF_CHROMATOGRAM_COMPRESSION_LEVEL));
+		putDefault(P_CHROMATGRAM_EXPORT_REFERENCES_SEPARATELY, DEF_CHROMATGRAM_EXPORT_REFERENCES_SEPARATELY);
+		putDefault(P_CHROMATGRAM_EXPORT_REFERENCES_HEADER_FIELD, DEF_CHROMATGRAM_EXPORT_REFERENCES_HEADER_FIELD);
 		putDefault(P_FORCE_LOAD_ALTERNATE_DETECTOR, Boolean.toString(DEF_FORCE_LOAD_ALTERNATE_DETECTOR));
 		putDefault(P_USE_SCAN_PROXIES, Boolean.toString(DEF_USE_SCAN_PROXIES));
 		putDefault(P_LOAD_SCAN_PROXIES_IN_BACKGROUND, Boolean.toString(DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND));
@@ -109,6 +118,30 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static void setChromatogramCompressionLevel(int value) {
 
 		INSTANCE().putInteger(P_CHROMATOGRAM_COMPRESSION_LEVEL, value);
+	}
+
+	public static void setChromatogramExportReferencesSeparately(boolean value) {
+
+		INSTANCE().putBoolean(P_CHROMATGRAM_EXPORT_REFERENCES_SEPARATELY, value);
+	}
+
+	public static boolean isChromatogramExportReferencesSeparately() {
+
+		return INSTANCE().getBoolean(P_CHROMATGRAM_EXPORT_REFERENCES_SEPARATELY, DEF_CHROMATGRAM_EXPORT_REFERENCES_SEPARATELY);
+	}
+
+	public static void setChromatogramExportReferencesHeaderField(HeaderField headerField) {
+
+		INSTANCE().put(P_CHROMATGRAM_EXPORT_REFERENCES_HEADER_FIELD, headerField.name());
+	}
+
+	public static HeaderField getChromatogramExportReferencesHeaderField() {
+
+		try {
+			return HeaderField.valueOf(INSTANCE().get(P_CHROMATGRAM_EXPORT_REFERENCES_HEADER_FIELD, DEF_CHROMATGRAM_EXPORT_REFERENCES_HEADER_FIELD));
+		} catch(Exception e) {
+			return DEF_HEADER_FIELD;
+		}
 	}
 
 	public static String getMethodVersionSave() {
