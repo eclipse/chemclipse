@@ -14,9 +14,9 @@ package org.eclipse.chemclipse.xir.converter.supplier.cml.converter;
 import java.io.File;
 
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xir.converter.core.AbstractScanExportConverter;
 import org.eclipse.chemclipse.xir.converter.core.IScanExportConverter;
+import org.eclipse.chemclipse.xir.converter.supplier.cml.io.ScanWriter;
 import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -25,9 +25,12 @@ public class ScanExportConverter extends AbstractScanExportConverter implements 
 	@Override
 	public IProcessingInfo<File> convert(File file, ISpectrumXIR scan, IProgressMonitor monitor) {
 
-		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
-		processingInfo.addInfoMessage("CML", "Export is not available");
-		//
+		IProcessingInfo<File> processingInfo = validate(file);
+		if(!processingInfo.hasErrorMessages()) {
+			ScanWriter scanWriter = new ScanWriter();
+			scanWriter.write(file, scan, monitor);
+			processingInfo.setProcessingResult(file);
+		}
 		return processingInfo;
 	}
 }
