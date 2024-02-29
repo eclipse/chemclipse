@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,9 +15,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -26,6 +28,9 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.support.PeakQuantitations;
 import org.eclipse.chemclipse.model.support.PeakQuantitationsExtractor;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IIonTransition;
+import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
@@ -135,6 +140,7 @@ public class ExtendedChromatogramStatisticsUI extends Composite implements IExte
 			addTimeData(chromatogramSelection, dataMap);
 			addScanData(chromatogramSelection, dataMap);
 			addPeakData(chromatogramSelection, dataMap);
+			addIonTransitionData(chromatogramSelection, dataMap);
 			//
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			info = ChromatogramDataSupport.getChromatogramLabel(chromatogram);
@@ -186,6 +192,31 @@ public class ExtendedChromatogramStatisticsUI extends Composite implements IExte
 		Collections.sort(entries);
 		for(String entry : entries) {
 			dataMap.put(entry, Double.toString(summedQuantitations.get(entry)));
+		}
+	}
+
+	private void addIonTransitionData(IChromatogramSelection<?, ?> chromatogramSelection, Map<String, String> dataMap) {
+
+		IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
+		if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
+			Set<IIonTransition> ionsTransitions = chromatogramMSD.getIonTransitionSettings().getIonTransitions();
+			if(!ionsTransitions.isEmpty()) {
+				/*
+				 * Collect
+				 */
+				Set<String> transitions = new HashSet<>();
+				for(IIonTransition ionTransition : ionsTransitions) {
+					transitions.add(ScanSupport.getLabelTandemMS(ionTransition));
+				}
+				/*
+				 * Sort
+				 */
+				List<String> transitionsSorted = new ArrayList<>(transitions);
+				Collections.sort(transitionsSorted);
+				for(int i = 0; i < transitionsSorted.size(); i++) {
+					dataMap.put("Ion Transition (" + (i + 1) + ")", transitionsSorted.get(i));
+				}
+			}
 		}
 	}
 

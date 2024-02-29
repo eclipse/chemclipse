@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -16,11 +16,8 @@ package org.eclipse.chemclipse.msd.model.core;
  */
 public abstract class AbstractIonTransition implements IIonTransition {
 
-	/**
-	 * Renew the serialVersionUID any time you have changed some fields or
-	 * methods.
-	 */
 	private static final long serialVersionUID = 96311762449505536L;
+	//
 	private String compoundName = "";
 	private double q1StartIon;
 	private double q1StopIon;
@@ -185,7 +182,6 @@ public abstract class AbstractIonTransition implements IIonTransition {
 		this.dwell = dwell;
 	}
 
-	// -----------------------------equals, hashCode, toString
 	@Override
 	public boolean equals(Object otherObject) {
 
@@ -234,5 +230,4 @@ public abstract class AbstractIonTransition implements IIonTransition {
 		builder.append("]");
 		return builder.toString();
 	}
-	// -----------------------------equals, hashCode, toString
 }

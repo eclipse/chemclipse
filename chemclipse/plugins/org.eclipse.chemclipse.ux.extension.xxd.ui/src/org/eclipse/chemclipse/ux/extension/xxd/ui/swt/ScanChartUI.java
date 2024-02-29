@@ -22,9 +22,9 @@ import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
@@ -72,8 +72,6 @@ public class ScanChartUI extends ScrollableChart {
 	//
 	private int labelHighestIntensities = 5;
 	private boolean addModuloLabels = false;
-	//
-	private DecimalFormat decimalFormatQ3 = ValueFormat.getDecimalFormatEnglish("0.0");
 	//
 	private BarSeriesYComparator barSeriesIntensityComparator = new BarSeriesYComparator();
 	private Map<Double, String> customLabels = new HashMap<>();
@@ -460,12 +458,7 @@ public class ScanChartUI extends ScrollableChart {
 			 */
 			if(scanMSD.isTandemMS()) {
 				for(IIon ion : scanMSD.getIons()) {
-					IIonTransition ionTransition = ion.getIonTransition();
-					if(ionTransition != null) {
-						customLabels.put(ion.getIon(), ionTransition.getQ1Ion() + " > " + decimalFormatQ3.format(ion.getIon()) + " @" + (int)ionTransition.getCollisionEnergy());
-					} else {
-						customLabels.put(ion.getIon(), Double.toString(ion.getIon()));
-					}
+					customLabels.put(ion.getIon(), ScanSupport.getLabelTandemMS(ion));
 				}
 			}
 		}
