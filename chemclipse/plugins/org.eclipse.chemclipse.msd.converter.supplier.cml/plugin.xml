@@ -12,7 +12,7 @@
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.cml.converter.DatabaseImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.cml.converter.MagicNumberMatcher"
             importContentMatcher="org.eclipse.chemclipse.msd.converter.supplier.cml.converter.FileContentMatcher"
-            isExportable="false"
+            isExportable="true"
             isImportable="true">
       </DatabaseSupplier>
    </extension>

@@ -30,6 +30,7 @@ import jakarta.xml.bind.Unmarshaller;
 
 public class RootElement {
 
+	// both <cml><spectrum> and <spectrum> alone are valid
 	public static Spectrum getSpectrum(File file) throws SAXException, IOException, JAXBException, ParserConfigurationException {
 
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();

@@ -23,6 +23,8 @@ public class Messages extends NLS {
 	public static String fileNotReadable;
 	public static String fileIsEmpty;
 	public static String ioError;
+	public static String fileNotWriteable;
+	public static String singleSpectrum;
 	//
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
