@@ -23,6 +23,13 @@
             filterName="Chromatogram Splitter (MS/MS)"
             filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsTandemMS"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.tandemms">
-      </ChromatogramFilterSupplier>        
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filter splits a chromatogram into its high resolution reference chromatograms."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.core.ChromatogramFilterHighResMS"
+            filterName="Chromatogram Splitter (High Resolution)"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsHighResMS"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.highresms">
+      </ChromatogramFilterSupplier>              
    </extension>
 </plugin>
