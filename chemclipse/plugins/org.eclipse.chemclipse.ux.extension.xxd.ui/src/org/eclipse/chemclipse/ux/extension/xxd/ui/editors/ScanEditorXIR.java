@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -30,6 +31,7 @@ import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ScanXIRImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedXIRScanUI;
+import org.eclipse.chemclipse.xir.converter.ui.swt.InfraredSpectrumFileSupport;
 import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -122,6 +124,12 @@ public class ScanEditorXIR implements IScanEditorXIR {
 	@Override
 	public boolean saveAs() {
 
+		try {
+			InfraredSpectrumFileSupport.saveSpectrum(scanXIR);
+		} catch(NoConverterAvailableException e) {
+			return false;
+		}
+		dirtyable.setDirty(false);
 		return true;
 	}
 
