@@ -177,6 +177,7 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 			return saveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 			return false;
 		}
 		return true;
