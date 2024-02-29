@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.filter.impl.preferences;
 
 import org.eclipse.chemclipse.chromatogram.filter.Activator;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsReset;
+import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsReshape;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsSelection;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsTransform;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.PeakTargetsToReferencesSettings;
@@ -131,6 +132,11 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		filterSettings.setMz(INSTANCE().getInteger(P_TRANSFORM_MZ, DEF_TRANSFORM_MZ));
 		//
 		return filterSettings;
+	}
+
+	public static FilterSettingsReshape getFilterSettingsReshape() {
+
+		return new FilterSettingsReshape();
 	}
 
 	public static SettingsIonRounding getFilterSettingsIonRounding() {

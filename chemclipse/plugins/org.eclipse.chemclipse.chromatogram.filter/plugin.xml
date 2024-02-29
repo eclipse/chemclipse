@@ -31,6 +31,13 @@
             filterName="Chromatogram Transform"
             filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsTransform"
             id="org.eclipse.chemclipse.chromatogram.filter.transformChromatogramSelection">
-      </ChromatogramFilterSupplier>              
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filter reshapes the chromatogram."
+            filter="org.eclipse.chemclipse.chromatogram.filter.impl.ChromatogramFilterReshape"
+            filterName="Chromatogram Reshape"
+            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsReshape"
+            id="org.eclipse.chemclipse.chromatogram.filter.chromatogramReshape">
+      </ChromatogramFilterSupplier>                    
    </extension>
 </plugin>
