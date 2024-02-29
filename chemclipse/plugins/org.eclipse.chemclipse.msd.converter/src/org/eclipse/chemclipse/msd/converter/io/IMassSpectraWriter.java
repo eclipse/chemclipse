@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,7 +33,7 @@ public interface IMassSpectraWriter {
 	 * @throws FileIsNotWriteableException
 	 * @throws IOException
 	 */
-	void write(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException;
+	void write(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException;
 
 	/**
 	 * Writes the given mass spectra to the file.
@@ -45,7 +45,7 @@ public interface IMassSpectraWriter {
 	 * @throws FileIsNotWriteableException
 	 * @throws IOException
 	 */
-	void write(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException;
+	void write(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException;
 
 	/**
 	 * Writes the mass spectrum with the given file writer.

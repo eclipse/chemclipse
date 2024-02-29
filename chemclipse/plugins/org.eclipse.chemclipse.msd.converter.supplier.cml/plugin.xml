@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.databaseSupplier">
+      <DatabaseSupplier
+            description="Reads and writes Chemical Markup Language (CML) spectra."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.cml.converter.DatabaseExportConverter"
+            fileExtension=".cml"
+            filterName="Chemical Markup Language (*.cml)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.cml.library"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.cml.converter.DatabaseImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.cml.converter.MagicNumberMatcher"
+            importContentMatcher="org.eclipse.chemclipse.msd.converter.supplier.cml.converter.FileContentMatcher"
+            isExportable="true"
+            isImportable="true">
+      </DatabaseSupplier>
+   </extension>
+</plugin>
