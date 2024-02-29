@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,7 +24,7 @@ import javax.xml.datatype.Duration;
 @XmlType(name = "")
 public class Maldi implements Serializable {
 
-	private final static long serialVersionUID = 320L;
+	private static final long serialVersionUID = 320L;
 	@XmlAttribute(name = "plateID", required = true)
 	private String plateID;
 	@XmlAttribute(name = "spotID", required = true)

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,5 +20,5 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "")
 public class MsManufacturer extends OntologyEntry implements Serializable {
 
-	private final static long serialVersionUID = 310L;
+	private static final long serialVersionUID = 310L;
 }

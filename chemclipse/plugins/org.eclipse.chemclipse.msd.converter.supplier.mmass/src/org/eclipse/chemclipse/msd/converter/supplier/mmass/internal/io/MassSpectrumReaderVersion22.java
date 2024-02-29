@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -137,13 +137,13 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 			checkArray(mzArray.getAttributes());
 			mzs = decodeFloatArray(decompress(Base64.decodeBase64(mzArray.getTextContent())));
 			if(mzs.length != points) {
-				throw new IllegalArgumentException("Spectrum points does not much uncompressed mz array.");
+				throw new IllegalArgumentException("Spectrum points does not match uncompressed mz array.");
 			}
 			Node intArray = spectrum.getElementsByTagName("intArray").item(0);
 			checkArray(intArray.getAttributes());
 			intensities = decodeFloatArray(decompress(Base64.decodeBase64(intArray.getTextContent())));
 			if(intensities.length != points) {
-				throw new IllegalArgumentException("Spectrum points does not much uncompressed intensities array.");
+				throw new IllegalArgumentException("Spectrum points does not match uncompressed intensities array.");
 			}
 		}
 		for(int i = 0; i < points; i++) {

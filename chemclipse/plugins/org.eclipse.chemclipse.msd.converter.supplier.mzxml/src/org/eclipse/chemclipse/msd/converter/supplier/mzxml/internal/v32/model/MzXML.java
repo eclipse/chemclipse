@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,7 +24,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "mzXML", namespace = "http://sashimi.sourceforge.net/schema_revision/mzXML_3.2")
 public class MzXML implements Serializable {
 
-	private final static long serialVersionUID = 320L;
+	private static final long serialVersionUID = 320L;
 	@XmlElement(required = true)
 	private MsRun msRun;
 

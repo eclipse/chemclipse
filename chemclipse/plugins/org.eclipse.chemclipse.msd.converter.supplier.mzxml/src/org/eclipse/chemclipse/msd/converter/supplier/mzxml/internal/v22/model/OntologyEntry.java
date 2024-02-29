@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlSeeAlso({MsManufacturer.class, MsMassAnalyzer.class})
 public class OntologyEntry implements Serializable {
 
-	private final static long serialVersionUID = 220L;
+	private static final long serialVersionUID = 220L;
 	@XmlAttribute(name = "category", required = true)
 	private String category;
 	@XmlAttribute(name = "value", required = true)
