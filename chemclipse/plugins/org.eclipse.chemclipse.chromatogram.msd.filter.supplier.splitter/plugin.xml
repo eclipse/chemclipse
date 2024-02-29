@@ -16,6 +16,13 @@
             filterName="Chromatogram Splitter (SCAN, SIM)"
             filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsSIM"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.sim">
-      </ChromatogramFilterSupplier>      
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filter splits a chromatogram into its MS/MS reference chromatograms."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.core.ChromatogramFilterTandemMS"
+            filterName="Chromatogram Splitter (MS/MS)"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsTandemMS"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.tandemms">
+      </ChromatogramFilterSupplier>        
    </extension>
 </plugin>

@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.prefere
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsMSx;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsSIM;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsTandemMS;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 
@@ -53,5 +54,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		settings.setLimitIons(INSTANCE().getInteger(P_LIMIT_IONS_SIM, DEF_LIMIT_IONS_SIM));
 		//
 		return settings;
+	}
+
+	public static FilterSettingsTandemMS getFilterSettingsTandemMS() {
+
+		return new FilterSettingsTandemMS();
 	}
 }
