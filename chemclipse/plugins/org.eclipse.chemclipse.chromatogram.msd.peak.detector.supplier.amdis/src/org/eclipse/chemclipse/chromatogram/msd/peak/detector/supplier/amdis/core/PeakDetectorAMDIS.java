@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,8 +23,6 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.IProcessingResult;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakDetectorAMDIS<P extends IPeak, C extends IChromatogram<P>, R> extends AbstractPeakDetectorMSD<P, C, R> {
@@ -43,9 +41,6 @@ public class PeakDetectorAMDIS<P extends IPeak, C extends IChromatogram<P>, R> e
 				AmdisIdentifier identifier = new AmdisIdentifier();
 				try {
 					IProcessingResult<Void> result = identifier.calulateAndSetDeconvolutedPeaks(chromatogramSelection, settingsAMDIS, monitor);
-					if(!result.hasErrorMessages()) {
-						processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "AMDIS (extern)", "Peaks have been detected successfully."));
-					}
 					for(IProcessingMessage message : result.getMessages()) {
 						processingInfo.addMessage(message);
 					}

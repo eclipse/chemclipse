@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,13 +8,14 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - fix bug 544729 AMDIS Idnetifier misses ELU File
+ * Christoph Läubrich - fix bug 544729 AMDIS Identifier misses ELU File
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.internal.identifier;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.MessageFormat;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.runtime.IExtendedRuntimeSupport;
@@ -31,6 +32,8 @@ import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.IProcessingResult;
+import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -89,6 +92,7 @@ public class AmdisIdentifier {
 			//
 			IProcessingResult<Void> insertPeaks = PeakProcessorSupport.insertPeaks(chromatogramSelection, peaks.getPeaks(), settingsAMDIS, subMonitor.split(10));
 			result.addMessages(insertPeaks);
+			result.addMessage(new ProcessingMessage(MessageType.INFO, PreferenceSupplier.IDENTIFIER, MessageFormat.format("{0} peaks have been detected.", peaks.getPeaks().size())));
 		} finally {
 			fileChromatogram.delete();
 		}
