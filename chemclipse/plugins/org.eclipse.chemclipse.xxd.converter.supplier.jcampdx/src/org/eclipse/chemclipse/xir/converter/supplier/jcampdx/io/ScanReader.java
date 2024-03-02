@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -143,9 +143,9 @@ public class ScanReader {
 						}
 					}
 					if(absorbance) {
-						vendorScan.getScanXIR().getProcessedSignals().add(new SignalInfrared(wavenumber, y, 0));
+						vendorScan.getScanISD().getProcessedSignals().add(new SignalInfrared(wavenumber, y, 0));
 					} else if(transmission) {
-						vendorScan.getScanXIR().getProcessedSignals().add(new SignalInfrared(wavenumber, 0, y));
+						vendorScan.getScanISD().getProcessedSignals().add(new SignalInfrared(wavenumber, 0, y));
 					}
 					firstValue = false;
 				}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,7 @@ import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.chemclipse.xir.model.core.selection.IChromatogramSelectionISD;
 import org.osgi.service.component.annotations.Component;
 
@@ -77,11 +77,11 @@ public class WavenumberCalibrator implements IProcessTypeSupplier {
 					for(int scan = startScan; scan <= stopScan; scan++) {
 						IScan scanX = chromatogramISD.getScan(scan);
 						if(scanX instanceof IScanISD scanISD) {
-							List<ISignalXIR> signals = new ArrayList<>(scanISD.getProcessedSignals());
+							List<ISignalVS> signals = new ArrayList<>(scanISD.getProcessedSignals());
 							Collections.sort(signals, (s1, s2) -> Double.compare(s1.getWavenumber(), s2.getWavenumber()));
 							int sizeSignals = signals.size();
 							if(sizeWavenumbers >= sizeSignals) {
-								Iterator<ISignalXIR> iteratorSignals = signals.iterator();
+								Iterator<ISignalVS> iteratorSignals = signals.iterator();
 								Iterator<Double> iteratorWavenumbers = wavenumbers.iterator();
 								while(iteratorSignals.hasNext()) {
 									iteratorSignals.next().setWavenumber(iteratorWavenumbers.next());

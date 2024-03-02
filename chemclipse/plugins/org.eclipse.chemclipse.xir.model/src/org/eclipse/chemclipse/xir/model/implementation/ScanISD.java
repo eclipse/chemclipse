@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,23 +15,23 @@ import java.util.TreeSet;
 
 import org.eclipse.chemclipse.xir.model.core.AbstractScanISD;
 import org.eclipse.chemclipse.xir.model.core.ISignalInfrared;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.chemclipse.xir.model.core.SignalType;
 
 public class ScanISD extends AbstractScanISD {
 
 	private static final long serialVersionUID = 4840397215574246595L;
 	//
-	private TreeSet<ISignalXIR> processedSignals = new TreeSet<ISignalXIR>();
+	private TreeSet<ISignalVS> processedSignals = new TreeSet<ISignalVS>();
 
 	@Override
 	public SignalType getSignalType() {
 
 		SignalType signalType = SignalType.RAMAN;
 		//
-		ISignalXIR signalXIR = processedSignals.first();
-		if(signalXIR != null) {
-			if(signalXIR instanceof ISignalInfrared) {
+		ISignalVS signal = processedSignals.first();
+		if(signal != null) {
+			if(signal instanceof ISignalInfrared) {
 				signalType = SignalType.FTIR;
 			}
 		}
@@ -43,15 +43,15 @@ public class ScanISD extends AbstractScanISD {
 	public float getTotalSignal() {
 
 		double totalSignal = 0.0d;
-		for(ISignalXIR signalXIR : processedSignals) {
-			totalSignal += signalXIR.getIntensity();
+		for(ISignalVS signal : processedSignals) {
+			totalSignal += signal.getIntensity();
 		}
 		//
 		return (float)totalSignal;
 	}
 
 	@Override
-	public TreeSet<ISignalXIR> getProcessedSignals() {
+	public TreeSet<ISignalVS> getProcessedSignals() {
 
 		return processedSignals;
 	}

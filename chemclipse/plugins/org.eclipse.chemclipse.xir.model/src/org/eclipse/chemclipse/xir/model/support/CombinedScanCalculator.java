@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.chemclipse.xir.model.core.SignalType;
 import org.eclipse.chemclipse.xir.model.implementation.ScanISD;
 import org.eclipse.chemclipse.xir.model.implementation.SignalInfrared;
@@ -42,14 +42,14 @@ public class CombinedScanCalculator {
 	public void addSignals(IScanISD scanISD, boolean nominalizeWavenumber) {
 
 		if(scanISD != null) {
-			for(ISignalXIR signalXIR : scanISD.getProcessedSignals()) {
-				double wavenumber = nominalizeWavenumber ? getWavenumber(signalXIR.getWavenumber()) : signalXIR.getWavenumber();
+			for(ISignalVS signal : scanISD.getProcessedSignals()) {
+				double wavenumber = nominalizeWavenumber ? getWavenumber(signal.getWavenumber()) : signal.getWavenumber();
 				List<Double> intensities = combinedScan.get(wavenumber);
 				if(intensities == null) {
 					intensities = new ArrayList<>();
 					combinedScan.put(wavenumber, intensities);
 				}
-				intensities.add(signalXIR.getIntensity());
+				intensities.add(signal.getIntensity());
 			}
 		}
 	}
@@ -58,17 +58,17 @@ public class CombinedScanCalculator {
 
 		IScanISD scanISD = new ScanISD();
 		for(Double wavenumber : combinedScan.keySet()) {
-			ISignalXIR signalXIR;
+			ISignalVS signal;
 			double intensity = getIntensity(wavenumber, calculationType);
 			switch(signalType) {
 				case FTIR:
-					signalXIR = new SignalInfrared(wavenumber, intensity);
+					signal = new SignalInfrared(wavenumber, intensity);
 					break;
 				default:
-					signalXIR = new SignalRaman(wavenumber, intensity);
+					signal = new SignalRaman(wavenumber, intensity);
 					break;
 			}
-			scanISD.getProcessedSignals().add(signalXIR);
+			scanISD.getProcessedSignals().add(signal);
 		}
 		//
 		return scanISD;

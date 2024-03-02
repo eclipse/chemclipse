@@ -33,7 +33,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.chemclipse.xir.model.core.SignalType;
 import org.eclipse.chemclipse.xir.model.core.selection.IChromatogramSelectionISD;
 import org.eclipse.chemclipse.xir.model.implementation.SignalInfrared;
@@ -79,7 +79,7 @@ public class WavenumberSubtractor implements IProcessTypeSupplier {
 				SignalType signalType = getSignalType(chromatogramSelectionISD);
 				boolean nominalizeWavenumber = processSettings.isNominalizeWavenumber();
 				boolean normalizeIntensity = processSettings.isNormalizeIntensity();
-				List<ISignalXIR> subtractSignals = getSubtractSignals(processSettings.getWavenumberSignals(), signalType, nominalizeWavenumber);
+				List<ISignalVS> subtractSignals = getSubtractSignals(processSettings.getWavenumberSignals(), signalType, nominalizeWavenumber);
 				if(normalizeIntensity) {
 					normalizeIntensities(subtractSignals);
 				}
@@ -125,16 +125,16 @@ public class WavenumberSubtractor implements IProcessTypeSupplier {
 			return signalType;
 		}
 
-		private void normalizeIntensities(List<ISignalXIR> signals) {
+		private void normalizeIntensities(List<ISignalVS> signals) {
 
-			double minIntensity = signals.stream().mapToDouble(ISignalXIR::getIntensity).min().getAsDouble();
-			double maxIntensity = signals.stream().mapToDouble(ISignalXIR::getIntensity).max().getAsDouble();
+			double minIntensity = signals.stream().mapToDouble(ISignalVS::getIntensity).min().getAsDouble();
+			double maxIntensity = signals.stream().mapToDouble(ISignalVS::getIntensity).max().getAsDouble();
 			/*
 			 * Min
 			 */
 			if(minIntensity < 0) {
 				double factorMin = -NORMALIZED_INTENSITY / minIntensity;
-				for(ISignalXIR signal : signals) {
+				for(ISignalVS signal : signals) {
 					double intensity = signal.getIntensity();
 					if(intensity < 0) {
 						signal.setIntensity(factorMin * intensity);
@@ -146,7 +146,7 @@ public class WavenumberSubtractor implements IProcessTypeSupplier {
 			 */
 			if(maxIntensity > 0) {
 				double factorMax = NORMALIZED_INTENSITY / maxIntensity;
-				for(ISignalXIR signal : signals) {
+				for(ISignalVS signal : signals) {
 					double intensity = signal.getIntensity();
 					if(intensity > 0) {
 						signal.setIntensity(factorMax * intensity);
@@ -155,34 +155,34 @@ public class WavenumberSubtractor implements IProcessTypeSupplier {
 			}
 		}
 
-		private void subtract(List<ISignalXIR> signalsSubtract, IScanISD scanISD, boolean nominalizeWavenumber) {
+		private void subtract(List<ISignalVS> signalsSubtract, IScanISD scanISD, boolean nominalizeWavenumber) {
 
 			/*
 			 * Map the signals
 			 */
-			Map<Double, ISignalXIR> processedSignalsMap = new HashMap<>();
-			for(ISignalXIR signalXIR : scanISD.getProcessedSignals()) {
-				double wavenumber = nominalizeWavenumber ? CombinedScanCalculator.getWavenumber(signalXIR.getWavenumber()) : signalXIR.getWavenumber();
-				processedSignalsMap.put(wavenumber, signalXIR);
+			Map<Double, ISignalVS> processedSignalsMap = new HashMap<>();
+			for(ISignalVS signal : scanISD.getProcessedSignals()) {
+				double wavenumber = nominalizeWavenumber ? CombinedScanCalculator.getWavenumber(signal.getWavenumber()) : signal.getWavenumber();
+				processedSignalsMap.put(wavenumber, signal);
 			}
 			/*
 			 * Process
 			 */
-			Iterator<ISignalXIR> iteratorSignalsSubtract = signalsSubtract.iterator();
+			Iterator<ISignalVS> iteratorSignalsSubtract = signalsSubtract.iterator();
 			while(iteratorSignalsSubtract.hasNext()) {
-				ISignalXIR signalXIR = iteratorSignalsSubtract.next();
-				double wavenumber = signalXIR.getWavenumber();
-				ISignalXIR signal = processedSignalsMap.get(wavenumber);
-				if(signal != null) {
-					double intensity = signal.getIntensity() - signalXIR.getIntensity();
-					signal.setIntensity(intensity);
+				ISignalVS signal = iteratorSignalsSubtract.next();
+				double wavenumber = signal.getWavenumber();
+				ISignalVS processedSignal = processedSignalsMap.get(wavenumber);
+				if(processedSignal != null) {
+					double intensity = processedSignal.getIntensity() - signal.getIntensity();
+					processedSignal.setIntensity(intensity);
 				}
 			}
 		}
 
-		private List<ISignalXIR> getSubtractSignals(WavenumberSignals wavenumberSignals, SignalType signalType, boolean nominalizeWavenumber) {
+		private List<ISignalVS> getSubtractSignals(WavenumberSignals wavenumberSignals, SignalType signalType, boolean nominalizeWavenumber) {
 
-			List<ISignalXIR> signals = new ArrayList<>();
+			List<ISignalVS> signals = new ArrayList<>();
 			//
 			for(WavenumberSignal wavenumberSignal : wavenumberSignals) {
 				/*
@@ -196,7 +196,7 @@ public class WavenumberSubtractor implements IProcessTypeSupplier {
 				/*
 				 * Create Signal
 				 */
-				ISignalXIR signal;
+				ISignalVS signal;
 				switch(signalType) {
 					case FTIR:
 						signal = new SignalInfrared(wavenumber, intensity);

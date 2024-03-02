@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,17 +13,17 @@
 package org.eclipse.chemclipse.xir.model.implementation;
 
 import org.eclipse.chemclipse.model.core.AbstractSignal;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 
 /*
- * It's either FT-IR/NIR/MIR or Raman
+ * Vibrational Spectroscopy Signal: Infrared or Raman
  */
-public abstract class AbstractSignalXIR extends AbstractSignal implements ISignalXIR, Comparable<ISignalXIR> {
+public abstract class AbstractSignalVS extends AbstractSignal implements ISignalVS, Comparable<ISignalVS> {
 
 	private static final long serialVersionUID = -2575735757102126907L;
 	private double wavenumber = 0.0d; // 1/cm
 
-	public AbstractSignalXIR(double wavenumber) {
+	public AbstractSignalVS(double wavenumber) {
 
 		this.wavenumber = wavenumber;
 	}
@@ -73,21 +73,21 @@ public abstract class AbstractSignalXIR extends AbstractSignal implements ISigna
 		if(getClass() != obj.getClass()) {
 			return false;
 		}
-		AbstractSignalXIR other = (AbstractSignalXIR)obj;
+		AbstractSignalVS other = (AbstractSignalVS)obj;
 		return (Double.doubleToLongBits(wavenumber) == Double.doubleToLongBits(other.wavenumber));
 	}
 
 	@Override
 	public String toString() {
 
-		return "AbstractSignalXIR [wavenumber=" + wavenumber + "]";
+		return "AbstractSignalVS [wavenumber=" + wavenumber + "]";
 	}
 
 	@Override
-	public int compareTo(ISignalXIR signalXIR) {
+	public int compareTo(ISignalVS signal) {
 
-		if(signalXIR != null) {
-			return Double.compare(wavenumber, signalXIR.getWavenumber());
+		if(signal != null) {
+			return Double.compare(wavenumber, signal.getWavenumber());
 		} else {
 			return 0;
 		}

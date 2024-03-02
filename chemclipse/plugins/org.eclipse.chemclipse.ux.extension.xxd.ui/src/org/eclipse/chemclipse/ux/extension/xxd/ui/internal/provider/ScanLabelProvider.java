@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -269,7 +269,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	private String getISD(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof ISignalXIR scanSignal) {
+		if(element instanceof ISignalVS scanSignal) {
 			switch(columnIndex) {
 				case 0:
 					text = Double.toString(scanSignal.getWavenumber()); // decimalFormatISD.format(scanSignal.getWavenumber());

@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
@@ -175,11 +175,11 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 		double[] ySeries;
 		//
 		if(spectrumXIR != null) {
-			int size = spectrumXIR.getScanXIR().getProcessedSignals().size();
+			int size = spectrumXIR.getScanISD().getProcessedSignals().size();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
-			for(ISignalXIR scanSignal : spectrumXIR.getScanXIR().getProcessedSignals()) {
+			for(ISignalVS scanSignal : spectrumXIR.getScanISD().getProcessedSignals()) {
 				xSeries[index] = scanSignal.getWavenumber();
 				ySeries[index] = scanSignal.getIntensity();
 				index++;

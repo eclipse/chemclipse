@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,7 +26,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.xir.model.core.ISignalInfrared;
 import org.eclipse.chemclipse.xir.model.core.ISignalRaman;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -63,7 +63,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 
 		this.spectrumXIR = spectrumXIR;
 		if(spectrumXIR != null) {
-			showRawData = spectrumXIR.getScanXIR().getProcessedSignals().isEmpty();
+			showRawData = spectrumXIR.getScanISD().getProcessedSignals().isEmpty();
 		}
 		chartXIR.modifyChart(showRawData, showAbsorbance);
 		updateScan();
@@ -78,7 +78,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 			/*
 			 * Get the data.
 			 */
-			dataInfo += " | Rotation Angle: " + spectrumXIR.getScanXIR().getRotationAngle() + "°";
+			dataInfo += " | Rotation Angle: " + spectrumXIR.getScanISD().getRotationAngle() + "°";
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			ILineSeriesData lineSeriesData;
@@ -122,11 +122,11 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 		double[] ySeries;
 		//
 		if(spectrumXIR != null) {
-			int size = spectrumXIR.getScanXIR().getProcessedSignals().size();
+			int size = spectrumXIR.getScanISD().getProcessedSignals().size();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
-			for(ISignalXIR scanSignal : spectrumXIR.getScanXIR().getProcessedSignals()) {
+			for(ISignalVS scanSignal : spectrumXIR.getScanISD().getProcessedSignals()) {
 				xSeries[index] = scanSignal.getWavenumber();
 				if(scanSignal instanceof ISignalInfrared signalInfrared) {
 					if(showAbsorbance) {
@@ -153,9 +153,9 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 		//
 		if(spectrumXIR != null) {
 			if(raw) {
-				ySeries = spectrumXIR.getScanXIR().getRawSignals().clone();
+				ySeries = spectrumXIR.getScanISD().getRawSignals().clone();
 			} else {
-				ySeries = spectrumXIR.getScanXIR().getBackgroundSignals().clone();
+				ySeries = spectrumXIR.getScanISD().getBackgroundSignals().clone();
 			}
 		} else {
 			ySeries = new double[0];

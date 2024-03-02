@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 
 public class WavenumberSupport {
 
@@ -46,11 +46,11 @@ public class WavenumberSupport {
 
 		List<Integer> traces = new ArrayList<>();
 		if(scanISD != null) {
-			List<ISignalXIR> scanSignals = new ArrayList<>(scanISD.getProcessedSignals());
+			List<ISignalVS> scanSignals = new ArrayList<>(scanISD.getProcessedSignals());
 			Collections.sort(scanSignals, (i1, i2) -> Double.compare(i2.getIntensity(), i1.getIntensity()));
 			//
 			exitloop:
-			for(ISignalXIR scanSignal : scanSignals) {
+			for(ISignalVS scanSignal : scanSignals) {
 				/*
 				 * Add the trace.
 				 */
