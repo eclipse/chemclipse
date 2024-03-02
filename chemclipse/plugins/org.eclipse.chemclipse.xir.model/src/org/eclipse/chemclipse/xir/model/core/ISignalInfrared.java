@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.xir.model.core;
 
 public interface ISignalInfrared extends ISignalVS {
 
-	double getTransmission();
+	double getTransmittance();
 
-	void setTransmission(double transmission);
+	void setTransmittance(double transmission);
 
 	double getAbsorbance();
 

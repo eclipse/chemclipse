@@ -46,7 +46,7 @@ public class SignalInfrared extends AbstractSignalVS implements ISignalInfrared 
 	}
 
 	@Override
-	public double getTransmission() {
+	public double getTransmittance() {
 
 		if(transmission > 0) {
 			return transmission;
@@ -60,7 +60,7 @@ public class SignalInfrared extends AbstractSignalVS implements ISignalInfrared 
 	}
 
 	@Override
-	public void setTransmission(double transmission) {
+	public void setTransmittance(double transmission) {
 
 		this.transmission = transmission;
 	}

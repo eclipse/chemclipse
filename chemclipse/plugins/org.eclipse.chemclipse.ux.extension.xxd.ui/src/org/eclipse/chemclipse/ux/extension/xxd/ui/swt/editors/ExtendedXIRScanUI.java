@@ -132,7 +132,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 					if(showAbsorbance) {
 						ySeries[index] = signalInfrared.getAbsorbance();
 					} else {
-						ySeries[index] = signalInfrared.getTransmission();
+						ySeries[index] = signalInfrared.getTransmittance();
 					}
 				} else if(scanSignal instanceof ISignalRaman signalRaman) {
 					ySeries[index] = signalRaman.getScattering();
