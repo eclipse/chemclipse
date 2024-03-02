@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.preferences;
 
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.l10n.Messages;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.AdjacentPeakSubtraction;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.Resolution;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.Sensitivity;
@@ -55,7 +56,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("AMDIS (extern)");
+		setTitle(Messages.amdisExternal);
 		setDescription("");
 	}
 

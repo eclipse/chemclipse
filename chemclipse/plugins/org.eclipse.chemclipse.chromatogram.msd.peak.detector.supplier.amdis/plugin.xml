@@ -7,7 +7,7 @@
             description="This is the base AMDIS Peak Deconvolution"
             id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis"
             peakDetector="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.core.PeakDetectorAMDIS"
-            peakDetectorName="AMDIS (extern)"
+            peakDetectorName="%amdisExternal"
             peakDetectorSettings="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsAMDIS">
       </PeakDetector>
    </extension>
@@ -17,7 +17,7 @@
             description="Import deconvoluted data from an *.ELU file."
             id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.elu"
             peakDetector="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.core.PeakDetectorELU"
-            peakDetectorName="AMDIS [ELU] (extern)"
+            peakDetectorName="AMDIS Import"
             peakDetectorSettings="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsELU">
       </PeakDetector>
    </extension>

@@ -26,6 +26,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.core,
+ org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.l10n,
  org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model,
  org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences,
  org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings,
@@ -33,3 +34,4 @@ Export-Package: org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.a
 Import-Package: org.eclipse.chemclipse.xxd.filter.peaks,
  org.osgi.service.component.annotations;version="1.2.0"
 Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.filter.AmbiguousPeakRemoverFilter.xml
+Bundle-Localization: OSGI-INF/l10n/bundle

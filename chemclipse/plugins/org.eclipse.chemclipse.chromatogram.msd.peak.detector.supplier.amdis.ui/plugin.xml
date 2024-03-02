@@ -7,7 +7,7 @@
             category="org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui.preferences.peakDetectorPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.preferences.amdisPeakDetectorPreferencePage"
-            name="AMDIS (extern)">
+            name="%amdisExternal">
       </page>
    </extension>
    <extension
