@@ -19,6 +19,7 @@ public interface INistSupport {
 	 * able to locate the mass spectrum.
 	 */
 	String NIST_IDENTIFIER_LEGACY = "NIST";
+	String NIST_IDENTIFIER = "NIST (extern)";
 	/*
 	 * The parameter is used to run the NIST-DB in batch mode.
 	 * NIST MS Search (nistms$.exe) Command Line Options, Ver24Man.pdf, page 60
