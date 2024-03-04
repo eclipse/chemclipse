@@ -23,3 +23,4 @@ Export-Package: org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support
  org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences,
  org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime,
  org.eclipse.chemclipse.msd.identifier.supplier.nist.settings
+Bundle-Localization: OSGI-INF/l10n/bundle

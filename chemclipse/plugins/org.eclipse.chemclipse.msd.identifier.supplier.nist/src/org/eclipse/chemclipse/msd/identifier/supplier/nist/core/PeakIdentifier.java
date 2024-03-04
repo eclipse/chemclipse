@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,8 +22,8 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifi
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.model.support.LimitSupport;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support.Identifier;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.l10n.Messages;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.INistSupport;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -58,10 +58,10 @@ public class PeakIdentifier extends AbstractPeakIdentifierMSD<IPeakIdentificatio
 				IPeakIdentificationResults peakIdentificationResults = identifier.runPeakIdentification(peaksToIdentify, peakIdentifierSettings, processingInfo, monitor);
 				processingInfo.setProcessingResult(peakIdentificationResults);
 			} catch(FileNotFoundException e) {
-				processingInfo.addErrorMessage(INistSupport.NIST_DESCRIPTION, "An I/O error ocurred.");
+				processingInfo.addErrorMessage(Messages.nistDbIdentifier, "An I/O error ocurred.");
 			}
 		} else {
-			processingInfo.addErrorMessage(INistSupport.NIST_DESCRIPTION, "The settings are not of type: " + PeakIdentifierSettings.class);
+			processingInfo.addErrorMessage(Messages.nistDbIdentifier, "The settings are not of type: " + PeakIdentifierSettings.class);
 		}
 		//
 		return processingInfo;

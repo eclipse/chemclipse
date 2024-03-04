@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -50,6 +50,7 @@ import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Comp
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Compounds;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Hit;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.NistResultFileParser;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.l10n.Messages;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.HLMFilenameFilter;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.IExtendedRuntimeSupport;
@@ -654,7 +655,7 @@ public class Identifier {
 						/*
 						 * Store the peak target
 						 */
-						identificationEntry.setIdentifier(INistSupport.NIST_IDENTIFIER);
+						identificationEntry.setIdentifier(Messages.nistIdentifier);
 						peakTargets.add(identificationEntry);
 						identificationResult.add(identificationEntry);
 					}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,8 +19,6 @@ public interface INistSupport {
 	 * able to locate the mass spectrum.
 	 */
 	String NIST_IDENTIFIER_LEGACY = "NIST";
-	String NIST_IDENTIFIER = "NIST (extern)";
-	String NIST_DESCRIPTION = "NIST-DB Identifier";
 	/*
 	 * The parameter is used to run the NIST-DB in batch mode.
 	 * NIST MS Search (nistms$.exe) Command Line Options, Ver24Man.pdf, page 60

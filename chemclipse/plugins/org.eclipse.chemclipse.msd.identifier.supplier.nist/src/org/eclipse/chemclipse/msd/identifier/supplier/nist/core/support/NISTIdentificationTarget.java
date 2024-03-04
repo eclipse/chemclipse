@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.INistSupport;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.l10n.Messages;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.core.runtime.IAdaptable;
 
@@ -33,7 +33,7 @@ public class NISTIdentificationTarget extends IdentificationTarget implements IA
 	@Override
 	public String getIdentifier() {
 
-		return INistSupport.NIST_IDENTIFIER;
+		return Messages.nistIdentifier;
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2023 Lablicate GmbH.
+ * Copyright (c) 2010, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,8 +18,8 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.AbstractMassSpectrumIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support.Identifier;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.l10n.Messages;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.INistSupport;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.ScanDirectIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -44,10 +44,10 @@ public class ScanDirectIdentifier extends AbstractMassSpectrumIdentifier {
 				IMassSpectra massSpectra = identifier.runMassSpectrumIdentification(massSpectrumList, scanDirectIdentifierSettings, monitor);
 				processingInfo.setProcessingResult(massSpectra);
 			} catch(FileNotFoundException e) {
-				processingInfo.addErrorMessage(INistSupport.NIST_DESCRIPTION, "An I/O error ocurred.");
+				processingInfo.addErrorMessage(Messages.nistDbIdentifier, "An I/O error ocurred.");
 			}
 		} else {
-			processingInfo.addErrorMessage(INistSupport.NIST_DESCRIPTION, "The settings are not of type: " + ScanDirectIdentifierSettings.class);
+			processingInfo.addErrorMessage(Messages.nistDbIdentifier, "The settings are not of type: " + ScanDirectIdentifierSettings.class);
 		}
 		//
 		return processingInfo;
