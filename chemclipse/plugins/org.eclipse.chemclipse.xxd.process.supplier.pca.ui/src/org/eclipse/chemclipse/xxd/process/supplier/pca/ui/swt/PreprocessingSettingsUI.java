@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 
@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PreprocessingSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.preprocessing.CenteringMean;
@@ -107,6 +106,7 @@ public class PreprocessingSettingsUI extends Composite {
 	private void createControl() {
 
 		setLayout(new GridLayout(3, false));
+		setBackgroundMode(SWT.INHERIT_DEFAULT);
 		//
 		createLabel(this, LABEL_NORMALIZE);
 		comboViewerNormalize = createComboViewerNormalize(this);
@@ -133,7 +133,9 @@ public class PreprocessingSettingsUI extends Composite {
 		//
 		labelFormula = createLabelFormula(this);
 		canvasFormula = createCanvas(this);
-		// this combo always comes with a default
+		/*
+		 * This combo always comes with a default
+		 */
 		updateFormulaDescription(comboViewerReplacer);
 	}
 
@@ -144,6 +146,7 @@ public class PreprocessingSettingsUI extends Composite {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
 		composite.setLayoutData(gridData);
+		//
 		return createLabel(composite, "Formula:");
 	}
 
@@ -151,8 +154,8 @@ public class PreprocessingSettingsUI extends Composite {
 
 		Label label = new Label(parent, SWT.NONE);
 		label.setText(text);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		label.setLayoutData(gridData);
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
 		return label;
 	}
 
@@ -378,7 +381,6 @@ public class PreprocessingSettingsUI extends Composite {
 
 		Canvas canvas = new Canvas(parent, SWT.BORDER);
 		canvas.setToolTipText("Formula");
-		canvas.setBackground(Colors.WHITE);
 		canvas.setData(KEY_IMAGE, null);
 		//
 		GridData gridData = new GridData(GridData.FILL_BOTH);
@@ -399,6 +401,7 @@ public class PreprocessingSettingsUI extends Composite {
 					int x = (int)(dest.width / 2.0f - src.width / 2.0f);
 					int y = (int)(dest.height / 2.0f - src.height / 2.0f);
 					e.gc.drawImage(image, x, y);
+					canvas.setBackground(parent.getBackground());
 				}
 			}
 		});
