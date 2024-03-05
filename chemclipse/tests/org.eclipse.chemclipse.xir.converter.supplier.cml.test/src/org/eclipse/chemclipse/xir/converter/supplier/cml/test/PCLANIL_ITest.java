@@ -57,6 +57,6 @@ public class PCLANIL_ITest extends TestCase {
 	@Test
 	public void testSignals() {
 
-		assertEquals(1801, vendorSpectrum.getScanXIR().getProcessedSignals().size());
+		assertEquals(1801, vendorSpectrum.getScanISD().getProcessedSignals().size());
 	}
 }

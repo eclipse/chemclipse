@@ -52,7 +52,7 @@ import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swtchart.LineStyle;
@@ -531,8 +531,8 @@ public class ChromatogramChartSupport {
 				intensity = maxIntensity;
 			} else if(scan instanceof IScanISD scanISD) {
 				double maxIntensity = -Double.MAX_VALUE;
-				for(ISignalXIR signalXIR : scanISD.getProcessedSignals()) {
-					double abundance = signalXIR.getIntensity();
+				for(ISignalVS signal : scanISD.getProcessedSignals()) {
+					double abundance = signal.getIntensity();
 					if(abundance > maxIntensity) {
 						maxIntensity = abundance;
 					}
@@ -546,7 +546,7 @@ public class ChromatogramChartSupport {
 			if(scan instanceof IScanISD scanISD) {
 				Set<Integer> traces = signals.getTraces();
 				intensity = 0;
-				for(ISignalXIR scanSignal : scanISD.getProcessedSignals()) {
+				for(ISignalVS scanSignal : scanISD.getProcessedSignals()) {
 					int wavenumber = (int)Math.round(scanSignal.getWavenumber());
 					if(traces.contains(wavenumber)) {
 						intensity += scanSignal.getIntensity();
@@ -559,7 +559,7 @@ public class ChromatogramChartSupport {
 			 */
 			if(scan instanceof IScanISD scanISD) {
 				Set<Integer> traces = signals.getTraces();
-				for(ISignalXIR scanSignal : scanISD.getProcessedSignals()) {
+				for(ISignalVS scanSignal : scanISD.getProcessedSignals()) {
 					int wavenumber = (int)Math.round(scanSignal.getWavenumber());
 					if(traces.contains(wavenumber)) {
 						intensity = scanSignal.getIntensity();

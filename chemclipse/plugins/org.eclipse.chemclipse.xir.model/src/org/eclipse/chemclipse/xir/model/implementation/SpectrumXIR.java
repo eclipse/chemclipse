@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,7 @@ public class SpectrumXIR extends AbstractMeasurementInfo implements ISpectrumXIR
 	private IScanISD scanXIR = new ScanISD();
 
 	@Override
-	public IScanISD getScanXIR() {
+	public IScanISD getScanISD() {
 
 		return scanXIR;
 	}

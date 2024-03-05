@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,7 +38,7 @@ import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanWSD;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.chemclipse.xir.model.implementation.ScanISD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -139,9 +139,9 @@ public class FilterScanMerger extends AbstractChromatogramFilter {
 							if(scanNext instanceof IScanISD nextScan) {
 								IScanISD scanMerged = new ScanISD();
 								scanMerged.setRetentionTime(retentionTimeCenter);
-								Map<Double, ISignalXIR> scanSignals = getScanSignals(currentScan, nextScan);
-								for(ISignalXIR signalXIR : scanSignals.values()) {
-									scanMerged.getProcessedSignals().add(signalXIR);
+								Map<Double, ISignalVS> scanSignals = getScanSignals(currentScan, nextScan);
+								for(ISignalVS signal : scanSignals.values()) {
+									scanMerged.getProcessedSignals().add(signal);
 								}
 								scanMerged.adjustTotalSignal(totalSignalMerged);
 								scansMerged.add(scanMerged);
@@ -187,24 +187,24 @@ public class FilterScanMerger extends AbstractChromatogramFilter {
 		return scanSignals;
 	}
 
-	private Map<Double, ISignalXIR> getScanSignals(IScanISD currentScan, IScanISD nextScan) {
+	private Map<Double, ISignalVS> getScanSignals(IScanISD currentScan, IScanISD nextScan) {
 
-		Map<Double, ISignalXIR> scanSignals = new HashMap<>();
+		Map<Double, ISignalVS> scanSignals = new HashMap<>();
 		/*
 		 * Initial Scan
 		 */
-		for(ISignalXIR signalXIR : currentScan.getProcessedSignals()) {
-			scanSignals.put(signalXIR.getWavenumber(), signalXIR);
+		for(ISignalVS signal : currentScan.getProcessedSignals()) {
+			scanSignals.put(signal.getWavenumber(), signal);
 		}
 		/*
 		 * Next Scan
 		 */
-		for(ISignalXIR signalXIR : nextScan.getProcessedSignals()) {
-			ISignalXIR scanSignal = scanSignals.get(signalXIR.getWavenumber());
+		for(ISignalVS signal : nextScan.getProcessedSignals()) {
+			ISignalVS scanSignal = scanSignals.get(signal.getWavenumber());
 			if(scanSignal == null) {
-				scanSignals.put(signalXIR.getWavenumber(), signalXIR);
+				scanSignals.put(signal.getWavenumber(), signal);
 			} else {
-				scanSignal.setIntensity(scanSignal.getIntensity() + signalXIR.getIntensity());
+				scanSignal.setIntensity(scanSignal.getIntensity() + signal.getIntensity());
 			}
 		}
 		//

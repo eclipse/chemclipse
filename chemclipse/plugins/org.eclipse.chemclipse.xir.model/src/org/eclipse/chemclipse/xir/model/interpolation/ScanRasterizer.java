@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.interpolation.RasterizeCalculator;
 import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.chemclipse.xir.model.implementation.SignalInfrared;
 import org.eclipse.chemclipse.xir.model.implementation.SignalRaman;
 
@@ -47,9 +47,9 @@ public class ScanRasterizer {
 				 */
 				boolean isInfrared = true;
 				TreeMap<Float, Float> wavenumberOriginal = new TreeMap<>();
-				for(ISignalXIR signalXIR : scanISD.getProcessedSignals()) {
-					isInfrared = signalXIR instanceof SignalInfrared;
-					wavenumberOriginal.put((float)signalXIR.getWavenumber(), (float)signalXIR.getIntensity());
+				for(ISignalVS signal : scanISD.getProcessedSignals()) {
+					isInfrared = signal instanceof SignalInfrared;
+					wavenumberOriginal.put((float)signal.getWavenumber(), (float)signal.getIntensity());
 				}
 				//
 				Map<Integer, Float> wavenumbersAdjusted = RasterizeCalculator.apply(wavenumberOriginal, steps);
@@ -69,7 +69,7 @@ public class ScanRasterizer {
 		}
 	}
 
-	private static ISignalXIR getSignalXIR(boolean isInfrared, double wavenumber, double signal) {
+	private static ISignalVS getSignalXIR(boolean isInfrared, double wavenumber, double signal) {
 
 		if(isInfrared) {
 			return new SignalInfrared(wavenumber, signal);

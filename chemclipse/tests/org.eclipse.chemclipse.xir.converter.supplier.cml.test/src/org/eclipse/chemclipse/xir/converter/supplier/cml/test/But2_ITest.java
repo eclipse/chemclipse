@@ -56,6 +56,6 @@ public class But2_ITest extends TestCase {
 	@Test
 	public void testSignals() {
 
-		assertEquals(224, vendorSpectrum.getScanXIR().getProcessedSignals().size());
+		assertEquals(224, vendorSpectrum.getScanISD().getProcessedSignals().size());
 	}
 }

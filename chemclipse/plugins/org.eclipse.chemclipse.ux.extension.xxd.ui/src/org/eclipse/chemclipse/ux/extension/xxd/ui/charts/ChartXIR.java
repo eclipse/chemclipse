@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import java.util.Locale;
 
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.IAxis.Position;
@@ -115,7 +116,7 @@ public class ChartXIR extends LineChart {
 		chartSettings.getRangeRestriction().setZeroY(false);
 		chartSettings.getRangeRestriction().setForceZeroMinY(false);
 		//
-		String yLabel = isAbsorbance ? "Absorbance" : "Transmission";
+		String yLabel = isAbsorbance ? ExtensionMessages.absorbance : ExtensionMessages.transmittance;
 		setPrimaryAxisSetProcessed(chartSettings, yLabel);
 		addSecondaryAxisSetProcessed(chartSettings, yLabel);
 		applySettings(chartSettings);
@@ -124,7 +125,7 @@ public class ChartXIR extends LineChart {
 	private void setPrimaryAxisSetProcessed(IChartSettings chartSettings, String yLabel) {
 
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
-		primaryAxisSettingsX.setTitle("Wavenumber [1/cm]");
+		primaryAxisSettingsX.setTitle(ExtensionMessages.wavenumber);
 		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		if(PreferencesSupport.isDarkTheme()) {
 			primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WHITE));

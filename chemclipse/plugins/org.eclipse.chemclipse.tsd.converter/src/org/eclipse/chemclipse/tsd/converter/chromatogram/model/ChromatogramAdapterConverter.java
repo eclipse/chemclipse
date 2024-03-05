@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,7 +41,7 @@ import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.xir.converter.chromatogram.ChromatogramConverterISD;
 import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramAdapterConverter extends AbstractImportConverter {
@@ -257,11 +257,11 @@ public class ChromatogramAdapterConverter extends AbstractImportConverter {
 
 		Map<Integer, Float> intensities = new HashMap<>();
 		//
-		Iterator<ISignalXIR> iterator = scanISD.getProcessedSignals().iterator();
+		Iterator<ISignalVS> iterator = scanISD.getProcessedSignals().iterator();
 		while(iterator.hasNext()) {
-			ISignalXIR signalXIR = iterator.next();
-			int wavenumber = (int)Math.round(signalXIR.getWavenumber());
-			float intensity = (float)signalXIR.getIntensity() + intensities.getOrDefault(wavenumber, 0.0f);
+			ISignalVS signal = iterator.next();
+			int wavenumber = (int)Math.round(signal.getWavenumber());
+			float intensity = (float)signal.getIntensity() + intensities.getOrDefault(wavenumber, 0.0f);
 			intensities.put(wavenumber, intensity);
 		}
 		//

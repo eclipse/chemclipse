@@ -149,13 +149,13 @@ public class ScanReader {
 					if(!absorbances.isEmpty()) {
 						int scans = Math.min(waveNumbers.size(), absorbances.size());
 						for(int i = 0; i < scans; i++) {
-							vendorScan.getScanXIR().getProcessedSignals().add(new SignalInfrared(waveNumbers.get(i), absorbances.get(i), 0));
+							vendorScan.getScanISD().getProcessedSignals().add(new SignalInfrared(waveNumbers.get(i), absorbances.get(i), 0));
 						}
 					}
 					if(!transmittances.isEmpty()) {
 						int scans = Math.min(waveNumbers.size(), transmittances.size());
 						for(int i = 0; i < scans; i++) {
-							vendorScan.getScanXIR().getProcessedSignals().add(new SignalInfrared(waveNumbers.get(i), 0, transmittances.get(i)));
+							vendorScan.getScanISD().getProcessedSignals().add(new SignalInfrared(waveNumbers.get(i), 0, transmittances.get(i)));
 						}
 					}
 				}

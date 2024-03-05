@@ -336,6 +336,9 @@ public class ExtensionMessages extends NLS {
 	public static String literatureReference;
 	public static String noLinkIsSupplierYet;
 	public static String openInExternalBrowser;
+	public static String transmittance;
+	public static String absorbance;
+	public static String wavenumber;
 	//
 	static {
 		NLS.initializeMessages("org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.messages", ExtensionMessages.class); //$NON-NLS-1$

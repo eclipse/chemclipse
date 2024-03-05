@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.xir.converter.supplier.cml.io;
 import java.io.File;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.chemclipse.xxd.converter.supplier.cml.model.v3.Array;
 import org.eclipse.chemclipse.xxd.converter.supplier.cml.model.v3.Cml;
@@ -67,7 +67,7 @@ public class ScanWriter {
 
 		Xaxis xAxis = new Xaxis();
 		StringBuilder wavenumbers = new StringBuilder();
-		for(ISignalXIR signal : ir.getScanXIR().getProcessedSignals()) {
+		for(ISignalVS signal : ir.getScanISD().getProcessedSignals()) {
 			wavenumbers.append(signal.getWavenumber());
 			wavenumbers.append(" ");
 		}
@@ -82,7 +82,7 @@ public class ScanWriter {
 
 		Yaxis yAxis = new Yaxis();
 		StringBuilder absorbances = new StringBuilder();
-		for(ISignalXIR signal : ir.getScanXIR().getProcessedSignals()) {
+		for(ISignalVS signal : ir.getScanISD().getProcessedSignals()) {
 			absorbances.append(signal.getIntensity());
 			absorbances.append(" ");
 		}

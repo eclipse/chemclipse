@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,7 +34,7 @@ import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.swtchart.extensions.barcharts.BarSeriesData;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesData;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
@@ -171,12 +171,12 @@ public class ScanChartSupport {
 			/*
 			 * ISD
 			 */
-			TreeSet<ISignalXIR> scanSignalsISD = scanISD.getProcessedSignals();
+			TreeSet<ISignalVS> scanSignalsISD = scanISD.getProcessedSignals();
 			int size = scanSignalsISD.size();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
-			for(ISignalXIR scanSignalISD : scanSignalsISD) {
+			for(ISignalVS scanSignalISD : scanSignalsISD) {
 				xSeries[index] = scanSignalISD.getWavenumber();
 				ySeries[index] = (mirrored) ? scanSignalISD.getIntensity() * -1 : scanSignalISD.getIntensity();
 				index++;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.xir.model.implementation;
 
 import org.eclipse.chemclipse.xir.model.core.ISignalInfrared;
 
-public class SignalInfrared extends AbstractSignalXIR implements ISignalInfrared {
+public class SignalInfrared extends AbstractSignalVS implements ISignalInfrared {
 
 	private static final long serialVersionUID = -8802517559910089354L;
 	//
@@ -46,7 +46,7 @@ public class SignalInfrared extends AbstractSignalXIR implements ISignalInfrared
 	}
 
 	@Override
-	public double getTransmission() {
+	public double getTransmittance() {
 
 		if(transmission > 0) {
 			return transmission;
@@ -60,7 +60,7 @@ public class SignalInfrared extends AbstractSignalXIR implements ISignalInfrared
 	}
 
 	@Override
-	public void setTransmission(double transmission) {
+	public void setTransmittance(double transmission) {
 
 		this.transmission = transmission;
 	}

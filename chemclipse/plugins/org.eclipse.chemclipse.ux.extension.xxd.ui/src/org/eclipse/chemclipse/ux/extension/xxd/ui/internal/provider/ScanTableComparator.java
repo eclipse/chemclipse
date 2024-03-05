@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
-import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
+import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.jface.viewers.Viewer;
 
 public class ScanTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
@@ -204,15 +204,15 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 	private int getISD(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof ISignalXIR signalXIR1 && e2 instanceof ISignalXIR signalXIR2) {
+		if(e1 instanceof ISignalVS signal1 && e2 instanceof ISignalVS signal2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:
-					sortOrder = Double.compare(signalXIR2.getWavenumber(), signalXIR1.getWavenumber());
+					sortOrder = Double.compare(signal2.getWavenumber(), signal1.getWavenumber());
 					break;
 				case 1:
 				case 2: // rel. abundance == abundance
-					sortOrder = Double.compare(signalXIR2.getIntensity(), signalXIR1.getIntensity());
+					sortOrder = Double.compare(signal2.getIntensity(), signal1.getIntensity());
 					break;
 				default:
 					sortOrder = 0;

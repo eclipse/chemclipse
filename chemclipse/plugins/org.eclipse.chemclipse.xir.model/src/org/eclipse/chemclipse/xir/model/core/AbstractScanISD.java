@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -45,7 +45,7 @@ public abstract class AbstractScanISD extends AbstractScan implements IScanISD {
 		/*
 		 * Adjust signal
 		 */
-		for(ISignalXIR scanSignal : getProcessedSignals()) {
+		for(ISignalVS scanSignal : getProcessedSignals()) {
 			double intensity = scanSignal.getIntensity();
 			intensity *= correctionFactor;
 			scanSignal.setIntensity(intensity);
@@ -91,8 +91,8 @@ public abstract class AbstractScanISD extends AbstractScan implements IScanISD {
 	@Override
 	public void removeWavenumbers(Set<Integer> wavenumbers) {
 
-		List<ISignalXIR> scanSignalsRemove = new ArrayList<>();
-		for(ISignalXIR scanSignal : getProcessedSignals()) {
+		List<ISignalVS> scanSignalsRemove = new ArrayList<>();
+		for(ISignalVS scanSignal : getProcessedSignals()) {
 			int wavenumber = (int)Math.round(scanSignal.getWavenumber());
 			if(wavenumbers.contains(wavenumber)) {
 				scanSignalsRemove.add(scanSignal);
@@ -105,8 +105,8 @@ public abstract class AbstractScanISD extends AbstractScan implements IScanISD {
 	@Override
 	public void keepWavenumbers(Set<Integer> wavenumbers) {
 
-		List<ISignalXIR> scanSignalsKeep = new ArrayList<>();
-		for(ISignalXIR scanSignal : getProcessedSignals()) {
+		List<ISignalVS> scanSignalsKeep = new ArrayList<>();
+		for(ISignalVS scanSignal : getProcessedSignals()) {
 			int wavenumber = (int)Math.round(scanSignal.getWavenumber());
 			if(wavenumbers.contains(wavenumber)) {
 				scanSignalsKeep.add(scanSignal);
