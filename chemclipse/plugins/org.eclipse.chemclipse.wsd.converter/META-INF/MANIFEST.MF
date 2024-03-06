@@ -14,7 +14,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.logging;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.chemclipse.wsd.converter.chromatogram,
+Export-Package: org.eclipse.chemclipse.wsd.converter,
+ org.eclipse.chemclipse.wsd.converter.chromatogram,
+ org.eclipse.chemclipse.wsd.converter.core,
  org.eclipse.chemclipse.wsd.converter.io,
  org.eclipse.chemclipse.wsd.converter.support
 Import-Package: org.eclipse.chemclipse.support.settings.parser,
