@@ -186,10 +186,10 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 					sortOrder = Float.compare(scanSignalWSD2.getWavelength(), scanSignalWSD1.getWavelength());
 					break;
 				case 1:
-					sortOrder = Float.compare(scanSignalWSD2.getAbundance(), scanSignalWSD1.getAbundance());
+					sortOrder = Float.compare(scanSignalWSD2.getAbsorbance(), scanSignalWSD1.getAbsorbance());
 					break;
-				case 2: // rel. abundance == abundance
-					sortOrder = Float.compare(scanSignalWSD2.getAbundance(), scanSignalWSD1.getAbundance());
+				case 2: // rel. absorbance == absorbance
+					sortOrder = Float.compare(scanSignalWSD2.getAbsorbance(), scanSignalWSD1.getAbsorbance());
 					break;
 				default:
 					sortOrder = 0;

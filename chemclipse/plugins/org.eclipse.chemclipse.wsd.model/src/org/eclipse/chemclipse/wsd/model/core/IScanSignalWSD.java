@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,12 +35,12 @@ public interface IScanSignalWSD extends Serializable {
 	 * 
 	 * @return float
 	 */
-	float getAbundance();
+	float getAbsorbance();
 
 	/**
-	 * Sets an abundance value for the wavelength.
+	 * Sets an optical density value for the wavelength.
 	 * 
-	 * @param abundance
+	 * @param absorbance
 	 */
-	void setAbundance(float abundance);
+	void setAbsorbance(float absorbance);
 }

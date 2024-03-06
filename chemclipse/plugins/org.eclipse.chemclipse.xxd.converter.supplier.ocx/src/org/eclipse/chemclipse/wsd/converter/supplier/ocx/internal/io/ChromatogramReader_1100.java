@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -174,7 +174,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 				float abundance = dataInputStream.readFloat();
 				//
 				scanSignalObject.setWavelength(wavelength);
-				scanSignalObject.setAbundance(abundance);
+				scanSignalObject.setAbsorbance(abundance);
 				//
 				scanObject.addScanSignal(scanSignalObject);
 			}
@@ -226,7 +226,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 				float abundance = dataInputStream.readFloat();
 				//
 				scanSignalObject.setWavelength(wavelength);
-				scanSignalObject.setAbundance(abundance);
+				scanSignalObject.setAbsorbance(abundance);
 				//
 				scanWSD.addScanSignal(scanSignalObject);
 			}

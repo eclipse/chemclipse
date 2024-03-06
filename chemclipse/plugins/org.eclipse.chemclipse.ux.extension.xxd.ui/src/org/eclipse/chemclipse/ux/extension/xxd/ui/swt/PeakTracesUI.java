@@ -243,7 +243,7 @@ public class PeakTracesUI extends ScrollableChart {
 		List<Integer> traces = new ArrayList<>();
 		//
 		List<IScanSignalWSD> scanSignals = new ArrayList<>(scanWSD.getScanSignals());
-		Collections.sort(scanSignals, (s1, s2) -> Float.compare(s2.getAbundance(), s1.getAbundance()));
+		Collections.sort(scanSignals, (s1, s2) -> Float.compare(s2.getAbsorbance(), s1.getAbsorbance()));
 		int maxDisplayTraces = preferenceStore.getInt(PreferenceSupplier.P_MAX_DISPLAY_PEAK_TRACES);
 		//
 		exitloop:

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -47,7 +47,7 @@ public class WavelengthSupport {
 		List<Integer> traces = new ArrayList<>();
 		if(scanWSD != null) {
 			List<IScanSignalWSD> scanSignals = new ArrayList<>(scanWSD.getScanSignals());
-			Collections.sort(scanSignals, (i1, i2) -> Float.compare(i2.getAbundance(), i1.getAbundance()));
+			Collections.sort(scanSignals, (i1, i2) -> Float.compare(i2.getAbsorbance(), i1.getAbsorbance()));
 			//
 			exitloop:
 			for(IScanSignalWSD scanSignal : scanSignals) {

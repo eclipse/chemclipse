@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -79,7 +79,7 @@ public class WavelengthPercentages {
 			 */
 			for(IScanSignalWSD scanSignal : scanWSD.getScanSignals()) {
 				if(scanSignal != null) {
-					percentage = factor * scanSignal.getAbundance();
+					percentage = factor * scanSignal.getAbsorbance();
 					wavelength = (int)Math.round(scanSignal.getWavelength());
 					wavelengthDistribution.put(wavelength, percentage);
 				}

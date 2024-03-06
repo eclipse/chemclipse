@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -76,8 +76,8 @@ public class TargetBuilderWSD {
 			StringBuilder builder = new StringBuilder();
 			boolean includeIntensityPercent = targetUnknownSettings.isIncludeIntensityPercent();
 			//
-			long sizePositive = unknown.getScanSignals().stream().filter(s -> s.getAbundance() >= 0).count();
-			long sizeNegative = unknown.getScanSignals().stream().filter(s -> s.getAbundance() < 0).count();
+			long sizePositive = unknown.getScanSignals().stream().filter(s -> s.getAbsorbance() >= 0).count();
+			long sizeNegative = unknown.getScanSignals().stream().filter(s -> s.getAbsorbance() < 0).count();
 			/*
 			 * Negative, Positive, Both
 			 */
@@ -108,15 +108,15 @@ public class TargetBuilderWSD {
 		final List<IScanSignalWSD> signalsSorted;
 		//
 		if(positive) {
-			signalsSorted = new ArrayList<>(unknown.getScanSignals().stream().filter(s -> s.getAbundance() >= 0).toList());
-			Collections.sort(signalsSorted, (s1, s2) -> Double.compare(s2.getAbundance(), s1.getAbundance()));
+			signalsSorted = new ArrayList<>(unknown.getScanSignals().stream().filter(s -> s.getAbsorbance() >= 0).toList());
+			Collections.sort(signalsSorted, (s1, s2) -> Double.compare(s2.getAbsorbance(), s1.getAbsorbance()));
 		} else {
-			signalsSorted = new ArrayList<>(unknown.getScanSignals().stream().filter(s -> s.getAbundance() < 0).toList());
-			Collections.sort(signalsSorted, (s1, s2) -> Double.compare(s1.getAbundance(), s2.getAbundance()));
+			signalsSorted = new ArrayList<>(unknown.getScanSignals().stream().filter(s -> s.getAbsorbance() < 0).toList());
+			Collections.sort(signalsSorted, (s1, s2) -> Double.compare(s1.getAbsorbance(), s2.getAbsorbance()));
 		}
 		//
 		int size = (signalsSorted.size() >= numberWavelengths) ? numberWavelengths : signalsSorted.size();
-		double maxIntensity = !signalsSorted.isEmpty() ? signalsSorted.get(0).getAbundance() : 0;
+		double maxIntensity = !signalsSorted.isEmpty() ? signalsSorted.get(0).getAbsorbance() : 0;
 		final double factorMax;
 		if(positive) {
 			factorMax = maxIntensity > 0 ? (100 / maxIntensity) : 0;
@@ -132,7 +132,7 @@ public class TargetBuilderWSD {
 			builder.append((int)signal.getWavelength());
 			if(includeIntensityPercent) {
 				builder.append(UnknownTargetBuilder.DELIMITER_INTENSITY);
-				double percent = factorMax * signal.getAbundance();
+				double percent = factorMax * signal.getAbsorbance();
 				builder.append(decimalFormat.format(percent));
 			}
 			/*

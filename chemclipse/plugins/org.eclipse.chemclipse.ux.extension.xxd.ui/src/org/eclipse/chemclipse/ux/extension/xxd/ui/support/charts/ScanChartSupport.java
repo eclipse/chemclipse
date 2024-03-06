@@ -107,7 +107,7 @@ public class ScanChartSupport {
 						Optional<IScanSignalWSD> scanSignal = scanWSD.getScanSignal(trace);
 						if(scanSignal.isPresent()) {
 							xSeries.add((double)scan.getRetentionTime());
-							ySeries.add((double)scanSignal.get().getAbundance());
+							ySeries.add((double)scanSignal.get().getAbsorbance());
 						}
 					}
 				}
@@ -164,7 +164,7 @@ public class ScanChartSupport {
 			int index = 0;
 			for(IScanSignalWSD scanSignalWSD : scanSignalsWSD) {
 				xSeries[index] = scanSignalWSD.getWavelength();
-				ySeries[index] = (mirrored) ? scanSignalWSD.getAbundance() * -1 : scanSignalWSD.getAbundance();
+				ySeries[index] = (mirrored) ? scanSignalWSD.getAbsorbance() * -1 : scanSignalWSD.getAbsorbance();
 				index++;
 			}
 		} else if(scan instanceof IScanVSD scanVSD) {

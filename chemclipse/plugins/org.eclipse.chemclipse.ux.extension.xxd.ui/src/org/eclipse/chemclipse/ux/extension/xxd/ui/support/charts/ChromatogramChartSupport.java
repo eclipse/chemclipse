@@ -523,9 +523,9 @@ public class ChromatogramChartSupport {
 			if(scan instanceof IScanWSD scanWSD) {
 				float maxIntensity = -Float.MAX_VALUE;
 				for(IScanSignalWSD scanSignalWSD : scanWSD.getScanSignals()) {
-					float abundance = scanSignalWSD.getAbundance();
-					if(abundance > maxIntensity) {
-						maxIntensity = abundance;
+					float absorbance = scanSignalWSD.getAbsorbance();
+					if(absorbance > maxIntensity) {
+						maxIntensity = absorbance;
 					}
 				}
 				intensity = maxIntensity;

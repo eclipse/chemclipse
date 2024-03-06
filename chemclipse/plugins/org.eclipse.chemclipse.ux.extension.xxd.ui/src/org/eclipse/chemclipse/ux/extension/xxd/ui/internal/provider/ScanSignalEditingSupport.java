@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -61,7 +61,7 @@ public class ScanSignalEditingSupport extends EditingSupport {
 			if(element instanceof IIon ion) {
 				return Float.toString(ion.getAbundance());
 			} else if(element instanceof IScanSignalWSD scanSignalWSD) {
-				return Float.toString(scanSignalWSD.getAbundance());
+				return Float.toString(scanSignalWSD.getAbsorbance());
 			} else if(element instanceof IScanCSD scanCSD) {
 				return Float.toString(scanCSD.getTotalSignal());
 			}
@@ -83,7 +83,7 @@ public class ScanSignalEditingSupport extends EditingSupport {
 						logger.warn(e);
 					}
 				} else if(element instanceof IScanSignalWSD scanSignalWSD) {
-					scanSignalWSD.setAbundance(abundance);
+					scanSignalWSD.setAbsorbance(abundance);
 					updateTable();
 				} else if(element instanceof IScanCSD) {
 					/*

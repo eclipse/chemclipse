@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -54,7 +54,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 		 * 
 		 */
 		for(IScanSignalWSD scanSignal : scanWSD.getScanSignals()) {
-			float abundance = (scanSignal.getAbundance() / actualPercentageIntensity) * 100.0f;
+			float abundance = (scanSignal.getAbsorbance() / actualPercentageIntensity) * 100.0f;
 			scanSignals.add(new ScanSignalWSD(scanSignal.getWavelength(), abundance));
 		}
 	}
@@ -132,7 +132,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 
 		float totalSignal = 0.0f;
 		for(IScanSignalWSD scan : scanSignals) {
-			totalSignal += scan.getAbundance();
+			totalSignal += scan.getAbsorbance();
 		}
 		return totalSignal;
 	}
@@ -151,7 +151,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 			while(iterator.hasNext()) {
 				IScanSignalWSD scan = iterator.next();
 				if(useWavelength(scan, markedWavelengths)) {
-					totalSignal += scan.getAbundance();
+					totalSignal += scan.getAbsorbance();
 				}
 			}
 		}
@@ -191,9 +191,9 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 		float correctionFactor = ((base / getTotalSignal()) * totalSignal) / base;
 		float abundance;
 		for(IScanSignalWSD scanSignal : scanSignals) {
-			abundance = scanSignal.getAbundance();
+			abundance = scanSignal.getAbsorbance();
 			abundance *= correctionFactor;
-			scanSignal.setAbundance(abundance);
+			scanSignal.setAbsorbance(abundance);
 		}
 	}
 
