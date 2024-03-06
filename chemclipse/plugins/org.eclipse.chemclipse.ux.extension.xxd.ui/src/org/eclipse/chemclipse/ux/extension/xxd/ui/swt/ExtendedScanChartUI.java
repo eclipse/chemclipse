@@ -49,8 +49,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ChromatogramUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.SubtractScanWizard;
+import org.eclipse.chemclipse.vsd.model.core.IScanVSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
-import org.eclipse.chemclipse.xir.model.core.IScanISD;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -821,9 +821,9 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		} else if(scan instanceof IScanWSD) {
 			setSelectionIndex(comboDataType, ScanDataSupport.DATA_TYPES_WSD);
 			setSelectionIndex(comboSignalType, ScanDataSupport.SIGNAL_TYPES_WSD);
-		} else if(scan instanceof IScanISD) {
-			setSelectionIndex(comboDataType, ScanDataSupport.DATA_TYPES_ISD);
-			setSelectionIndex(comboSignalType, ScanDataSupport.SIGNAL_TYPES_ISD);
+		} else if(scan instanceof IScanVSD) {
+			setSelectionIndex(comboDataType, ScanDataSupport.DATA_TYPES_VSD);
+			setSelectionIndex(comboSignalType, ScanDataSupport.SIGNAL_TYPES_VSD);
 		} else {
 			comboDataType.setItems(ScanDataSupport.DATA_TYPES_DEFAULT);
 			comboDataType.select(0);

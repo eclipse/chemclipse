@@ -19,10 +19,10 @@ import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.vsd.model.core.IScanVSD;
+import org.eclipse.chemclipse.vsd.model.support.WavenumberSupport;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.WavelengthSupport;
-import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.support.WavenumberSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -43,8 +43,8 @@ public class TracesSupport {
 			traces = ScanSupport.extractTracesText(scanMSD, maxCopyTraces, sortTraces);
 		} else if(scan instanceof IScanWSD scanWSD) {
 			traces = WavelengthSupport.extractTracesText(scanWSD, maxCopyTraces, sortTraces);
-		} else if(scan instanceof IScanISD scanISD) {
-			traces = WavenumberSupport.extractTracesText(scanISD, maxCopyTraces, sortTraces);
+		} else if(scan instanceof IScanVSD scanVSD) {
+			traces = WavenumberSupport.extractTracesText(scanVSD, maxCopyTraces, sortTraces);
 		} else {
 			traces = "";
 		}
@@ -96,8 +96,8 @@ public class TracesSupport {
 			scanInstance = scanMSD;
 		} else if(scan instanceof IScanWSD scanWSD) {
 			scanInstance = scanWSD;
-		} else if(scan instanceof IScanISD scanISD) {
-			scanInstance = scanISD;
+		} else if(scan instanceof IScanVSD scanVSD) {
+			scanInstance = scanVSD;
 		}
 		//
 		return scanInstance;

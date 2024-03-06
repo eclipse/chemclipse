@@ -34,12 +34,12 @@ import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.chemclipse.vsd.model.core.IScanVSD;
+import org.eclipse.chemclipse.vsd.model.core.ISignalVSD;
+import org.eclipse.chemclipse.vsd.model.implementation.ScanVSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanWSD;
-import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalVS;
-import org.eclipse.chemclipse.xir.model.implementation.ScanISD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class FilterScanMerger extends AbstractChromatogramFilter {
@@ -132,15 +132,15 @@ public class FilterScanMerger extends AbstractChromatogramFilter {
 								scanMerged.adjustTotalSignal(totalSignalMerged);
 								scansMerged.add(scanMerged);
 							}
-						} else if(scan instanceof IScanISD currentScan) {
+						} else if(scan instanceof IScanVSD currentScan) {
 							/*
 							 * ISD
 							 */
-							if(scanNext instanceof IScanISD nextScan) {
-								IScanISD scanMerged = new ScanISD();
+							if(scanNext instanceof IScanVSD nextScan) {
+								IScanVSD scanMerged = new ScanVSD();
 								scanMerged.setRetentionTime(retentionTimeCenter);
-								Map<Double, ISignalVS> scanSignals = getScanSignals(currentScan, nextScan);
-								for(ISignalVS signal : scanSignals.values()) {
+								Map<Double, ISignalVSD> scanSignals = getScanSignals(currentScan, nextScan);
+								for(ISignalVSD signal : scanSignals.values()) {
 									scanMerged.getProcessedSignals().add(signal);
 								}
 								scanMerged.adjustTotalSignal(totalSignalMerged);
@@ -187,20 +187,20 @@ public class FilterScanMerger extends AbstractChromatogramFilter {
 		return scanSignals;
 	}
 
-	private Map<Double, ISignalVS> getScanSignals(IScanISD currentScan, IScanISD nextScan) {
+	private Map<Double, ISignalVSD> getScanSignals(IScanVSD currentScan, IScanVSD nextScan) {
 
-		Map<Double, ISignalVS> scanSignals = new HashMap<>();
+		Map<Double, ISignalVSD> scanSignals = new HashMap<>();
 		/*
 		 * Initial Scan
 		 */
-		for(ISignalVS signal : currentScan.getProcessedSignals()) {
+		for(ISignalVSD signal : currentScan.getProcessedSignals()) {
 			scanSignals.put(signal.getWavenumber(), signal);
 		}
 		/*
 		 * Next Scan
 		 */
-		for(ISignalVS signal : nextScan.getProcessedSignals()) {
-			ISignalVS scanSignal = scanSignals.get(signal.getWavenumber());
+		for(ISignalVSD signal : nextScan.getProcessedSignals()) {
+			ISignalVSD scanSignal = scanSignals.get(signal.getWavenumber());
 			if(scanSignal == null) {
 				scanSignals.put(signal.getWavenumber(), signal);
 			} else {

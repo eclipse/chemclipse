@@ -34,12 +34,12 @@ import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
+import org.eclipse.chemclipse.vsd.model.core.IChromatogramVSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.xwc.ExtractedWavelengthSignalExtractor;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignalExtractor;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
-import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -101,7 +101,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 			writeChromatogram(file, chromatogramMSD, monitor);
 		} else if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
 			writeChromatogram(file, chromatogramWSD, monitor);
-		} else if(chromatogram instanceof IChromatogramISD chromatogramISD) {
+		} else if(chromatogram instanceof IChromatogramVSD chromatogramISD) {
 			writeChromatogram(file, chromatogramISD, monitor);
 		}
 	}
@@ -157,7 +157,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 		}
 	}
 
-	private void writeChromatogram(File file, IChromatogramISD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogram(File file, IChromatogramVSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(file), CSVFormat.EXCEL)) {
 			writeTIC(csvPrinter, chromatogram);

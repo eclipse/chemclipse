@@ -131,7 +131,7 @@ public class JobReader {
 			event = filteredEventReader.nextEvent();
 			event = eventReader.nextEvent();
 			try {
-				dataType = DataType.valueOf(event.asCharacters().getData());
+				dataType = DataType.valueOf(event.asCharacters().getData(), DataType.AUTO_DETECT);
 				batchProcessJob.setDataType(dataType);
 			} catch(Exception e) {
 				logger.warn(e);

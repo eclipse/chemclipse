@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.vsd.converter.scanSupplier">
+      <ScanSupplier
+            description="Reads Chemical Markup Language Scans."
+            exportConverter="org.eclipse.chemclipse.vsd.converter.supplier.cml.converter.ScanExportConverter"
+            fileExtension=".cml"
+            filterName="Chemical Markup Language (*.cml)"
+            id="org.eclipse.chemclipse.vsd.converter.supplier.cml"
+            importConverter="org.eclipse.chemclipse.vsd.converter.supplier.cml.converter.ScanImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.cml.converter.MagicNumberMatcher"
+            importContentMatcher="org.eclipse.chemclipse.vsd.converter.supplier.cml.converter.FileContentMatcher"
+            isExportable="true"
+            isImportable="true">
+      </ScanSupplier>
+   </extension>
+</plugin>

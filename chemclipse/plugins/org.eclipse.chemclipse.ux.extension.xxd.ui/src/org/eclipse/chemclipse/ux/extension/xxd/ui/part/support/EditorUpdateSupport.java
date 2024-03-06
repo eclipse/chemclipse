@@ -27,9 +27,9 @@ import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramProjectEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IQuantitationDatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
-import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorXIR;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorVSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
+import org.eclipse.chemclipse.vsd.model.core.ISpectrumVSD;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
@@ -127,9 +127,9 @@ public class EditorUpdateSupport {
 		return dataSelections;
 	}
 
-	public List<ISpectrumXIR> getScanSelectionsXIR() {
+	public List<ISpectrumVSD> getScanSelectionsXIR() {
 
-		List<ISpectrumXIR> dataNMRSelections = new ArrayList<>();
+		List<ISpectrumVSD> dataNMRSelections = new ArrayList<>();
 		if(partService != null) {
 			/*
 			 * TODO: see message
@@ -142,8 +142,8 @@ public class EditorUpdateSupport {
 						/*
 						 * XIR
 						 */
-						ISpectrumXIR selection = null;
-						if(object instanceof IScanEditorXIR editor) {
+						ISpectrumVSD selection = null;
+						if(object instanceof IScanEditorVSD editor) {
 							selection = editor.getScanSelection();
 						}
 						//

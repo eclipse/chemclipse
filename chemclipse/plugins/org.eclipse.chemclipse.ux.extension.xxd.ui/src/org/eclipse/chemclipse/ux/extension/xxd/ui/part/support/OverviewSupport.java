@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,8 +27,8 @@ import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.vsd.converter.core.ScanConverterVSD;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
-import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class OverviewSupport {
@@ -108,11 +108,11 @@ public class OverviewSupport {
 						return fireUpdate(list.get(0));
 					}
 				}
-			} else if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_RAWFILE)) {
+			} else if(topic.equals(IChemClipseEvents.TOPIC_SCAN_VSD_UPDATE_RAWFILE)) {
 				/*
 				 * XIR
 				 */
-				IProcessingInfo<?> processingInfo = ScanConverterXIR.convert(file, new NullProgressMonitor());
+				IProcessingInfo<?> processingInfo = ScanConverterVSD.convert(file, new NullProgressMonitor());
 				Object data = processingInfo.getProcessingResult();
 				if(data instanceof IMeasurementInfo) {
 					return fireUpdate(data);
@@ -180,13 +180,13 @@ public class OverviewSupport {
 		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE);
 		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE);
 		topics.add(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_RAWFILE);
-		topics.add(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_RAWFILE);
+		topics.add(IChemClipseEvents.TOPIC_SCAN_VSD_UPDATE_RAWFILE);
 		topics.add(IChemClipseEvents.TOPIC_MASS_SPECTRUM_UPDATE_RAWFILE);
 		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW);
 		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW);
 		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW);
 		topics.add(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_OVERVIEW);
-		topics.add(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_OVERVIEW);
+		topics.add(IChemClipseEvents.TOPIC_SCAN_VSD_UPDATE_OVERVIEW);
 		topics.add(IChemClipseEvents.TOPIC_MASS_SPECTRUM_UPDATE_OVERVIEW);
 		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE);
 	}

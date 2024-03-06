@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,10 +23,10 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
+import org.eclipse.chemclipse.vsd.model.core.IScanVSD;
+import org.eclipse.chemclipse.vsd.model.implementation.ScanVSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanWSD;
-import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.implementation.ScanISD;
 
 public class GapFiller {
 
@@ -131,8 +131,8 @@ public class GapFiller {
 			scan = new VendorMassSpectrum();
 		} else if(scanReference instanceof IScanWSD) {
 			scan = new ScanWSD();
-		} else if(scanReference instanceof IScanISD) {
-			scan = new ScanISD();
+		} else if(scanReference instanceof IScanVSD) {
+			scan = new ScanVSD();
 		}
 		//
 		if(scan != null) {

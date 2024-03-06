@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,9 +25,9 @@ import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.processing.converter.AbstractSupplierFileIdentifier;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.vsd.converter.chromatogram.ChromatogramConverterVSD;
+import org.eclipse.chemclipse.vsd.converter.core.ScanConverterVSD;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
-import org.eclipse.chemclipse.xir.converter.chromatogram.ChromatogramConverterISD;
-import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 
 public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 
@@ -55,11 +55,11 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 			case WSD:
 				supplier = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport().getSupplier();
 				break;
-			case ISD:
-				supplier = ChromatogramConverterISD.getInstance().getChromatogramConverterSupport().getSupplier();
+			case VSD:
+				supplier = ChromatogramConverterVSD.getInstance().getChromatogramConverterSupport().getSupplier();
 				break;
-			case XIR:
-				supplier = ScanConverterXIR.getScanConverterSupport().getSupplier();
+			case SCAN_VSD:
+				supplier = ScanConverterVSD.getScanConverterSupport().getSupplier();
 				break;
 			case NMR:
 				supplier = ScanConverterNMR.getScanConverterSupport().getSupplier();
@@ -98,11 +98,11 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 			case WSD:
 				type = TYPE_WSD;
 				break;
-			case ISD:
-				type = TYPE_ISD;
+			case VSD:
+				type = TYPE_VSD;
 				break;
-			case XIR:
-				type = TYPE_XIR;
+			case SCAN_VSD:
+				type = TYPE_SCAN_VSD;
 				break;
 			case NMR:
 				type = TYPE_NMR;

@@ -38,8 +38,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
+import org.eclipse.chemclipse.vsd.model.core.IScanVSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
-import org.eclipse.chemclipse.xir.model.core.IScanISD;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
@@ -315,8 +315,8 @@ public class ScanChartUI extends ScrollableChart {
 			forceZeroY = true; // Only 1 signal contained.
 		} else if(scan instanceof IScanWSD scanWSD) {
 			forceZeroY = (scanWSD.getNumberOfScanSignals() == 1);
-		} else if(scan instanceof IScanISD scanISD) {
-			forceZeroY = (scanISD.getProcessedSignals().size() == 1);
+		} else if(scan instanceof IScanVSD scanVSD) {
+			forceZeroY = (scanVSD.getProcessedSignals().size() == 1);
 		}
 		return forceZeroY;
 	}
@@ -380,8 +380,8 @@ public class ScanChartUI extends ScrollableChart {
 				usedDataType = DataType.CSD;
 			} else if(scan instanceof IScanWSD) {
 				usedDataType = DataType.WSD;
-			} else if(scan instanceof IScanISD) {
-				usedDataType = DataType.ISD;
+			} else if(scan instanceof IScanVSD) {
+				usedDataType = DataType.VSD;
 			} else {
 				usedDataType = DataType.MSD_NOMINAL;
 			}
@@ -409,8 +409,8 @@ public class ScanChartUI extends ScrollableChart {
 				} else {
 					usedSignalType = SignalType.CENTROID;
 				}
-			} else if(scan instanceof IScanISD scanISD) {
-				if(scanISD.getProcessedSignals().size() > 1) {
+			} else if(scan instanceof IScanVSD scanVSD) {
+				if(scanVSD.getProcessedSignals().size() > 1) {
 					usedSignalType = SignalType.PROFILE;
 				} else {
 					usedSignalType = SignalType.CENTROID;
@@ -441,7 +441,7 @@ public class ScanChartUI extends ScrollableChart {
 			case WSD:
 				labelOption = LabelOption.NOMIMAL;
 				break;
-			case ISD:
+			case VSD:
 				labelOption = LabelOption.NOMIMAL;
 				break;
 			default:
@@ -534,14 +534,14 @@ public class ScanChartUI extends ScrollableChart {
 				scanDataSupport.setDataTypeWSD(chartSettings);
 				rangeRestriction.setZeroY(false);
 				break;
-			case ISD:
+			case VSD:
 				/*
 				 * No display of wavenumbers when Raman is shown.
 				 */
 				if(signalType == SignalType.PROFILE) {
 					labelPaintListener = null;
 				}
-				scanDataSupport.setDataTypeISD(chartSettings);
+				scanDataSupport.setDataTypeVSD(chartSettings);
 				rangeRestriction.setZeroY(true);
 				break;
 			default:

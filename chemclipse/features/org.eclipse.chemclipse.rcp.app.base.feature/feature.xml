@@ -488,14 +488,14 @@
          unpack="false"/>
          
    <plugin
-         id="org.eclipse.chemclipse.chromatogram.isd.filter"
+         id="org.eclipse.chemclipse.chromatogram.vsd.filter"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.chemclipse.chromatogram.isd.filter.ui"
+         id="org.eclipse.chemclipse.chromatogram.vsd.filter.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -621,21 +621,21 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.chemclipse.xir.converter"
+         id="org.eclipse.chemclipse.vsd.converter"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.chemclipse.xir.converter.ui"
+         id="org.eclipse.chemclipse.vsd.converter.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.chemclipse.xir.model"
+         id="org.eclipse.chemclipse.vsd.model"
          download-size="0"
          install-size="0"
          version="0.0.0"

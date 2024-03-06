@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
@@ -17,8 +17,8 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
+import org.eclipse.chemclipse.vsd.model.core.ISignalVSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
-import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.jface.viewers.Viewer;
 
 public class ScanTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
@@ -50,8 +50,8 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 			case WSD:
 				sortOrder = getWSD(viewer, e1, e2);
 				break;
-			case ISD:
-				sortOrder = getISD(viewer, e1, e2);
+			case VSD:
+				sortOrder = getVSD(viewer, e1, e2);
 				break;
 			default:
 				sortOrder = 0;
@@ -201,10 +201,10 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 		return sortOrder;
 	}
 
-	private int getISD(Viewer viewer, Object e1, Object e2) {
+	private int getVSD(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof ISignalVS signal1 && e2 instanceof ISignalVS signal2) {
+		if(e1 instanceof ISignalVSD signal1 && e2 instanceof ISignalVSD signal2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:

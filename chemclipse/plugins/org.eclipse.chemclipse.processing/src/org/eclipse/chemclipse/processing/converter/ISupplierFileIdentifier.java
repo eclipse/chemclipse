@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - support for new E4 launching API
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.converter;
@@ -20,9 +20,8 @@ public interface ISupplierFileIdentifier extends SupplierContext {
 	String TYPE_MSD = "MSD";
 	String TYPE_CSD = "CSD";
 	String TYPE_WSD = "WSD";
-	String TYPE_ISD = "ISD";
 	String TYPE_TSD = "TSD";
-	String TYPE_XIR = "XIR";
+	String TYPE_VSD = "VSD";
 	String TYPE_NMR = "NMR";
 	String TYPE_DATABASE_MSD = "DATABASE_MSD";
 	String TYPE_DATABASE_CSD = "DATABASE_CSD";
@@ -30,6 +29,7 @@ public interface ISupplierFileIdentifier extends SupplierContext {
 	String TYPE_DATABASE_NMR = "DATABASE_NMR";
 	String TYPE_PEAKLIST_MSD = "PEAKLIST MSD"; // e.g. Matlab Parafac Peaklist *.mpl
 	String TYPE_SCAN_MSD = "SCAN_MSD"; // MALDI-TOF
+	String TYPE_SCAN_VSD = "SCAN_VSD"; // FT-IR
 	String TYPE_CAL = "CAL"; // RI Calibration
 	String TYPE_PCR = "PCR"; // Polymerase Chain Reaction
 	String TYPE_SEQ = "SEQ"; // Sequence

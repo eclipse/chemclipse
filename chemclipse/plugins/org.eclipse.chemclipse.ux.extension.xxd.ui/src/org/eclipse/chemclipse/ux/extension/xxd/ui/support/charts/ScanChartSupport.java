@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
@@ -27,14 +27,14 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonValueComparator;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
+import org.eclipse.chemclipse.vsd.model.core.IScanVSD;
+import org.eclipse.chemclipse.vsd.model.core.ISignalVSD;
 import org.eclipse.chemclipse.wsd.model.comparator.WavelengthValueComparator;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
-import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.swtchart.extensions.barcharts.BarSeriesData;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesData;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
@@ -167,18 +167,18 @@ public class ScanChartSupport {
 				ySeries[index] = (mirrored) ? scanSignalWSD.getAbundance() * -1 : scanSignalWSD.getAbundance();
 				index++;
 			}
-		} else if(scan instanceof IScanISD scanISD) {
+		} else if(scan instanceof IScanVSD scanVSD) {
 			/*
-			 * ISD
+			 * VSD
 			 */
-			TreeSet<ISignalVS> scanSignalsISD = scanISD.getProcessedSignals();
-			int size = scanSignalsISD.size();
+			TreeSet<ISignalVSD> scanSignalsVSD = scanVSD.getProcessedSignals();
+			int size = scanSignalsVSD.size();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
-			for(ISignalVS scanSignalISD : scanSignalsISD) {
-				xSeries[index] = scanSignalISD.getWavenumber();
-				ySeries[index] = (mirrored) ? scanSignalISD.getIntensity() * -1 : scanSignalISD.getIntensity();
+			for(ISignalVSD scanSignalVSD : scanSignalsVSD) {
+				xSeries[index] = scanSignalVSD.getWavenumber();
+				ySeries[index] = (mirrored) ? scanSignalVSD.getIntensity() * -1 : scanSignalVSD.getIntensity();
 				index++;
 			}
 		} else {

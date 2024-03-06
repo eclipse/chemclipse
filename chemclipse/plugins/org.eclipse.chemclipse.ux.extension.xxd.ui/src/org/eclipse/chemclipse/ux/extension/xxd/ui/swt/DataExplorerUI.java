@@ -139,10 +139,10 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI implements IExtended
 			editorSupportList.add(new SupplierEditorSupport(DataType.WSD, () -> context));
 		}
 		/*
-		 * ISD
+		 * VSD
 		 */
-		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_DATA_ISD)) {
-			editorSupportList.add(new SupplierEditorSupport(DataType.ISD, () -> context));
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_DATA_VSD)) {
+			editorSupportList.add(new SupplierEditorSupport(DataType.VSD, () -> context));
 		}
 		/*
 		 * TSD
@@ -153,8 +153,8 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI implements IExtended
 		/*
 		 * XIR
 		 */
-		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_DATA_XIR)) {
-			editorSupportList.add(new SupplierEditorSupport(DataType.XIR, () -> context));
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_DATA_SCAN_VSD)) {
+			editorSupportList.add(new SupplierEditorSupport(DataType.SCAN_VSD, () -> context));
 		}
 		/*
 		 * NMR

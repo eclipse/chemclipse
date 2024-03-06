@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,9 +24,9 @@ public enum DataType {
 	MSD, // mass selective data
 	CSD, // current selective data
 	WSD, // wavelength selective data
-	ISD, // infrared selective data (FT-IR, Raman)
+	VSD, // vibrational selective data (FT-IR, Raman)
+	SCAN_VSD, // vibrational selective data (FT-IR, Raman) - single scan
 	TSD, // time selective data (IMS)
-	XIR, // Infrared detectors, FTIR, NIR, MIR
 	NMR, // Nuclear magnetic resonance
 	CAL, // Retention Index Calibration
 	PCR, // Polymerase Chain Reaction
@@ -45,8 +45,8 @@ public enum DataType {
 				return DataType.WSD;
 			case CSD:
 				return DataType.CSD;
-			case ISD:
-				return DataType.ISD;
+			case VSD:
+				return DataType.VSD;
 			case NMR:
 				return DataType.NMR;
 			case MALDI:
@@ -67,8 +67,8 @@ public enum DataType {
 				return DataCategory.WSD;
 			case CSD:
 				return DataCategory.CSD;
-			case ISD:
-				return DataCategory.ISD;
+			case VSD:
+				return DataCategory.VSD;
 			case NMR:
 				return DataCategory.NMR;
 			case MALDI:
@@ -77,6 +77,36 @@ public enum DataType {
 				return DataCategory.MSD_DATABASE;
 			default:
 				return DataCategory.AUTO_DETECT;
+		}
+	}
+
+	/**
+	 * This DataCategory was formerly used to map VSD (vibrational spectroscopy chromatograms)
+	 * 
+	 * @return
+	 */
+	public static String ISD_LEGACY() {
+
+		return "ISD";
+	}
+
+	/**
+	 * Returns the data type inclusive legacy check.
+	 * 
+	 * @param name
+	 * @param def
+	 * @return
+	 */
+	public static DataType valueOf(String name, DataType def) {
+
+		if(ISD_LEGACY().equals(name)) {
+			return DataType.VSD;
+		} else {
+			try {
+				return DataType.valueOf(name);
+			} catch(Exception e) {
+				return def;
+			}
 		}
 	}
 

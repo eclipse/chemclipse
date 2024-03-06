@@ -64,11 +64,11 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.AbstractUpdater;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
+import org.eclipse.chemclipse.vsd.model.core.IChromatogramVSD;
+import org.eclipse.chemclipse.vsd.model.core.selection.ChromatogramSelectionVSD;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
-import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
-import org.eclipse.chemclipse.xir.model.core.selection.ChromatogramSelectionISD;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.ui.di.Focus;
@@ -372,8 +372,8 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 					chromatogramSelection = new ChromatogramSelectionCSD(chromatogram);
 				} else if(object instanceof IChromatogramWSD chromatogram) {
 					chromatogramSelection = new ChromatogramSelectionWSD(chromatogram);
-				} else if(object instanceof IChromatogramISD chromatogram) {
-					chromatogramSelection = new ChromatogramSelectionISD(chromatogram);
+				} else if(object instanceof IChromatogramVSD chromatogram) {
+					chromatogramSelection = new ChromatogramSelectionVSD(chromatogram);
 				}
 				chromatogramFile = null;
 			}

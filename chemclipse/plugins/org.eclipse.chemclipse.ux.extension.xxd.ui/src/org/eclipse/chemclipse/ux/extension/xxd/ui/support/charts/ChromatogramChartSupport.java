@@ -43,6 +43,8 @@ import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
+import org.eclipse.chemclipse.vsd.model.core.IScanVSD;
+import org.eclipse.chemclipse.vsd.model.core.ISignalVSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
@@ -51,8 +53,6 @@ import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
-import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swtchart.LineStyle;
@@ -529,9 +529,9 @@ public class ChromatogramChartSupport {
 					}
 				}
 				intensity = maxIntensity;
-			} else if(scan instanceof IScanISD scanISD) {
+			} else if(scan instanceof IScanVSD scanVSD) {
 				double maxIntensity = -Double.MAX_VALUE;
-				for(ISignalVS signal : scanISD.getProcessedSignals()) {
+				for(ISignalVSD signal : scanVSD.getProcessedSignals()) {
 					double abundance = signal.getIntensity();
 					if(abundance > maxIntensity) {
 						maxIntensity = abundance;
@@ -543,10 +543,10 @@ public class ChromatogramChartSupport {
 			/*
 			 * Wavenumber
 			 */
-			if(scan instanceof IScanISD scanISD) {
+			if(scan instanceof IScanVSD scanVSD) {
 				Set<Integer> traces = signals.getTraces();
 				intensity = 0;
-				for(ISignalVS scanSignal : scanISD.getProcessedSignals()) {
+				for(ISignalVSD scanSignal : scanVSD.getProcessedSignals()) {
 					int wavenumber = (int)Math.round(scanSignal.getWavenumber());
 					if(traces.contains(wavenumber)) {
 						intensity += scanSignal.getIntensity();
@@ -557,9 +557,9 @@ public class ChromatogramChartSupport {
 			/*
 			 * Wavenumber
 			 */
-			if(scan instanceof IScanISD scanISD) {
+			if(scan instanceof IScanVSD scanVSD) {
 				Set<Integer> traces = signals.getTraces();
-				for(ISignalVS scanSignal : scanISD.getProcessedSignals()) {
+				for(ISignalVSD scanSignal : scanVSD.getProcessedSignals()) {
 					int wavenumber = (int)Math.round(scanSignal.getWavenumber());
 					if(traces.contains(wavenumber)) {
 						intensity = scanSignal.getIntensity();

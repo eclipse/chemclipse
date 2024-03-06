@@ -36,9 +36,9 @@ import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.vsd.model.core.IChromatogramVSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
-import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class ChromatogramDataSupport {
@@ -72,8 +72,8 @@ public class ChromatogramDataSupport {
 			return "[CSD]";
 		} else if(chromatogram instanceof IChromatogramWSD) {
 			return "[WSD]";
-		} else if(chromatogram instanceof IChromatogramISD) {
-			return "[ISD]";
+		} else if(chromatogram instanceof IChromatogramVSD) {
+			return "[VSD]";
 		}
 		return "";
 	}

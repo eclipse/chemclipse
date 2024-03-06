@@ -29,8 +29,8 @@ import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
+import org.eclipse.chemclipse.vsd.model.core.IChromatogramVSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.osgi.service.component.annotations.Component;
@@ -82,8 +82,8 @@ public class EditorProcessTypeSupplier implements IProcessTypeSupplier {
 							new SupplierEditorSupport(DataType.WSD, () -> eclipseContext).openEditor(chromatogram);
 						} else if(chromatogram instanceof IChromatogramCSD) {
 							new SupplierEditorSupport(DataType.CSD, () -> eclipseContext).openEditor(chromatogram);
-						} else if(chromatogram instanceof IChromatogramISD) {
-							new SupplierEditorSupport(DataType.ISD, () -> eclipseContext).openEditor(chromatogram);
+						} else if(chromatogram instanceof IChromatogramVSD) {
+							new SupplierEditorSupport(DataType.VSD, () -> eclipseContext).openEditor(chromatogram);
 						}
 					}
 				});

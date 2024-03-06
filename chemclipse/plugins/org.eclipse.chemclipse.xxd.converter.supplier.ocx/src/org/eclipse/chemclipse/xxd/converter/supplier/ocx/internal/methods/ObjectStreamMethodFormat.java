@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring vibrational spectroscopy
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.methods;
 
@@ -23,6 +24,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -30,6 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public abstract class ObjectStreamMethodFormat extends GenericStreamMethodFormat {
 
 	protected ObjectStreamMethodFormat(String version) {
+
 		super(version);
 	}
 
@@ -115,17 +118,22 @@ public abstract class ObjectStreamMethodFormat extends GenericStreamMethodFormat
 		}
 	}
 
-	public static <T extends Enum<T>> ObjectInputStreamDeserializer<T> enumDeserialization(Class<T> type, T missingValue) {
+	public static ObjectInputStreamDeserializer<DataCategory> deserializeDataType(DataCategory missingValue) {
 
-		T[] constants = type.getEnumConstants();
 		return stream -> {
-			Object readObject = stream.readObject();
-			for(T constant : constants) {
-				if(constant.name().equals(readObject)) {
-					return constant;
+			/*
+			 * Map Legacy Category
+			 */
+			String name = stream.readObject().toString();
+			if(name.equals(DataCategory.ISD_LEGACY())) {
+				return DataCategory.VSD;
+			} else {
+				try {
+					return DataCategory.valueOf(name);
+				} catch(Exception e) {
+					return missingValue;
 				}
 			}
-			return missingValue;
 		};
 	}
 
