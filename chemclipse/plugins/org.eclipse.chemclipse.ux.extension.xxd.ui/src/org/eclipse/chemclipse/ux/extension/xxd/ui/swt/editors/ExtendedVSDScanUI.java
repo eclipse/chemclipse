@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartXIR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartVSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
@@ -44,41 +44,41 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
-public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
+public class ExtendedVSDScanUI extends Composite implements IExtendedPartUI {
 
-	private ChartXIR chartXIR;
-	private ISpectrumVSD spectrumXIR;
+	private ChartVSD chartVSD;
+	private ISpectrumVSD spectrumVSD;
 	//
 	private Label labelDataInfo;
 	private boolean showRawData = false;
 	private boolean showAbsorbance = false;
 
-	public ExtendedXIRScanUI(Composite parent, int style) {
+	public ExtendedVSDScanUI(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
 	}
 
-	public void update(ISpectrumVSD spectrumXIR) {
+	public void update(ISpectrumVSD spectrumVSD) {
 
-		this.spectrumXIR = spectrumXIR;
-		if(spectrumXIR != null) {
-			showRawData = spectrumXIR.getScanVSD().getProcessedSignals().isEmpty();
+		this.spectrumVSD = spectrumVSD;
+		if(spectrumVSD != null) {
+			showRawData = spectrumVSD.getScanVSD().getProcessedSignals().isEmpty();
 		}
-		chartXIR.modifyChart(showRawData, showAbsorbance);
+		chartVSD.modifyChart(showRawData, showAbsorbance);
 		updateScan();
 	}
 
 	private void updateScan() {
 
-		chartXIR.deleteSeries();
+		chartVSD.deleteSeries();
 		String dataInfo = showRawData ? "Raw Data" : "Processed Data";
 		//
-		if(spectrumXIR != null) {
+		if(spectrumVSD != null) {
 			/*
 			 * Get the data.
 			 */
-			dataInfo += " | Rotation Angle: " + spectrumXIR.getScanVSD().getRotationAngle() + "°";
+			dataInfo += " | Rotation Angle: " + spectrumVSD.getScanVSD().getRotationAngle() + "°";
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			ILineSeriesData lineSeriesData;
@@ -88,13 +88,13 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 				/*
 				 * Raw and Background Data
 				 */
-				lineSeriesData = new LineSeriesData(getSeriesData(spectrumXIR, "Raw Signals", true));
+				lineSeriesData = new LineSeriesData(getSeriesData(spectrumVSD, "Raw Signals", true));
 				lineSeriesSettings = lineSeriesData.getSettings();
 				lineSeriesSettings.setLineColor(Colors.RED);
 				lineSeriesSettings.setEnableArea(false);
 				lineSeriesDataList.add(lineSeriesData);
 				//
-				lineSeriesData = new LineSeriesData(getSeriesData(spectrumXIR, "Background Signals", false));
+				lineSeriesData = new LineSeriesData(getSeriesData(spectrumVSD, "Background Signals", false));
 				lineSeriesSettings = lineSeriesData.getSettings();
 				lineSeriesSettings.setLineColor(Colors.BLACK);
 				lineSeriesSettings.setEnableArea(false);
@@ -103,30 +103,30 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 				/*
 				 * Processed Data
 				 */
-				lineSeriesData = new LineSeriesData(getSeriesDataProcessed(spectrumXIR, "Processed Data"));
+				lineSeriesData = new LineSeriesData(getSeriesDataProcessed(spectrumVSD, "Processed Data"));
 				lineSeriesSettings = lineSeriesData.getSettings();
 				lineSeriesSettings.setLineColor(Colors.RED);
 				lineSeriesSettings.setEnableArea(false);
 				lineSeriesDataList.add(lineSeriesData);
 			}
 			//
-			chartXIR.addSeriesData(lineSeriesDataList);
+			chartVSD.addSeriesData(lineSeriesDataList);
 		}
 		//
 		labelDataInfo.setText(dataInfo);
 	}
 
-	private ISeriesData getSeriesDataProcessed(ISpectrumVSD spectrumXIR, String id) {
+	private ISeriesData getSeriesDataProcessed(ISpectrumVSD spectrumVSD, String id) {
 
 		double[] xSeries;
 		double[] ySeries;
 		//
-		if(spectrumXIR != null) {
-			int size = spectrumXIR.getScanVSD().getProcessedSignals().size();
+		if(spectrumVSD != null) {
+			int size = spectrumVSD.getScanVSD().getProcessedSignals().size();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
-			for(ISignalVSD scanSignal : spectrumXIR.getScanVSD().getProcessedSignals()) {
+			for(ISignalVSD scanSignal : spectrumVSD.getScanVSD().getProcessedSignals()) {
 				xSeries[index] = scanSignal.getWavenumber();
 				if(scanSignal instanceof ISignalInfrared signalInfrared) {
 					if(showAbsorbance) {
@@ -147,15 +147,15 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 		return new SeriesData(xSeries, ySeries, id);
 	}
 
-	private ISeriesData getSeriesData(ISpectrumVSD spectrumXIR, String id, boolean raw) {
+	private ISeriesData getSeriesData(ISpectrumVSD spectrumVSD, String id, boolean raw) {
 
 		double[] ySeries;
 		//
-		if(spectrumXIR != null) {
+		if(spectrumVSD != null) {
 			if(raw) {
-				ySeries = spectrumXIR.getScanVSD().getRawSignals().clone();
+				ySeries = spectrumVSD.getScanVSD().getRawSignals().clone();
 			} else {
-				ySeries = spectrumXIR.getScanVSD().getBackgroundSignals().clone();
+				ySeries = spectrumVSD.getScanVSD().getBackgroundSignals().clone();
 			}
 		} else {
 			ySeries = new double[0];
@@ -211,7 +211,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 
 				showAbsorbance = !showAbsorbance;
 				button.setImage(ApplicationImageFactory.getInstance().getImage(getTransmittanceAbsorbanceImage(), IApplicationImage.SIZE_16x16));
-				chartXIR.modifyChart(showRawData, showAbsorbance);
+				chartVSD.modifyChart(showRawData, showAbsorbance);
 				updateScan();
 			}
 		});
@@ -234,7 +234,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				showRawData = !showRawData;
-				chartXIR.modifyChart(showRawData, showAbsorbance);
+				chartVSD.modifyChart(showRawData, showAbsorbance);
 				updateScan();
 			}
 		});
@@ -250,7 +250,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				chartXIR.toggleSeriesLegendVisibility();
+				chartVSD.toggleSeriesLegendVisibility();
 			}
 		});
 	}
@@ -265,8 +265,8 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				chartXIR.togglePositionLegendVisibility();
-				chartXIR.redraw();
+				chartVSD.togglePositionLegendVisibility();
+				chartVSD.redraw();
 			}
 		});
 	}
@@ -281,7 +281,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				chartXIR.toggleRangeSelectorVisibility();
+				chartVSD.toggleRangeSelectorVisibility();
 			}
 		});
 	}
@@ -326,16 +326,16 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 
 	private void createScanChart(Composite parent) {
 
-		chartXIR = new ChartXIR(parent, SWT.BORDER, showAbsorbance);
-		chartXIR.setLayoutData(new GridData(GridData.FILL_BOTH));
+		chartVSD = new ChartVSD(parent, SWT.BORDER, showAbsorbance);
+		chartVSD.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings
 		 */
-		IChartSettings chartSettings = chartXIR.getChartSettings();
+		IChartSettings chartSettings = chartVSD.getChartSettings();
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableRangeSelector(true);
 		chartSettings.setShowRangeSelectorInitially(false);
 		//
-		chartXIR.applySettings(chartSettings);
+		chartVSD.applySettings(chartSettings);
 	}
 }

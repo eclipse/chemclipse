@@ -30,7 +30,7 @@ import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorVSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ScanVSDImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedXIRScanUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedVSDScanUI;
 import org.eclipse.chemclipse.vsd.converter.ui.swt.InfraredSpectrumFileSupport;
 import org.eclipse.chemclipse.vsd.model.core.ISpectrumVSD;
 import org.eclipse.e4.ui.di.Focus;
@@ -56,7 +56,7 @@ public class ScanEditorVSD implements IScanEditorVSD {
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanEditorVSD";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorVSD";
 	public static final String ICON_URI = ApplicationImageFactory.getInstance().getURI(IApplicationImage.IMAGE_SCAN_VSD, IApplicationImageProvider.SIZE_16x16);
-	public static final String TOOLTIP = ExtensionMessages.editorXIR;
+	public static final String TOOLTIP = ExtensionMessages.editorVSD;
 	//
 	private final MPart part;
 	private final MDirtyable dirtyable;
@@ -64,9 +64,9 @@ public class ScanEditorVSD implements IScanEditorVSD {
 	private final MApplication application;
 	//
 	private File scanFile;
-	private ExtendedXIRScanUI extendedScanXIREditorUI;
+	private ExtendedVSDScanUI extendedScanVSDEditorUI;
 	//
-	private ISpectrumVSD scanXIR = null;
+	private ISpectrumVSD scanVSD = null;
 	//
 	private final Shell shell;
 
@@ -85,7 +85,7 @@ public class ScanEditorVSD implements IScanEditorVSD {
 	@Focus
 	public void setFocus() {
 
-		extendedScanXIREditorUI.setFocus();
+		extendedScanVSDEditorUI.setFocus();
 	}
 
 	@PreDestroy
@@ -125,7 +125,7 @@ public class ScanEditorVSD implements IScanEditorVSD {
 	public boolean saveAs() {
 
 		try {
-			InfraredSpectrumFileSupport.saveSpectrum(scanXIR);
+			InfraredSpectrumFileSupport.saveSpectrum(scanVSD);
 		} catch(NoConverterAvailableException e) {
 			return false;
 		}
@@ -136,19 +136,19 @@ public class ScanEditorVSD implements IScanEditorVSD {
 	@Override
 	public ISpectrumVSD getScanSelection() {
 
-		return scanXIR;
+		return scanVSD;
 	}
 
 	private void initialize(Composite parent) {
 
-		scanXIR = loadScan();
+		scanVSD = loadScan();
 		createEditorPages(parent);
-		extendedScanXIREditorUI.update(scanXIR);
+		extendedScanVSDEditorUI.update(scanVSD);
 	}
 
 	private synchronized ISpectrumVSD loadScan() {
 
-		ISpectrumVSD scanXIR = null;
+		ISpectrumVSD scanVSD = null;
 		//
 		try {
 			Object object = part.getObject();
@@ -158,13 +158,13 @@ public class ScanEditorVSD implements IScanEditorVSD {
 				 */
 				File file = new File((String)map.get(EditorSupport.MAP_FILE));
 				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
-				scanXIR = loadScan(file, batch);
+				scanVSD = loadScan(file, batch);
 			}
 		} catch(Exception e) {
 			logger.error(e);
 		}
 		//
-		return scanXIR;
+		return scanVSD;
 	}
 
 	private ISpectrumVSD loadScan(File file, boolean batch) {
@@ -185,7 +185,7 @@ public class ScanEditorVSD implements IScanEditorVSD {
 		}
 		//
 		scanFile = file;
-		return runnable.getScanXIR();
+		return runnable.getSpectrumVSD();
 	}
 
 	private void createEditorPages(Composite parent) {
@@ -195,6 +195,6 @@ public class ScanEditorVSD implements IScanEditorVSD {
 
 	private void createScanPage(Composite parent) {
 
-		extendedScanXIREditorUI = new ExtendedXIRScanUI(parent, SWT.NONE);
+		extendedScanVSDEditorUI = new ExtendedVSDScanUI(parent, SWT.NONE);
 	}
 }

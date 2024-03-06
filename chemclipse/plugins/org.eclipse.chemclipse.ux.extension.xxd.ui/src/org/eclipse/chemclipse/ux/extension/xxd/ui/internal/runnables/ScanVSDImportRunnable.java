@@ -34,7 +34,7 @@ public class ScanVSDImportRunnable implements IRunnableWithProgress {
 		this.file = file;
 	}
 
-	public ISpectrumVSD getScanXIR() {
+	public ISpectrumVSD getSpectrumVSD() {
 
 		return spectrumVSD;
 	}

@@ -24,7 +24,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.vsd.converter.supplier.cml.model.IVendorSpectrumVSD;
-import org.eclipse.chemclipse.vsd.converter.supplier.cml.model.VendorSpectrumXIR;
+import org.eclipse.chemclipse.vsd.converter.supplier.cml.model.VendorSpectrumVSD;
 import org.eclipse.chemclipse.vsd.model.implementation.SignalInfrared;
 import org.eclipse.chemclipse.xxd.converter.supplier.cml.io.RootElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.cml.model.v3.Array;
@@ -59,7 +59,7 @@ public class ScanReader {
 		try {
 			Spectrum spectrum = RootElement.getSpectrum(file);
 			if(spectrum.getType() == SpectrumType.INFRARED || spectrum.getType() == SpectrumType.IR) {
-				vendorScan = new VendorSpectrumXIR();
+				vendorScan = new VendorSpectrumVSD();
 				vendorScan.setSampleName(spectrum.getTitle());
 				vendorScan.setDataName(spectrum.getId());
 				MetadataList metadataList = spectrum.getMetadataList();

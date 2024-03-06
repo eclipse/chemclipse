@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Matthias Mailänder differentiate transmission vs absorbance
+ * Matthias Mailänder - differentiate transmission vs absorbance
  *******************************************************************************/
 package org.eclipse.chemclipse.vsd.model.implementation;
 
@@ -80,7 +80,7 @@ public abstract class AbstractSignalVSD extends AbstractSignal implements ISigna
 	@Override
 	public String toString() {
 
-		return "AbstractSignalVS [wavenumber=" + wavenumber + "]";
+		return "AbstractSignalVSD [wavenumber=" + wavenumber + "]";
 	}
 
 	@Override
