@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - remove references to ModelAddon
  * Matthias Mailänder - add a method to find descriptor and icon
  *******************************************************************************/
@@ -51,7 +51,7 @@ public class PartSupport {
 	 */
 	public static final String PARTDESCRIPTOR_OVERLAY_CHROMATOGRAM = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramOverlayPartDescriptor";
 	public static final String PARTDESCRIPTOR_OVERLAY_NMR = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.nmrOverlayPartDescriptor";
-	public static final String PARTDESCRIPTOR_OVERLAY_XIR = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.xirOverlayPartDescriptor";
+	public static final String PARTDESCRIPTOR_OVERLAY_VSD = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.vsdOverlayPartDescriptor";
 	public static final String PARTDESCRIPTOR_BASELINE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.baselinePartDescriptor";
 	public static final String PARTDESCRIPTOR_HEADER_DATA = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.headerDataPartDescriptor";
 	public static final String PARTDESCRIPTOR_CHROMATOGRAM_STATISTICS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramStatisticsPartDescriptor";

@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.methods;
 
@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IForma
 public class MethodReader_1001 extends AbstractMethodReader {
 
 	public MethodReader_1001() {
+
 		super(IFormat.METHOD_VERSION_0002);
 	}
 
@@ -48,13 +49,13 @@ public class MethodReader_1001 extends AbstractMethodReader {
 			//
 			int dataTypes = dataInputStream.readInt();
 			for(int j = 0; j < dataTypes; j++) {
-				String dataTypeString = readString(dataInputStream);
 				try {
-					DataCategory category = DataType.valueOf(dataTypeString).toDataCategory();
+					DataCategory category = DataType.valueOf(readString(dataInputStream), DataType.AUTO_DETECT).toDataCategory();
 					if(category == DataCategory.AUTO_DETECT) {
 						continue;
+					} else {
+						processEntry.addDataCategory(category);
 					}
-					processEntry.addDataCategory(category);
 				} catch(NullPointerException | IllegalArgumentException e) {
 					continue;
 				}

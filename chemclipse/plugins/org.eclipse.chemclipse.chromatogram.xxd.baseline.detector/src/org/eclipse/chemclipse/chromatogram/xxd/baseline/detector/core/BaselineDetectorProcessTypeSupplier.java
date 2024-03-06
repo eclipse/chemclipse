@@ -59,7 +59,7 @@ public class BaselineDetectorProcessTypeSupplier implements IProcessTypeSupplier
 		@SuppressWarnings("unchecked")
 		public BaselineDetectorProcessorSupplier(IBaselineDetectorSupplier supplier, IProcessTypeSupplier parent) {
 
-			super(supplier.getId(), supplier.getDetectorName(), supplier.getDescription(), (Class<IBaselineDetectorSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD, DataType.ISD);
+			super(supplier.getId(), supplier.getDetectorName(), supplier.getDescription(), (Class<IBaselineDetectorSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD, DataType.VSD);
 		}
 
 		@Override

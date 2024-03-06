@@ -49,10 +49,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
+import org.eclipse.chemclipse.vsd.model.core.IChromatogramVSD;
+import org.eclipse.chemclipse.vsd.model.core.selection.ChromatogramSelectionVSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
-import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
-import org.eclipse.chemclipse.xir.model.core.selection.ChromatogramSelectionISD;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -182,8 +182,8 @@ public class ChromatogramReferencesUI extends Composite {
 			return new ChromatogramSelectionMSD(chromatogramMSD);
 		} else if(referencedChromatogram instanceof IChromatogramWSD chromatogramWSD) {
 			return new ChromatogramSelectionWSD(chromatogramWSD);
-		} else if(referencedChromatogram instanceof IChromatogramISD chromatogramISD) {
-			return new ChromatogramSelectionISD(chromatogramISD);
+		} else if(referencedChromatogram instanceof IChromatogramVSD chromatogramVSD) {
+			return new ChromatogramSelectionVSD(chromatogramVSD);
 		} else {
 			return null;
 		}

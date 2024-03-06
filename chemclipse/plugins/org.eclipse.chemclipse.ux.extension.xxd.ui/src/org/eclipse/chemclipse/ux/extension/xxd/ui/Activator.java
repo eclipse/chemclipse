@@ -167,7 +167,7 @@ public class Activator extends AbstractActivatorUI {
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_RAWFILE, IChemClipseEvents.EVENT_BROKER_DATA);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_RAWFILE, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_VSD_UPDATE_RAWFILE, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, IChemClipseEvents.EVENT_BROKER_DATA);
 		//
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_LITERATURE_UPDATE, IChemClipseEvents.EVENT_BROKER_DATA);
@@ -176,12 +176,12 @@ public class Activator extends AbstractActivatorUI {
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_VSD_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);
 		//
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_VSD_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
 		//
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, IChemClipseEvents.EVENT_BROKER_DATA);
@@ -210,7 +210,7 @@ public class Activator extends AbstractActivatorUI {
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_EDITOR_LIBRARY_CLOSE, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_EDITOR_PCR_CLOSE, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_EDITOR_NMR_CLOSE, IChemClipseEvents.EVENT_BROKER_DATA);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_EDITOR_XIR_CLOSE, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_EDITOR_VSD_CLOSE, IChemClipseEvents.EVENT_BROKER_DATA);
 		//
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_TOOLBAR_UPDATE, IChemClipseEvents.EVENT_BROKER_DATA);
 	}

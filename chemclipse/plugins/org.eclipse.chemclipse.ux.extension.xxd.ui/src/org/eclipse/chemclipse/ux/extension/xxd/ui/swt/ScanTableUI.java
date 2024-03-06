@@ -30,10 +30,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanSignalEd
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanSignalListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanTableComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.vsd.model.core.IScanVSD;
+import org.eclipse.chemclipse.vsd.model.core.ISignalVSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
-import org.eclipse.chemclipse.xir.model.core.IScanISD;
-import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -126,13 +126,13 @@ public class ScanTableUI extends ExtendedTableViewer {
 			super.setInput(null);
 			setLabelAndContentProviders(DataType.WSD);
 			super.setInput(scanWSD.getScanSignals());
-		} else if(scan instanceof IScanISD scanISD) {
+		} else if(scan instanceof IScanVSD scanVSD) {
 			/*
-			 * ISD
+			 * VSD
 			 */
 			super.setInput(null);
-			setLabelAndContentProviders(DataType.ISD);
-			super.setInput(scanISD.getProcessedSignals());
+			setLabelAndContentProviders(DataType.VSD);
+			super.setInput(scanVSD.getProcessedSignals());
 		} else {
 			getTable().removeAll();
 			super.setInput(null);
@@ -176,9 +176,9 @@ public class ScanTableUI extends ExtendedTableViewer {
 			} else if(scan instanceof IScanWSD scanWSD) {
 				minIntensity = scanWSD.getScanSignals().stream().mapToDouble(IScanSignalWSD::getAbundance).min().getAsDouble();
 				maxIntensity = scanWSD.getScanSignals().stream().mapToDouble(IScanSignalWSD::getAbundance).max().getAsDouble();
-			} else if(scan instanceof IScanISD scanISD) {
-				minIntensity = scanISD.getProcessedSignals().stream().mapToDouble(ISignalVS::getIntensity).min().getAsDouble();
-				maxIntensity = scanISD.getProcessedSignals().stream().mapToDouble(ISignalVS::getIntensity).max().getAsDouble();
+			} else if(scan instanceof IScanVSD scanVSD) {
+				minIntensity = scanVSD.getProcessedSignals().stream().mapToDouble(ISignalVSD::getIntensity).min().getAsDouble();
+				maxIntensity = scanVSD.getProcessedSignals().stream().mapToDouble(ISignalVSD::getIntensity).max().getAsDouble();
 			}
 			//
 			scanLabelProvider.setTotalIntensity(minIntensity, maxIntensity);
@@ -228,8 +228,8 @@ public class ScanTableUI extends ExtendedTableViewer {
 			case WSD:
 				titles = ScanLabelProvider.TITLES_WSD;
 				break;
-			case ISD:
-				titles = ScanLabelProvider.TITLES_ISD;
+			case VSD:
+				titles = ScanLabelProvider.TITLES_VSD;
 				break;
 			default:
 				titles = ScanLabelProvider.TITLES_EMPTY;
@@ -256,8 +256,8 @@ public class ScanTableUI extends ExtendedTableViewer {
 			case WSD:
 				bounds = ScanLabelProvider.BOUNDS_WSD;
 				break;
-			case ISD:
-				bounds = ScanLabelProvider.BOUNDS_ISD;
+			case VSD:
+				bounds = ScanLabelProvider.BOUNDS_VSD;
 				break;
 			default:
 				bounds = ScanLabelProvider.BOUNDS_EMPTY;

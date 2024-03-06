@@ -59,7 +59,7 @@ public class ChromatogramIntegratorProcessTypeSupplier implements IProcessTypeSu
 		@SuppressWarnings("unchecked")
 		public ChromatogramIntegratorProcessorSupplier(IChromatogramIntegratorSupplier supplier, IProcessTypeSupplier parent) {
 
-			super(supplier.getId(), supplier.getIntegratorName(), supplier.getDescription(), (Class<IChromatogramIntegrationSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD, DataType.ISD);
+			super(supplier.getId(), supplier.getIntegratorName(), supplier.getDescription(), (Class<IChromatogramIntegrationSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD, DataType.VSD);
 		}
 
 		@Override

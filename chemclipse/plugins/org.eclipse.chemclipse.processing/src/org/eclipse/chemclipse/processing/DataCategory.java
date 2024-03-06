@@ -21,10 +21,9 @@ public enum DataCategory implements ILabel {
 	MSD(TranslationSupport.getTranslationService().translate("%DataCategory.MSD", Activator.getContributorURI())), //
 	CSD(TranslationSupport.getTranslationService().translate("%DataCategory.CSD", Activator.getContributorURI())), //
 	WSD(TranslationSupport.getTranslationService().translate("%DataCategory.WSD", Activator.getContributorURI())), //
-	ISD(TranslationSupport.getTranslationService().translate("%DataCategory.ISD", Activator.getContributorURI())), //
+	VSD(TranslationSupport.getTranslationService().translate("%DataCategory.VSD", Activator.getContributorURI())), //
 	TSD(TranslationSupport.getTranslationService().translate("%DataCategory.TSD", Activator.getContributorURI())), //
 	NMR(TranslationSupport.getTranslationService().translate("%DataCategory.NMR", Activator.getContributorURI())), //
-	XIR(TranslationSupport.getTranslationService().translate("%DataCategory.XIR", Activator.getContributorURI())), //
 	PCR(TranslationSupport.getTranslationService().translate("%DataCategory.PCR", Activator.getContributorURI())), //
 	MALDI(TranslationSupport.getTranslationService().translate("%DataCategory.MALDI", Activator.getContributorURI())), //
 	MSD_DATABASE(TranslationSupport.getTranslationService().translate("%DataCategory.MSD_DATABASE", Activator.getContributorURI())), //
@@ -46,9 +45,19 @@ public enum DataCategory implements ILabel {
 		return label;
 	}
 
+	/**
+	 * This DataCategory was formerly used to map VSD (vibrational spectroscopy chromatograms)
+	 * 
+	 * @return
+	 */
+	public static String ISD_LEGACY() {
+
+		return "ISD";
+	}
+
 	public static DataCategory[] chromatographyCategories() {
 
-		return new DataCategory[]{CSD, MSD, WSD, ISD};
+		return new DataCategory[]{CSD, MSD, VSD, WSD};
 	}
 
 	public static DataCategory[] spectroscopyCategories() {

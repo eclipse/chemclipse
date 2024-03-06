@@ -67,14 +67,14 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramCha
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesUI;
+import org.eclipse.chemclipse.vsd.model.core.IChromatogramVSD;
+import org.eclipse.chemclipse.vsd.model.core.selection.IChromatogramSelectionVSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
-import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
-import org.eclipse.chemclipse.xir.model.core.selection.IChromatogramSelectionISD;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
@@ -645,7 +645,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.SWC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.XWC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.MPC));
-					} else if(chromatogramSelection instanceof IChromatogramSelectionISD) {
+					} else if(chromatogramSelection instanceof IChromatogramSelectionVSD) {
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.XVC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.SVC));
@@ -804,7 +804,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			markedTraces.add(new MarkedTrace(wavenumber.intValue()));
 		}
 		//
-		if(chromatogram instanceof IChromatogramISD) {
+		if(chromatogram instanceof IChromatogramVSD) {
 			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
 			seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + displayType.name() + OverlayChartSupport.OVERLAY_STOP_MARKER;
 			color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
@@ -849,7 +849,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		 * SSC
 		 */
 		List<Number> wavenumbers = getSelectedTraces(true);
-		if(chromatogram instanceof IChromatogramISD) {
+		if(chromatogram instanceof IChromatogramVSD) {
 			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
 			for(Number number : wavenumbers) {
 				int wavenumber = number.intValue();
@@ -1193,7 +1193,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		/*
 		 * Max Plot
 		 */
-		if(chromatogram instanceof IChromatogramWSD || chromatogram instanceof IChromatogramISD) {
+		if(chromatogram instanceof IChromatogramWSD || chromatogram instanceof IChromatogramVSD) {
 			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
 			seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + MPC_LABEL + OverlayChartSupport.OVERLAY_STOP_MARKER;
 			availableSeriesIds.add(seriesId);
@@ -1214,7 +1214,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
-				if(referencedChromatogram instanceof IChromatogramWSD || referencedChromatogram instanceof IChromatogramISD) {
+				if(referencedChromatogram instanceof IChromatogramWSD || referencedChromatogram instanceof IChromatogramVSD) {
 					String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, false);
 					String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
 					seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + MPC_LABEL + OverlayChartSupport.OVERLAY_STOP_MARKER;

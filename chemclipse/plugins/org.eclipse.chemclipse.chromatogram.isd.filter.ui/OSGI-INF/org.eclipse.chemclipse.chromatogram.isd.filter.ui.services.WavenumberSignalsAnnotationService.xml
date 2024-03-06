@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" configuration-policy="optional" name="org.eclipse.chemclipse.chromatogram.isd.filter.ui.services.WavenumberSignalsAnnotationService">
-   <service>
-      <provide interface="org.eclipse.chemclipse.ux.extension.xxd.ui.methods.IAnnotationWidgetService"/>
-   </service>
-   <implementation class="org.eclipse.chemclipse.chromatogram.isd.filter.ui.services.WavenumberSignalsAnnotationService"/>
-</scr:component>

@@ -47,10 +47,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
+import org.eclipse.chemclipse.vsd.model.core.IScanVSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
-import org.eclipse.chemclipse.xir.model.core.IScanISD;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -317,8 +317,8 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 			signals = Integer.toString(optimizedScanMSD != null ? optimizedScanMSD.getNumberOfIons() : scanMSD.getNumberOfIons());
 		} else if(scan instanceof IScanWSD scanWSD) {
 			signals = Integer.toString(scanWSD.getNumberOfScanSignals());
-		} else if(scan instanceof IScanISD scanISD) {
-			signals = Integer.toString(scanISD.getProcessedSignals().size());
+		} else if(scan instanceof IScanVSD scanVSD) {
+			signals = Integer.toString(scanVSD.getProcessedSignals().size());
 		} else {
 			signals = "--";
 		}
@@ -765,9 +765,9 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 			if(signal instanceof IScanSignalWSD signalWSD) {
 				scanWSD.removeScanSignal(signalWSD);
 			}
-		} else if(scan instanceof IScanISD) {
+		} else if(scan instanceof IScanVSD) {
 			/*
-			 * ISD
+			 * VSD
 			 */
 			// Not supported yet.
 		}
@@ -806,9 +806,9 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 					float valueX = Float.parseFloat(x);
 					float valueY = Float.parseFloat(y);
 					scanWSD.addScanSignal(new ScanSignalWSD(valueX, valueY));
-				} else if(scan instanceof IScanISD) {
+				} else if(scan instanceof IScanVSD) {
 					/*
-					 * ISD
+					 * VSD
 					 */
 					// Not supported yet.
 				}

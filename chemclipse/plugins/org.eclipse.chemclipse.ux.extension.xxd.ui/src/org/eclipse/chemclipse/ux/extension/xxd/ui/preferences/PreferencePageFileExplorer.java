@@ -34,9 +34,9 @@ public class PreferencePageFileExplorer extends FieldEditorPreferencePage implem
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_SCANS_MSD, "MSD (MALDI-TOF, ...)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_CSD, "CSD (FID, ECD, ...)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_WSD, "WSD (UV/Vis, DAD, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_ISD, "ISD (Raman, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_VSD, "VSD (Raman, ...)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_TSD, "TSD (IMS, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_XIR, "XIR (FTIR, NIR, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_SCAN_VSD, "VSD (Scan FTIR, NIR, ...)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_NMR, "NMR", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_CAL, "CAL", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_PCR, "PCR", getFieldEditorParent()));

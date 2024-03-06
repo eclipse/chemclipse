@@ -29,12 +29,12 @@ import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.vsd.converter.chromatogram.ChromatogramConverterVSD;
+import org.eclipse.chemclipse.vsd.model.core.IChromatogramVSD;
+import org.eclipse.chemclipse.vsd.model.core.selection.ChromatogramSelectionVSD;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
-import org.eclipse.chemclipse.xir.converter.chromatogram.ChromatogramConverterISD;
-import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
-import org.eclipse.chemclipse.xir.model.core.selection.ChromatogramSelectionISD;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -80,10 +80,10 @@ public class ChromatogramTypeSupport {
 					IChromatogramWSD chromatogramWSD = processingInfoWSD.getProcessingResult();
 					chromatogramSelection = new ChromatogramSelectionWSD(chromatogramWSD, fireUpdate);
 					break;
-				case ISD:
-					IProcessingInfo<IChromatogramISD> processingInfoISD = ChromatogramConverterISD.getInstance().convert(file, monitor);
-					IChromatogramISD chromatogramISD = processingInfoISD.getProcessingResult();
-					chromatogramSelection = new ChromatogramSelectionISD(chromatogramISD, fireUpdate);
+				case VSD:
+					IProcessingInfo<IChromatogramVSD> processingInfoISD = ChromatogramConverterVSD.getInstance().convert(file, monitor);
+					IChromatogramVSD chromatogramISD = processingInfoISD.getProcessingResult();
+					chromatogramSelection = new ChromatogramSelectionVSD(chromatogramISD, fireUpdate);
 					break;
 				default:
 					// No action
@@ -129,8 +129,8 @@ public class ChromatogramTypeSupport {
 			case ISupplierFileIdentifier.TYPE_WSD:
 				dataType = DataType.WSD;
 				break;
-			case ISupplierFileIdentifier.TYPE_ISD:
-				dataType = DataType.ISD;
+			case ISupplierFileIdentifier.TYPE_VSD:
+				dataType = DataType.VSD;
 				break;
 			default:
 				dataType = null;

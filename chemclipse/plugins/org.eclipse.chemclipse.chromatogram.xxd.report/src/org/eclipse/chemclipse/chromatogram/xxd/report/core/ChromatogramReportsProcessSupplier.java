@@ -66,7 +66,7 @@ public class ChromatogramReportsProcessSupplier implements IProcessTypeSupplier 
 		@SuppressWarnings("unchecked")
 		public ChromatogramReportProcessorSupplier(IChromatogramReportSupplier supplier, IProcessTypeSupplier parent) {
 
-			super(supplier.getId(), supplier.getReportName(), supplier.getDescription(), (Class<IChromatogramReportSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD, DataType.ISD);
+			super(supplier.getId(), supplier.getReportName(), supplier.getDescription(), (Class<IChromatogramReportSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD, DataType.VSD);
 			this.supplier = supplier;
 		}
 

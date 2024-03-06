@@ -31,10 +31,10 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.vsd.model.core.IChromatogramVSD;
+import org.eclipse.chemclipse.vsd.model.implementation.ChromatogramVSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ChromatogramWSD;
-import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
-import org.eclipse.chemclipse.xir.model.implementation.ChromatogramISD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilterReshape extends AbstractChromatogramFilter implements IChromatogramFilter {
@@ -187,8 +187,8 @@ public class ChromatogramFilterReshape extends AbstractChromatogramFilter implem
 			chromatogramReference = new ChromatogramMSD();
 		} else if(chromatogram instanceof IChromatogramWSD) {
 			chromatogramReference = new ChromatogramWSD();
-		} else if(chromatogram instanceof IChromatogramISD) {
-			chromatogramReference = new ChromatogramISD();
+		} else if(chromatogram instanceof IChromatogramVSD) {
+			chromatogramReference = new ChromatogramVSD();
 		}
 		//
 		if(chromatogramReference != null) {

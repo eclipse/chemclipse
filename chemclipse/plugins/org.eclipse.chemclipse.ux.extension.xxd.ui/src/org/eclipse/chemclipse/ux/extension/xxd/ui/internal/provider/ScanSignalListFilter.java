@@ -7,15 +7,15 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
+import org.eclipse.chemclipse.vsd.model.core.ISignalVSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
-import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
@@ -69,8 +69,8 @@ public class ScanSignalListFilter extends ViewerFilter {
 			if(Double.toString(scanSignalWSD.getWavelength()).contains(searchText)) {
 				return true;
 			}
-		} else if(element instanceof ISignalVS scanSignalISD) {
-			if(Double.toString(scanSignalISD.getWavenumber()).contains(searchText)) {
+		} else if(element instanceof ISignalVSD scanSignalVSD) {
+			if(Double.toString(scanSignalVSD.getWavenumber()).contains(searchText)) {
 				return true;
 			}
 		}

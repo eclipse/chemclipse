@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.converter.ui.converterPreferencePage"      
+            class="org.eclipse.chemclipse.vsd.converter.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.vsd.converter.ui.converterPreferencePage"
+            name="Converter XIR">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.converter.ui.converterPreferencePage"      
+            class="org.eclipse.chemclipse.vsd.converter.ui.preferences.PreferencePageISD"
+            id="org.eclipse.chemclipse.vsd.converter.ui.preferencePageISD"
+            name="Converter ISD">
+      </page>
+   </extension>   
+</plugin>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - E4/support snippet launching
  * Matthias Mailänder - add MS converter for MALDI
  *******************************************************************************/
@@ -39,20 +39,20 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEdito
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorCSD;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorISD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorVSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PlateEditorPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.QuantitationDatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorVSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.services.EditorServicesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.services.IEditorService;
+import org.eclipse.chemclipse.vsd.converter.chromatogram.ChromatogramConverterVSD;
+import org.eclipse.chemclipse.vsd.converter.core.ScanConverterVSD;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
-import org.eclipse.chemclipse.xir.converter.chromatogram.ChromatogramConverterISD;
-import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
@@ -96,14 +96,14 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 			case WSD:
 				supplier = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport().getSupplier();
 				break;
-			case ISD:
-				supplier = ChromatogramConverterISD.getInstance().getChromatogramConverterSupport().getSupplier();
+			case VSD:
+				supplier = ChromatogramConverterVSD.getInstance().getChromatogramConverterSupport().getSupplier();
 				break;
 			case TSD:
 				supplier = ChromatogramConverterTSD.getInstance().getChromatogramConverterSupport().getSupplier();
 				break;
-			case XIR:
-				supplier = ScanConverterXIR.getScanConverterSupport().getSupplier();
+			case SCAN_VSD:
+				supplier = ScanConverterVSD.getScanConverterSupport().getSupplier();
 				break;
 			case NMR:
 				supplier = ScanConverterNMR.getScanConverterSupport().getSupplier();
@@ -208,8 +208,8 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 		 */
 		if(TYPE_TSD.equals(type)) {
 			refreshEditorReferences(DataType.TSD);
-		} else if(TYPE_ISD.equals(type)) {
-			refreshEditorReferences(DataType.ISD);
+		} else if(TYPE_VSD.equals(type)) {
+			refreshEditorReferences(DataType.VSD);
 		}
 	}
 
@@ -257,14 +257,14 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW;
 				break;
-			case ISD:
-				type = TYPE_ISD;
-				elementId = ChromatogramEditorISD.ID;
-				contributionURI = ChromatogramEditorISD.CONTRIBUTION_URI;
-				iconURI = ChromatogramEditorISD.ICON_URI;
-				tooltip = ChromatogramEditorISD.TOOLTIP;
-				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_ISD_UPDATE_RAWFILE;
-				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_ISD_UPDATE_OVERVIEW;
+			case VSD:
+				type = TYPE_VSD;
+				elementId = ChromatogramEditorVSD.ID;
+				contributionURI = ChromatogramEditorVSD.CONTRIBUTION_URI;
+				iconURI = ChromatogramEditorVSD.ICON_URI;
+				tooltip = ChromatogramEditorVSD.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_VSD_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_VSD_UPDATE_OVERVIEW;
 				break;
 			case TSD:
 				type = TYPE_TSD;
@@ -276,14 +276,14 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_TSD_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_TSD_UPDATE_OVERVIEW;
 				break;
-			case XIR:
-				type = TYPE_XIR;
-				elementId = ScanEditorXIR.ID;
-				contributionURI = ScanEditorXIR.CONTRIBUTION_URI;
-				iconURI = ScanEditorXIR.ICON_URI;
-				tooltip = ScanEditorXIR.TOOLTIP;
-				topicUpdateRawfile = IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_RAWFILE;
-				topicUpdateOverview = IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_OVERVIEW;
+			case SCAN_VSD:
+				type = TYPE_SCAN_MSD;
+				elementId = ScanEditorVSD.ID;
+				contributionURI = ScanEditorVSD.CONTRIBUTION_URI;
+				iconURI = ScanEditorVSD.ICON_URI;
+				tooltip = ScanEditorVSD.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_SCAN_VSD_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_SCAN_VSD_UPDATE_OVERVIEW;
 				break;
 			case NMR:
 				type = TYPE_NMR;

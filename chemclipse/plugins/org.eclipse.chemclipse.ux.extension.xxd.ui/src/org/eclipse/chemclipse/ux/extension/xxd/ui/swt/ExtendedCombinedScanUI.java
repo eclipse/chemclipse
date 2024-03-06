@@ -46,8 +46,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.Preferenc
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
-import org.eclipse.chemclipse.xir.model.core.selection.IChromatogramSelectionISD;
-import org.eclipse.chemclipse.xir.model.support.FilterSupportISD;
+import org.eclipse.chemclipse.vsd.model.core.selection.IChromatogramSelectionVSD;
+import org.eclipse.chemclipse.vsd.model.support.FilterSupportVSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.swt.SWT;
@@ -86,7 +86,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 	private Button buttonLocked;
 	private ScanIdentifierUI scanIdentifierUI;
 	/*
-	 * MSD, ISD
+	 * MSD, VSD
 	 */
 	private IChromatogramSelection<?, ?> chromatogramSelection = null;
 	private IScan combinedScan = null;
@@ -124,9 +124,9 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 				boolean useNormalize = PreferenceSupplierModelMSD.isUseNormalizedScan();
 				boolean usePeaksInsteadOfScans = PreferenceSupplierModelMSD.isUsePeaksInsteadOfScans();
 				combinedScan = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType, usePeaksInsteadOfScans);
-			} else if(object instanceof IChromatogramSelectionISD chromatogramSelectionISD) {
-				this.chromatogramSelection = chromatogramSelectionISD;
-				combinedScan = FilterSupportISD.getCombinedSpectrum(chromatogramSelectionISD, false, calculationType);
+			} else if(object instanceof IChromatogramSelectionVSD chromatogramSelectionVSD) {
+				this.chromatogramSelection = chromatogramSelectionVSD;
+				combinedScan = FilterSupportVSD.getCombinedSpectrum(chromatogramSelectionVSD, false, calculationType);
 			}
 			//
 			toolbarInfo.get().setText(getCombinedRangeInfo(object));

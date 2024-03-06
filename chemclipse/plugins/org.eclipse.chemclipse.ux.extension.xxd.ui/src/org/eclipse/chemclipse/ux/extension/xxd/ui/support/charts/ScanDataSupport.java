@@ -38,13 +38,13 @@ public class ScanDataSupport {
 	public static final String[] DATA_TYPES_MSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.MSD_NOMINAL.toString(), DataType.MSD_TANDEM.toString(), DataType.MSD_HIGHRES.toString()};
 	public static final String[] DATA_TYPES_CSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.CSD.toString()};
 	public static final String[] DATA_TYPES_WSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.WSD.toString()};
-	public static final String[] DATA_TYPES_ISD = new String[]{DataType.AUTO_DETECT.toString(), DataType.ISD.toString()};
+	public static final String[] DATA_TYPES_VSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.VSD.toString()};
 	//
 	public static final String[] SIGNAL_TYPES_DEFAULT = new String[]{SignalType.AUTO_DETECT.toString()};
 	public static final String[] SIGNAL_TYPES_MSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
 	public static final String[] SIGNAL_TYPES_CSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString()};
 	public static final String[] SIGNAL_TYPES_WSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
-	public static final String[] SIGNAL_TYPES_ISD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
+	public static final String[] SIGNAL_TYPES_VSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -202,7 +202,7 @@ public class ScanDataSupport {
 		ChartSupport.addSecondaryAxisY(chartSettings, titleY1);
 	}
 
-	public void setDataTypeISD(IChartSettings chartSettings) {
+	public void setDataTypeVSD(IChartSettings chartSettings) {
 
 		String titleX = "Wavenumber";
 		String titleY = preferenceStore.getString(PreferenceSupplier.P_TITLE_Y_AXIS_INTENSITY);

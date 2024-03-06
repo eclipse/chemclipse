@@ -53,7 +53,7 @@ public class MethodReaderWriter_1003 extends ObjectStreamMethodFormat {
 	protected IProcessMethod readObjectFromStream(ObjectInputStream stream, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException, ClassNotFoundException {
 
 		Set<DataCategory> categories = new LinkedHashSet<>();
-		readItems(stream, enumDeserialization(DataCategory.class, DataCategory.AUTO_DETECT), categories::add);
+		readItems(stream, deserializeDataType(DataCategory.AUTO_DETECT), categories::add);
 		ProcessMethod processMethod = new ProcessMethod(categories);
 		processMethod.setUUID(readString(stream));
 		processMethod.setName(readString(stream));
@@ -92,7 +92,7 @@ public class MethodReaderWriter_1003 extends ObjectStreamMethodFormat {
 			processEntry.setName(readString(stream));
 			processEntry.setDescription(readString(stream));
 			processEntry.setSettings(readString(stream));
-			readItems(stream, enumDeserialization(DataCategory.class, DataCategory.AUTO_DETECT), processEntry::addDataCategory);
+			readItems(stream, deserializeDataType(DataCategory.AUTO_DETECT), processEntry::addDataCategory);
 			readItems(stream, processEntryDeserialization(processEntry), processEntry.getEntries()::add);
 			processEntry.setReadOnly(stream.readBoolean());
 			return processEntry;

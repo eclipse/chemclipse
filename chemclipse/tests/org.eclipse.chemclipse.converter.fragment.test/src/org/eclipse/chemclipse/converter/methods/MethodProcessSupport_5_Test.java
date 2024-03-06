@@ -20,12 +20,12 @@ public class MethodProcessSupport_5_Test extends MethodProcessSupportTestCase {
 
 	public void test1() {
 
-		DataCategory[] methodCategories = new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD, DataCategory.ISD};
+		DataCategory[] methodCategories = new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD, DataCategory.VSD};
 		List<DataCategory[]> processCategories = new ArrayList<>();
 		processCategories.add(new DataCategory[]{DataCategory.CSD, DataCategory.MSD});
 		processCategories.add(new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD});
 		processCategories.add(new DataCategory[]{DataCategory.CSD}); // Match
-		processCategories.add(new DataCategory[]{DataCategory.CSD, DataCategory.ISD});
+		processCategories.add(new DataCategory[]{DataCategory.CSD, DataCategory.VSD});
 		DataCategory[] dataCategories = MethodProcessSupport.getDataTypes(getProcessMethod(methodCategories, processCategories));
 		//
 		assertNotNull(dataCategories);
@@ -35,12 +35,12 @@ public class MethodProcessSupport_5_Test extends MethodProcessSupportTestCase {
 
 	public void test2() {
 
-		DataCategory[] methodCategories = new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD, DataCategory.ISD};
+		DataCategory[] methodCategories = new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD, DataCategory.VSD};
 		List<DataCategory[]> processCategories = new ArrayList<>();
 		processCategories.add(new DataCategory[]{DataCategory.CSD, DataCategory.MSD});
 		processCategories.add(new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD});
 		processCategories.add(new DataCategory[]{DataCategory.MSD}); // Match
-		processCategories.add(new DataCategory[]{DataCategory.CSD, DataCategory.ISD});
+		processCategories.add(new DataCategory[]{DataCategory.CSD, DataCategory.VSD});
 		DataCategory[] dataCategories = MethodProcessSupport.getDataTypes(getProcessMethod(methodCategories, processCategories));
 		//
 		assertNotNull(dataCategories);
@@ -50,13 +50,13 @@ public class MethodProcessSupport_5_Test extends MethodProcessSupportTestCase {
 
 	public void test3() {
 
-		DataCategory[] methodCategories = new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD, DataCategory.ISD};
+		DataCategory[] methodCategories = new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD, DataCategory.VSD};
 		List<DataCategory[]> processCategories = new ArrayList<>();
 		processCategories.add(new DataCategory[]{DataCategory.CSD, DataCategory.MSD});
 		processCategories.add(new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD});
 		processCategories.add(new DataCategory[]{DataCategory.MSD}); // First Match
 		processCategories.add(new DataCategory[]{DataCategory.CSD});
-		processCategories.add(new DataCategory[]{DataCategory.CSD, DataCategory.ISD});
+		processCategories.add(new DataCategory[]{DataCategory.CSD, DataCategory.VSD});
 		DataCategory[] dataCategories = MethodProcessSupport.getDataTypes(getProcessMethod(methodCategories, processCategories));
 		//
 		assertNotNull(dataCategories);

@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.processing.methods.ProcessMethod;
 
 public class BatchProcessJob {
 
-	public static final DataType[] DATA_TYPES = new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD, DataType.ISD};
+	public static final DataType[] DATA_TYPES = new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD, DataType.VSD};
 	public static final DataType DATA_TYPE_DEFAULT = DataType.MSD;
 	//
 	public static final String DESCRIPTION = "Batch Job";

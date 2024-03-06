@@ -44,7 +44,7 @@ public class ExtensionMessages extends NLS {
 	public static String chromatogram;
 	public static String chromatogramFromProjectExplorer;
 	public static String chromatogramEditorTSD;
-	public static String chromatogramEditorISD;
+	public static String chromatogramEditorVSD;
 	public static String quantitationEditor;
 	public static String edit;
 	public static String editorNMR;

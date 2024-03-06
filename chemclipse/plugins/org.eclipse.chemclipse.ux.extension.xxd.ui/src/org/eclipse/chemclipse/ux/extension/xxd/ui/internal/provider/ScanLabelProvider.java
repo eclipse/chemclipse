@@ -24,8 +24,8 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.vsd.model.core.ISignalVSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
-import org.eclipse.chemclipse.xir.model.core.ISignalVS;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -56,8 +56,8 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	public static final int[] BOUNDS_CSD = {150, 150, 150};
 	public static final String[] TITLES_WSD = {WAVELENGTH, INTENSITY, RELATIVE_INTENSITY};
 	public static final int[] BOUNDS_WSD = {150, 150, 150};
-	public static final String[] TITLES_ISD = {WAVENUMBER, INTENSITY, RELATIVE_INTENSITY};
-	public static final int[] BOUNDS_ISD = {150, 150, 150};
+	public static final String[] TITLES_VSD = {WAVENUMBER, INTENSITY, RELATIVE_INTENSITY};
+	public static final int[] BOUNDS_VSD = {150, 150, 150};
 	public static final String[] TITLES_EMPTY = {NO_VALUE};
 	public static final int[] BOUNDS_EMPTY = {150};
 	//
@@ -68,7 +68,6 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	private DecimalFormat decimalFormatHighResMSD;
 	private DecimalFormat decimalFormatCSD;
 	private DecimalFormat decimalFormatWSD;
-	// private DecimalFormat decimalFormatISD;
 	//
 	private DecimalFormat decimalFormatIntensity;
 	private DecimalFormat decimalFormatRelativeIntensity;
@@ -84,7 +83,6 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 		decimalFormatHighResMSD = ValueFormat.getDecimalFormatEnglish("0.000###");
 		decimalFormatCSD = ValueFormat.getDecimalFormatEnglish("0.0000");
 		decimalFormatWSD = ValueFormat.getDecimalFormatEnglish("0.0");
-		// decimalFormatISD = ValueFormat.getDecimalFormatEnglish("0.0");
 		decimalFormatIntensity = ValueFormat.getDecimalFormatEnglish("0.0###");
 		decimalFormatRelativeIntensity = ValueFormat.getDecimalFormatEnglish("0.0000");
 	}
@@ -125,8 +123,8 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 			case WSD:
 				text = getWSD(element, columnIndex);
 				break;
-			case ISD:
-				text = getISD(element, columnIndex);
+			case VSD:
+				text = getVSD(element, columnIndex);
 				break;
 			default:
 				text = NO_VALUE;
@@ -266,13 +264,13 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 		return text;
 	}
 
-	private String getISD(Object element, int columnIndex) {
+	private String getVSD(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof ISignalVS scanSignal) {
+		if(element instanceof ISignalVSD scanSignal) {
 			switch(columnIndex) {
 				case 0:
-					text = Double.toString(scanSignal.getWavenumber()); // decimalFormatISD.format(scanSignal.getWavenumber());
+					text = Double.toString(scanSignal.getWavenumber());
 					break;
 				case 1:
 					text = decimalFormatIntensity.format(scanSignal.getIntensity());

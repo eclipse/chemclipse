@@ -115,7 +115,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarCSD;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarISD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarVSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
@@ -134,9 +134,9 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ProcessorToolbarUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarConfig;
+import org.eclipse.chemclipse.vsd.model.core.IChromatogramVSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
-import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
 import org.eclipse.chemclipse.xxd.process.comparators.CategoryNameComparator;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageChromatogramExport;
@@ -446,8 +446,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				dataCategory = DataCategory.WSD;
 			} else if(chromatogram instanceof IChromatogramCSD) {
 				dataCategory = DataCategory.CSD;
-			} else if(chromatogram instanceof IChromatogramISD) {
-				dataCategory = DataCategory.ISD;
+			} else if(chromatogram instanceof IChromatogramVSD) {
+				dataCategory = DataCategory.VSD;
 			}
 		}
 		//
@@ -1526,8 +1526,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 					case WSD:
 						preferencePages.add(PreferencePageProcessorToolbarWSD.class);
 						break;
-					case ISD:
-						preferencePages.add(PreferencePageProcessorToolbarISD.class);
+					case VSD:
+						preferencePages.add(PreferencePageProcessorToolbarVSD.class);
 						break;
 					default:
 						break;

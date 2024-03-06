@@ -241,9 +241,9 @@
       </page>
       <page
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarISD"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageProcessorToolbarISD"
-            name="Processor Quick-Access (ISD)">
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessorToolbarVSD"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageProcessorToolbarVSD"
+            name="Processor Quick-Access (VSD)">
       </page>                                                                                                               
    </extension> 
    <extension

@@ -151,14 +151,14 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 				case ISupplierFileIdentifier.TYPE_TSD:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_TSD, IApplicationImageProvider.SIZE_16x16);
 					break;
-				case ISupplierFileIdentifier.TYPE_ISD:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_ISD, IApplicationImageProvider.SIZE_16x16);
+				case ISupplierFileIdentifier.TYPE_VSD:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_VSD, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_NMR:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SCAN_NMR, IApplicationImageProvider.SIZE_16x16);
 					break;
-				case ISupplierFileIdentifier.TYPE_XIR:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SCAN_XIR, IApplicationImageProvider.SIZE_16x16);
+				case ISupplierFileIdentifier.TYPE_SCAN_VSD:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SCAN_VSD, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_PCR:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_PLATE_PCR, IApplicationImageProvider.SIZE_16x16);

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.chemclipse.chromatogram.isd.filter.processors.WavenumberSubtractor">
-   <service>
-      <provide interface="org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier"/>
-   </service>
-   <implementation class="org.eclipse.chemclipse.chromatogram.isd.filter.processors.WavenumberSubtractor"/>
-</scr:component>

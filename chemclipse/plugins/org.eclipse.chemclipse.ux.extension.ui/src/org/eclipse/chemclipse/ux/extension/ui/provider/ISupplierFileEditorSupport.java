@@ -29,9 +29,9 @@ import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.vsd.model.core.IChromatogramVSD;
+import org.eclipse.chemclipse.vsd.model.core.ISpectrumVSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.xir.model.core.IChromatogramISD;
-import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -140,14 +140,14 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 								type = " [CSD]";
 							} else if(object instanceof IChromatogramWSD) {
 								type = " [WSD]";
-							} else if(object instanceof IChromatogramISD) {
-								type = " [ISD]";
+							} else if(object instanceof IChromatogramVSD) {
+								type = " [VSD]";
 							}
 							part.setLabel(chromatogram.getName() + type);
 						} else if(object instanceof IMassSpectra massSpectra) {
 							part.setLabel(massSpectra.getName());
-						} else if(object instanceof ISpectrumXIR) {
-							part.setLabel("FTIR");
+						} else if(object instanceof ISpectrumVSD) {
+							part.setLabel("VSD");
 						} else if(object instanceof IMeasurement measurement) {
 							part.setLabel(measurement.getDataName());
 						}

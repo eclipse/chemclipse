@@ -33,8 +33,8 @@ import org.eclipse.chemclipse.tsd.converter.service.IConverterServiceTSD;
 import org.eclipse.chemclipse.tsd.model.core.IChromatogramPeakTSD;
 import org.eclipse.chemclipse.tsd.model.core.IChromatogramTSD;
 import org.eclipse.chemclipse.tsd.model.core.TypeTSD;
+import org.eclipse.chemclipse.vsd.converter.chromatogram.ChromatogramConverterVSD;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
-import org.eclipse.chemclipse.xir.converter.chromatogram.ChromatogramConverterISD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramConverterTSD implements IChromatogramConverter<IChromatogramPeakTSD, IChromatogramTSD> {
@@ -144,7 +144,7 @@ public class ChromatogramConverterTSD implements IChromatogramConverter<IChromat
 
 	private List<IConverterServiceTSD> getConverterAdapterServicesISD() {
 
-		IChromatogramConverterSupport converterSupportISD = ChromatogramConverterISD.getInstance().getChromatogramConverterSupport();
+		IChromatogramConverterSupport converterSupportISD = ChromatogramConverterVSD.getInstance().getChromatogramConverterSupport();
 		return getConverterAdapterServices(converterSupportISD.getSupplier(), TypeTSD.HPLC_RAMAN);
 	}
 

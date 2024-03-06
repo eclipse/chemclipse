@@ -24,10 +24,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
-import org.eclipse.chemclipse.xir.model.core.ISignalInfrared;
-import org.eclipse.chemclipse.xir.model.core.ISignalRaman;
-import org.eclipse.chemclipse.xir.model.core.ISignalVS;
-import org.eclipse.chemclipse.xir.model.core.ISpectrumXIR;
+import org.eclipse.chemclipse.vsd.model.core.ISignalInfrared;
+import org.eclipse.chemclipse.vsd.model.core.ISignalRaman;
+import org.eclipse.chemclipse.vsd.model.core.ISignalVSD;
+import org.eclipse.chemclipse.vsd.model.core.ISpectrumVSD;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -47,7 +47,7 @@ import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 
 	private ChartXIR chartXIR;
-	private ISpectrumXIR spectrumXIR;
+	private ISpectrumVSD spectrumXIR;
 	//
 	private Label labelDataInfo;
 	private boolean showRawData = false;
@@ -59,11 +59,11 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 		createControl();
 	}
 
-	public void update(ISpectrumXIR spectrumXIR) {
+	public void update(ISpectrumVSD spectrumXIR) {
 
 		this.spectrumXIR = spectrumXIR;
 		if(spectrumXIR != null) {
-			showRawData = spectrumXIR.getScanISD().getProcessedSignals().isEmpty();
+			showRawData = spectrumXIR.getScanVSD().getProcessedSignals().isEmpty();
 		}
 		chartXIR.modifyChart(showRawData, showAbsorbance);
 		updateScan();
@@ -78,7 +78,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 			/*
 			 * Get the data.
 			 */
-			dataInfo += " | Rotation Angle: " + spectrumXIR.getScanISD().getRotationAngle() + "°";
+			dataInfo += " | Rotation Angle: " + spectrumXIR.getScanVSD().getRotationAngle() + "°";
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			ILineSeriesData lineSeriesData;
@@ -116,17 +116,17 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 		labelDataInfo.setText(dataInfo);
 	}
 
-	private ISeriesData getSeriesDataProcessed(ISpectrumXIR spectrumXIR, String id) {
+	private ISeriesData getSeriesDataProcessed(ISpectrumVSD spectrumXIR, String id) {
 
 		double[] xSeries;
 		double[] ySeries;
 		//
 		if(spectrumXIR != null) {
-			int size = spectrumXIR.getScanISD().getProcessedSignals().size();
+			int size = spectrumXIR.getScanVSD().getProcessedSignals().size();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
-			for(ISignalVS scanSignal : spectrumXIR.getScanISD().getProcessedSignals()) {
+			for(ISignalVSD scanSignal : spectrumXIR.getScanVSD().getProcessedSignals()) {
 				xSeries[index] = scanSignal.getWavenumber();
 				if(scanSignal instanceof ISignalInfrared signalInfrared) {
 					if(showAbsorbance) {
@@ -147,15 +147,15 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 		return new SeriesData(xSeries, ySeries, id);
 	}
 
-	private ISeriesData getSeriesData(ISpectrumXIR spectrumXIR, String id, boolean raw) {
+	private ISeriesData getSeriesData(ISpectrumVSD spectrumXIR, String id, boolean raw) {
 
 		double[] ySeries;
 		//
 		if(spectrumXIR != null) {
 			if(raw) {
-				ySeries = spectrumXIR.getScanISD().getRawSignals().clone();
+				ySeries = spectrumXIR.getScanVSD().getRawSignals().clone();
 			} else {
-				ySeries = spectrumXIR.getScanISD().getBackgroundSignals().clone();
+				ySeries = spectrumXIR.getScanVSD().getBackgroundSignals().clone();
 			}
 		} else {
 			ySeries = new double[0];
@@ -219,7 +219,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 
 	private String getTransmittanceAbsorbanceImage() {
 
-		return showAbsorbance ? IApplicationImage.IMAGE_SCAN_XIR_INVERTED : IApplicationImage.IMAGE_SCAN_XIR;
+		return showAbsorbance ? IApplicationImage.IMAGE_SCAN_VSD_INVERTED : IApplicationImage.IMAGE_SCAN_VSD;
 	}
 
 	private void createRawProcessedButton(Composite parent) {
@@ -227,7 +227,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the raw/processed modus");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SCAN_XIR_RAW, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SCAN_VSD_RAW, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
