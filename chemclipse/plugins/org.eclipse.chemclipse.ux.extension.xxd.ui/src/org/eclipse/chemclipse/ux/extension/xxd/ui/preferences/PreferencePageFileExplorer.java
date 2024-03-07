@@ -27,16 +27,18 @@ public class PreferencePageFileExplorer extends FieldEditorPreferencePage implem
 		setDescription("");
 	}
 
+	@Override
 	public void createFieldEditors() {
 
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_MSD, "MSD (Quadrupole, IonTrap, ...)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_LIBRARY_MSD, "MSD (Libraries, ...)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_SCANS_MSD, "MSD (MALDI-TOF, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_CSD, "CSD (FID, ECD, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_WSD, "WSD (UV/Vis, DAD, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_VSD, "VSD (Raman, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_CSD, "CSD (GC-FID, GC-ECD, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_WSD, "WSD (HPLC-DAD, HPLC-UV/Vis ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_VSD, "VSD (HPLC-Raman, ...)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_TSD, "TSD (IMS, ...)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_SCAN_VSD, "VSD (Scan FTIR, NIR, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_SCAN_VSD, "VSD (FTIR, NIR, Raman, ...)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_SCAN_WSD, "WSD (UV/Vis, ...)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_NMR, "NMR", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_CAL, "CAL", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_PCR, "PCR", getFieldEditorParent()));
@@ -45,6 +47,7 @@ public class PreferencePageFileExplorer extends FieldEditorPreferencePage implem
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_DATA_QUANT_DB, "QDB (Quantitation Databases)", getFieldEditorParent()));
 	}
 
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

@@ -151,10 +151,16 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI implements IExtended
 			editorSupportList.add(new SupplierEditorSupport(DataType.TSD, () -> context));
 		}
 		/*
-		 * XIR
+		 * VSD
 		 */
 		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_DATA_SCAN_VSD)) {
 			editorSupportList.add(new SupplierEditorSupport(DataType.SCAN_VSD, () -> context));
+		}
+		/*
+		 * WSD
+		 */
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_DATA_SCAN_WSD)) {
+			editorSupportList.add(new SupplierEditorSupport(DataType.SCAN_WSD, () -> context));
 		}
 		/*
 		 * NMR

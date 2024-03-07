@@ -24,6 +24,7 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_VSD_UPDATE_RAWFILE = "chromatogram/vsd/update/rawfile";
 	String TOPIC_CHROMATOGRAM_TSD_UPDATE_RAWFILE = "chromatogram/tsd/update/rawfile";
 	String TOPIC_SCAN_VSD_UPDATE_RAWFILE = "scan/vsd/update/rawfile";
+	String TOPIC_SCAN_WSD_UPDATE_RAWFILE = "scan/wsd/update/rawfile";
 	String TOPIC_SCAN_NMR_UPDATE_RAWFILE = "scan/nmr/update/rawfile";
 	String TOPIC_PLATE_PCR_UPDATE_RAWFILE = "plate/pcr/update/rawfile";
 	String TOPIC_SEQUENCE_UPDATE_RAWFILE = "sequence/update/rawfile";
@@ -39,6 +40,7 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_TSD_UPDATE_OVERVIEW = "chromatogram/tsd/update/overview";
 	String TOPIC_SCAN_NMR_UPDATE_OVERVIEW = "scan/nmr/update/overview";
 	String TOPIC_SCAN_VSD_UPDATE_OVERVIEW = "scan/vsd/update/overview";
+	String TOPIC_SCAN_WSD_UPDATE_OVERVIEW = "scan/wsd/update/overview";
 	String TOPIC_SEQUENCE_UPDATE_OVERVIEW = "sequence/update/overview";
 	String TOPIC_MASS_SPECTRUM_UPDATE_OVERVIEW = "spectrum/ms/update/overview";
 	String TOPIC_METHOD_UPDATE_OVERVIEW = "method/update/overview";
@@ -105,6 +107,7 @@ public interface IChemClipseEvents {
 	String TOPIC_EDITOR_PCR_CLOSE = "editor/pcr/close";
 	String TOPIC_EDITOR_NMR_CLOSE = "editor/nmr/close";
 	String TOPIC_EDITOR_VSD_CLOSE = "editor/vsd/close";
+	String TOPIC_EDITOR_WSD_CLOSE = "editor/wsd/close";
 	String TOPIC_EDITOR_PCA_CLOSE = "editor/pca/close";
 	//
 	String TOPIC_EDITOR_CHROMATOGRAM_TOOLBAR_UPDATE = "editor/chromatogram/toolbar/update";

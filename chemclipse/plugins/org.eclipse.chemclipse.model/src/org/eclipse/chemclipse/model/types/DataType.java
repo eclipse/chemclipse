@@ -24,8 +24,9 @@ public enum DataType {
 	MSD, // mass selective data
 	CSD, // current selective data
 	WSD, // wavelength selective data
-	VSD, // vibrational selective data (FT-IR, Raman)
-	SCAN_VSD, // vibrational selective data (FT-IR, Raman) - single scan
+	VSD, // vibrational spectroscopy data (FT-IR, Raman)
+	SCAN_VSD, // vibrational spectroscopy (FT-IR, Raman) - single scan
+	SCAN_WSD, // wavelength selective single scan (UV/Vis)
 	TSD, // time selective data (IMS)
 	NMR, // Nuclear magnetic resonance
 	CAL, // Retention Index Calibration
