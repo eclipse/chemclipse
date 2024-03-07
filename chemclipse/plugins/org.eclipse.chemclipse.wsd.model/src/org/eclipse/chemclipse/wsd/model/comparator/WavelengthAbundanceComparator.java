@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -49,13 +49,13 @@ public class WavelengthAbundanceComparator implements Comparator<IScanSignalWSD>
 		int returnValue;
 		switch(sortOrder) {
 			case ASC:
-				returnValue = Float.compare(scanSignal1.getAbundance(), scanSignal2.getAbundance());
+				returnValue = Float.compare(scanSignal1.getAbsorbance(), scanSignal2.getAbsorbance());
 				break;
 			case DESC:
-				returnValue = Float.compare(scanSignal2.getAbundance(), scanSignal1.getAbundance());
+				returnValue = Float.compare(scanSignal2.getAbsorbance(), scanSignal1.getAbsorbance());
 				break;
 			default:
-				returnValue = Float.compare(scanSignal1.getAbundance(), scanSignal2.getAbundance());
+				returnValue = Float.compare(scanSignal1.getAbsorbance(), scanSignal2.getAbsorbance());
 				break;
 		}
 		return returnValue;

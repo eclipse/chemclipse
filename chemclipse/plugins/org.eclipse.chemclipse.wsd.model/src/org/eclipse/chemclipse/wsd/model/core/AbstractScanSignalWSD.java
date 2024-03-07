@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,13 +32,13 @@ public abstract class AbstractScanSignalWSD implements IScanSignalWSD {
 	}
 
 	@Override
-	public float getAbundance() {
+	public float getAbsorbance() {
 
 		return abundance;
 	}
 
 	@Override
-	public void setAbundance(float abundance) {
+	public void setAbsorbance(float abundance) {
 
 		this.abundance = abundance;
 	}

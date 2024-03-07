@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -115,7 +115,7 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 			for(int signal = 0; signal < scanSignalTotal; signal++) {
 				IScanSignalWSD scanSignal = scanWSD.getScanSignal(signal);
 				int wavelength = (int)scanSignal.getWavelength(); // Change to double 1.2.0.0
-				float abundance = scanSignal.getAbundance();
+				float abundance = scanSignal.getAbsorbance();
 				dataOutputStream.writeInt(wavelength);
 				dataOutputStream.writeFloat(abundance);
 			}
@@ -201,7 +201,7 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 			for(int signal = 0; signal < scanSignalTotal; signal++) {
 				IScanSignalWSD scanSignal = scanWSD.getScanSignal(signal);
 				int wavelength = (int)scanSignal.getWavelength(); // Change to double 1.2.0.0
-				float abundance = scanSignal.getAbundance();
+				float abundance = scanSignal.getAbsorbance();
 				dataOutputStream.writeInt(wavelength);
 				dataOutputStream.writeFloat(abundance);
 			}

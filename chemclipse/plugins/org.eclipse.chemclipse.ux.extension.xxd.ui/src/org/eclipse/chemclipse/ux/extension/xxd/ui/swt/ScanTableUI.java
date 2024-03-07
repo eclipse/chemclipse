@@ -174,8 +174,8 @@ public class ScanTableUI extends ExtendedTableViewer {
 				minIntensity = 0.0f;
 				maxIntensity = scanMSD.getHighestAbundance().getAbundance();
 			} else if(scan instanceof IScanWSD scanWSD) {
-				minIntensity = scanWSD.getScanSignals().stream().mapToDouble(IScanSignalWSD::getAbundance).min().getAsDouble();
-				maxIntensity = scanWSD.getScanSignals().stream().mapToDouble(IScanSignalWSD::getAbundance).max().getAsDouble();
+				minIntensity = scanWSD.getScanSignals().stream().mapToDouble(IScanSignalWSD::getAbsorbance).min().getAsDouble();
+				maxIntensity = scanWSD.getScanSignals().stream().mapToDouble(IScanSignalWSD::getAbsorbance).max().getAsDouble();
 			} else if(scan instanceof IScanVSD scanVSD) {
 				minIntensity = scanVSD.getProcessedSignals().stream().mapToDouble(ISignalVSD::getIntensity).min().getAsDouble();
 				maxIntensity = scanVSD.getProcessedSignals().stream().mapToDouble(ISignalVSD::getIntensity).max().getAsDouble();

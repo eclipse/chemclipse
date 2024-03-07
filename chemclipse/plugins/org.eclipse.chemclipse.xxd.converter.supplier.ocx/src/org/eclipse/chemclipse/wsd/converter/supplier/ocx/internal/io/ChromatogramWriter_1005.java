@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Michael Chang.
+ * Copyright (c) 2015, 2024 Michael Chang.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -111,7 +111,7 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 			for(int signal = 0; signal < scanSignalTotal; signal++) {
 				IScanSignalWSD scanSignal = scanWsd.getScanSignal(signal);
 				int wavelength = (int)scanSignal.getWavelength(); // Change to double 1.2.0.0
-				float abundance = scanSignal.getAbundance();
+				float abundance = scanSignal.getAbsorbance();
 				dataOutputStream.writeInt(wavelength);
 				dataOutputStream.writeFloat(abundance);
 			}
@@ -191,7 +191,7 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 			for(int signal = 0; signal < scanSignalTotal; signal++) {
 				IScanSignalWSD scanSignal = scanWsd.getScanSignal(signal);
 				int wavelength = (int)scanSignal.getWavelength(); // Change to double 1.2.0.0
-				float abundance = scanSignal.getAbundance();
+				float abundance = scanSignal.getAbsorbance();
 				dataOutputStream.writeInt(wavelength);
 				dataOutputStream.writeFloat(abundance);
 			}

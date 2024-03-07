@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -92,7 +92,7 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 			int wavelengthActual = AbstractScanSignalWSD.getWavelength(scanSignal.getWavelength());
 			if(isValidWavelength(wavelengthActual)) {
 				int position = wavelengthActual - startWavelength;
-				abundanceValues[position] = scanSignal.getAbundance();
+				abundanceValues[position] = scanSignal.getAbsorbance();
 			}
 		} else {
 			setAbundance(scanSignal);
@@ -105,7 +105,7 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 		int wavelengthActual = AbstractScanSignalWSD.getWavelength(scanSignal.getWavelength());
 		if(isValidWavelength(wavelengthActual)) {
 			int position = wavelengthActual - startWavelength;
-			abundanceValues[position] += scanSignal.getAbundance();
+			abundanceValues[position] += scanSignal.getAbsorbance();
 		}
 	}
 

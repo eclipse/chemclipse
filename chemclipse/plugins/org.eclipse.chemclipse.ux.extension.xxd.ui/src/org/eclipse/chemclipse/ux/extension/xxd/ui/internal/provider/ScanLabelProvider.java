@@ -247,10 +247,10 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 					text = decimalFormatWSD.format(scanSignal.getWavelength());
 					break;
 				case 1:
-					text = decimalFormatIntensity.format(scanSignal.getAbundance());
+					text = decimalFormatIntensity.format(scanSignal.getAbsorbance());
 					break;
 				case 2:
-					float signal = scanSignal.getAbundance();
+					float signal = scanSignal.getAbsorbance();
 					if(signal < 0) {
 						text = "-" + decimalFormatRelativeIntensity.format(relativeIntensityFactorNegative * signal);
 					} else {

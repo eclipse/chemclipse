@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -85,7 +85,7 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 
 		float minSignal = Float.MAX_VALUE;
 		for(IScanSignalWSD scanSignal : scanWSD.getScanSignals()) {
-			minSignal = Math.min(minSignal, scanSignal.getAbundance());
+			minSignal = Math.min(minSignal, scanSignal.getAbsorbance());
 		}
 		//
 		return minSignal;
@@ -94,7 +94,7 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 	private void adjustSignal(IScanWSD scanWSD, float offsetSignal) {
 
 		for(IScanSignalWSD scanSignal : scanWSD.getScanSignals()) {
-			scanSignal.setAbundance(scanSignal.getAbundance() + offsetSignal);
+			scanSignal.setAbsorbance(scanSignal.getAbsorbance() + offsetSignal);
 		}
 	}
 }

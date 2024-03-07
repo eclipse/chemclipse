@@ -180,7 +180,7 @@ public class FilterScanMerger extends AbstractChromatogramFilter {
 			if(scanSignal == null) {
 				scanSignals.put(scanSignalWSD.getWavelength(), scanSignalWSD);
 			} else {
-				scanSignal.setAbundance(scanSignal.getAbundance() + scanSignalWSD.getAbundance());
+				scanSignal.setAbsorbance(scanSignal.getAbsorbance() + scanSignalWSD.getAbsorbance());
 			}
 		}
 		//

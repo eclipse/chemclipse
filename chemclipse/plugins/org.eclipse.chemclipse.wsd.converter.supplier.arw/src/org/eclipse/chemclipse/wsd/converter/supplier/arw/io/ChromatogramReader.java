@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -108,7 +108,7 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 										if(!Float.isNaN(intensity)) {
 											IScanSignalWSD scanSignal = new VendorScanSignal();
 											scanSignal.setWavelength(wavelength);
-											scanSignal.setAbundance(intensity);
+											scanSignal.setAbsorbance(intensity);
 											scan.addScanSignal(scanSignal);
 										}
 									}
