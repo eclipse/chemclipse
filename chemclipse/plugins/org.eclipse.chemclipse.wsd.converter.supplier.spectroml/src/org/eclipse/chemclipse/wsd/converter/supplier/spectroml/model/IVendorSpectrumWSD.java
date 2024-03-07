@@ -9,11 +9,11 @@
  * Contributors:
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.vsd.converter.supplier.cml.model;
+package org.eclipse.chemclipse.wsd.converter.supplier.spectroml.model;
 
-import org.eclipse.chemclipse.vsd.model.core.ISpectrumVSD;
+import org.eclipse.chemclipse.wsd.model.core.ISpectrumWSD;
 
-public interface IVendorSpectrumVSD extends ISpectrumVSD { // TODO: ILibraryInformation
+public interface IVendorSpectrumWSD extends ISpectrumWSD { // TODO: ILibraryInformation
 
 	/**
 	 * Returns CAS number of the IR spectrum.

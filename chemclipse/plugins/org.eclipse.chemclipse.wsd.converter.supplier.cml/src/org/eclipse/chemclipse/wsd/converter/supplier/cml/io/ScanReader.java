@@ -111,7 +111,7 @@ public class ScanReader {
 					}
 					int scans = Math.min(wavelengths.size(), absorbances.size());
 					for(int i = 0; i < scans; i++) {
-						vendorScan.getSignals().add(new SignalWSD(wavelengths.get(i).floatValue(), absorbances.get(i).floatValue()));
+						vendorScan.getSignals().add(new SignalWSD(wavelengths.get(i).floatValue(), absorbances.get(i).floatValue(), 0d));
 					}
 				}
 			}

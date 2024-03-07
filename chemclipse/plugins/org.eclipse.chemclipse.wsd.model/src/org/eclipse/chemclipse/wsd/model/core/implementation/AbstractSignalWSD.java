@@ -20,13 +20,16 @@ import org.eclipse.chemclipse.wsd.model.core.ISignalWSD;
 public abstract class AbstractSignalWSD extends AbstractSignal implements ISignalWSD, Comparable<ISignalWSD> {
 
 	private static final long serialVersionUID = -3849935170783926023L;
-	private double wavelength = 0.0d; // nm
+	//
+	private double wavelength = 0; // nm
 	private double absorbance = 0;
+	private double transmittance = 0;
 
-	public AbstractSignalWSD(double wavelength, double absorbance) {
+	public AbstractSignalWSD(double wavelength, double absorbance, double transmittance) {
 
 		this.wavelength = wavelength;
 		this.absorbance = absorbance;
+		this.transmittance = transmittance;
 	}
 
 	@Override
@@ -63,6 +66,18 @@ public abstract class AbstractSignalWSD extends AbstractSignal implements ISigna
 	public void setAbsorbance(double absorbance) {
 
 		this.absorbance = absorbance;
+	}
+
+	@Override
+	public double getTransmittance() {
+
+		return transmittance;
+	}
+
+	@Override
+	public void setTransmittance(double transmittance) {
+
+		this.transmittance = transmittance;
 	}
 
 	@Override

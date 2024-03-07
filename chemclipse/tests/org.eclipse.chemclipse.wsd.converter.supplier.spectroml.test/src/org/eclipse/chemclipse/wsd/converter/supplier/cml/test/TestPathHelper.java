@@ -5,20 +5,15 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.wsd.model.core.implementation;
+package org.eclipse.chemclipse.wsd.converter.supplier.cml.test;
 
-import org.eclipse.chemclipse.wsd.model.core.ISignalWSD;
+import org.eclipse.chemclipse.wsd.converter.supplier.spectroml.PathResolver;
 
-public class SignalWSD extends AbstractSignalWSD implements ISignalWSD, Comparable<ISignalWSD> {
+public class TestPathHelper extends PathResolver {
 
-	private static final long serialVersionUID = -6878875442146282898L;
-
-	public SignalWSD(double wavelength, double absorbance, double transmittance) {
-
-		super(wavelength, absorbance, transmittance);
-	}
+	public static final String SAMPLE = "testData/SpectroML.xml";
 }

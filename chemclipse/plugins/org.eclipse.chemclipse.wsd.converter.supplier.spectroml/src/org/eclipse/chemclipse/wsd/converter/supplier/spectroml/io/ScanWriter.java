@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2024 Lablicate GmbH.
- *
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,17 +8,18 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - refactoring vibrational spectroscopy
  *******************************************************************************/
-package org.eclipse.chemclipse.wsd.model.core.implementation;
+package org.eclipse.chemclipse.wsd.converter.supplier.spectroml.io;
 
-import org.eclipse.chemclipse.wsd.model.core.ISignalWSD;
+import java.io.File;
 
-public class SignalWSD extends AbstractSignalWSD implements ISignalWSD, Comparable<ISignalWSD> {
+import org.eclipse.chemclipse.wsd.model.core.ISpectrumWSD;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-	private static final long serialVersionUID = -6878875442146282898L;
+public class ScanWriter {
 
-	public SignalWSD(double wavelength, double absorbance, double transmittance) {
+	public void write(File file, ISpectrumWSD spectrum, IProgressMonitor monitor) {
 
-		super(wavelength, absorbance, transmittance);
 	}
 }
