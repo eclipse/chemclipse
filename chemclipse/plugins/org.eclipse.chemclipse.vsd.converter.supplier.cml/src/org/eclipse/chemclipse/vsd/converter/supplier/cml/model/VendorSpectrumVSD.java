@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.vsd.converter.supplier.cml.model;
 
 import org.eclipse.chemclipse.vsd.model.implementation.SpectrumVSD;
 
-public class VendorSpectrumXIR extends SpectrumVSD implements IVendorSpectrumVSD {
+public class VendorSpectrumVSD extends SpectrumVSD implements IVendorSpectrumVSD {
 
 	private static final long serialVersionUID = 703379410586981110L;
 	//

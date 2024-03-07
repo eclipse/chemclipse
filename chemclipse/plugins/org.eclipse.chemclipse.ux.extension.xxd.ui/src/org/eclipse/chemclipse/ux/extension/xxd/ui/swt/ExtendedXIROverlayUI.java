@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartXIR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartVSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
@@ -48,7 +48,7 @@ import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
 public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 
-	private AtomicReference<ChartXIR> chartControl = new AtomicReference<>();
+	private AtomicReference<ChartVSD> chartControl = new AtomicReference<>();
 	//
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 	//
@@ -121,7 +121,7 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 
 	private void createOverlayChart(Composite parent) {
 
-		ChartXIR chartXIR = new ChartXIR(parent, SWT.BORDER, true); // TODO
+		ChartVSD chartXIR = new ChartVSD(parent, SWT.BORDER, true); // TODO
 		chartXIR.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
 		chartControl.set(chartXIR);
@@ -134,7 +134,7 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 
 	private void refreshUpdateOverlayChart() {
 
-		ChartXIR chartXIR = chartControl.get();
+		ChartVSD chartXIR = chartControl.get();
 		chartXIR.deleteSeries();
 		if(!scanSelections.isEmpty()) {
 			//

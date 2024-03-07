@@ -29,14 +29,14 @@ import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
-public class ChartXIR extends LineChart {
+public class ChartVSD extends LineChart {
 
-	public ChartXIR() {
+	public ChartVSD() {
 
 		super();
 	}
 
-	public ChartXIR(Composite parent, int style, boolean isAbsorbance) {
+	public ChartVSD(Composite parent, int style, boolean isAbsorbance) {
 
 		super(parent, style);
 		initialize(isAbsorbance);
