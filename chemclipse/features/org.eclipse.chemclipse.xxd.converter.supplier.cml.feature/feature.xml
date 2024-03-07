@@ -36,4 +36,8 @@
          id="org.eclipse.chemclipse.msd.converter.supplier.cml"
          version="0.0.0"/>
 
+   <plugin
+         id="org.eclipse.chemclipse.wsd.converter.supplier.cml"
+         version="0.0.0"/>
+
 </feature>

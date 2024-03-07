@@ -30,6 +30,7 @@ public interface ISupplierFileIdentifier extends SupplierContext {
 	String TYPE_PEAKLIST_MSD = "PEAKLIST MSD"; // e.g. Matlab Parafac Peaklist *.mpl
 	String TYPE_SCAN_MSD = "SCAN_MSD"; // MALDI-TOF
 	String TYPE_SCAN_VSD = "SCAN_VSD"; // FT-IR
+	String TYPE_SCAN_WSD = "SCAN_WSD"; // UV/Vis
 	String TYPE_CAL = "CAL"; // RI Calibration
 	String TYPE_PCR = "PCR"; // Polymerase Chain Reaction
 	String TYPE_SEQ = "SEQ"; // Sequence

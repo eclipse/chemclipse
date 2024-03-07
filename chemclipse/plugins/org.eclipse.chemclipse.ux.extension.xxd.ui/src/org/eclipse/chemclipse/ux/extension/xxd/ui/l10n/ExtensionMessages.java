@@ -49,6 +49,7 @@ public class ExtensionMessages extends NLS {
 	public static String edit;
 	public static String editorNMR;
 	public static String editorVSD;
+	public static String editorWSD;
 	public static String sequenceEditor;
 	public static String adjustChromatogramEditor;
 	public static String chromatogramEditorReset;
@@ -339,6 +340,7 @@ public class ExtensionMessages extends NLS {
 	public static String transmittance;
 	public static String absorbance;
 	public static String wavenumber;
+	public static String wavelength;
 	//
 	static {
 		NLS.initializeMessages("org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.messages", ExtensionMessages.class); //$NON-NLS-1$

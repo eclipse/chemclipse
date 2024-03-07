@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.vsd.converter.chromatogram.ChromatogramConverterVSD;
 import org.eclipse.chemclipse.vsd.converter.core.ScanConverterVSD;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
+import org.eclipse.chemclipse.wsd.converter.core.ScanConverterWSD;
 
 public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 
@@ -60,6 +61,9 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 				break;
 			case SCAN_VSD:
 				supplier = ScanConverterVSD.getScanConverterSupport().getSupplier();
+				break;
+			case SCAN_WSD:
+				supplier = ScanConverterWSD.getScanConverterSupport().getSupplier();
 				break;
 			case NMR:
 				supplier = ScanConverterNMR.getScanConverterSupport().getSupplier();
@@ -97,6 +101,9 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 				break;
 			case WSD:
 				type = TYPE_WSD;
+				break;
+			case SCAN_WSD:
+				type = TYPE_SCAN_WSD;
 				break;
 			case VSD:
 				type = TYPE_VSD;

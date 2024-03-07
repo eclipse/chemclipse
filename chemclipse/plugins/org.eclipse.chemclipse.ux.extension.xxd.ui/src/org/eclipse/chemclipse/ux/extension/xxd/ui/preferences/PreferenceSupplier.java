@@ -862,6 +862,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final boolean DEF_SHOW_SCANS_MSD = true;
 	public static final String P_SHOW_DATA_SCAN_VSD = "showDataScanVSD";
 	public static final boolean DEF_SHOW_DATA_SCAN_VSD = true;
+	public static final String P_SHOW_DATA_SCAN_WSD = "showDataScanWSD";
+	public static final boolean DEF_SHOW_DATA_SCAN_WSD = true;
 	public static final String P_SHOW_DATA_NMR = "showDataNMR";
 	public static final boolean DEF_SHOW_DATA_NMR = true;
 	public static final String P_SHOW_DATA_CAL = "showDataCAL";
@@ -1200,6 +1202,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_SHOW_LIBRARY_MSD, DEF_SHOW_LIBRARY_MSD);
 		putDefault(P_SHOW_SCANS_MSD, DEF_SHOW_SCANS_MSD);
 		putDefault(P_SHOW_DATA_SCAN_VSD, DEF_SHOW_DATA_SCAN_VSD);
+		putDefault(P_SHOW_DATA_SCAN_WSD, DEF_SHOW_DATA_SCAN_WSD);
 		putDefault(P_SHOW_DATA_NMR, DEF_SHOW_DATA_NMR);
 		putDefault(P_SHOW_DATA_CAL, DEF_SHOW_DATA_CAL);
 		putDefault(P_SHOW_DATA_PCR, DEF_SHOW_DATA_PCR);

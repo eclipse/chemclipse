@@ -47,12 +47,14 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.QuantitationDatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorVSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.services.EditorServicesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.services.IEditorService;
 import org.eclipse.chemclipse.vsd.converter.chromatogram.ChromatogramConverterVSD;
 import org.eclipse.chemclipse.vsd.converter.core.ScanConverterVSD;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
+import org.eclipse.chemclipse.wsd.converter.core.ScanConverterWSD;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
@@ -104,6 +106,9 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case SCAN_VSD:
 				supplier = ScanConverterVSD.getScanConverterSupport().getSupplier();
+				break;
+			case SCAN_WSD:
+				supplier = ScanConverterWSD.getScanConverterSupport().getSupplier();
 				break;
 			case NMR:
 				supplier = ScanConverterNMR.getScanConverterSupport().getSupplier();
@@ -277,13 +282,22 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_TSD_UPDATE_OVERVIEW;
 				break;
 			case SCAN_VSD:
-				type = TYPE_SCAN_MSD;
+				type = TYPE_SCAN_VSD;
 				elementId = ScanEditorVSD.ID;
 				contributionURI = ScanEditorVSD.CONTRIBUTION_URI;
 				iconURI = ScanEditorVSD.ICON_URI;
 				tooltip = ScanEditorVSD.TOOLTIP;
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_SCAN_VSD_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_SCAN_VSD_UPDATE_OVERVIEW;
+				break;
+			case SCAN_WSD:
+				type = TYPE_SCAN_WSD;
+				elementId = ScanEditorWSD.ID;
+				contributionURI = ScanEditorWSD.CONTRIBUTION_URI;
+				iconURI = ScanEditorWSD.ICON_URI;
+				tooltip = ScanEditorWSD.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_SCAN_WSD_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_SCAN_WSD_UPDATE_OVERVIEW;
 				break;
 			case NMR:
 				type = TYPE_NMR;
