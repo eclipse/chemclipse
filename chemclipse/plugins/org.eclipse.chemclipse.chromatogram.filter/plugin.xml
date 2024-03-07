@@ -38,6 +38,13 @@
             filterName="Chromatogram Reshape"
             filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsReshape"
             id="org.eclipse.chemclipse.chromatogram.filter.chromatogramReshape">
-      </ChromatogramFilterSupplier>                    
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filter transfers header data to the chromatogram references."
+            filter="org.eclipse.chemclipse.chromatogram.filter.impl.ChromatogramFilterHeaderTransfer"
+            filterName="Chromatogram Header Transfer"
+            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsHeaderTransfer"
+            id="org.eclipse.chemclipse.chromatogram.filter.chromatogramHeaderTransfer">
+      </ChromatogramFilterSupplier>                          
    </extension>
 </plugin>
