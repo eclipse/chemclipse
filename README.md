@@ -9,10 +9,16 @@ Currently it offers workflows in the following areas:
   * coupled with mass spectrometry (GC/MS)
   * flame-ionization detectors (GC/FID)
   * wavelength-selective detectors (HPLC-DAD/UV-Vis)
-* real-time polymerase chain reaction (PCR)
-* nuclear magnetic resonance (NMR)
-* infrared spectroscopy (FTIR, NIR, MIR)
+  * vibrational-spectroscopy detectors (GC-IR, HPLC-Raman)
 * mass spectrometry (MALDI-TOF MS)
+* molecular spectroscopy
+  * nuclear magnetic resonance (NMR)
+  * vibrational spectroscopy
+    * infrared spectroscopy (FTIR, NIR, MIR)
+    * raman spectroscopy (Raman)
+  * ultraviolet–visible spectroscopy (UV/Vis)
+* molecular biology
+  * real-time polymerase chain reaction (PCR)
 
 Thanks to the open and flexible architecture more are possible and we are open for ideas and suggestions see our [contribution guidelines](https://github.com/eclipse/chemclipse/blob/develop/CONTRIBUTING.md).
 
