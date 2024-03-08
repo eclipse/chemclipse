@@ -33,10 +33,10 @@ if [ -z $new_version ]; then
 fi
 
 #
-# The workspace path, use the eclipse workspace path, e.g. /home/openchrom/www.openchrom.net/OpenChrom/trunk
+# The workspace path, use the eclipse workspace path, e.g. ~/git/chemclipse
 # Use "$workspace" as the actual workspace could contains white spaces.
 #
-echo -n "Please enter the workspace path (/home/openchrom/www.openchrom.net/Development/OpenChrom/0.6.0/workspace): "
+echo -n "Please enter the workspace path ($HOME/eclipse/workspace): "
 read workspace
 if [ -z "$workspace" ]; then
   echo "No valid workspace."

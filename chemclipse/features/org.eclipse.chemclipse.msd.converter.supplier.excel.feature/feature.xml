@@ -7,7 +7,7 @@
       license-feature="org.eclipse.license"
       license-feature-version="1.0.0.qualifier">
 
-   <description url="http://www.openchrom.net/plugins/converter/excel/">
+   <description>
       This is a Excel chromatogram converter.
    </description>
 
