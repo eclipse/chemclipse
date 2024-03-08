@@ -25,4 +25,8 @@ public interface ISignalWSD extends ISignal, Serializable {
 	double getAbsorbance();
 
 	void setAbsorbance(double absorbance);
+
+	double getTransmittance();
+
+	void setTransmittance(double transmittance);
 }

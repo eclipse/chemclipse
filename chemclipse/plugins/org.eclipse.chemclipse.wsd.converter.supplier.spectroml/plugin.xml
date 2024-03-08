@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.wsd.converter.scanSupplier">
+      <ScanSupplier
+            description="Reads SpectroML Scans."
+            exportConverter="org.eclipse.chemclipse.wsd.converter.supplier.spectroml.converter.ScanExportConverter"
+            fileExtension=".xml"
+            filterName="SpectroML (*.xml)"
+            id="org.eclipse.chemclipse.wsd.converter.supplier.cml"
+            importConverter="org.eclipse.chemclipse.wsd.converter.supplier.spectroml.converter.ScanImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.wsd.converter.supplier.spectroml.converter.MagicNumberMatcher"
+            importContentMatcher="org.eclipse.chemclipse.wsd.converter.supplier.spectroml.converter.FileContentMatcher"
+            isExportable="false"
+            isImportable="true">
+      </ScanSupplier>
+   </extension>
+</plugin>

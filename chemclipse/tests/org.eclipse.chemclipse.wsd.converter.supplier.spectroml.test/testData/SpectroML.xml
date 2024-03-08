@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<!-- SpectroML sample file, 8/29/01 -->
+<SpectroML version="1.0">
+   <experiment type="UV/Vis" language="en-us" experimentId="e0">
+      <file experimentLinks="e0" externalLinks="">
+         <title>sample experiment</title>
+         <timeStamp>
+            <date>2000-11-01</date>
+            <time>10:00:00</time>
+         </timeStamp>
+			<path pathId="p0" instrumentDescriptionLink="id0" instrumentPropertyLink="ip0" sampleDescriptionLink="sd0" samplePropertyLink="sp0" measurementDescriptionLink="md0" measurementPropertyLink="mp0" dataPropertyLink="dp0" dataCoreLink="dc0"/>         
+			<comment>simple measurement of drinking water</comment>
+      </file>
+      <instrument>
+         <instrumentDescription instrumentDescriptionId="id0">
+            <instrumentDesignation>
+               <identifier>25547UV-247</identifier>
+               <manufacturer>Hewlett Packard</manufacturer>
+               <model>HP 8453</model>
+               <owner>
+                  <name>NIST, ACSL</name>
+                  <contact>gary.kramer@nist.gov</contact>
+               </owner>
+               <location>
+                  <name>Filter Lab</name>
+                  <contact>john.travis@nist.gov</contact>
+               </location>
+               <comment>UV/Vis diode array spectrometer</comment>
+            </instrumentDesignation>
+            <instrumentApplication>
+               <software>Hewlett-Packard ChemStation</software>
+               <version>Win system 1.0</version>
+               <operatingSystem>Windows NT 4.0 SP 5</operatingSystem>
+               <firmware>1.0</firmware>
+               <operator>
+                  <name>Paul DeRose</name>
+                  <contact>paul.derose@nist.gov</contact>
+               </operator>
+               <comment>standard installation, advanced mode</comment>
+            </instrumentApplication>
+         </instrumentDescription>
+         <instrumentProperty instrumentPropertyId="ip0">
+            <instrumentSetting>
+               <resolution unit="nm">1</resolution>
+               <linearDispersion unit="-">unknown</linearDispersion>
+               <spectralBandWidthRange>
+                  <minimum unit="nm">1.5</minimum>
+                  <maximum unit="nm">1.5</maximum>
+               </spectralBandWidthRange>
+               <wavelengthRange>
+                  <minimum unit="nm">1.5</minimum>
+                  <maximum unit="nm">1.5</maximum>
+               </wavelengthRange>
+               <absorbanceRange>
+                  <minimum unit="AU">0</minimum>
+                  <maximum unit="AU">4</maximum>
+               </absorbanceRange>
+               <detectorTypes>diode array</detectorTypes>
+               <sourceTypes>tungsten + deuterium lamp</sourceTypes>
+               <comment>standard properties</comment>
+            </instrumentSetting>
+            <instrumentParameter>
+               <slitWidth unit="mm">1</slitWidth>
+               <spectralSlitWidth unit="nm">1</spectralSlitWidth>
+               <beamChannel>1</beamChannel>
+               <sampleHolder>multi sample unit</sampleHolder>
+               <samplePosition>1</samplePosition>
+               <scanSpeed unit="ms">500</scanSpeed>
+               <pointSeparation unit="nm">1</pointSeparation>
+               <comment>standard parameters</comment>
+            </instrumentParameter>
+         </instrumentProperty>
+      </instrument>
+      <sample>
+         <sampleDescription sampleDescriptionId="sd0">
+            <sampleDesignation>
+               <identifier>1063546374</identifier>
+               <name>water</name>
+               <owner>
+                  <name>NIST, ACSL</name>
+                  <contact>alexander.ruehl@nist.gov</contact>
+               </owner>
+               <location>
+                  <name>Filter Lab</name>
+                  <contact>john.travis@nist.gov</contact>
+               </location>
+               <casNumber>7732-18-5</casNumber>
+               <formula>H2O</formula>
+               <storageMethod>no storage</storageMethod>
+               <disposalMethod>water sink</disposalMethod>
+               <comment>one time use</comment>
+            </sampleDesignation>
+            <samplePreparation>
+               <procedureMethod>fill</procedureMethod>
+               <timeStamp>
+                  <date>2001-11-01</date>
+                  <time>09:30:00</time>
+               </timeStamp>
+               <operator>
+                  <name>Alexander Ruehl</name>
+                  <contact>alexander.ruehl@nist.gov</contact>
+               </operator>
+               <supplier>
+                  <name>Filter Lab</name>
+                  <contact>john.travis@nist.gov</contact>
+               </supplier>
+               <preparationDescription>out of crane</preparationDescription>
+               <comment>regular drinking water</comment>
+            </samplePreparation>
+         </sampleDescription>
+         <sampleProperty samplePropertyId="sp0">
+            <sampleAttribute>
+               <molecularWeight unit="AMU">18.02</molecularWeight>
+               <meltingPoint unit="C">0</meltingPoint>
+               <boilingPoint unit="C">100</boilingPoint>
+               <density unit="g/cc">0.995</density>
+               <refractiveIndex unit="rel. air, 20C, 434 nm">1.3404</refractiveIndex>
+               <comment>ususal properties</comment>
+            </sampleAttribute>
+            <sampleParameter>
+               <state>liquid</state>
+               <pathLength unit="mm">10</pathLength>
+               <amount unit="ml">5</amount>
+               <pressure unit="torr">760</pressure>
+               <temperature unit="K">293</temperature>
+               <comment>filled cuvette</comment>
+            </sampleParameter>
+         </sampleProperty>
+      </sample>
+      <measurement>
+         <measurementDescription measurementDescriptionId="md0">
+            <measurementDesignation>
+               <identifier>M876-UV</identifier>
+               <title>water analysis</title>
+               <owner>
+                  <name>NIST, Analytical Chemistry Division</name>
+                  <contact>(301)975-4645</contact>
+               </owner>
+               <laboratoryReference>printout 11/01/00-1</laboratoryReference>
+               <comment>single quick measurement</comment>
+            </measurementDesignation>
+            <measurementExecution>
+               <project>SpectroML</project>
+               <timeStamp>
+                  <date>2001-11-01</date>
+                  <time>09:30:00</time>
+               </timeStamp>
+               <operator>
+                  <name>Alexander Ruehl</name>
+                  <contact>alexander.ruehl@nist.gov</contact>
+               </operator>
+               <comment>test</comment>
+            </measurementExecution>
+         </measurementDescription>
+         <measurementProperty measurementPropertyId="mp0">
+            <measurementParameter>
+               <measurementType>sample</measurementType>
+               <scanMode>discrete wavelengths</scanMode>
+               <referenceSample sampleDescriptionLink="">empty cuvette</referenceSample>
+               <filter>none</filter>
+               <signalNoise>none</signalNoise>
+               <scanNumbers>1</scanNumbers>
+               <scanDuration unit="s">5</scanDuration>
+               <comment>no averaging</comment>
+            </measurementParameter>
+            <measurementCorrection>
+					<qualificationTimeStamp>                  
+						<date>2000-07-19</date>                  
+						<time>11:51:00</time>               
+					</qualificationTimeStamp>               
+					<qualificationReference>qual.csv</qualificationReference>               
+					<proficiencyTimeStamp>                  
+						<date>2000-07-19</date>                  
+						<time>14:00:00</time>               
+					</proficiencyTimeStamp>               
+					<proficiencyReference>prof.csv</proficiencyReference>               
+					<transmittanceTimeStamp>                  
+						<date>2000-09-29</date>                  
+						<time>10:05:00</time>               
+					</transmittanceTimeStamp>               
+					<transmittanceReference>trans.csv</transmittanceReference>
+					<wavelengthTimeStamp>                  
+						<date>2000-09-29</date>                  
+						<time>15:12:00</time>               
+					</wavelengthTimeStamp>               
+					<wavelengthReference>wave.csv</wavelengthReference>            
+	            <comment>NTRM correction infos</comment>
+            </measurementCorrection>
+         </measurementProperty>
+      </measurement>
+      <data>
+         <dataProperty dataPropertyId="dp0">
+            <dataParameter>
+					<axisLabel>                  
+						<axis dim="x">Wavelength</axis>                  
+						<axis dim="y">Transmittance</axis>               
+					</axisLabel>               
+					<axisUnit>                  
+						<axis dim="x">nm</axis>                  
+						<axis dim="y">%T</axis>               
+					</axisUnit>            
+               <minimumValue>
+                  <value dim="x">270</value>
+                  <value dim="y">0.029019</value>
+               </minimumValue>
+               <maximumValue>
+                  <value dim="x">976</value>
+                  <value dim="y">0.10616</value>
+               </maximumValue>
+               <comment>lines at 270 nm, 655nm, 976 nm</comment>
+            </dataParameter>
+            <dataCalculation>
+               <scaleFactor>
+                  <value dim="x">1</value>
+                  <value dim="y">1</value>
+               </scaleFactor>
+               <numberPoints>3</numberPoints>
+               <pointIncrement>
+                  <value dim="x">0</value>
+                  <value dim="y">0</value>
+               </pointIncrement>
+               <startValue>
+                  <value dim="x">270</value>
+                  <value dim="y">0.029019</value>
+               </startValue>
+               <comment>discrete points</comment>
+            </dataCalculation>
+         </dataProperty>
+         <dataCore dataCoreId="dc0">
+				<values dim="x">270 655 976</values>            
+				<values dim="y">0.10616 0.029019 0.23453</values>         
+         </dataCore>
+      </data>
+   </experiment>
+</SpectroML>

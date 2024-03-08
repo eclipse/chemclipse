@@ -5,20 +5,29 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.wsd.model.core.implementation;
+package org.eclipse.chemclipse.wsd.converter.supplier.spectroml.model.v1;
 
-import org.eclipse.chemclipse.wsd.model.core.ISignalWSD;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlValue;
 
-public class SignalWSD extends AbstractSignalWSD implements ISignalWSD, Comparable<ISignalWSD> {
+@XmlAccessorType(XmlAccessType.FIELD)
+public class NumberPoints {
 
-	private static final long serialVersionUID = -6878875442146282898L;
+	@XmlValue
+	private int value;
 
-	public SignalWSD(double wavelength, double absorbance, double transmittance) {
+	public int getValue() {
 
-		super(wavelength, absorbance, transmittance);
+		return value;
+	}
+
+	public void setValue(int value) {
+
+		this.value = value;
 	}
 }

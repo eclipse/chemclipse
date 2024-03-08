@@ -5,20 +5,22 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.wsd.model.core.implementation;
+package org.eclipse.chemclipse.wsd.converter.supplier.spectroml.converter;
 
-import org.eclipse.chemclipse.wsd.model.core.ISignalWSD;
+import java.io.File;
 
-public class SignalWSD extends AbstractSignalWSD implements ISignalWSD, Comparable<ISignalWSD> {
+import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
+import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 
-	private static final long serialVersionUID = -6878875442146282898L;
+public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
 
-	public SignalWSD(double wavelength, double absorbance, double transmittance) {
+	@Override
+	public boolean checkFileFormat(File file) {
 
-		super(wavelength, absorbance, transmittance);
+		return checkFileExtension(file, ".xml");
 	}
 }
