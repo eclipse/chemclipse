@@ -213,10 +213,6 @@
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.feature"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.feature"
          version="0.0.0"/>
 
