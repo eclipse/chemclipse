@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.model.IVendorSpectrumVSD;
-import org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.model.VendorSpectrumXIR;
+import org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.model.VendorSpectrumVSD;
 import org.eclipse.chemclipse.vsd.model.implementation.SignalInfrared;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -54,7 +54,7 @@ public class ScanReader {
 
 	public IVendorSpectrumVSD read(File file, IProgressMonitor monitor) throws IOException {
 
-		IVendorSpectrumVSD vendorScan = new VendorSpectrumXIR();
+		IVendorSpectrumVSD vendorScan = new VendorSpectrumVSD();
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		String line;
