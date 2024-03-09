@@ -34,6 +34,7 @@ public class ScanReader {
 
 	private static final Logger logger = Logger.getLogger(ScanReader.class);
 	//
+	private static final String COMMENT_MARKER = "$$";
 	private static final String HEADER_MARKER = "##";
 	private static final String DATE = "##DATE=";
 	private static final String XUNITS = "##XUNITS=";
@@ -70,6 +71,9 @@ public class ScanReader {
 		boolean transmission = false;
 		boolean absorbance = false;
 		while((line = bufferedReader.readLine()) != null) {
+			if(line.contains(COMMENT_MARKER)) {
+				line = line.substring(0, line.indexOf(COMMENT_MARKER));
+			}
 			if(line.startsWith(DATE)) {
 				String date = line.trim().replace(DATE, "");
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
