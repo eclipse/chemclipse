@@ -16,12 +16,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Scanner;
 
+import org.apache.commons.math3.util.Precision;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.model.IVendorSpectrumVSD;
 import org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.model.VendorSpectrumVSD;
@@ -50,8 +51,6 @@ public class ScanReader {
 	private static final String NPOINTS = "##NPOINTS=";
 	private static final String FIRSTY = "##FIRSTY=";
 	private static final String XYDATA = "##XYDATA=";
-	//
-	private static final Pattern rawYpattern = Pattern.compile("\\+(\\d*)");
 
 	public IVendorSpectrumVSD read(File file, IProgressMonitor monitor) throws IOException {
 
@@ -133,29 +132,38 @@ public class ScanReader {
 				}
 			}
 			if(!line.startsWith(HEADER_MARKER)) {
-				Matcher rawYs = rawYpattern.matcher(line.trim());
-				while(rawYs.find()) {
-					if(!firstValue) {
-						rawX += deltaX;
+				if(deltaX == 0) {
+					if(firstX > lastX) {
+						deltaX = -1;
+					} else {
+						deltaX = +1;
 					}
-					double wavenumber = rawX * xFactor;
-					//
-					int rawY = Integer.parseInt(rawYs.group(1));
-					double y = rawY * yFactor;
-					if(firstValue) {
-						if(firstY != y) {
-							/*
-							 * TODO approximate here
-							 */
-							logger.warn("Expected first Y to be " + firstY + " but calculated " + y);
+				}
+				try (Scanner scanner = new Scanner(line).useDelimiter("[^\\d]+")) {
+					if(!scanner.hasNextInt()) {
+						continue;
+					}
+					rawX = scanner.nextInt();
+					while(scanner.hasNextInt()) {
+						int rawY = scanner.nextInt();
+						if(!firstValue) {
+							rawX += deltaX;
 						}
+						double wavenumber = rawX * xFactor;
+						double y = rawY * yFactor;
+						if(firstValue) {
+							double epsilon = Math.pow(10, -BigDecimal.valueOf(firstY).scale());
+							if(Precision.equals(firstY, y, epsilon)) {
+								logger.warn("Expected first Y to be " + firstY + " but calculated " + y);
+							}
+						}
+						if(absorbance) {
+							vendorScan.getScanVSD().getProcessedSignals().add(new SignalInfrared(wavenumber, y, 0));
+						} else if(transmission) {
+							vendorScan.getScanVSD().getProcessedSignals().add(new SignalInfrared(wavenumber, 0, y));
+						}
+						firstValue = false;
 					}
-					if(absorbance) {
-						vendorScan.getScanVSD().getProcessedSignals().add(new SignalInfrared(wavenumber, y, 0));
-					} else if(transmission) {
-						vendorScan.getScanVSD().getProcessedSignals().add(new SignalInfrared(wavenumber, 0, y));
-					}
-					firstValue = false;
 				}
 			}
 		}
