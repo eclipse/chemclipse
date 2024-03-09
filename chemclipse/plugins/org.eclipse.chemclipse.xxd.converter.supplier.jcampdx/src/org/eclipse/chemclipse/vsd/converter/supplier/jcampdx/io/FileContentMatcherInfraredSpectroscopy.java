@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,8 +25,9 @@ public class FileContentMatcherInfraredSpectroscopy extends AbstractFileContentM
 	public boolean checkFileFormat(File file) {
 
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-			for(int i = 0; i < 3; i++) {
-				if(bufferedReader.readLine().contains("##DATA TYPE=INFRARED SPECTRUM")) {
+			for(int i = 0; i < 10; i++) {
+				String line = bufferedReader.readLine().trim();
+				if(line.startsWith("##DATA TYPE") && line.contains("INFRARED SPECTRUM")) {
 					return true;
 				}
 			}
