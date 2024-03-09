@@ -46,7 +46,7 @@ public class ScanReader {
 	// private static final String MINY = "##MINY=";
 	private static final String XFACTOR = "##XFACTOR=";
 	private static final String YFACTOR = "##YFACTOR=";
-	// private static final String NPOINTS = "##NPOINTS=";
+	private static final String NPOINTS = "##NPOINTS=";
 	private static final String FIRSTY = "##FIRSTY=";
 	private static final String XYDATA = "##XYDATA=";
 	//
@@ -65,6 +65,7 @@ public class ScanReader {
 		double xFactor = 0;
 		double yFactor = 0;
 		float rawX = 0;
+		int nPoints = 0;
 		boolean firstValue = true;
 		boolean transmission = false;
 		boolean absorbance = false;
@@ -78,6 +79,9 @@ public class ScanReader {
 				} catch(ParseException e) {
 					logger.warn(e);
 				}
+			}
+			if(line.startsWith(NPOINTS)) {
+				nPoints = Integer.parseInt(line.replace(NPOINTS, "").trim());
 			}
 			if(line.startsWith(XYDATA)) {
 				if(!line.contains("(X++(Y..Y))")) {
@@ -150,6 +154,12 @@ public class ScanReader {
 					}
 					firstValue = false;
 				}
+			}
+		}
+		if(nPoints > 0) {
+			int signals = vendorScan.getScanVSD().getProcessedSignals().size();
+			if(signals != nPoints) {
+				logger.warn("Expected " + nPoints + " but got " + signals + " signals instead.");
 			}
 		}
 		if(lastX != rawX * xFactor) {
