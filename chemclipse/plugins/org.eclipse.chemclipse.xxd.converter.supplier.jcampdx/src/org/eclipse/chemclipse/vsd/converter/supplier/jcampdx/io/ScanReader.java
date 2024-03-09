@@ -95,34 +95,33 @@ public class ScanReader {
 				}
 			}
 			if(line.startsWith(FIRSTX)) {
-				firstX = Float.parseFloat(line.trim().replace(FIRSTX, ""));
-				rawX = firstX;
+				firstX = Float.parseFloat(line.replace(FIRSTX, "").trim());
 			}
 			if(line.startsWith(FIRSTY)) {
-				firstY = Float.parseFloat(line.trim().replace(FIRSTY, ""));
+				firstY = Float.parseFloat(line.replace(FIRSTY, "").trim());
 			}
 			if(line.startsWith(LASTX)) {
-				lastX = Float.parseFloat(line.trim().replace(LASTX, ""));
+				lastX = Float.parseFloat(line.replace(LASTX, "").trim());
 			}
 			if(line.startsWith(DELTAX)) {
-				deltaX = Float.parseFloat(line.trim().replace(DELTAX, ""));
+				deltaX = Float.parseFloat(line.replace(DELTAX, "").trim());
 			}
 			if(line.startsWith(XFACTOR)) {
-				xFactor = Double.valueOf(line.trim().replace(XFACTOR, ""));
+				xFactor = Double.valueOf(line.replace(XFACTOR, "").trim());
 			}
 			if(line.startsWith(YFACTOR)) {
-				yFactor = Double.valueOf(line.trim().replace(YFACTOR, ""));
+				yFactor = Double.valueOf(line.replace(YFACTOR, "").trim());
 			}
 			if(line.startsWith(XUNITS)) {
-				String xUnit = line.trim().replace(XUNITS, "");
-				if(!xUnit.equals("1/CM")) {
+				String xUnit = line.replace(XUNITS, "").trim();
+				if(!(xUnit.equals("1/CM") || xUnit.equals("WAVENUMBERS"))) {
 					bufferedReader.close();
 					fileReader.close();
 					throw new UnsupportedDataTypeException("Unsupported X unit: " + xUnit);
 				}
 			}
 			if(line.startsWith(YUNITS)) {
-				String yUnit = line.trim().replace(YUNITS, "");
+				String yUnit = line.replace(YUNITS, "").trim();
 				if(yUnit.equals("TRANSMITTANCE")) {
 					transmission = true;
 				} else if(yUnit.equals("ABSORBANCE")) {
