@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.ui
+Automatic-Module-Name: org.eclipse.chemclipse.pcr.report.supplier.txt.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: PCR Report
 Bundle-SymbolicName: org.eclipse.chemclipse.pcr.report.supplier.txt.ui;singleton:=true

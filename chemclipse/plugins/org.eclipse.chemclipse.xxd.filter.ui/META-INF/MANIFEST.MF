@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.filter.ui
+Automatic-Module-Name: org.eclipse.chemclipse.xxd.filter.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: Filter UI
 Bundle-SymbolicName: org.eclipse.chemclipse.xxd.filter.ui;singleton:=true

@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.pcr.converter.supplier.rdml
+Automatic-Module-Name: org.eclipse.chemclipse.pcr.converter.supplier.rdes
 Bundle-ManifestVersion: 2
 Bundle-Name: RDES PCR Converter
 Bundle-SymbolicName: org.eclipse.chemclipse.pcr.converter.supplier.rdes;singleton:=true

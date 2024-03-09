@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.swt.ui
+Automatic-Module-Name: org.eclipse.chemclipse.swt.win32
 Bundle-ManifestVersion: 2
 Bundle-Name: SWT Windows API
 Bundle-SymbolicName: org.eclipse.chemclipse.swt.win32;singleton:=true
