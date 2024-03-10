@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.xxd.converter.supplier.jcampdx
+Automatic-Module-Name: org.eclipse.chemclipse.xxd.converter.supplier.cml
 Bundle-ManifestVersion: 2
 Bundle-Name: CML
 Bundle-SymbolicName: org.eclipse.chemclipse.xxd.converter.supplier.cml;singleton:=true

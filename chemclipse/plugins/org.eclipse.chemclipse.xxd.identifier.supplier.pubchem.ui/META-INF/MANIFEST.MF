@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: net.openchrom.xxd.identifier.supplier.cdk.ui
+Automatic-Module-Name: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: PubChem UI
 Bundle-SymbolicName: org.eclipse.chemclipse.xxd.identifier.supplier.pubchem.ui;singleton:=true

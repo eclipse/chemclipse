@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: net.openchrom.xxd.identifier.supplier.cdk.fragment.test
+Automatic-Module-Name: org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.fragment.test
 Bundle-ManifestVersion: 2
 Bundle-Name: Wikidata Test
 Bundle-SymbolicName: org.eclipse.chemclipse.xxd.identifier.supplier.wikidata.fragment.test

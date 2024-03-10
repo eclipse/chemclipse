@@ -7,7 +7,7 @@
       license-feature="org.eclipse.license"
       license-feature-version="1.0.0.qualifier">
 
-   <description url="http://www.openchrom.net/plugins/converter/csv/">
+   <description>
       This is a CSV chromatogram converter.
    </description>
 

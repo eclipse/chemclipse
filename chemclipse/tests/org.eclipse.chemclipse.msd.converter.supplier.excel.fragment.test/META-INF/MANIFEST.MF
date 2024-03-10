@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.msd.converter.supplier.csv.fragment.test
+Automatic-Module-Name: org.eclipse.chemclipse.msd.converter.supplier.excel.fragment.test
 Bundle-ManifestVersion: 2
 Bundle-Name: Excel Chromatogram Test
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.converter.supplier.excel.fragment.test
