@@ -16,7 +16,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -150,8 +149,7 @@ public class ScanReader {
 						double wavenumber = rawX * xFactor;
 						double y = rawY * yFactor;
 						if(firstValue) {
-							double epsilon = Math.pow(10, -BigDecimal.valueOf(firstY).scale());
-							if(Precision.equals(firstY, y, epsilon)) {
+							if(!Precision.equalsWithRelativeTolerance(firstY, y, 0.1)) {
 								logger.warn("Expected first Y to be " + firstY + " but calculated " + y);
 							}
 						}
@@ -171,7 +169,7 @@ public class ScanReader {
 				logger.warn("Expected " + nPoints + " but got " + signals + " signals instead.");
 			}
 		}
-		if(lastX != rawX * xFactor) {
+		if(!Precision.equalsWithRelativeTolerance(lastX, rawX * xFactor, 0.1)) {
 			logger.warn("Expected last X to be " + lastX + " but calculated " + rawX * xFactor);
 		}
 		bufferedReader.close();
