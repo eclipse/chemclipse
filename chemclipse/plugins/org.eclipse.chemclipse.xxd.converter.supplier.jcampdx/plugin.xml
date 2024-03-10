@@ -62,8 +62,8 @@
       <ScanSupplier
             description="Reads JCAMP-DX FT-IR (*.dx) scans."
             exportConverter="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.converter.ScanExportConverter"
-            fileExtension=".dx"
-            filterName="FT-IR (*.dx)"
+            fileExtension=".jdx"
+            filterName="JCAMP-DX FT-IR (*.dx)"
             id="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx"
             importContentMatcher="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.io.FileContentMatcherInfraredSpectroscopy"
             importConverter="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.converter.ScanImportConverter"

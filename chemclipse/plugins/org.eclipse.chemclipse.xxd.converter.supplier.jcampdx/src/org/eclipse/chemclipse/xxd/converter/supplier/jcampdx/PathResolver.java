@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.converter.supplier.ocx;
+package org.eclipse.chemclipse.xxd.converter.supplier.jcampdx;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,7 +25,7 @@ public class PathResolver {
 	/**
 	 * Returns a absolute path of the specified Folder. For example
 	 * TESTDATA_IMPORT_EMPTY as an absolute Path:
-	 * $PluginPath$/testData/files/data.ocb
+	 * $PluginPath$/testData/files/DATA.JDX
 	 * 
 	 * @param string
 	 * @return String absolutePath

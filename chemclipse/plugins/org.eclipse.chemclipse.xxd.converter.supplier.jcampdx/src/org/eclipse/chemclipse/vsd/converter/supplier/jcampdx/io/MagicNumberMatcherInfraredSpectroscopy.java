@@ -22,6 +22,6 @@ public class MagicNumberMatcherInfraredSpectroscopy extends AbstractMagicNumberM
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		return checkFileExtension(file, ".dx");
+		return (checkFileExtension(file, ".dx") || checkFileExtension(file, ".jdx"));
 	}
 }
