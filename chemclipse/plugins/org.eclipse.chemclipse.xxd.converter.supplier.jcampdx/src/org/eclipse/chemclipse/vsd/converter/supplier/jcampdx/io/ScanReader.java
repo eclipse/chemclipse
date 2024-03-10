@@ -143,12 +143,10 @@ public class ScanReader {
 					if(!scanner.hasNextInt()) {
 						continue;
 					}
-					rawX = scanner.nextInt();
+					rawX = scanner.nextInt() - deltaX;
 					while(scanner.hasNextInt()) {
 						int rawY = scanner.nextInt();
-						if(!firstValue) {
-							rawX += deltaX;
-						}
+						rawX += deltaX;
 						double wavenumber = rawX * xFactor;
 						double y = rawY * yFactor;
 						if(firstValue) {
