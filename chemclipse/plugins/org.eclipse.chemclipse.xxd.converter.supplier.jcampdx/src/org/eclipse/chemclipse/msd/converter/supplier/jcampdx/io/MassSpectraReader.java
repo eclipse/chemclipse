@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,11 +35,12 @@ import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorLibrary
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
-import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.support.IConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassSpectraReader extends AbstractMassSpectraReader implements IMassSpectraReader {
 
+	public static final String CONVERTER_ID_MSD_LIBRARY = "org.eclipse.chemclipse.msd.converter.supplier.jcampdx.library.jdx";
+	//
 	private static final Logger logger = Logger.getLogger(MassSpectraReader.class);
 	private static final String COMMENT_MARKER = "$$";
 	private static final String HEADER_MARKER = "##";
@@ -236,7 +237,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 				}
 				//
 				massSpectra.setName(file.getName());
-				massSpectra.setConverterId(IConstants.CONVERTER_ID_MSD_LIBRARY);
+				massSpectra.setConverterId(CONVERTER_ID_MSD_LIBRARY);
 				/*
 				 * Close the streams
 				 */

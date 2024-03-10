@@ -36,11 +36,12 @@ import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.support.IConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReader extends AbstractChromatogramMSDReader {
 
+	public static final String CONVERTER_ID_MSD = "org.eclipse.chemclipse.msd.converter.supplier.jcampdx";
+	//
 	private static final Logger logger = Logger.getLogger(ChromatogramReader.class);
 	//
 	private static final String HEADER_MASSFINDER_3 = "##PROGRAM=MassFinder3";
@@ -231,7 +232,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 		chromatogram.setScanInterval(scanInterval);
 		//
 		chromatogram.setFile(file);
-		chromatogram.setConverterId(IConstants.CONVERTER_ID_MSD);
+		chromatogram.setConverterId(CONVERTER_ID_MSD);
 		/*
 		 * Close the streams
 		 */

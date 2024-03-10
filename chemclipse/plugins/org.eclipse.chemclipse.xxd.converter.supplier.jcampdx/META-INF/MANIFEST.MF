@@ -25,5 +25,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.csd.converter.supplier.jcampdx.io,
  org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io,
- org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.io,
- org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.support
+ org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.io
