@@ -62,12 +62,42 @@
       <ScanSupplier
             description="Reads JCAMP-DX FT-IR (*.dx) scans."
             exportConverter="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.converter.ScanExportConverter"
-            fileExtension=".jdx"
+            fileExtension=".dx"
             filterName="JCAMP-DX FT-IR (*.dx)"
-            id="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx"
+            id="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.dx"
             importContentMatcher="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.io.FileContentMatcherInfraredSpectroscopy"
             importConverter="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.converter.ScanImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.io.MagicNumberMatcherInfraredSpectroscopy"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.io.MagicNumberMatcherAbsorptionSpectroscopy"
+            isExportable="false"
+            isImportable="true">
+      </ScanSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.vsd.converter.scanSupplier">
+      <ScanSupplier
+            description="Reads JCAMP-DX FT-IR (*.jdx) scans."
+            exportConverter="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.converter.ScanExportConverter"
+            fileExtension=".jdx"
+            filterName="JCAMP-DX FT-IR (*.jdx)"
+            id="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.jdx"
+            importContentMatcher="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.io.FileContentMatcherInfraredSpectroscopy"
+            importConverter="org.eclipse.chemclipse.vsd.converter.supplier.jcampdx.converter.ScanImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.io.MagicNumberMatcherAbsorptionSpectroscopy"
+            isExportable="false"
+            isImportable="true">
+      </ScanSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.wsd.converter.scanSupplier">
+      <ScanSupplier
+            description="Reads JCAMP-DX UV-Vis (*.jdx) scans."
+            exportConverter="org.eclipse.chemclipse.wsd.converter.supplier.jcampdx.converter.ScanExportConverter"
+            fileExtension=".jdx"
+            filterName="JCAMP-DX UV-Vis (*.jdx)"
+            id="org.eclipse.chemclipse.wsd.converter.supplier.jcampdx.jdx"
+            importContentMatcher="org.eclipse.chemclipse.wsd.converter.supplier.jcampdx.io.FileContentMatcherUltravioletVisible"
+            importConverter="org.eclipse.chemclipse.wsd.converter.supplier.jcampdx.converter.ScanImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.io.MagicNumberMatcherAbsorptionSpectroscopy"
             isExportable="false"
             isImportable="true">
       </ScanSupplier>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -31,11 +31,12 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
-import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.support.IConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReader extends AbstractChromatogramCSDReader {
 
+	public static final String CONVERTER_ID_CSD = "org.eclipse.chemclipse.csd.converter.supplier.jcampdx";
+	//
 	private static final Logger logger = Logger.getLogger(ChromatogramReader.class);
 	//
 	private static final String HEADER_TITLE = "##TITLE=";
@@ -175,7 +176,7 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 				chromatogram.setScanInterval(scanInterval);
 				//
 				chromatogram.setFile(file);
-				chromatogram.setConverterId(IConstants.CONVERTER_ID_CSD);
+				chromatogram.setConverterId(CONVERTER_ID_CSD);
 			}
 		}
 		//
