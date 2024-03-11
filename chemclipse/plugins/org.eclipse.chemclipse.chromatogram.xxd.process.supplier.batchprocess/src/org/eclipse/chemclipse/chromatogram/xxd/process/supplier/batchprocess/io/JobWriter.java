@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2023 Lablicate GmbH.
+ * Copyright (c) 2010, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.io
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -29,7 +28,6 @@ import javax.xml.stream.events.StartElement;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.internal.support.JobTags;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.model.BatchProcessJob;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
@@ -38,7 +36,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class JobWriter {
 
-	public void writeBatchProcessJob(File file, BatchProcessJob batchProcessJob, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException, XMLStreamException {
+	public void writeBatchProcessJob(File file, BatchProcessJob batchProcessJob, IProgressMonitor monitor) throws IOException, XMLStreamException {
 
 		XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
 		try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file))) {
