@@ -26,8 +26,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.io.
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.internal.runnables.ExportRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.internal.runnables.ImportRunnable;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -36,13 +36,18 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.ProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
+import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.BatchJobUI;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -72,8 +77,6 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 				updateDirtyStatus(false);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
-			} catch(FileIsNotWriteableException e) {
-				logger.warn(e);
 			} catch(IOException e) {
 				logger.warn(e);
 			} catch(XMLStreamException e) {
@@ -85,6 +88,28 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	@Override
 	public void doSaveAs() {
 
+		Display display = Display.getCurrent();
+		Shell shell = display.getActiveShell();
+		FileDialog dialog = ExtendedFileDialog.create(shell, SWT.SAVE);
+		dialog.setText("Save the batch job");
+		dialog.setFileName("ChromatogramBatchJob.obj");
+		String fileName = dialog.open();
+		if(fileName != null) {
+			File exportFile = new File(fileName);
+			batchProcessJob = getBatchProcessJob(batchJobUI.getDataType());
+			ExportRunnable runnable = new ExportRunnable(exportFile, batchProcessJob);
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
+			try {
+				monitor.run(false, false, runnable);
+				updateDirtyStatus(false);
+			} catch(InvocationTargetException e) {
+				logger.warn(e);
+				logger.warn(e.getCause());
+			} catch(InterruptedException e) {
+				logger.warn(e);
+				Thread.currentThread().interrupt();
+			}
+		}
 	}
 
 	@Override
@@ -132,7 +157,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	@Override
 	public boolean isSaveAsAllowed() {
 
-		return false;
+		return false; // enable once the Date Explorer can open .obj
 	}
 
 	@Override
