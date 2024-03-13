@@ -110,7 +110,7 @@ public class OverviewSupport {
 				}
 			} else if(topic.equals(IChemClipseEvents.TOPIC_SCAN_VSD_UPDATE_RAWFILE)) {
 				/*
-				 * XIR
+				 * Vibrational Spectroscopy (IR, Raman)
 				 */
 				IProcessingInfo<?> processingInfo = ScanConverterVSD.convert(file, new NullProgressMonitor());
 				Object data = processingInfo.getProcessingResult();

@@ -91,7 +91,6 @@ public class ScanConverterVSD {
 				if(importConverter != null) {
 					processingInfo = importConverter.convert(file, monitor);
 					if(!processingInfo.hasErrorMessages()) {
-						// IScanXIR object = processingInfo.getProcessingResult();
 						return processingInfo;
 					}
 				}

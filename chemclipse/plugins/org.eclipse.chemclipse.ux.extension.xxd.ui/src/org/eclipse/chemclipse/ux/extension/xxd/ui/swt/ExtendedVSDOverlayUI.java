@@ -16,8 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import jakarta.inject.Inject;
-
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -46,7 +44,9 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
-public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
+import jakarta.inject.Inject;
+
+public class ExtendedVSDOverlayUI extends Composite implements IExtendedPartUI {
 
 	private AtomicReference<ChartVSD> chartControl = new AtomicReference<>();
 	//
@@ -57,7 +57,7 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 	private IColorScheme colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceSupplier.P_COLOR_SCHEME_DISPLAY_OVERLAY));
 
 	@Inject
-	public ExtendedXIROverlayUI(Composite parent, int style) {
+	public ExtendedVSDOverlayUI(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
@@ -66,7 +66,7 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 	@Override
 	public void update() {
 
-		scanSelections = editorUpdateSupport.getScanSelectionsXIR();
+		scanSelections = editorUpdateSupport.getVibrationalSpectroscopySelections();
 		refreshUpdateOverlayChart();
 	}
 
@@ -121,10 +121,10 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 
 	private void createOverlayChart(Composite parent) {
 
-		ChartVSD chartXIR = new ChartVSD(parent, SWT.BORDER, true); // TODO
-		chartXIR.setLayoutData(new GridData(GridData.FILL_BOTH));
+		ChartVSD chartVSD = new ChartVSD(parent, SWT.BORDER, true); // TODO
+		chartVSD.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		chartControl.set(chartXIR);
+		chartControl.set(chartVSD);
 	}
 
 	private void applySettings() {
@@ -134,19 +134,19 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 
 	private void refreshUpdateOverlayChart() {
 
-		ChartVSD chartXIR = chartControl.get();
-		chartXIR.deleteSeries();
+		ChartVSD chartVSD = chartControl.get();
+		chartVSD.deleteSeries();
 		if(!scanSelections.isEmpty()) {
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			int i = 1;
 			Color color = colorSchemeNormal.getColor();
 			//
-			for(ISpectrumVSD scanXIR : scanSelections) {
+			for(ISpectrumVSD spectrumVSD : scanSelections) {
 				/*
 				 * Get the data.
 				 */
-				ILineSeriesData lineSeriesData = getLineSeriesData(scanXIR, "XIR_" + i++);
+				ILineSeriesData lineSeriesData = getLineSeriesData(spectrumVSD, "VSD_" + i++);
 				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 				lineSeriesSettings.setLineColor(color);
 				lineSeriesSettings.setEnableArea(false);
@@ -155,13 +155,13 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 				color = colorSchemeNormal.getNextColor();
 			}
 			//
-			chartXIR.addSeriesData(lineSeriesDataList, LineChart.MEDIUM_COMPRESSION);
+			chartVSD.addSeriesData(lineSeriesDataList, LineChart.MEDIUM_COMPRESSION);
 		}
 	}
 
-	private ILineSeriesData getLineSeriesData(ISpectrumVSD scanXIR, String id) {
+	private ILineSeriesData getLineSeriesData(ISpectrumVSD spectrumVSD, String id) {
 
-		ILineSeriesData lineSeriesData = new LineSeriesData(getSeriesDataProcessed(scanXIR, id));
+		ILineSeriesData lineSeriesData = new LineSeriesData(getSeriesDataProcessed(spectrumVSD, id));
 		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 		lineSeriesSettings.setLineColor(Colors.RED);
 		lineSeriesSettings.setEnableArea(true);
@@ -169,17 +169,17 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 		return lineSeriesData;
 	}
 
-	private ISeriesData getSeriesDataProcessed(ISpectrumVSD spectrumXIR, String id) {
+	private ISeriesData getSeriesDataProcessed(ISpectrumVSD spectrumVSD, String id) {
 
 		double[] xSeries;
 		double[] ySeries;
 		//
-		if(spectrumXIR != null) {
-			int size = spectrumXIR.getScanVSD().getProcessedSignals().size();
+		if(spectrumVSD != null) {
+			int size = spectrumVSD.getScanVSD().getProcessedSignals().size();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
-			for(ISignalVSD scanSignal : spectrumXIR.getScanVSD().getProcessedSignals()) {
+			for(ISignalVSD scanSignal : spectrumVSD.getScanVSD().getProcessedSignals()) {
 				xSeries[index] = scanSignal.getWavenumber();
 				ySeries[index] = scanSignal.getIntensity();
 				index++;

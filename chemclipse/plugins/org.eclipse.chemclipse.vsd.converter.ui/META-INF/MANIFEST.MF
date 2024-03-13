@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.vsd.converter.ui
 Bundle-ManifestVersion: 2
-Bundle-Name: XIR Converter UI
+Bundle-Name: VSD Converter UI
 Bundle-SymbolicName: org.eclipse.chemclipse.vsd.converter.ui;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Vendor: ChemClipse
