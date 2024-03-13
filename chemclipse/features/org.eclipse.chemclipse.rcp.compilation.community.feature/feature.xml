@@ -30,6 +30,10 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.license"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.platform"
+         version="0.0.0"/>
+
    <plugin
          id="org.eclipse.chemclipse.rcp.compilation.community.ui"
          version="0.0.0"/>
