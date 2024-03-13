@@ -127,9 +127,9 @@ public class EditorUpdateSupport {
 		return dataSelections;
 	}
 
-	public List<ISpectrumVSD> getScanSelectionsXIR() {
+	public List<ISpectrumVSD> getVibrationalSpectroscopySelections() {
 
-		List<ISpectrumVSD> dataNMRSelections = new ArrayList<>();
+		List<ISpectrumVSD> dataSelections = new ArrayList<>();
 		if(partService != null) {
 			/*
 			 * TODO: see message
@@ -139,16 +139,12 @@ public class EditorUpdateSupport {
 				for(MPart part : parts) {
 					Object object = part.getObject();
 					if(object != null) {
-						/*
-						 * XIR
-						 */
 						ISpectrumVSD selection = null;
 						if(object instanceof IScanEditorVSD editor) {
 							selection = editor.getScanSelection();
 						}
-						//
 						if(selection != null) {
-							dataNMRSelections.add(selection);
+							dataSelections.add(selection);
 						}
 					}
 				}
@@ -160,7 +156,7 @@ public class EditorUpdateSupport {
 		 * If the window was null and there was no open editor, the list will
 		 * contains 0 elements.
 		 */
-		return dataNMRSelections;
+		return dataSelections;
 	}
 
 	public List<IDataNMRSelection> getDataNMRSelections(EPartService partService) {

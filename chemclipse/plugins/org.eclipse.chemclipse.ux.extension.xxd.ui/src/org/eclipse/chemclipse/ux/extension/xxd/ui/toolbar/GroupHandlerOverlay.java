@@ -42,7 +42,7 @@ public class GroupHandlerOverlay extends AbstractGroupHandler {
 		//
 		partHandler.add(new PartHandler("Overlay (Chromatogram)", PartSupport.PARTDESCRIPTOR_OVERLAY_CHROMATOGRAM, PreferenceSupplier.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT));
 		partHandler.add(new PartHandler("Overlay (NMR)", PartSupport.PARTDESCRIPTOR_OVERLAY_NMR, PreferenceSupplier.P_STACK_POSITION_OVERLAY_NMR));
-		partHandler.add(new PartHandler("Overlay (XIR)", PartSupport.PARTDESCRIPTOR_OVERLAY_VSD, PreferenceSupplier.P_STACK_POSITION_OVERLAY_XIR));
+		partHandler.add(new PartHandler("Overlay (VSD)", PartSupport.PARTDESCRIPTOR_OVERLAY_VSD, PreferenceSupplier.P_STACK_POSITION_OVERLAY_VSD));
 		//
 		return partHandler;
 	}
