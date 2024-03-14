@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -60,7 +60,7 @@ public class PeakQuantifierProcessTypeSupplier implements IProcessTypeSupplier {
 		@SuppressWarnings("unchecked")
 		public PeakQuantifierProcessorSupplier(IPeakQuantifierSupplier supplier, IProcessTypeSupplier parent) {
 
-			super(supplier.getId(), supplier.getPeakQuantifierName(), supplier.getDescription(), (Class<IPeakQuantifierSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD);
+			super(supplier.getId(), supplier.getPeakQuantifierName(), supplier.getDescription(), (Class<IPeakQuantifierSettings>)supplier.getSettingsClass(), parent, DataType.CSD, DataType.MSD, DataType.WSD);
 		}
 
 		@Override
