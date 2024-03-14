@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.services.IScanIdentifierService;
@@ -113,11 +114,18 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	//
 	private boolean editModus = false;
 	private boolean subtractModus = false;
+	//
+	private IUpdateListener updateListener = null;
 
 	public ExtendedScanChartUI(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
+	}
+
+	public void setUpdateListener(IUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
 	}
 
 	private String getLastTopic(List<String> topics) {
@@ -423,6 +431,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 				setSubtractModus(e.display, !subtractModus, true);
 				updateInfoLabels();
+				fireUpdate();
 			}
 		});
 		return button;
@@ -453,6 +462,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 			public void update(Display display) {
 
 				updateScan(scan);
+				fireUpdate();
 			}
 		});
 		return scanFilterUI;
@@ -470,6 +480,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 				UpdateNotifierUI.update(display, scan);
 				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Scan Chart identification has been performed.");
 				ChromatogramUpdateSupport.fireUpdateChromatogramSelection(display, scan);
+				fireUpdate();
 			}
 		});
 		//
@@ -668,6 +679,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 				setSubtractModus(e.display, false, false);
 				updateInfoLabels();
 				updateScan(scan);
+				fireUpdate();
 			}
 		});
 	}
@@ -681,6 +693,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 				updateScan(scan);
 				scanIdentifierControl.get().updateIdentifier();
+				fireUpdate();
 			}
 		};
 		//
@@ -790,6 +803,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 			if(MessageDialog.openQuestion(display.getActiveShell(), "Optimized Scan", "Would you like to delete the optimized scan?")) {
 				scanMSD.setOptimizedMassSpectrum(null);
 				updateScan(scan);
+				fireUpdate();
 			}
 		}
 	}
@@ -849,5 +863,12 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		//
 		combo.setItems(items);
 		combo.select(index);
+	}
+
+	private void fireUpdate() {
+
+		if(updateListener != null) {
+			updateListener.update();
+		}
 	}
 }
