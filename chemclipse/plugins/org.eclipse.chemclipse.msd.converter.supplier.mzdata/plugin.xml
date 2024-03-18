@@ -23,7 +23,7 @@
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter.MassSpectrumExportConverter"
             fileExtension=".mzData"
             filterName="Mass Spectrum (*.mzData)"
-            id="org.eclipse.chemclipse.msd.converter.supplier.mzdata.MassSpectrumSupplier"
+            id="org.eclipse.chemclipse.msd.converter.supplier.mzdata.ms"
             importContentMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter.MassSpectrumFileContentMatcher"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter.MassSpectrumImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter.MagicNumberMatcher"
