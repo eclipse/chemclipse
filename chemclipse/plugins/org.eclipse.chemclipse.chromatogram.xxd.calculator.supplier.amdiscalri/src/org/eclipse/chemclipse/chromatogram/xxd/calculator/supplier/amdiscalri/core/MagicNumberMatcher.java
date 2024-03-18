@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.c
 
 import java.io.File;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalibrationFile;
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 
@@ -21,6 +22,6 @@ public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IM
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		return checkFileExtension(file, ".cal");
+		return checkFileExtension(file, CalibrationFile.FILE_EXTENSION);
 	}
 }
