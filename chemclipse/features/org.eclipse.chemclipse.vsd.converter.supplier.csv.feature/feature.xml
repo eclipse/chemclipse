@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.chemclipse.vsd.converter.supplier.csv.feature"
+      label="FT-IR (*.csv)"
+      version="0.9.0.qualifier"
+      provider-name="ChemClipse"
+      plugin="org.eclipse.chemclipse.feature.branding"
+      license-feature="org.eclipse.license"
+      license-feature-version="1.0.0.qualifier">
+
+   <description url="https://www.chemclipse.net">
+      CSV FTIR (*.csv)
+   </description>
+
+   <copyright url="https://www.lablicate.com">
+      Copyright (c) 2018, 2024 Lablicate GmbH.
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <plugin
+         id="org.eclipse.chemclipse.vsd.converter.supplier.csv"
+         version="0.0.0"/>
+
+</feature>

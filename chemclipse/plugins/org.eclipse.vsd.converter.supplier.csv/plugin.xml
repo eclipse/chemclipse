@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.vsd.converter.scanSupplier">
+      <ScanSupplier
+            description="Reads FTIR (*.csv) scans."
+            fileExtension=".csv"
+            fileName=""
+            filterName="FTIR (*.csv)"
+            id="org.eclipse.chemclipse.vsd.converter.supplier.csv"
+            importConverter="net.openchrom.vsd.converter.supplier.csv.core.ScanImportConverter"
+            exportConverter="net.openchrom.vsd.converter.supplier.csv.core.ScanExportConverter"            
+            importMagicNumberMatcher="net.openchrom.vsd.converter.supplier.csv.core.MagicNumberMatcher"
+            isExportable="false"
+            isImportable="true">
+      </ScanSupplier>
+   </extension>
+</plugin>
