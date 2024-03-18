@@ -9,9 +9,9 @@
             fileName=""
             filterName="FTIR (*.csv)"
             id="org.eclipse.chemclipse.vsd.converter.supplier.csv"
-            importConverter="net.openchrom.vsd.converter.supplier.csv.core.ScanImportConverter"
-            exportConverter="net.openchrom.vsd.converter.supplier.csv.core.ScanExportConverter"            
-            importMagicNumberMatcher="net.openchrom.vsd.converter.supplier.csv.core.MagicNumberMatcher"
+            importConverter="org.eclipse.chemclipse.vsd.converter.supplier.csv.core.ScanImportConverter"
+            exportConverter="org.eclipse.chemclipse.vsd.converter.supplier.csv.core.ScanExportConverter"            
+            importMagicNumberMatcher="org.eclipse.chemclipse.vsd.converter.supplier.csv.core.MagicNumberMatcher"
             isExportable="false"
             isImportable="true">
       </ScanSupplier>
