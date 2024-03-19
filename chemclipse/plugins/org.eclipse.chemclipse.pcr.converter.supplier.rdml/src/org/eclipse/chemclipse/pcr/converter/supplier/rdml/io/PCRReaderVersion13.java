@@ -103,6 +103,9 @@ public class PCRReaderVersion13 implements IPCRReader {
 						for(DpAmpCurveType adp : data.getAdp()) {
 							channel.getFluorescence().add((double)adp.getFluor());
 						}
+						if(data.getCq() != null) {
+							channel.setCrossingPoint(data.getCq());
+						}
 					}
 					well.getChannels().put(0, channel);
 					well.putHeaderData(IWell.SAMPLE_SUBSET, "Default"); // TODO: should be optional
