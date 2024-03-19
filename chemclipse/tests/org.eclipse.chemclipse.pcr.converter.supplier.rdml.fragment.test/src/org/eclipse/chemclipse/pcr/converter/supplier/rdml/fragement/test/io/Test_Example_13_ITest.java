@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -62,7 +62,7 @@ public class Test_Example_13_ITest extends TestCase {
 		IWell well = plate.getWell(0);
 		assertEquals("A1: gDNA", well.getLabel());
 		IChannel channel = well.getChannels().get(0);
-		assertEquals(0, channel.getId());
+		assertEquals(1, channel.getId());
 		assertEquals("SYBRGreen I", channel.getDetectionName());
 		assertEquals(668.4299926757812, channel.getFluorescence().get(0));
 	}
