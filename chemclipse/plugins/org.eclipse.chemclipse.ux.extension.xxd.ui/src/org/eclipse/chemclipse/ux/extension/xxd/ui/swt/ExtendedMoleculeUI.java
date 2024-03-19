@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
@@ -36,6 +37,8 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.KeyAdapter;
@@ -66,6 +69,8 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swtchart.extensions.clipboard.ImageArrayTransfer;
+import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
@@ -310,10 +315,12 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void mouseScrolled(MouseEvent event) {
 
-				if(getMoleculeImageService().isOnline())
+				if(getMoleculeImageService().isOnline()) {
 					return;
-				scaleFactor += (event.count > 0) ? SCALE_DELTA : -SCALE_DELTA;
-				canvas.redraw();
+				} else {
+					scaleFactor += (event.count > 0) ? SCALE_DELTA : -SCALE_DELTA;
+					canvas.redraw();
+				}
 			}
 		});
 		//
@@ -323,6 +330,33 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			public void paintControl(PaintEvent event) {
 
 				drawImage(canvas, event);
+			}
+		});
+		//
+		canvas.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				if(e.stateMask == SWT.MOD1 && e.keyCode == IKeyboardSupport.KEY_CODE_LC_C) {
+					ImageData imageData = imageMolecule.getImageData();
+					if(imageData != null) {
+						Clipboard clipboard = new Clipboard(e.display);
+						try {
+							if(OperatingSystemUtils.isWindows()) {
+								clipboard.setContents(new Object[]{imageData, imageData}, new Transfer[]{ImageArrayTransfer.getImageTransferWindows(), ImageArrayTransfer.getInstanceWindows()});
+							} else if(OperatingSystemUtils.isLinux()) {
+								clipboard.setContents(new Object[]{imageData}, new Transfer[]{ImageArrayTransfer.getInstanceLinux()});
+							} else if(OperatingSystemUtils.isMac() || OperatingSystemUtils.isUnix()) {
+								clipboard.setContents(new Object[]{imageData}, new Transfer[]{ImageArrayTransfer.getImageTransferMacOS()});
+							}
+						} finally {
+							if(!clipboard.isDisposed()) {
+								clipboard.dispose();
+							}
+						}
+					}
+				}
 			}
 		});
 		//
