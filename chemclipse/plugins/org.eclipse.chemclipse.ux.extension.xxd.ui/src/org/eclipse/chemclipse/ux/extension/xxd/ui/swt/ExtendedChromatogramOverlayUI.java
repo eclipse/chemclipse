@@ -562,6 +562,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		ChromatogramRulerChart chromatogramRulerChart = new ChromatogramRulerChart(parent, SWT.BORDER);
 		chromatogramRulerChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		chromatogramRulerChart.setFileName("Overlay");
 		/*
 		 * Chart Settings
 		 */
