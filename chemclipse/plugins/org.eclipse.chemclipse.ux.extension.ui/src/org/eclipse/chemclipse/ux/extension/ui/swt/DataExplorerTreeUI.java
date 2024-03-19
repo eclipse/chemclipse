@@ -21,11 +21,9 @@ import java.util.function.Function;
 
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.l10n.Messages;
 import org.eclipse.chemclipse.ux.extension.ui.listener.DataExplorerDragListener;
-import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.core.runtime.IStatus;
@@ -40,9 +38,6 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.TreeItem;
 
 public class DataExplorerTreeUI {
 
@@ -171,37 +166,9 @@ public class DataExplorerTreeUI {
 		treeViewer.setUseHashlookup(true);
 		treeViewer.setExpandPreCheckFilters(true);
 		treeViewer.setContentProvider(new DataExplorerContentProvider(identifier));
-		if(OperatingSystemUtils.isLinux()) {
-			if(PreferenceSupplier.isLinuxUseTreeViewerLabelProvider()) {
-				treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
-			} else {
-				/*
-				 * Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
-				 */
-				DataExplorerLabelProvider labelProvider = new DataExplorerLabelProvider(identifier);
-				treeViewer.getTree().addListener(SWT.PaintItem, createLabelListener(labelProvider));
-			}
-		} else {
-			treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
-		}
+		treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
 		setInput(treeViewer);
 		treeViewerControl.set(treeViewer);
-	}
-
-	private Listener createLabelListener(DataExplorerLabelProvider labelProvider) {
-
-		return new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-
-				TreeItem item = (TreeItem)event.item;
-				if(item == null || item.getData() == null) {
-					return;
-				}
-				item.setText(labelProvider.getText(item.getData()));
-			}
-		};
 	}
 
 	private void setInput(TreeViewer treeViewer) {

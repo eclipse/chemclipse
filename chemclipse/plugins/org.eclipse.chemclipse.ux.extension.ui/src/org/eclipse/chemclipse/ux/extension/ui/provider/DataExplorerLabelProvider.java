@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
 import org.eclipse.chemclipse.ux.extension.ui.swt.IdentifierCacheSupport;
 import org.eclipse.core.runtime.Adapters;
@@ -39,6 +40,7 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 
 	private final Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> supplierFunction;
 	private ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
+	private boolean isInitial = true;
 
 	public DataExplorerLabelProvider(Collection<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
 
@@ -74,6 +76,13 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 	@Override
 	public Image getImage(Object element) {
 
+		/*
+		 * Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
+		 */
+		if(isInitial && OperatingSystemUtils.isLinux()) {
+			isInitial = false;
+			return null;
+		}
 		if(element instanceof File file) {
 			ImageDescriptor descriptor = null;
 			//
