@@ -35,6 +35,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * GUI blocks needed to manipulate various types of preferences. Each field
 	 * editor knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
@@ -45,7 +46,6 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_USER_LOCATION_PATH, "User Location", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_OPEN_FIRST_DATA_MATCH_ONLY, "Open First Data Match Only", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_OPEN_EDITOR_MULTIPLE_TIMES, "Open Editor Multiple Times", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_LINUX_USE_TREE_VIEWER_LABEL_PROVIDER, "Linux TreeViewer Labels (Danger Zone: SIGSEGV - requires restart)", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Microsoft Windows", getFieldEditorParent()));
@@ -57,6 +57,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * @see
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

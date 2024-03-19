@@ -36,8 +36,6 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final boolean DEF_OPEN_FIRST_DATA_MATCH_ONLY = true;
 	public static final String P_OPEN_EDITOR_MULTIPLE_TIMES = "openEditorMultipleTimes";
 	public static final boolean DEF_OPEN_EDITOR_MULTIPLE_TIMES = true;
-	public static final String P_LINUX_USE_TREE_VIEWER_LABEL_PROVIDER = "linuxUseTreeViewerLabelProvider";
-	public static final boolean DEF_LINUX_USE_TREE_VIEWER_LABEL_PROVIDER = false;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -61,7 +59,6 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_SHOW_NETWORK_SHARES, DEF_SHOW_NETWORK_SHARES);
 		putDefault(P_OPEN_FIRST_DATA_MATCH_ONLY, DEF_OPEN_FIRST_DATA_MATCH_ONLY);
 		putDefault(P_OPEN_EDITOR_MULTIPLE_TIMES, DEF_OPEN_EDITOR_MULTIPLE_TIMES);
-		putDefault(P_LINUX_USE_TREE_VIEWER_LABEL_PROVIDER, DEF_LINUX_USE_TREE_VIEWER_LABEL_PROVIDER);
 	}
 
 	public static String getSelectedDrivePath() {
@@ -122,17 +119,6 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static boolean isOpenEditorMultipleTimes() {
 
 		return INSTANCE().getBoolean(P_OPEN_EDITOR_MULTIPLE_TIMES);
-	}
-
-	/**
-	 * Caution: Active setting could lead to a SIGSEGV crash.
-	 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=573090
-	 * 
-	 * @return boolean
-	 */
-	public static boolean isLinuxUseTreeViewerLabelProvider() {
-
-		return INSTANCE().getBoolean(P_LINUX_USE_TREE_VIEWER_LABEL_PROVIDER);
 	}
 
 	public static boolean showNetworkShares() {
