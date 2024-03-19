@@ -8,7 +8,7 @@
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.ChromatogramExportConverter"
             fileExtension=".mzXML"
             filterName="mzXML Chromatogram (*.mzXML)"
-            id="org.eclipse.chemclipse.msd.converter.supplier.mzxml.chromatogram"
+            id="org.eclipse.chemclipse.msd.converter.supplier.mzxml"
             importContentMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.ChromatogramFileContentMatcher"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.ChromatogramImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.MagicNumberMatcher"
