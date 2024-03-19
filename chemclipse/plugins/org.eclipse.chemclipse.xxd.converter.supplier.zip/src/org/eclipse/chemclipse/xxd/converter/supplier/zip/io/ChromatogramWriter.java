@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.xxd.converter.supplier.zip.io;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
@@ -36,7 +35,7 @@ public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 	private static final int METHOD = ZipOutputStream.DEFLATED;
 
 	@Override
-	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		File destinationDirectory = PathHelper.getStoragePathExport();
 		File destinationFile = new File(destinationDirectory.getAbsolutePath() + File.separator + chromatogram.getName());
@@ -69,6 +68,5 @@ public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 		 * Delete the temporarily exported file
 		 */
 		export.delete();
-
 	}
 }
