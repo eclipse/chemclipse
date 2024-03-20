@@ -40,7 +40,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AlkaneIdentifier {
 
-	public static final String IDENTIFIER = "Alkanes Identifier"; // $NON-NLS-N$
+	public static final String IDENTIFIER = "org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri"; // $NON-NLS-N$
 	//
 	private final String massSpectraFiles; // Initialized in constructor.
 	private final DatabasesCache databasesCache; // Initialized in constructor.
