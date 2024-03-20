@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import java.util.TreeMap;
+import static org.junit.Assert.assertThrows;
+
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
-import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.msd.model.core.IPeakIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
@@ -96,82 +97,46 @@ public class PeakModel_2_Test extends TestCase {
 
 	public void testConstruct_1() {
 
-		try {
-			peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
-		} catch(IllegalArgumentException e) {
-			assertFalse("An IllegalArgumentException should not be thrown here.", true);
-		} catch(PeakException e) {
-			assertFalse("An PeakException should not be thrown here.", true);
-		}
+		peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
 		assertNotNull("The construction was fine.", peakModel);
 	}
 
 	public void testConstruct_2() {
 
-		try {
+		assertThrows(IllegalArgumentException.class, () -> {
 			peakModel = new PeakModelMSD(null, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		} catch(PeakException e) {
-			assertFalse("An PeakException should not be thrown here.", true);
-		}
+		});
 	}
 
 	public void testConstruct_3() {
 
-		try {
+		assertThrows(IllegalArgumentException.class, () -> {
 			peakModel = new PeakModelMSD(peakMaximum, null, startBackgroundAbundance, stopBackgroundAbundance);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		} catch(PeakException e) {
-			assertFalse("An PeakException should not be thrown here.", true);
-		}
+		});
 	}
 
 	public void testConstruct_4() {
 
-		try {
+		assertThrows(IllegalArgumentException.class, () -> {
 			peakModel = new PeakModelMSD(null, null, startBackgroundAbundance, stopBackgroundAbundance);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		} catch(PeakException e) {
-			assertFalse("An PeakException should not be thrown here.", true);
-		}
+		});
 	}
 
 	public void testConstruct_5() {
 
-		try {
-			peakModel = new PeakModelMSD(peakMaximum, intensityValues, 0, stopBackgroundAbundance);
-		} catch(IllegalArgumentException e) {
-			assertFalse("An IllegalArgumentException should not be thrown here.", true);
-		} catch(PeakException e) {
-			assertFalse("An PeakException should not be thrown here.", true);
-		}
+		peakModel = new PeakModelMSD(peakMaximum, intensityValues, 0, stopBackgroundAbundance);
 		assertNotNull("The construction was fine.", peakModel);
 	}
 
 	public void testConstruct_6() {
 
-		try {
-			peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, 0);
-		} catch(IllegalArgumentException e) {
-			assertFalse("An IllegalArgumentException should not be thrown here.", true);
-		} catch(PeakException e) {
-			assertFalse("An PeakException should not be thrown here.", true);
-		}
+		peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, 0);
 		assertNotNull("The construction was fine.", peakModel);
 	}
 
 	public void testConstruct_7() {
 
-		try {
-			peakModel = new PeakModelMSD(peakMaximum, intensityValues, 0, 0);
-		} catch(IllegalArgumentException e) {
-			assertFalse("An IllegalArgumentException should not be thrown here.", true);
-		} catch(PeakException e) {
-			assertFalse("An PeakException should not be thrown here.", true);
-		}
+		peakModel = new PeakModelMSD(peakMaximum, intensityValues, 0, 0);
 		assertNotNull("The construction was fine.", peakModel);
 	}
 }
