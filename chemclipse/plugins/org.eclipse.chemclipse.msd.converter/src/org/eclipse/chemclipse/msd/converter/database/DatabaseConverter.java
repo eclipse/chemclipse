@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.database;
@@ -46,8 +46,6 @@ import org.eclipse.core.runtime.Platform;
  * AMDIS *.msl<br/>
  * JCAMP-DX *.jdx<br/>
  * ASCII *.txt<br/>
- *
- * @author eselmeister
  */
 public class DatabaseConverter {
 
@@ -138,7 +136,7 @@ public class DatabaseConverter {
 					 * immediately.<br/> There is no chance to reach the correct
 					 * converter. That is really not what we want.<br/> If all
 					 * approaches have failed null will be returned.<br/><br/> I
-					 * hope it's a little bit more clear now.<br/> eselmeister
+					 * hope it's a little bit more clear now.<br/>
 					 */
 					processingInfo = importConverter.convert(file, monitor);
 					if(!processingInfo.hasErrorMessages()) {
@@ -150,6 +148,7 @@ public class DatabaseConverter {
 			logger.info(e);
 			processingInfo = getNoImportConverterAvailableProcessingInfo(file);
 		}
+		//
 		return processingInfo;
 	}
 
@@ -203,8 +202,6 @@ public class DatabaseConverter {
 		return processingInfo;
 	}
 
-	// ------------------------------------export
-	// ---------------------------------------------ConverterMethods
 	/**
 	 * Returns an IDatabaseImportConverter instance or null if none is
 	 * available.
