@@ -18,7 +18,7 @@
 		<pmd.version>3.21.0</pmd.version>
 		<checkstyle.version>3.3.0</checkstyle.version>
 		<maven-install-plugin.version>3.1.1</maven-install-plugin.version>
-		<cbi-version>1.1.5</cbi-version>
+		<cbi-version>1.4.3</cbi-version>
 		<!-- definition of the target to use -->
 		<tycho.target.groupId>org.eclipse.chemclipse</tycho.target.groupId>
 		<tycho.target.artifactId>org.eclipse.chemclipse.targetplatform</tycho.target.artifactId>
@@ -293,7 +293,7 @@
 	<pluginRepositories>
 		<pluginRepository>
 			<id>eclipse</id>
-			<url>https://repo.eclipse.org/content/repositories/cbi/</url>
+			<url>https://repo.eclipse.org/content/groups/releases</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
