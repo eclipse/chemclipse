@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,7 +29,6 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorChromatogram;
@@ -38,7 +37,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorChromatog
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractReaderVersion extends AbstractChromatogramMSDReader implements IChromatogramMSDReader {
@@ -90,13 +88,7 @@ public abstract class AbstractReaderVersion extends AbstractChromatogramMSDReade
 				//
 				IVendorScan massSpectrum = new VendorScan();
 				massSpectrum.setRetentionTime(retentionTime);
-				try {
-					massSpectrum.addIon(new VendorIon(IIon.TIC_ION, totalSignal));
-				} catch(AbundanceLimitExceededException e) {
-					logger.warn(e);
-				} catch(IonLimitExceededException e) {
-					logger.warn(e);
-				}
+				massSpectrum.addIon(new VendorIon(IIon.TIC_ION, totalSignal));
 				chromatogram.addScan(massSpectrum);
 			}
 		} catch(XMLStreamException e) {

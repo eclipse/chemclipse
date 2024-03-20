@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,10 +19,10 @@ import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanIon;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.implementation.ScanIon;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
@@ -39,7 +39,7 @@ public class PeakBuilder_30_Test extends TestCase {
 
 	private IChromatogramMSD chromatogram;
 	private IVendorMassSpectrum massSpectrum;
-	private IScanIon defaultIon;
+	private IIon defaultIon;
 	private IExtractedIonSignals extractedIonSignals;
 	private IScanRange scanRange;
 	private IExtractedIonSignalExtractor extractedIonSignalExtractor;
@@ -72,7 +72,7 @@ public class PeakBuilder_30_Test extends TestCase {
 		for(int scan = 1; scan <= 10; scan++) {
 			massSpectrum = new VendorMassSpectrum();
 			for(int ion = 32; ion <= 38; ion++) {
-				defaultIon = new ScanIon(ion, ion * scan * intensities.get(scan - 1));
+				defaultIon = new Ion(ion, ion * scan * intensities.get(scan - 1));
 				massSpectrum.addIon(defaultIon);
 			}
 			chromatogram.addScan(massSpectrum);

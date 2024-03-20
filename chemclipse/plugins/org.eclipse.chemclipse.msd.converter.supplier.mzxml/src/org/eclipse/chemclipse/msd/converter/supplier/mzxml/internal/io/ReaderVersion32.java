@@ -28,7 +28,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.DataProcessing;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.MsInstrument;
@@ -45,7 +44,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.Polarity;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
@@ -181,29 +179,21 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 						 */
 						double mz = AbstractIon.getIon(values[peakIndex], ION_PRECISION);
 						float intensity = (float)values[peakIndex + 1];
-						try {
-							if(intensity >= VendorIon.MIN_ABUNDANCE && intensity <= VendorIon.MAX_ABUNDANCE) {
-								// if(msLevel >= 2) {
-								// try {
-								// double filter3Ion = mz; // daughter m/z start
-								// double filter1Resolution = 1.0d; // q1 resolution
-								// double filter3Resolution = 1.0d; // q3 resolution
-								// int transitionGroup = 1; // transition group
-								// IIonTransition ionTransition = ionTransitionSettings.getIonTransition(filter1Ion, filter3Ion, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
-								// massSpectrum.addIon(new VendorIon(mz, intensity, ionTransition));
-								// } catch(IonTransitionIsNullException e) {
-								// logger.warn(e);
-								// }
-								// } else {
-								// massSpectrum.addIon(new VendorIon(mz, intensity));
-								// }
-								massSpectrum.addIon(new VendorIon(mz, intensity));
-							}
-						} catch(AbundanceLimitExceededException e) {
-							logger.warn(e);
-						} catch(IonLimitExceededException e) {
-							logger.warn(e);
-						}
+						// if(msLevel >= 2) {
+						// try {
+						// double filter3Ion = mz; // daughter m/z start
+						// double filter1Resolution = 1.0d; // q1 resolution
+						// double filter3Resolution = 1.0d; // q3 resolution
+						// int transitionGroup = 1; // transition group
+						// IIonTransition ionTransition = ionTransitionSettings.getIonTransition(filter1Ion, filter3Ion, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
+						// massSpectrum.addIon(new VendorIon(mz, intensity, ionTransition));
+						// } catch(IonTransitionIsNullException e) {
+						// logger.warn(e);
+						// }
+						// } else {
+						// massSpectrum.addIon(new VendorIon(mz, intensity));
+						// }
+						massSpectrum.addIon(new VendorIon(mz, intensity));
 					}
 				}
 				chromatogram.addScan(massSpectrum);

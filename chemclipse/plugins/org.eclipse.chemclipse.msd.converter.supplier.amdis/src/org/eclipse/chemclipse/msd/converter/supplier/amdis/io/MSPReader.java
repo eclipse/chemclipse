@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
@@ -41,7 +40,6 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.Polarity;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -314,23 +312,17 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 		float abundance;
 		Matcher ions = ionPattern.matcher(ionData);
 		while(ions.find()) {
-			try {
-				/*
-				 * Get the ion and abundance values.
-				 */
-				ion = Double.parseDouble(ions.group(1));
-				abundance = Float.parseFloat(ions.group(3));
-				/*
-				 * Create the ion and store it in mass spectrum.
-				 */
-				if(abundance > 0) {
-					amdisIon = new Ion(ion, abundance);
-					massSpectrum.addIon(amdisIon);
-				}
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
+			/*
+			 * Get the ion and abundance values.
+			 */
+			ion = Double.parseDouble(ions.group(1));
+			abundance = Float.parseFloat(ions.group(3));
+			/*
+			 * Create the ion and store it in mass spectrum.
+			 */
+			if(abundance > 0) {
+				amdisIon = new Ion(ion, abundance);
+				massSpectrum.addIon(amdisIon);
 			}
 		}
 	}

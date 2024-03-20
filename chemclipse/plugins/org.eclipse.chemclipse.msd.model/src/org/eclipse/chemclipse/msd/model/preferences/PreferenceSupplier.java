@@ -12,12 +12,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.preferences;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.Activator;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
@@ -177,14 +175,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 					 */
 					double mz = Double.parseDouble(fragment[0]);
 					float abundance = Float.parseFloat(fragment[1]);
-					try {
-						IIon subtractIon = new Ion(mz, abundance);
-						scanMSD.addIon(subtractIon);
-					} catch(AbundanceLimitExceededException e) {
-						logger.warn(e);
-					} catch(IonLimitExceededException e) {
-						logger.warn(e);
-					}
+					IIon subtractIon = new Ion(mz, abundance);
+					scanMSD.addIon(subtractIon);
 				}
 			}
 			return scanMSD;

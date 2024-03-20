@@ -11,17 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.model;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.Polarity;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 public class VendorScan extends AbstractVendorStandaloneMassSpectrum implements IVendorScan {
 
 	private static final long serialVersionUID = -6772709008581956403L;
-	private static final Logger logger = Logger.getLogger(VendorScan.class);
 	//
 	public static final int MAX_IONS = 65535;
 	public static final int MIN_RETENTION_TIME = 0;
@@ -76,14 +72,8 @@ public class VendorScan extends AbstractVendorStandaloneMassSpectrum implements 
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			try {
-				mzXMLIon = new VendorIon(ion.getIon(), ion.getAbundance());
-				massSpectrum.addIon(mzXMLIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			mzXMLIon = new VendorIon(ion.getIon(), ion.getAbundance());
+			massSpectrum.addIon(mzXMLIon);
 		}
 		return massSpectrum;
 	}

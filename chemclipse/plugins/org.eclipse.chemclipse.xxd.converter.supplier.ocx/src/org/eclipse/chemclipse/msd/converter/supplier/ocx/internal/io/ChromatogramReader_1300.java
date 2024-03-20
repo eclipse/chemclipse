@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,8 +23,6 @@ import java.util.Set;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.io.ChromatogramReaderCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -42,7 +39,6 @@ import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.core.PeakType;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ChromatogramComparisonResult;
@@ -74,17 +70,15 @@ import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.Vend
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.VendorScan;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.VendorScanProxy;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
@@ -112,7 +106,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 	private static final Logger logger = Logger.getLogger(ChromatogramReader_1300.class);
 
 	@Override
-	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramMSD chromatogram = null;
 		ZipFile zipFile = new ZipFile(file);
@@ -129,16 +123,13 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramOverview chromatogramOverview = null;
-		ZipFile zipFile = new ZipFile(file);
-		try {
+		try (ZipFile zipFile = new ZipFile(file)) {
 			if(isValidFileFormat(zipFile)) {
 				chromatogramOverview = readOverviewFromZipFile(zipFile, "", monitor);
 			}
-		} finally {
-			zipFile.close();
 		}
 		//
 		return chromatogramOverview;
@@ -271,16 +262,10 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			massSpectrum = new VendorScan();
 			int retentionTime = dataInputStream.readInt(); // Retention Time
 			float abundance = dataInputStream.readFloat(); // Total Signal
-			try {
-				ion = new VendorIon(AbstractIon.TIC_ION, abundance);
-				massSpectrum.setRetentionTime(retentionTime);
-				massSpectrum.addIon(ion);
-				chromatogram.addScan(massSpectrum);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			ion = new VendorIon(IIon.TIC_ION, abundance);
+			massSpectrum.setRetentionTime(retentionTime);
+			massSpectrum.addIon(ion);
+			chromatogram.addScan(massSpectrum);
 		}
 	}
 
@@ -354,7 +339,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		 * Get the Baseline
 		 */
 		int scans = dataInputStream.readInt(); // Number of Scans
-		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
+		List<IBaselineElement> baselineElements = new ArrayList<>();
 		for(int scan = 1; scan <= scans; scan++) {
 			int retentionTime = dataInputStream.readInt(); // Retention Time
 			float backgroundAbundance = dataInputStream.readFloat(); // Background Abundance
@@ -476,7 +461,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 
 	private List<IInternalStandard> readInternalStandards(DataInputStream dataInputStream) throws IOException {
 
-		List<IInternalStandard> internalStandards = new ArrayList<IInternalStandard>();
+		List<IInternalStandard> internalStandards = new ArrayList<>();
 		int numberOfInternalStandards = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfInternalStandards; i++) {
 			String name = readString(dataInputStream);
@@ -493,7 +478,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 
 	private List<IIntegrationEntry> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
 
-		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 		int numberOfIntegrationEntries = dataInputStream.readInt(); // Number Integration Entries
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double ion = dataInputStream.readDouble(); // m/z
@@ -521,7 +506,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			Set<String> synonyms = new HashSet<>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
@@ -584,7 +569,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			Set<String> synonyms = new HashSet<>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
@@ -694,7 +679,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			Set<String> synonyms = new HashSet<>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
@@ -822,16 +807,8 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			/*
 			 * Read Ions
 			 */
-			try {
-				IVendorIon ion = readIon(dataInputStream, ionTransitionSettings);
-				massSpectrum.addIon(ion);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonTransitionIsNullException e) {
-				logger.warn(e);
-			}
+			IVendorIon ion = readIon(dataInputStream, ionTransitionSettings);
+			massSpectrum.addIon(ion);
 		}
 		/*
 		 * Identification Results
@@ -839,7 +816,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		readMassSpectrumIdentificationTargets(dataInputStream, massSpectrum);
 	}
 
-	private IVendorIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException, AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+	private IVendorIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException {
 
 		IVendorIon ion;
 		//

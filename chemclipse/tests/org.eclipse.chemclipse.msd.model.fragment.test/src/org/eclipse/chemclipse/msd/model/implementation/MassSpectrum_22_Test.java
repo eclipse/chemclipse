@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,11 +15,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.MarkedTraceModus;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 import junit.framework.TestCase;
 
@@ -66,7 +64,7 @@ public class MassSpectrum_22_Test extends TestCase {
 		assertEquals("getTotalSignal", 1242021.9f, massSpectrum.getTotalSignal());
 	}
 
-	public void testGetTotalIonSignal_2() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetTotalIonSignal_2()  {
 
 		excludedIons.add(new MarkedIon(104));
 		excludedIons.add(new MarkedIon(28));
@@ -78,7 +76,7 @@ public class MassSpectrum_22_Test extends TestCase {
 		assertEquals("TotalSignal", 120000.4f, massSpectrum.getIon(106).getAbundance());
 	}
 
-	public void testGetTotalIonSignal_3() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetTotalIonSignal_3()  {
 
 		massSpectrum.removeIons(excludedIons);
 		assertEquals("getTotalSignal", 1242021.9f, massSpectrum.getTotalSignal());
@@ -88,7 +86,7 @@ public class MassSpectrum_22_Test extends TestCase {
 		assertEquals("TotalSignal", 120000.4f, massSpectrum.getIon(106).getAbundance());
 	}
 
-	public void testGetTotalIonSignal_4() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetTotalIonSignal_4()  {
 
 		Set<Integer> ions = new HashSet<Integer>();
 		ions.add(104);
@@ -101,7 +99,7 @@ public class MassSpectrum_22_Test extends TestCase {
 		assertEquals("TotalSignal", 120000.4f, massSpectrum.getIon(106).getAbundance());
 	}
 
-	public void testGetTotalIonSignal_5() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetTotalIonSignal_5()  {
 
 		massSpectrum.removeIon(104);
 		massSpectrum.removeIon(28);
@@ -112,7 +110,7 @@ public class MassSpectrum_22_Test extends TestCase {
 		assertEquals("TotalSignal", 120000.4f, massSpectrum.getIon(106).getAbundance());
 	}
 
-	public void testGetTotalIonSignal_6() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetTotalIonSignal_6()  {
 
 		excludedIons.add(new MarkedIon(104));
 		excludedIons.add(new MarkedIon(28));

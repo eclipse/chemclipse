@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import junit.framework.TestCase;
-
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+
+import junit.framework.TestCase;
 
 /**
  * massSpectrum = new DefaultMassSpectrum();
@@ -128,14 +126,8 @@ public class MassSpectrum_3_Test extends TestCase {
 	public void testGetIon_1() {
 
 		IIon ion;
-		try {
-			ion = massSpectrum.getIon(5);
-			assertEquals("getIon", null, ion);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		ion = massSpectrum.getIon(5);
+		assertEquals("getIon", null, ion);
 	}
 
 	public void testIsDirty_1() {

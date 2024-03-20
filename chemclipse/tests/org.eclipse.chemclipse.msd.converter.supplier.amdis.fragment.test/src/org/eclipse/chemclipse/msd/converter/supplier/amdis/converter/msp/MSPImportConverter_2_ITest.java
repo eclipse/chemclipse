@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,14 +14,12 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.database.IDatabaseImportConverter;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.PathResolver;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -53,7 +51,7 @@ public class MSPImportConverter_2_ITest extends TestCase {
 		assertEquals(2, massSpectra.size());
 	}
 
-	public void test_2() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void test_2()  {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
 		ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
@@ -79,7 +77,7 @@ public class MSPImportConverter_2_ITest extends TestCase {
 		assertEquals(5.00050e-03f, massSpectrum.getIon(31).getAbundance());
 	}
 
-	public void test_3() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void test_3()  {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(2);
 		ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;

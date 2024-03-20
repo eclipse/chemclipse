@@ -22,14 +22,12 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.cml.model.IVendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.cml.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.cml.model.VendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.xxd.converter.supplier.cml.io.RootElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.cml.model.v3.Array;
@@ -126,16 +124,12 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 						for(int i = 0; i < scans; i++) {
 							double mz = mzs.get(i);
 							float abundance = abundances.get(i).floatValue();
-							if(yAxis.getMultiplierToData() != null) {
+							if(yAxis != null && yAxis.getMultiplierToData() != null) {
 								abundance = abundance * yAxis.getMultiplierToData().floatValue();
 							}
 							VendorIon ion = new VendorIon(mz, abundance);
 							massSpectrum.addIon(ion);
 						}
-					} catch(AbundanceLimitExceededException e) {
-						logger.warn(e);
-					} catch(IonLimitExceededException e) {
-						logger.warn(e);
 					} catch(NumberFormatException e) {
 						logger.warn(e);
 					}

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.cml.model;
 
-import org.eclipse.chemclipse.msd.model.core.IScanIon;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 
-public interface IVendorIon extends IScanIon {
+public interface IVendorIon extends IIon {
 }

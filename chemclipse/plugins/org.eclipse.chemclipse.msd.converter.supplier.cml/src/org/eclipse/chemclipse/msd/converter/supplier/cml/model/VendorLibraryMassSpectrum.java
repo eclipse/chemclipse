@@ -11,17 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.cml.model;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
 public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectrum implements IVendorLibraryMassSpectrum {
 
 	private static final long serialVersionUID = -1734320282918143749L;
-	private static final Logger logger = Logger.getLogger(VendorLibraryMassSpectrum.class);
 
 	@Override
 	public IVendorLibraryMassSpectrum makeDeepCopy() throws CloneNotSupportedException {
@@ -37,14 +33,8 @@ public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectru
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			try {
-				cmlIon = new Ion(ion.getIon(), ion.getAbundance());
-				massSpectrum.addIon(cmlIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			cmlIon = new Ion(ion.getIon(), ion.getAbundance());
+			massSpectrum.addIon(cmlIon);
 		}
 		return massSpectrum;
 	}

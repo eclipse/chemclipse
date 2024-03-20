@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,22 +18,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.CombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 
 public class CombinedMassSpectrumCalculator {
 
-	private static final Logger logger = Logger.getLogger(CombinedMassSpectrumCalculator.class);
-	private Map<Integer, List<Double>> combinedMassSpectrum = new HashMap<Integer, List<Double>>();
+	private Map<Integer, List<Double>> combinedMassSpectrum = new HashMap<>();
 
 	public int size() {
 
@@ -94,13 +90,7 @@ public class CombinedMassSpectrumCalculator {
 		for(Integer ion : combinedMassSpectrum.keySet()) {
 			float intensity = (float)getAbundance(ion, calculationType);
 			if(intensity > IIon.ZERO_INTENSITY) {
-				try {
-					massSpectrum.addIon(new Ion(ion, intensity));
-				} catch(AbundanceLimitExceededException e) {
-					logger.warn(e);
-				} catch(IonLimitExceededException e) {
-					logger.warn(e);
-				}
+				massSpectrum.addIon(new Ion(ion, intensity));
 			}
 		}
 		return massSpectrum;

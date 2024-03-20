@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 
 import junit.framework.TestCase;
 
@@ -37,41 +36,27 @@ public class Ion_7_Test extends TestCase {
 
 	public void testConstructor_1() {
 
-		try {
-			new Ion(5.5f);
-		} catch(IonLimitExceededException e) {
-			assertTrue(false);
-		}
+		IIon ion = new Ion(5.5f);
+		assertEquals(5.5d, ion.getIon());
 	}
 
 	public void testConstructor_2() {
 
-		try {
-			new Ion(-0.1f, 2593.5f);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue(false);
-		} catch(IonLimitExceededException e) {
-			assertTrue(true);
-		}
+		IIon ion = new Ion(-0.1f, 2593.5f);
+		assertEquals(0d, ion.getIon());
+		assertEquals(2593.5f, ion.getAbundance());
 	}
 
 	public void testConstructor_3() {
 
-		try {
-			new Ion(-0.1f);
-		} catch(IonLimitExceededException e) {
-			assertTrue(true);
-		}
+		IIon ion = new Ion(-0.1f);
+		assertEquals(0d, ion.getIon());
 	}
 
 	public void testConstructor_4() {
 
-		try {
-			new Ion(1.0f, -0.1f);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue(true);
-		} catch(IonLimitExceededException e) {
-			assertTrue(false);
-		}
+		IIon ion = new Ion(1.0f, -0.1f);
+		assertEquals(1d, ion.getIon());
+		assertEquals(0f, ion.getAbundance());
 	}
 }

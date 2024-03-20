@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,9 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 
 /**
@@ -262,21 +260,17 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * => 45,73476.1 will be returned<br/>
 	 * 
 	 * @param ion
-	 * @throws AbundanceLimitExceededException
-	 * @throws IonLimitExceededException
 	 * @return IIon
 	 */
-	IIon getIon(int ion) throws AbundanceLimitExceededException, IonLimitExceededException;
+	IIon getIon(int ion);
 
 	/**
 	 * Returns the ion with the given exact ion value.
 	 * 
 	 * @param ion
 	 * @return IIon
-	 * @throws AbundanceLimitExceededException
-	 * @throws IonLimitExceededException
 	 */
-	IIon getIon(double ion) throws AbundanceLimitExceededException, IonLimitExceededException;
+	IIon getIon(double ion);
 
 	/**
 	 * Returns the ion with the given accurate ion value.
@@ -286,10 +280,8 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * @param ion
 	 * @param precision
 	 * @return IIon
-	 * @throws AbundanceLimitExceededException
-	 * @throws IonLimitExceededException
 	 */
-	IIon getIon(double ion, int precision) throws AbundanceLimitExceededException, IonLimitExceededException;
+	IIon getIon(double ion, int precision);
 
 	/**
 	 * Adjust all ions of the chromatogram to the adjusted signal

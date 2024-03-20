@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.columns.SeparationColumnPackaging;
 import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.ColumnIndexMarker;
 import org.eclipse.chemclipse.model.identifier.IColumnIndexMarker;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -43,7 +42,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.VendorLibraryMa
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.support.util.ValueParserSupport;
@@ -356,23 +354,17 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 		float abundance;
 		Matcher ions = IONS.matcher(ionData);
 		while(ions.find()) {
-			try {
-				/*
-				 * Get the ion and abundance values.
-				 */
-				ion = Double.parseDouble(ions.group(1));
-				abundance = Float.parseFloat(ions.group(3));
-				/*
-				 * Create the ion and store it in mass spectrum.
-				 */
-				if(abundance > 0) {
-					amdisIon = new Ion(ion, abundance);
-					massSpectrum.addIon(amdisIon);
-				}
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
+			/*
+			 * Get the ion and abundance values.
+			 */
+			ion = Double.parseDouble(ions.group(1));
+			abundance = Float.parseFloat(ions.group(3));
+			/*
+			 * Create the ion and store it in mass spectrum.
+			 */
+			if(abundance > 0) {
+				amdisIon = new Ion(ion, abundance);
+				massSpectrum.addIon(amdisIon);
 			}
 		}
 	}

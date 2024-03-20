@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,9 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.interna
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.calculator.SubtractCalculator;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.CombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
@@ -90,56 +88,26 @@ public class SubtractCalculator_4_Test extends TestCase {
 
 	public void testSubtractedMassSpectrum_2() {
 
-		try {
-			assertEquals(2893.3f, targetMassSpectrum.getIon(16.1).getAbundance());
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue(false);
-		} catch(IonLimitExceededException e) {
-			assertTrue(false);
-		}
+		assertEquals(2893.3f, targetMassSpectrum.getIon(16.1).getAbundance());
 	}
 
 	public void testSubtractedMassSpectrum_3() {
 
-		try {
-			assertEquals(8484.3f, targetMassSpectrum.getIon(18.1).getAbundance());
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue(false);
-		} catch(IonLimitExceededException e) {
-			assertTrue(false);
-		}
+		assertEquals(8484.3f, targetMassSpectrum.getIon(18.1).getAbundance());
 	}
 
 	public void testSubtractedMassSpectrum_4() {
 
-		try {
-			assertEquals(3894.4f, targetMassSpectrum.getIon(20.0).getAbundance());
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue(false);
-		} catch(IonLimitExceededException e) {
-			assertTrue(false);
-		}
+		assertEquals(3894.4f, targetMassSpectrum.getIon(20.0).getAbundance());
 	}
 
 	public void testSubtractedMassSpectrum_5() {
 
-		try {
-			assertEquals(1947.3f, targetMassSpectrum.getIon(32.3).getAbundance());
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue(false);
-		} catch(IonLimitExceededException e) {
-			assertTrue(false);
-		}
+		assertEquals(1947.3f, targetMassSpectrum.getIon(32.3).getAbundance());
 	}
 
 	public void testSubtractedMassSpectrum_6() {
 
-		try {
-			assertEquals(3793.5f, targetMassSpectrum.getIon(43.0).getAbundance());
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue(false);
-		} catch(IonLimitExceededException e) {
-			assertTrue(false);
-		}
+		assertEquals(3793.5f, targetMassSpectrum.getIon(43.0).getAbundance());
 	}
 }

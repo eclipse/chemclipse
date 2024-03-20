@@ -11,11 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.csv.model;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 public class VendorScan extends AbstractVendorMassSpectrum implements IVendorScan {
 
@@ -24,7 +21,6 @@ public class VendorScan extends AbstractVendorMassSpectrum implements IVendorSca
 	 * methods.
 	 */
 	private static final long serialVersionUID = -8416701833314906892L;
-	private static final Logger logger = Logger.getLogger(VendorScan.class);
 	/*
 	 * MIN/MAX Bounds
 	 */
@@ -84,14 +80,8 @@ public class VendorScan extends AbstractVendorMassSpectrum implements IVendorSca
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			try {
-				csvIon = new VendorIon(ion.getIon(), ion.getAbundance());
-				massSpectrum.addIon(csvIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			csvIon = new VendorIon(ion.getIon(), ion.getAbundance());
+			massSpectrum.addIon(csvIon);
 		}
 		return massSpectrum;
 	}

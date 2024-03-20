@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonIsNullException;
+import static org.junit.Assert.assertThrows;
 
 import junit.framework.TestCase;
 
@@ -44,28 +42,12 @@ public class Ion_10_Test extends TestCase {
 
 	public void testConstructor_1() {
 
-		try {
-			ion2 = new Ion(ion1);
-		} catch(AbundanceLimitExceededException e) {
-			assertFalse("AbundanceLimitExceededException should not be thrown here.", true);
-		} catch(IonLimitExceededException e) {
-			assertFalse("IonLimitExceededException should not be thrown here.", true);
-		} catch(IonIsNullException e) {
-			assertFalse("IonIsNullException should not be thrown here.", true);
-		}
+		ion2 = new Ion(ion1);
 		assertTrue("hashCode", ion1.equals(ion2));
 	}
 
 	public void testConstructor_2() {
 
-		try {
-			ion2 = new Ion(null);
-		} catch(AbundanceLimitExceededException e) {
-			assertFalse("AbundanceLimitExceededException should not be thrown here.", true);
-		} catch(IonLimitExceededException e) {
-			assertFalse("IonLimitExceededException should not be thrown here.", true);
-		} catch(IonIsNullException e) {
-			assertTrue("IonIsNullException", true);
-		}
+		assertThrows(IllegalArgumentException.class, () -> ion2 = new Ion(null));
 	}
 }

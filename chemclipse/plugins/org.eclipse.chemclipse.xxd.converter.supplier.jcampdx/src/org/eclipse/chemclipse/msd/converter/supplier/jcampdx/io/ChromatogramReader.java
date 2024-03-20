@@ -19,7 +19,6 @@ import java.io.IOException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -35,7 +34,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReader extends AbstractChromatogramMSDReader {
@@ -187,26 +185,18 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 							if(values.length == 2) {
 								double mz = Double.parseDouble(values[0].trim());
 								float abundance = Float.parseFloat(values[1].trim());
-								if(abundance >= VendorIon.MIN_ABUNDANCE && abundance <= VendorIon.MAX_ABUNDANCE) {
-									ion = new VendorIon(mz, abundance);
-									massSpectrum.addIon(ion);
-								}
+								ion = new VendorIon(mz, abundance);
+								massSpectrum.addIon(ion);
 							}
 						} else {
 							String[] values = line.split(ION_DELIMITER_WHITESPACE);
 							if(values.length == 2) {
 								double mz = Double.parseDouble(values[0].trim());
 								float abundance = Float.parseFloat(values[1].trim());
-								if(abundance >= VendorIon.MIN_ABUNDANCE && abundance <= VendorIon.MAX_ABUNDANCE) {
-									ion = new VendorIon(mz, abundance);
-									massSpectrum.addIon(ion);
-								}
+								ion = new VendorIon(mz, abundance);
+								massSpectrum.addIon(ion);
 							}
 						}
-					} catch(AbundanceLimitExceededException e) {
-						logger.warn(e);
-					} catch(IonLimitExceededException e) {
-						logger.warn(e);
 					} catch(NumberFormatException e) {
 						logger.warn(e);
 					}
@@ -271,7 +261,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 					try {
 						String value = line.replace(TIC_MARKER, "").trim();
 						float abundance = Float.parseFloat(value);
-						IVendorIon ion = new VendorIon(AbstractIon.TIC_ION, true);
+						IVendorIon ion = new VendorIon(AbstractIon.TIC_ION);
 						ion.setAbundance(abundance);
 						IVendorScan massSpectrum = new VendorScan();
 						/*
@@ -288,10 +278,6 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 							massSpectrum.addIon(ion);
 							chromatogram.addScan(massSpectrum);
 						}
-					} catch(AbundanceLimitExceededException e) {
-						logger.warn(e);
-					} catch(IonLimitExceededException e) {
-						logger.warn(e);
 					} catch(NumberFormatException e) {
 						logger.warn(e);
 					}

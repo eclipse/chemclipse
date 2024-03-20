@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,11 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.massbank.model;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
 public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectrum {
@@ -25,7 +22,6 @@ public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectru
 	 * methods.
 	 */
 	private static final long serialVersionUID = -7294423367073178234L;
-	private static final Logger logger = Logger.getLogger(VendorLibraryMassSpectrum.class);
 	//
 	private Chromatography chromatography = new Chromatography();
 
@@ -53,14 +49,8 @@ public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectru
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			try {
-				massbankIon = new Ion(ion.getIon(), ion.getAbundance());
-				massSpectrum.addIon(massbankIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			massbankIon = new Ion(ion.getIon(), ion.getAbundance());
+			massSpectrum.addIon(massbankIon);
 		}
 		return massSpectrum;
 	}

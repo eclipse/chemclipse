@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,7 +32,6 @@ import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.core.PeakType;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ChromatogramComparisonResult;
@@ -69,8 +68,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
@@ -201,16 +198,10 @@ public class ChromatogramReader_1002 extends AbstractChromatogramReader implemen
 			massSpectrum = new VendorScan();
 			int retentionTime = dataInputStream.readInt(); // Retention Time
 			float abundance = dataInputStream.readFloat(); // Total Signal
-			try {
-				ion = new VendorIon(AbstractIon.TIC_ION, abundance);
-				massSpectrum.setRetentionTime(retentionTime);
-				massSpectrum.addIon(ion);
-				chromatogram.addScan(massSpectrum);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			ion = new VendorIon(AbstractIon.TIC_ION, abundance);
+			massSpectrum.setRetentionTime(retentionTime);
+			massSpectrum.addIon(ion);
+			chromatogram.addScan(massSpectrum);
 		}
 	}
 
@@ -598,16 +589,8 @@ public class ChromatogramReader_1002 extends AbstractChromatogramReader implemen
 			/*
 			 * Read Ions
 			 */
-			try {
-				IVendorIon ion = readIon(dataInputStream, ionTransitionSettings);
-				massSpectrum.addIon(ion);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonTransitionIsNullException e) {
-				logger.warn(e);
-			}
+			IVendorIon ion = readIon(dataInputStream, ionTransitionSettings);
+			massSpectrum.addIon(ion);
 		}
 		/*
 		 * Identification Results
@@ -635,16 +618,8 @@ public class ChromatogramReader_1002 extends AbstractChromatogramReader implemen
 			/*
 			 * Read Ions
 			 */
-			try {
-				IVendorIon ion = readIon(dataInputStream, ionTransitionSettings);
-				massSpectrum.addIon(ion);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonTransitionIsNullException e) {
-				logger.warn(e);
-			}
+			IVendorIon ion = readIon(dataInputStream, ionTransitionSettings);
+			massSpectrum.addIon(ion);
 		}
 		/*
 		 * Identification Results
@@ -654,7 +629,7 @@ public class ChromatogramReader_1002 extends AbstractChromatogramReader implemen
 		return massSpectrum;
 	}
 
-	private IVendorIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException, AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+	private IVendorIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException {
 
 		IVendorIon ion;
 		//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,6 @@ import java.util.Set;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IColumnIndexMarker;
@@ -39,7 +38,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.RegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
@@ -518,13 +516,7 @@ public abstract class AbstractWriter {
 			int startIon = extractedIonSignal.getStartIon();
 			int stopIon = extractedIonSignal.getStopIon();
 			for(int ion = startIon; ion <= stopIon; ion++) {
-				try {
-					optimizedMassSpectrum.addIon(new Ion(ion, extractedIonSignal.getAbundance(ion)));
-				} catch(AbundanceLimitExceededException e) {
-					logger.warn(e);
-				} catch(IonLimitExceededException e) {
-					logger.warn(e);
-				}
+				optimizedMassSpectrum.addIon(new Ion(ion, extractedIonSignal.getAbundance(ion)));
 			}
 		} else {
 			/*
@@ -573,13 +565,7 @@ public abstract class AbstractWriter {
 		//
 		if(copyIons) {
 			for(IIon ion : massSpectrum.getIons()) {
-				try {
-					massSpectrumCopy.addIon(new Ion(ion.getIon(), ion.getAbundance()));
-				} catch(AbundanceLimitExceededException e) {
-					logger.warn(e);
-				} catch(IonLimitExceededException e) {
-					logger.warn(e);
-				}
+				massSpectrumCopy.addIon(new Ion(ion.getIon(), ion.getAbundance()));
 			}
 		}
 		//

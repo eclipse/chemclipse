@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,10 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonBounds;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 import junit.framework.TestCase;
 
@@ -173,17 +171,11 @@ public class MassSpectrum_14_Test extends TestCase {
 	public void testGetIon_1() {
 
 		IIon ion;
-		try {
-			ion = massSpectrum.getIon(5);
-			assertEquals("getIon", null, ion);
-			ion = massSpectrum.getIon(46);
-			assertTrue("getIon", ion != null);
-			assertEquals("getIon(46) abundance", 8.815093f, ion.getAbundance());
-			assertEquals("getIon(46) ion", 46.0d, ion.getIon());
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		ion = massSpectrum.getIon(5);
+		assertEquals("getIon", null, ion);
+		ion = massSpectrum.getIon(46);
+		assertTrue("getIon", ion != null);
+		assertEquals("getIon(46) abundance", 8.815093f, ion.getAbundance());
+		assertEquals("getIon(46) ion", 46.0d, ion.getIon());
 	}
 }

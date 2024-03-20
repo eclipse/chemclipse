@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,12 +12,10 @@
 package org.eclipse.chemclipse.msd.model.implementation;
 
 import org.eclipse.chemclipse.model.core.MarkedTraceModus;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 import junit.framework.TestCase;
 
@@ -66,7 +64,7 @@ public class MassSpectrum_21_Test extends TestCase {
 		assertEquals("getTotalSignal", 1242021.9f, massSpectrum.getTotalSignal());
 	}
 
-	public void testGetTotalIonSignal_2() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetTotalIonSignal_2()  {
 
 		excludedIons.add(new MarkedIon(104));
 		excludedIons.add(new MarkedIon(28));

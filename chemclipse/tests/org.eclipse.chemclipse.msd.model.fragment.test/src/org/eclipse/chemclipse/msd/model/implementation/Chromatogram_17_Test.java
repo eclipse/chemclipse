@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.msd.model.implementation;
 import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanIon;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -32,7 +32,7 @@ public class Chromatogram_17_Test extends TestCase {
 
 	private IChromatogramMSD chromatogram;
 	private IVendorMassSpectrum supplierMassSpectrum;
-	private IScanIon ion;
+	private IIon ion;
 	private IMarkedIons excludedIons;
 	private IScanMSD ms;
 
@@ -46,7 +46,7 @@ public class Chromatogram_17_Test extends TestCase {
 			supplierMassSpectrum = new VendorMassSpectrum();
 			supplierMassSpectrum.setRetentionTime(i);
 			for(int j = 1; j <= 50; j++) {
-				ion = new ScanIon(j, j);
+				ion = new Ion(j, j);
 				supplierMassSpectrum.addIon(ion);
 			}
 			chromatogram.addScan(supplierMassSpectrum);

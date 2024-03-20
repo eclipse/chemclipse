@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -395,13 +395,7 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 
 	private boolean isIonInvalid(IIon ion) {
 
-		if(ion.getAbundance() < VendorIon.MIN_ABUNDANCE) {
-			return true;
-		} else if(ion.getAbundance() > VendorIon.MAX_ABUNDANCE) {
-			return true;
-		} else if(ion.getIon() < VendorIon.MIN_ION) {
-			return true;
-		} else if(ion.getIon() > VendorIon.MAX_ION) {
+		if(ion.getIon() < VendorIon.MIN_ION && ion.getIon() > VendorIon.MAX_ION) {
 			return true;
 		}
 		//
