@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -170,7 +170,7 @@ public class DataType {
 	public List<DpAmpCurveType> getAdp() {
 
 		if(adp == null) {
-			adp = new ArrayList<DpAmpCurveType>();
+			adp = new ArrayList<>();
 		}
 		return this.adp;
 	}
@@ -178,7 +178,7 @@ public class DataType {
 	public List<DpMeltingCurveType> getMdp() {
 
 		if(mdp == null) {
-			mdp = new ArrayList<DpMeltingCurveType>();
+			mdp = new ArrayList<>();
 		}
 		return this.mdp;
 	}

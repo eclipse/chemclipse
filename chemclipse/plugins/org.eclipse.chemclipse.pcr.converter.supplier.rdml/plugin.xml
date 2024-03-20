@@ -12,7 +12,7 @@
             id="org.eclipse.chemclipse.pcr.converter.supplier.rdml"
             importConverter="org.eclipse.chemclipse.pcr.converter.supplier.rdml.core.PCRImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.pcr.converter.supplier.rdml.core.MagicNumberMatcher"
-            isExportable="false"
+            isExportable="true"
             isImportable="true">
       </PlateSupplier>
    </extension>

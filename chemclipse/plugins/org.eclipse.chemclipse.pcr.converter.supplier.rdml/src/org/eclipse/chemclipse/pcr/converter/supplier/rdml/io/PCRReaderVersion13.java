@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.pcr.converter.supplier.rdml.io;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
@@ -37,6 +39,7 @@ import org.eclipse.chemclipse.pcr.converter.support.AmplificationAnalysis;
 import org.eclipse.chemclipse.pcr.model.core.Channel;
 import org.eclipse.chemclipse.pcr.model.core.ChannelSpecification;
 import org.eclipse.chemclipse.pcr.model.core.DetectionFormat;
+import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IChannelSpecification;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
@@ -58,8 +61,8 @@ public class PCRReaderVersion13 implements IPCRReader {
 		IVendorPlate vendorPlate = new VendorPlate();
 		Rdml rdml = getRDML(inputStream);
 		setDate(vendorPlate, rdml);
-		setDefaultDetectionFormat(vendorPlate);
 		readExperiment(vendorPlate, rdml);
+		setDefaultDetectionFormat(vendorPlate);
 		AmplificationAnalysis.calculateCrossingPoints(vendorPlate);
 		return vendorPlate;
 	}
@@ -98,13 +101,19 @@ public class PCRReaderVersion13 implements IPCRReader {
 					IWell well = new Well();
 					well.setPosition(calculateCoordinate(w + 1, pcrFormatType));
 					well.setSampleName(sample.getId());
-					Channel channel = createChannel(rdml);
+					List<IChannel> channels = createChannels(rdml);
+					int c = 0;
 					for(DataType data : react.getData()) {
+						IChannel channel = channels.get(c);
 						for(DpAmpCurveType adp : data.getAdp()) {
 							channel.getFluorescence().add((double)adp.getFluor());
 						}
+						if(data.getCq() != null) {
+							channel.setCrossingPoint(data.getCq());
+						}
+						well.getChannels().put(c, channel);
+						c++;
 					}
-					well.getChannels().put(0, channel);
 					well.putHeaderData(IWell.SAMPLE_SUBSET, "Default"); // TODO: should be optional
 					vendorPlate.getWells().add(well);
 					w++;
@@ -113,23 +122,30 @@ public class PCRReaderVersion13 implements IPCRReader {
 		}
 	}
 
-	private Channel createChannel(Rdml rdml) {
+	private List<IChannel> createChannels(Rdml rdml) {
 
-		Channel channel = new Channel();
-		channel.setId(0);
+		List<IChannel> channels = new ArrayList<>();
+		int d = 1;
 		for(DyeType dye : rdml.getDye()) {
+			Channel channel = new Channel();
 			channel.setDetectionName(dye.getId());
+			channel.setId(d);
+			channel.setValid(true);
+			channels.add(channel);
+			d++;
 		}
-		channel.setValid(true);
-		return channel;
+		return channels;
 	}
 
+	// TODO: this should not be required
 	private void setDefaultDetectionFormat(IVendorPlate vendorPlate) {
 
 		DetectionFormat detectionFormat = new DetectionFormat();
-		IChannelSpecification channelSpecification = new ChannelSpecification();
-		channelSpecification.putHeaderData(IChannelSpecification.NAME, "Default");
-		detectionFormat.getChannelSpecifications().add(channelSpecification);
+		for(IChannel channel : vendorPlate.getWell(0).getChannels().values()) {
+			IChannelSpecification channelSpecification = new ChannelSpecification();
+			channelSpecification.putHeaderData(IChannelSpecification.NAME, channel.getDetectionName());
+			detectionFormat.getChannelSpecifications().add(channelSpecification);
+		}
 		vendorPlate.setDetectionFormat(detectionFormat);
 	}
 
