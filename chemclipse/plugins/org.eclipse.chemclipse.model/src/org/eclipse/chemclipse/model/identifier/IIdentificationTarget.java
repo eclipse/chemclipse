@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2023 Lablicate GmbH.
+ * Copyright (c) 2010, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -177,7 +177,7 @@ public interface IIdentificationTarget extends ITarget {
 		//
 		IComparisonResult comparisonResult = new ComparisonResult(matchFactor, matchFactor, matchFactor, matchFactor);
 		IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
-		identificationTarget.setIdentifier(identifier);
+		identificationTarget.setIdentifier(identifier); // $NON-NLS-N$
 		//
 		return identificationTarget;
 	}
@@ -197,14 +197,18 @@ public interface IIdentificationTarget extends ITarget {
 	IComparisonResult getComparisonResult();
 
 	/**
-	 * Get the identifier (e.g. "INCOS Mass Spectrum Identifier").
+	 * Get the identifier, e.g.: 'NIST (extern)'
 	 * 
 	 * @return String
 	 */
 	String getIdentifier();
 
 	/**
-	 * Set the identifier.
+	 * Caution
+	 * ---
+	 * The identifier must not be translated. Otherwise, the ILibraryService is
+	 * not able to locate the reference mass spectrum for displaying the
+	 * unknown/reference mass spectrum in the comparison view.
 	 * 
 	 * @param identifier
 	 */

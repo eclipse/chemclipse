@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - don't translate the identifier id
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.l10n;
 
@@ -17,7 +18,6 @@ public class Messages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.eclipse.chemclipse.msd.identifier.supplier.nist.l10n.messages"; //$NON-NLS-1$
 	//
-	public static String nistIdentifier;
 	public static String nistDbIdentifier;
 	//
 	static {

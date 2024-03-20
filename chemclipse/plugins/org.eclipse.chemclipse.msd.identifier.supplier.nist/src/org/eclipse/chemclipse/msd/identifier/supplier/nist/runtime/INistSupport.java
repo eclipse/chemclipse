@@ -18,8 +18,9 @@ public interface INistSupport {
 	 * If one loads an old file, containing the "NIST" label, the library service shall be
 	 * able to locate the mass spectrum.
 	 */
-	String NIST_IDENTIFIER_LEGACY = "NIST";
-	String NIST_IDENTIFIER = "NIST (extern)";
+	String NIST_IDENTIFIER_LEGACY_1 = "NIST"; // $NON-NLS-N$
+	String NIST_IDENTIFIER_LEGACY_2 = "NIST (external)"; // $NON-NLS-N$
+	String NIST_IDENTIFIER = "NIST (extern)"; // $NON-NLS-N$
 	/*
 	 * The parameter is used to run the NIST-DB in batch mode.
 	 * NIST MS Search (nistms$.exe) Command Line Options, Ver24Man.pdf, page 60

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - add method to check if target is valid, ad generics
  *******************************************************************************/
@@ -40,7 +40,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AlkaneIdentifier {
 
-	public static final String IDENTIFIER = "Alkanes Identifier";
+	public static final String IDENTIFIER = "Alkanes Identifier"; // $NON-NLS-N$
 	//
 	private final String massSpectraFiles; // Initialized in constructor.
 	private final DatabasesCache databasesCache; // Initialized in constructor.

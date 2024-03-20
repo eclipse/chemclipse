@@ -16,13 +16,13 @@ import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.l10n.Messages;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.INistSupport;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.core.runtime.IAdaptable;
 
 public class NISTIdentificationTarget extends IdentificationTarget implements IAdaptable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3172016048674240447L;
 	private IScanMSD identifiedScan;
 
 	public NISTIdentificationTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
@@ -33,7 +33,7 @@ public class NISTIdentificationTarget extends IdentificationTarget implements IA
 	@Override
 	public String getIdentifier() {
 
-		return Messages.nistIdentifier;
+		return INistSupport.NIST_IDENTIFIER; // $NON-NLS-N$
 	}
 
 	@Override

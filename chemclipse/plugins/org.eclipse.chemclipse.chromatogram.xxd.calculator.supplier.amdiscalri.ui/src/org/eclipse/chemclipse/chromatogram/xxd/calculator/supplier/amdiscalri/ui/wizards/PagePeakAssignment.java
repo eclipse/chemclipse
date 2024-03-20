@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
@@ -387,7 +387,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 			libraryInformation.setDatabase(databaseName); // Important, otherwise LibraryService fails.
 			IPeakComparisonResult comparisonResult = new PeakComparisonResult(factor, factor, factor, factor, factor);
 			IIdentificationTarget peakTarget = new IdentificationTarget(libraryInformation, comparisonResult);
-			peakTarget.setIdentifier(AlkaneIdentifier.IDENTIFIER);
+			peakTarget.setIdentifier(AlkaneIdentifier.IDENTIFIER); // $NON-NLS-N$
 			peak.getTargets().add(peakTarget);
 			targetsViewerUI.setInput(peak.getTargets());
 			/*

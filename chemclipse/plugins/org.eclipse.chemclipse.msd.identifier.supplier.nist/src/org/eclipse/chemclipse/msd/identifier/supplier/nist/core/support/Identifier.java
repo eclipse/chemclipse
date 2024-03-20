@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - use dedicated NISTIdentificationTarget for improved performance
  *******************************************************************************/
@@ -50,7 +50,6 @@ import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Comp
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Compounds;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Hit;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.NistResultFileParser;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.l10n.Messages;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.HLMFilenameFilter;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.IExtendedRuntimeSupport;
@@ -652,10 +651,7 @@ public class Identifier {
 					float matchFactor = comparisonResult.getMatchFactor();
 					float reverseMatchFactor = comparisonResult.getReverseMatchFactor();
 					if(matchFactor >= minMatchFactor && reverseMatchFactor >= minReverseMatchFactor) {
-						/*
-						 * Store the peak target
-						 */
-						identificationEntry.setIdentifier(Messages.nistIdentifier);
+						identificationEntry.setIdentifier(INistSupport.NIST_IDENTIFIER); // $NON-NLS-N$
 						peakTargets.add(identificationEntry);
 						identificationResult.add(identificationEntry);
 					}

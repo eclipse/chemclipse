@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - move code from AbstracConverterSupport
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.core;
@@ -59,9 +59,6 @@ public class Converter {
 	 */
 	public static boolean isValid(final String input) {
 
-		/*
-		 *
-		 */
 		if(input == null) {
 			return false;
 		}
@@ -157,9 +154,11 @@ public class Converter {
 				}
 			}
 		}
+		//
 		if(availableConverters.isEmpty()) {
 			throw new NoConverterAvailableException("There is no converter available to process the file: " + file.toString());
 		}
+		//
 		return availableConverters;
 	}
 }

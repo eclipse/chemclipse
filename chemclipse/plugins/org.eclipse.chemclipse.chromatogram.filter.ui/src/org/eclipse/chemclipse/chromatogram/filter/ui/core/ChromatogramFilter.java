@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.ui.core;
 
@@ -44,7 +44,8 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ChromatogramFilter extends AbstractChromatogramFilter {
 
-	private static final String IDENTIFIER = Messages.scanMaximaDetectorUI;
+	private static final String DESCRIPTION = Messages.scanMaximaDetectorUI;
+	private static final String IDENTIFIER = "Scan Maxima Detector UI";
 
 	@Override
 	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
@@ -56,7 +57,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 			filterSettings = maxDetectorFilterSettings;
 		} else {
 			filterSettings = PreferenceSupplier.getMaxDetectorFilterSettings();
-			processingInfo.addWarnMessage(IDENTIFIER, NLS.bind(Messages.settingsNotOfType, MaxDetectorFilterSettings.class));
+			processingInfo.addWarnMessage(DESCRIPTION, NLS.bind(Messages.settingsNotOfType, MaxDetectorFilterSettings.class));
 		}
 		//
 		if(!processingInfo.hasErrorMessages()) {
@@ -95,7 +96,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void detectScanMaxima(Shell shell, IChromatogramSelection<?,?> chromatogramSelection, MaxDetectorFilterSettings filterSettings) {
+	private void detectScanMaxima(Shell shell, IChromatogramSelection<?, ?> chromatogramSelection, MaxDetectorFilterSettings filterSettings) {
 
 		ChromatogramFilterDialog dialog = new ChromatogramFilterDialog(shell);
 		if(IDialogConstants.OK_ID == dialog.open()) {
@@ -180,7 +181,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 				float matchFactor = filterSettings.getMatchFactor();
 				ComparisonResult comparisonResult = new ComparisonResult(matchFactor, 0.0f, 0.0f, 0.0f);
 				IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
-				identificationTarget.setIdentifier(IDENTIFIER);
+				identificationTarget.setIdentifier(IDENTIFIER); // $NON-NLS-N$
 				scan.getTargets().add(identificationTarget);
 			}
 		}
