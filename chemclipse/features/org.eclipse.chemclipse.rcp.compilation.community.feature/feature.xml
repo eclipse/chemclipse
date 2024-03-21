@@ -353,11 +353,51 @@
          version="0.0.0"/>
 
    <plugin
+         id="org.eclipse.nebula.widgets.richtext"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.osgi.service.coordinator"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.osgi.service.http.whiteboard"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.equinox.http.service.api"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.mortbay.jasper.apache-el"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.equinox.jsp.jasper.registry"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.help.base"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.apache.lucene.analysis-common"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.apache.lucene.analysis-smartcn"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.jetty.http"
+         version="0.0.0"/>
+
+   <plugin
          id="slf4j.api"
          version="0.0.0"/>
 
    <plugin
-         id="org.eclipse.nebula.widgets.richtext"
+         id="org.slf4j.api"
          version="0.0.0"/>
 
 </feature>
