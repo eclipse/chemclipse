@@ -45,7 +45,7 @@ import org.eclipse.swt.widgets.Shell;
 public class ChromatogramFilter extends AbstractChromatogramFilter {
 
 	private static final String DESCRIPTION = Messages.scanMaximaDetectorUI;
-	private static final String IDENTIFIER = "Scan Maxima Detector UI";
+	private static final String IDENTIFIER = "org.eclipse.chemclipse.chromatogram.filter.ui.scanMaximaDetector"; // $NON-NLS-N$
 
 	@Override
 	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
@@ -181,7 +181,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 				float matchFactor = filterSettings.getMatchFactor();
 				ComparisonResult comparisonResult = new ComparisonResult(matchFactor, 0.0f, 0.0f, 0.0f);
 				IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
-				identificationTarget.setIdentifier(IDENTIFIER); // $NON-NLS-N$
+				identificationTarget.setIdentifier(IDENTIFIER);
 				scan.getTargets().add(identificationTarget);
 			}
 		}

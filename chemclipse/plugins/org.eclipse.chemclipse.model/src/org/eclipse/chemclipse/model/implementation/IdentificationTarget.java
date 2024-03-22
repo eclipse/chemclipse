@@ -37,7 +37,7 @@ public class IdentificationTarget extends AbstractIdentificationTarget implement
 
 		super(libraryInformation, comparisonResult);
 		if(identifier != null) {
-			setIdentifier(identifier); // $NON-NLS-N$
+			setIdentifier(identifier);
 		}
 	}
 

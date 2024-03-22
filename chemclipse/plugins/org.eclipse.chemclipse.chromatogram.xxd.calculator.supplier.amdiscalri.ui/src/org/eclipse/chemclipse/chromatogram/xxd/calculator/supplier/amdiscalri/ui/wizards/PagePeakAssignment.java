@@ -387,7 +387,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 			libraryInformation.setDatabase(databaseName); // Important, otherwise LibraryService fails.
 			IPeakComparisonResult comparisonResult = new PeakComparisonResult(factor, factor, factor, factor, factor);
 			IIdentificationTarget peakTarget = new IdentificationTarget(libraryInformation, comparisonResult);
-			peakTarget.setIdentifier(AlkaneIdentifier.IDENTIFIER); // $NON-NLS-N$
+			peakTarget.setIdentifier(AlkaneIdentifier.IDENTIFIER);
 			peak.getTargets().add(peakTarget);
 			targetsViewerUI.setInput(peak.getTargets());
 			/*

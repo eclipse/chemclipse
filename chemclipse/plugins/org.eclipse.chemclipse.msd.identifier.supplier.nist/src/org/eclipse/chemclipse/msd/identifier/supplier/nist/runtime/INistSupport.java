@@ -20,7 +20,8 @@ public interface INistSupport {
 	 */
 	String NIST_IDENTIFIER_LEGACY_1 = "NIST"; // $NON-NLS-N$
 	String NIST_IDENTIFIER_LEGACY_2 = "NIST (external)"; // $NON-NLS-N$
-	String NIST_IDENTIFIER = "NIST (extern)"; // $NON-NLS-N$
+	String NIST_IDENTIFIER_LEGACY_3 = "NIST (extern)"; // $NON-NLS-N$
+	String NIST_IDENTIFIER = "org.eclipse.chemclipse.msd.identifier.supplier.nist"; // $NON-NLS-N$
 	/*
 	 * The parameter is used to run the NIST-DB in batch mode.
 	 * NIST MS Search (nistms$.exe) Command Line Options, Ver24Man.pdf, page 60

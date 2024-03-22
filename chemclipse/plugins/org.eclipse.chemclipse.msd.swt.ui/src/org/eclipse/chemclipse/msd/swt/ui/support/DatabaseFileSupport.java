@@ -155,7 +155,7 @@ public class DatabaseFileSupport {
 					ILibraryInformation libraryInformation = peakTarget.getLibraryInformation();
 					IComparisonResult comparisonResult = peakTarget.getComparisonResult();
 					IIdentificationTarget massSpectrumTarget = new IdentificationTarget(libraryInformation, comparisonResult);
-					massSpectrumTarget.setIdentifier(peakTarget.getIdentifier()); // $NON-NLS-N$
+					massSpectrumTarget.setIdentifier(peakTarget.getIdentifier());
 					massSpectrumTarget.setVerified(peakTarget.isVerified());
 					massSpectrum.getTargets().add(massSpectrumTarget);
 				} catch(ReferenceMustNotBeNullException e1) {
@@ -247,6 +247,7 @@ public class DatabaseFileSupport {
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
 		File data = runnable.getData();
 		if(data == null) {

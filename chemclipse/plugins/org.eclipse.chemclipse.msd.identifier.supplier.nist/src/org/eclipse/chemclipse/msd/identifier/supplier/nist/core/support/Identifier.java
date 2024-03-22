@@ -651,7 +651,7 @@ public class Identifier {
 					float matchFactor = comparisonResult.getMatchFactor();
 					float reverseMatchFactor = comparisonResult.getReverseMatchFactor();
 					if(matchFactor >= minMatchFactor && reverseMatchFactor >= minReverseMatchFactor) {
-						identificationEntry.setIdentifier(INistSupport.NIST_IDENTIFIER); // $NON-NLS-N$
+						identificationEntry.setIdentifier(INistSupport.NIST_IDENTIFIER);
 						peakTargets.add(identificationEntry);
 						identificationResult.add(identificationEntry);
 					}
