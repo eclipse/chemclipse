@@ -76,6 +76,16 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		setTargetReferences(targetReferenceSettings.getTargetReferences());
 	}
 
+	/**
+	 * Returns an unmodifiable list of the contained target labels.
+	 * 
+	 * @return {@link List}
+	 */
+	public List<TargetLabel> getTargetLabels() {
+
+		return Collections.unmodifiableList(targetLabels);
+	}
+
 	public ICustomSeries getCustomSeries() {
 
 		return customSeries;

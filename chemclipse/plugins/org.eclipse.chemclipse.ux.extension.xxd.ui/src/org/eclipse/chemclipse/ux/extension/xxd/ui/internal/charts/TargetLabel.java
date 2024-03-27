@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,8 +20,8 @@ public class TargetLabel {
 	private final String label;
 	private final String id;
 	private final boolean isActive;
-	private final double x;
-	private final double y;
+	private double x;
+	private double y;
 	private final FontData fontData;
 	/*
 	 * Cached values used for calculation
@@ -58,9 +58,31 @@ public class TargetLabel {
 		return x;
 	}
 
+	/**
+	 * Adjust the y value.
+	 * Handle this method carefully.
+	 * 
+	 * @param x
+	 */
+	public void adjustX(double x) {
+
+		this.x = x;
+	}
+
 	public double getY() {
 
 		return y;
+	}
+
+	/**
+	 * Adjust the y value.
+	 * Handle this method carefully.
+	 * 
+	 * @param y
+	 */
+	public void adjustY(double y) {
+
+		this.y = y;
 	}
 
 	public FontData getFontData() {
