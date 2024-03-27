@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -56,8 +56,9 @@ public class MethodSupport {
 				/*
 				 * Resume at a given position?
 				 */
-				int resumeIndex = ResumeMethodSupport.selectResumeIndex(shell, processMethod);
-				processMethod.setResumeIndex(resumeIndex);
+				MethodParameters methodParameters = ResumeMethodSupport.selectMethodParameters(shell, processMethod);
+				processMethod.setActiveProfile(methodParameters.getProfile());
+				processMethod.setResumeIndex(methodParameters.getResumeIndex());
 				//
 				ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 				dialog.run(true, false, new IRunnableWithProgress() {

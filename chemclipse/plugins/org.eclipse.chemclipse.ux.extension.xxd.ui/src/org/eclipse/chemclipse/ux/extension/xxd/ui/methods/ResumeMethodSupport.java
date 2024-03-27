@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
-import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -21,10 +20,18 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ResumeMethodSupport {
 
-	public static int selectResumeIndex(Shell shell, IProcessMethod processMethod) throws MethodCancelException {
+	public static MethodParameters selectMethodParameters(Shell shell, IProcessMethod processMethod) throws MethodCancelException {
 
-		int resumeIndex = ProcessEntryContainer.DEFAULT_RESUME_INDEX;
+		MethodParameters methodParameters = new MethodParameters();
+		//
 		if(processMethod != null) {
+			/*
+			 * Set the active profile as this is used to
+			 * parameterize the process method even if
+			 * no support resume was activated. The resume index
+			 * is 0 by default, so that all items are processed.
+			 */
+			methodParameters.setProfile(processMethod.getActiveProfile());
 			if(processMethod.isSupportResume()) {
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_RESUME_METHOD_DIALOG)) {
@@ -36,7 +43,8 @@ public class ResumeMethodSupport {
 					resumeMethodDialog.create();
 					//
 					if(resumeMethodDialog.open() == Window.OK) {
-						resumeIndex = resumeMethodDialog.getResumeIndex();
+						methodParameters.setProfile(resumeMethodDialog.getProfile());
+						methodParameters.setResumeIndex(resumeMethodDialog.getResumeIndex());
 					} else {
 						throw new MethodCancelException();
 					}
@@ -44,6 +52,6 @@ public class ResumeMethodSupport {
 			}
 		}
 		//
-		return resumeIndex;
+		return methodParameters;
 	}
 }

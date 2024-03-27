@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
@@ -26,6 +28,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -40,8 +43,11 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ResumeMethodDialog extends TitleAreaDialog {
 
-	private ComboViewer comboViewer;
-	private Label labelDescription;
+	private AtomicReference<ComboViewer> comboViewerProfileControl = new AtomicReference<>();
+	private AtomicReference<ComboViewer> comboViewerResumeControl = new AtomicReference<>();
+	private AtomicReference<Label> labelResumeControl = new AtomicReference<>();
+	//
+	private String profile = "";
 	private int resumeIndex = 0;
 	private ProcessEntryContainer container;
 
@@ -62,12 +68,23 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 		setTitle(ExtensionMessages.processMethod);
 		setMessage(ExtensionMessages.resumeProcessMethodAtEntry, IMessageProvider.INFORMATION);
 		getButton(IDialogConstants.CANCEL_ID).setEnabled(true);
-		getButton(IDialogConstants.OK_ID).setText("Process");
+		getButton(IDialogConstants.OK_ID).setText(ExtensionMessages.process);
+	}
+
+	public String getProfile() {
+
+		return profile;
 	}
 
 	public int getResumeIndex() {
 
 		return resumeIndex;
+	}
+
+	@Override
+	protected boolean isResizable() {
+
+		return true;
 	}
 
 	@Override
@@ -78,9 +95,11 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite.setLayout(new GridLayout(1, true));
 		//
+		createLabel(composite, ExtensionMessages.selectProfile);
+		createComboViewerProfile(composite);
 		createLabel(composite, ExtensionMessages.resumeFollowingEntryDefaultComplete);
-		comboViewer = createComboViewerProcessEntry(composite);
-		labelDescription = createLabel(composite, "");
+		createComboViewerResume(composite);
+		createLabelResume(composite);
 		createButtonResumeMethodOption(composite);
 		//
 		initialize();
@@ -89,6 +108,25 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 	}
 
 	private void initialize() {
+
+		updateComboViewerProfile();
+		updateComboViewerResume();
+	}
+
+	private void updateComboViewerProfile() {
+
+		if(container != null) {
+			ComboViewer comboViewer = comboViewerProfileControl.get();
+			List<String> profiles = new ArrayList<>(container.getProfiles());
+			profiles.remove(ProcessEntryContainer.DEFAULT_PROFILE);
+			Collections.sort(profiles);
+			profiles.add(0, ProcessEntryContainer.DEFAULT_PROFILE);
+			comboViewer.setInput(profiles);
+			comboViewer.setSelection(new StructuredSelection(container.getActiveProfile()));
+		}
+	}
+
+	private void updateComboViewerResume() {
 
 		List<Object> processEntries = new ArrayList<>();
 		processEntries.add(ExtensionMessages.completeMethod);
@@ -99,8 +137,14 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 			}
 		}
 		//
+		ComboViewer comboViewer = comboViewerResumeControl.get();
 		comboViewer.setInput(processEntries);
 		comboViewer.getCombo().select(0);
+	}
+
+	private void createLabelResume(Composite parent) {
+
+		labelResumeControl.set(createLabel(parent, ""));
 	}
 
 	private Label createLabel(Composite parent, String message) {
@@ -112,7 +156,43 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 		return label;
 	}
 
-	private ComboViewer createComboViewerProcessEntry(Composite parent) {
+	private void createComboViewerProfile(Composite parent) {
+
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(new ListContentProvider());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof String text) {
+					return text;
+				}
+				return null;
+			}
+		});
+		//
+		combo.setToolTipText(ExtensionMessages.selectProfile);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 150;
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Object element = comboViewer.getStructuredSelection().getFirstElement();
+				if(element instanceof String text) {
+					profile = text;
+				}
+			}
+		});
+		//
+		comboViewerProfileControl.set(comboViewer);
+	}
+
+	private void createComboViewerResume(Composite parent) {
 
 		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
@@ -131,7 +211,7 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 			}
 		});
 		//
-		combo.setToolTipText("Select a process entry to resume the method.");
+		combo.setToolTipText(ExtensionMessages.resumeFollowingEntryDefaultComplete);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		combo.setLayoutData(gridData);
@@ -143,15 +223,15 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 				Object element = comboViewer.getStructuredSelection().getFirstElement();
 				if(element instanceof IProcessEntry processEntry) {
 					resumeIndex = combo.getSelectionIndex() - 1;
-					labelDescription.setText(processEntry.getDescription());
+					labelResumeControl.get().setText(processEntry.getDescription());
 				} else {
 					resumeIndex = ProcessEntryContainer.DEFAULT_RESUME_INDEX;
-					labelDescription.setText("");
+					labelResumeControl.get().setText("");
 				}
 			}
 		});
 		//
-		return comboViewer;
+		comboViewerResumeControl.set(comboViewer);
 	}
 
 	private Button createButtonResumeMethodOption(Composite parent) {

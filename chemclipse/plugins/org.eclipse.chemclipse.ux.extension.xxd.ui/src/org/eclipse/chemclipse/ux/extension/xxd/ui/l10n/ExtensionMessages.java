@@ -341,6 +341,8 @@ public class ExtensionMessages extends NLS {
 	public static String absorbance;
 	public static String wavenumber;
 	public static String wavelength;
+	public static String process;
+	public static String selectProfile;
 	//
 	static {
 		NLS.initializeMessages("org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.messages", ExtensionMessages.class); //$NON-NLS-1$

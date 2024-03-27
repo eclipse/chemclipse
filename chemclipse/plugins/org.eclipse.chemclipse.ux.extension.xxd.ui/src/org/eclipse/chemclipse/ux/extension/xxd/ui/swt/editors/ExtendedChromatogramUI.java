@@ -100,6 +100,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.marker.PositionMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.marker.RetentionIndexMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodCancelException;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodParameters;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ResumeMethodSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
@@ -717,8 +718,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			//
 			if(processSupplier instanceof MetaProcessorProcessSupplier metaProcessorProcessSupplier) {
 				IProcessMethod processMethod = metaProcessorProcessSupplier.getProcessMethod();
-				int resumeIndex = ResumeMethodSupport.selectResumeIndex(shell, processMethod);
-				processMethod.setResumeIndex(resumeIndex);
+				MethodParameters methodParameters = ResumeMethodSupport.selectMethodParameters(shell, processMethod);
+				processMethod.setActiveProfile(methodParameters.getProfile());
+				processMethod.setResumeIndex(methodParameters.getResumeIndex());
 			}
 			//
 			processChromatogram(new IRunnableWithProgress() {
