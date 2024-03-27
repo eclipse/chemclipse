@@ -94,6 +94,10 @@ public class ListProcessEntryContainer extends AbstractProcessEntryContainer {
 
 	public void setName(String name) throws IllegalStateException {
 
+		if(name != null && name.endsWith(".ocm")) {
+			name = name.substring(0, name.length() - 4);
+		}
+		//
 		this.name = name;
 	}
 

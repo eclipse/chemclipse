@@ -405,6 +405,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_METHOD_EDIT = "methodEdit.gif";
 	String IMAGE_METHOD_DELETE = "methodDelete.gif";
 	String IMAGE_METHOD_COPY = "methodCopy.gif";
+	String IMAGE_METHOD_RECORD = "methodRecord.gif";
 	//
 	String IMAGE_EXECUTE_EXTENSION = "execute-extension.png";
 	String IMAGE_POPUP_MENU = "popup-menu.png";

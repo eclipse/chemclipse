@@ -960,6 +960,11 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_EDITOR_TSD = "editorTSD";
 	public static final String DEF_EDITOR_TSD = ChromatogramEditorTSD.CONTRIBUTION_URI;
 	/*
+	 * Methods
+	 */
+	public static final String P_CREATE_METHOD_ENABLE_RESUME = "createMethodEnableResume";
+	public static final boolean DEF_CREATE_METHOD_ENABLE_RESUME = true;
+	/*
 	 * Quick-Access Processors
 	 * The basic setting is initialized with DataCategory elements
 	 */
@@ -1256,6 +1261,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_MERGE_PEAKS_CALCULATION_TYPE, DEF_MERGE_PEAKS_CALCULATION_TYPE);
 		putDefault(P_MERGE_PEAKS_IDENTIFICATION_TARGETS, DEF_MERGE_PEAKS_IDENTIFICATION_TARGETS);
 		putDefault(P_MERGE_PEAKS_DELETE_ORIGINS, DEF_MERGE_PEAKS_DELETE_ORIGINS);
+		/*
+		 * Methods
+		 */
+		putDefault(P_CREATE_METHOD_ENABLE_RESUME, DEF_CREATE_METHOD_ENABLE_RESUME);
 		//
 		putDefault(P_FILTER_PATH_CHROMATOGRAM_MSD, DEF_FILTER_PATH_CHROMATOGRAM_MSD);
 		putDefault(P_FILTER_PATH_CHROMATOGRAM_CSD, DEF_FILTER_PATH_CHROMATOGRAM_CSD);
@@ -1496,6 +1505,11 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static boolean isActivateTargetDragAndDropWindows() {
 
 		return INSTANCE().getBoolean(P_ACTIVATE_TARGET_DND_WINDOWS, DEF_ACTIVATE_TARGET_DND_WINDOWS);
+	}
+
+	public static boolean isCreateMethodEnableResume() {
+
+		return INSTANCE().getBoolean(P_CREATE_METHOD_ENABLE_RESUME, DEF_CREATE_METHOD_ENABLE_RESUME);
 	}
 
 	public static String getFilterPathRetentionIndices() {

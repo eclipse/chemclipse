@@ -115,7 +115,7 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 		ProcessMethod newMethod = new ProcessMethod(extendedMethodUI.getProcessMethod());
 		newMethod.setName(null); // will be set after the filename was chosen
 		try {
-			saveSuccessful = MethodFileSupport.saveProccessMethod(newMethod);
+			saveSuccessful = MethodFileSupport.saveProccessMethod(Display.getDefault().getActiveShell(), newMethod);
 			dirtyable.setDirty(!saveSuccessful);
 			notifications.created(newMethod);
 		} catch(NoConverterAvailableException e) {

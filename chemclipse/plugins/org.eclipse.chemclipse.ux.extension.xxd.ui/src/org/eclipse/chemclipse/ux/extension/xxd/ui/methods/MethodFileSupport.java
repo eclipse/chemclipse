@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - provide shell explicitly
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -27,7 +28,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
@@ -37,11 +37,11 @@ public class MethodFileSupport {
 
 	}
 
-	public static boolean saveProccessMethod(IProcessMethod processMethod) throws NoConverterAvailableException {
+	public static boolean saveProccessMethod(Shell shell, IProcessMethod processMethod) throws NoConverterAvailableException {
 
-		Shell shell = Display.getDefault().getActiveShell();
 		File currentFile = processMethod.getSourceFile();
 		String filename = currentFile != null ? currentFile.getName() : ExtensionMessages.processMethodFilename;
+		//
 		return saveProccessMethod(shell, processMethod, filename);
 	}
 
@@ -50,9 +50,14 @@ public class MethodFileSupport {
 		if(processMethod == null) {
 			return false;
 		}
+		/*
+		 * The currently selected method directory shall be preferred.
+		 */
+		File directory = MethodConverter.getUserMethodDirectory();
+		String filterPath = directory.exists() ? directory.getAbsolutePath() : Activator.getDefault().getSettingsPath();
 		//
 		FileDialog dialog = ExtendedFileDialog.create(shell, SWT.SAVE);
-		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
+		dialog.setFilterPath(filterPath);
 		dialog.setFileName(fileName);
 		dialog.setText(ExtensionMessages.saveProcessMethodAs + "...");
 		dialog.setOverwrite(true);
@@ -75,8 +80,9 @@ public class MethodFileSupport {
 		File file = new File(filename);
 		ProcessMethod newMethod = (ProcessMethod)processMethod;
 		newMethod.setSourceFile(file);
-		newMethod.setName(newMethod.getName()); // derive from filename
+		newMethod.setName(newMethod.getName());
 		writeFile(shell, file, newMethod, selectedSupplier);
+		//
 		return true;
 	}
 

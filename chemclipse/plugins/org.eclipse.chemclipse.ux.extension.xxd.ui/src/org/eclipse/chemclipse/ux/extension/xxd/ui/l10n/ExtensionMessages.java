@@ -343,6 +343,9 @@ public class ExtensionMessages extends NLS {
 	public static String wavelength;
 	public static String process;
 	public static String selectProfile;
+	public static String tooltipRecordMethod;
+	public static String recordMethodMessage;
+	public static String descriptionRecordMethod;
 	//
 	static {
 		NLS.initializeMessages("org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.messages", ExtensionMessages.class); //$NON-NLS-1$

@@ -18,13 +18,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
@@ -46,6 +50,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.preferences.PreferenceSupplierConverter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -65,7 +71,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-public class MethodSupportUI extends Composite {
+public class MethodSupportUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(MethodSupportUI.class);
 	//
@@ -73,6 +79,7 @@ public class MethodSupportUI extends Composite {
 	private AtomicReference<Button> addControl = new AtomicReference<>();
 	private AtomicReference<Button> editControl = new AtomicReference<>();
 	private AtomicReference<Button> copyControl = new AtomicReference<>();
+	private AtomicReference<Button> recordControl = new AtomicReference<>();
 	private AtomicReference<Button> deleteControl = new AtomicReference<>();
 	private AtomicReference<Button> directoryControl = new AtomicReference<>();
 	private AtomicReference<Button> executeControl = new AtomicReference<>();
@@ -81,6 +88,8 @@ public class MethodSupportUI extends Composite {
 	private IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 	private IMethodListener methodListener = null;
 	private SupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(DataType.MTH, () -> Activator.getDefault().getEclipseContext());
+	//
+	private ProcessMethod processMethodMacroRecorder = null;
 
 	public MethodSupportUI(Composite parent, int style) {
 
@@ -98,6 +107,16 @@ public class MethodSupportUI extends Composite {
 			eventBroker.unsubscribe(eventHandler);
 		}
 		super.dispose();
+	}
+
+	/**
+	 * May return null. If null, then no recording has been activated.
+	 * 
+	 * @return {@link ProcessMethod}
+	 */
+	public ProcessMethod getProcessMethodMacroRecorder() {
+
+		return processMethodMacroRecorder;
 	}
 
 	public void setMethodListener(IMethodListener methodListener) {
@@ -127,7 +146,7 @@ public class MethodSupportUI extends Composite {
 		setLayout(new FillLayout());
 		//
 		Composite composite = new Composite(this, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(7, false);
+		GridLayout gridLayout = new GridLayout(8, false);
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
@@ -136,6 +155,7 @@ public class MethodSupportUI extends Composite {
 		createButtonAddMethod(composite);
 		createButtonEditMethod(composite);
 		createButtonCopyMethod(composite);
+		createButtonRecordMethod(composite);
 		createButtonDeleteMethod(composite);
 		createButtonMethodDirectory(composite);
 		createButtonExecuteMethod(composite);
@@ -311,6 +331,53 @@ public class MethodSupportUI extends Composite {
 		});
 		//
 		copyControl.set(button);
+	}
+
+	private void createButtonRecordMethod(Composite parent) {
+
+		Button button = new Button(parent, SWT.TOGGLE);
+		button.setText("");
+		button.setToolTipText(ExtensionMessages.tooltipRecordMethod);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD_RECORD, IApplicationImageProvider.SIZE_16x16));
+		button.setSelection(processMethodMacroRecorder != null);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(processMethodMacroRecorder == null) {
+					/*
+					 * Start Recording
+					 */
+					processMethodMacroRecorder = new ProcessMethod(new HashSet<>(Arrays.asList(DataCategory.CSD, DataCategory.MSD, DataCategory.VSD, DataCategory.WSD)));
+					MessageDialog.openInformation(e.display.getActiveShell(), ExtensionMessages.processMethod, ExtensionMessages.recordMethodMessage);
+				} else {
+					try {
+						/*
+						 * Stop Recording
+						 */
+						processMethodMacroRecorder.setDescription(ExtensionMessages.descriptionRecordMethod);
+						processMethodMacroRecorder.setOperator(UserManagement.getCurrentUser());
+						processMethodMacroRecorder.setCategory(ExtensionMessages.process);
+						processMethodMacroRecorder.setSupportResume(PreferenceSupplier.isCreateMethodEnableResume());
+						//
+						if(MethodFileSupport.saveProccessMethod(e.display.getActiveShell(), processMethodMacroRecorder)) {
+							File file = processMethodMacroRecorder.getSourceFile();
+							if(file != null && file.exists()) {
+								MethodConverter.setUserMethodFile(file);
+								openProcessMethodEditor(file);
+								updateInput();
+							}
+						}
+					} catch(NoConverterAvailableException e1) {
+						logger.warn(e1);
+					}
+					processMethodMacroRecorder = null;
+				}
+			}
+		});
+		//
+		recordControl.set(button);
 	}
 
 	private void createButtonDeleteMethod(Composite parent) {
@@ -492,7 +559,11 @@ public class MethodSupportUI extends Composite {
 		copyControl.get().setEnabled(false);
 		deleteControl.get().setEnabled(false);
 		executeControl.get().setEnabled(false);
-		directoryControl.get().setEnabled(true); // Always true
+		/*
+		 * Always true
+		 */
+		copyControl.get().setEnabled(true);
+		directoryControl.get().setEnabled(true);
 		//
 		IProcessMethod processMethod = getProcessMethod();
 		if(processMethod != null) {

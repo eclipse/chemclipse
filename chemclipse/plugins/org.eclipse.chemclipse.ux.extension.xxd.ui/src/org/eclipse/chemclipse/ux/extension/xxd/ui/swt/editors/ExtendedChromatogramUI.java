@@ -59,7 +59,9 @@ import org.eclipse.chemclipse.processing.core.IMessageProvider;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
+import org.eclipse.chemclipse.processing.methods.ProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
+import org.eclipse.chemclipse.processing.methods.ProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier.SupplierType;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
@@ -722,7 +724,23 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				processMethod.setActiveProfile(methodParameters.getProfile());
 				processMethod.setResumeIndex(methodParameters.getResumeIndex());
 			}
-			//
+			/*
+			 * Process Method Macro Recorder
+			 * ProcessSupplier, MetaProcessorProcessSupplier
+			 * NodeProcessorPreferences
+			 */
+			ProcessMethod processMethodMacroRecorder = toolbarMethodControl.get().getProcessMethodMacroRecorder();
+			if(processMethodMacroRecorder != null) {
+				ProcessEntry processEntry = new ProcessEntry(processMethodMacroRecorder);
+				processEntry.setProcessorId(processSupplier.getId());
+				processEntry.setName(processSupplier.getName());
+				processEntry.setDescription(processSupplier.getDescription());
+				processEntry.setSettings(settings.getUserSettingsAsString());
+				processMethodMacroRecorder.addProcessEntry(processEntry);
+			}
+			/*
+			 * Apply
+			 */
 			processChromatogram(new IRunnableWithProgress() {
 
 				@Override
@@ -1898,6 +1916,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			int sizeReferencesBefore = chromatogramSelection.getChromatogram().getReferencedChromatograms().size();
 			consumer.accept(chromatogramSelection);
 			int sizeReferencesAfter = chromatogramSelection.getChromatogram().getReferencedChromatograms().size();
+			//
 			if(sizeReferencesBefore != sizeReferencesAfter) {
 				Display.getDefault().asyncExec(new Runnable() {
 
