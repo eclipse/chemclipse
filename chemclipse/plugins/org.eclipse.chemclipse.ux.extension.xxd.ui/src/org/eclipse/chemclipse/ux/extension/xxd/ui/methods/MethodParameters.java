@@ -25,7 +25,11 @@ public class MethodParameters {
 
 	public void setProfile(String profile) {
 
-		this.profile = profile;
+		if(profile == null || profile.isEmpty()) {
+			this.profile = ProcessEntryContainer.DEFAULT_PROFILE;
+		} else {
+			this.profile = profile;
+		}
 	}
 
 	public int getResumeIndex() {

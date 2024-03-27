@@ -47,7 +47,7 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 	private AtomicReference<ComboViewer> comboViewerResumeControl = new AtomicReference<>();
 	private AtomicReference<Label> labelResumeControl = new AtomicReference<>();
 	//
-	private String profile = "";
+	private String profile = ProcessEntryContainer.DEFAULT_PROFILE;
 	private int resumeIndex = 0;
 	private ProcessEntryContainer container;
 
