@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences.DialogBehavior;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.editor.SystemEditor;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.literature.LiteratureReference;
@@ -62,6 +63,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 	private AtomicReference<SettingsUI<?>> settingsUI = new AtomicReference<>();
 	private AtomicReference<ComboViewer> comboViewerLiterature = new AtomicReference<>();
 	private AtomicReference<Button> buttonLink = new AtomicReference<>();
+	private AtomicReference<Button> buttonRestoreDefaults = new AtomicReference<>();
 	//
 	private boolean isDontAskAgain;
 	private boolean isUseSystemDefaults;
@@ -305,11 +307,15 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		SelectionListener selectionListener = createSelectionListener(validationListener);
 		//
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(2, true));
-		composite.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL));
+		GridData gridData = new GridData(GridData.GRAB_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(2, false));
 		//
-		addButtonResetDefaults(composite);
-		addButtonSettings(composite, validationListener, selectionListener);
+		addButtonRememberSettings(composite, selectionListener);
+		addButtonRestoreDefaults(composite, selectionListener);
+		//
+		settingsUI.get().getControl().addChangeListener(validationListener);
 	}
 
 	private Listener createValidationListener() {
@@ -362,27 +368,16 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		};
 	}
 
-	private void addButtonSettings(Composite parent, Listener validationListener, SelectionListener selectionListener) {
+	private void addButtonRememberSettings(Composite parent, SelectionListener selectionListener) {
 
 		buttonDefault.get().addSelectionListener(selectionListener);
 		buttonUser.get().addSelectionListener(selectionListener);
 		//
 		if(preferences.getDialogBehaviour() == DialogBehavior.NONE) {
 			isDontAskAgain = false;
+			addLabelNoOption(parent);
 		} else {
-			Button buttonDontAskAgain = new Button(parent, SWT.CHECK);
-			buttonDontAskAgain.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false));
-			buttonDontAskAgain.setText(ExtensionMessages.rememberDecision);
-			buttonDontAskAgain.addSelectionListener(new SelectionAdapter() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-
-					isDontAskAgain = buttonDontAskAgain.getSelection();
-				}
-			});
-			isDontAskAgain = preferences.getDialogBehaviour() != DialogBehavior.SHOW;
-			buttonDontAskAgain.setSelection(isDontAskAgain);
+			addButtonDontAskAgain(parent);
 		}
 		/*
 		 * Defaults
@@ -394,15 +389,41 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		}
 		//
 		selectionListener.widgetSelected(null);
-		settingsUI.get().getControl().addChangeListener(validationListener);
 	}
 
-	private void addButtonResetDefaults(Composite parent) {
+	private void addLabelNoOption(Composite parent) {
 
-		Button buttonResetDefaults = new Button(parent, SWT.PUSH);
-		buttonResetDefaults.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, true, false));
-		buttonResetDefaults.setText(ExtensionMessages.resetDefaults);
-		buttonResetDefaults.addSelectionListener(new SelectionAdapter() {
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("");
+		label.setToolTipText("The option remember the settings is not available here.");
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
+
+	private void addButtonDontAskAgain(Composite parent) {
+
+		Button button = new Button(parent, SWT.CHECK);
+		button.setText(ExtensionMessages.rememberDecision);
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				isDontAskAgain = button.getSelection();
+			}
+		});
+		//
+		isDontAskAgain = preferences.getDialogBehaviour() != DialogBehavior.SHOW;
+		button.setSelection(isDontAskAgain);
+	}
+
+	private void addButtonRestoreDefaults(Composite parent, SelectionListener selectionListener) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText(ExtensionMessages.resetDefaults);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -410,5 +431,8 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 				settingsUI.get().getControl().restoreDefaults();
 			}
 		});
+		button.addSelectionListener(selectionListener);
+		//
+		buttonRestoreDefaults.set(button);
 	}
 }
