@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -59,6 +58,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private AtomicReference<TreeViewer> treeViewerControl = new AtomicReference<>();
 	private AtomicReference<ToolItem> toolItemEditControl = new AtomicReference<>();
 	private AtomicReference<ToolItem> toolItemDeleteControl = new AtomicReference<>();
+	//
 	private final Supplier<Collection<IProcessorPreferences<?>>> preferenceSupplier;
 
 	public SettingsPreferencesEditPage(Supplier<Collection<IProcessorPreferences<?>>> preferenceSupplier) {
@@ -332,14 +332,16 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private void doEdit() {
 
 		ITreeSelection selection = treeViewerControl.get().getStructuredSelection();
-		IProcessorPreferences<?> entry = getEntry(selection.getFirstElement());
-		if(entry != null) {
+		IProcessorPreferences<?> processorPreferences = getEntry(selection.getFirstElement());
+		//
+		if(processorPreferences != null) {
 			try {
-				if(SettingsWizard.openEditPreferencesWizard(getShell(), entry, true)) {
+				if(SettingsWizard.openEditPreferencesWizard(getShell(), processorPreferences, true)) {
 					updateTree();
 				}
-			} catch(IOException e) {
-				logger.warn(e);
+			} catch(Exception e) {
+				MessageDialog.openInformation(getShell(), "Processor Preferences", "This processor is listed in view only modus.");
+				logger.warn("Failed to serialize the preferences for: " + processorPreferences.getSupplier().getName());
 			}
 		}
 	}
@@ -347,13 +349,13 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private void updateTree() {
 
 		Map<String, TreeNode> categories = new TreeMap<>();
-		for(IProcessorPreferences<?> entry : preferenceSupplier.get()) {
+		for(IProcessorPreferences<?> processorPreferences : preferenceSupplier.get()) {
 			/*
 			 * Processsor
 			 */
-			IProcessTypeSupplier supplier = entry.getSupplier().getTypeSupplier();
-			TreeNode processorNode = new TreeNode(entry);
-			String category = supplier.getCategory();
+			IProcessTypeSupplier processTypeSupplier = processorPreferences.getSupplier().getTypeSupplier();
+			TreeNode processorNode = new TreeNode(processorPreferences);
+			String category = processTypeSupplier != null ? processTypeSupplier.getCategory() : processorPreferences.getSupplier().getCategory();
 			TreeNode categoryNode = categories.get(category);
 			//
 			if(categoryNode == null) {

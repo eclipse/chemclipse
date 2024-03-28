@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,8 +13,8 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessSettingsSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsPreferencesEditPage;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.widgets.Composite;
@@ -34,7 +34,7 @@ public class PreferencePageProcessors extends PreferencePage {
 	@Override
 	protected Control createContents(Composite parent) {
 
-		SettingsPreferencesEditPage page = new SettingsPreferencesEditPage(() -> SettingsWizard.getAllPreferences(processSupplierContext));
+		SettingsPreferencesEditPage page = new SettingsPreferencesEditPage(() -> ProcessSettingsSupport.getPreferences(processSupplierContext));
 		page.createControl(parent);
 		//
 		return page.getControl();

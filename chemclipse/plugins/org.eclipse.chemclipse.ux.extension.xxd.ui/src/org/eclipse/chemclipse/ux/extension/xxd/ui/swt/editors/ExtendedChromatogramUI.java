@@ -104,6 +104,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.marker.RetentionIndexMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodCancelException;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodParameters;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessSettingsSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ResumeMethodSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisIntensity;
@@ -713,7 +714,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 		try {
 			Shell shell = getChromatogramChart().getShell();
-			IProcessorPreferences<C> settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processSupplier), true);
+			IProcessorPreferences<C> settings = SettingsWizard.getSettings(shell, ProcessSettingsSupport.getWorkspacePreferences(processSupplier), true);
 			if(settings == null) {
 				return;
 			}

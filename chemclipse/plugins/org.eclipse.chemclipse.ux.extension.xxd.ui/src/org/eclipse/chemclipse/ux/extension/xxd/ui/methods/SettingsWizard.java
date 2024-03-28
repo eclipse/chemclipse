@@ -14,27 +14,19 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences.DialogBehavior;
-import org.eclipse.chemclipse.processing.supplier.NodeProcessorPreferences;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
-import org.osgi.service.prefs.BackingStoreException;
-import org.osgi.service.prefs.Preferences;
 
 public class SettingsWizard extends Wizard {
 
@@ -121,6 +113,7 @@ public class SettingsWizard extends Wizard {
 
 			}
 		};
+		//
 		wizardDialog.setMinimumPageSize(SettingsWizard.DEFAULT_WIDTH, SettingsWizard.DEFAULT_HEIGHT);
 		wizardDialog.open();
 	}
@@ -150,52 +143,5 @@ public class SettingsWizard extends Wizard {
 			}
 			return preferences;
 		}
-	}
-
-	/**
-	 * 
-	 * @param processorId
-	 * @return the preferences for this processor id
-	 */
-	public static <T> IProcessorPreferences<T> getWorkspacePreferences(IProcessSupplier<T> supplier) {
-
-		return new NodeProcessorPreferences<>(supplier, getStorage().node(supplier.getId()));
-	}
-
-	private static IEclipsePreferences preferences;
-
-	/**
-	 * 
-	 * @return all active preferences for this {@link IProcessSupplierContext}
-	 */
-	public static Collection<IProcessorPreferences<?>> getAllPreferences(IProcessSupplierContext context) {
-
-		List<IProcessorPreferences<?>> result = new ArrayList<>();
-		try {
-			IEclipsePreferences storage = getStorage();
-			String[] childrenNames = storage.childrenNames();
-			for(String name : childrenNames) {
-				Preferences node = storage.node(name);
-				if(node.keys().length == 0) {
-					// empty default node
-					continue;
-				}
-				IProcessSupplier<?> processorSupplier = context.getSupplier(name);
-				if(processorSupplier != null) {
-					result.add(new NodeProcessorPreferences<>(processorSupplier, node));
-				}
-			}
-		} catch(BackingStoreException e) {
-			// can't load it then
-		}
-		return result;
-	}
-
-	private static IEclipsePreferences getStorage() {
-
-		if(preferences == null) {
-			preferences = InstanceScope.INSTANCE.getNode(IProcessSupplier.class.getName());
-		}
-		return preferences;
 	}
 }
