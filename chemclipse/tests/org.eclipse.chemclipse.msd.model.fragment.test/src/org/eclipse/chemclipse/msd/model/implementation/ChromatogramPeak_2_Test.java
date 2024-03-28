@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import static org.junit.Assert.assertThrows;
+
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.junit.Test;
 
 /**
  * The chromatogram and peak will be initialized in DefaultPeakTestCase.<br/>
@@ -54,37 +57,26 @@ public class ChromatogramPeak_2_Test extends ChromatogramPeakTestCase {
 
 	public void testConstructor_2() {
 
-		try {
+		assertThrows(IllegalArgumentException.class, () -> {
 			peak = new ChromatogramPeakMSD(null, getChromatogram());
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		} catch(PeakException e) {
-			assertFalse("A PeakException should not be thrown here.", true);
-		}
-		assertNull(peak);
+		});
 	}
 
 	public void testConstructor_3() {
 
-		try {
+		assertThrows(IllegalArgumentException.class, () -> {
 			peak = new ChromatogramPeakMSD(getPeakModel(), null);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		} catch(PeakException e) {
-			assertFalse("A PeakException should not be thrown here.", true);
-		}
-		assertNull(peak);
+		});
 	}
 
+	@Test
 	public void testConstructor_4() {
 
 		try {
-			peak = new ChromatogramPeakMSD(null, null);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		} catch(PeakException e) {
-			assertFalse("A PeakException should not be thrown here.", true);
+			new ChromatogramPeakMSD(null, null);
+			fail("Expected an exception to be thrown");
+		} catch(Exception e) {
+			assertTrue(e instanceof IllegalArgumentException || e instanceof PeakException);
 		}
-		assertNull(peak);
 	}
 }

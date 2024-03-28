@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,12 +12,12 @@
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core;
 
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanIon;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.implementation.ScanIon;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.junit.Ignore;
 
@@ -28,7 +28,7 @@ public class SimpleChromatogramTestCase extends TestCase {
 
 	protected IChromatogramMSD chromatogram;
 	protected IVendorMassSpectrum supplierMassSpectrum;
-	protected IScanIon ion;
+	protected IIon ion;
 	protected IChromatogramSelectionMSD chromatogramSelection;
 
 	@Override
@@ -40,15 +40,15 @@ public class SimpleChromatogramTestCase extends TestCase {
 		chromatogram.setScanDelay(4500);
 		chromatogram.setScanInterval(1000);
 		supplierMassSpectrum = new VendorMassSpectrum();
-		ion = new ScanIon(43, 1000.0f);
+		ion = new Ion(43, 1000.0f);
 		supplierMassSpectrum.addIon(ion);
 		chromatogram.addScan(supplierMassSpectrum);
 		supplierMassSpectrum = new VendorMassSpectrum();
-		ion = new ScanIon(43, 2000.0f);
+		ion = new Ion(43, 2000.0f);
 		supplierMassSpectrum.addIon(ion);
 		chromatogram.addScan(supplierMassSpectrum);
 		supplierMassSpectrum = new VendorMassSpectrum();
-		ion = new ScanIon(43, 1000.0f);
+		ion = new Ion(43, 1000.0f);
 		supplierMassSpectrum.addIon(ion);
 		chromatogram.addScan(supplierMassSpectrum);
 		chromatogram.recalculateRetentionTimes();

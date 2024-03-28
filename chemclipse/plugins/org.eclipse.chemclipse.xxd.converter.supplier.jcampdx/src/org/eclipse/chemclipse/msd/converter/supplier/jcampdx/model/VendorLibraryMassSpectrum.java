@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,11 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
 public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectrum implements IVendorLibraryMassSpectrum {
@@ -25,7 +22,6 @@ public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectru
 	 * methods.
 	 */
 	private static final long serialVersionUID = -888313765380340368L;
-	private static final Logger logger = Logger.getLogger(VendorLibraryMassSpectrum.class);
 
 	@Override
 	public IVendorLibraryMassSpectrum makeDeepCopy() throws CloneNotSupportedException {
@@ -41,14 +37,8 @@ public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectru
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			try {
-				jcampIon = new Ion(ion.getIon(), ion.getAbundance());
-				massSpectrum.addIon(jcampIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			jcampIon = new Ion(ion.getIon(), ion.getAbundance());
+			massSpectrum.addIon(jcampIon);
 		}
 		return massSpectrum;
 	}

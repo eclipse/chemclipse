@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,14 +12,14 @@
 package org.eclipse.chemclipse.msd.model.xic;
 
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanIon;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.implementation.ScanIon;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 
 import junit.framework.TestCase;
@@ -27,7 +27,7 @@ import junit.framework.TestCase;
 public class ExtractedIonSignals_15_Test extends TestCase {
 
 	private IVendorMassSpectrum supplierMassSpectrum;
-	private IScanIon defaultIon;
+	private IIon defaultIon;
 	private IExtractedIonSignals extractedIonSignals;
 	private IChromatogramMSD chromatogram;
 	private IExtractedIonSignalExtractor extractedIonSignalExtractor;
@@ -48,7 +48,7 @@ public class ExtractedIonSignals_15_Test extends TestCase {
 			supplierMassSpectrum.setRetentionTime(scan);
 			supplierMassSpectrum.setRetentionIndex(scan / 60.0f);
 			for(int ion = ionStart; ion <= ionStop; ion++) {
-				defaultIon = new ScanIon(ion, ion * scan);
+				defaultIon = new Ion(ion, ion * scan);
 				supplierMassSpectrum.addIon(defaultIon);
 			}
 			chromatogram.addScan(supplierMassSpectrum);

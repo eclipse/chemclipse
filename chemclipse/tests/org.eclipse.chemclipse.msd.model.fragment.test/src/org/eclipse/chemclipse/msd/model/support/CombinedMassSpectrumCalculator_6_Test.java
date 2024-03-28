@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,13 +12,11 @@
 package org.eclipse.chemclipse.msd.model.support;
 
 import org.eclipse.chemclipse.model.core.MarkedTraceModus;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 import junit.framework.TestCase;
 
@@ -46,7 +44,7 @@ public class CombinedMassSpectrumCalculator_6_Test extends TestCase {
 		super.tearDown();
 	}
 
-	public void testValues_1() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_1() {
 
 		int ion = 103;
 		ICombinedMassSpectrum massSpectrum1 = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
@@ -57,7 +55,7 @@ public class CombinedMassSpectrumCalculator_6_Test extends TestCase {
 		assertNull(massSpectrum2.getIon(ion));
 	}
 
-	public void testValues_2() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_2() {
 
 		int ion = 104;
 		ICombinedMassSpectrum massSpectrum1 = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
@@ -68,7 +66,7 @@ public class CombinedMassSpectrumCalculator_6_Test extends TestCase {
 		assertNull(massSpectrum2.getIon(ion));
 	}
 
-	public void testValues_3() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_3() {
 
 		ICombinedMassSpectrum massSpectrum1 = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
 		assertEquals(5100.0f, massSpectrum1.getIon(56).getAbundance());

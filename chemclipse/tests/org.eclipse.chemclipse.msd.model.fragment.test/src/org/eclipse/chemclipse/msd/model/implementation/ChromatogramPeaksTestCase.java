@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,7 +15,6 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -25,7 +24,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.junit.Ignore;
 
 import junit.framework.TestCase;
@@ -58,7 +56,7 @@ public class ChromatogramPeaksTestCase extends TestCase {
 		createPeak3();
 	}
 
-	private void createChromatogram() throws AbundanceLimitExceededException, IonLimitExceededException {
+	private void createChromatogram() {
 
 		chromatogram = new ChromatogramMSD();
 		fragmentValues = new TreeMap<Float, Float>();
@@ -95,7 +93,7 @@ public class ChromatogramPeaksTestCase extends TestCase {
 		chromatogram.recalculateRetentionTimes();
 	}
 
-	private void createPeak1() throws IllegalArgumentException, PeakException, AbundanceLimitExceededException, IonLimitExceededException {
+	private void createPeak1() throws IllegalArgumentException, PeakException {
 
 		peakMaximum = new PeakMassSpectrum();
 		// remove some ions.
@@ -135,7 +133,7 @@ public class ChromatogramPeaksTestCase extends TestCase {
 		peak1 = new ChromatogramPeakMSD(peakModel, chromatogram);
 	}
 
-	private void createPeak2() throws IllegalArgumentException, PeakException, AbundanceLimitExceededException, IonLimitExceededException {
+	private void createPeak2() throws IllegalArgumentException, PeakException {
 
 		peakMaximum = new PeakMassSpectrum();
 		// remove some ions.
@@ -170,7 +168,7 @@ public class ChromatogramPeaksTestCase extends TestCase {
 		peak2 = new ChromatogramPeakMSD(peakModel, chromatogram);
 	}
 
-	private void createPeak3() throws IllegalArgumentException, PeakException, AbundanceLimitExceededException, IonLimitExceededException {
+	private void createPeak3() throws IllegalArgumentException, PeakException {
 
 		peakMaximum = new PeakMassSpectrum();
 		// remove some ions.

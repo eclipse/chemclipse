@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,10 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 import junit.framework.TestCase;
 
@@ -41,25 +39,25 @@ public class MassSpectrum_28_Test extends TestCase {
 		assertFalse(massSpectrum.isMeasurementSIM());
 	}
 
-	public void test2() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void test2()  {
 
 		addIons(massSpectrum, 1);
 		assertTrue(massSpectrum.isMeasurementSIM());
 	}
 
-	public void test3() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void test3()  {
 
 		addIons(massSpectrum, 10);
 		assertTrue(massSpectrum.isMeasurementSIM());
 	}
 
-	public void test4() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void test4()  {
 
 		addIons(massSpectrum, 11);
 		assertFalse(massSpectrum.isMeasurementSIM());
 	}
 
-	private void addIons(IScanMSD massSpectrum, int amount) throws AbundanceLimitExceededException, IonLimitExceededException {
+	private void addIons(IScanMSD massSpectrum, int amount)  {
 
 		for(int i = 1; i <= amount; i++) {
 			IIon nominalIon = new Ion(i, 1000);

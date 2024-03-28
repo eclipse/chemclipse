@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -10,6 +10,8 @@
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
+
+import org.eclipse.chemclipse.msd.model.core.IIon;
 
 import junit.framework.TestCase;
 
@@ -23,7 +25,7 @@ public class Chromatogram_2_Test extends TestCase {
 	private ChromatogramMSD chromatogram1;
 	private ChromatogramMSD chromatogram2;
 	private VendorMassSpectrum supplierMassSpectrum;
-	private ScanIon ion;
+	private IIon ion;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -32,7 +34,7 @@ public class Chromatogram_2_Test extends TestCase {
 		chromatogram1 = new ChromatogramMSD();
 		chromatogram2 = new ChromatogramMSD();
 		supplierMassSpectrum = new VendorMassSpectrum();
-		ion = new ScanIon(25.5f, 45862.3f);
+		ion = new Ion(25.5f, 45862.3f);
 		supplierMassSpectrum.addIon(ion);
 		chromatogram2.addScan(supplierMassSpectrum);
 	}

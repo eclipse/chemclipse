@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 
 import junit.framework.TestCase;
 
@@ -66,7 +63,7 @@ public class MassSpectrum_27_Test extends TestCase {
 		assertEquals(2789.54f, ion.getAbundance());
 	}
 
-	public void test5() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void test5() {
 
 		IIon nominalIon = new Ion(105.6d, 2000.2f);
 		massSpectrum.addIon(false, nominalIon);
@@ -75,7 +72,7 @@ public class MassSpectrum_27_Test extends TestCase {
 		assertEquals(2000.2f, ion.getAbundance());
 	}
 
-	public void test6() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void test6() {
 
 		IIon nominalIon = new Ion(105.6d, 2000.2f);
 		massSpectrum.addIon(true, nominalIon);
@@ -84,7 +81,7 @@ public class MassSpectrum_27_Test extends TestCase {
 		assertEquals(3500.45f, ion.getAbundance());
 	}
 
-	public void test7() throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+	public void test7() throws NullPointerException {
 
 		IIonTransition ionTransition = new IonTransition(210.2d, 105.6d, 15.0d, 1.2d, 1.2d, 0);
 		IIon tripleQuadIon = new Ion(105.6d, 5000.0f, ionTransition);
@@ -94,7 +91,7 @@ public class MassSpectrum_27_Test extends TestCase {
 		assertEquals(5000.0f, ion.getAbundance());
 	}
 
-	public void test8() throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+	public void test8() throws NullPointerException {
 
 		IIonTransition ionTransition = new IonTransition(210.2d, 105.6d, 15.0d, 1.2d, 1.2d, 0);
 		IIon tripleQuadIon = new Ion(105.6d, 5000.0f, ionTransition);
@@ -104,7 +101,7 @@ public class MassSpectrum_27_Test extends TestCase {
 		assertEquals(7789.54f, ion.getAbundance());
 	}
 
-	public void test9() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void test9() {
 
 		IIon nominalIon = new Ion(106.6d, 7800.2f);
 		massSpectrum.addIon(false, nominalIon);
@@ -113,7 +110,7 @@ public class MassSpectrum_27_Test extends TestCase {
 		assertEquals(12089.99f, massSpectrum.getTotalSignal());
 	}
 
-	public void test10() throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+	public void test10() {
 
 		IIonTransition ionTransition = new IonTransition(210.2d, 106.6d, 15.0d, 1.2d, 1.2d, 0);
 		IIon tripleQuadIon = new Ion(106.6d, 7800.2f, ionTransition);

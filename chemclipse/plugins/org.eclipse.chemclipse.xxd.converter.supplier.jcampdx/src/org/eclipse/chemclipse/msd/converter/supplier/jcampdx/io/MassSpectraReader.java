@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
@@ -33,7 +32,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.IVendorLibrar
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -209,15 +207,9 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 								while(ions.find()) {
 									double mz = Double.parseDouble(ions.group(1));
 									float abundance = Float.parseFloat(ions.group(3));
-									if(abundance >= VendorIon.MIN_ABUNDANCE && abundance <= VendorIon.MAX_ABUNDANCE) {
-										ion = new VendorIon(mz, abundance);
-										massSpectrum.addIon(ion);
-									}
+									ion = new VendorIon(mz, abundance);
+									massSpectrum.addIon(ion);
 								}
-							} catch(AbundanceLimitExceededException e) {
-								logger.warn(e);
-							} catch(IonLimitExceededException e) {
-								logger.warn(e);
 							} catch(NumberFormatException e) {
 								logger.warn(e);
 							}

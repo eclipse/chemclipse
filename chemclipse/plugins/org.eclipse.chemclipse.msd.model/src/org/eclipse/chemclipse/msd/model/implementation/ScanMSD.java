@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,12 +15,9 @@ package org.eclipse.chemclipse.msd.model.implementation;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 /**
  * If a new mass spectrum type should be implemented, extend the abstract class {@link AbstractScanMSD} and not this class.
@@ -34,10 +31,10 @@ public class ScanMSD extends AbstractScanMSD implements IScanMSD {
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = -1794251778820195779L;
-	private static final Logger logger = Logger.getLogger(ScanMSD.class);
+	private static final long serialVersionUID = -1794251778820195780L;
 
 	public ScanMSD() {
+
 		super();
 	}
 
@@ -45,7 +42,7 @@ public class ScanMSD extends AbstractScanMSD implements IScanMSD {
 
 		super(ions);
 	}
-	
+
 	/**
 	 * Creates a new instance of {@code ScanMSD} by creating a
 	 * shallow copy of provided {@code templateScan}.
@@ -56,10 +53,10 @@ public class ScanMSD extends AbstractScanMSD implements IScanMSD {
 	 *            {@link IScanMSD scan} that is used as a template
 	 */
 	public ScanMSD(IScanMSD templateScan) {
+
 		super(templateScan);
 	}
 
-	// -------------------------------IMassSpectrumCloneable
 	@Override
 	public IScanMSD makeDeepCopy() throws CloneNotSupportedException {
 
@@ -74,14 +71,8 @@ public class ScanMSD extends AbstractScanMSD implements IScanMSD {
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			try {
-				defaultIon = new Ion(ion.getIon(), ion.getAbundance());
-				massSpectrum.addIon(defaultIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			defaultIon = new Ion(ion.getIon(), ion.getAbundance());
+			massSpectrum.addIon(defaultIon);
 		}
 		return massSpectrum;
 	}
@@ -119,5 +110,4 @@ public class ScanMSD extends AbstractScanMSD implements IScanMSD {
 
 		return makeDeepCopy();
 	}
-	// -------------------------------IMassSpectrumCloneable
 }

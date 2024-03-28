@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  *
@@ -8,8 +8,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 /**
  * A factory to create {@link IIon ions}.
@@ -35,5 +33,5 @@ public interface FactoryIon {
 	 *             if the given <i>m/z</i> exceeds the <i>m/z</i> capabilities
 	 *             of the implementing tpye
 	 */
-	IIon create(double mz, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException;
+	IIon create(double mz, float abundance);
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,9 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IIon;
+
+import junit.framework.TestCase;
 
 /**
  * @author eselmeister
@@ -22,7 +23,7 @@ public class Chromatogram_20_Test extends TestCase {
 
 	private IChromatogramMSD chromatogram;
 	private VendorMassSpectrum supplierMassSpectrum;
-	private ScanIon ion;
+	private IIon ion;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -32,33 +33,33 @@ public class Chromatogram_20_Test extends TestCase {
 		// ------------------------------Scan 1
 		supplierMassSpectrum = new VendorMassSpectrum();
 		supplierMassSpectrum.setRetentionTime(7500);
-		ion = new ScanIon(45.4f, 65883.3f);
+		ion = new Ion(45.4f, 65883.3f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(104.3f, 102453.3f);
+		ion = new Ion(104.3f, 102453.3f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(86.2f, 302410.3f);
+		ion = new Ion(86.2f, 302410.3f);
 		supplierMassSpectrum.addIon(ion);
 		chromatogram.addScan(supplierMassSpectrum);
 		// ------------------------------Scan 1
 		// ------------------------------Scan 2
 		supplierMassSpectrum = new VendorMassSpectrum();
 		supplierMassSpectrum.setRetentionTime(10500);
-		ion = new ScanIon(18.1f, 883.3f);
+		ion = new Ion(18.1f, 883.3f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(146.3f, 2453.3f);
+		ion = new Ion(146.3f, 2453.3f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(48.2f, 3021.3f);
+		ion = new Ion(48.2f, 3021.3f);
 		supplierMassSpectrum.addIon(ion);
 		chromatogram.addScan(supplierMassSpectrum);
 		// ------------------------------Scan 2
 		// ------------------------------Scan 3
 		supplierMassSpectrum = new VendorMassSpectrum();
 		supplierMassSpectrum.setRetentionTime(13500);
-		ion = new ScanIon(22.1f, 6883.3f);
+		ion = new Ion(22.1f, 6883.3f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(80.3f, 1023.3f);
+		ion = new Ion(80.3f, 1023.3f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(190.2f, 2410.3f);
+		ion = new Ion(190.2f, 2410.3f);
 		supplierMassSpectrum.addIon(ion);
 		chromatogram.addScan(supplierMassSpectrum);
 		// ------------------------------Scan 3

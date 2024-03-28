@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.implementation.ScanIon;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.junit.Ignore;
 
@@ -40,19 +40,19 @@ public class ChromatogramOverviewsTestCase extends TestCase {
 		// Scan RT - Abundance
 		// 5000 - 22000
 		massSpectrum = new VendorMassSpectrum();
-		massSpectrum.addIon(new ScanIon(IIon.TIC_ION, 22000));
+		massSpectrum.addIon(new Ion(IIon.TIC_ION, 22000));
 		chromatogram1.addScan(massSpectrum);
 		// 6000 - 66200
 		massSpectrum = new VendorMassSpectrum();
-		massSpectrum.addIon(new ScanIon(IIon.TIC_ION, 66200));
+		massSpectrum.addIon(new Ion(IIon.TIC_ION, 66200));
 		chromatogram1.addScan(massSpectrum);
 		// 7000 - 1712850
 		massSpectrum = new VendorMassSpectrum();
-		massSpectrum.addIon(new ScanIon(IIon.TIC_ION, 1712850));
+		massSpectrum.addIon(new Ion(IIon.TIC_ION, 1712850));
 		chromatogram1.addScan(massSpectrum);
 		// 8000 - 812450
 		massSpectrum = new VendorMassSpectrum();
-		massSpectrum.addIon(new ScanIon(IIon.TIC_ION, 812450));
+		massSpectrum.addIon(new Ion(IIon.TIC_ION, 812450));
 		chromatogram1.addScan(massSpectrum);
 		chromatogram1.recalculateRetentionTimes();
 		// ---------------------------------chromatogram1
@@ -63,19 +63,19 @@ public class ChromatogramOverviewsTestCase extends TestCase {
 		// Scan RT - Abundance
 		// 3000 - 2500
 		massSpectrum = new VendorMassSpectrum();
-		massSpectrum.addIon(new ScanIon(IIon.TIC_ION, 2500));
+		massSpectrum.addIon(new Ion(IIon.TIC_ION, 2500));
 		chromatogram2.addScan(massSpectrum);
 		// 4500 - 55200
 		massSpectrum = new VendorMassSpectrum();
-		massSpectrum.addIon(new ScanIon(IIon.TIC_ION, 55200));
+		massSpectrum.addIon(new Ion(IIon.TIC_ION, 55200));
 		chromatogram2.addScan(massSpectrum);
 		// 6000 - 869542
 		massSpectrum = new VendorMassSpectrum();
-		massSpectrum.addIon(new ScanIon(IIon.TIC_ION, 869542));
+		massSpectrum.addIon(new Ion(IIon.TIC_ION, 869542));
 		chromatogram2.addScan(massSpectrum);
 		// 7500 - 23654
 		massSpectrum = new VendorMassSpectrum();
-		massSpectrum.addIon(new ScanIon(IIon.TIC_ION, 23654));
+		massSpectrum.addIon(new Ion(IIon.TIC_ION, 23654));
 		chromatogram2.addScan(massSpectrum);
 		chromatogram2.recalculateRetentionTimes();
 		// ---------------------------------chromatogram2

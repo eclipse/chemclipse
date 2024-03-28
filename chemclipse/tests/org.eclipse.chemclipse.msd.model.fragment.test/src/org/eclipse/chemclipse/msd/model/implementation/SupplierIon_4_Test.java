@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.msd.model.implementation;
 
 import static org.junit.Assert.assertNotEquals;
 
+import org.eclipse.chemclipse.msd.model.core.IIon;
+
 import junit.framework.TestCase;
 
 /**
@@ -22,17 +24,15 @@ import junit.framework.TestCase;
  */
 public class SupplierIon_4_Test extends TestCase {
 
-	private ScanIon ion1;
-	private ScanIon ion2;
-	private Ion ionX;
+	private IIon ion1;
+	private IIon ion2;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		ion1 = new ScanIon(1.0f, 5726.4f);
-		ion2 = new ScanIon(1.0f, 5716.4f);
-		ionX = new Ion(1.0f, 5726.4f);
+		ion1 = new Ion(1.0f, 5726.4f);
+		ion2 = new Ion(1.0f, 5716.4f);
 	}
 
 	@Override
@@ -53,16 +53,6 @@ public class SupplierIon_4_Test extends TestCase {
 		assertNotEquals("equals", ion2, ion1);
 	}
 
-	public void testEquals_3() {
-
-		assertNotEquals("equals", ion1, ionX);
-	}
-
-	public void testEquals_4() {
-
-		assertNotEquals("equals", ion2, ionX);
-	}
-
 	public void testHashCode_1() {
 
 		assertNotEquals("hashCode", ion1.hashCode(), ion2.hashCode());
@@ -71,15 +61,5 @@ public class SupplierIon_4_Test extends TestCase {
 	public void testHashCode_2() {
 
 		assertNotEquals("hashCode", ion2.hashCode(), ion1.hashCode());
-	}
-
-	public void testHashCode_3() {
-
-		assertNotEquals("hashCode", ion1.hashCode(), ionX.hashCode());
-	}
-
-	public void testHashCode_4() {
-
-		assertNotEquals("hashCode", ion2.hashCode(), ionX.hashCode());
 	}
 }

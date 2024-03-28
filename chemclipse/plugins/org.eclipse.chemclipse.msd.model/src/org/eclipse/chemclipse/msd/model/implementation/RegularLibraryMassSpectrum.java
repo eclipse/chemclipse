@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,16 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 public class RegularLibraryMassSpectrum extends AbstractRegularLibraryMassSpectrum {
 
-	private static final Logger logger = Logger.getLogger(RegularLibraryMassSpectrum.class);
 	private static final long serialVersionUID = 5138492745628996885L;
 
 	/**
@@ -47,14 +43,8 @@ public class RegularLibraryMassSpectrum extends AbstractRegularLibraryMassSpectr
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			try {
-				defaultIon = new Ion(ion.getIon(), ion.getAbundance());
-				massSpectrum.addIon(defaultIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			defaultIon = new Ion(ion.getIon(), ion.getAbundance());
+			massSpectrum.addIon(defaultIon);
 		}
 		return massSpectrum;
 	}

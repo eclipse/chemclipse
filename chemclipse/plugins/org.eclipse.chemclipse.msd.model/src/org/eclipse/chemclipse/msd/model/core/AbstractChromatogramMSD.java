@@ -16,19 +16,16 @@ package org.eclipse.chemclipse.msd.model.core;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.results.ChromatogramSegmentation;
 import org.eclipse.chemclipse.model.results.NoiseSegmentMeasurementResult;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.ImmutableZeroIon;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -63,7 +60,6 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	private static final long serialVersionUID = 6481555040060687480L;
 	//
 	public static final int DEFAULT_SEGMENT_WIDTH = 10;
-	private static final Logger logger = Logger.getLogger(AbstractChromatogramMSD.class);
 	private final IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
 	private ImmutableZeroIon immutableZeroIon;
@@ -72,11 +68,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	public AbstractChromatogramMSD() {
 
 		ionTransitionSettings = new IonTransitionSettings();
-		try {
-			immutableZeroIon = new ImmutableZeroIon();
-		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
-			logger.error(e);
-		}
+		immutableZeroIon = new ImmutableZeroIon();
 		loadNoiseCalculator();
 	}
 

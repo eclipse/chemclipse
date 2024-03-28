@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  *
@@ -8,8 +8,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
 /**
@@ -22,8 +20,8 @@ import org.eclipse.chemclipse.msd.model.implementation.Ion;
 public class FactoryIonDefault implements FactoryIon {
 
 	@Override
-	public Ion create(double mz, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
+	public IIon create(double mz, float abundance) {
 
-		return new Ion(mz).setAbundance(abundance);
+		return new Ion(mz, abundance);
 	}
 }

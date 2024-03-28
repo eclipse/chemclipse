@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.xic;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
 import junit.framework.TestCase;
@@ -66,15 +65,8 @@ public class ExtractedIonSignal_1_Test extends TestCase {
 	public void testSetup_3() {
 
 		extractedIonSignal = new ExtractedIonSignal(1, 1);
-		Ion ion;
-		try {
-			ion = new Ion(1.0f, 1000.0f);
-			extractedIonSignal.setAbundance(ion);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		IIon ion = new Ion(1.0f, 1000.0f);
+		extractedIonSignal.setAbundance(ion);
 		assertEquals("Abundance", 0.0f, extractedIonSignal.getAbundance(0));
 		assertEquals("Abundance", 1000.0f, extractedIonSignal.getAbundance(1));
 		assertEquals("Abundance", 0.0f, extractedIonSignal.getAbundance(2));
@@ -121,17 +113,10 @@ public class ExtractedIonSignal_1_Test extends TestCase {
 	public void testSetup_7() {
 
 		extractedIonSignal = new ExtractedIonSignal(10, 11);
-		Ion ion;
-		try {
-			ion = new Ion(10.0f, 1000.0f);
-			extractedIonSignal.setAbundance(ion);
-			ion = new Ion(11.0f, 2000.0f);
-			extractedIonSignal.setAbundance(ion);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		IIon ion = new Ion(10.0f, 1000.0f);
+		extractedIonSignal.setAbundance(ion);
+		ion = new Ion(11.0f, 2000.0f);
+		extractedIonSignal.setAbundance(ion);
 		assertEquals("Abundance", 1000.0f, extractedIonSignal.getAbundance(10));
 		assertEquals("Abundance", 2000.0f, extractedIonSignal.getAbundance(11));
 	}
@@ -143,15 +128,8 @@ public class ExtractedIonSignal_1_Test extends TestCase {
 	public void testSetup_8() {
 
 		extractedIonSignal = new ExtractedIonSignal(10, 11);
-		Ion ion;
-		try {
-			ion = new Ion(10.0f, 1000.0f);
-			extractedIonSignal.setAbundance(ion);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		IIon ion = new Ion(10.0f, 1000.0f);
+		extractedIonSignal.setAbundance(ion);
 		assertEquals("Abundance", 1000.0f, extractedIonSignal.getAbundance(10));
 		assertEquals("Abundance", 0.0f, extractedIonSignal.getAbundance(11));
 	}
@@ -165,20 +143,13 @@ public class ExtractedIonSignal_1_Test extends TestCase {
 	public void testSetup_9() {
 
 		extractedIonSignal = new ExtractedIonSignal(10, 11);
-		Ion ion;
-		try {
-			ion = new Ion(10.0f, 1000.0f);
-			extractedIonSignal.setAbundance(ion);
-			extractedIonSignal.setAbundance(ion);
-			extractedIonSignal.setAbundance(ion);
-			ion = new Ion(11.0f, 2000.0f);
-			extractedIonSignal.setAbundance(ion);
-			extractedIonSignal.setAbundance(ion);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		IIon ion = new Ion(10.0f, 1000.0f);
+		extractedIonSignal.setAbundance(ion);
+		extractedIonSignal.setAbundance(ion);
+		extractedIonSignal.setAbundance(ion);
+		ion = new Ion(11.0f, 2000.0f);
+		extractedIonSignal.setAbundance(ion);
+		extractedIonSignal.setAbundance(ion);
 		assertEquals("Abundance", 3000.0f, extractedIonSignal.getAbundance(10));
 		assertEquals("Abundance", 4000.0f, extractedIonSignal.getAbundance(11));
 	}
@@ -190,15 +161,8 @@ public class ExtractedIonSignal_1_Test extends TestCase {
 	public void testSetup_10() {
 
 		extractedIonSignal = new ExtractedIonSignal(10.4f, 10.4f);
-		Ion ion;
-		try {
-			ion = new Ion(10.4f, 1000.0f);
-			extractedIonSignal.setAbundance(ion);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		IIon ion = new Ion(10.4f, 1000.0f);
+		extractedIonSignal.setAbundance(ion);
 		assertEquals("Abundance", 1000.0f, extractedIonSignal.getAbundance(10));
 	}
 
@@ -209,15 +173,8 @@ public class ExtractedIonSignal_1_Test extends TestCase {
 	public void testSetup_11() {
 
 		extractedIonSignal = new ExtractedIonSignal(10.5f, 10.5f);
-		Ion ion;
-		try {
-			ion = new Ion(10.5f, 1000.0f);
-			extractedIonSignal.setAbundance(ion);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		IIon ion = new Ion(10.5f, 1000.0f);
+		extractedIonSignal.setAbundance(ion);
 		assertEquals("Abundance", 1000.0f, extractedIonSignal.getAbundance(11));
 	}
 }

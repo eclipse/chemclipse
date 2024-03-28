@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,10 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.zip.ZipFile;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.columns.SeparationColumnType;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.io.IReaderProxy;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.IVendorScan;
@@ -28,8 +26,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.Vend
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.io.ReaderIO_1501;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
@@ -40,7 +36,6 @@ import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IForma
  */
 public class ReaderProxy_1501 extends AbstractZipReader implements IReaderProxy {
 
-	private static final Logger logger = Logger.getLogger(ReaderProxy_1501.class);
 	private ReaderIO_1501 reader1501 = new ReaderIO_1501();
 
 	@Override
@@ -108,16 +103,8 @@ public class ReaderProxy_1501 extends AbstractZipReader implements IReaderProxy 
 			/*
 			 * Read Ions
 			 */
-			try {
-				IVendorIon ion = readIon(dataInputStream, ionTransitionSettings);
-				massSpectrum.addIon(ion);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonTransitionIsNullException e) {
-				logger.warn(e);
-			}
+			IVendorIon ion = readIon(dataInputStream, ionTransitionSettings);
+			massSpectrum.addIon(ion);
 		}
 		/*
 		 * Identification Results
@@ -125,7 +112,7 @@ public class ReaderProxy_1501 extends AbstractZipReader implements IReaderProxy 
 		reader1501.readIdentificationTargets(dataInputStream, false, massSpectrum);
 	}
 
-	private IVendorIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException, AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+	private IVendorIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException {
 
 		IVendorIon ion;
 		//

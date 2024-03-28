@@ -15,19 +15,15 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 
 public class ChromatogramSubtractor {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramSubtractor.class);
 	private static final boolean CHANNEL_WISE_SUBTRACTION = true;
 
 	public void perform(IChromatogram<?> chromatogramMaster, IChromatogram<?> chromatogramSubtract) {
@@ -107,20 +103,14 @@ public class ChromatogramSubtractor {
 				for(IIon ion : ions) {
 					double mass = ion.getIon();
 					IIon subtract;
-					try {
-						subtract = scanSubtract.getIon(mass);
-						if(subtract != null) {
-							float abundance = ion.getAbundance() - subtract.getAbundance();
-							if(abundance <= 0.0) {
-								zeroAbundanceIons.add(ion);
-							} else {
-								ion.setAbundance(abundance);
-							}
+					subtract = scanSubtract.getIon(mass);
+					if(subtract != null) {
+						float abundance = ion.getAbundance() - subtract.getAbundance();
+						if(abundance <= 0.0) {
+							zeroAbundanceIons.add(ion);
+						} else {
+							ion.setAbundance(abundance);
 						}
-					} catch(AbundanceLimitExceededException e) {
-						logger.warn(e);
-					} catch(IonLimitExceededException e) {
-						logger.warn(e);
 					}
 				}
 				zeroAbundanceIons.stream().forEach(scanMasterMSD::removeIon);

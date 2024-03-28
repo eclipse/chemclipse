@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,10 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.support;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 import junit.framework.TestCase;
 
@@ -45,37 +43,37 @@ public class CombinedMassSpectrumCalculator_7_Test extends TestCase {
 		super.tearDown();
 	}
 
-	public void testValues_1() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_1() {
 
 		int ion = 18;
 		assertEquals(9.756098f, noiseMassSpectrum.getIon(ion).getAbundance());
 	}
 
-	public void testValues_2() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_2() {
 
 		int ion = 28;
 		assertEquals(15.609756f, noiseMassSpectrum.getIon(ion).getAbundance());
 	}
 
-	public void testValues_3() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_3() {
 
 		int ion = 43;
 		assertEquals(19.512196f, noiseMassSpectrum.getIon(ion).getAbundance());
 	}
 
-	public void testValues_4() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_4() {
 
 		int ion = 103;
 		assertEquals(243.90244f, noiseMassSpectrum.getIon(ion).getAbundance());
 	}
 
-	public void testValues_5() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_5() {
 
 		int ion = 104;
 		assertEquals(1000.0f, noiseMassSpectrum.getIon(ion).getAbundance());
 	}
 
-	public void testValues_6() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_6() {
 
 		int ion = 155;
 		assertEquals(878.04877f, noiseMassSpectrum.getIon(ion).getAbundance());

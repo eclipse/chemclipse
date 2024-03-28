@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2023 Lablicate GmbH.
+ * Copyright (c) 2010, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.noise;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.support.AnalysisSegment;
 import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.support.CombinedMassSpectrumCalculator;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignals;
@@ -90,7 +88,7 @@ public class CalculatorSupport_2_Test extends TestCase {
 		assertEquals("Size", 6, combinedMassSpectrumCalculator.size());
 	}
 
-	public void testGetCombinedMassSpectrumCalculator_2() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetCombinedMassSpectrumCalculator_2()  {
 
 		int ion = 18;
 		float abundance = 200.0f;
@@ -98,7 +96,7 @@ public class CalculatorSupport_2_Test extends TestCase {
 		assertEquals("Abundance", abundance, massSpectrum.getIon(ion).getAbundance());
 	}
 
-	public void testGetCombinedMassSpectrumCalculator_3() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetCombinedMassSpectrumCalculator_3()  {
 
 		int ion = 28;
 		float abundance = 320.0f;
@@ -106,7 +104,7 @@ public class CalculatorSupport_2_Test extends TestCase {
 		assertEquals("Abundance", abundance, massSpectrum.getIon(ion).getAbundance());
 	}
 
-	public void testGetCombinedMassSpectrumCalculator_4() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetCombinedMassSpectrumCalculator_4()  {
 
 		int ion = 43;
 		float abundance = 400.0f;
@@ -114,7 +112,7 @@ public class CalculatorSupport_2_Test extends TestCase {
 		assertEquals("Abundance", abundance, massSpectrum.getIon(ion).getAbundance());
 	}
 
-	public void testGetCombinedMassSpectrumCalculator_5() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetCombinedMassSpectrumCalculator_5()  {
 
 		int ion = 103;
 		float abundance = 5000.0f;
@@ -122,7 +120,7 @@ public class CalculatorSupport_2_Test extends TestCase {
 		assertEquals("Abundance", abundance, massSpectrum.getIon(ion).getAbundance());
 	}
 
-	public void testGetCombinedMassSpectrumCalculator_6() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetCombinedMassSpectrumCalculator_6()  {
 
 		int ion = 104;
 		float abundance = 20500.0f;
@@ -130,7 +128,7 @@ public class CalculatorSupport_2_Test extends TestCase {
 		assertEquals("Abundance", abundance, massSpectrum.getIon(ion).getAbundance());
 	}
 
-	public void testGetCombinedMassSpectrumCalculator_7() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetCombinedMassSpectrumCalculator_7()  {
 
 		int ion = 155;
 		float abundance = 18000.0f;
@@ -145,42 +143,42 @@ public class CalculatorSupport_2_Test extends TestCase {
 		assertEquals("Size", 6, noiseMassSpectrum.getNumberOfIons());
 	}
 
-	public void testNormalizeMassSpectrumCalculator_2() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testNormalizeMassSpectrumCalculator_2()  {
 
 		ICombinedMassSpectrum noiseMassSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
 		noiseMassSpectrum.normalize(1000.0f);
 		assertEquals("N18", 9.756098f, noiseMassSpectrum.getIon(18).getAbundance());
 	}
 
-	public void testNormalizeMassSpectrumCalculator_3() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testNormalizeMassSpectrumCalculator_3()  {
 
 		ICombinedMassSpectrum noiseMassSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
 		noiseMassSpectrum.normalize(1000.0f);
 		assertEquals("N28", 15.609756f, noiseMassSpectrum.getIon(28).getAbundance());
 	}
 
-	public void testNormalizeMassSpectrumCalculator_4() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testNormalizeMassSpectrumCalculator_4()  {
 
 		ICombinedMassSpectrum noiseMassSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
 		noiseMassSpectrum.normalize(1000.0f);
 		assertEquals("N43", 19.512196f, noiseMassSpectrum.getIon(43).getAbundance());
 	}
 
-	public void testNormalizeMassSpectrumCalculator_5() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testNormalizeMassSpectrumCalculator_5()  {
 
 		ICombinedMassSpectrum noiseMassSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
 		noiseMassSpectrum.normalize(1000.0f);
 		assertEquals("N103", 243.90244f, noiseMassSpectrum.getIon(103).getAbundance());
 	}
 
-	public void testNormalizeMassSpectrumCalculator_6() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testNormalizeMassSpectrumCalculator_6()  {
 
 		ICombinedMassSpectrum noiseMassSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
 		noiseMassSpectrum.normalize(1000.0f);
 		assertEquals("N104", 1000.0f, noiseMassSpectrum.getIon(104).getAbundance());
 	}
 
-	public void testNormalizeMassSpectrumCalculator_7() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testNormalizeMassSpectrumCalculator_7()  {
 
 		ICombinedMassSpectrum noiseMassSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
 		noiseMassSpectrum.normalize(1000.0f);

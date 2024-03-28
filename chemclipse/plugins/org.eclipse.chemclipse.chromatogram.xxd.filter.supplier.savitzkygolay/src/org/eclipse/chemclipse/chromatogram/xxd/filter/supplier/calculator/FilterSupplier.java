@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayProcessor;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonProvider;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonValueComparator;
@@ -50,11 +49,10 @@ public class FilterSupplier {
 		int i = 0;
 		int smoothedIons = result.getProcessingResult();
 		for(IIon ion : ions) {
-			try {
-				ion.setAbundance((float)smoothed[i]);
+			if(!ion.setAbundance((float)smoothed[i])) {
+				result.addWarnMessage("Savitzky-Golay", "Ion " + i + " of mass spectrum can not be smoothed because the abundance limit is exceeded.");
+			} else {
 				smoothedIons++;
-			} catch(AbundanceLimitExceededException e) {
-				result.addWarnMessage("Savitzky-Golay", "Ion " + i + " of massspectrum can not be smoothed because the abundance limit is exceeded");
 			}
 			i++;
 		}

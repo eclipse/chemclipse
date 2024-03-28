@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,10 +17,10 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanIon;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.implementation.ScanIon;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 
 import junit.framework.TestCase;
@@ -37,7 +37,7 @@ public class PeakBuilder_23_Test extends TestCase {
 	private IScanRange scanRange;
 	private IChromatogramMSD chromatogram;
 	private IVendorMassSpectrum massSpectrum;
-	private IScanIon defaultIon;
+	private IIon defaultIon;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -50,7 +50,7 @@ public class PeakBuilder_23_Test extends TestCase {
 		for(int scan = 1; scan <= 10; scan++) {
 			massSpectrum = new VendorMassSpectrum();
 			for(int ion = 32; ion <= 38; ion++) {
-				defaultIon = new ScanIon(ion, ion * 5);
+				defaultIon = new Ion(ion, ion * 5);
 				massSpectrum.addIon(defaultIon);
 			}
 			chromatogram.addScan(massSpectrum);

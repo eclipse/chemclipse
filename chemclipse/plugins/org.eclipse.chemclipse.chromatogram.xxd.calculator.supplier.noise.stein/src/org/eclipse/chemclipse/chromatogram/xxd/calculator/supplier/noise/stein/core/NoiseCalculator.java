@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.model.support.NoiseSegment;
 import org.eclipse.chemclipse.model.support.SegmentValidator;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.msd.model.noise.CalculatorSupport;
@@ -179,11 +178,7 @@ public class NoiseCalculator implements IonNoiseCalculator {
 					if(ion == IIon.TIC_ION) {
 						scan = CalculatorSupport.getCombinedMassSpectrum(signals, segment).normalize();
 					} else {
-						try {
-							scan = new ScanMSD(Collections.singleton(new Ion(ion))).normalize();
-						} catch(IonLimitExceededException e) {
-							scan = null;
-						}
+						scan = new ScanMSD(Collections.singleton(new Ion(ion))).normalize();
 					}
 					result.add(new SteinIonNoiseSegment(segment, factor, ion, scan));
 				}

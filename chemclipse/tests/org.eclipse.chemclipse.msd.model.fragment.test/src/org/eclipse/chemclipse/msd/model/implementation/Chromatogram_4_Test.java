@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,6 +17,7 @@ import java.util.Date;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
@@ -32,7 +33,7 @@ public class Chromatogram_4_Test extends TestCase {
 
 	private ChromatogramMSD chromatogram;
 	private VendorMassSpectrum supplierMassSpectrum;
-	private ScanIon ion;
+	private IIon ion;
 	private Date date;
 	private ITotalScanSignalExtractor totalIonSignalExtractor;
 	private IExtractedIonSignalExtractor extractedIonSignalExtractor;
@@ -45,11 +46,11 @@ public class Chromatogram_4_Test extends TestCase {
 		// ------------------------------Scan 1
 		supplierMassSpectrum = new VendorMassSpectrum();
 		supplierMassSpectrum.setRetentionTime(7896);
-		ion = new ScanIon(45.4f, 65883.3f);
+		ion = new Ion(45.4f, 65883.3f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(104.3f, 102453.3f);
+		ion = new Ion(104.3f, 102453.3f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(86.2f, 302410.3f);
+		ion = new Ion(86.2f, 302410.3f);
 		supplierMassSpectrum.addIon(ion);
 		chromatogram.addScan(supplierMassSpectrum);
 		// ------------------------------Scan 1

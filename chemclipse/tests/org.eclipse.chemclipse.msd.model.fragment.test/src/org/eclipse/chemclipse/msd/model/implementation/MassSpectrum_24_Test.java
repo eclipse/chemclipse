@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,10 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 import junit.framework.TestCase;
 
@@ -83,37 +81,19 @@ public class MassSpectrum_24_Test extends TestCase {
 
 	public void testGetTotalSignal_3() {
 
-		try {
-			ion = mergedMassSpectrum.getIon(46);
-			assertEquals("getTotalSignal ion 46", 157000.4f, ion.getAbundance());
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		ion = mergedMassSpectrum.getIon(46);
+		assertEquals("getTotalSignal ion 46", 157000.4f, ion.getAbundance());
 	}
 
 	public void testGetTotalSignal_4() {
 
-		try {
-			ion = mergedMassSpectrum.getIon(110);
-			assertEquals("getTotalSignal ion 110", 120000.4f, ion.getAbundance());
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		ion = mergedMassSpectrum.getIon(110);
+		assertEquals("getTotalSignal ion 110", 120000.4f, ion.getAbundance());
 	}
 
 	public void testGetTotalSignal_5() {
 
-		try {
-			ion = mergedMassSpectrum.getIon(33);
-			assertEquals("getTotalSignal ion 33", 890520.4f, ion.getAbundance());
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		ion = mergedMassSpectrum.getIon(33);
+		assertEquals("getTotalSignal ion 33", 890520.4f, ion.getAbundance());
 	}
 }

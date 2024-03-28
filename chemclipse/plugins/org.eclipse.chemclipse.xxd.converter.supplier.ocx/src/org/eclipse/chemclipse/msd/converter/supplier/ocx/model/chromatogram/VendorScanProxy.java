@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,12 +15,10 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.io.ProxyReaderMSD;
 import org.eclipse.chemclipse.msd.model.core.AbstractVendorMassSpectrumProxy;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class VendorScanProxy extends AbstractVendorMassSpectrumProxy implements IVendorScanProxy {
@@ -38,6 +36,7 @@ public class VendorScanProxy extends AbstractVendorMassSpectrumProxy implements 
 	private IIonTransitionSettings ionTransitionSettings;
 
 	public VendorScanProxy(File file, int offset, String version, IIonTransitionSettings ionTransitionSettings) {
+
 		this.file = file;
 		this.offset = offset;
 		this.version = version;
@@ -93,14 +92,8 @@ public class VendorScanProxy extends AbstractVendorMassSpectrumProxy implements 
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			try {
-				chemClipseIon = new VendorIon(ion.getIon(), ion.getAbundance());
-				massSpectrum.addIon(chemClipseIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			chemClipseIon = new VendorIon(ion.getIon(), ion.getAbundance());
+			massSpectrum.addIon(chemClipseIon);
 		}
 		return massSpectrum;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,19 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IScanIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 public class VendorMassSpectrum extends AbstractVendorStandaloneMassSpectrum implements IVendorStandaloneMassSpectrum {
 
 	private static final long serialVersionUID = 9103911623007941476L;
-	private static final Logger logger = Logger.getLogger(VendorMassSpectrum.class);
 	//
 	public static final int MAX_IONS = 65535;
 	public static final int MIN_RETENTION_TIME = 0;
@@ -56,7 +51,7 @@ public class VendorMassSpectrum extends AbstractVendorStandaloneMassSpectrum imp
 		 * again.
 		 */
 		IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)super.clone();
-		IScanIon defaultIon;
+		IIon defaultIon;
 		/*
 		 * The instance variables have been copied by super.clone();.<br/> The
 		 * ions in the ion list need not to be removed via
@@ -66,14 +61,8 @@ public class VendorMassSpectrum extends AbstractVendorStandaloneMassSpectrum imp
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			try {
-				defaultIon = new ScanIon(ion.getIon(), ion.getAbundance());
-				massSpectrum.addIon(defaultIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			defaultIon = new Ion(ion.getIon(), ion.getAbundance());
+			massSpectrum.addIon(defaultIon);
 		}
 		return massSpectrum;
 	}

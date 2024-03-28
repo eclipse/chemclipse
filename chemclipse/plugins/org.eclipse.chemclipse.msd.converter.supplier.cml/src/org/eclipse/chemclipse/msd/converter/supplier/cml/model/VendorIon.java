@@ -11,50 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.cml.model;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.core.AbstractScanIon;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 
-public class VendorIon extends AbstractScanIon implements IVendorIon {
+public class VendorIon extends AbstractIon implements IVendorIon {
 
 	private static final long serialVersionUID = -4883514315841553936L;
 
-	public VendorIon(double ion, boolean ignoreAbundanceLimit) throws IonLimitExceededException {
-
-		super(ion, ignoreAbundanceLimit);
-	}
-
-	public VendorIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
-
-		super(ion, abundance);
-	}
-
-	public VendorIon(double ion) throws IonLimitExceededException {
+	public VendorIon(double ion) {
 
 		super(ion);
 	}
 
-	@Override
-	public float getMinPossibleAbundanceValue() {
+	public VendorIon(double ion, float abundance) {
 
-		return Float.MIN_VALUE;
-	}
-
-	@Override
-	public float getMaxPossibleAbundanceValue() {
-
-		return Float.MAX_VALUE;
-	}
-
-	@Override
-	public double getMinPossibleIonValue() {
-
-		return 1.0d;
-	}
-
-	@Override
-	public double getMaxPossibleIonValue() {
-
-		return Double.MAX_VALUE;
+		super(ion, abundance);
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,10 +17,8 @@ import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
 /**
@@ -76,10 +74,6 @@ public class SplashFactory {
 			splash = stringBuilder.toString();
 		} catch(CloneNotSupportedException e) {
 			logger.error(e);
-		} catch(AbundanceLimitExceededException e) {
-			logger.error(e);
-		} catch(IonLimitExceededException e) {
-			logger.error(e);
 		}
 	}
 
@@ -88,15 +82,16 @@ public class SplashFactory {
 		return splash;
 	}
 
-	private List<IIon> filterSpectrum(IScanMSD massSpectrum, int topIons, double basePeakPercentage) throws AbundanceLimitExceededException, IonLimitExceededException {
+	private List<IIon> filterSpectrum(IScanMSD massSpectrum, int topIons, double basePeakPercentage) {
 
 		double basePeakIntensity = massSpectrum.getBasePeakAbundance();
 		List<IIon> ions = massSpectrum.getIons();
 		if(basePeakPercentage >= 0) {
 			List<IIon> filteredIons = new ArrayList<IIon>();
 			for(IIon ion : ions) {
-				if((double)ion.getAbundance() + EPS_CORRECTION >= basePeakPercentage * basePeakIntensity)
+				if(ion.getAbundance() + EPS_CORRECTION >= basePeakPercentage * basePeakIntensity) {
 					filteredIons.add(new Ion(ion.getIon(), ion.getAbundance()));
+				}
 			}
 			ions = filteredIons;
 		}

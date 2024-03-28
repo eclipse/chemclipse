@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,10 +13,7 @@ package org.eclipse.chemclipse.msd.model.core;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.PeakIon;
 
 /**
@@ -29,7 +26,6 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 	 * methods.
 	 */
 	private static final long serialVersionUID = -7779014133066855210L;
-	private static final Logger logger = Logger.getLogger(AbstractPeakMassSpectrum.class);
 
 	protected AbstractPeakMassSpectrum() {
 
@@ -63,15 +59,9 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 		double intensityFactor = (double)intensity / IPeakIntensityValues.MAX_INTENSITY;
 		List<IIon> ions = peakMassSpectrum.getIons();
 		for(IIon ion : ions) {
-			try {
-				abundance = (float)(ion.getAbundance() * intensityFactor);
-				peakIon = new PeakIon(ion.getIon(), abundance);
-				addIon(peakIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			abundance = (float)(ion.getAbundance() * intensityFactor);
+			peakIon = new PeakIon(ion.getIon(), abundance);
+			addIon(peakIon);
 		}
 	}
 
@@ -113,22 +103,16 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 		float abundance;
 		List<IIon> ions = massSpectrum.getIons();
 		for(IIon ion : ions) {
-			try {
-				abundance = (ion.getAbundance() / actualPercentageIntensity) * 100.0f;
-				peakIon = new PeakIon(ion.getIon(), abundance);
-				addIon(peakIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			abundance = (ion.getAbundance() / actualPercentageIntensity) * 100.0f;
+			peakIon = new PeakIon(ion.getIon(), abundance);
+			addIon(peakIon);
 		}
 	}
 
 	protected AbstractPeakMassSpectrum(IScanMSD massSpectrum) throws IllegalArgumentException {
 
 		if(massSpectrum == null) {
-			throw new IllegalArgumentException("The massSpectrum must not be null");
+			throw new IllegalArgumentException("The massSpectrum must not be null.");
 		}
 		/*
 		 * Add the ions.
@@ -136,14 +120,8 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 		PeakIon peakIon;
 		List<IIon> ions = massSpectrum.getIons();
 		for(IIon ion : ions) {
-			try {
-				peakIon = new PeakIon(ion);
-				addIon(peakIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			peakIon = new PeakIon(ion);
+			addIon(peakIon);
 		}
 	}
 

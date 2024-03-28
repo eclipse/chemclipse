@@ -19,16 +19,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-import jakarta.inject.Inject;
-
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
@@ -59,6 +55,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
+
+import jakarta.inject.Inject;
 
 public class ExtendedComparisonScanUI extends Composite implements IExtendedPartUI {
 
@@ -356,13 +354,7 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 	private IIon getIon(int mz, float abundance) {
 
 		IIon ion = null;
-		try {
-			ion = new Ion(mz, abundance);
-		} catch(AbundanceLimitExceededException e) {
-			logger.warn(e);
-		} catch(IonLimitExceededException e) {
-			logger.warn(e);
-		}
+		ion = new Ion(mz, abundance);
 		return ion;
 	}
 

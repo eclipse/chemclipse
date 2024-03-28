@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonValueComparator;
@@ -111,11 +110,7 @@ public class FilterSupplier {
 			if(abundance <= 0) {
 				ionsToRemove.add(ion);
 			} else {
-				try {
-					ion.setAbundance(abundance);
-				} catch(AbundanceLimitExceededException e) {
-					// logger.warn(e);
-				}
+				ion.setAbundance(abundance);
 			}
 		}
 		/*

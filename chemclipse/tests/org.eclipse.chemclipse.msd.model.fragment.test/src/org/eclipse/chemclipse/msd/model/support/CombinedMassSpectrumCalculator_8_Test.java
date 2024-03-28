@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,10 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.support;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 import junit.framework.TestCase;
 
@@ -45,35 +43,35 @@ public class CombinedMassSpectrumCalculator_8_Test extends TestCase {
 		assertEquals(3, combinedMassSpectrumCalculator.size());
 	}
 
-	public void testValues_2() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_2() {
 
 		int ion = 60;
 		ICombinedMassSpectrum massSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
 		assertNull(massSpectrum.getIon(ion));
 	}
 
-	public void testValues_3() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_3() {
 
 		int ion = 103;
 		ICombinedMassSpectrum massSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
 		assertNull(massSpectrum.getIon(ion));
 	}
 
-	public void testValues_4() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_4() {
 
 		int ion = 56;
 		ICombinedMassSpectrum massSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
 		assertEquals(5100.0f, massSpectrum.getIon(ion).getAbundance());
 	}
 
-	public void testValues_5() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_5() {
 
 		int ion = 104;
 		ICombinedMassSpectrum massSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
 		assertEquals(5300.0f, massSpectrum.getIon(ion).getAbundance());
 	}
 
-	public void testValues_6() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testValues_6() {
 
 		int ion = 28;
 		ICombinedMassSpectrum massSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);

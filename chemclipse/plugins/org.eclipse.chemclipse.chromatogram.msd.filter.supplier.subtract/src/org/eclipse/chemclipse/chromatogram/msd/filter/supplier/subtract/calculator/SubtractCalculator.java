@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -243,27 +242,23 @@ public class SubtractCalculator {
 				 * No Normalization:
 				 * Remove the total intensity.
 				 */
-				try {
-					float abundance = ion.getAbundance();
-					float abundanceAdjusted;
-					if(useNormalize) {
-						abundanceAdjusted = abundance - ((subtractIntensity / NORMALIZATION_BASE) * abundance);
-					} else {
-						abundanceAdjusted = abundance - subtractIntensity;
-					}
-					/*
-					 * Ion abundance must be not lower or equal than zero.
-					 */
-					if(abundanceAdjusted <= 0) {
-						ionsToRemove.add(ion);
-					} else {
-						ion.setAbundance(abundanceAdjusted);
-					}
-				} catch(AbundanceLimitExceededException e) {
+				float abundance = ion.getAbundance();
+				float abundanceAdjusted;
+				if(useNormalize) {
+					abundanceAdjusted = abundance - ((subtractIntensity / NORMALIZATION_BASE) * abundance);
+				} else {
+					abundanceAdjusted = abundance - subtractIntensity;
+				}
+				/*
+				 * Ion abundance must be not lower or equal than zero.
+				 */
+				if(abundanceAdjusted <= 0) {
+					ionsToRemove.add(ion);
+				} else if(!ion.setAbundance(abundanceAdjusted)) {
 					/*
 					 * Remove the ion if the abundance is not valid.
 					 */
-					logger.warn(e);
+					logger.warn("Invalid abundance for ion " + ion);
 					ionsToRemove.add(ion);
 				}
 			}

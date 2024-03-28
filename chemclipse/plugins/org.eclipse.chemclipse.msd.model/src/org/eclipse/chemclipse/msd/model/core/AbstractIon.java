@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
-import org.eclipse.chemclipse.msd.model.exceptions.IonIsNullException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 import org.eclipse.core.runtime.Platform;
 
 /**
@@ -41,12 +37,12 @@ public abstract class AbstractIon implements IIon {
 	private float abundance = 0.0f;
 	private IIonTransition ionTransition;
 
-	protected AbstractIon(double ion) throws IonLimitExceededException {
+	protected AbstractIon(double ion) {
 
 		setIon(ion);
 	}
 
-	protected AbstractIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
+	protected AbstractIon(double ion, float abundance) {
 
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
@@ -62,7 +58,7 @@ public abstract class AbstractIon implements IIon {
 		setAbundance(abundance);
 	}
 
-	protected AbstractIon(double ion, float abundance, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+	protected AbstractIon(double ion, float abundance, IIonTransition ionTransition) throws NullPointerException {
 
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
@@ -79,11 +75,11 @@ public abstract class AbstractIon implements IIon {
 		if(ionTransition != null) {
 			this.ionTransition = ionTransition;
 		} else {
-			throw new IonTransitionIsNullException("The given ion transition instance should be not null.");
+			throw new NullPointerException("The given ion transition instance should be not null.");
 		}
 	}
 
-	protected AbstractIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException {
+	protected AbstractIon(IIon ion) throws IllegalArgumentException {
 
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
@@ -99,11 +95,11 @@ public abstract class AbstractIon implements IIon {
 			setIon(ion.getIon());
 			setAbundance(ion.getAbundance());
 		} else {
-			throw new IonIsNullException("The given ion instance should be not null.");
+			throw new IllegalArgumentException("The given ion instance should be not null.");
 		}
 	}
 
-	protected AbstractIon(IIon ion, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException, IonTransitionIsNullException {
+	protected AbstractIon(IIon ion, IIonTransition ionTransition) throws IllegalArgumentException {
 
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
@@ -119,7 +115,7 @@ public abstract class AbstractIon implements IIon {
 		if(ionTransition != null) {
 			this.ionTransition = ionTransition;
 		} else {
-			throw new IonTransitionIsNullException("The given ion transition instance should be not null.");
+			throw new IllegalArgumentException("The given ion transition instance should be not null.");
 		}
 	}
 
@@ -182,23 +178,23 @@ public abstract class AbstractIon implements IIon {
 	}
 
 	@Override
-	public AbstractIon setAbundance(float abundance) throws AbundanceLimitExceededException {
+	public boolean setAbundance(float abundance) {
 
 		if(abundance < 0) {
-			throw new AbundanceLimitExceededException("The abundance value can't be negative. It is actual: " + abundance);
+			return false;
 		}
 		this.abundance = abundance;
-		return this;
+		return true;
 	}
 
 	@Override
-	public AbstractIon setIon(double ion) throws IonLimitExceededException {
+	public boolean setIon(double ion) {
 
 		if(ion < 0) {
-			throw new IonLimitExceededException("The ion value can't be negative. It is actual: " + ion);
+			return false;
 		}
 		this.ion = ion;
-		return this;
+		return true;
 	}
 
 	@Override
@@ -207,7 +203,6 @@ public abstract class AbstractIon implements IIon {
 		return ionTransition;
 	}
 
-	// -----------------------------Comparable<IIon>
 	/**
 	 * Compares the mass/charge ration of two ions. Returns the
 	 * following values: a.compareTo(b) 0 a == b : 28 == 28 -1 a < b : 18 < 28
@@ -219,8 +214,6 @@ public abstract class AbstractIon implements IIon {
 		return (int)(this.ion - other.getIon());
 	}
 
-	// -----------------------------Comparable<IIon>
-	// -----------------------------IAdaptable
 	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Object getAdapter(Class adapter) {
@@ -228,8 +221,6 @@ public abstract class AbstractIon implements IIon {
 		return Platform.getAdapterManager().getAdapter(this, adapter);
 	}
 
-	// -----------------------------IAdaptable
-	// -----------------------------equals, hashCode, toString
 	@Override
 	public boolean equals(Object otherObject) {
 
@@ -270,5 +261,4 @@ public abstract class AbstractIon implements IIon {
 		builder.append("]");
 		return builder.toString();
 	}
-	// -----------------------------equals, hashCode, toString
 }

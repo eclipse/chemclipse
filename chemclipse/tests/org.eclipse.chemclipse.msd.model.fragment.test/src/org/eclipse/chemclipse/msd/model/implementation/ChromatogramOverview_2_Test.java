@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,7 +32,7 @@ public class ChromatogramOverview_2_Test extends TestCase {
 	private ChromatogramMSD chrom;
 	private IChromatogramOverview chromatogram;
 	private VendorMassSpectrum supplierMassSpectrum;
-	private ScanIon ion;
+	private IIon ion;
 	private Date date;
 	private ITotalScanSignalExtractor totalIonSignalExtractor;
 
@@ -44,7 +44,7 @@ public class ChromatogramOverview_2_Test extends TestCase {
 		// ------------------------------Scan 1
 		supplierMassSpectrum = new VendorMassSpectrum();
 		supplierMassSpectrum.setRetentionTime(7896);
-		ion = new ScanIon(IIon.TIC_ION, 470746.9f);
+		ion = new Ion(IIon.TIC_ION, 470746.9f);
 		supplierMassSpectrum.addIon(ion);
 		chrom.addScan(supplierMassSpectrum);
 		// ------------------------------Scan 1

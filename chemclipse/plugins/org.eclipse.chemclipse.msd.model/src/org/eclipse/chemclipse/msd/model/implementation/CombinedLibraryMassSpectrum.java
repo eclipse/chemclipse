@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,18 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractCombinedLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 public class CombinedLibraryMassSpectrum extends AbstractCombinedLibraryMassSpectrum {
 
 	private static final long serialVersionUID = 892855578774838614L;
-	private static final Logger logger = Logger.getLogger(CombinedMassSpectrum.class);
 
 	@Override
 	public IScanMSD makeDeepCopy() throws CloneNotSupportedException {
@@ -38,14 +34,8 @@ public class CombinedLibraryMassSpectrum extends AbstractCombinedLibraryMassSpec
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			try {
-				defaultIon = new Ion(ion.getIon(), ion.getAbundance());
-				massSpectrum.addIon(defaultIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			defaultIon = new Ion(ion.getIon(), ion.getAbundance());
+			massSpectrum.addIon(defaultIon);
 		}
 		return massSpectrum;
 	}

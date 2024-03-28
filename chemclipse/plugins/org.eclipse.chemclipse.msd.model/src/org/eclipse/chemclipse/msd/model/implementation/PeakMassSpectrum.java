@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,14 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
 public class PeakMassSpectrum extends AbstractPeakMassSpectrum implements IPeakMassSpectrum {
 
@@ -27,9 +24,9 @@ public class PeakMassSpectrum extends AbstractPeakMassSpectrum implements IPeakM
 	 * methods.
 	 */
 	private static final long serialVersionUID = -1105097569796396530L;
-	private static final Logger logger = Logger.getLogger(PeakMassSpectrum.class);
 
 	public PeakMassSpectrum() {
+
 		super();
 	}
 
@@ -43,6 +40,7 @@ public class PeakMassSpectrum extends AbstractPeakMassSpectrum implements IPeakM
 	 * @param intensity
 	 */
 	public PeakMassSpectrum(IPeakMassSpectrum peakMassSpectrum, float intensity) throws IllegalArgumentException {
+
 		super(peakMassSpectrum, intensity);
 	}
 
@@ -53,6 +51,7 @@ public class PeakMassSpectrum extends AbstractPeakMassSpectrum implements IPeakM
 	 * @param massSpectrum
 	 */
 	public PeakMassSpectrum(IScanMSD massSpectrum) throws IllegalArgumentException {
+
 		super(massSpectrum);
 	}
 
@@ -80,6 +79,7 @@ public class PeakMassSpectrum extends AbstractPeakMassSpectrum implements IPeakM
 	 * @param actualPercentageIntensity
 	 */
 	public PeakMassSpectrum(IScanMSD massSpectrum, float actualPercentageIntensity) throws IllegalArgumentException {
+
 		super(massSpectrum, actualPercentageIntensity);
 	}
 
@@ -102,14 +102,8 @@ public class PeakMassSpectrum extends AbstractPeakMassSpectrum implements IPeakM
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			try {
-				peakIon = new PeakIon(ion.getIon(), ion.getAbundance());
-				massSpectrum.addIon(peakIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			peakIon = new PeakIon(ion.getIon(), ion.getAbundance());
+			massSpectrum.addIon(peakIon);
 		}
 		return massSpectrum;
 	}

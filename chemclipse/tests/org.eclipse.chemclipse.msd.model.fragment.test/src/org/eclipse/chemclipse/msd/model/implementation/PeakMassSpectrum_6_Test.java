@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import static org.junit.Assert.assertThrows;
+
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
+
 import junit.framework.TestCase;
 
 public class PeakMassSpectrum_6_Test extends TestCase {
@@ -71,11 +74,7 @@ public class PeakMassSpectrum_6_Test extends TestCase {
 		/*
 		 * 101% of 6514141.6f = 3257071.0f
 		 */
-		try {
-			peakMassSpectrumShifted = new PeakMassSpectrum(peakMassSpectrum, 101);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		}
+		assertThrows(IllegalArgumentException.class, () -> peakMassSpectrumShifted = new PeakMassSpectrum(peakMassSpectrum, 101));
 	}
 
 	public void testGetShiftedMassSpectrum_4() {

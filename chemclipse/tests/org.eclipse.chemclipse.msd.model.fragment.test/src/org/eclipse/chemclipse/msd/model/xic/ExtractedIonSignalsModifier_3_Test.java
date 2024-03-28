@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,11 +16,11 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanIon;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.implementation.ScanIon;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 
 import junit.framework.TestCase;
@@ -32,7 +32,7 @@ public class ExtractedIonSignalsModifier_3_Test extends TestCase {
 
 	private IChromatogramMSD chromatogram;
 	private IVendorMassSpectrum supplierMassSpectrum;
-	private IScanIon supplierIon;
+	private IIon supplierIon;
 	private IExtractedIonSignals extractedIonSignals;
 	private IExtractedIonSignal extractedIonSignal;
 	private List<Integer> scans;
@@ -51,7 +51,7 @@ public class ExtractedIonSignalsModifier_3_Test extends TestCase {
 		for(int scan = 1; scan <= 100; scan++) {
 			supplierMassSpectrum = new VendorMassSpectrum();
 			for(int ion = 32; ion <= 104; ion++) {
-				supplierIon = new ScanIon(ion, ion * 2);
+				supplierIon = new Ion(ion, ion * 2);
 				supplierMassSpectrum.addIon(supplierIon);
 			}
 			chromatogram.addScan(supplierMassSpectrum);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 import junit.framework.TestCase;
 
@@ -38,47 +36,27 @@ public class Ion_6_Test extends TestCase {
 
 	public void testException_1() {
 
-		try {
-			new Ion(IIon.TIC_ION, -1.0f);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue(true);
-		} catch(IonLimitExceededException e) {
-			assertTrue(false);
-		}
+		IIon ion = new Ion(IIon.TIC_ION, -1.0f);
+		assertEquals(0d, ion.getIon());
+		assertEquals(0f, ion.getAbundance());
 	}
 
 	public void testException_2() {
 
-		try {
-			Ion ion = new Ion(IIon.TIC_ION, 1.0f);
-			ion.setAbundance(-1.0f);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue(true);
-		} catch(IonLimitExceededException e) {
-			assertTrue(false);
-		}
+		IIon ion = new Ion(IIon.TIC_ION, 1.0f);
+		assertFalse(ion.setAbundance(-1.0f));
 	}
 
 	public void testException_3() {
 
-		try {
-			new Ion(-1.0f, 1.0f);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue(false);
-		} catch(IonLimitExceededException e) {
-			assertTrue(true);
-		}
+		IIon ion = new Ion(-1.0f, 1.0f);
+		assertEquals(0d, ion.getIon());
+		assertEquals(1.0f, ion.getAbundance());
 	}
 
 	public void testException_4() {
 
-		try {
-			Ion ion = new Ion(1.0f, 1.0f);
-			ion.setIon(-1.0f);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue(false);
-		} catch(IonLimitExceededException e) {
-			assertTrue(true);
-		}
+		Ion ion = new Ion(1.0f, 1.0f);
+		assertFalse(ion.setIon(-1.0f));
 	}
 }
