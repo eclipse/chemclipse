@@ -139,9 +139,6 @@ public interface IProcessSupplier<SettingType> {
 				numberOfCalls++;
 			}
 			boolean mustSplit = numberOfCalls > 1;
-			if(mustSplit) {
-				context.setWorkRemaining(numberOfCalls);
-			}
 			context.setContextObject(IProcessSupplier.class, supplier);
 			context.setContextObject(IProcessorPreferences.class, processorPreferences);
 			if(transformer != null) {
