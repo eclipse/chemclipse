@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,11 +16,9 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.Scan;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
@@ -33,7 +31,7 @@ public class AbstractChromatogram_4_Test extends TestCase {
 
 	private static final int RT_VARIANCE = 10;
 
-	public void testAddRemovePeak() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testAddRemovePeak() {
 
 		/*
 		 * We have removed the peak identity as it made several problems.
@@ -68,7 +66,7 @@ public class AbstractChromatogram_4_Test extends TestCase {
 		assertEquals("Peak was not removed", 4, chromatogram.getNumberOfPeaks()); // befor 2
 	}
 
-	public void testGetPeaks() throws AbundanceLimitExceededException, IonLimitExceededException {
+	public void testGetPeaks() {
 
 		ChromatogramMSD chromatogram = new ChromatogramMSD();
 		chromatogram.addScan(createScanAt(0));
@@ -107,7 +105,7 @@ public class AbstractChromatogram_4_Test extends TestCase {
 		return peakMSD;
 	}
 
-	protected static IPeakModelMSD createPeakModel(int retentionTime, int height) throws AbundanceLimitExceededException, IonLimitExceededException {
+	protected static IPeakModelMSD createPeakModel(int retentionTime, int height) {
 
 		final IPeakIntensityValues peakIntensities = new PeakIntensityValues(1000);
 		peakIntensities.addIntensityValue(retentionTime, 1000);
@@ -117,7 +115,6 @@ public class AbstractChromatogram_4_Test extends TestCase {
 		peakMassSpectrum.addIon(new Ion(10, 100));
 		peakMassSpectrum.addIon(new Ion(12, 1000));
 		peakMassSpectrum.addIon(new Ion(13, 100));
-		final IPeakModelMSD peakModelMSD = new PeakModelMSD(peakMassSpectrum, peakIntensities, 0, 0);
-		return peakModelMSD;
+		return new PeakModelMSD(peakMassSpectrum, peakIntensities, 0, 0);
 	}
 }

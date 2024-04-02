@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,11 +20,11 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.IScanIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.implementation.ScanIon;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
@@ -46,7 +46,7 @@ public class PeakBuilder_29_Test extends TestCase {
 	private ITotalScanSignals totalIonSignals;
 	private IChromatogramMSD chromatogram;
 	private IVendorMassSpectrum massSpectrum;
-	private IScanIon defaultIon;
+	private IIon defaultIon;
 	private LinearEquation backgroundEquation;
 	private IMarkedIons excludedIons;
 	private IExtractedIonSignals extractedIonSignals;
@@ -77,7 +77,7 @@ public class PeakBuilder_29_Test extends TestCase {
 		for(int scan = 1; scan <= 10; scan++) {
 			massSpectrum = new VendorMassSpectrum();
 			for(int ion = 32; ion <= 38; ion++) {
-				defaultIon = new ScanIon(ion, ion * scan * intensities.get(scan - 1));
+				defaultIon = new Ion(ion, ion * scan * intensities.get(scan - 1));
 				massSpectrum.addIon(defaultIon);
 			}
 			chromatogram.addScan(massSpectrum);

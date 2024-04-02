@@ -37,7 +37,6 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.csv.QuoteMode;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -45,7 +44,6 @@ import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -62,7 +60,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
@@ -74,8 +71,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConverter {
 
 	public static final Charset CHARSET = StandardCharsets.UTF_8;
-	//
-	private static final Logger logger = Logger.getLogger(CSVPeakConverter.class);
 	//
 	private static final String HEADER_NAME = "Name";
 	private static final String HEADER_AREA = "Area";
@@ -254,12 +249,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 			String[] values = SEPERATOR_VALUE_PATTERN.split(csvRecord, 2);
 			double ion = Double.parseDouble(values[0]);
 			float intensity = Float.parseFloat(values[1]);
-			try {
-				massSpectrum.addIon(new Ion(ion, intensity));
-			} catch(AbundanceLimitExceededException
-					| IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			massSpectrum.addIon(new Ion(ion, intensity));
 		});
 		return massSpectrum;
 	}

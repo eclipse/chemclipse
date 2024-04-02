@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.msd.model.implementation;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanIon;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
@@ -34,7 +34,7 @@ public class Chromatogram_18_Test extends TestCase {
 
 	private IChromatogramMSD chromatogram;
 	private IVendorMassSpectrum supplierMassSpectrum;
-	private IScanIon ion;
+	private IIon ion;
 	private IExtractedIonSignals extractedIonSignals;
 	private IExtractedIonSignal extractedIonSignal;
 	private ChromatogramSelectionMSD chromatogramSelection;
@@ -50,7 +50,7 @@ public class Chromatogram_18_Test extends TestCase {
 			supplierMassSpectrum = new VendorMassSpectrum();
 			supplierMassSpectrum.setRetentionTime(i);
 			for(int j = 1; j <= 50; j++) {
-				ion = new ScanIon(j, i * j);
+				ion = new Ion(j, i * j);
 				supplierMassSpectrum.addIon(ion);
 			}
 			chromatogram.addScan(supplierMassSpectrum);

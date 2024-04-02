@@ -24,13 +24,11 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.model.VendorChromatogram;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.model.VendorIon;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.model.VendorScan;
@@ -154,7 +152,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		return massSpectrum;
 	}
 
-	private IIon getIonsOverview(CSVRecord csvRecord, String zeroMarker) throws AbundanceLimitExceededException, IonLimitExceededException {
+	private IIon getIonsOverview(CSVRecord csvRecord, String zeroMarker)  {
 
 		float abundanceTotalSignal = 0.0f;
 		for(int index = ION_COLUMN_START; index < csvRecord.size(); index++) {

@@ -26,7 +26,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.DataProcessing;
@@ -41,7 +40,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorMassSpect
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
@@ -121,16 +119,8 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 					 */
 					double mz = AbstractIon.getIon(values[peakIndex]);
 					float intensity = (float)values[peakIndex + 1];
-					try {
-						if(intensity >= VendorIon.MIN_ABUNDANCE && intensity <= VendorIon.MAX_ABUNDANCE) {
-							IVendorIon ion = new VendorIon(mz, intensity);
-							massSpectrum.addIon(ion);
-						}
-					} catch(AbundanceLimitExceededException e) {
-						logger.warn(e);
-					} catch(IonLimitExceededException e) {
-						logger.warn(e);
-					}
+					IVendorIon ion = new VendorIon(mz, intensity);
+					massSpectrum.addIon(ion);
 				}
 				monitor.worked(1);
 			}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,13 +25,10 @@ import java.util.Set;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractScan;
 import org.eclipse.chemclipse.model.core.MarkedTraceModus;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonCombinedComparator;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonComparatorMode;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.msd.model.exceptions.IonIsNullException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.ImmutableZeroIon;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
@@ -116,13 +113,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		 * cloned will be stored in the new object again by each implementing class.
 		 */
 		createNewIonList();
-		try {
-			immutableZeroIon = new ImmutableZeroIon();
-			// TODO: in case of exception, immutableZeroIon will be null
-		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
-			// TODO: Exception never thrown from default constructor
-			logger.warn(e);
-		}
+		immutableZeroIon = new ImmutableZeroIon();
 	}
 
 	@Override
@@ -486,7 +477,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	@Override
-	public IIon getIon(int ion) throws AbundanceLimitExceededException, IonLimitExceededException {
+	public IIon getIon(int ion) {
 
 		if(hasIons()) {
 			IExtractedIonSignal extractedIonSignal = new ExtractedIonSignal(ion, ion);
@@ -506,7 +497,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 
 	// TODO JUnit and optimize
 	@Override
-	public IIon getIon(double ion) throws AbundanceLimitExceededException, IonLimitExceededException {
+	public IIon getIon(double ion) {
 
 		if(hasIons()) {
 			for(IIon actualIon : ionsList) {
@@ -522,7 +513,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	@Override
-	public IIon getIon(double ion, int precision) throws AbundanceLimitExceededException, IonLimitExceededException {
+	public IIon getIon(double ion, int precision) {
 
 		if(hasIons()) {
 			for(IIon actualIon : ionsList) {
@@ -557,11 +548,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		for(IIon ion : ionsList) {
 			abundance = ion.getAbundance();
 			abundance += abundance * percentage;
-			try {
-				ion.setAbundance(abundance);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			}
+			ion.setAbundance(abundance);
 		}
 	}
 
@@ -587,10 +574,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		for(IIon ion : ionsList) {
 			abundance = ion.getAbundance();
 			abundance *= correctionFactor;
-			try {
-				ion.setAbundance(abundance);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
+			if(!ion.setAbundance(abundance)) {
+				logger.warn("Invalid abundance: " + abundance);
 			}
 		}
 	}
@@ -625,16 +610,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		for(IIon actualIon : ionsList) {
 			int mz = (int)actualIon.getIon();
 			if(!excludedIonsNominal.contains(mz)) {
-				try {
-					ion = new Ion(actualIon);
-					massSpectrum.addIon(ion);
-				} catch(AbundanceLimitExceededException e) {
-					logger.warn(e);
-				} catch(IonLimitExceededException e) {
-					logger.warn(e);
-				} catch(IonIsNullException e) {
-					logger.warn(e);
-				}
+				ion = new Ion(actualIon);
+				massSpectrum.addIon(ion);
 			}
 		}
 		return massSpectrum;
@@ -710,12 +687,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		float percentageAbundance;
 		for(IIon actualIon : ions) {
 			percentageAbundance = (float)(factor * actualIon.getAbundance());
-			try {
-				actualIon.setAbundance(percentageAbundance);
-			} catch(AbundanceLimitExceededException e) {
-				// TODO What will be done if this exception is thrown?
-				logger.warn(e);
-			}
+			actualIon.setAbundance(percentageAbundance); // TODO use return value
 		}
 		return this;
 	}
@@ -877,14 +849,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	 */
 	private void addIntensities(IIon firstIon, IIon secondIon) {
 
-		try {
-			firstIon.setAbundance(secondIon.getAbundance() + firstIon.getAbundance());
-			setDirty(true);
-		} catch(AbundanceLimitExceededException e) {
-			// If an exception will be thrown -> do nothing an keep the old
-			// value
-			setDirty(false);
-		}
+		setDirty(firstIon.setAbundance(secondIon.getAbundance() + firstIon.getAbundance()));
 	}
 
 	/**
@@ -895,14 +860,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	 */
 	private void addHigherIntensity(IIon firstIon, IIon secondIon) {
 
-		try {
-			firstIon.setAbundance(secondIon.getAbundance());
-			setDirty(true);
-		} catch(AbundanceLimitExceededException e) {
-			// If an exception will be thrown -> do nothing an keep the old
-			// value
-			setDirty(false);
-		}
+		setDirty(firstIon.setAbundance(secondIon.getAbundance()));
 	}
 
 	/**

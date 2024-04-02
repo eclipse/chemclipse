@@ -29,16 +29,13 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.model.Hi
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.model.VendorScan;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsHighResMS;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.support.HeaderField;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -47,8 +44,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilterHighResMS extends AbstractChromatogramFilterMSD {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramFilterHighResMS.class);
-	//
 	private static final int DEFAULT_SCAN_DELAY = 0;
 	private static final int DEFAULT_SCAN_INTERVAL = 100;
 	private static final String LINE_DELIMITER = "\n";
@@ -136,17 +131,11 @@ public class ChromatogramFilterHighResMS extends AbstractChromatogramFilterMSD {
 				for(int retentionTime : retentionTimes) {
 					float intensity = scans.getOrDefault(retentionTime, 0.0f);
 					if(intensity > 0.0f) {
-						try {
-							IIon ion = new Ion(mz, scans.get(retentionTime));
-							VendorScan vendorScanMSD = new VendorScan();
-							vendorScanMSD.setRetentionTime(retentionTime);
-							vendorScanMSD.addIon(ion);
-							chromatogramReferenceMSD.addScan(vendorScanMSD);
-						} catch(AbundanceLimitExceededException e) {
-							logger.warn(e);
-						} catch(IonLimitExceededException e) {
-							logger.warn(e);
-						}
+						IIon ion = new Ion(mz, scans.get(retentionTime));
+						VendorScan vendorScanMSD = new VendorScan();
+						vendorScanMSD.setRetentionTime(retentionTime);
+						vendorScanMSD.addIon(ion);
+						chromatogramReferenceMSD.addScan(vendorScanMSD);
 					}
 				}
 				//

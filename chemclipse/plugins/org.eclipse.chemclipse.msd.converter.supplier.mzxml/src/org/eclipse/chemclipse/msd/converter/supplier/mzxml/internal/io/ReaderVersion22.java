@@ -25,7 +25,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v22.model.DataProcessing;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v22.model.MsInstrument;
@@ -43,7 +42,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.Polarity;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
@@ -149,16 +147,8 @@ public class ReaderVersion22 extends AbstractReaderVersion implements IChromatog
 					 */
 					double mz = AbstractIon.getIon(values[peakIndex], ION_PRECISION);
 					float intensity = (float)values[peakIndex + 1];
-					try {
-						if(intensity >= VendorIon.MIN_ABUNDANCE && intensity <= VendorIon.MAX_ABUNDANCE) {
-							IVendorIon ion = new VendorIon(mz, intensity);
-							massSpectrum.addIon(ion);
-						}
-					} catch(AbundanceLimitExceededException e) {
-						logger.warn(e);
-					} catch(IonLimitExceededException e) {
-						logger.warn(e);
-					}
+					IVendorIon ion = new VendorIon(mz, intensity);
+					massSpectrum.addIon(ion);
 				}
 				chromatogram.addScan(massSpectrum);
 				monitor.worked(1);

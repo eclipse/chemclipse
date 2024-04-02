@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,16 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import static org.junit.Assert.assertThrows;
+
+import org.junit.Test;
+
 import junit.framework.TestCase;
 
 public class PeakMassSpectrum_2_Test extends TestCase {
 
-	public void testGetNumberOfIons_1() {
+	@Test
+	public void testNullPointer() {
 
-		try {
-			new PeakMassSpectrum(null);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		}
+		assertThrows(IllegalArgumentException.class, () -> new PeakMassSpectrum(null));
 	}
 }

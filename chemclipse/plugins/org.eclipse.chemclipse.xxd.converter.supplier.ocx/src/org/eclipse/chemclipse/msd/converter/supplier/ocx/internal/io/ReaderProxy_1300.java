@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,7 +21,6 @@ import java.util.zip.ZipFile;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.columns.SeparationColumnType;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -37,8 +36,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.Vend
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
 
@@ -115,16 +112,8 @@ public class ReaderProxy_1300 extends AbstractZipReader implements IReaderProxy 
 			/*
 			 * Read Ions
 			 */
-			try {
-				IVendorIon ion = readIon(dataInputStream, ionTransitionSettings);
-				massSpectrum.addIon(ion);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonTransitionIsNullException e) {
-				logger.warn(e);
-			}
+			IVendorIon ion = readIon(dataInputStream, ionTransitionSettings);
+			massSpectrum.addIon(ion);
 		}
 		/*
 		 * Identification Results
@@ -132,7 +121,7 @@ public class ReaderProxy_1300 extends AbstractZipReader implements IReaderProxy 
 		readScanIdentificationTargets(dataInputStream, massSpectrum);
 	}
 
-	private IVendorIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException, AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+	private IVendorIon readIon(DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException {
 
 		IVendorIon ion;
 		//

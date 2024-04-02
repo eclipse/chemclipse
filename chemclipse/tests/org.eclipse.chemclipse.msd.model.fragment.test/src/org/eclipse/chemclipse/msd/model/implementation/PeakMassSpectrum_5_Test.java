@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,9 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import static org.junit.Assert.assertThrows;
+
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+
 import junit.framework.TestCase;
 
 public class PeakMassSpectrum_5_Test extends TestCase {
@@ -77,26 +80,16 @@ public class PeakMassSpectrum_5_Test extends TestCase {
 
 	public void testGetTotalSignal_4() {
 
-		/*
-		 * throws an exception
-		 */
-		try {
+		assertThrows(IllegalArgumentException.class, () -> {
 			peakMassSpectrum = new PeakMassSpectrum(massSpectrum, 0.0f);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		}
+		});
 	}
 
 	public void testGetTotalSignal_5() {
 
-		/*
-		 * throws an exception
-		 */
-		try {
+		assertThrows(IllegalArgumentException.class, () -> {
 			peakMassSpectrum = new PeakMassSpectrum(massSpectrum, -1.0f);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		}
+		});
 	}
 
 	public void testGetTotalSignal_6() {

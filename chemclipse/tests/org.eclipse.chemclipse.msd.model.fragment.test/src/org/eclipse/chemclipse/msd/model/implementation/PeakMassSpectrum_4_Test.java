@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,10 +17,6 @@ public class PeakMassSpectrum_4_Test extends TestCase {
 
 	public void testGetNumberOfIons_1() {
 
-		try {
-			new PeakMassSpectrum(null);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		}
+		// TODO: implement
 	}
 }

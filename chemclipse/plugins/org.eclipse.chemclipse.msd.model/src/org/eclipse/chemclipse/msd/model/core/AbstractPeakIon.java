@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,30 +11,27 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-
 public abstract class AbstractPeakIon extends AbstractIon implements IPeakIon {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = -3520745862587712333L;
+	private static final long serialVersionUID = -3520745862587712334L;
 	private float uncertaintyFactor = 1.0f;
 	private PeakIonType peakIonType = PeakIonType.NO_TYPE;
 
-	protected AbstractPeakIon(double ion) throws IonLimitExceededException {
+	protected AbstractPeakIon(double ion) {
 
 		super(ion);
 	}
 
-	protected AbstractPeakIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
+	protected AbstractPeakIon(double ion, float abundance) {
 
 		super(ion, abundance);
 	}
 
-	protected AbstractPeakIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException {
+	protected AbstractPeakIon(IIon ion) {
 
 		super(ion.getIon(), ion.getAbundance());
 	}
@@ -51,7 +48,7 @@ public abstract class AbstractPeakIon extends AbstractIon implements IPeakIon {
 	 * @throws AbundanceLimitExceededException
 	 * @throws IonLimitExceededException
 	 */
-	protected AbstractPeakIon(double ion, float abundance, float uncertaintyFactor) throws AbundanceLimitExceededException, IonLimitExceededException {
+	protected AbstractPeakIon(double ion, float abundance, float uncertaintyFactor) {
 
 		super(ion, abundance);
 		/*

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.xic;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
 import junit.framework.TestCase;
@@ -44,15 +43,8 @@ public class ExtractedIonSignal_4_Test extends TestCase {
 	public void testSetup_1() {
 
 		extractedIonSignal = new ExtractedIonSignal(1, 1);
-		Ion ion;
-		try {
-			ion = new Ion(1.0f, 1000.0f);
-			extractedIonSignal.setAbundance(ion);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		IIon ion = new Ion(1.0f, 1000.0f);
+		extractedIonSignal.setAbundance(ion);
 		assertEquals("Abundance", 0.0f, extractedIonSignal.getAbundance(0));
 		assertEquals("Abundance", 1000.0f, extractedIonSignal.getAbundance(1));
 		assertEquals("Abundance", 0.0f, extractedIonSignal.getAbundance(2));
@@ -64,15 +56,8 @@ public class ExtractedIonSignal_4_Test extends TestCase {
 	public void testSetup_2() {
 
 		extractedIonSignal = new ExtractedIonSignal(1, 1);
-		Ion ion;
-		try {
-			ion = new Ion(1.0f, 1000.0f);
-			extractedIonSignal.setAbundance(ion);
-		} catch(AbundanceLimitExceededException e) {
-			assertTrue("AbundanceLimitExceededException", false);
-		} catch(IonLimitExceededException e) {
-			assertTrue("IonLimitExceededException", false);
-		}
+		IIon ion = new Ion(1.0f, 1000.0f);
+		extractedIonSignal.setAbundance(ion);
 		extractedIonSignal.setAbundance(0, 2586.4f, true);
 		extractedIonSignal.setAbundance(1, 2586.4f, true);
 		extractedIonSignal.setAbundance(2, 2586.4f, true);

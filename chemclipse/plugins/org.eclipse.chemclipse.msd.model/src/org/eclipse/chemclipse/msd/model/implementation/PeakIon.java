@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractPeakIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakIon;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 public class PeakIon extends AbstractPeakIon implements IPeakIon {
 
@@ -23,17 +21,20 @@ public class PeakIon extends AbstractPeakIon implements IPeakIon {
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = -4094514166910811629L;
+	private static final long serialVersionUID = -4094514166910811630L;
 
-	public PeakIon(double ion) throws IonLimitExceededException {
+	public PeakIon(double ion) {
+
 		super(ion);
 	}
 
-	public PeakIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
+	public PeakIon(double ion, float abundance) {
+
 		super(ion, abundance);
 	}
 
-	public PeakIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException {
+	public PeakIon(IIon ion) {
+
 		super(ion.getIon(), ion.getAbundance());
 	}
 }

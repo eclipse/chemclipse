@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,16 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzdata.model;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 public class VendorScan extends AbstractVendorStandaloneMassSpectrum implements IVendorScan {
 
 	private static final long serialVersionUID = -3291852423110935802L;
-	private static final Logger logger = Logger.getLogger(VendorScan.class);
 	//
 	public static final int MAX_MASSFRAGMENTS = 65535;
 	public static final int MIN_RETENTION_TIME = 0;
@@ -63,14 +59,8 @@ public class VendorScan extends AbstractVendorStandaloneMassSpectrum implements 
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			try {
-				mzDataIon = new VendorIon(ion.getIon(), ion.getAbundance());
-				massSpectrum.addIon(mzDataIon);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
-				logger.warn(e);
-			}
+			mzDataIon = new VendorIon(ion.getIon(), ion.getAbundance());
+			massSpectrum.addIon(mzDataIon);
 		}
 		return massSpectrum;
 	}

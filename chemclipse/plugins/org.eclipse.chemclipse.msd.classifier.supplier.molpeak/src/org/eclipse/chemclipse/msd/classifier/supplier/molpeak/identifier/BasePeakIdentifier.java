@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,8 +26,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.core.Pea
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IFileIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.PeakIdentifierSettings;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.DeltaCalculation;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -42,7 +40,6 @@ import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
@@ -59,8 +56,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  */
 public class BasePeakIdentifier {
 
-	private static final Logger logger = Logger.getLogger(BasePeakIdentifier.class);
-	//
 	public static final String IDENTIFIER = "SGH + C Identifier";
 	public static final String NOT_FOUND = "Not Found (" + IDENTIFIER + ")";
 	public static final String SYRINGYL = "Syringyl";
@@ -284,14 +279,8 @@ public class BasePeakIdentifier {
 	private static IScanMSD getSyringyl() {
 
 		IScanMSD massSpectrum = null;
-		try {
-			massSpectrum = new ScanMSD();
-			massSpectrum.addIon(new Ion(156.0d, 1000.0f));
-		} catch(AbundanceLimitExceededException e) {
-			logger.warn(e);
-		} catch(IonLimitExceededException e) {
-			logger.warn(e);
-		}
+		massSpectrum = new ScanMSD();
+		massSpectrum.addIon(new Ion(156.0d, 1000.0f));
 		return massSpectrum;
 	}
 

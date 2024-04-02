@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,7 +26,7 @@ public class ChromatogramOverview_5_Test extends TestCase {
 	private ChromatogramMSD chrom;
 	private IChromatogramOverview chromatogram;
 	private VendorMassSpectrum supplierMassSpectrum;
-	private ScanIon ion;
+	private IIon ion;
 	private float RT_FACTOR = 1000.0f * 60.0f;
 
 	@Override
@@ -37,7 +37,7 @@ public class ChromatogramOverview_5_Test extends TestCase {
 		// ------------------------------Scan 1 - 200
 		for(int i = 1; i <= 200; i++) {
 			supplierMassSpectrum = new VendorMassSpectrum();
-			ion = new ScanIon(IIon.TIC_ION, 4500.0f);
+			ion = new Ion(IIon.TIC_ION, 4500.0f);
 			supplierMassSpectrum.addIon(ion);
 			chrom.addScan(supplierMassSpectrum);
 		}

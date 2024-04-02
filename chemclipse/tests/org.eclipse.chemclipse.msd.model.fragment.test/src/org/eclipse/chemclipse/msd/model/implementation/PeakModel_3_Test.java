@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import java.util.TreeMap;
+import static org.junit.Assert.assertThrows;
+
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
@@ -98,39 +100,31 @@ public class PeakModel_3_Test extends TestCase {
 
 		// ----------------------IntensityValues
 		intensityValues = new PeakIntensityValues();
-		scanValues = new TreeMap<Integer, Float>();
+		scanValues = new TreeMap<>();
 		scanValues.put(9500, 100.0f);
 		scanValues.put(10500, 86.0f);
 		for(Entry<Integer, Float> entry : scanValues.entrySet()) {
 			intensityValues.addIntensityValue(entry.getKey(), entry.getValue());
 		}
 		// ----------------------IntensityValues
-		try {
+		assertThrows(IllegalArgumentException.class, () -> {
 			peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		} catch(PeakException e) {
-			assertFalse("A PeakException should not be thrown here.", true);
-		}
+		});
 	}
 
 	public void testConstruct_3() {
 
 		// ----------------------IntensityValues
 		intensityValues = new PeakIntensityValues();
-		scanValues = new TreeMap<Integer, Float>();
+		scanValues = new TreeMap<>();
 		scanValues.put(10500, 86.0f);
 		for(Entry<Integer, Float> entry : scanValues.entrySet()) {
 			intensityValues.addIntensityValue(entry.getKey(), entry.getValue());
 		}
 		// ----------------------IntensityValues
-		try {
+		assertThrows(IllegalArgumentException.class, () -> {
 			peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		} catch(PeakException e) {
-			assertFalse("A PeakException should not be thrown here.", true);
-		}
+		});
 	}
 
 	public void testConstruct_4() {
@@ -138,13 +132,9 @@ public class PeakModel_3_Test extends TestCase {
 		// ----------------------IntensityValues
 		intensityValues = new PeakIntensityValues();
 		// ----------------------IntensityValues
-		try {
+		assertThrows(IllegalArgumentException.class, () -> {
 			peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
-		} catch(IllegalArgumentException e) {
-			assertTrue("IllegalArgumentException", true);
-		} catch(PeakException e) {
-			assertFalse("A PeakException should not be thrown here.", true);
-		}
+		});
 	}
 
 	public void testConstruct_5() {
@@ -155,7 +145,7 @@ public class PeakModel_3_Test extends TestCase {
 		 * There must be at least one value with an intensity of 100.0f
 		 * (IPeakIntensityValues.MAX_INTENSITY).
 		 */
-		scanValues = new TreeMap<Integer, Float>();
+		scanValues = new TreeMap<>();
 		scanValues.put(1500, 0.0f);
 		scanValues.put(9500, 99.0f);
 		scanValues.put(10500, 86.0f);
@@ -163,12 +153,8 @@ public class PeakModel_3_Test extends TestCase {
 			intensityValues.addIntensityValue(entry.getKey(), entry.getValue());
 		}
 		// ----------------------IntensityValues
-		try {
+		assertThrows(PeakException.class, () -> {
 			peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
-		} catch(IllegalArgumentException e) {
-			assertFalse("An IllegalArgumentException should not be thrown here.", true);
-		} catch(PeakException e) {
-			assertTrue("PeakException", true);
-		}
+		});
 	}
 }

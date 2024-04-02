@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.core.runtime.IAdaptable;
 
 /**
@@ -36,7 +34,7 @@ import org.eclipse.core.runtime.IAdaptable;
  * | | |<br/>
  * [AgilentIon] [NetCDFIon] [MzXMLIon]<br/>
  *
- * @author eselmeister
+ * @author Philip Wenig
  * @author Alexander Kerner
  */
 public interface IIon extends IIonSerializable, IAdaptable, Comparable<IIon> {
@@ -57,9 +55,9 @@ public interface IIon extends IIonSerializable, IAdaptable, Comparable<IIon> {
 	 *
 	 * @param ion
 	 *            - The new Value of the ion
-	 * @throws IonLimitExceededException
+	 * @return true if ion is valid
 	 */
-	IIon setIon(double ion) throws IonLimitExceededException;
+	boolean setIon(double ion);
 
 	/**
 	 * Returns the actual abundance of the ion.
@@ -72,9 +70,9 @@ public interface IIon extends IIonSerializable, IAdaptable, Comparable<IIon> {
 	 * Sets an abundance value for the ion.
 	 *
 	 * @param abundance
-	 * @throws AbundanceLimitExceededException
+	 * @return true if the value is valid
 	 */
-	IIon setAbundance(float abundance) throws AbundanceLimitExceededException;
+	boolean setAbundance(float abundance);
 
 	/**
 	 * Returns the ion transition.

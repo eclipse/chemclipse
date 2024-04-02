@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -10,6 +10,8 @@
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
+
+import org.eclipse.chemclipse.msd.model.core.IIon;
 
 import junit.framework.TestCase;
 
@@ -23,7 +25,7 @@ public class Chromatogram_10_Test extends TestCase {
 
 	private ChromatogramMSD chromatogram;
 	private VendorMassSpectrum supplierMassSpectrum;
-	private ScanIon ion;
+	private IIon ion;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -32,29 +34,29 @@ public class Chromatogram_10_Test extends TestCase {
 		chromatogram = new ChromatogramMSD();
 		// Scan 1
 		supplierMassSpectrum = new VendorMassSpectrum();
-		ion = new ScanIon(45.3f, 45827.3f);
+		ion = new Ion(45.3f, 45827.3f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(55.8f, 457.1f);
+		ion = new Ion(55.8f, 457.1f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(75.2f, 827.8f);
+		ion = new Ion(75.2f, 827.8f);
 		supplierMassSpectrum.addIon(ion);
 		chromatogram.addScan(supplierMassSpectrum);
 		// Scan 2
 		supplierMassSpectrum = new VendorMassSpectrum();
-		ion = new ScanIon(45.3f, 827.3f);
+		ion = new Ion(45.3f, 827.3f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(55.8f, 45827.4f);
+		ion = new Ion(55.8f, 45827.4f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(75.2f, 427.4f);
+		ion = new Ion(75.2f, 427.4f);
 		supplierMassSpectrum.addIon(ion);
 		chromatogram.addScan(supplierMassSpectrum);
 		// Scan 3
 		supplierMassSpectrum = new VendorMassSpectrum();
-		ion = new ScanIon(45.3f, 927.3f);
+		ion = new Ion(45.3f, 927.3f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(55.8f, 74627.2f);
+		ion = new Ion(55.8f, 74627.2f);
 		supplierMassSpectrum.addIon(ion);
-		ion = new ScanIon(75.2f, 12477.3f);
+		ion = new Ion(75.2f, 12477.3f);
 		supplierMassSpectrum.addIon(ion);
 		chromatogram.addScan(supplierMassSpectrum);
 	}

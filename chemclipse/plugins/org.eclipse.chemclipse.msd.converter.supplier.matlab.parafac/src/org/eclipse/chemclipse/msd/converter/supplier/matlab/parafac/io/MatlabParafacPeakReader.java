@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,6 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.IConstants;
@@ -27,7 +26,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.con
 import org.eclipse.chemclipse.msd.model.core.IPeakIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.PeakIon;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
@@ -141,7 +139,6 @@ public class MatlabParafacPeakReader implements IPeakReader {
 	 */
 	private void parseLine(String line, PeakSupport peakSupport, IProcessingInfo<?> processingInfo) {
 
-		IProcessingMessage processingMessage;
 		/*
 		 * 
 		 */
@@ -168,18 +165,8 @@ public class MatlabParafacPeakReader implements IPeakReader {
 				case MASS_SPECTRUM:
 					int ion = Integer.parseInt(values[0]);
 					float abundance = Float.parseFloat(values[1]);
-					try {
-						IPeakIon peakIon = new PeakIon(ion, abundance);
-						peakSupport.getPeakMaximum().addIon(peakIon);
-					} catch(AbundanceLimitExceededException e) {
-						processingMessage = new ProcessingMessage(MessageType.WARN, "Import Peak", "The ion abundance exceeds its limit: " + line);
-						processingInfo.addMessage(processingMessage);
-						logger.warn(e);
-					} catch(IonLimitExceededException e) {
-						processingMessage = new ProcessingMessage(MessageType.WARN, "Import Peak", "The ion value exceeds its limit: " + line);
-						processingInfo.addMessage(processingMessage);
-						logger.warn(e);
-					}
+					IPeakIon peakIon = new PeakIon(ion, abundance);
+					peakSupport.getPeakMaximum().addIon(peakIon);
 					break;
 				case ELUTION_PROFILE:
 					int retentionTime = Integer.parseInt(values[0]);

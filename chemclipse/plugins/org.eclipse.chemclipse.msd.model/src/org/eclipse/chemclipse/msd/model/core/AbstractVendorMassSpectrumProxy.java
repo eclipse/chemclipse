@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,9 +15,7 @@ package org.eclipse.chemclipse.msd.model.core;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
 /**
  * This is a proxy.
@@ -208,21 +206,21 @@ public abstract class AbstractVendorMassSpectrumProxy extends AbstractVendorMass
 	}
 
 	@Override
-	public IIon getIon(int ion) throws AbundanceLimitExceededException, IonLimitExceededException {
+	public IIon getIon(int ion)  {
 
 		checkProxyAndImportOnDemand();
 		return super.getIon(ion);
 	}
 
 	@Override
-	public IIon getIon(double ion) throws AbundanceLimitExceededException, IonLimitExceededException {
+	public IIon getIon(double ion)  {
 
 		checkProxyAndImportOnDemand();
 		return super.getIon(ion);
 	}
 
 	@Override
-	public IIon getIon(double ion, int precision) throws AbundanceLimitExceededException, IonLimitExceededException {
+	public IIon getIon(double ion, int precision)  {
 
 		checkProxyAndImportOnDemand();
 		return super.getIon(ion, precision);

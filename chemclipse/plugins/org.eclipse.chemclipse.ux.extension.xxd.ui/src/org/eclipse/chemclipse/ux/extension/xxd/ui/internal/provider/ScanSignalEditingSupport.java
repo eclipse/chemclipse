@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ScanTableUI;
@@ -76,12 +75,8 @@ public class ScanSignalEditingSupport extends EditingSupport {
 			float abundance = parseValue(value);
 			if(abundance > 0.0f) {
 				if(element instanceof IIon ion) {
-					try {
-						ion.setAbundance(abundance);
-						updateTable();
-					} catch(AbundanceLimitExceededException e) {
-						logger.warn(e);
-					}
+					ion.setAbundance(abundance);
+					updateTable();
 				} else if(element instanceof IScanSignalWSD scanSignalWSD) {
 					scanSignalWSD.setAbsorbance(abundance);
 					updateTable();
