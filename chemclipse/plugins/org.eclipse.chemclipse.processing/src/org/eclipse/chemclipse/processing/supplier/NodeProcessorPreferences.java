@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,17 +20,22 @@ public final class NodeProcessorPreferences<T> implements IProcessorPreferences<
 
 	private static final Logger logger = Logger.getLogger(NodeProcessorPreferences.class);
 	//
-	private static final String KEY_USE_SYSTEM_DEFAULTS = "useSystemDefaults";
-	private static final String KEY_USER_SETTINGS = "userSettings";
-	private static final String KEY_ASK_FOR_SETTINGS = "askForSettings";
+	public static final String KEY_USE_SYSTEM_DEFAULTS = "useSystemDefaults";
+	public static final String KEY_USER_SETTINGS = "userSettings";
+	public static final String KEY_ASK_FOR_SETTINGS = "askForSettings";
 	//
-	private Preferences node;
 	private IProcessSupplier<T> supplier;
+	private Preferences preferences;
 
-	public NodeProcessorPreferences(IProcessSupplier<T> supplier, Preferences node) {
+	public NodeProcessorPreferences(IProcessSupplier<T> supplier, Preferences preferences) {
 
 		this.supplier = supplier;
-		this.node = node;
+		this.preferences = preferences;
+	}
+
+	public Preferences getPreferences() {
+
+		return preferences;
 	}
 
 	@Override
@@ -41,7 +46,7 @@ public final class NodeProcessorPreferences<T> implements IProcessorPreferences<
 		}
 		//
 		trySync();
-		boolean askForSettings = node.getBoolean(KEY_ASK_FOR_SETTINGS, true);
+		boolean askForSettings = preferences.getBoolean(KEY_ASK_FOR_SETTINGS, true);
 		if(askForSettings) {
 			return DialogBehavior.SHOW;
 		} else {
@@ -52,14 +57,14 @@ public final class NodeProcessorPreferences<T> implements IProcessorPreferences<
 	@Override
 	public void setAskForSettings(boolean askForSettings) {
 
-		node.putBoolean(KEY_ASK_FOR_SETTINGS, askForSettings);
+		preferences.putBoolean(KEY_ASK_FOR_SETTINGS, askForSettings);
 		tryFlush();
 	}
 
 	@Override
 	public void setUserSettings(String settings) {
 
-		node.put(KEY_USER_SETTINGS, settings);
+		preferences.put(KEY_USER_SETTINGS, settings);
 		tryFlush();
 	}
 
@@ -67,7 +72,7 @@ public final class NodeProcessorPreferences<T> implements IProcessorPreferences<
 	public void reset() {
 
 		try {
-			node.clear();
+			preferences.clear();
 			tryFlush();
 		} catch(BackingStoreException e) {
 			logger.warn(e);
@@ -82,13 +87,13 @@ public final class NodeProcessorPreferences<T> implements IProcessorPreferences<
 		}
 		//
 		trySync();
-		return node.getBoolean(KEY_USE_SYSTEM_DEFAULTS, true);
+		return preferences.getBoolean(KEY_USE_SYSTEM_DEFAULTS, true);
 	}
 
 	@Override
 	public void setUseSystemDefaults(boolean useSystemDefaults) {
 
-		node.putBoolean(KEY_USE_SYSTEM_DEFAULTS, useSystemDefaults);
+		preferences.putBoolean(KEY_USE_SYSTEM_DEFAULTS, useSystemDefaults);
 		tryFlush();
 	}
 
@@ -96,7 +101,7 @@ public final class NodeProcessorPreferences<T> implements IProcessorPreferences<
 	public String getUserSettingsAsString() {
 
 		trySync();
-		return node.get(KEY_USER_SETTINGS, "");
+		return preferences.get(KEY_USER_SETTINGS, "");
 	}
 
 	@Override
@@ -108,7 +113,7 @@ public final class NodeProcessorPreferences<T> implements IProcessorPreferences<
 	public void trySync() {
 
 		try {
-			node.sync();
+			preferences.sync();
 		} catch(BackingStoreException e) {
 			logger.warn(e);
 		}
@@ -117,7 +122,7 @@ public final class NodeProcessorPreferences<T> implements IProcessorPreferences<
 	private void tryFlush() {
 
 		try {
-			node.flush();
+			preferences.flush();
 		} catch(BackingStoreException e) {
 			logger.warn(e);
 		}
