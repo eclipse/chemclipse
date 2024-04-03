@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeakModel;
-import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationResult;
@@ -45,6 +44,7 @@ import org.eclipse.chemclipse.model.identifier.PeakIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationResult;
 import org.eclipse.chemclipse.model.implementation.IdentificationResults;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Compound;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Compounds;
@@ -706,9 +706,6 @@ public class Identifier {
 	public IIdentificationTarget getPeakIdentificationEntry(Compound compound, int index) {
 
 		Hit hit = compound.getHit(index);
-		//
-		IIdentificationTarget identificationEntry = null;
-		IPeakComparisonResult comparisonResult;
 		/*
 		 * Get the library information.
 		 */
@@ -722,13 +719,9 @@ public class Identifier {
 		/*
 		 * Get the match factor and reverse match factor values.
 		 */
-		comparisonResult = new PeakComparisonResult(hit.getMatchFactor(), hit.getReverseMatchFactor(), 0.0f, 0.0f, hit.getProbability());
-		try {
-			identificationEntry = new NISTIdentificationTarget(libraryInformation, comparisonResult);
-		} catch(ReferenceMustNotBeNullException e) {
-			logger.warn(e);
-		}
-		return identificationEntry;
+		IPeakComparisonResult comparisonResult = new PeakComparisonResult(hit.getMatchFactor(), hit.getReverseMatchFactor(), 0.0f, 0.0f, hit.getProbability());
+		//
+		return new IdentificationTarget(libraryInformation, comparisonResult);
 	}
 
 	private String getName(String name) {
@@ -825,13 +818,10 @@ public class Identifier {
 	 */
 	public IIdentificationTarget getMassSpectrumIdentificationEntry(Hit hit, Compound compound) {
 
-		IIdentificationTarget identificationEntry = null;
-		ILibraryInformation libraryInformation;
-		IComparisonResult comparisonResult;
 		/*
 		 * Get the library information.
 		 */
-		libraryInformation = new LibraryInformation();
+		ILibraryInformation libraryInformation = new LibraryInformation();
 		libraryInformation.setName(getName(hit.getName()));
 		libraryInformation.setCasNumber(hit.getCAS());
 		libraryInformation.setMiscellaneous(COMPOUND_IN_LIB_FACTOR + compound.getCompoundInLibraryFactor());
@@ -841,12 +831,8 @@ public class Identifier {
 		/*
 		 * Get the match factor and reverse match factor values.
 		 */
-		comparisonResult = new ComparisonResult(hit.getMatchFactor(), hit.getReverseMatchFactor(), 0.0f, 0.0f, hit.getProbability());
-		try {
-			identificationEntry = new NISTIdentificationTarget(libraryInformation, comparisonResult);
-		} catch(ReferenceMustNotBeNullException e) {
-			logger.warn(e);
-		}
-		return identificationEntry;
+		IComparisonResult comparisonResult = new ComparisonResult(hit.getMatchFactor(), hit.getReverseMatchFactor(), 0.0f, 0.0f, hit.getProbability());
+		//
+		return new IdentificationTarget(libraryInformation, comparisonResult);
 	}
 }
