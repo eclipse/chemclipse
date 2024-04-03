@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,13 +21,10 @@ import java.util.function.Predicate;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubMonitor;
 
 public class ProcessExecutionContext implements IProcessSupplierContext, IMessageConsumer {
 
-	private static final int WORK_UNIT = 100;
-	//
-	private final SubMonitor subMonitor;
+	private final IProgressMonitor monitor;
 	private final IProcessSupplierContext context;
 	private final IMessageConsumer consumer;
 	private ProcessExecutionContext parent;
@@ -44,13 +41,12 @@ public class ProcessExecutionContext implements IProcessSupplierContext, IMessag
 		this.consumer = rootConsumer;
 		this.context = rootContext;
 		this.parent = parent;
-		//
-		subMonitor = SubMonitor.convert(monitor, WORK_UNIT);
+		this.monitor = monitor;
 	}
 
 	public IProgressMonitor getProgressMonitor() {
 
-		return subMonitor;
+		return monitor;
 	}
 
 	public ProcessExecutionContext getParent() {
@@ -96,11 +92,6 @@ public class ProcessExecutionContext implements IProcessSupplierContext, IMessag
 		}
 	}
 
-	public void setWorkRemaining(int workRemaining) {
-
-		subMonitor.setWorkRemaining(workRemaining * WORK_UNIT);
-	}
-
 	public ProcessExecutionContext split() {
 
 		return split(context);
@@ -108,7 +99,7 @@ public class ProcessExecutionContext implements IProcessSupplierContext, IMessag
 
 	public ProcessExecutionContext split(IProcessSupplierContext childContext) {
 
-		return new ProcessExecutionContext(subMonitor.split(WORK_UNIT), consumer, childContext, this);
+		return new ProcessExecutionContext(monitor, consumer, childContext, this);
 	}
 
 	@SuppressWarnings("unchecked")

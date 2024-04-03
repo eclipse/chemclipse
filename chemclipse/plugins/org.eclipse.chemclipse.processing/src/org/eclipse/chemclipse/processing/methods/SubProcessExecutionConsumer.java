@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,8 +12,8 @@
 package org.eclipse.chemclipse.processing.methods;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessExecutionConsumer;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 
 public final class SubProcessExecutionConsumer<T> implements IProcessExecutionConsumer<T> {
 
@@ -21,6 +21,7 @@ public final class SubProcessExecutionConsumer<T> implements IProcessExecutionCo
 	private final SubProcess<T> subprocess;
 
 	public SubProcessExecutionConsumer(IProcessExecutionConsumer<T> parent, SubProcess<T> subprocess) {
+
 		this.intercepted = parent;
 		this.subprocess = subprocess;
 	}
@@ -30,7 +31,6 @@ public final class SubProcessExecutionConsumer<T> implements IProcessExecutionCo
 
 		ProcessExecutionContext ctx2;
 		if(intercepted.canExecute(preferences)) {
-			context.setWorkRemaining(2);
 			ProcessExecutionContext ctx1 = context.split();
 			ctx1.setContextObject(IProcessExecutionConsumer.class, intercepted);
 			intercepted.execute(preferences, ctx1);

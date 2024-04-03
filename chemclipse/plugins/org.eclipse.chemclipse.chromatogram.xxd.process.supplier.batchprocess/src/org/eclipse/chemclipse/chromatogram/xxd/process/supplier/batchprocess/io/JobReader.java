@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.io
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,8 +29,6 @@ import javax.xml.stream.events.XMLEvent;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.internal.filter.BatchProcessJobEventFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.internal.support.JobTags;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.model.BatchProcessJob;
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -44,7 +41,7 @@ public class JobReader {
 
 	private static final Logger logger = Logger.getLogger(JobReader.class);
 
-	public BatchProcessJob read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public BatchProcessJob read(File file, IProgressMonitor monitor) throws IOException {
 
 		ProcessMethod processMethod = new ProcessMethod(ProcessMethod.CHROMATOGRAPHY);
 		BatchProcessJob batchProcessJob = new BatchProcessJob(processMethod);
@@ -120,7 +117,7 @@ public class JobReader {
 		/*
 		 * Use event filters.
 		 */
-		List<String> acceptedElements = new ArrayList<String>();
+		List<String> acceptedElements = new ArrayList<>();
 		acceptedElements.add(JobTags.DATA_TYPE_ENTRY);
 		EventFilter eventFilter = new BatchProcessJobEventFilter(acceptedElements);
 		XMLEventReader filteredEventReader = inputFactory.createFilteredReader(eventReader, eventFilter);
@@ -167,7 +164,7 @@ public class JobReader {
 		/*
 		 * Use event filters.
 		 */
-		List<String> acceptedElements = new ArrayList<String>();
+		List<String> acceptedElements = new ArrayList<>();
 		acceptedElements.add(JobTags.CHROMATOGRAM_INPUT_ENTRY);
 		EventFilter eventFilter = new BatchProcessJobEventFilter(acceptedElements);
 		XMLEventReader filteredEventReader = inputFactory.createFilteredReader(eventReader, eventFilter);
@@ -207,7 +204,7 @@ public class JobReader {
 		/*
 		 * Use event filters.
 		 */
-		List<String> acceptedElements = new ArrayList<String>();
+		List<String> acceptedElements = new ArrayList<>();
 		acceptedElements.add(JobTags.CHROMATOGRAM_PROCESS_ENTRY);
 		EventFilter eventFilter = new BatchProcessJobEventFilter(acceptedElements);
 		XMLEventReader filteredEventReader = inputFactory.createFilteredReader(eventReader, eventFilter);

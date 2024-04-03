@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -143,7 +143,6 @@ public class ProcessTypeSupport implements IProcessSupplierContext {
 
 		ProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		ProcessExecutionContext executionContext = new ProcessExecutionContext(monitor, processingInfo, this);
-		executionContext.setWorkRemaining(chromatogramSelections.size());
 		for(IChromatogramSelection<?, ?> selection : chromatogramSelections) {
 			ProcessEntryContainer.applyProcessEntries(processMethod, executionContext.split(), IChromatogramSelectionProcessSupplier.createConsumer(selection));
 		}

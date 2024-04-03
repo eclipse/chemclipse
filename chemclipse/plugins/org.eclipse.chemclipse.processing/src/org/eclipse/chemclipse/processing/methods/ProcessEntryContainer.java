@@ -142,7 +142,6 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 	static <X, T> T applyProcessEntries(ProcessEntryContainer container, ProcessExecutionContext context, BiFunction<IProcessEntry, IProcessSupplier<X>, IProcessorPreferences<X>> preferenceSupplier, IProcessExecutionConsumer<T> consumer) {
 
 		int resumeIndex = container.isSupportResume() ? container.getResumeIndex() : DEFAULT_RESUME_INDEX;
-		context.setWorkRemaining(container.getNumberOfEntries());
 		//
 		int index = -1;
 		for(IProcessEntry processEntry : container) {
