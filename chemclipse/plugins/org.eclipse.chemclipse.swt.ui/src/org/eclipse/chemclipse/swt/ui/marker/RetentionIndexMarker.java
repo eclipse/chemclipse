@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.marker;
+package org.eclipse.chemclipse.swt.ui.marker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +28,22 @@ import org.eclipse.swtchart.extensions.marker.IBaseChartPaintListener;
 
 public class RetentionIndexMarker extends AbstractBaseChartPaintListener implements IBaseChartPaintListener {
 
+	private boolean showIdentifier = false;
 	private List<PositionMarker> positionMarkers = new ArrayList<>();
 
 	public RetentionIndexMarker(BaseChart baseChart) {
 
 		super(baseChart);
+	}
+
+	public boolean isShowIdentifier() {
+
+		return showIdentifier;
+	}
+
+	public void setShowIdentifier(boolean showIdentifier) {
+
+		this.showIdentifier = showIdentifier;
 	}
 
 	public void clear() {
@@ -51,17 +62,23 @@ public class RetentionIndexMarker extends AbstractBaseChartPaintListener impleme
 
 		if(isDraw()) {
 			for(PositionMarker positionMarker : positionMarkers) {
-				int retentionTime = positionMarker.getRetentionTime();
-				if(retentionTime > 0) {
-					int retentionIndex = positionMarker.getRetentionIndex();
-					drawMarker(e, retentionTime, retentionIndex, true);
+				if(usePositionMarker(positionMarker)) {
+					drawMarker(e, positionMarker, true);
 				}
 			}
 		}
 	}
 
-	private void drawMarker(PaintEvent e, int retentionTime, int retentionIndex, boolean top) {
+	private boolean usePositionMarker(PositionMarker positionMarker) {
 
+		return positionMarker.getRetentionTime() > 0;
+	}
+
+	private void drawMarker(PaintEvent e, PositionMarker positionMarker, boolean top) {
+
+		int retentionTime = positionMarker.getRetentionTime();
+		int retentionIndex = positionMarker.getRetentionIndex();
+		//
 		BaseChart baseChart = getBaseChart();
 		IAxis axisX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
 		if(axisX != null) {
@@ -78,6 +95,9 @@ public class RetentionIndexMarker extends AbstractBaseChartPaintListener impleme
 				double percent = 1.0d / rangeX * (retentionTime - min);
 				int offset = (int)(width * percent);
 				if(offset > 0) {
+					/*
+					 * Settings
+					 */
 					GC gc = e.gc;
 					Color colorBackground = gc.getBackground();
 					Color colorForeground = gc.getForeground();
@@ -87,7 +107,7 @@ public class RetentionIndexMarker extends AbstractBaseChartPaintListener impleme
 					gc.drawLine(offset, 0, offset, e.height);
 					//
 					if(retentionIndex > 0) {
-						String label = Integer.toString(retentionIndex);
+						String label = showIdentifier ? positionMarker.getIdentifier() : Integer.toString(retentionIndex);
 						Point labelSize = gc.textExtent(label);
 						if(top) {
 							gc.setBackground(Colors.DARK_GRAY);

@@ -83,6 +83,8 @@ import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
+import org.eclipse.chemclipse.swt.ui.marker.PositionMarker;
+import org.eclipse.chemclipse.swt.ui.marker.RetentionIndexMarker;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -99,8 +101,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenc
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceSettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers.DynamicHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.marker.PositionMarker;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.marker.RetentionIndexMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodCancelException;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodParameters;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
