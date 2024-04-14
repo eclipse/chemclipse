@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramFilterMSD extends AbstractChromatogramFilterMSD {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramFilterMSD.class);
+	private static final String DESCRIPTION = "Savitzky-Golay Smoothing";
 
 	private IChromatogramFilterResult process(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
@@ -63,7 +64,7 @@ public class ChromatogramFilterMSD extends AbstractChromatogramFilterMSD {
 			processingInfo.addErrorMessage(processingInfo.getProcessingResult().getResultStatus().name(), processingInfo.getProcessingResult().getDescription(), proposedString.toString());
 		}
 		if(processingInfo.getProcessingResult().getResultStatus().equals(ResultStatus.OK)) {
-			processingInfo.addInfoMessage(processingInfo.getProcessingResult().getResultStatus().name(), processingInfo.getProcessingResult().getDescription());
+			processingInfo.addInfoMessage(DESCRIPTION, processingInfo.getProcessingResult().getDescription());
 		}
 		return processingInfo;
 	}
