@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -98,7 +98,7 @@ public class SavitzkyGolayTotalScanSignalOperation extends AbstractOperation imp
 
 		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogram();
 		updateSignal(totalScanSignals, chromatogramMSD);
-		chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been re-applied successfully.");
+		chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been re-applied.");
 		updateChromatogramSelection();
 		return Status.OK_STATUS;
 	}
@@ -108,7 +108,7 @@ public class SavitzkyGolayTotalScanSignalOperation extends AbstractOperation imp
 
 		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogram();
 		updateSignal(previousTotalScanSignals, chromatogramMSD);
-		chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been reverted successfully.");
+		chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been reverted.");
 		updateChromatogramSelection();
 		return Status.OK_STATUS;
 	}

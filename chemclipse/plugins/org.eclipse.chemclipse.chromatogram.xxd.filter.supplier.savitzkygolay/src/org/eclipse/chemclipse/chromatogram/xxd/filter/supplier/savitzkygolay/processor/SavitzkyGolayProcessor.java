@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,8 @@
  * Lorenz Gerber - Ion-wise msd chromatogram filter
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor;
+
+import java.text.MessageFormat;
 
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
@@ -61,9 +63,9 @@ public class SavitzkyGolayProcessor {
 			}
 			//
 			chromatogram.setDirty(true);
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
+			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, MessageFormat.format("Smoothed {0} scans.", totalScanSignals.getTotalScanSignals().size()));
 		} catch(ChromatogramIsNullException e) {
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, "Something has gone wrong to apply the Savitzky-Golay filter.");
+			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, "Can't apply Savitzky-Golay filter on empty chromatogram.");
 		}
 		return chromatogramFilterResult;
 	}
@@ -113,7 +115,7 @@ public class SavitzkyGolayProcessor {
 		for(ITotalScanSignal signal : totalSignals.getTotalScanSignals()) {
 			signal.setTotalSignal((float)sgTic[i++]);
 		}
-		return new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
+		return new ChromatogramFilterResult(ResultStatus.OK, MessageFormat.format("Smoothed {0} signals.", totalSignals.getTotalScanSignals().size()));
 	}
 
 	public static void apply(double[][] matrix, ChromatogramFilterSettings filterSettings) {

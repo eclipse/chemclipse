@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.calculator.operations;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class SavitzkyGolayPerIonOperation extends AbstractOperation implements I
 			double[][] matrix = extractedMatrix.getMatrix();
 			SavitzkyGolayProcessor.apply(matrix, filterSettings);
 			extractedMatrix.updateSignal();
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
+			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, MessageFormat.format("Smoothed {0} scans.", extractedMatrix.getScanNumbers().length));
 			updateChromatogramSelection();
 		} catch(IllegalArgumentException e) {
 			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, "High Resolution Data is not supported.");
