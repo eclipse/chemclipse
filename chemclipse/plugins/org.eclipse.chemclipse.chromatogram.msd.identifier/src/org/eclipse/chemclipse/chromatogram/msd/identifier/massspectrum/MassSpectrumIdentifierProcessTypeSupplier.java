@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -75,7 +75,7 @@ public class MassSpectrumIdentifierProcessTypeSupplier implements IProcessTypeSu
 					messageConsumer.addMessages(MassSpectrumIdentifier.identify(chromatogramSelectionMSD.getSelectedScan(), supplier.getId(), monitor));
 				}
 			} else {
-				messageConsumer.addWarnMessage(getName(), "Only MSD chromatogram supported, skipp processing");
+				messageConsumer.addWarnMessage(getName(), "Only MSD chromatogram supported, skip processing");
 			}
 			chromatogramSelection.getChromatogram().setDirty(true);
 			return chromatogramSelection;
