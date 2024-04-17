@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
@@ -28,6 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public abstract class AbstractMassSpectraWriter extends AbstractWriter implements IMassSpectraWriter {
 
 	private static final int MAX_SPECTRA_CHUNK = 65535;
+	private static final Logger logger = Logger.getLogger(AbstractMassSpectraWriter.class);
 
 	@Override
 	public void write(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
@@ -45,7 +47,9 @@ public abstract class AbstractMassSpectraWriter extends AbstractWriter implement
 			/*
 			 * Split the export file to several files.
 			 */
-			file.delete();
+			if(!file.delete()) {
+				logger.error("Failed to delete file " + file);
+			}
 			List<IMassSpectra> splittedMassSpectra = getSplittedMassSpectra(massSpectra);
 			int counter = 1;
 			for(IMassSpectra massSpectraChunk : splittedMassSpectra) {
