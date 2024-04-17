@@ -109,6 +109,7 @@ public abstract class AbstractMassSpectraWriter extends AbstractWriter implement
 		 * Get all mass spectra, test to null and append them with the given
 		 * file writer.
 		 */
+		monitor.beginTask("Write Mass Spectra", massSpectra.size());
 		for(int i = 1; i <= massSpectra.size(); i++) {
 			IScanMSD massSpectrum = massSpectra.getMassSpectrum(i);
 			/*
@@ -117,6 +118,8 @@ public abstract class AbstractMassSpectraWriter extends AbstractWriter implement
 			if(massSpectrum != null && !massSpectrum.isEmpty()) {
 				writeMassSpectrum(fileWriter, massSpectrum, monitor);
 			}
+			monitor.worked(1);
 		}
+		monitor.done();
 	}
 }
