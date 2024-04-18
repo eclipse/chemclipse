@@ -14,9 +14,9 @@
 	<packaging>pom</packaging>
 	<properties>
 		<!-- versions for plugins to use -->
-		<tycho.version>4.0.6</tycho.version>
-		<pmd.version>3.21.0</pmd.version>
-		<checkstyle.version>3.3.0</checkstyle.version>
+		<tycho.version>4.0.7</tycho.version>
+		<pmd.version>3.21.2</pmd.version>
+		<checkstyle.version>3.3.1</checkstyle.version>
 		<maven-install-plugin.version>3.1.1</maven-install-plugin.version>
 		<cbi-version>1.4.3</cbi-version>
 		<!-- definition of the target to use -->
@@ -185,7 +185,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>
-					<version>3.3.0</version>
+					<version>3.4.1</version>
 					<executions>
 						<execution>
 							<id>enforce-maven</id>
