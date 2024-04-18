@@ -141,14 +141,6 @@
          version="0.0.0"/>
 
    <plugin
-         id="org.eclipse.ltk.core.refactoring"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.ltk.ui.refactoring"
-         version="0.0.0"/>
-
-   <plugin
          id="org.apache.httpcomponents.client5.httpclient5"
          version="0.0.0"/>
 
@@ -162,10 +154,6 @@
 
    <plugin
          id="org.eclipse.e4.ui.progress"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.jdt.core"
          version="0.0.0"/>
 
    <plugin
