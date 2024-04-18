@@ -7,7 +7,7 @@
             comparatorName="Euclidean Distance"
             description="This comparator calculates the similarity between two mass spectra with the Euclidean distance algorithm."
             id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.euclidean"
-            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.EuclideanMassSpectrumComparator"
+            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.EuclideanComparator"
             nominalMS="true"
             tandemMS="false"
             highResolutionMS="false">
@@ -38,6 +38,51 @@
             description="The comparator uses the cosine match, based on the multiplication of the ion and intensity: m/z * Intensity"
             id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.cosinemultiply"
             massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.CosineMultiplyComparator"
+            nominalMS="true"
+            tandemMS="false"
+            highResolutionMS="false">
+      </ComparisonSupplier>
+      <ComparisonSupplier
+            comparatorName="Pearson Distance"
+            description="This comparator calculates the similarity between two mass spectra with the Pearson distance algorithm."
+            id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.pearson"
+            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.PearsonComparator"
+            nominalMS="true"
+            tandemMS="false"
+            highResolutionMS="false">
+      </ComparisonSupplier>
+      <ComparisonSupplier
+            comparatorName="Covariance"
+            description="This comparator calculates the similarity between two mass spectra with the covariance-based distance."
+            id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.covariance"
+            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.CovarianceComparator"
+            nominalMS="true"
+            tandemMS="false"
+            highResolutionMS="false">
+      </ComparisonSupplier>
+      <ComparisonSupplier
+            comparatorName="Pareto (0.75)"
+            description="This comparator calculates the similarity between two mass spectra with the covariance-based distance."
+            id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.pareto.0.75"
+            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.Pareto075Comparator"
+            nominalMS="true"
+            tandemMS="false"
+            highResolutionMS="false">
+      </ComparisonSupplier>
+      <ComparisonSupplier
+            comparatorName="Pareto (0.50)"
+            description="This comparator calculates the similarity between two mass spectra with the covariance-based distance."
+            id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.pareto.0.50"
+            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.Pareto050Comparator"
+            nominalMS="true"
+            tandemMS="false"
+            highResolutionMS="false">
+      </ComparisonSupplier>
+      <ComparisonSupplier
+            comparatorName="Pareto (0.25)"
+            description="This comparator calculates the similarity between two mass spectra with the covariance-based distance."
+            id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.pareto.0.25"
+            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.Pareto025Comparator"
             nominalMS="true"
             tandemMS="false"
             highResolutionMS="false">

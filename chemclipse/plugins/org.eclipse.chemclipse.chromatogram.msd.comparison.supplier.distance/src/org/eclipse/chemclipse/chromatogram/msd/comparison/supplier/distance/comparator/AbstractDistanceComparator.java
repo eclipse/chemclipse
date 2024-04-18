@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,7 +8,8 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - don't extract ion signal more than once
+ * Matthias Mailänder - abstract
+ * Christoph Läubrich - don't extract ion signal more than once, use lazy result
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator;
 
@@ -18,7 +19,6 @@ import java.util.List;
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
-import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.AbstractMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
@@ -28,7 +28,9 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
-public class EuclideanMassSpectrumComparator extends AbstractMassSpectrumComparator implements IMassSpectrumComparator {
+public abstract class AbstractDistanceComparator extends AbstractMassSpectrumComparator implements IMassSpectrumComparator {
+
+	abstract DistanceMeasure getDistanceMeasure();
 
 	@Override
 	public IProcessingInfo<IComparisonResult> compare(IScanMSD unknown, IScanMSD reference, MatchConstraints matchConstraints) {
@@ -39,7 +41,7 @@ public class EuclideanMassSpectrumComparator extends AbstractMassSpectrumCompara
 			 * Get the match and reverse match factor.
 			 * Internally it's normalized to 1, but a percentage value is used by the MS methods.
 			 */
-			DistanceMeasure distanceMeasure = new EuclideanDistance();
+			DistanceMeasure distanceMeasure = getDistanceMeasure();
 			IExtractedIonSignal unknownSignal = unknown.getExtractedIonSignal();
 			IExtractedIonSignal referenceSignal = reference.getExtractedIonSignal();
 			float matchFactor = (1 - calculateMatch(unknownSignal, referenceSignal, distanceMeasure)) * 100;
@@ -66,8 +68,8 @@ public class EuclideanMassSpectrumComparator extends AbstractMassSpectrumCompara
 	private float calculateMatch(IExtractedIonSignal unknownSignal, IExtractedIonSignal referenceSignal, DistanceMeasure distanceMeasure) {
 
 		int size = unknownSignal.getNumberOfIonValues();
-		double unknown[] = new double[size];
-		double reference[] = new double[size];
+		double[] unknown = new double[size];
+		double[] reference = new double[size];
 		for(int i = unknownSignal.getStartIon(), j = 0; i <= unknownSignal.getStopIon(); i++, j++) {
 			unknown[j] = unknownSignal.getAbundance(i);
 			reference[j] = referenceSignal.getAbundance(i);
@@ -93,7 +95,7 @@ public class EuclideanMassSpectrumComparator extends AbstractMassSpectrumCompara
 
 	private float calculateMatchDirect(IExtractedIonSignal unknownSignal, IExtractedIonSignal referenceSignal, DistanceMeasure distanceMeasure) {
 
-		List<Integer> ionList = new ArrayList<Integer>();
+		List<Integer> ionList = new ArrayList<>();
 		int startIon = unknownSignal.getStartIon();
 		int stopIon = unknownSignal.getStopIon();
 		for(int ion = startIon; ion <= stopIon; ion++) {
@@ -102,8 +104,8 @@ public class EuclideanMassSpectrumComparator extends AbstractMassSpectrumCompara
 			}
 		}
 		//
-		double unknown[] = new double[ionList.size()];
-		double reference[] = new double[ionList.size()];
+		double[] unknown = new double[ionList.size()];
+		double[] reference = new double[ionList.size()];
 		int j = 0;
 		for(int ion : ionList) {
 			unknown[j] = unknownSignal.getAbundance(ion);
@@ -128,4 +130,4 @@ public class EuclideanMassSpectrumComparator extends AbstractMassSpectrumCompara
 		}
 		return match;
 	}
-};
+}

@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import jakarta.inject.Inject;
-
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -82,6 +80,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 import org.eclipse.ui.PlatformUI;
+
+import jakarta.inject.Inject;
 
 public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
@@ -740,7 +740,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void deleteTargetsAll(Display display) {
 
-		if(getObject() instanceof ITargetSupplier targetSupplier) {
+		if(chromatogramSelection != null && getObject() instanceof ITargetSupplier targetSupplier) {
 			Set<IIdentificationTarget> targetsToDelete = targetSupplier.getTargets();
 			DeleteTargetsOperation deleteTargetsOperation = new DeleteTargetsOperation(display, chromatogramSelection, targetSupplier, targetsToDelete);
 			deleteTargetsOperation.addContext(UndoContextFactory.getUndoContext());

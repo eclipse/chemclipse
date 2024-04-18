@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
 public class EuclideanMassSpectrumComparator_6_Test extends MassSpectrumSetTestCase {
 
-	private EuclideanMassSpectrumComparator comparator;
+	private EuclideanComparator comparator;
 	private IProcessingInfo<IComparisonResult> processingInfo;
 	private IComparisonResult result;
 
@@ -31,7 +31,7 @@ public class EuclideanMassSpectrumComparator_6_Test extends MassSpectrumSetTestC
 		IScanMSD unknown = problemA1.getMassSpectrum();
 		IScanMSD reference = problemA2.getMassSpectrum();
 		//
-		comparator = new EuclideanMassSpectrumComparator();
+		comparator = new EuclideanComparator();
 		processingInfo = comparator.compare(unknown, reference, new MatchConstraints());
 		result = processingInfo.getProcessingResult();
 	}
