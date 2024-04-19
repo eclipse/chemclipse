@@ -73,16 +73,16 @@ public class Identifier {
 
 	private static final Logger logger = Logger.getLogger(Identifier.class);
 	//
-	private static final String MSL_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl";
-	private static final String MSP_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msp";
+	private static final String MSL_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl"; // $NON-NLS-N$
+	private static final String MSP_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msp"; // $NON-NLS-N$
 	private static final String DESCRIPTION = "NIST Peak Identifier";
 	private static final String LIBRARY = "NIST";
 	private static final String COMPOUND_IN_LIB_FACTOR = "InLib Factor: ";
 	/*
 	 * Mass Spectrum/Peak Identifier
 	 */
-	private static final String PROCESS_ID_BACKGROUND = "ID-";
-	private static final String BACKUP_CONTROL_EXTENSION = ".openchrom.bak";
+	private static final String PROCESS_ID_BACKGROUND = "ID-"; // $NON-NLS-N$
+	private static final String BACKUP_CONTROL_EXTENSION = ".openchrom.bak"; // $NON-NLS-N$
 
 	/**
 	 * Performs a mass spectrum identification.
@@ -651,7 +651,7 @@ public class Identifier {
 					float matchFactor = comparisonResult.getMatchFactor();
 					float reverseMatchFactor = comparisonResult.getReverseMatchFactor();
 					if(matchFactor >= minMatchFactor && reverseMatchFactor >= minReverseMatchFactor) {
-						identificationEntry.setIdentifier(INistSupport.NIST_IDENTIFIER); // $NON-NLS-N$
+						identificationEntry.setIdentifier(INistSupport.NIST_IDENTIFIER);
 						peakTargets.add(identificationEntry);
 						identificationResult.add(identificationEntry);
 					}

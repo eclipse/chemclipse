@@ -25,26 +25,26 @@ public interface INistSupport {
 	 * The parameter is used to run the NIST-DB in batch mode.
 	 * NIST MS Search (nistms$.exe) Command Line Options, Ver24Man.pdf, page 60
 	 */
-	String PAR2 = "/PAR=2";
-	String INSTRUMENT = "/INSTRUMENT";
+	String PAR2 = "/PAR=2"; // $NON-NLS-N$
+	String INSTRUMENT = "/INSTRUMENT"; // $NON-NLS-N$
 	/*
 	 * The path is NIST library specific.
 	 */
-	String NISTLOG_FILE = "NISTLOG.TXT";
-	String SRCREADY_FILE = "SRCREADY.TXT";
-	String SRCRESLT_FILE = "SRCRESLT.TXT";
-	String AUTOIMP_FILE = "AUTOIMP.MSD";
-	String NIST_SETTINGS_FILE = "nistms.INI";
-	String HITS_TO_PRINT = "Hits to Print=";
+	String NISTLOG_FILE = "NISTLOG.TXT"; // $NON-NLS-N$
+	String SRCREADY_FILE = "SRCREADY.TXT"; // $NON-NLS-N$
+	String SRCRESLT_FILE = "SRCRESLT.TXT"; // $NON-NLS-N$
+	String AUTOIMP_FILE = "AUTOIMP.MSD"; // $NON-NLS-N$
+	String NIST_SETTINGS_FILE = "nistms.INI"; // $NON-NLS-N$
+	String HITS_TO_PRINT = "Hits to Print="; // $NON-NLS-N$
 	/*
 	 * The path is ChemClipse specific.
 	 */
-	String FILESPEC_FILE = "FILESPEC.FIL";
-	String MASSSPECTRA_FILE = "MASSSPECTRA.MSL";
+	String FILESPEC_FILE = "FILESPEC.FIL"; // $NON-NLS-N$
+	String MASSSPECTRA_FILE = "MASSSPECTRA.MSL"; // $NON-NLS-N$
 	/*
 	 * Identifier for the NIST executable. It will be used to avoid killing other processes than the nistms$.exe.
 	 */
-	String NIST_EXE_IDENTIFIER_LC = "nistms";
+	String NIST_EXE_IDENTIFIER_LC = "nistms"; // $NON-NLS-N$
 
 	/**
 	 * Validates the NIST executable;
