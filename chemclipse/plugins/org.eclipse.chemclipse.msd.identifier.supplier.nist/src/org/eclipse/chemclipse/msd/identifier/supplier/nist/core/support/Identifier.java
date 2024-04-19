@@ -406,8 +406,9 @@ public class Identifier {
 	private void deleteFile(String path) {
 
 		File file = new File(path);
-		logger.info("Delete: " + path);
-		file.delete();
+		if(file.delete()) {
+			logger.info("Delete: " + path);
+		}
 	}
 
 	private void backupControlFiles(IExtendedRuntimeSupport runtimeSupport) {
