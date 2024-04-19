@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,29 +43,29 @@ public abstract class AbstractWineRuntimeSupport extends AbstractRuntimeSupport 
 	 */
 	private void extractValues() {
 
-		String DOSDEVICES = File.separator + "dosdevices" + File.separator;
-		String DRIVE = File.separator + "drive_";
+		String dosDevices = File.separator + "dosdevices" + File.separator;
+		String drive = File.separator + "drive_";
 		String[] parts = null;
 		/*
 		 * Get the parts.
 		 */
 		String nistApplication = getApplication();
-		if(nistApplication.contains(DOSDEVICES)) {
+		if(nistApplication.contains(dosDevices)) {
 			/*
 			 * /home/chemclipse/.wine/dosdevices/c:/Programme/NIST/MSSEARCH/nistms$.exe
 			 * =>
 			 * parts[0] = /home/chemclipse/.wine
 			 * parts[1] = c:/Programme/NIST/MSSEARCH/nistms$.exe
 			 */
-			parts = nistApplication.split(DOSDEVICES);
-		} else if(nistApplication.contains(DRIVE)) {
+			parts = nistApplication.split(dosDevices);
+		} else if(nistApplication.contains(drive)) {
 			/*
 			 * /home/chemclipse/.wine/drive_c/Programme/NIST/MSSEARCH/nistms$.exe
 			 * =>
 			 * parts[0] = /home/chemclipse/.wine
 			 * parts[1] = c/Programme/NIST/MSSEARCH/nistms$.exe
 			 */
-			parts = nistApplication.split(DRIVE);
+			parts = nistApplication.split(drive);
 			/*
 			 * parts[1] = c/Programme/NIST/MSSEARCH/nistms$.exe
 			 * =>
@@ -78,7 +78,7 @@ public abstract class AbstractWineRuntimeSupport extends AbstractRuntimeSupport 
 		 */
 		if(parts != null) {
 			wineEnvironment = parts[0]; // "/home/chemclipse/.wine"
-			wineApplication = parts[1].replace("/", "\\"); // "c:\Programme\NIST\MSSEARCH\nistms$.exe"
+			wineApplication = parts[1].replace("/", "\\"); // "c:\\Programme\\NIST\MSSEARCH\\nistms$.exe"
 		}
 	}
 }

@@ -13,9 +13,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,16 +75,16 @@ public class Identifier {
 
 	private static final Logger logger = Logger.getLogger(Identifier.class);
 	//
-	private static final String MSL_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl";
-	private static final String MSP_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msp";
+	private static final String MSL_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl"; // $NON-NLS-N$
+	private static final String MSP_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msp"; // $NON-NLS-N$
 	private static final String DESCRIPTION = "NIST Peak Identifier";
 	private static final String LIBRARY = "NIST";
 	private static final String COMPOUND_IN_LIB_FACTOR = "InLib Factor: ";
 	/*
 	 * Mass Spectrum/Peak Identifier
 	 */
-	private static final String PROCESS_ID_BACKGROUND = "ID-";
-	private static final String BACKUP_CONTROL_EXTENSION = ".openchrom.bak";
+	private static final String PROCESS_ID_BACKGROUND = "ID-"; // $NON-NLS-N$
+	private static final String BACKUP_CONTROL_EXTENSION = ".openchrom.bak"; // $NON-NLS-N$
 
 	/**
 	 * Performs a mass spectrum identification.
@@ -107,7 +109,7 @@ public class Identifier {
 			boolean batchModus = searchSettings.isBatchModus();
 			int waitTime = getWaitTime(searchSettings);
 			IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistFolder, batchModus);
-			setNumberOfTargetsToReport(runtimeSupport, searchSettings.getNumberOfTargets(), monitor);
+			setNumberOfTargetsToReport(runtimeSupport, searchSettings.getNumberOfTargets());
 			/*
 			 * Get the mass spectra and label them.
 			 */
@@ -139,13 +141,9 @@ public class Identifier {
 					logger.info("Run Identification");
 					Compounds compounds = runNistApplication(runtimeSupport, maxProcessTime, waitTime, monitor);
 					logger.info("Assign Compounds");
-					assignMassSpectrumCompounds(compounds.getCompounds(), massSpectrumList, identificationResults, searchSettings, identifierTable, monitor);
+					assignMassSpectrumCompounds(compounds.getCompounds(), massSpectrumList, identificationResults, searchSettings, monitor);
 				}
-			} catch(FileIsNotWriteableException e) {
-				logger.warn(e);
 			} catch(IOException e) {
-				logger.warn(e);
-			} catch(NoConverterAvailableException e) {
 				logger.warn(e);
 			}
 			/*
@@ -189,7 +187,7 @@ public class Identifier {
 			 */
 			int waitTime = 1;
 			IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistFolder);
-			setNumberOfTargetsToReport(runtimeSupport, searchSettings.getNumberOfTargets(), monitor);
+			setNumberOfTargetsToReport(runtimeSupport, searchSettings.getNumberOfTargets());
 			/*
 			 * Get the mass spectra and label them.
 			 */
@@ -213,17 +211,11 @@ public class Identifier {
 					prepareFiles(runtimeSupport, massSpectra, monitor);
 					long maxProcessTime = (long)(searchSettings.getTimeoutInMinutes() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					Compounds compounds = runNistApplication(runtimeSupport, maxProcessTime, waitTime, monitor);
-					identificationResults = assignPeakCompounds(compounds, peaks, identificationResults, searchSettings, identifierTable, processingInfo, monitor);
+					identificationResults = assignPeakCompounds(compounds, peaks, searchSettings, processingInfo, monitor);
 				}
-			} catch(FileIsNotWriteableException e) {
-				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused by a file is not writeable exception.");
 			} catch(IOException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused by a IO exception.");
-			} catch(NoConverterAvailableException e) {
-				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused the converter to write the mass spectrum was not available.");
+				processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified.", e);
 			}
 			/*
 			 * Clean temporary files finally to not pollute the workspace for other
@@ -232,7 +224,6 @@ public class Identifier {
 			resetPeakIdentifier(peaks, identifierTable);
 			cleanFiles(runtimeSupport, monitor);
 			restoreControlFiles(runtimeSupport);
-			//
 		}
 		return identificationResults;
 	}
@@ -368,7 +359,7 @@ public class Identifier {
 		massSpectrum.setIdentifier(identifierTable.get(key));
 	}
 
-	private void setNumberOfTargetsToReport(IExtendedRuntimeSupport runtimeSupport, int numberOfTargets, IProgressMonitor monitor) {
+	private void setNumberOfTargetsToReport(IExtendedRuntimeSupport runtimeSupport, int numberOfTargets) {
 
 		runtimeSupport.getNistSupport().setNumberOfTargets(numberOfTargets);
 	}
@@ -406,8 +397,9 @@ public class Identifier {
 	private void deleteFile(String path) {
 
 		File file = new File(path);
-		logger.info("Delete: " + path);
-		file.delete();
+		if(file.delete()) {
+			logger.info("Delete: " + path);
+		}
 	}
 
 	private void backupControlFiles(IExtendedRuntimeSupport runtimeSupport) {
@@ -469,7 +461,7 @@ public class Identifier {
 	 * @throws FileIsNotWriteableException
 	 * @throws FileNotFoundException
 	 */
-	private void prepareFiles(IExtendedRuntimeSupport runtimeSupport, IMassSpectra massSpectra, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException, NoConverterAvailableException {
+	private void prepareFiles(IExtendedRuntimeSupport runtimeSupport, IMassSpectra massSpectra, IProgressMonitor monitor) throws IOException {
 
 		monitor.subTask("Write the peak mass spectra.");
 		INistSupport nistSupport = runtimeSupport.getNistSupport();
@@ -520,15 +512,20 @@ public class Identifier {
 	 */
 	private Compounds runNistApplication(final IExtendedRuntimeSupport runtimeSupport, final long maxProcessTime, int waitTime, final IProgressMonitor monitor) throws IOException {
 
-		monitor.subTask("Start the NIST-DB application.");
+		monitor.beginTask("Run the NIST-DB application.", IProgressMonitor.UNKNOWN);
 		boolean batchModus = runtimeSupport.isBatchModus();
-		runtimeSupport.executeRunCommand();
-		//
+		Process process = runtimeSupport.executeRunCommand();
+		logger.info("Spawned " + process);
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+			String line;
+			while((line = reader.readLine()) != null) {
+				logger.error(line);
+			}
+		}
 		try {
 			/*
 			 * Parse results.
 			 */
-			monitor.subTask("Waiting for the result file ... this could take a while.");
 			if(batchModus) {
 				long start = System.currentTimeMillis();
 				long max = start + maxProcessTime;
@@ -539,9 +536,7 @@ public class Identifier {
 				waitForFile(results, monitor, max);
 				return nistResultFileParser.getCompounds(results);
 			} else {
-				/*
-				 * Wait for the NIST UI to be appear.
-				 */
+				monitor.subTask("Waiting for NIST MS Search.");
 				try {
 					Thread.sleep(waitTime);
 				} catch(InterruptedException e) {
@@ -556,21 +551,20 @@ public class Identifier {
 		}
 	}
 
-	private void waitForFile(final File file, final IProgressMonitor monitor, long max) throws IOException {
+	private void waitForFile(final File file, final IProgressMonitor monitor, long max) {
 
 		try {
-			/*
-			 * Wait for the file to appear
-			 */
+			monitor.subTask("Waiting for the result file ... this could take a while.");
 			while(!file.exists()) {
 				Thread.sleep(100);
-				if(monitor.isCanceled() || System.currentTimeMillis() > max) {
-					throw new OperationCanceledException();
+				if(monitor.isCanceled()) {
+					throw new OperationCanceledException("Cancelled");
+				}
+				if(System.currentTimeMillis() > max) {
+					throw new OperationCanceledException("Timeout");
 				}
 			}
-			/*
-			 * Wait until file size does not change anymore ... .
-			 */
+			monitor.subTask("Waiting for the result file to finalize.");
 			long fileLength;
 			do {
 				fileLength = file.length();
@@ -589,8 +583,9 @@ public class Identifier {
 
 		monitor.subTask("Start the NIST-DB application.");
 		try {
-			runtimeSupport.executeOpenCommand();
-		} catch(IOException e) {
+			Process process = runtimeSupport.executeOpenCommand();
+			logger.info("Run " + runtimeSupport.getApplication() + " as " + process.pid());
+		} catch(Exception e) {
 			logger.warn(e);
 		}
 	}
@@ -598,13 +593,13 @@ public class Identifier {
 	/**
 	 * Assign the compounds to the peaks.
 	 */
-	private IPeakIdentificationResults assignPeakCompounds(Compounds compounds, List<? extends IPeakMSD> peaks, IPeakIdentificationResults identificationResults, ISearchSettings searchSettings, Map<String, String> identifierTable, IProcessingInfo<?> processingInfo, IProgressMonitor monitor) {
+	private IPeakIdentificationResults assignPeakCompounds(Compounds compounds, List<? extends IPeakMSD> peaks, ISearchSettings searchSettings, IProcessingInfo<?> processingInfo, IProgressMonitor monitor) {
 
 		/*
 		 * Add the identification result (all hits for one peak) to the results.
 		 */
 		monitor.subTask("Assign the identified peaks.");
-		return getPeakIdentificationResults(compounds, peaks, searchSettings, identifierTable, processingInfo);
+		return getPeakIdentificationResults(compounds, peaks, searchSettings, processingInfo);
 	}
 
 	/**
@@ -615,7 +610,7 @@ public class Identifier {
 	 * @param peakIdentifierSettings
 	 * @return {@link INistPeakIdentificationResults}
 	 */
-	public IPeakIdentificationResults getPeakIdentificationResults(Compounds compounds, List<? extends IPeakMSD> peaks, ISearchSettings searchSettings, Map<String, String> identifierTable, IProcessingInfo<?> processingInfo) {
+	public IPeakIdentificationResults getPeakIdentificationResults(Compounds compounds, List<? extends IPeakMSD> peaks, ISearchSettings searchSettings, IProcessingInfo<?> processingInfo) {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		IPeakIdentificationResult identificationResult;
@@ -651,7 +646,7 @@ public class Identifier {
 					float matchFactor = comparisonResult.getMatchFactor();
 					float reverseMatchFactor = comparisonResult.getReverseMatchFactor();
 					if(matchFactor >= minMatchFactor && reverseMatchFactor >= minReverseMatchFactor) {
-						identificationEntry.setIdentifier(INistSupport.NIST_IDENTIFIER); // $NON-NLS-N$
+						identificationEntry.setIdentifier(INistSupport.NIST_IDENTIFIER);
 						peakTargets.add(identificationEntry);
 						identificationResult.add(identificationEntry);
 					}
@@ -741,7 +736,7 @@ public class Identifier {
 	 * @param monitor
 	 * @return INistMassSpectrumIdentificationResults
 	 */
-	private IIdentificationResults assignMassSpectrumCompounds(List<Compound> compounds, List<IScanMSD> massSpectra, IIdentificationResults identificationResults, ISearchSettings searchSettings, Map<String, String> identifier, IProgressMonitor monitor) {
+	private IIdentificationResults assignMassSpectrumCompounds(List<Compound> compounds, List<IScanMSD> massSpectra, IIdentificationResults identificationResults, ISearchSettings searchSettings, IProgressMonitor monitor) {
 
 		/*
 		 * If the compounds and peaks are different, there must have gone
