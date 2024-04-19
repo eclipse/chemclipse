@@ -107,7 +107,7 @@ public class Identifier {
 			boolean batchModus = searchSettings.isBatchModus();
 			int waitTime = getWaitTime(searchSettings);
 			IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistFolder, batchModus);
-			setNumberOfTargetsToReport(runtimeSupport, searchSettings.getNumberOfTargets(), monitor);
+			setNumberOfTargetsToReport(runtimeSupport, searchSettings.getNumberOfTargets());
 			/*
 			 * Get the mass spectra and label them.
 			 */
@@ -139,13 +139,9 @@ public class Identifier {
 					logger.info("Run Identification");
 					Compounds compounds = runNistApplication(runtimeSupport, maxProcessTime, waitTime, monitor);
 					logger.info("Assign Compounds");
-					assignMassSpectrumCompounds(compounds.getCompounds(), massSpectrumList, identificationResults, searchSettings, identifierTable, monitor);
+					assignMassSpectrumCompounds(compounds.getCompounds(), massSpectrumList, identificationResults, searchSettings, monitor);
 				}
-			} catch(FileIsNotWriteableException e) {
-				logger.warn(e);
 			} catch(IOException e) {
-				logger.warn(e);
-			} catch(NoConverterAvailableException e) {
 				logger.warn(e);
 			}
 			/*
@@ -189,7 +185,7 @@ public class Identifier {
 			 */
 			int waitTime = 1;
 			IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistFolder);
-			setNumberOfTargetsToReport(runtimeSupport, searchSettings.getNumberOfTargets(), monitor);
+			setNumberOfTargetsToReport(runtimeSupport, searchSettings.getNumberOfTargets());
 			/*
 			 * Get the mass spectra and label them.
 			 */
@@ -213,17 +209,11 @@ public class Identifier {
 					prepareFiles(runtimeSupport, massSpectra, monitor);
 					long maxProcessTime = (long)(searchSettings.getTimeoutInMinutes() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					Compounds compounds = runNistApplication(runtimeSupport, maxProcessTime, waitTime, monitor);
-					identificationResults = assignPeakCompounds(compounds, peaks, identificationResults, searchSettings, identifierTable, processingInfo, monitor);
+					identificationResults = assignPeakCompounds(compounds, peaks, searchSettings, processingInfo, monitor);
 				}
-			} catch(FileIsNotWriteableException e) {
-				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused by a file is not writeable exception.");
 			} catch(IOException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused by a IO exception.");
-			} catch(NoConverterAvailableException e) {
-				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified, caused the converter to write the mass spectrum was not available.");
+				processingInfo.addErrorMessage(DESCRIPTION, "The peaks couldn't be identified.", e);
 			}
 			/*
 			 * Clean temporary files finally to not pollute the workspace for other
@@ -232,7 +222,6 @@ public class Identifier {
 			resetPeakIdentifier(peaks, identifierTable);
 			cleanFiles(runtimeSupport, monitor);
 			restoreControlFiles(runtimeSupport);
-			//
 		}
 		return identificationResults;
 	}
@@ -368,7 +357,7 @@ public class Identifier {
 		massSpectrum.setIdentifier(identifierTable.get(key));
 	}
 
-	private void setNumberOfTargetsToReport(IExtendedRuntimeSupport runtimeSupport, int numberOfTargets, IProgressMonitor monitor) {
+	private void setNumberOfTargetsToReport(IExtendedRuntimeSupport runtimeSupport, int numberOfTargets) {
 
 		runtimeSupport.getNistSupport().setNumberOfTargets(numberOfTargets);
 	}
@@ -470,7 +459,7 @@ public class Identifier {
 	 * @throws FileIsNotWriteableException
 	 * @throws FileNotFoundException
 	 */
-	private void prepareFiles(IExtendedRuntimeSupport runtimeSupport, IMassSpectra massSpectra, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException, NoConverterAvailableException {
+	private void prepareFiles(IExtendedRuntimeSupport runtimeSupport, IMassSpectra massSpectra, IProgressMonitor monitor) throws IOException {
 
 		monitor.subTask("Write the peak mass spectra.");
 		INistSupport nistSupport = runtimeSupport.getNistSupport();
@@ -557,7 +546,7 @@ public class Identifier {
 		}
 	}
 
-	private void waitForFile(final File file, final IProgressMonitor monitor, long max) throws IOException {
+	private void waitForFile(final File file, final IProgressMonitor monitor, long max) {
 
 		try {
 			/*
@@ -599,13 +588,13 @@ public class Identifier {
 	/**
 	 * Assign the compounds to the peaks.
 	 */
-	private IPeakIdentificationResults assignPeakCompounds(Compounds compounds, List<? extends IPeakMSD> peaks, IPeakIdentificationResults identificationResults, ISearchSettings searchSettings, Map<String, String> identifierTable, IProcessingInfo<?> processingInfo, IProgressMonitor monitor) {
+	private IPeakIdentificationResults assignPeakCompounds(Compounds compounds, List<? extends IPeakMSD> peaks, ISearchSettings searchSettings, IProcessingInfo<?> processingInfo, IProgressMonitor monitor) {
 
 		/*
 		 * Add the identification result (all hits for one peak) to the results.
 		 */
 		monitor.subTask("Assign the identified peaks.");
-		return getPeakIdentificationResults(compounds, peaks, searchSettings, identifierTable, processingInfo);
+		return getPeakIdentificationResults(compounds, peaks, searchSettings, processingInfo);
 	}
 
 	/**
@@ -616,7 +605,7 @@ public class Identifier {
 	 * @param peakIdentifierSettings
 	 * @return {@link INistPeakIdentificationResults}
 	 */
-	public IPeakIdentificationResults getPeakIdentificationResults(Compounds compounds, List<? extends IPeakMSD> peaks, ISearchSettings searchSettings, Map<String, String> identifierTable, IProcessingInfo<?> processingInfo) {
+	public IPeakIdentificationResults getPeakIdentificationResults(Compounds compounds, List<? extends IPeakMSD> peaks, ISearchSettings searchSettings, IProcessingInfo<?> processingInfo) {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		IPeakIdentificationResult identificationResult;
@@ -742,7 +731,7 @@ public class Identifier {
 	 * @param monitor
 	 * @return INistMassSpectrumIdentificationResults
 	 */
-	private IIdentificationResults assignMassSpectrumCompounds(List<Compound> compounds, List<IScanMSD> massSpectra, IIdentificationResults identificationResults, ISearchSettings searchSettings, Map<String, String> identifier, IProgressMonitor monitor) {
+	private IIdentificationResults assignMassSpectrumCompounds(List<Compound> compounds, List<IScanMSD> massSpectra, IIdentificationResults identificationResults, ISearchSettings searchSettings, IProgressMonitor monitor) {
 
 		/*
 		 * If the compounds and peaks are different, there must have gone
