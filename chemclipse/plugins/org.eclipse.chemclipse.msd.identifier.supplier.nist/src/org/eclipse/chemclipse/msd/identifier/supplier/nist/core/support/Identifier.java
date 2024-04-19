@@ -522,12 +522,10 @@ public class Identifier {
 				logger.error(line);
 			}
 		}
-		//
 		try {
 			/*
 			 * Parse results.
 			 */
-			monitor.subTask("Waiting for the result file ... this could take a while.");
 			if(batchModus) {
 				long start = System.currentTimeMillis();
 				long max = start + maxProcessTime;
@@ -538,9 +536,7 @@ public class Identifier {
 				waitForFile(results, monitor, max);
 				return nistResultFileParser.getCompounds(results);
 			} else {
-				/*
-				 * Wait for the NIST UI to be appear.
-				 */
+				monitor.subTask("Waiting for NIST MS Search.");
 				try {
 					Thread.sleep(waitTime);
 				} catch(InterruptedException e) {
@@ -558,9 +554,7 @@ public class Identifier {
 	private void waitForFile(final File file, final IProgressMonitor monitor, long max) {
 
 		try {
-			/*
-			 * Wait for the file to appear
-			 */
+			monitor.subTask("Waiting for the result file ... this could take a while.");
 			while(!file.exists()) {
 				Thread.sleep(100);
 				if(monitor.isCanceled()) {
@@ -570,9 +564,7 @@ public class Identifier {
 					throw new OperationCanceledException("Timeout");
 				}
 			}
-			/*
-			 * Wait until file size does not change anymore ... .
-			 */
+			monitor.subTask("Waiting for the result file to finalize.");
 			long fileLength;
 			do {
 				fileLength = file.length();
