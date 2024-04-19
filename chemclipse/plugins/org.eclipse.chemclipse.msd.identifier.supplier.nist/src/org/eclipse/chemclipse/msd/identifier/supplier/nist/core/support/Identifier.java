@@ -13,9 +13,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -512,7 +514,14 @@ public class Identifier {
 
 		monitor.beginTask("Run the NIST-DB application.", IProgressMonitor.UNKNOWN);
 		boolean batchModus = runtimeSupport.isBatchModus();
-		runtimeSupport.executeRunCommand();
+		Process process = runtimeSupport.executeRunCommand();
+		logger.info("Spawned " + process);
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+			String line;
+			while((line = reader.readLine()) != null) {
+				logger.error(line);
+			}
+		}
 		//
 		try {
 			/*
@@ -554,8 +563,11 @@ public class Identifier {
 			 */
 			while(!file.exists()) {
 				Thread.sleep(100);
-				if(monitor.isCanceled() || System.currentTimeMillis() > max) {
-					throw new OperationCanceledException();
+				if(monitor.isCanceled()) {
+					throw new OperationCanceledException("Cancelled");
+				}
+				if(System.currentTimeMillis() > max) {
+					throw new OperationCanceledException("Timeout");
 				}
 			}
 			/*
@@ -579,8 +591,9 @@ public class Identifier {
 
 		monitor.subTask("Start the NIST-DB application.");
 		try {
-			runtimeSupport.executeOpenCommand();
-		} catch(IOException e) {
+			Process process = runtimeSupport.executeOpenCommand();
+			logger.info("Run " + runtimeSupport.getApplication() + " as " + process.pid());
+		} catch(Exception e) {
 			logger.warn(e);
 		}
 	}
