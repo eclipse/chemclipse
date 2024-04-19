@@ -510,7 +510,7 @@ public class Identifier {
 	 */
 	private Compounds runNistApplication(final IExtendedRuntimeSupport runtimeSupport, final long maxProcessTime, int waitTime, final IProgressMonitor monitor) throws IOException {
 
-		monitor.subTask("Start the NIST-DB application.");
+		monitor.beginTask("Run the NIST-DB application.", IProgressMonitor.UNKNOWN);
 		boolean batchModus = runtimeSupport.isBatchModus();
 		runtimeSupport.executeRunCommand();
 		//
