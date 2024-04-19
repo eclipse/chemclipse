@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - extract common methods to base class
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core;
@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core.IPeakDetectorW
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.IPeakDetectorSettingsWSD;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseChromatogramClassifier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.model.DetectorType;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsWSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlope;
@@ -208,7 +209,7 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 
 		List<IChromatogramPeakWSD> peaks = new ArrayList<>();
 		Set<Integer> traces = wavelengths.getWavelengths().stream().map(Float::intValue).collect(Collectors.toSet());
-		boolean includeBackground = peakDetectorSettings.isIncludeBackground();
+		DetectorType detectorType = peakDetectorSettings.getDetectorType();
 		boolean optimizeBaseline = peakDetectorSettings.isOptimizeBaseline();
 		//
 		IChromatogramPeakWSD peak = null;
@@ -222,19 +223,26 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 				 * Optimize the scan range.
 				 */
 				scanRange = new ScanRange(rawPeak.getStartScan(), rawPeak.getStopScan());
-				if(includeBackground && optimizeBaseline) {
+				if(isValleyOption(detectorType) && optimizeBaseline) {
 					scanRange = optimizeBaseline(chromatogram, scanRange.getStartScan(), rawPeak.getMaximumScan(), scanRange.getStopScan(), wavelengths);
 				}
 				/*
-				 * includeBackground
-				 * false: BV or VB
-				 * true: VV
+				 * Detector Type
 				 */
-				peak = PeakBuilderWSD.createPeak(chromatogram, scanRange, includeBackground, traces, wavelengths.getMarkedTraceModus());
+				switch(detectorType) {
+					case BB:
+						peak = PeakBuilderWSD.createPeak(chromatogram, scanRange, false, traces, wavelengths.getMarkedTraceModus());
+						break;
+					case CB: // There is no real baseline, hence use VV.
+					default:
+						peak = PeakBuilderWSD.createPeak(chromatogram, scanRange, true, traces, wavelengths.getMarkedTraceModus());
+						break;
+				}
+				/*
+				 * Validate
+				 * Add the detector description.
+				 */
 				if(isValidPeak(peak)) {
-					/*
-					 * Add the detector description.
-					 */
 					peak.setDetectorDescription(FirstDerivativePeakDetector.DETECTOR_DESCRIPTION);
 					peaks.add(peak);
 				}
@@ -375,5 +383,10 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 		}
 		//
 		return startScanOptimized;
+	}
+
+	private boolean isValleyOption(DetectorType detectorType) {
+
+		return DetectorType.VV.equals(detectorType);
 	}
 }

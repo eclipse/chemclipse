@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - support m/z filtering
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
@@ -15,8 +15,10 @@ package org.eclipse.chemclipse.msd.model.core.support;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.MarkedTraceModus;
+import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
@@ -53,6 +55,12 @@ public class PeakBuilderMSD {
 		return createPeak(chromatogram, scanRange, includedBackground, includedIons, MarkedTraceModus.INCLUDE);
 	}
 
+	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean includedBackground, Set<Integer> includedIons, MarkedTraceModus filterMode) throws PeakException {
+
+		PeakType peakType = includedBackground ? PeakType.VV : PeakType.BB;
+		return createPeak(chromatogram, scanRange, peakType, includedIons, filterMode);
+	}
+
 	/**
 	 * EXPERIMENTAL!
 	 * 
@@ -63,7 +71,7 @@ public class PeakBuilderMSD {
 	 * @return IChromatogramPeakMSD
 	 * @throws PeakException
 	 */
-	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean includedBackground, Set<Integer> includedIons, MarkedTraceModus filterMode) throws PeakException {
+	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, PeakType peakType, Set<Integer> includedIons, MarkedTraceModus filterMode) throws PeakException {
 
 		/*
 		 * Validate the given objects.
@@ -71,7 +79,6 @@ public class PeakBuilderMSD {
 		validateChromatogram(chromatogram);
 		validateScanRange(scanRange);
 		checkScanRange(chromatogram, scanRange);
-		ITotalScanSignal totalIonSignal;
 		IBackgroundAbundanceRange backgroundAbundanceRange;
 		/*
 		 * Get the total signals and determine the start and stop background
@@ -83,10 +90,10 @@ public class PeakBuilderMSD {
 		 * chromatogram and eventually peak internal background, if the start
 		 * abundance is higher than the stop abundance or vice versa.
 		 */
-		totalIonSignal = totalIonSignals.getTotalScanSignal(scanRange.getStartScan());
-		float startBackgroundAbundance = totalIonSignal.getTotalSignal();
-		totalIonSignal = totalIonSignals.getTotalScanSignal(scanRange.getStopScan());
-		float stopBackgroundAbundance = totalIonSignal.getTotalSignal();
+		ITotalScanSignal totalIonSignalStart = totalIonSignals.getTotalScanSignal(scanRange.getStartScan());
+		float startBackgroundAbundance = totalIonSignalStart.getTotalSignal();
+		ITotalScanSignal totalIonSignalStop = totalIonSignals.getTotalScanSignal(scanRange.getStopScan());
+		float stopBackgroundAbundance = totalIonSignalStop.getTotalSignal();
 		/*
 		 * The abundance of base or startBackground/stopBackground (depends
 		 * which is the lower value) is the chromatogram background.<br/> Then a
@@ -97,12 +104,22 @@ public class PeakBuilderMSD {
 		 * abundance.<br/> To include or exclude the background abundance in the
 		 * IPeakModel affects the calculation of its width at different heights.
 		 */
-		if(includedBackground) {
-			backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
-		} else {
-			float base = Math.min(startBackgroundAbundance, stopBackgroundAbundance);
-			backgroundAbundanceRange = new BackgroundAbundanceRange(base, base);
+		switch(peakType) {
+			case VV:
+				backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
+				break;
+			case CB:
+				IBaselineModel baselineModel = chromatogram.getBaselineModel();
+				startBackgroundAbundance = baselineModel.getBackgroundAbundance(totalIonSignalStart.getRetentionTime());
+				stopBackgroundAbundance = baselineModel.getBackgroundAbundance(totalIonSignalStop.getRetentionTime());
+				backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
+				break;
+			default:
+				float base = Math.min(startBackgroundAbundance, stopBackgroundAbundance);
+				backgroundAbundanceRange = new BackgroundAbundanceRange(base, base);
+				break;
 		}
+		//
 		LinearEquation backgroundEquation = getBackgroundEquation(totalIonSignals, scanRange, backgroundAbundanceRange);
 		/*
 		 * Calculate the intensity values.

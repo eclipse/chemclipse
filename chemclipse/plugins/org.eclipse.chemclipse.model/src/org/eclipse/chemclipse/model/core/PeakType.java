@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - adding delete type
  * Philip Wenig - delete type doesn't make sense here, moved to IPeak (markedAsDeleted)
  *******************************************************************************/
@@ -45,7 +45,8 @@ public enum PeakType implements ILabel {
 	VP("VP (Valley, Perpendicular Drop)"), //
 	BP("BP (Baseline, Perpendicular Drop)"), //
 	DD("DD (Deconvolution)"), //
-	TS("TS (Tangent Skim)"); //
+	TS("TS (Tangent Skim)"), //
+	CB("CB (Chromatogram Baseline)"); //
 
 	private String label = "";
 

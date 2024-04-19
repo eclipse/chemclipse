@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics, Logging
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl;
@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.II
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.core.PeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorMSD;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.model.DetectorType;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -68,7 +69,7 @@ public class AlkanePatternDetectorMSD {
 				PeakDetectorMSD<?, ?, ?> peakDetectorMSD = new PeakDetectorMSD<>();
 				PeakDetectorSettingsMSD peakDetectorSettings = new PeakDetectorSettingsMSD();
 				peakDetectorSettings.setThreshold(Threshold.LOW);
-				peakDetectorSettings.setIncludeBackground(false);
+				peakDetectorSettings.setDetectorType(DetectorType.BB);
 				peakDetectorSettings.setMinimumSignalToNoiseRatio(50.0f);
 				peakDetectorSettings.setMovingAverageWindowSize(5);
 				peakDetectorMSD.detect(chromatogramSelectionMSD, peakDetectorSettings, monitor);

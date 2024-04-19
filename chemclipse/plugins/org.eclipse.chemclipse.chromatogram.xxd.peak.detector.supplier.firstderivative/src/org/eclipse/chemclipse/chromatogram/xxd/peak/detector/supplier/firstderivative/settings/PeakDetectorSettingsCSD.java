@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,13 +7,14 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Matthias Mailänder - remove the window size enum
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.AbstractPeakDetectorCSDSettings;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.model.DetectorType;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
@@ -30,9 +31,9 @@ public class PeakDetectorSettingsCSD extends AbstractPeakDetectorCSDSettings {
 	@LabelProperty(value = "%Threshold")
 	private Threshold threshold = Threshold.MEDIUM;
 	//
-	@JsonProperty(value = "Include Background", defaultValue = "false")
-	@LabelProperty(value = "%IncludeBackground", tooltip = "%IncludeBackgroundDescription")
-	private boolean includeBackground = false;
+	@JsonProperty(value = "Detector Type", defaultValue = "VV")
+	@LabelProperty(value = "Detector Type", tooltip = "Select the option to set the peak baseline.")
+	private DetectorType detectorType = DetectorType.VV;
 	//
 	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
 	@LabelProperty(value = "%MinSignalToNoiseRatio")
@@ -70,14 +71,14 @@ public class PeakDetectorSettingsCSD extends AbstractPeakDetectorCSDSettings {
 		}
 	}
 
-	public boolean isIncludeBackground() {
+	public DetectorType getDetectorType() {
 
-		return includeBackground;
+		return detectorType;
 	}
 
-	public void setIncludeBackground(boolean includeBackground) {
+	public void setDetectorType(DetectorType detectorType) {
 
-		this.includeBackground = includeBackground;
+		this.detectorType = detectorType;
 	}
 
 	public float getMinimumSignalToNoiseRatio() {

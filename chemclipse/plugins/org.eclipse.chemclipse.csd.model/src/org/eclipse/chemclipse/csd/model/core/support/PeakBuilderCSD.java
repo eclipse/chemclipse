@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.model.core.support;
 
@@ -20,7 +20,9 @@ import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.implementation.PeakModelCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ScanCSD;
+import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
+import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
@@ -44,6 +46,12 @@ public class PeakBuilderCSD {
 		// only static usage
 	}
 
+	public static IChromatogramPeakCSD createPeak(IChromatogramCSD chromatogram, IScanRange scanRange, boolean calculatePeakIncludedBackground) throws PeakException {
+
+		PeakType peakType = calculatePeakIncludedBackground ? PeakType.VV : PeakType.BB;
+		return createPeak(chromatogram, scanRange, peakType);
+	}
+
 	/**
 	 * Creates an instance of IPeak.<br/>
 	 * The background abundance will be automatically set linear through the
@@ -62,7 +70,7 @@ public class PeakBuilderCSD {
 	 * @return IPeak
 	 * @throws PeakException
 	 */
-	public static IChromatogramPeakCSD createPeak(IChromatogramCSD chromatogram, IScanRange scanRange, boolean calculatePeakIncludedBackground) throws PeakException {
+	public static IChromatogramPeakCSD createPeak(IChromatogramCSD chromatogram, IScanRange scanRange, PeakType peakType) throws PeakException {
 
 		/*
 		 * Validate the given objects.
@@ -70,7 +78,6 @@ public class PeakBuilderCSD {
 		validateChromatogram(chromatogram);
 		validateScanRange(scanRange);
 		checkScanRange(chromatogram, scanRange);
-		ITotalScanSignal totalScanSignal;
 		IBackgroundAbundanceRange backgroundAbundanceRange;
 		/*
 		 * Get the total signals and determine the start and stop background
@@ -82,10 +89,10 @@ public class PeakBuilderCSD {
 		 * chromatogram and eventually peak internal background, if the start
 		 * abundance is higher than the stop abundance or vice versa.
 		 */
-		totalScanSignal = totalScanSignals.getTotalScanSignal(scanRange.getStartScan());
-		float startBackgroundAbundance = totalScanSignal.getTotalSignal();
-		totalScanSignal = totalScanSignals.getTotalScanSignal(scanRange.getStopScan());
-		float stopBackgroundAbundance = totalScanSignal.getTotalSignal();
+		ITotalScanSignal totalScanSignalStart = totalScanSignals.getTotalScanSignal(scanRange.getStartScan());
+		float startBackgroundAbundance = totalScanSignalStart.getTotalSignal();
+		ITotalScanSignal totalScanSignalStop = totalScanSignals.getTotalScanSignal(scanRange.getStopScan());
+		float stopBackgroundAbundance = totalScanSignalStop.getTotalSignal();
 		/*
 		 * The abundance of base or startBackground/stopBackground (depends
 		 * which is the lower value) is the chromatogram background.<br/> Then a
@@ -96,11 +103,20 @@ public class PeakBuilderCSD {
 		 * abundance.<br/> To include or exclude the background abundance in the
 		 * IPeakModel affects the calculation of its width at different heights.
 		 */
-		if(calculatePeakIncludedBackground) {
-			backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
-		} else {
-			float base = Math.min(startBackgroundAbundance, stopBackgroundAbundance);
-			backgroundAbundanceRange = new BackgroundAbundanceRange(base, base);
+		switch(peakType) {
+			case VV:
+				backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
+				break;
+			case CB:
+				IBaselineModel baselineModel = chromatogram.getBaselineModel();
+				startBackgroundAbundance = baselineModel.getBackgroundAbundance(totalScanSignalStart.getRetentionTime());
+				stopBackgroundAbundance = baselineModel.getBackgroundAbundance(totalScanSignalStop.getRetentionTime());
+				backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
+				break;
+			default:
+				float base = Math.min(startBackgroundAbundance, stopBackgroundAbundance);
+				backgroundAbundanceRange = new BackgroundAbundanceRange(base, base);
+				break;
 		}
 		/*
 		 * Calculate the intensity values.
@@ -447,5 +463,4 @@ public class PeakBuilderCSD {
 			throw new PeakException("The chromatogram must not be null.");
 		}
 	}
-	// -------------------------------------------------protected methods
 }

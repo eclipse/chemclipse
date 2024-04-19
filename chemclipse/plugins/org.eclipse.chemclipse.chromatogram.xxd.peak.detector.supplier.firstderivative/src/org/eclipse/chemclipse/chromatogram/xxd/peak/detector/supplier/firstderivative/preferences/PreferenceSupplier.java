@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.model.DetectorType;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsCSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsWSD;
@@ -30,8 +31,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	//
 	public static final String P_THRESHOLD_CSD = "thresholdCSD";
 	public static final String DEF_THRESHOLD_CSD = Threshold.MEDIUM.name();
-	public static final String P_INCLUDE_BACKGROUND_CSD = "includeBackgroundCSD";
-	public static final boolean DEF_INCLUDE_BACKGROUND_CSD = false; // false will use BV oder VB, if true VV will be used.
+	public static final String P_DETECTOR_TYPE_CSD = "detectorTypeCSD";
+	public static final String DEF_DETECTOR_TYPE_CSD = DetectorType.VV.name();
 	public static final String P_MIN_SN_RATIO_CSD = "minSNRatioCSD";
 	public static final float DEF_MIN_SN_RATIO_CSD = 0.0f; // 0 = all peaks will be added
 	public static final String P_MOVING_AVERAGE_WINDOW_SIZE_CSD = "movingAverageWindowSizeCSD";
@@ -43,8 +44,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	//
 	public static final String P_THRESHOLD_MSD = "thresholdMSD";
 	public static final String DEF_THRESHOLD_MSD = Threshold.MEDIUM.name();
-	public static final String P_INCLUDE_BACKGROUND_MSD = "includeBackgroundMSD";
-	public static final boolean DEF_INCLUDE_BACKGROUND_MSD = false; // false will use BV oder VB, if true VV will be used.
+	public static final String P_DETECTOR_TYPE_MSD = "detectorTypeMSD";
+	public static final String DEF_DETECTOR_TYPE_MSD = DetectorType.VV.name();
 	public static final String P_MIN_SN_RATIO_MSD = "minSNRatioMSD";
 	public static final float DEF_MIN_SN_RATIO_MSD = 0.0f; // 0 = all peaks will be added
 	public static final String P_MOVING_AVERAGE_WINDOW_SIZE_MSD = "movingAverageWindowSizeMSD";
@@ -62,8 +63,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	//
 	public static final String P_THRESHOLD_WSD = "thresholdWSD";
 	public static final String DEF_THRESHOLD_WSD = Threshold.MEDIUM.name();
-	public static final String P_INCLUDE_BACKGROUND_WSD = "includeBackgroundWSD";
-	public static final boolean DEF_INCLUDE_BACKGROUND_WSD = false; // false will use BV oder VB, if true VV will be used.
+	public static final String P_DETECTOR_TYPE_WSD = "detectorTypeWSD";
+	public static final String DEF_DETECTOR_TYPE_WSD = DetectorType.VV.name();
 	public static final String P_MIN_SN_RATIO_WSD = "minSNRatioWSD";
 	public static final float DEF_MIN_SN_RATIO_WSD = 0.0f; // 0 = all peaks will be added
 	public static final String P_MOVING_AVERAGE_WINDOW_SIZE_WSD = "movingAverageWindowSizeWSD";
@@ -83,14 +84,14 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	@Override
 	public void initializeDefaults() {
 
-		putDefault(P_INCLUDE_BACKGROUND_CSD, Boolean.toString(DEF_INCLUDE_BACKGROUND_CSD));
+		putDefault(P_DETECTOR_TYPE_CSD, DEF_DETECTOR_TYPE_CSD);
 		putDefault(P_MIN_SN_RATIO_CSD, Float.toString(DEF_MIN_SN_RATIO_CSD));
 		putDefault(P_MOVING_AVERAGE_WINDOW_SIZE_CSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD);
 		putDefault(P_THRESHOLD_CSD, DEF_THRESHOLD_CSD);
 		putDefault(P_USE_NOISE_SEGMENTS_CSD, Boolean.toString(DEF_USE_NOISE_SEGMENTS_CSD));
 		putDefault(P_OPTIMIZE_BASELINE_CSD, Boolean.toString(DEF_OPTIMIZE_BASELINE_CSD));
 		//
-		putDefault(P_INCLUDE_BACKGROUND_MSD, Boolean.toString(DEF_INCLUDE_BACKGROUND_MSD));
+		putDefault(P_DETECTOR_TYPE_MSD, DEF_DETECTOR_TYPE_MSD);
 		putDefault(P_MIN_SN_RATIO_MSD, Float.toString(DEF_MIN_SN_RATIO_MSD));
 		putDefault(P_MOVING_AVERAGE_WINDOW_SIZE_MSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD);
 		putDefault(P_THRESHOLD_MSD, DEF_THRESHOLD_MSD);
@@ -100,7 +101,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_MZ_VALUES_TO_FILTER_MSD, DEF_MZ_VALUES_TO_FILTER_MSD);
 		putDefault(P_USE_INDIVIDUAL_TRACES_MSD, Boolean.toString(DEF_USE_INDIVIDUAL_TRACES_MSD));
 		//
-		putDefault(P_INCLUDE_BACKGROUND_WSD, Boolean.toString(DEF_INCLUDE_BACKGROUND_WSD));
+		putDefault(P_DETECTOR_TYPE_WSD, DEF_DETECTOR_TYPE_WSD);
 		putDefault(P_MIN_SN_RATIO_WSD, Float.toString(DEF_MIN_SN_RATIO_WSD));
 		putDefault(P_MOVING_AVERAGE_WINDOW_SIZE_WSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_WSD);
 		putDefault(P_THRESHOLD_WSD, DEF_THRESHOLD_WSD);
@@ -110,7 +111,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 
 		PeakDetectorSettingsCSD settings = new PeakDetectorSettingsCSD();
 		settings.setThreshold(Threshold.valueOf(INSTANCE().get(P_THRESHOLD_CSD, DEF_THRESHOLD_CSD)));
-		settings.setIncludeBackground(INSTANCE().getBoolean(P_INCLUDE_BACKGROUND_CSD, DEF_INCLUDE_BACKGROUND_CSD));
+		settings.setDetectorType(getDetectorType(P_DETECTOR_TYPE_CSD, DEF_DETECTOR_TYPE_CSD));
 		settings.setMinimumSignalToNoiseRatio(INSTANCE().getFloat(P_MIN_SN_RATIO_CSD, DEF_MIN_SN_RATIO_CSD));
 		settings.setMovingAverageWindowSize(WindowSize.getAdjustedSetting(INSTANCE().get(P_MOVING_AVERAGE_WINDOW_SIZE_CSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD)));
 		settings.setUseNoiseSegments(INSTANCE().getBoolean(P_USE_NOISE_SEGMENTS_CSD, DEF_USE_NOISE_SEGMENTS_CSD));
@@ -122,7 +123,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 
 		PeakDetectorSettingsMSD settings = new PeakDetectorSettingsMSD();
 		settings.setThreshold(Threshold.valueOf(INSTANCE().get(P_THRESHOLD_MSD, DEF_THRESHOLD_MSD)));
-		settings.setIncludeBackground(INSTANCE().getBoolean(P_INCLUDE_BACKGROUND_MSD, DEF_INCLUDE_BACKGROUND_MSD));
+		settings.setDetectorType(getDetectorType(P_DETECTOR_TYPE_MSD, DEF_DETECTOR_TYPE_MSD));
 		settings.setMinimumSignalToNoiseRatio(INSTANCE().getFloat(P_MIN_SN_RATIO_MSD, DEF_MIN_SN_RATIO_MSD));
 		settings.setMovingAverageWindowSize(WindowSize.getAdjustedSetting(INSTANCE().get(P_MOVING_AVERAGE_WINDOW_SIZE_MSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD)));
 		settings.setUseNoiseSegments(INSTANCE().getBoolean(P_USE_NOISE_SEGMENTS_MSD, DEF_USE_NOISE_SEGMENTS_MSD));
@@ -137,9 +138,18 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 
 		PeakDetectorSettingsWSD settings = new PeakDetectorSettingsWSD();
 		settings.setThreshold(Threshold.valueOf(INSTANCE().get(P_THRESHOLD_WSD, DEF_THRESHOLD_WSD)));
-		settings.setIncludeBackground(INSTANCE().getBoolean(P_INCLUDE_BACKGROUND_WSD, DEF_INCLUDE_BACKGROUND_WSD));
+		settings.setDetectorType(getDetectorType(P_DETECTOR_TYPE_WSD, DEF_DETECTOR_TYPE_WSD));
 		settings.setMinimumSignalToNoiseRatio(INSTANCE().getFloat(P_MIN_SN_RATIO_WSD, DEF_MIN_SN_RATIO_WSD));
 		settings.setMovingAverageWindowSize(WindowSize.getAdjustedSetting(INSTANCE().get(P_MOVING_AVERAGE_WINDOW_SIZE_WSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_WSD)));
 		return settings;
+	}
+
+	private static DetectorType getDetectorType(String key, String def) {
+
+		try {
+			return DetectorType.valueOf(INSTANCE().get(key, def));
+		} catch(Exception e) {
+			return DetectorType.VV;
+		}
 	}
 }

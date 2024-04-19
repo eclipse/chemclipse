@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
  * Christoph Läubrich - extract common methods to base class
  *******************************************************************************/
@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseChromatogramClassifier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.model.DetectorType;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlope;
@@ -40,6 +41,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.MarkedTraceModus;
+import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
@@ -223,7 +225,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 
 		List<IChromatogramPeakMSD> peaks = new ArrayList<>();
 		Set<Integer> traces = ions.getIonsNominal().stream().map(e -> e.intValue()).collect(Collectors.toSet());
-		boolean includeBackground = peakDetectorSettings.isIncludeBackground();
+		DetectorType detectorType = peakDetectorSettings.getDetectorType();
 		boolean optimizeBaseline = peakDetectorSettings.isOptimizeBaseline();
 		//
 		for(IRawPeak rawPeak : rawPeaks) {
@@ -232,19 +234,29 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 				 * Optimize the scan range.
 				 */
 				ScanRange scanRange = new ScanRange(rawPeak.getStartScan(), rawPeak.getStopScan());
-				if(includeBackground && optimizeBaseline) {
+				if(isValleyOption(detectorType) && optimizeBaseline) {
 					scanRange = optimizeBaseline(chromatogram, scanRange.getStartScan(), rawPeak.getMaximumScan(), scanRange.getStopScan(), ions);
 				}
 				/*
-				 * includeBackground
-				 * false: BV or VB
-				 * true: VV
+				 * Detector Type
 				 */
-				IChromatogramPeakMSD peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, includeBackground, traces, ions.getMarkedTraceModus());
+				IChromatogramPeakMSD peak = null;
+				switch(detectorType) {
+					case BB:
+						peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, PeakType.BB, traces, ions.getMarkedTraceModus());
+						break;
+					case CB:
+						peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, PeakType.CB, traces, ions.getMarkedTraceModus());
+						break;
+					default:
+						peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, PeakType.VV, traces, ions.getMarkedTraceModus());
+						break;
+				}
+				/*
+				 * Validate
+				 * Add the detector description.
+				 */
 				if(isValidPeak(peak, peakDetectorSettings)) {
-					/*
-					 * Add the detector description.
-					 */
 					peak.setDetectorDescription(FirstDerivativePeakDetector.DETECTOR_DESCRIPTION);
 					peaks.add(peak);
 				}
@@ -406,5 +418,10 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 		}
 		//
 		return startScanOptimized;
+	}
+
+	private boolean isValleyOption(DetectorType detectorType) {
+
+		return DetectorType.VV.equals(detectorType);
 	}
 }
