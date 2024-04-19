@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public abstract class AbstractLinuxWineSupport extends AbstractWineRuntimeSupport implements IWineRuntimeSupport {
 
@@ -48,8 +47,7 @@ public abstract class AbstractLinuxWineSupport extends AbstractWineRuntimeSuppor
 		commands.add(getWineApplication());
 		commands.addAll(getParameters());
 		ProcessBuilder processBuilder = new ProcessBuilder(commands);
-		Map<String, String> environment = processBuilder.environment();
-		environment.put("WINEPREFIX", getWineEnvironment());
+		processBuilder.environment().put("WINEPREFIX", getWineEnvironment());
 		return processBuilder;
 	}
 }
