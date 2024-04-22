@@ -27,7 +27,9 @@ import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.Preferenc
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakIdentifier extends AbstractPeakIdentifierMSD<IPeakIdentificationResults> {
@@ -56,6 +58,8 @@ public class PeakIdentifier extends AbstractPeakIdentifierMSD<IPeakIdentificatio
 				//
 				Identifier identifier = new Identifier();
 				IPeakIdentificationResults peakIdentificationResults = identifier.runPeakIdentification(peaksToIdentify, peakIdentifierSettings, processingInfo, monitor);
+				int numberOfIdentifiedPeaks = peakIdentificationResults.getIdentificationResults().size();
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, Messages.nistDbIdentifier, numberOfIdentifiedPeaks + " peaks were identified successfully."));
 				processingInfo.setProcessingResult(peakIdentificationResults);
 			} catch(FileNotFoundException e) {
 				processingInfo.addErrorMessage(Messages.nistDbIdentifier, "An I/O error ocurred.");

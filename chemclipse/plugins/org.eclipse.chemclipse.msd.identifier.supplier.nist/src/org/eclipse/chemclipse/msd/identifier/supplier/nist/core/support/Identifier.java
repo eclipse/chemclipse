@@ -62,9 +62,6 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.model.implementation.PeakIdentificationResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -657,11 +654,6 @@ public class Identifier {
 				 * Add the identification result to the results list.
 				 */
 				identificationResults.add(identificationResult);
-				/*
-				 * Processing info
-				 */
-				IProcessingMessage processingMessage = new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The peak was identified successfully: " + peak.getModelDescription());
-				processingInfo.addMessage(processingMessage);
 			} else {
 				processingInfo.addErrorMessage(DESCRIPTION, "The result id was not set, hence no result could be extracted.");
 			}
