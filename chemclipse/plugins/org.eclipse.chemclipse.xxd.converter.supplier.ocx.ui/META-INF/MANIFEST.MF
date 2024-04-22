@@ -4,6 +4,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Open Chromatography Binary UI
 Bundle-SymbolicName: org.eclipse.chemclipse.xxd.converter.supplier.ocx.ui;singleton:=true
 Bundle-Version: 0.9.0.qualifier
+Export-Package: org.eclipse.chemclipse.xxd.converter.supplier.ocx.ui.preferences
 Bundle-Activator: org.eclipse.chemclipse.xxd.converter.supplier.ocx.ui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
