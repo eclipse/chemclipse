@@ -13,11 +13,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -516,12 +514,6 @@ public class Identifier {
 		boolean batchModus = runtimeSupport.isBatchModus();
 		Process process = runtimeSupport.executeRunCommand();
 		logger.info("Spawned " + process);
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
-			String line;
-			while((line = reader.readLine()) != null) {
-				logger.error(line);
-			}
-		}
 		try {
 			/*
 			 * Parse results.
