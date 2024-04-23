@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,27 +11,30 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 public class ExtendedEditHistoryUI extends Composite implements IExtendedPartUI {
 
-	private Button buttonToolbarInfo;
+	private AtomicReference<Button> buttonToolbarInfo = new AtomicReference<>();
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
-	private Button buttonToolbarSearch;
+	private AtomicReference<Button> buttonToolbarSearch = new AtomicReference<>();
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private AtomicReference<EditHistoryListUI> tableViewer = new AtomicReference<>();
 	//
-	private IEditHistory editHistory;
+	private IEditHistory editHistory = null;
 
 	public ExtendedEditHistoryUI(Composite parent, int style) {
 
@@ -59,8 +62,8 @@ public class ExtendedEditHistoryUI extends Composite implements IExtendedPartUI 
 
 	private void initialize() {
 
-		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
-		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_EDIT, false);
+		enableToolbar(toolbarInfo, buttonToolbarInfo.get(), IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarSearch, buttonToolbarSearch.get(), IMAGE_SEARCH, TOOLTIP_EDIT, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -69,10 +72,33 @@ public class ExtendedEditHistoryUI extends Composite implements IExtendedPartUI 
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
 		//
-		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
-		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		createButtonToggleToolbarInfo(composite);
+		createButtonToggleToolbarSearch(composite);
+		createButtonSettings(composite);
+	}
+
+	private void createButtonToggleToolbarInfo(Composite parent) {
+
+		buttonToolbarInfo.set(createButtonToggleToolbar(parent, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO));
+	}
+
+	private void createButtonToggleToolbarSearch(Composite parent) {
+
+		buttonToolbarSearch.set(createButtonToggleToolbar(parent, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH));
+	}
+
+	private void createButtonSettings(Composite parent) {
+
+		createSettingsButton(getParent(), Arrays.asList(PreferencePage.class), new ISettingsHandler() {
+
+			@Override
+			public void apply(Display display) {
+
+				applySettings(display);
+			}
+		});
 	}
 
 	private void createToolbarInfo(Composite parent) {
@@ -104,6 +130,11 @@ public class ExtendedEditHistoryUI extends Composite implements IExtendedPartUI 
 		EditHistoryListUI editHistoryListUI = new EditHistoryListUI(this, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		editHistoryListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		tableViewer.set(editHistoryListUI);
+	}
+
+	private void applySettings(Display display) {
+
+		updateInput();
 	}
 
 	private void updateInput() {
