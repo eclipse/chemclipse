@@ -74,6 +74,9 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.history.EditInformation;
+import org.eclipse.chemclipse.support.history.IEditHistory;
+import org.eclipse.chemclipse.support.history.ProcessSupplierEntry;
+import org.eclipse.chemclipse.support.history.ProcessSupplierSupport;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -718,7 +721,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			if(settings == null) {
 				return;
 			}
-			//
+			/*
+			 * Meta Processor
+			 */
 			if(processSupplier instanceof MetaProcessorProcessSupplier metaProcessorProcessSupplier) {
 				IProcessMethod processMethod = metaProcessorProcessSupplier.getProcessMethod();
 				MethodParameters methodParameters = ResumeMethodSupport.selectMethodParameters(shell, processMethod);
@@ -797,25 +802,38 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void updateAuditTrail(IMessageProvider processingInfo, IProcessMethod processMethod) {
 
-		if(processingInfo.hasErrorMessages()) {
-			return;
+		if(!processingInfo.hasErrorMessages()) {
+			processMethod.forEach(p -> updateAuditTrail(p.getName(), processTypeSupport.getSupplier(p.getProcessorId())));
 		}
-		processMethod.forEach(p -> updateAuditTrail(p.getName()));
 	}
 
 	private void updateAuditTrail(IMessageProvider processingInfo, IProcessSupplier<?> processSupplier) {
 
-		if(processingInfo.hasErrorMessages()) {
-			return;
+		if(!processingInfo.hasErrorMessages()) {
+			updateAuditTrail(processSupplier.getCategory() + ": " + processSupplier.getName(), processSupplier);
 		}
-		updateAuditTrail(processSupplier.getCategory() + ": " + processSupplier.getName());
 	}
 
-	private void updateAuditTrail(String description) {
+	private void updateAuditTrail(String description, IProcessSupplier<?> processSupplier) {
 
 		IChromatogram<?> chromatogram = getChromatogramSelection().getChromatogram();
-		EditInformation editInformation = new EditInformation(description, UserManagement.getCurrentUser());
-		chromatogram.getEditHistory().add(editInformation);
+		IEditHistory editHistory = chromatogram.getEditHistory();
+		/*
+		 * Normal description
+		 */
+		editHistory.add(new EditInformation(description, UserManagement.getCurrentUser()));
+		/*
+		 * Detailed step to recover process method
+		 */
+		if(processSupplier != null) {
+			IProcessorPreferences<?> processorPreferences = ProcessSettingsSupport.getWorkspacePreferences(processSupplier);
+			ProcessSupplierEntry processSupplierEntry = new ProcessSupplierEntry();
+			processSupplierEntry.setId(processSupplier.getId());
+			processSupplierEntry.setName(processSupplier.getName());
+			processSupplierEntry.setDescription(processSupplier.getDescription());
+			processSupplierEntry.setUserSettings(processorPreferences.getUserSettingsAsString());
+			editHistory.add(ProcessSupplierSupport.createEditInformation(processSupplierEntry));
+		}
 	}
 
 	private boolean isValidSupplier(IProcessSupplier<?> supplier) {
