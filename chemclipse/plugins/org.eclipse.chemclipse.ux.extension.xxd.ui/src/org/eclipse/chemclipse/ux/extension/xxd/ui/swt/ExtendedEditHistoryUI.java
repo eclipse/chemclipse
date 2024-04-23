@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.support.history.ProcessSupplierEntry;
 import org.eclipse.chemclipse.support.history.ProcessSupplierSupport;
+import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
@@ -147,8 +148,16 @@ public class ExtendedEditHistoryUI extends Composite implements IExtendedPartUI 
 						/*
 						 * Method
 						 */
+						String name = file.getName();
+						name = name.endsWith(MethodConverter.FILE_EXTENSION) ? name.substring(0, name.length() - MethodConverter.FILE_EXTENSION.length()) : name;
 						Set<DataCategory> dataCategories = new HashSet<>(Arrays.asList(DataCategory.chromatographyCategories()));
 						ProcessMethod processMethod = new ProcessMethod(dataCategories);
+						processMethod.setName(name);
+						processMethod.setDescription("Method created by Edit History");
+						processMethod.setOperator(UserManagement.getCurrentUser());
+						processMethod.setCategory(ExtensionMessages.process);
+						processMethod.setSupportResume(PreferenceSupplier.isCreateMethodEnableResume());
+						//
 						for(ProcessSupplierEntry processSupplierEntry : processSupplierEntries) {
 							ProcessEntry processEntry = new ProcessEntry(processMethod);
 							processEntry.setProcessorId(processSupplierEntry.getId());
