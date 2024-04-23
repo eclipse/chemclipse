@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,13 +18,11 @@ import org.eclipse.jface.viewers.ViewerFilter;
 public class EditHistoryListFilter extends ViewerFilter {
 
 	private String searchText;
-	private String searchTextExtended;
 	private boolean caseSensitive;
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
 
 		this.searchText = searchText;
-		this.searchTextExtended = ".*" + searchText + ".*";
 		this.caseSensitive = caseSensitive;
 	}
 
@@ -39,24 +37,26 @@ public class EditHistoryListFilter extends ViewerFilter {
 		}
 		//
 		if(element instanceof IEditInformation editInformation) {
-			String search = (caseSensitive) ? searchTextExtended : searchTextExtended.toLowerCase();
+			String search = caseSensitive ? searchText : searchText.toLowerCase();
 			//
-			String description = (caseSensitive) ? editInformation.getDescription() : editInformation.getDescription().toLowerCase();
-			if(description.matches(search)) {
+			if(matches(search, editInformation.getDescription())) {
 				return true;
 			}
 			//
-			String editor = (caseSensitive) ? editInformation.getEditor() : editInformation.getEditor().toLowerCase();
-			if(editor.matches(search)) {
+			if(matches(search, editInformation.getEditor())) {
 				return true;
 			}
 			//
-			String date = (caseSensitive) ? editInformation.getDate().toString() : editInformation.getDate().toString();
-			if(date.matches(search)) {
+			if(matches(search, editInformation.getDate().toString())) {
 				return true;
 			}
 		}
 		//
 		return false;
+	}
+
+	private boolean matches(String search, String target) {
+
+		return (caseSensitive ? target : target.toLowerCase()).contains(search);
 	}
 }

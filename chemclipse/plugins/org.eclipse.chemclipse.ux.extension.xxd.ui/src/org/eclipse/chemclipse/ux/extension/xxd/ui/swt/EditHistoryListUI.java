@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.EditHistoryL
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
 public class EditHistoryListUI extends ExtendedTableViewer {
@@ -47,5 +48,6 @@ public class EditHistoryListUI extends ExtendedTableViewer {
 		setLabelProvider(labelProvider);
 		setContentProvider(contentProvider);
 		setComparator(comparator);
+		setFilters(new ViewerFilter[]{listFilter});
 	}
 }
