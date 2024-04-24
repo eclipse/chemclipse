@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.util;
 
@@ -21,7 +21,7 @@ public class ValueParserSupport {
 	public boolean parseBoolean(String[] values, int index, boolean def) {
 
 		boolean result = def;
-		String value = parseString(values, index, "");
+		String value = parseString(values, index, "").toLowerCase();
 		if(Boolean.toString(true).equals(value)) {
 			result = true;
 		} else if(Boolean.toString(false).equals(value)) {
