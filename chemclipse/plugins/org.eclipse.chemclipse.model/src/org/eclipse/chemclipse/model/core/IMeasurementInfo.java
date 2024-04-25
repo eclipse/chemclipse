@@ -108,4 +108,8 @@ public interface IMeasurementInfo extends Serializable {
 	String getFindings();
 
 	void setFindings(String findings);
+
+	String getTags();
+
+	void setTags(String tags);
 }

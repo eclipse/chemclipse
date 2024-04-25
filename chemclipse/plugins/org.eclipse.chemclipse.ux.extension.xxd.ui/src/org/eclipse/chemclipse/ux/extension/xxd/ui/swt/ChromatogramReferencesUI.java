@@ -473,6 +473,9 @@ public class ChromatogramReferencesUI extends Composite {
 				case SHORT_INFO:
 					chromatogram.setShortInfo(name);
 					break;
+				case TAGS:
+					chromatogram.setTags(name);
+					break;
 				default:
 					/*
 					 * NAME and DEFAULT are not supported here as NAME can't be set.

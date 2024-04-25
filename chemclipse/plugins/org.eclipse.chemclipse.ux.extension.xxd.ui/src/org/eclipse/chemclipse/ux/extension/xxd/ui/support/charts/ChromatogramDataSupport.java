@@ -47,12 +47,23 @@ public class ChromatogramDataSupport {
 
 	public static String getChromatogramEditorLabel(IChromatogramSelection<?, ?> chromatogramSelection) {
 
+		String label = "";
 		if(chromatogramSelection != null) {
+			HeaderField headerField = PreferenceSupplier.getChromatogramEditorLabel();
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-			return chromatogram.getName() + " " + getChromatogramType(chromatogramSelection);
-		} else {
-			return "";
+			String description = getHeaderField(chromatogram, headerField);
+			StringBuilder builder = new StringBuilder();
+			if(description != null && !description.isBlank()) {
+				builder.append(description);
+			} else {
+				builder.append(chromatogram.getName());
+			}
+			builder.append(" ");
+			builder.append(getChromatogramType(chromatogramSelection));
+			label = builder.toString();
 		}
+		//
+		return label;
 	}
 
 	public static String getChromatogramType(IChromatogramSelection<?, ?> chromatogramSelection) {
@@ -331,31 +342,7 @@ public class ChromatogramDataSupport {
 		 * Get the information to display.
 		 */
 		String type = ChromatogramDataSupport.getChromatogramType(chromatogram);
-		String description = null;
-		//
-		switch(headerField) {
-			case NAME:
-				description = chromatogram.getName();
-				break;
-			case SAMPLE_NAME:
-				description = chromatogram.getSampleName();
-				break;
-			case DATA_NAME:
-				description = chromatogram.getDataName();
-				break;
-			case SHORT_INFO:
-				description = chromatogram.getShortInfo();
-				break;
-			case SAMPLE_GROUP:
-				description = chromatogram.getSampleGroup();
-				break;
-			case MISC_INFO:
-				description = chromatogram.getMiscInfo();
-				break;
-			default:
-				// Do nothing, see check default.
-				break;
-		}
+		String description = getHeaderField(chromatogram, headerField);
 		/*
 		 * Check default
 		 */
@@ -380,6 +367,47 @@ public class ChromatogramDataSupport {
 		} else {
 			return description;
 		}
+	}
+
+	/**
+	 * Might return null.
+	 * 
+	 * @param chromatogram
+	 * @param headerField
+	 * @return {@link String}
+	 */
+	private static String getHeaderField(IChromatogram<?> chromatogram, HeaderField headerField) {
+
+		String field = null;
+		//
+		switch(headerField) {
+			case NAME:
+				field = chromatogram.getName();
+				break;
+			case SAMPLE_NAME:
+				field = chromatogram.getSampleName();
+				break;
+			case DATA_NAME:
+				field = chromatogram.getDataName();
+				break;
+			case SHORT_INFO:
+				field = chromatogram.getShortInfo();
+				break;
+			case SAMPLE_GROUP:
+				field = chromatogram.getSampleGroup();
+				break;
+			case MISC_INFO:
+				field = chromatogram.getMiscInfo();
+				break;
+			case TAGS:
+				field = chromatogram.getTags();
+				break;
+			default:
+				// Do nothing, see check default.
+				break;
+		}
+		//
+		return field;
 	}
 
 	private static boolean scanIsInSelectedRange(IScan scan, int startRetentionTime, int stopRetentionTime) {

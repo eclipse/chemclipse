@@ -79,6 +79,9 @@ public class ChromatogramFilterHeaderTransfer extends AbstractChromatogramFilter
 			case SHORT_INFO:
 				data = chromatogram.getShortInfo();
 				break;
+			case TAGS:
+				data = chromatogram.getTags();
+				break;
 			default:
 				data = "";
 				break;
@@ -107,6 +110,9 @@ public class ChromatogramFilterHeaderTransfer extends AbstractChromatogramFilter
 				break;
 			case SHORT_INFO:
 				chromatogram.setShortInfo(data);
+				break;
+			case TAGS:
+				chromatogram.setTags(data);
 				break;
 			default:
 				break;

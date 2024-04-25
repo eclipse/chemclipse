@@ -609,6 +609,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final boolean DEF_CHROMATOGRAM_RESTRICT_ZOOM_X = false;
 	public static final String P_CHROMATOGRAM_RESTRICT_ZOOM_Y = "chromatogramRestrictZoomY";
 	public static final boolean DEF_CHROMATOGRAM_RESTRICT_ZOOM_Y = true;
+	public static final String P_CHROMATOGRAM_EDITOR_LABEL = "chromatogramEditorLabel";
+	public static final String DEF_CHROMATOGRAM_EDITOR_LABEL = HeaderField.NAME.name();
 	public static final String P_CHROMATOGRAM_REFERENCE_LABEL = "chromatogramReferenceLabel";
 	public static final String DEF_CHROMATOGRAM_REFERENCE_LABEL = HeaderField.DEFAULT.name();
 	public static final String P_CHROMATOGRAM_TRANSFER_NAME_TO_REFERENCES_HEADER_FIELD = "chromatogramTransferNameToReferencesHeaderField";
@@ -1347,6 +1349,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_Y, DEF_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_Y);
 		putDefault(P_CHROMATOGRAM_RESTRICT_ZOOM_X, DEF_CHROMATOGRAM_RESTRICT_ZOOM_X);
 		putDefault(P_CHROMATOGRAM_RESTRICT_ZOOM_Y, DEF_CHROMATOGRAM_RESTRICT_ZOOM_Y);
+		putDefault(P_CHROMATOGRAM_EDITOR_LABEL, DEF_CHROMATOGRAM_EDITOR_LABEL);
 		putDefault(P_CHROMATOGRAM_REFERENCE_LABEL, DEF_CHROMATOGRAM_REFERENCE_LABEL);
 		putDefault(P_CHROMATOGRAM_TRANSFER_NAME_TO_REFERENCES_HEADER_FIELD, DEF_CHROMATOGRAM_TRANSFER_NAME_TO_REFERENCES_HEADER_FIELD);
 		putDefault(P_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES, DEF_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES);
@@ -1544,5 +1547,14 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static boolean isHideProcessMethodEntries() {
 
 		return INSTANCE().getBoolean(P_EDIT_HISTORY_HIDE_PROCESS_METHOD_ENTRIES, DEF_EDIT_HISTORY_HIDE_PROCESS_METHOD_ENTRIES);
+	}
+
+	public static HeaderField getChromatogramEditorLabel() {
+
+		try {
+			return HeaderField.valueOf(INSTANCE().get(P_CHROMATOGRAM_EDITOR_LABEL, DEF_CHROMATOGRAM_EDITOR_LABEL));
+		} catch(Exception e) {
+			return HeaderField.NAME;
+		}
 	}
 }

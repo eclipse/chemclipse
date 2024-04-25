@@ -270,6 +270,9 @@ public class ChromatogramFilterHighResMS extends AbstractChromatogramFilterMSD {
 			case SHORT_INFO:
 				chromatogram.setShortInfo(identifier);
 				break;
+			case TAGS:
+				chromatogram.setTags(identifier);
+				break;
 			default:
 				break;
 		}

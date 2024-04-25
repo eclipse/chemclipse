@@ -56,6 +56,7 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SET_CHROMATOGRAM_INTENSITY_RANGE, "Set chromatogram intensity range", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_EDITOR_LABEL, "Editor Label:", HeaderField.getOptions(), getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_REFERENCE_LABEL, "Reference Label:", HeaderField.getOptions(), getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_TRANSFER_NAME_TO_REFERENCES_HEADER_FIELD, "Transfer Name to References Header Field:", ILabel.getOptions(new HeaderField[]{HeaderField.DATA_NAME, HeaderField.SAMPLE_NAME, HeaderField.SAMPLE_GROUP, HeaderField.SHORT_INFO}), getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES, "Transfer Column Type to References", getFieldEditorParent()));

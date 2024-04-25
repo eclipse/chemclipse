@@ -47,6 +47,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	private static final String SAMPLE_WEIGHT_UNIT = "Sample Weight Unit";
 	private static final String DATA_NAME = "Data Name";
 	private static final String FINDINGS = "Findings";
+	private static final String TAGS = "Tags";
 	//
 	private Set<String> protectKeys = new HashSet<>();
 	private Map<String, String> headerMap = new HashMap<>();
@@ -70,6 +71,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 		headerMap.put(SAMPLE_WEIGHT_UNIT, "");
 		headerMap.put(DATA_NAME, "");
 		headerMap.put(FINDINGS, "");
+		headerMap.put(TAGS, "");
 		//
 		protectKeys.addAll(headerMap.keySet());
 	}
@@ -377,5 +379,17 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	public void setFindings(String findings) {
 
 		putHeaderData(FINDINGS, findings != null ? findings : "");
+	}
+
+	@Override
+	public String getTags() {
+
+		return getHeaderData(TAGS);
+	}
+
+	@Override
+	public void setTags(String tags) {
+
+		putHeaderData(TAGS, tags != null ? tags : "");
 	}
 }

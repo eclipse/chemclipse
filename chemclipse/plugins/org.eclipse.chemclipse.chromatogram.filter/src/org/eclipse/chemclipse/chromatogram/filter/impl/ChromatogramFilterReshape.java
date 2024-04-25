@@ -134,6 +134,9 @@ public class ChromatogramFilterReshape extends AbstractChromatogramFilter implem
 			case SHORT_INFO:
 				chromatogram.setShortInfo(identifier);
 				break;
+			case TAGS:
+				chromatogram.setTags(identifier);
+				break;
 			default:
 				break;
 		}
