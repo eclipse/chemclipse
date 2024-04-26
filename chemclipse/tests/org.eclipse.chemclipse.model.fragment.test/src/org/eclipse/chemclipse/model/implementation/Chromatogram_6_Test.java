@@ -40,7 +40,7 @@ public class Chromatogram_6_Test extends TestCase {
 
 	public void test_2() {
 
-		assertEquals(15, chromatogram.getHeaderDataMap().size());
+		assertEquals(16, chromatogram.getHeaderDataMap().size());
 	}
 
 	public void test_3() {
