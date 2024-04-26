@@ -41,14 +41,6 @@
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.equinox.p2.rcp.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.equinox.p2.user.ui"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.help"
          version="0.0.0"/>
 
@@ -342,22 +334,6 @@
 
    <plugin
          id="org.eclipse.equinox.p2.transport.ecf"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.equinox.p2.ui"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.equinox.p2.ui.sdk"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.equinox.p2.ui.sdk.scheduler"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.equinox.p2.updatechecker"
          version="0.0.0"/>
 
    <plugin
