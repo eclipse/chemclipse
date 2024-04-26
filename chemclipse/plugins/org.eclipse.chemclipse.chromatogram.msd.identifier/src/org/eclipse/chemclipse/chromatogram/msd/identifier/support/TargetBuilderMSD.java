@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,7 +37,7 @@ public class TargetBuilderMSD {
 
 	private static final Logger logger = Logger.getLogger(TargetBuilderMSD.class);
 	//
-	private static final String UNKNOWN = "???";
+	private static final String UNKNOWN = "???"; // $NON-NLS-N$
 
 	public IIdentificationTarget getPeakTarget(IScanMSD reference, IComparisonResult comparisonResult, String identifier) {
 

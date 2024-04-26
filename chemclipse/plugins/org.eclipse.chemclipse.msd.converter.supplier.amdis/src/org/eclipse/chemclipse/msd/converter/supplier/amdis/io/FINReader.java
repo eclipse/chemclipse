@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,11 +28,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class FINReader extends AbstractMassSpectraReader implements IMassSpectraReader {
 
-	private static final String MARKER_START = "|CA";
-	private static final String MARKER_NAME = "NA#";
-	private static final String MARKER_SPECTRUM = "LIBRARY SPECTRUM";
-	private static final String NAME = "NAME:";
-	private static final String UNKNOWN = "Unknown";
+	private static final String MARKER_START = "|CA"; // $NON-NLS-N$
+	private static final String MARKER_NAME = "NA#"; // $NON-NLS-N$
+	private static final String MARKER_SPECTRUM = "LIBRARY SPECTRUM"; // $NON-NLS-N$
+	private static final String NAME = "NAME:"; // $NON-NLS-N$
+	private static final String UNKNOWN = "Unknown"; // $NON-NLS-N$
 
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {

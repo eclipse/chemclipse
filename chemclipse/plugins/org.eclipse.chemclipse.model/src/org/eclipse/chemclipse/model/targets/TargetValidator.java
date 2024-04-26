@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.IStatus;
 
 public class TargetValidator implements IValidator<Object> {
 
-	public static final String IDENTIFIER = "Manual";
+	public static final String IDENTIFIER = "org.eclipse.chemclipse.model.targets.manual"; // $NON-NLS-N$
 	//
 	private static final String ERROR_TARGET = "Please enter target, e.g.: " + TargetListUtil.EXAMPLE;
 	private static final String ERROR_TOKEN = "The target must not contain: " + TargetListUtil.SEPARATOR_TOKEN;
