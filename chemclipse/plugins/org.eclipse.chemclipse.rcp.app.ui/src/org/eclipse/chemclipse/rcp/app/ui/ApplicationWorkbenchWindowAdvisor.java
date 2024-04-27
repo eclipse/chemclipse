@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,6 +26,15 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		super(configurer);
 		configurer.addEditorAreaTransfer(FileTransfer.getInstance());
 		configurer.configureEditorAreaDropListener(new EditorAreaDropAdapter(configurer.getWindow()));
+	}
+
+	@Override
+	public void preWindowOpen() {
+
+		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
+		configurer.setShowProgressIndicator(true);
+		configurer.setShowCoolBar(true);
+		configurer.setShowStatusLine(true);
 	}
 
 	@Override

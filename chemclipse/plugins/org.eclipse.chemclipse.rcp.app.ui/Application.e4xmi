@@ -108,9 +108,15 @@
         <children xsi:type="menu:HandledToolItem" xmi:id="_G9eogOToEeK3p9M57zVYqQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.updates" visible="false" label="Updates" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/updates.gif" enabled="false" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>
       </children>
     </trimBars>
-    <trimBars xmi:id="_jEP4kDL0EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.bottom" side="Bottom">
-      <children xsi:type="menu:ToolBar" xmi:id="_ksnkkDL0EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.bottom">
-        <children xsi:type="menu:ToolBarSeparator" xmi:id="_kOkSsINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.0"/>
+    <trimBars xmi:id="_CT96oF6VEeO_3ZCXGA_PQg" elementId="org.eclipse.ui.trim.status" side="Bottom">
+      <children xsi:type="menu:ToolControl" xmi:id="_6CqUoHB1EemL5_T8nUqtDA" elementId="org.eclipse.ui.StatusLine" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.StandardTrim">
+        <tags>stretch</tags>
+      </children>
+      <children xsi:type="menu:ToolControl" xmi:id="_oCZ-wHB2EemL5_T8nUqtDA" elementId="org.eclipse.ui.ProgressBar" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.StandardTrim">
+        <tags>Draggable</tags>
+      </children>
+      <children xsi:type="menu:ToolControl" xmi:id="_ndBZwHB2EemL5_T8nUqtDA" elementId="org.eclipse.ui.HeapStatus" toBeRendered="false" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.StandardTrim">
+        <tags>Draggable</tags>
       </children>
     </trimBars>
   </children>
