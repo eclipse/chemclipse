@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,17 +7,19 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
@@ -79,13 +81,13 @@ public class ProjectExplorerEditorSupport extends AbstractSupplierFileEditorSupp
 	}
 
 	@Override
-	public boolean openEditor(File file) {
+	public boolean openEditor(File file, Map<HeaderField, String> headerMap) {
 
-		return openEditor(file, false);
+		return openEditor(file, headerMap, false);
 	}
 
 	@Override
-	public boolean openEditor(final File file, boolean batch) {
+	public boolean openEditor(final File file, Map<HeaderField, String> headerMap, boolean batch) {
 
 		boolean success = false;
 		try {
@@ -136,8 +138,8 @@ public class ProjectExplorerEditorSupport extends AbstractSupplierFileEditorSupp
 	}
 
 	@Override
-	public boolean openEditor(File file, ISupplier supplier) {
+	public boolean openEditor(File file, Map<HeaderField, String> headerMap, ISupplier supplier) {
 
-		return openEditor(file);
+		return openEditor(file, headerMap);
 	}
 }

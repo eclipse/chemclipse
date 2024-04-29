@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,12 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.support;
 
 import java.io.File;
+import java.util.Map;
 
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.ux.extension.msd.ui.editors.DatabaseEditor;
@@ -33,19 +35,19 @@ public class DatabaseEditorSupport extends AbstractSupplierFileEditorSupport imp
 	}
 
 	@Override
-	public boolean openEditor(File file) {
+	public boolean openEditor(File file, Map<HeaderField, String> headerMap) {
 
-		return openEditor(file, false);
+		return openEditor(file, headerMap, false);
 	}
 
 	@Override
-	public boolean openEditor(final File file, boolean batch) {
+	public boolean openEditor(File file, Map<HeaderField, String> headerMap, boolean batch) {
 
 		/*
 		 * Check that the selected file or directory is a valid database.
 		 */
 		if(isSupplierFile(file)) {
-			openEditor(file, null, DatabaseEditor.ID, DatabaseEditor.CONTRIBUTION_URI, DatabaseEditor.ICON_URI, DatabaseEditor.TOOLTIP, batch);
+			openEditor(file, null, DatabaseEditor.ID, DatabaseEditor.CONTRIBUTION_URI, DatabaseEditor.ICON_URI, DatabaseEditor.TOOLTIP, headerMap, batch);
 			return true;
 		} else {
 			return false;
@@ -66,8 +68,8 @@ public class DatabaseEditorSupport extends AbstractSupplierFileEditorSupport imp
 	}
 
 	@Override
-	public boolean openEditor(File file, ISupplier supplier) {
+	public boolean openEditor(File file, Map<HeaderField, String> headerMap, ISupplier supplier) {
 
-		return openEditor(file);
+		return false;
 	}
 }

@@ -16,6 +16,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
@@ -24,6 +25,7 @@ import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
@@ -145,11 +147,11 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	}
 
 	@Override
-	public boolean openEditor(final File file, boolean batch) {
+	public boolean openEditor(File file, Map<HeaderField, String> headerMap, boolean batch) {
 
 		if(isSupplierFile(file)) {
 			refreshEditorReferences();
-			openEditor(file, null, elementId, contributionURI, iconURI, tooltip, batch);
+			openEditor(file, null, elementId, contributionURI, iconURI, tooltip, headerMap, batch);
 			return true;
 		} else {
 			return false;
@@ -157,7 +159,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	}
 
 	@Override
-	public boolean openEditor(File file, ISupplier supplier) {
+	public boolean openEditor(File file, Map<HeaderField, String> headerMap, ISupplier supplier) {
 
 		IEclipseContext eclipseContext = contextSupplier.get();
 		IEclipseContext parameterContext = EclipseContextFactory.create();
@@ -180,7 +182,8 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 		} finally {
 			parameterContext.dispose();
 		}
-		return openEditor(file, false);
+		//
+		return openEditor(file, headerMap, false);
 	}
 
 	@Override

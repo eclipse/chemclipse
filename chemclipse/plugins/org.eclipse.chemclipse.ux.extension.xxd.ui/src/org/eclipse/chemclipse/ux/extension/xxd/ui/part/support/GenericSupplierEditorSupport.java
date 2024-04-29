@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,8 +14,11 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 import java.util.function.Supplier;
 
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
@@ -65,13 +68,13 @@ public class GenericSupplierEditorSupport implements ISupplierFileEditorSupport 
 	}
 
 	@Override
-	public boolean openEditor(File file, boolean batch) {
+	public boolean openEditor(File file, Map<HeaderField, String> headerMap, boolean batch) {
 
 		return false;
 	}
 
 	@Override
-	public boolean openEditor(File file, ISupplier supplier) {
+	public boolean openEditor(File file, Map<HeaderField, String> headerMap, ISupplier supplier) {
 
 		IEclipseContext eclipseContext = contextSupplier.get();
 		IEclipseContext parameterContext = EclipseContextFactory.create();
@@ -95,5 +98,17 @@ public class GenericSupplierEditorSupport implements ISupplierFileEditorSupport 
 			parameterContext.dispose();
 		}
 		return false;
+	}
+
+	@Override
+	public boolean openEditor(File file, boolean batch) {
+
+		return openEditor(file, Collections.emptyMap(), batch);
+	}
+
+	@Override
+	public boolean openEditor(File file, ISupplier supplier) {
+
+		return openEditor(file, Collections.emptyMap(), supplier);
 	}
 }

@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
@@ -30,6 +31,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
@@ -350,6 +352,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private synchronized IChromatogramSelection<?, ?> loadChromatogram() {
 
 		IChromatogramSelection<?, ?> chromatogramSelection = null;
@@ -362,6 +365,39 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 				File file = new File((String)map.get(EditorSupport.MAP_FILE));
 				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
 				chromatogramSelection = loadChromatogramSelection(file, batch);
+				if(chromatogramSelection != null) {
+					IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+					if(map.get(EditorSupport.MAP_HEADER_MAP) instanceof Map headerMap) {
+						Set<Map.Entry<?, ?>> headerEntries = headerMap.entrySet();
+						for(Map.Entry<?, ?> headerEntry : headerEntries) {
+							if(headerEntry.getKey() instanceof HeaderField headerField) {
+								String value = headerEntry.getValue().toString();
+								switch(headerField) {
+									case DATA_NAME:
+										chromatogram.setDataName(value);
+										break;
+									case SAMPLE_NAME:
+										chromatogram.setSampleName(value);
+										break;
+									case SAMPLE_GROUP:
+										chromatogram.setSampleGroup(value);
+										break;
+									case MISC_INFO:
+										chromatogram.setMiscInfo(value);
+										break;
+									case SHORT_INFO:
+										chromatogram.setShortInfo(value);
+										break;
+									case TAGS:
+										chromatogram.setTags(value);
+										break;
+									default:
+										break;
+								}
+							}
+						}
+					}
+				}
 			} else {
 				/*
 				 * Already available.

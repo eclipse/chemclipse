@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurement;
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
@@ -44,25 +46,44 @@ import org.eclipse.swt.widgets.Shell;
 
 public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 
-	default boolean openEditor(final File file) {
+	boolean openEditor(File file, boolean batch);
 
-		return openEditor(file, false);
-	}
-
-	boolean openEditor(final File file, boolean batch);
+	boolean openEditor(File file, Map<HeaderField, String> headerMap, boolean batch);
 
 	boolean openEditor(File file, ISupplier supplier);
+
+	boolean openEditor(File file, Map<HeaderField, String> headerMap, ISupplier supplier);
 
 	default void openOverview(final File file) {
 
 	}
 
+	default boolean openEditor(File file) {
+
+		return openEditor(file, Collections.emptyMap());
+	}
+
+	default boolean openEditor(File file, Map<HeaderField, String> headerMap) {
+
+		return openEditor(file, headerMap, false);
+	}
+
 	default void openEditor(File file, Object object, String elementId, String contributionURI, String iconURI, String tooltip) {
 
-		openEditor(file, object, elementId, contributionURI, iconURI, tooltip, false);
+		openEditor(file, object, elementId, contributionURI, iconURI, tooltip, Collections.emptyMap());
+	}
+
+	default void openEditor(File file, Object object, String elementId, String contributionURI, String iconURI, String tooltip, Map<HeaderField, String> headerMap) {
+
+		openEditor(file, object, elementId, contributionURI, iconURI, tooltip, headerMap, false);
 	}
 
 	default void openEditor(File file, Object object, String elementId, String contributionURI, String iconURI, String tooltip, boolean batch) {
+
+		openEditor(file, object, elementId, contributionURI, iconURI, tooltip, Collections.emptyMap(), batch);
+	}
+
+	default void openEditor(File file, Object object, String elementId, String contributionURI, String iconURI, String tooltip, Map<HeaderField, String> headerMap, boolean batch) {
 
 		EModelService modelService = Activator.getDefault().getModelService();
 		MApplication application = Activator.getDefault().getApplication();
@@ -162,6 +183,7 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 					Map<String, Object> map = new HashMap<>();
 					map.put(EditorSupport.MAP_FILE, file.getAbsolutePath());
 					map.put(EditorSupport.MAP_BATCH, batch);
+					map.put(EditorSupport.MAP_HEADER_MAP, headerMap);
 					part.setObject(map);
 					part.setLabel(file.getName());
 				}
