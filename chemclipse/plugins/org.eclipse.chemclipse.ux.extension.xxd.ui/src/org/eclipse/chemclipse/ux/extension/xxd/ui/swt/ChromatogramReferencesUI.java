@@ -513,6 +513,8 @@ public class ChromatogramReferencesUI extends Composite {
 						dataType = DataType.CSD;
 					} else if(chromatogram instanceof IChromatogramWSD) {
 						dataType = DataType.WSD;
+					} else if(chromatogram instanceof IChromatogramVSD) {
+						dataType = DataType.VSD;
 					}
 					//
 					if(dataType != null) {
