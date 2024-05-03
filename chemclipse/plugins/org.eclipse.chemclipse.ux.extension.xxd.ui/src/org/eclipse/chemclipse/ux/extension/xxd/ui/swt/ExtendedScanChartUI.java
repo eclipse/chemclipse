@@ -128,6 +128,11 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		this.updateListener = updateListener;
 	}
 
+	public void clear() {
+
+		update(null);
+	}
+
 	private String getLastTopic(List<String> topics) {
 
 		Collections.reverse(topics);
