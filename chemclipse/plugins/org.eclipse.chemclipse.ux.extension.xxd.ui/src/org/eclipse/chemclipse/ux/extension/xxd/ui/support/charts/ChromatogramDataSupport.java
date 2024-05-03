@@ -49,8 +49,17 @@ public class ChromatogramDataSupport {
 
 		String label = "";
 		if(chromatogramSelection != null) {
+			label = getChromatogramEditorLabel(chromatogramSelection.getChromatogram());
+		}
+		//
+		return label;
+	}
+
+	public static String getChromatogramEditorLabel(IChromatogram<?> chromatogram) {
+
+		String label = "";
+		if(chromatogram != null) {
 			HeaderField headerField = PreferenceSupplier.getChromatogramEditorLabel();
-			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			String description = getHeaderField(chromatogram, headerField);
 			StringBuilder builder = new StringBuilder();
 			if(description != null && !description.isBlank()) {
@@ -59,7 +68,7 @@ public class ChromatogramDataSupport {
 				builder.append(chromatogram.getName());
 			}
 			builder.append(" ");
-			builder.append(getChromatogramType(chromatogramSelection));
+			builder.append(getChromatogramType(chromatogram));
 			label = builder.toString();
 		}
 		//
@@ -86,6 +95,7 @@ public class ChromatogramDataSupport {
 		} else if(chromatogram instanceof IChromatogramVSD) {
 			return "[VSD]";
 		}
+		//
 		return "";
 	}
 
