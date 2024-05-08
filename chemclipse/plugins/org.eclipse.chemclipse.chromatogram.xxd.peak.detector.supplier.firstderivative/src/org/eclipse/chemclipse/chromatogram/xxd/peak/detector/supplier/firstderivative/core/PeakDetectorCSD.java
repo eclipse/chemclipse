@@ -39,6 +39,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
@@ -218,13 +219,13 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 				IChromatogramPeakCSD peak = null;
 				switch(detectorType) {
 					case BB:
-						peak = PeakBuilderCSD.createPeak(chromatogram, scanRange, false);
+						peak = PeakBuilderCSD.createPeak(chromatogram, scanRange, PeakType.BB);
 						break;
 					case CB:
-						// TODO
+						peak = PeakBuilderCSD.createPeak(chromatogram, scanRange, PeakType.CB);
 						break;
 					default:
-						peak = PeakBuilderCSD.createPeak(chromatogram, scanRange, true); // VV
+						peak = PeakBuilderCSD.createPeak(chromatogram, scanRange, PeakType.VV);
 						break;
 				}
 				/*
