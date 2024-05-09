@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - use specific file extension
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.classification.model;
 
@@ -26,6 +27,12 @@ import org.eclipse.core.runtime.IStatus;
 
 public class ClassificationDictionary extends ArrayList<ClassificationRule> {
 
+	public static final String DESCRIPTION = "Classification Dictionary";
+	public static final String FILE_EXTENSION = ".cld";
+	public static final String FILE_NAME = DESCRIPTION.replaceAll("\\s", "") + FILE_EXTENSION;
+	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
+	public static final String FILTER_NAME = DESCRIPTION + " (*" + FILE_EXTENSION + ")";
+	//
 	public static final String WHITE_SPACE = " ";
 	public static final String SEPARATOR_TOKEN = ";";
 	public static final String SEPARATOR_ENTRY = "|";

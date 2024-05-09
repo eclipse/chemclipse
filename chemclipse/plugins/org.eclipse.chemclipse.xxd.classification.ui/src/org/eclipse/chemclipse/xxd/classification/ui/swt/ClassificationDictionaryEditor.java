@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - use specific file extension
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.classification.ui.swt;
 
@@ -55,9 +56,6 @@ public class ClassificationDictionaryEditor extends Composite implements IChange
 	public static final String REMOVE_ALL_TOOLTIP = "Remove all classifications";
 	public static final String IMPORT = "Import";
 	public static final String EXPORT = "Export";
-	private static final String FILTER_EXTENSION = "*.txt";
-	private static final String FILTER_NAME = "Classification Dictionary (*.txt)";
-	private static final String FILE_NAME = "ClassificationDictionary.txt";
 	//
 	public static final String IMPORT_TITLE = "Import classifications";
 	public static final String EXPORT_TITLE = "Export classifications";
@@ -291,8 +289,8 @@ public class ClassificationDictionaryEditor extends Composite implements IChange
 
 				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText(IMPORT_TITLE);
-				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-				fileDialog.setFilterNames(new String[]{FILTER_NAME});
+				fileDialog.setFilterExtensions(new String[]{ClassificationDictionary.FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{ClassificationDictionary.FILTER_NAME});
 				fileDialog.setFilterPath(PreferenceSupplier.getListPathImport());
 				String path = fileDialog.open();
 				if(path != null) {
@@ -321,9 +319,9 @@ public class ClassificationDictionaryEditor extends Composite implements IChange
 				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
 				fileDialog.setText(EXPORT_TITLE);
-				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-				fileDialog.setFilterNames(new String[]{FILTER_NAME});
-				fileDialog.setFileName(FILE_NAME);
+				fileDialog.setFilterExtensions(new String[]{ClassificationDictionary.FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{ClassificationDictionary.FILTER_NAME});
+				fileDialog.setFileName(ClassificationDictionary.FILE_NAME);
 				fileDialog.setFilterPath(PreferenceSupplier.getListPathExport());
 				String path = fileDialog.open();
 				if(path != null) {
