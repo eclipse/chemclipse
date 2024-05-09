@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,8 +8,11 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - use object identity
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.classification.model;
+
+import java.util.Objects;
 
 public class ClassificationRule {
 
@@ -62,5 +65,30 @@ public class ClassificationRule {
 	public void setReference(Reference reference) {
 
 		this.reference = reference;
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(classification, reference, searchExpression);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if(this == obj)
+			return true;
+		if(obj == null)
+			return false;
+		if(getClass() != obj.getClass())
+			return false;
+		ClassificationRule other = (ClassificationRule)obj;
+		return Objects.equals(classification, other.classification) && reference == other.reference && Objects.equals(searchExpression, other.searchExpression);
+	}
+
+	@Override
+	public String toString() {
+
+		return "ClassificationRule [searchExpression=" + searchExpression + ", classification=" + classification + ", reference=" + reference + "]";
 	}
 }

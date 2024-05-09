@@ -19,7 +19,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.xxd.classification.validators.ClassificationRuleValidator;
@@ -62,7 +64,9 @@ public class ClassificationDictionary extends ArrayList<ClassificationRule> {
 			while((line = bufferedReader.readLine()) != null) {
 				ClassificationRule classificationRule = extract(line);
 				if(classificationRule != null) {
-					add(classificationRule);
+					if(!contains(classificationRule)) {
+						add(classificationRule);
+					}
 				}
 			}
 		} catch(FileNotFoundException e) {
@@ -76,15 +80,15 @@ public class ClassificationDictionary extends ArrayList<ClassificationRule> {
 
 		boolean success = false;
 		try (PrintWriter printWriter = new PrintWriter(file)) {
-			Iterator<ClassificationRule> iterator = iterator();
-			while(iterator.hasNext()) {
-				ClassificationRule rule = iterator.next();
+			List<ClassificationRule> classificationRules = new ArrayList<>(this);
+			Collections.sort(classificationRules, (r1, r2) -> r1.getSearchExpression().compareTo(r2.getSearchExpression()));
+			for(ClassificationRule classificationRule : classificationRules) {
 				StringBuilder builder = new StringBuilder();
-				builder.append(rule.getSearchExpression());
+				builder.append(classificationRule.getSearchExpression());
 				addSeparator(builder);
-				builder.append(rule.getClassification());
+				builder.append(classificationRule.getClassification());
 				addSeparator(builder);
-				builder.append(rule.getReference().name());
+				builder.append(classificationRule.getReference().name());
 				printWriter.println(builder.toString());
 			}
 			printWriter.flush();
@@ -102,12 +106,12 @@ public class ClassificationDictionary extends ArrayList<ClassificationRule> {
 		Iterator<ClassificationRule> iterator = iterator();
 		//
 		while(iterator.hasNext()) {
-			ClassificationRule rule = iterator.next();
-			builder.append(rule.getSearchExpression());
+			ClassificationRule classificationRule = iterator.next();
+			builder.append(classificationRule.getSearchExpression());
 			addSeparator(builder);
-			builder.append(rule.getClassification());
+			builder.append(classificationRule.getClassification());
 			addSeparator(builder);
-			builder.append(rule.getReference().name());
+			builder.append(classificationRule.getReference().name());
 			if(iterator.hasNext()) {
 				builder.append(SEPARATOR_TOKEN);
 			}
@@ -118,17 +122,17 @@ public class ClassificationDictionary extends ArrayList<ClassificationRule> {
 
 	private ClassificationRule extract(String text) {
 
-		ClassificationRule rule = null;
+		ClassificationRule classificationRule = null;
 		ClassificationRuleValidator validator = new ClassificationRuleValidator();
 		//
 		IStatus status = validator.validate(text);
 		if(status.isOK()) {
-			rule = validator.getSetting();
+			classificationRule = validator.getSetting();
 		} else {
 			logger.warn(status.getMessage());
 		}
 		//
-		return rule;
+		return classificationRule;
 	}
 
 	private void loadDictionary(String input) {
