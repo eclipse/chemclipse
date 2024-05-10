@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (c) 2021, 2022 Eclipse contributors
+# Copyright (c) 2021, 2024 Eclipse contributors
 #
 # This program and the accompanying materials are made available under the
 # terms of the Eclipse Public License 2.0 which is available at
@@ -8,8 +8,7 @@
 # SPDX-License-Identifier: EPL-2.0
 #
 # Contributors:
-#     Alexander Fedorov (ArSysOp) - initial API and implementation
-#     Matthias Mailänder - adapted for OpenChrom
+#     Matthias Mailänder - initial setup
 ###############################################################################
 
 name: Continuous Integration
@@ -22,19 +21,26 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
+
     - name: Checkout ChemClipse
       uses: actions/checkout@v3
-    - name: Set up JDK
-      uses: actions/setup-java@v3
+
+    - uses: sdkman/sdkman-action@main
+      name: Setup Temurin
+      id: temurin
       with:
-        distribution: 'temurin'
-        java-version: '17'
-        cache: 'maven'
-    - name: Set up Maven
-      uses: stCarolas/setup-maven@v4.5
+        candidate: java
+        version: 17.0.11-tem
+
+    - uses: sdkman/sdkman-action@main
+      name: Setup Maven
+      id: maven
       with:
-        maven-version: 3.9.2
+        candidate: maven
+        version: 3.9.6
+
     - name: Build with Maven
-      run: mvn -f chemclipse/releng/org.eclipse.chemclipse.aggregator/pom.xml -T 1C clean verify --batch-mode --no-transfer-progress
+      run: |
+        source $HOME/.sdkman/bin/sdkman-init.sh
+        mvn -f chemclipse/releng/org.eclipse.chemclipse.aggregator/pom.xml -T 1C clean verify --batch-mode --no-transfer-progress
