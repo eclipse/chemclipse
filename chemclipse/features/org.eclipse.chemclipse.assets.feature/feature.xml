@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.chemclipse.assets.features"
+      id="org.eclipse.chemclipse.assets.feature"
       label="Assets"
       version="0.9.0.qualifier"
       provider-name="ChemClipse"
       license-feature="org.eclipse.license"
       license-feature-version="1.0.0.qualifier">
 
-   <description url="http://www.chemclipse.net">
-      Assets Support
+   <description url="https://www.chemclipse.net">
+      Manual installation of plugins
    </description>
 
-   <copyright url="http://www.chemclipse.net">
-      Copyright (c) 2022 Lablicate GmbH.
+   <copyright url="https://www.chemclipse.net">
+      Copyright (c) 2022, 2024 Lablicate GmbH.
    </copyright>
 
    <license url="%licenseURL">
@@ -21,16 +21,10 @@
 
    <plugin
          id="org.eclipse.chemclipse.assets"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.chemclipse.assets.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
 </feature>

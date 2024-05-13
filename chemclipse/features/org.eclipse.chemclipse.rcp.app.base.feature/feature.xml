@@ -21,7 +21,7 @@
    </license>
 
    <includes
-         id="org.eclipse.chemclipse.assets.features"
+         id="org.eclipse.chemclipse.assets.feature"
          version="0.0.0"/>
 
    <plugin
