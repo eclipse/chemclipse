@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.quantitation.exceptions.NoPeakQuantifierAvailableException;
 import org.eclipse.chemclipse.chromatogram.xxd.quantitation.settings.IPeakQuantifierSettings;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
@@ -66,13 +67,14 @@ public class PeakQuantifierProcessTypeSupplier implements IProcessTypeSupplier {
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IPeakQuantifierSettings processSettings, IMessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			@SuppressWarnings("unchecked")
-			List<IPeak> peaks = (List<IPeak>)chromatogramSelection.getChromatogram().getPeaks();
+			IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
+			List<IPeak> peaks = new ArrayList<>(chromatogram.getPeaks(chromatogramSelection));
 			if(processSettings instanceof IPeakQuantifierSettings) {
 				messageConsumer.addMessages(PeakQuantifier.quantify(peaks, processSettings, getId(), monitor));
 			} else {
 				messageConsumer.addMessages(PeakQuantifier.quantify(peaks, getId(), monitor));
 			}
+			//
 			return chromatogramSelection;
 		}
 	}
