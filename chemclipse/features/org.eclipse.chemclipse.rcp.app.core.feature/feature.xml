@@ -8,12 +8,12 @@
       license-feature="org.eclipse.license"
       license-feature-version="1.0.0.qualifier">
 
-   <description url="http://www.chemclipse.net">
+   <description url="https://www.chemclipse.net">
       ChemClipse - open source chromatography/mass spectrometry
    </description>
 
-   <copyright url="http://www.chemclipse.net">
-      Copyright (c) 2015, 2023 Lablicate GmbH.
+   <copyright url="https://www.chemclipse.net">
+      Copyright (c) 2015, 2024 Lablicate GmbH.
    </copyright>
 
    <license url="%licenseURL">
@@ -66,6 +66,10 @@
 
    <includes
          id="org.eclipse.swtchart.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.license"
          version="0.0.0"/>
 
    <plugin
@@ -634,10 +638,6 @@
 
    <plugin
          id="ch.qos.logback.core"
-         version="0.0.0"/>
-
-   <plugin
-         id="slf4j.api"
          version="0.0.0"/>
 
    <plugin

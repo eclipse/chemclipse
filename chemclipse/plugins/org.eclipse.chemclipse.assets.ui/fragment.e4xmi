@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_vZ8VQDi8Ee21NqK38qIIXw">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_vZ8VQDi8Ee21NqK38qIIXw">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_2Ks3YDi8Ee21NqK38qIIXw" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Command" xmi:id="_IOWDADi9Ee21NqK38qIIXw" elementId="org.eclipse.chemclipse.assets.ui.command.installassets" commandName="Install Assets" description="Installs additional assets"/>
   </fragments>
@@ -7,8 +7,6 @@
     <elements xsi:type="commands:Handler" xmi:id="_iMcjwDi9Ee21NqK38qIIXw" elementId="org.eclipse.chemclipse.assets.ui.handler.installassets" contributionURI="bundleclass://org.eclipse.chemclipse.assets.ui/org.eclipse.chemclipse.assets.ui.handlers.InstallAssetsHandler" command="_IOWDADi9Ee21NqK38qIIXw"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_v1X3kDi9Ee21NqK38qIIXw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.plugins">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_SLaToDi-Ee21NqK38qIIXw" elementId="org.eclipse.chemclipse.assets.ui.handledmenuitem.installassets" label="%InstallAssets" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/import_wiz.png" tooltip="Installs additional assets" command="_IOWDADi9Ee21NqK38qIIXw">
-      <visibleWhen xsi:type="ui:ImperativeExpression" xmi:id="_SLaToTi-Ee21NqK38qIIXw" contributionURI="bundleclass://org.eclipse.chemclipse.assets.ui/org.eclipse.chemclipse.assets.ui.handlers.InstallAssetsHandler$VisibleWhen"/>
-    </elements>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_SLaToDi-Ee21NqK38qIIXw" elementId="org.eclipse.chemclipse.assets.ui.handledmenuitem.installassets" label="%InstallAssets" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/import_wiz.png" tooltip="Installs additional assets" command="_IOWDADi9Ee21NqK38qIIXw"/>
   </fragments>
 </fragment:ModelFragments>

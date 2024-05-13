@@ -17,14 +17,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import jakarta.inject.Named;
-
 import org.eclipse.chemclipse.assets.core.AssetItem;
 import org.eclipse.chemclipse.assets.ui.wizards.AssetInstallPage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.wizards.SinglePageWizard;
 import org.eclipse.e4.core.di.annotations.CanExecute;
-import org.eclipse.e4.core.di.annotations.Evaluate;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.di.extensions.Service;
@@ -34,6 +31,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
+
+import jakarta.inject.Named;
 
 public class InstallAssetsHandler {
 
@@ -84,14 +83,5 @@ public class InstallAssetsHandler {
 	public boolean canExecute(@Optional @Service(filterExpression = "(action=ConfigReader)") Runnable configReader, @Optional @Service(filterExpression = "(action=BundleReader)") Runnable bundleReader, @Optional IEventBroker eventBroker) {
 
 		return configReader != null && bundleReader != null && eventBroker != null;
-	}
-
-	public static final class VisibleWhen {
-
-		@Evaluate
-		public boolean isVisible() {
-
-			return !Boolean.getBoolean("chemclipse.assets.install.disabled");
-		}
 	}
 }

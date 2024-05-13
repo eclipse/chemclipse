@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.chemclipse.rcp.compilation.community.feature"
-      label="ChemClipse CE"
+      label="ChemClipse"
       version="0.9.0.qualifier"
       provider-name="ChemClipse"
       plugin="org.eclipse.chemclipse.feature.branding"
       license-feature="org.eclipse.license"
       license-feature-version="1.0.0.qualifier">
 
-   <description url="http://www.chemclipse.net">
-      This is the ChemClipse Community Edition.
+   <description url="https://www.chemclipse.net">
+      Analytical chemistry data analysis client.
    </description>
 
-   <copyright url="http://www.chemclipse.net">
+   <copyright url="https://www.chemclipse.net">
       Copyright (c) 2014, 2024 Lablicate GmbH.
    </copyright>
 
@@ -22,10 +22,6 @@
 
    <includes
          id="org.eclipse.chemclipse.rcp.app.compilation.core.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.license"
          version="0.0.0"/>
 
    <plugin
