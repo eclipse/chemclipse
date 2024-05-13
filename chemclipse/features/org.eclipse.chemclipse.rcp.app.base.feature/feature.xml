@@ -21,10 +21,6 @@
    </license>
 
    <includes
-         id="org.eclipse.chemclipse.rcp.app.core.feature"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.chemclipse.assets.features"
          version="0.0.0"/>
 
