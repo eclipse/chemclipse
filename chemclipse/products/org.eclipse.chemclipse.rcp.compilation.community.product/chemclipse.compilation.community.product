@@ -68,6 +68,7 @@ Contributors:
    <features>
       <feature id="org.eclipse.chemclipse.rcp.compilation.community.feature"/>
       <feature id="org.eclipse.chemclipse.rcp.app.core.feature" installMode="root"/>
+      <feature id="org.eclipse.chemclipse.assets.feature" installMode="root"/>
    </features>
 
    <configurations>

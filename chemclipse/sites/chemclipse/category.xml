@@ -6,6 +6,9 @@
    <feature url="features/org.eclipse.chemclipse.rcp.compilation.community.feature_0.9.0.qualifier.jar" id="org.eclipse.chemclipse.rcp.compilation.community.feature" version="0.9.0.qualifier">
       <category name="org.eclipse.chemclipse.chemclipse"/>
    </feature>
+   <feature url="features/org.eclipse.chemclipse.assets.feature_0.9.0.qualifier.jar" id="org.eclipse.chemclipse.assets.feature" version="0.9.0.qualifier">
+      <category name="org.eclipse.chemclipse.chemclipse"/>
+   </feature>
    <category-def name="org.eclipse.chemclipse.chemclipse" label="ChemClipse">
       <description>
          Update site for derivative products.
