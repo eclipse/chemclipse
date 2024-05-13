@@ -68,6 +68,10 @@
          id="org.eclipse.swtchart.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.license"
+         version="0.0.0"/>
+
    <plugin
          id="com.ibm.icu"
          version="0.0.0"/>
