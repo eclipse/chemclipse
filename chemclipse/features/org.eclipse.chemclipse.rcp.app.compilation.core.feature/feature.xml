@@ -312,4 +312,8 @@
          id="org.eclipse.chemclipse.xxd.converter.supplier.cml.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.vsd.converter.supplier.csv.feature"
+         version="0.0.0"/>
+
 </feature>
