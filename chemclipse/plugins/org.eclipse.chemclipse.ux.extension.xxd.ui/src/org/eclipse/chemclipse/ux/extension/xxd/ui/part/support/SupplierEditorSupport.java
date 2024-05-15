@@ -35,6 +35,7 @@ import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.tsd.converter.chromatogram.ChromatogramConverterTSD;
+import org.eclipse.chemclipse.ux.extension.msd.ui.editors.DatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
@@ -355,6 +356,15 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				tooltip = MassSpectrumEditor.TOOLTIP;
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_MASS_SPECTRUM_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_MASS_SPECTRUM_UPDATE_OVERVIEW;
+				break;
+			case MSD_DATABASE:
+				type = TYPE_DATABASE_MSD;
+				elementId = DatabaseEditor.ID;
+				contributionURI = DatabaseEditor.CONTRIBUTION_URI;
+				iconURI = DatabaseEditor.ICON_URI;
+				tooltip = DatabaseEditor.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE;
 				break;
 			default:
 				break;
