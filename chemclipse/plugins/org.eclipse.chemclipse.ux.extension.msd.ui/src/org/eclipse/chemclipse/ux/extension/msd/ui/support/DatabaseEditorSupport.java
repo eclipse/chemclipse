@@ -70,6 +70,6 @@ public class DatabaseEditorSupport extends AbstractSupplierFileEditorSupport imp
 	@Override
 	public boolean openEditor(File file, Map<HeaderField, String> headerMap, ISupplier supplier) {
 
-		return false;
+		return openEditor(file, headerMap, false);
 	}
 }
