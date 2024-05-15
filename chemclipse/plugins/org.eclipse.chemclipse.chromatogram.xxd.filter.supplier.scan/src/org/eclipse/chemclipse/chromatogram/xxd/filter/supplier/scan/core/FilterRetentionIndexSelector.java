@@ -78,7 +78,7 @@ public class FilterRetentionIndexSelector extends AbstractChromatogramFilter {
 			for(int i = startScan; i <= stopScan; i++) {
 				IScan scan = chromatogram.getScan(i);
 				if(!scan.getTargets().isEmpty()) {
-					selectColumnRetentionIndex(scan.getTargets(), searchColumn, caseSensitive, removeWhiteSpace);
+					selectColumnRetentionIndex(scan, searchColumn, caseSensitive, removeWhiteSpace);
 				}
 			}
 			/*
@@ -86,16 +86,19 @@ public class FilterRetentionIndexSelector extends AbstractChromatogramFilter {
 			 */
 			List<? extends IPeak> peaks = chromatogram.getPeaks(chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime());
 			for(IPeak peak : peaks) {
-				selectColumnRetentionIndex(peak.getTargets(), searchColumn, caseSensitive, removeWhiteSpace);
+				selectColumnRetentionIndex(peak.getPeakModel().getPeakMaximum(), searchColumn, caseSensitive, removeWhiteSpace);
 			}
 		}
 	}
 
-	private void selectColumnRetentionIndex(Set<IIdentificationTarget> identificationTargets, String searchColumn, boolean caseSensitive, boolean removeWhiteSpace) {
+	private void selectColumnRetentionIndex(IScan scan, String searchColumn, boolean caseSensitive, boolean removeWhiteSpace) {
 
+		float retentionIndexTarget = scan.getRetentionIndex();
+		Set<IIdentificationTarget> identificationTargets = scan.getTargets();
+		//
 		for(IIdentificationTarget identificationTarget : identificationTargets) {
 			ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
-			float retentionIndex = ColumnIndexSupport.getRetentionIndex(libraryInformation.getColumnIndexMarkers(), searchColumn, caseSensitive, removeWhiteSpace);
+			float retentionIndex = ColumnIndexSupport.getRetentionIndex(retentionIndexTarget, libraryInformation.getColumnIndexMarkers(), searchColumn, caseSensitive, removeWhiteSpace);
 			libraryInformation.setRetentionIndex(retentionIndex);
 		}
 	}
