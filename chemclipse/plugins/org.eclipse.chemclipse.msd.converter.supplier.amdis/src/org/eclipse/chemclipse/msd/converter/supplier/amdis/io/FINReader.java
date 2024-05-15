@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class FINReader extends AbstractMassSpectraReader implements IMassSpectraReader {
 
 	private static final String MARKER_START = "|CA";
-	private static final String MARKER_NAME = "NA#";
+	private static final String MARKER_NAME = "NA";
 	private static final String MARKER_SPECTRUM = "LIBRARY SPECTRUM";
 	private static final String NAME = "NAME:";
 	private static final String UNKNOWN = "Unknown";
@@ -41,6 +41,7 @@ public class FINReader extends AbstractMassSpectraReader implements IMassSpectra
 		massSpectra.setConverterId("");
 		massSpectra.setName(file.getName());
 		parse(massSpectra, file);
+		//
 		return massSpectra;
 	}
 
@@ -80,11 +81,9 @@ public class FINReader extends AbstractMassSpectraReader implements IMassSpectra
 						String[] values = line.split("\\|");
 						if(values.length == 4) {
 							String item = values[3].trim();
-							String[] items = item.split(" ");
 							if(item.startsWith(MARKER_NAME)) {
-								component = (items.length >= 3) ? items[2].trim() : UNKNOWN;
-							} else {
-								component = (items.length >= 4) ? items[3].trim() : UNKNOWN;
+								String name = item.substring(MARKER_START.length() - 1).trim();
+								component = name.isBlank() ? UNKNOWN : name;
 							}
 						}
 					} else {
