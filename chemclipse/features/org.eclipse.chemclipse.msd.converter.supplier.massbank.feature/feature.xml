@@ -3,7 +3,8 @@
       id="org.eclipse.chemclipse.msd.converter.supplier.massbank.feature"
       label="MSD MassBank"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding"
+      provider-name="ChemClipse"
+      plugin="org.eclipse.chemclipse.feature.branding"
       license-feature="org.eclipse.license"
       license-feature-version="1.0.0.qualifier">
 
@@ -26,16 +27,6 @@
 
    <plugin
          id="org.eclipse.chemclipse.msd.converter.supplier.massbank"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.chemclipse.msd.converter.supplier.massbank.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
 </feature>
