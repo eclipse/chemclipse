@@ -16,12 +16,6 @@ Export-Package: org.eclipse.chemclipse.processing;version="1.0.0",
  org.eclipse.chemclipse.processing.procedures;version="1.0.0",
  org.eclipse.chemclipse.processing.supplier;version="1.0.0",
  org.eclipse.chemclipse.processing.system
-Import-Package: org.eclipse.chemclipse.support.settings,
- org.eclipse.chemclipse.support.settings.parser,
- org.eclipse.chemclipse.support.settings.serialization,
- org.eclipse.core.runtime;version="3.5.0",
- org.osgi.service.component.annotations;version="[1.0.0,2.0.0)",
- org.osgi.service.prefs;version="1.1.1"
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.14.0",
  org.eclipse.chemclipse.logging;bundle-version="0.9.0",
