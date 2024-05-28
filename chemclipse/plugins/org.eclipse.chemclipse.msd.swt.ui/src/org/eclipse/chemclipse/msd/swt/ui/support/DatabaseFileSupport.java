@@ -37,7 +37,6 @@ import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.msd.swt.ui.Activator;
 import org.eclipse.chemclipse.msd.swt.ui.internal.support.DatabaseExportRunnable;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
@@ -79,7 +78,7 @@ public class DatabaseFileSupport {
 			return;
 		}
 		//
-		FileDialog dialog = ExtendedFileDialog.create(shell, SWT.SAVE);
+		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
 		dialog.setFileName(fileName);
 		dialog.setText("Save Mass Spectrum As");
@@ -194,7 +193,7 @@ public class DatabaseFileSupport {
 		/*
 		 * Create the dialog.
 		 */
-		FileDialog dialog = ExtendedFileDialog.create(shell, SWT.SAVE);
+		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
 		dialog.setFileName(fileName);
 		dialog.setText("Save Mass Spectra As...");

@@ -34,7 +34,6 @@ import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.support.history.ProcessSupplierEntry;
 import org.eclipse.chemclipse.support.history.ProcessSupplierSupport;
 import org.eclipse.chemclipse.support.settings.UserManagement;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
@@ -134,7 +133,7 @@ public class ExtendedEditHistoryUI extends Composite implements IExtendedPartUI 
 				if(processSupplierEntries.isEmpty()) {
 					MessageDialog.openInformation(e.display.getActiveShell(), ExtensionMessages.processMethod, "The edit history does not contain any method process specific information.");
 				} else {
-					FileDialog fileDialog = ExtendedFileDialog.create(e.display.getActiveShell(), SWT.SAVE);
+					FileDialog fileDialog = new FileDialog(e.display.getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
 					fileDialog.setText(ExtensionMessages.processMethod);
 					fileDialog.setFilterExtensions(new String[]{MethodConverter.FILTER_EXTENSION});

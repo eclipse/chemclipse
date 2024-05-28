@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
@@ -176,7 +175,7 @@ public class ChartPCR extends LineChart {
 					if(plate == null) {
 						return;
 					}
-					FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
+					FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 					fileDialog.setText(ExtensionMessages.pcrExport);
 					fileDialog.setFileName(plate.getName() + "." + supplier.getFileExtension()); //$NON-NLS-1$
 					fileDialog.setFilterExtensions(new String[]{"*" + supplier.getFileExtension()}); //$NON-NLS-1$

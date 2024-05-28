@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -374,7 +373,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(samples != null) {
-					FileDialog fileDialog = ExtendedFileDialog.create(e.display.getActiveShell(), SWT.READ_ONLY);
+					FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
 					fileDialog.setText("Import");
 					fileDialog.setFilterExtensions(new String[]{SampleTemplateIO.FILTER_EXTENSION});
 					fileDialog.setFilterNames(new String[]{SampleTemplateIO.FILTER_NAME});
@@ -409,7 +408,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(samples != null) {
-					FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+					FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
 					fileDialog.setText("Export");
 					fileDialog.setFilterExtensions(new String[]{SampleTemplateIO.FILTER_EXTENSION});

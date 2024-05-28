@@ -40,7 +40,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.UserManagement;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
@@ -479,7 +478,7 @@ public class MethodSupportUI extends Composite implements IExtendedPartUI {
 
 	private File createNewMethod(Shell shell, boolean openEditor) {
 
-		FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
+		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 		fileDialog.setOverwrite(true);
 		fileDialog.setText(ExtensionMessages.processMethod);
 		fileDialog.setFileName(MethodConverter.FILE_NAME);

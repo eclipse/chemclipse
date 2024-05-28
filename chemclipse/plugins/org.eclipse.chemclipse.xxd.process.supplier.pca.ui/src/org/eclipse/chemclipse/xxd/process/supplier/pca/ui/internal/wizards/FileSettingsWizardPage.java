@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PcaExtractionFileBinary;
@@ -39,6 +38,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
@@ -197,7 +197,7 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
+				FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText("Import");
 				fileDialog.setFilterExtensions(new String[]{PcaExtractionFileText.FILTER_EXTENSION + ";" + PcaExtractionFileBinary.FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{PcaExtractionFileText.FILTER_NAME + ";" + PcaExtractionFileBinary.FILTER_NAME});
@@ -228,7 +228,7 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+				FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
 				fileDialog.setText(PcaExtractionFileText.DESCRIPTION);
 				fileDialog.setFilterExtensions(new String[]{PcaExtractionFileText.FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{PcaExtractionFileText.FILTER_NAME});

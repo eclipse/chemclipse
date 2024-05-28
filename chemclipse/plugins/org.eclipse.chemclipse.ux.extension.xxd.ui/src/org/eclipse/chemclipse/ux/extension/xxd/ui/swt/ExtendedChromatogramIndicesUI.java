@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.RetentionIndexUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
@@ -145,7 +144,7 @@ public class ExtendedChromatogramIndicesUI extends Composite implements IExtende
 			public void widgetSelected(SelectionEvent e) {
 
 				if(chromatogramSelection != null) {
-					FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+					FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
 					fileDialog.setText("Save Calibation Data");
 					fileDialog.setFilterExtensions(new String[]{CalibrationFile.FILTER_EXTENSION});

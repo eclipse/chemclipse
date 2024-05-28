@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.support.ui.preferences.editors;
 
 import java.util.Arrays;
 
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -58,7 +57,7 @@ public class FileListEditor extends ListEditor {
 	protected String getNewInputObject() {
 
 		List list = getList();
-		FileDialog dialog = ExtendedFileDialog.create(getShell(), SWT.OPEN);
+		FileDialog dialog = new FileDialog(getShell(), SWT.OPEN);
 		dialog.setText(SupportMessages.selectFile);
 		if(filterExtensions != null && filterNames != null) {
 			dialog.setFilterExtensions(filterExtensions);

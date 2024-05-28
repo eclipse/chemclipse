@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.PCRExportRunnable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -47,7 +46,7 @@ public class PCRFileSupport {
 			return null;
 		}
 		//
-		FileDialog dialog = ExtendedFileDialog.create(shell, SWT.SAVE);
+		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialog.
 		 */

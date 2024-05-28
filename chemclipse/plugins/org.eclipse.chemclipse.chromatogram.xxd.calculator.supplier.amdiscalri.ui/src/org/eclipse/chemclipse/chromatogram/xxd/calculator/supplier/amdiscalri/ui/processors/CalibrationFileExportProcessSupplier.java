@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -94,7 +93,7 @@ public class CalibrationFileExportProcessSupplier implements IProcessTypeSupplie
 										disposeShell = true;
 									}
 									//
-									FileDialog fileDialog = ExtendedFileDialog.create(display.getActiveShell(), SWT.SAVE);
+									FileDialog fileDialog = new FileDialog(display.getActiveShell(), SWT.SAVE);
 									fileDialog.setOverwrite(true);
 									fileDialog.setText(CalibrationFile.DESCRIPTION);
 									fileDialog.setFilterExtensions(new String[]{CalibrationFile.FILTER_EXTENSION});

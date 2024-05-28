@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,7 +35,6 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -104,7 +103,7 @@ public class ChartNMR extends LineChart {
 					@Override
 					public void execute(Shell shell, ScrollableChart scrollableChart) {
 
-						FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
+						FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 						fileDialog.setText("NMR Export");
 						fileDialog.setFilterExtensions(new String[]{"*" + supplier.getFileExtension()});
 						fileDialog.setFilterNames(new String[]{supplier.getFilterName()});

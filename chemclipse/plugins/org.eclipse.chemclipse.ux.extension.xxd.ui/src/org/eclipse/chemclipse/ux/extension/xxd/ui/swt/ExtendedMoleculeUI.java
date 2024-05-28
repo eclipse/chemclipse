@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
@@ -467,7 +466,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(imageMolecule != null) {
-					FileDialog fileDialog = ExtendedFileDialog.create(e.display.getActiveShell(), SWT.SAVE);
+					FileDialog fileDialog = new FileDialog(e.display.getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
 					fileDialog.setText("Save Molecule");
 					fileDialog.setFilterExtensions(new String[]{"*.png"});

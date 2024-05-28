@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.va
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
@@ -46,6 +45,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
@@ -349,7 +349,7 @@ public class RetentionIndexAssignerEditor extends Composite implements IChangeLi
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
+				FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText(IMPORT_TITLE);
 				fileDialog.setFilterExtensions(new String[]{RetentionIndexAssigner.FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{RetentionIndexAssigner.FILTER_NAME});
@@ -378,7 +378,7 @@ public class RetentionIndexAssignerEditor extends Composite implements IChangeLi
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+				FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
 				fileDialog.setText(EXPORT_TITLE);
 				fileDialog.setFilterExtensions(new String[]{RetentionIndexAssigner.FILTER_EXTENSION});

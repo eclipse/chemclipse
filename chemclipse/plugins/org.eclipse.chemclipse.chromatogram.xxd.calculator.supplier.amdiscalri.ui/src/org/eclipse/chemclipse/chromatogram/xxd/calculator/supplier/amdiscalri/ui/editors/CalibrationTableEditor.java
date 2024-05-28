@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,7 +18,6 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalibrationFile;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.CalibrationFileListUI;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.FieldEditor;
@@ -251,7 +250,7 @@ public class CalibrationTableEditor extends FieldEditor {
 
 		CalibrationFile calibrationFile = null;
 		//
-		FileDialog fileDialog = ExtendedFileDialog.create(DisplayUtils.getShell(buttonAdd), SWT.OPEN);
+		FileDialog fileDialog = new FileDialog(DisplayUtils.getShell(buttonAdd), SWT.OPEN);
 		fileDialog.setText("Select New Calibration File");
 		fileDialog.setFilterPath(PreferenceSupplier.getFilterPathIndexFiles());
 		//

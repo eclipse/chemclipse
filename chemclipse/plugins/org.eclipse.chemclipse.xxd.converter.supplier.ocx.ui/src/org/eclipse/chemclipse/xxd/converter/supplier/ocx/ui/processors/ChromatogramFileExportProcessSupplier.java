@@ -32,7 +32,6 @@ import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.wsd.converter.io.IChromatogramWSDWriter;
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.io.ChromatogramWriterWSD;
@@ -102,7 +101,7 @@ public class ChromatogramFileExportProcessSupplier implements IProcessTypeSuppli
 										disposeShell = true;
 									}
 									//
-									FileDialog fileDialog = ExtendedFileDialog.create(display.getActiveShell(), SWT.SAVE);
+									FileDialog fileDialog = new FileDialog(display.getActiveShell(), SWT.SAVE);
 									fileDialog.setOverwrite(true);
 									fileDialog.setText(IFormatVersion.DESCRIPTION_CHROMATOGRAM);
 									fileDialog.setFilterExtensions(new String[]{IFormatVersion.FILTER_EXTENSION_CHROMATOGRAM});

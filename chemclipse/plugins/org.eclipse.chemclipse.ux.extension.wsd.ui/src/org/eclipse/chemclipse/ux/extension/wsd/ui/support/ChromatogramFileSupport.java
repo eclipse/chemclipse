@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.internal.support.ChromatogramExportRunnable;
@@ -59,7 +58,7 @@ public class ChromatogramFileSupport {
 			return false;
 		}
 		//
-		FileDialog dialog = ExtendedFileDialog.create(DisplayUtils.getShell(), SWT.SAVE);
+		FileDialog dialog = new FileDialog(DisplayUtils.getShell(), SWT.SAVE);
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
 		dialog.setFileName(chromatogram.getName());
 		dialog.setText("Save Chromatogram As");
