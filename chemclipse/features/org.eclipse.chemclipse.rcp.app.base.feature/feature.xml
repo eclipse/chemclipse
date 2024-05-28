@@ -197,10 +197,6 @@
          version="0.0.0"/>
 
    <plugin
-         id="org.eclipse.chemclipse.csd.swt.ui"
-         version="0.0.0"/>
-
-   <plugin
          id="org.eclipse.chemclipse.chromatogram.xxd.quantitation"
          version="0.0.0"/>
 
@@ -218,10 +214,6 @@
 
    <plugin
          id="org.eclipse.chemclipse.wsd.model"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.chemclipse.wsd.swt.ui"
          version="0.0.0"/>
 
    <plugin
@@ -330,14 +322,6 @@
 
    <plugin
          id="org.eclipse.chemclipse.nmr.converter.ui"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.chemclipse.nmr.processor"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.chemclipse.nmr.processor.ui"
          version="0.0.0"/>
 
    <plugin

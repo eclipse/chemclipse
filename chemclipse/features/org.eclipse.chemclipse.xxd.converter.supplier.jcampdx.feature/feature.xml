@@ -24,8 +24,4 @@
          id="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx"
          version="0.0.0"/>
 
-   <plugin
-         id="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.ui"
-         version="0.0.0"/>
-
 </feature>
