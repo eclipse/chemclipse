@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,8 @@ public enum TargetsDeleteOption implements ILabel {
 
 	ALL_TARGETS("All Targets"), //
 	UNVERIFIED_TARGETS("Unverified Targets"), //
-	EMPTY_SMILES("Targets without SMILES");
+	EMPTY_SMILES("Targets without SMILES"), //
+	PROPERTY_IDENTIFIER("By Property (Identifier)");
 
 	private String label = "";
 

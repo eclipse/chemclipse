@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,12 @@ public class TargetsFilter {
 	public static void filter(ITargetSupplier targetSupplier, DeleteTargetsFilterSettings settings) {
 
 		if(targetSupplier != null && settings != null) {
+			/*
+			 * Targets and option if used.
+			 */
 			Set<IIdentificationTarget> targets = targetSupplier.getTargets();
+			String property = settings.getProperty().trim();
+			//
 			switch(settings.getTargetDeleteOption()) {
 				case ALL_TARGETS:
 					targets.clear();
@@ -33,6 +38,9 @@ public class TargetsFilter {
 					break;
 				case EMPTY_SMILES:
 					removeEmptySmilesTargets(targets);
+					break;
+				case PROPERTY_IDENTIFIER:
+					removeTargetsByIdentifier(targets, property);
 					break;
 			}
 		}
@@ -46,6 +54,7 @@ public class TargetsFilter {
 				delete.add(target);
 			}
 		}
+		//
 		removeTargets(targets, delete);
 	}
 
@@ -58,7 +67,22 @@ public class TargetsFilter {
 				delete.add(target);
 			}
 		}
+		//
 		removeTargets(targets, delete);
+	}
+
+	private static void removeTargetsByIdentifier(Set<IIdentificationTarget> targets, String identifier) {
+
+		if(!identifier.isEmpty()) {
+			Set<IIdentificationTarget> delete = new HashSet<>();
+			for(IIdentificationTarget target : targets) {
+				if(target.getIdentifier().equals(identifier)) {
+					delete.add(target);
+				}
+			}
+			//
+			removeTargets(targets, delete);
+		}
 	}
 
 	private static void removeTargets(Set<IIdentificationTarget> targets, Set<IIdentificationTarget> delete) {
