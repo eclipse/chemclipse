@@ -112,7 +112,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.nebula.widgets.richtext;bundle-version="1.5.1",
  org.eclipse.chemclipse.vsd.converter.ui;bundle-version="0.9.0",
  org.eclipse.chemclipse.wsd.converter.ui
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Import-Package: jakarta.annotation;version="2.1.1",
  jakarta.inject;version="2.0.1",

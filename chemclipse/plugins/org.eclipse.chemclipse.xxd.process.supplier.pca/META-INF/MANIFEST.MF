@@ -24,7 +24,7 @@ Require-Bundle: org.eclipse.core.runtime,
  wrapped.org.apache.poi.poi;bundle-version="4.1.1",
  wrapped.org.apache.poi.poi-ooxml;bundle-version="4.1.1",
  org.apache.commons.commons-csv;bundle-version="1.8.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.xxd.process.supplier.pca.core,
  org.eclipse.chemclipse.xxd.process.supplier.pca.core.filters,

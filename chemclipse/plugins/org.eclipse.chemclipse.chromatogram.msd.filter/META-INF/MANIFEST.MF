@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.9",
  org.eclipse.chemclipse.support;bundle-version="0.8.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram,
  org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum,
  org.eclipse.chemclipse.chromatogram.msd.filter.core.peak,

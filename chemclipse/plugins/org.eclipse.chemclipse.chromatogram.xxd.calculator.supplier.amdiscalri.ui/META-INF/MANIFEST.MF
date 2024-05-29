@@ -32,7 +32,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.core.contexts;bundle-version="1.5.1",
  com.fasterxml.jackson.core.jackson-databind;bundle-version="2.9.2", 
  org.eclipse.chemclipse.xxd.process.ui;bundle-version="0.8.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: OSGI-INF/l10n/bundle
 Import-Package: jakarta.annotation;version="2.1.1",
