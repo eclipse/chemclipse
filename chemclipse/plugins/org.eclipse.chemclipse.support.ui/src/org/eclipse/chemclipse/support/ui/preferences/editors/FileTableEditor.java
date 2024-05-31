@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.l10n.SupportMessages;
 import org.eclipse.chemclipse.support.util.FileSettingUtil;
 import org.eclipse.swt.SWT;
@@ -59,7 +58,7 @@ public class FileTableEditor extends TableViewerFieldEditor<File> {
 	protected List<File> getNewInputObject() {
 
 		List<File> files = new ArrayList<>();
-		FileDialog dialog = ExtendedFileDialog.create(getShell(), SWT.OPEN | SWT.MULTI);
+		FileDialog dialog = new FileDialog(getShell(), SWT.OPEN | SWT.MULTI);
 		dialog.setText(SupportMessages.selectFile);
 		if(filterExtensions != null) {
 			dialog.setFilterExtensions(filterExtensions);

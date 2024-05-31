@@ -38,7 +38,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
@@ -348,7 +347,7 @@ public class ProcessMethodToolbar extends ToolBar {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 
-						FileDialog fileDialog = ExtendedFileDialog.create(toolBar.getShell(), SWT.OPEN);
+						FileDialog fileDialog = new FileDialog(toolBar.getShell(), SWT.OPEN);
 						fileDialog.setText("Select Process Method File");
 						fileDialog.setFileName(MethodConverter.FILE_NAME);
 						fileDialog.setFilterExtensions(new String[]{MethodConverter.FILTER_EXTENSION});

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificati
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.BatchJobImportRunnable;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -185,7 +184,7 @@ public class BatchProcessEditor extends MultiPageEditorPart {
 		/*
 		 * File dialog.
 		 */
-		FileDialog dialog = ExtendedFileDialog.create(shell, SWT.SAVE);
+		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		dialog.setText("Save the identification batch job");
 		dialog.setFileName("PeakIdentificationBatchJob.opi");
 		String fileName = dialog.open();

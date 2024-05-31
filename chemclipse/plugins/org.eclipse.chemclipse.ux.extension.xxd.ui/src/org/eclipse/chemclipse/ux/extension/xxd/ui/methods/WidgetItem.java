@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.support.settings.validation.InputValidator;
 import org.eclipse.chemclipse.support.text.ILabel;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.AdapterLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
@@ -406,7 +405,7 @@ public class WidgetItem {
 					style = SWT.OPEN;
 				}
 				if(filechooser) {
-					FileDialog dialog = ExtendedFileDialog.create(button.getShell(), style);
+					FileDialog dialog = new FileDialog(button.getShell(), style);
 					if(fileSettingProperty != null) {
 						String[] extensions = fileSettingProperty.validExtensions();
 						String[] extensionNames = fileSettingProperty.extensionNames();

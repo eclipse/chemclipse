@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -17,7 +17,6 @@ import java.io.PrintWriter;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.Activator;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -50,6 +49,7 @@ public class PreferencePageSampleQuant extends FieldEditorPreferencePage impleme
 	 * GUI blocks needed to manipulate various types of preferences. Each field
 	 * editor knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
@@ -68,7 +68,7 @@ public class PreferencePageSampleQuant extends FieldEditorPreferencePage impleme
 				 * Save a demo targets.txt
 				 */
 				Shell shell = Display.getCurrent().getActiveShell();
-				FileDialog fileDialog = ExtendedFileDialog.create(shell, SWT.SAVE);
+				FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 				fileDialog.setText("Demo targets.txt");
 				fileDialog.setFilterExtensions(new String[]{"*.txt"});
 				fileDialog.setFilterNames(new String[]{"Targets *.txt"});
@@ -109,6 +109,7 @@ public class PreferencePageSampleQuant extends FieldEditorPreferencePage impleme
 	 * @see
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

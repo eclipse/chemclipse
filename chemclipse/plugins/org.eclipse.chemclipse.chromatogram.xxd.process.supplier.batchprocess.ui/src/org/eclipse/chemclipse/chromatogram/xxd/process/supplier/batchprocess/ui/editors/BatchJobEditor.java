@@ -36,7 +36,6 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.ProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.BatchJobUI;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -90,7 +89,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 
 		Display display = Display.getCurrent();
 		Shell shell = display.getActiveShell();
-		FileDialog dialog = ExtendedFileDialog.create(shell, SWT.SAVE);
+		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		dialog.setText("Save the batch job");
 		dialog.setFileName("ChromatogramBatchJob.obj");
 		String fileName = dialog.open();

@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.vsd.converter.core.ScanConverterVSD;
 import org.eclipse.chemclipse.vsd.model.core.ISpectrumVSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -67,7 +66,7 @@ public class InfraredSpectrumFileSupport {
 		/*
 		 * Create the dialogue.
 		 */
-		FileDialog dialog = ExtendedFileDialog.create(shell, SWT.SAVE);
+		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		dialog.setFileName(fileName);
 		dialog.setText("Save Spectrum As...");
 		dialog.setOverwrite(true);

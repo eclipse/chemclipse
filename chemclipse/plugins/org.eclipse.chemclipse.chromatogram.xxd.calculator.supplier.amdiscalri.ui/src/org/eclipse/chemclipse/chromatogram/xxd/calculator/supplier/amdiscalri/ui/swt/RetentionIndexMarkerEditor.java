@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
@@ -340,7 +339,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
+				FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText(IMPORT_TITLE_FILE);
 				fileDialog.setFilterExtensions(new String[]{CalibrationFile.FILTER_EXTENSION + ";" + CalibrationFile.FILTER_EXTENSION.toUpperCase()});
 				fileDialog.setFilterNames(new String[]{CalibrationFile.FILTER_NAME});
@@ -440,7 +439,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
+				FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText(IMPORT_TITLE);
 				fileDialog.setFilterExtensions(new String[]{RetentionIndexMarker.FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{RetentionIndexMarker.FILTER_NAME});
@@ -469,7 +468,7 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				FileDialog fileDialog = ExtendedFileDialog.create(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+				FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
 				fileDialog.setText(EXPORT_TITLE);
 				fileDialog.setFilterExtensions(new String[]{RetentionIndexMarker.FILTER_EXTENSION});

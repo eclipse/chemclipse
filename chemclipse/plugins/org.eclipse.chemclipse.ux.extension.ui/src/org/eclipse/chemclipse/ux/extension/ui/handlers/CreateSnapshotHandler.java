@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.ux.extension.ui.handlers;
 
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.swt.SWT;
@@ -48,7 +47,7 @@ public class CreateSnapshotHandler {
 				/*
 				 * Save the image to a file.
 				 */
-				FileDialog fileDialog = ExtendedFileDialog.create(DisplayUtils.getShell(), SWT.SAVE);
+				FileDialog fileDialog = new FileDialog(DisplayUtils.getShell(), SWT.SAVE);
 				fileDialog.setText("Save Clipboard To File");
 				fileDialog.setFileName("Clipboard.png");
 				fileDialog.setFilterExtensions(new String[]{"*.png"});

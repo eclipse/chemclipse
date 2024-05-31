@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.ChromatogramExportRunnable;
@@ -59,7 +58,7 @@ public class ChromatogramFileSupport {
 			return false;
 		}
 		//
-		FileDialog dialog = ExtendedFileDialog.create(DisplayUtils.getShell(), SWT.SAVE);
+		FileDialog dialog = new FileDialog(DisplayUtils.getShell(), SWT.SAVE);
 		/*
 		 * Create the dialog.
 		 */

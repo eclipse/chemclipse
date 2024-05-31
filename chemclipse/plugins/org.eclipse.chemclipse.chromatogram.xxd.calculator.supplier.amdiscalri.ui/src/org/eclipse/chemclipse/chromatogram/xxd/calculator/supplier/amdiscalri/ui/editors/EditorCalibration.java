@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.files.ExtendedFileDialog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
@@ -63,7 +62,7 @@ public class EditorCalibration extends MultiPageEditorPart {
 	@Override
 	public void doSaveAs() {
 
-		FileDialog fileDialog = ExtendedFileDialog.create(Display.getCurrent().getActiveShell(), SWT.SAVE);
+		FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
 		fileDialog.setText("Save the *.cal file.");
 		fileDialog.setFilterExtensions(new String[]{"*.cal"});
 		fileDialog.setFilterNames(new String[]{"AMDIS Calibration *.cal"});
