@@ -29,6 +29,7 @@ import org.eclipse.swtchart.extensions.marker.IBaseChartPaintListener;
 public class RetentionIndexMarker extends AbstractBaseChartPaintListener implements IBaseChartPaintListener {
 
 	private boolean showIdentifier = false;
+	private boolean showLabelTop = true;
 	private List<PositionMarker> positionMarkers = new ArrayList<>();
 
 	public RetentionIndexMarker(BaseChart baseChart) {
@@ -44,6 +45,16 @@ public class RetentionIndexMarker extends AbstractBaseChartPaintListener impleme
 	public void setShowIdentifier(boolean showIdentifier) {
 
 		this.showIdentifier = showIdentifier;
+	}
+
+	public boolean isShowLabelTop() {
+
+		return showLabelTop;
+	}
+
+	public void setShowLabelTop(boolean showLabelTop) {
+
+		this.showLabelTop = showLabelTop;
 	}
 
 	public void clear() {
@@ -63,7 +74,7 @@ public class RetentionIndexMarker extends AbstractBaseChartPaintListener impleme
 		if(isDraw()) {
 			for(PositionMarker positionMarker : positionMarkers) {
 				if(usePositionMarker(positionMarker)) {
-					drawMarker(e, positionMarker, true);
+					drawMarker(e, positionMarker, showLabelTop);
 				}
 			}
 		}
