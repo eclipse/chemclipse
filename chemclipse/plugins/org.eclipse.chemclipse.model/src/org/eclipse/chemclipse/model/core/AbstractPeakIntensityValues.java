@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -21,19 +21,11 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.exceptions.PeakException;
-import org.eclipse.chemclipse.model.support.ITwoPoints;
-import org.eclipse.chemclipse.model.support.TwoPoints;
-import org.eclipse.chemclipse.numeric.core.IPoint;
-import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
-import org.eclipse.chemclipse.numeric.exceptions.PointIsNullException;
 
-public abstract class AbstractPeakIntensityValues implements IPeakIntensityValues {
+public abstract class AbstractPeakIntensityValues extends AbstractPeakIntensityValuesStrict implements IPeakIntensityValues {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = 1597422380319731942L;
+	private static final long serialVersionUID = 8193494258780090715L;
 	//
 	private NavigableMap<Integer, Float> intensityValues;
 	private float maxIntensity;
@@ -149,28 +141,6 @@ public abstract class AbstractPeakIntensityValues implements IPeakIntensityValue
 	}
 
 	@Override
-	public LinearEquation calculateIncreasingInflectionPointEquation(float totalSignal) throws PeakException {
-
-		Map.Entry<Integer, Float> entry = getHighestIntensityValue();
-		if(entry != null) {
-			NavigableMap<Integer, Float> increasingValues = intensityValues.headMap(entry.getKey(), true);
-			return calculateInflectionPointEquation(increasingValues, totalSignal);
-		}
-		return null;
-	}
-
-	@Override
-	public LinearEquation calculateDecreasingInflectionPointEquation(float totalSignal) throws PeakException {
-
-		Map.Entry<Integer, Float> entry = getHighestIntensityValue();
-		if(entry != null) {
-			NavigableMap<Integer, Float> decreasingValues = intensityValues.tailMap(entry.getKey(), true);
-			return calculateInflectionPointEquation(decreasingValues, totalSignal);
-		}
-		return null;
-	}
-
-	@Override
 	public List<Integer> getRetentionTimes() {
 
 		return new ArrayList<>(intensityValues.keySet());
@@ -194,6 +164,18 @@ public abstract class AbstractPeakIntensityValues implements IPeakIntensityValue
 		}
 	}
 
+	@Override
+	public LinearEquation calculateIncreasingInflectionPointEquation(float totalSignal) throws PeakException {
+
+		return calculateIncreasingInflectionPointEquation(intensityValues, totalSignal, maxIntensity);
+	}
+
+	@Override
+	public LinearEquation calculateDecreasingInflectionPointEquation(float totalSignal) throws PeakException {
+
+		return calculateDecreasingInflectionPointEquation(intensityValues, totalSignal, maxIntensity);
+	}
+
 	private float calculateNormalizedIntensityValue(float maxIntensityValue, float actualIntensity) {
 
 		float result = 0.0f;
@@ -212,54 +194,4 @@ public abstract class AbstractPeakIntensityValues implements IPeakIntensityValue
 		}
 		return result;
 	}
-
-	// ------------------------------private methods
-	/**
-	 * Calculates a inflection point equation.
-	 * 
-	 * @throws PeakException
-	 */
-	private LinearEquation calculateInflectionPointEquation(NavigableMap<Integer, Float> values, float totalSignal) throws PeakException {
-
-		NavigableMap<Double, ITwoPoints> slopes = new TreeMap<Double, ITwoPoints>();
-		IPoint p1 = null;
-		Map.Entry<Integer, Float> e1 = null;
-		IPoint p2 = null;
-		Map.Entry<Integer, Float> e2 = null;
-		ITwoPoints points = null;
-		List<Integer> keys = new ArrayList<Integer>(values.keySet());
-		for(int i = 0; i < keys.size() - 1; i++) {
-			/*
-			 * Use the existing entry and point to avoid unnecessary object
-			 * creation.
-			 */
-			if(e1 == null) {
-				e1 = values.floorEntry(keys.get(i));
-				p1 = new Point(e1.getKey(), (e1.getValue() / maxIntensity) * totalSignal);
-			} else {
-				e1 = e2;
-				p1 = p2;
-			}
-			e2 = values.floorEntry(keys.get(i + 1));
-			p2 = new Point(e2.getKey(), (e2.getValue() / maxIntensity) * totalSignal);
-			try {
-				points = new TwoPoints(p1, p2);
-				slopes.put(Math.abs(points.getSlope()), points);
-			} catch(PointIsNullException e) {
-			}
-		}
-		/*
-		 * Why can i use the highest entry here? Are there not increasing and
-		 * decreasing slopes? Yes, but the slope has been added to the list with
-		 * its absolute value Math.abs(points.getSlope()), for that this
-		 * statement is correct.
-		 */
-		Entry<Double, ITwoPoints> entry = slopes.lastEntry();
-		if(entry != null) {
-			return entry.getValue().getLinearEquation();
-		} else {
-			throw new PeakException("The inflection point equation could not be calculated. [values=" + values + ", totalSignal: " + totalSignal);
-		}
-	}
-	// ------------------------------private methods
 }

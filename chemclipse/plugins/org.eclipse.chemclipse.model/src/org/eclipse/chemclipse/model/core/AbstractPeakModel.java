@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,13 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.Scan;
@@ -21,14 +22,18 @@ import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
-import org.eclipse.chemclipse.numeric.exceptions.SolverException;
 
-public abstract class AbstractPeakModel implements IPeakModel {
+public abstract class AbstractPeakModel extends AbstractPeakModelStrict implements IPeakModel {
 
 	/**
 	 * Renew the UUID on change.
 	 */
 	private static final long serialVersionUID = -5447031278614316999L;
+	/*
+	 * If strict model is used, the inflection points are calculated.
+	 * CAUTION - more tests needed - keep it true for now.
+	 */
+	private boolean strictModel = true;
 	/*
 	 * The peak maximum is a mass spectrum or a simple tic signal.
 	 */
@@ -36,15 +41,6 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	//
 	private LinearEquation backgroundEquation;
 	private IPeakIntensityValues peakIntensityValues;
-	/*
-	 * Points of inflection. We do not need to determine the linear equation of
-	 * the points of inflection, because the peak is not given by a mathematical
-	 * function. The peak consists of several points so that the linear equation
-	 * of the point of inflection is described by the segment of the peak with
-	 * the highest or lowest slope.
-	 */
-	private LinearEquation increasingInflectionPointEquation;
-	private LinearEquation decreasingInflectionPointEquation;
 	/*
 	 * If the background is non equal than there is an angle to which the
 	 * background raises or falls. This needs to be considered when the width of
@@ -81,6 +77,7 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	 */
 	protected AbstractPeakModel(IScan peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
 
+		super(peakMaximum, peakIntensityValues);
 		/*
 		 * Checks all conditions for the peak model to be valid.
 		 */
@@ -115,18 +112,6 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		} else {
 			return 0.0f;
 		}
-	}
-
-	@Override
-	public float getPeakAbundanceByInflectionPoints() {
-
-		float abundance = 0.0f;
-		try {
-			IPoint intersection = Equations.calculateIntersection(increasingInflectionPointEquation, decreasingInflectionPointEquation);
-			abundance = (float)intersection.getY();
-		} catch(SolverException e) {
-		}
-		return abundance;
 	}
 
 	@Override
@@ -166,18 +151,6 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	}
 
 	@Override
-	public int getRetentionTimeAtPeakMaximumByInflectionPoints() {
-
-		int x = 0;
-		try {
-			IPoint intersection = Equations.calculateIntersection(increasingInflectionPointEquation, decreasingInflectionPointEquation);
-			x = (int)intersection.getX();
-		} catch(SolverException e) {
-		}
-		return x;
-	}
-
-	@Override
 	public void replaceRetentionTimes(List<Integer> retentionTimes) throws IllegalArgumentException, PeakException {
 
 		peakIntensityValues.replaceRetentionTimes(retentionTimes);
@@ -194,73 +167,6 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	public int getWidthBaselineTotal() {
 
 		return getStopRetentionTime() - getStartRetentionTime() + 1;
-	}
-
-	@Override
-	public int getWidthBaselineByInflectionPoints() {
-
-		/*
-		 * Why do we use base equation, where the baseline is f(x) = 0x + 0?
-		 * Because peak and background can be retrieved seperately.
-		 */
-		LinearEquation base = new LinearEquation(0, 0);
-		int width = 0;
-		try {
-			IPoint p1 = Equations.calculateIntersection(increasingInflectionPointEquation, base);
-			IPoint p2 = Equations.calculateIntersection(decreasingInflectionPointEquation, base);
-			width = (int)(p2.getX() - p1.getX() + 1);
-			/*
-			 * The value was such too high, so don't use the Equations method.
-			 * width = (int)Equations.calculateWidth(p1, p2);
-			 */
-		} catch(SolverException e) {
-			/*
-			 * If an error occurs, the width will be 0.
-			 */
-		}
-		return width;
-	}
-
-	@Override
-	public int getWidthByInflectionPoints() {
-
-		return getWidthByInflectionPoints(0.5f);
-	}
-
-	@Override
-	public int getWidthByInflectionPoints(float height) {
-
-		int width = 0;
-		LinearEquation percentageHeightBaseline = getPercentageHeightBaselineEquation(height);
-		if(percentageHeightBaseline == null) {
-			return 0;
-		}
-		try {
-			IPoint p1 = Equations.calculateIntersection(increasingInflectionPointEquation, percentageHeightBaseline);
-			IPoint p2 = Equations.calculateIntersection(decreasingInflectionPointEquation, percentageHeightBaseline);
-			width = (int)(p2.getX() - p1.getX() + 1);
-			/*
-			 * The value was such too high, so don't use the Equations method.
-			 * width = (int)Equations.calculateWidth(p1, p2);
-			 */
-		} catch(SolverException e) {
-			/*
-			 * If an error occurs, the width will be 0.
-			 */
-		}
-		return width;
-	}
-
-	@Override
-	public float getIncreasingInflectionPointAbundance(int retentionTime) {
-
-		return (float)increasingInflectionPointEquation.calculateY(retentionTime);
-	}
-
-	@Override
-	public float getDecreasingInflectionPointAbundance(int retentionTime) {
-
-		return (float)decreasingInflectionPointEquation.calculateY(retentionTime);
 	}
 
 	@Override
@@ -284,7 +190,6 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	@Override
 	public float getTailing() {
 
-		float tailing = 0.0f;
 		/*
 		 * Baseline at 10% peak height.
 		 */
@@ -293,63 +198,19 @@ public abstract class AbstractPeakModel implements IPeakModel {
 			return 0;
 		}
 		/*
-		 * Is it correct to use the inflection point values (peak height,
-		 * intersection baseline left and right)?<br/> It is much easier to
-		 * implement than to search after the tabular model values, but can it
-		 * be used to determine the peak tailing?
+		 * Calculation
 		 */
-		try {
-			IPoint p1 = Equations.calculateIntersection(increasingInflectionPointEquation, percentageHeightBaseline);
-			IPoint p2 = Equations.calculateIntersection(decreasingInflectionPointEquation, percentageHeightBaseline);
-			int retentionTimeMax = getRetentionTimeAtPeakMaximumByInflectionPoints();
-			float leftWidth = retentionTimeMax - (float)p1.getX();
-			float rightWidth = (float)p2.getX() - retentionTimeMax;
-			tailing = rightWidth / leftWidth;
-		} catch(SolverException e) {
+		if(strictModel) {
+			return calucalteTailingByInflectionPoints(percentageHeightBaseline);
+		} else {
+			return calucalteTailingByIntensityValues();
 		}
-		return tailing;
 	}
 
 	@Override
 	public List<Integer> getRetentionTimes() {
 
 		return peakIntensityValues.getRetentionTimes();
-	}
-
-	// TODO JUnit
-	@Override
-	public LinearEquation getIncreasingInflectionPointEquation() {
-
-		return increasingInflectionPointEquation;
-	}
-
-	// TODO JUnit
-	@Override
-	public LinearEquation getDecreasingInflectionPointEquation() {
-
-		return decreasingInflectionPointEquation;
-	}
-
-	// TODO JUnit
-	@Override
-	public LinearEquation getPercentageHeightBaselineEquation(float height) {
-
-		if(height < 0 || height > 1.0f) {
-			return null;
-		}
-		/*
-		 * Use the calculated abundance of the peak and not the stored one in
-		 * peakMaximum.
-		 */
-		float abundance = getPeakAbundanceByInflectionPoints();
-		float percentageHeight = abundance * height;
-		/*
-		 * Why can we use a linear baseline without adopting it to the angle
-		 * given by the background?<br/> Because the peak and the background are
-		 * separated. So it is not necessary to shift the baseline for the given
-		 * percentage abundance.
-		 */
-		return new LinearEquation(0, percentageHeight);
 	}
 
 	@Override
@@ -380,6 +241,18 @@ public abstract class AbstractPeakModel implements IPeakModel {
 			intensity = entry.getValue();
 		}
 		return intensity;
+	}
+
+	@Override
+	public Object getTemporarilyInfo(String key) {
+
+		return temporarilyInfo.get(key);
+	}
+
+	@Override
+	public void setTemporarilyInfo(String key, Object value) {
+
+		temporarilyInfo.put(key, value);
 	}
 
 	private void checkModelConditions(IScan peakMaximum, IPeakIntensityValues peakIntensityValues) throws IllegalArgumentException, PeakException {
@@ -429,6 +302,7 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		int stopRetentionTime = peakIntensityValues.getStopRetentionTime();
 		IPoint p1 = new Point(startRetentionTime, startBackgroundAbundance);
 		IPoint p2 = new Point(stopRetentionTime, stopBackgroundAbundance);
+		//
 		return Equations.createLinearEquation(p1, p2);
 	}
 
@@ -463,69 +337,108 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		return Math.toDegrees(Math.atan(a / b));
 	}
 
-	@Override
-	public Object getTemporarilyInfo(String key) {
-
-		return temporarilyInfo.get(key);
-	}
-
-	@Override
-	public void setTemporarilyInfo(String key, Object value) {
-
-		temporarilyInfo.put(key, value);
-	}
-
 	private void calculatePeakModel() throws IllegalArgumentException, PeakException {
 
 		checkModelConditions(peakMaximum, peakIntensityValues);
 		backgroundEquation = calculateBackgroundEquation(startBackgroundAbundance, stopBackgroundAbundance);
 		gradientAngle = calculateGradientAngle();
 		/*
-		 * Calculate the equation for the points of inflection.<br/> The peak
-		 * maximum has been checked, so it can be used here.
+		 * Only if a strict model is used.
 		 */
-		increasingInflectionPointEquation = peakIntensityValues.calculateIncreasingInflectionPointEquation(peakMaximum.getTotalSignal());
-		decreasingInflectionPointEquation = peakIntensityValues.calculateDecreasingInflectionPointEquation(peakMaximum.getTotalSignal());
+		if(strictModel) {
+			calculateInflectionPointEquations();
+		}
 	}
 
-	@Override
-	public boolean equals(Object otherObject) {
+	private float calucalteTailingByIntensityValues() {
 
-		if(this == otherObject) {
-			return true;
+		float tailing = 0.0f;
+		List<Integer> retentionTimes = peakIntensityValues.getRetentionTimes();
+		if(retentionTimes.size() >= 3) {
+			/*
+			 * Values
+			 */
+			Map.Entry<Integer, Float> maximum = peakIntensityValues.getHighestIntensityValue();
+			float halfHeight = maximum.getValue() / 2;
+			boolean first = true;
+			/*
+			 * A peak consist of at least 3 points.
+			 * Hence, some additional checks are not required
+			 * to speed up performance.
+			 */
+			IPoint leftA = null;
+			IPoint leftB = null;
+			IPoint rightA = null;
+			IPoint rightB = null;
+			//
+			exitloop:
+			for(int i = 0; i < retentionTimes.size(); i++) {
+				int retentionTime = retentionTimes.get(i);
+				float intensity = peakIntensityValues.getIntensityValue(retentionTime).getValue();
+				if(first) {
+					if(intensity > halfHeight) {
+						int retentionTimePrevious = retentionTimes.get(i - 1);
+						float intensityPrevious = peakIntensityValues.getIntensityValue(retentionTimePrevious).getValue();
+						leftA = new Point(retentionTimePrevious, intensityPrevious);
+						leftB = new Point(retentionTime, intensity);
+						first = false;
+					}
+				} else {
+					if(intensity < halfHeight) {
+						int retentionTimePrevious = retentionTimes.get(i - 1);
+						float intensityPrevious = peakIntensityValues.getIntensityValue(retentionTimePrevious).getValue();
+						rightA = new Point(retentionTimePrevious, intensityPrevious);
+						rightB = new Point(retentionTime, intensity);
+						break exitloop;
+					}
+				}
+			}
+			/*
+			 * Calculate
+			 */
+			if(leftA != null && leftB != null && rightA != null && rightB != null) {
+				LinearEquation linearEquationPre = Equations.createLinearEquation(leftA, leftB);
+				LinearEquation linearEquationPost = Equations.createLinearEquation(rightA, rightB);
+				//
+				if(linearEquationPre != null && linearEquationPost != null) {
+					int retentionTimeStart = (int)Math.round(linearEquationPre.calculateX(halfHeight));
+					int retentionTimeCenter = maximum.getKey();
+					int retentionTimeStop = (int)Math.round(linearEquationPost.calculateX(halfHeight));
+					//
+					float rightWidth = retentionTimeCenter - retentionTimeStart;
+					float leftWidth = retentionTimeStop - retentionTimeCenter;
+					tailing = rightWidth / leftWidth;
+				}
+			}
 		}
-		if(otherObject == null) {
-			return false;
-		}
-		if(getClass() != otherObject.getClass()) {
-			return false;
-		}
-		AbstractPeakModel other = (AbstractPeakModel)otherObject;
-		return getPeakMaximum().equals(other.getPeakMaximum()) && gradientAngle == other.getGradientAngle() && increasingInflectionPointEquation.equals(other.getIncreasingInflectionPointEquation()) && decreasingInflectionPointEquation.equals(other.getDecreasingInflectionPointEquation());
+		//
+		return tailing;
 	}
 
-	// TODO JUnit
 	@Override
 	public int hashCode() {
 
-		return 7 * peakMaximum.hashCode() + 11 * Double.valueOf(gradientAngle).hashCode() + 13 * increasingInflectionPointEquation.hashCode() + 15 * decreasingInflectionPointEquation.hashCode();
+		return Objects.hash(gradientAngle, peakMaximum);
 	}
 
-	// TODO JUnit
+	@Override
+	public boolean equals(Object obj) {
+
+		if(this == obj)
+			return true;
+		if(obj == null)
+			return false;
+		if(getClass() != obj.getClass())
+			return false;
+		AbstractPeakModel other = (AbstractPeakModel)obj;
+		return Double.doubleToLongBits(gradientAngle) == Double.doubleToLongBits(other.gradientAngle) && //
+				peakMaximum.getRetentionTime() == other.peakMaximum.getRetentionTime() && //
+				peakMaximum.getTotalSignal() == other.peakMaximum.getTotalSignal();
+	}
+
 	@Override
 	public String toString() {
 
-		StringBuilder builder = new StringBuilder();
-		builder.append(getClass().getName());
-		builder.append("[");
-		builder.append("peakMaximum=" + peakMaximum);
-		builder.append(",");
-		builder.append("gradientAngle=" + gradientAngle);
-		builder.append(",");
-		builder.append("increasingInflectionPointEquation=" + increasingInflectionPointEquation);
-		builder.append(",");
-		builder.append("decreasingInflectionPointEquation=" + decreasingInflectionPointEquation);
-		builder.append("]");
-		return builder.toString();
+		return "AbstractPeakModel [peakMaximum=" + peakMaximum + ", backgroundEquation=" + backgroundEquation + ", peakIntensityValues=" + peakIntensityValues + ", gradientAngle=" + gradientAngle + ", startBackgroundAbundance=" + startBackgroundAbundance + ", stopBackgroundAbundance=" + stopBackgroundAbundance + ", temporarilyInfo=" + temporarilyInfo + "]";
 	}
 }

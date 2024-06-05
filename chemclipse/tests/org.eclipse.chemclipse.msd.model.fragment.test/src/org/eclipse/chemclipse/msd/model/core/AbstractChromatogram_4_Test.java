@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -46,6 +46,7 @@ public class AbstractChromatogram_4_Test extends TestCase {
 		IPeakModelMSD model1 = createPeakModel(1000, 500);
 		IPeakModelMSD model2 = createPeakModel(1000, 600);
 		IPeakModelMSD model3 = createPeakModel(1500, 600);
+		//
 		assertFalse("Peakmodels are equal", model1.equals(model2));
 		chromatogram.addPeak(createPeakForModel(chromatogram, model1));
 		assertEquals("Peak was not added", 1, chromatogram.getNumberOfPeaks());
@@ -109,12 +110,15 @@ public class AbstractChromatogram_4_Test extends TestCase {
 
 		final IPeakIntensityValues peakIntensities = new PeakIntensityValues(1000);
 		peakIntensities.addIntensityValue(retentionTime, 1000);
-		peakIntensities.addIntensityValue(retentionTime - RT_VARIANCE, height);
-		peakIntensities.addIntensityValue(retentionTime + RT_VARIANCE, height);
+		peakIntensities.addIntensityValue(retentionTime - RT_VARIANCE, 500);
+		peakIntensities.addIntensityValue(retentionTime + RT_VARIANCE, 700);
+		//
 		final IPeakMassSpectrum peakMassSpectrum = new PeakMassSpectrum();
 		peakMassSpectrum.addIon(new Ion(10, 100));
 		peakMassSpectrum.addIon(new Ion(12, 1000));
 		peakMassSpectrum.addIon(new Ion(13, 100));
+		peakMassSpectrum.adjustTotalSignal(height);
+		//
 		return new PeakModelMSD(peakMassSpectrum, peakIntensities, 0, 0);
 	}
 }

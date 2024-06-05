@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -17,7 +17,7 @@ import java.util.List;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 
-public interface IPeakModel extends Serializable {
+public interface IPeakModel extends IPeakModelStrict, Serializable {
 
 	int MINIMUM_SCANS = 3;
 
@@ -82,17 +82,6 @@ public interface IPeakModel extends Serializable {
 	float getPeakAbundance();
 
 	/**
-	 * Returns the abundance (height) of the peak determined by use of the
-	 * points of inflection.<br/>
-	 * The abundance or height is determined by the intersection between both
-	 * inflection equations.<br/>
-	 * To get the stored height you can also use getPeakAbundance().
-	 * 
-	 * @return float
-	 */
-	float getPeakAbundanceByInflectionPoints();
-
-	/**
 	 * Returns the width of the actual peak in milliseconds at its baseline.<br/>
 	 * If you would like to have the width measured with help of the points of
 	 * inflection, call getWidthBaseline().
@@ -100,40 +89,6 @@ public interface IPeakModel extends Serializable {
 	 * @return int
 	 */
 	int getWidthBaselineTotal();
-
-	/**
-	 * Returns the width of the peak by using the points of inflection.<br/>
-	 * The width is measured were the equations of the point of inflection
-	 * intersects with the baseline of the peak.<br/>
-	 * The width will be returned in milliseconds.<br/>
-	 * If you would like to have the total width at baseline call
-	 * getWidthBaselineTotal().
-	 * 
-	 * @return int
-	 */
-	int getWidthBaselineByInflectionPoints();
-
-	/**
-	 * Returns the width of the actual peak in milliseconds at a half of the
-	 * peak height.<br/>
-	 * 
-	 * @return int
-	 */
-	int getWidthByInflectionPoints();
-
-	/**
-	 * Returns the peak width at a given height.<br/>
-	 * The width is measured were the equations of the point of inflection
-	 * intersects with the percentage height of the peak.<br/>
-	 * As the height, the abundance (height) by inflection points is chosen. The
-	 * abundance can be achieved by getPeakAbundanceByInflectionPoints(). Use
-	 * this to get the width e.g. at a height of 50%, or at 85%.<br/>
-	 * The height must be a value between 0.0f (0%) and 1.0f (100%).<br/>
-	 * 
-	 * @param height
-	 * @return int
-	 */
-	int getWidthByInflectionPoints(float height);
 
 	/**
 	 * Returns the start retention time of the peak in milliseconds.
@@ -159,17 +114,6 @@ public interface IPeakModel extends Serializable {
 	int getRetentionTimeAtPeakMaximum();
 
 	/**
-	 * Returns the retention time at the peak maximum in milliseconds.<br/>
-	 * The retention time is calculated by the intersection of both inflection
-	 * point equations (increasing and decreasing equation).<br/>
-	 * To get the retention time at maximum of the tabular peak model, call
-	 * getRetentionTimeAtPeakMaximum().
-	 * 
-	 * @return int
-	 */
-	int getRetentionTimeAtPeakMaximumByInflectionPoints();
-
-	/**
 	 * Replaces the existing retentionTimes by the new list.
 	 * Retention times are given in milliseconds.
 	 * Number of scans and list size must be equal.
@@ -184,30 +128,6 @@ public interface IPeakModel extends Serializable {
 	 * @return
 	 */
 	int getNumberOfScans();
-
-	/**
-	 * Returns the increasing inflection point abundance (height) of the current
-	 * peak model at a given retention time.<br/>
-	 * The abundance is given exclusive the background abundance.<br/>
-	 * You can call also getIncreasingInflectionPointAbudance(int retentionTime)
-	 * to get the increasing abundance at the given retention time.
-	 * 
-	 * @param retentionTime
-	 * @return float
-	 */
-	float getIncreasingInflectionPointAbundance(int retentionTime);
-
-	/**
-	 * Returns the decreasing inflection point abundance (height) of the current
-	 * peak model at a given retention time.<br/>
-	 * The abundance is given exclusive the background abundance.<br/>
-	 * You can call also getDecreasingInflectionPointAbudance(int retentionTime)
-	 * to get the increasing abundance at the given retention time.
-	 * 
-	 * @param retentionTime
-	 * @return float
-	 */
-	float getDecreasingInflectionPointAbundance(int retentionTime);
 
 	/**
 	 * Returns the gradient angle of the peak.<br/>
@@ -246,22 +166,6 @@ public interface IPeakModel extends Serializable {
 	 * @return List<Integer>
 	 */
 	List<Integer> getRetentionTimes();
-
-	// TODO JUnit
-	/**
-	 * Returns the increasing inflection point equation.
-	 * 
-	 * @return {@link LinearEquation}
-	 */
-	LinearEquation getIncreasingInflectionPointEquation();
-
-	// TODO JUnit
-	/**
-	 * Returns the decreasing inflection point equation.
-	 * 
-	 * @return {@link LinearEquation}
-	 */
-	LinearEquation getDecreasingInflectionPointEquation();
 
 	// TODO JUnit
 	/**
