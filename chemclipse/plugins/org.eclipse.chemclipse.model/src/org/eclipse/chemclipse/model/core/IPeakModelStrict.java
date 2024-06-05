@@ -98,6 +98,7 @@ public interface IPeakModelStrict {
 	// TODO JUnit
 	/**
 	 * Returns the increasing inflection point equation.
+	 * May return null.
 	 * 
 	 * @return {@link LinearEquation}
 	 */
@@ -106,6 +107,7 @@ public interface IPeakModelStrict {
 	// TODO JUnit
 	/**
 	 * Returns the decreasing inflection point equation.
+	 * May return null.
 	 * 
 	 * @return {@link LinearEquation}
 	 */

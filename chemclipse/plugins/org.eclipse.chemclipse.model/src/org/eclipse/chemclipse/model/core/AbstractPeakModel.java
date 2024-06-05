@@ -38,7 +38,6 @@ public abstract class AbstractPeakModel extends AbstractPeakModelStrict implemen
 	 * The peak maximum is a mass spectrum or a simple tic signal.
 	 */
 	private IScan peakMaximum;
-	//
 	private LinearEquation backgroundEquation;
 	private IPeakIntensityValues peakIntensityValues;
 	/*

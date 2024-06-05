@@ -60,11 +60,14 @@ public abstract class AbstractPeakModelStrict implements IPeakModel {
 	public int getRetentionTimeAtPeakMaximumByInflectionPoints() {
 
 		int x = 0;
-		try {
-			IPoint intersection = Equations.calculateIntersection(increasingInflectionPointEquation, decreasingInflectionPointEquation);
-			x = (int)intersection.getX();
-		} catch(SolverException e) {
+		if(increasingInflectionPointEquation != null && decreasingInflectionPointEquation != null) {
+			try {
+				IPoint intersection = Equations.calculateIntersection(increasingInflectionPointEquation, decreasingInflectionPointEquation);
+				x = (int)intersection.getX();
+			} catch(SolverException e) {
+			}
 		}
+		//
 		return x;
 	}
 

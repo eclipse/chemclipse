@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -171,13 +171,14 @@ public class ExtendedPeakDetailsUI extends Composite implements IExtendedPartUI 
 		IPeakModel peakModel = peak.getPeakModel();
 		list.add("PeakType: " + peak.getPeakType());
 		// list.add("Purity: " + decimalFormat.format(peak.getPurity()));
-		LinearEquation equation;
-		equation = peakModel.getIncreasingInflectionPointEquation();
-		list.add(getEquationString("Increasing Inflection Point Equation: ", equation));
-		equation = peakModel.getDecreasingInflectionPointEquation();
-		list.add(getEquationString("Decreasing Inflection Point Equation: ", equation));
-		equation = peakModel.getPercentageHeightBaselineEquation(0.5f);
-		list.add(getEquationString("Percentage Baseline Equation 50%: ", equation));
+		LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
+		LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
+		if(increasing != null && decreasing != null) {
+			list.add(getEquationString("Increasing Inflection Point Equation: ", increasing));
+			list.add(getEquationString("Decreasing Inflection Point Equation: ", decreasing));
+			list.add(getEquationString("Percentage Baseline Equation 50%: ", peakModel.getPercentageHeightBaselineEquation(0.5f)));
+		}
+		//
 		list.add("Gradient Angle: " + decimalFormat.format(peakModel.getGradientAngle()));
 		list.add("-------------------------");
 		addRetentionTimes(peakModel);

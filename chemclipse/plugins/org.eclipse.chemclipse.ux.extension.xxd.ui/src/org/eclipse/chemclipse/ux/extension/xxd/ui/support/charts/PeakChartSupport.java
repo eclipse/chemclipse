@@ -174,57 +174,58 @@ public class PeakChartSupport {
 		//
 		if(peak != null) {
 			IPeakModel peakModel = peak.getPeakModel();
-			try {
-				LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
-				LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
-				LinearEquation baseline = peakModel.getPercentageHeightBaselineEquation(0.0f);
-				/*
-				 * Where does the increasing tangent crosses the baseline.
-				 */
-				IPoint intersection = Equations.calculateIntersection(increasing, baseline);
-				double x;
-				/*
-				 * Take a look if the retention time (X) is lower than the peaks
-				 * retention time.<br/> If yes, take the peaks start retention
-				 * time, otherwise the values would be 0 by default.
-				 */
-				double startRetentionTime = peakModel.getStartRetentionTime();
-				x = intersection.getX() < startRetentionTime ? startRetentionTime : intersection.getX();
-				xSeries[0] = x;
-				//
-				if(includeBackground) {
-					ySeries[0] = intersection.getY() + peakModel.getBackgroundAbundance((int)x);
-				} else {
-					ySeries[0] = intersection.getY();
+			LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
+			LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
+			if(increasing != null && decreasing != null) {
+				try {
+					LinearEquation baseline = peakModel.getPercentageHeightBaselineEquation(0.0f);
+					/*
+					 * Where does the increasing tangent crosses the baseline.
+					 */
+					IPoint intersection = Equations.calculateIntersection(increasing, baseline);
+					double x;
+					/*
+					 * Take a look if the retention time (X) is lower than the peaks
+					 * retention time.<br/> If yes, take the peaks start retention
+					 * time, otherwise the values would be 0 by default.
+					 */
+					double startRetentionTime = peakModel.getStartRetentionTime();
+					x = intersection.getX() < startRetentionTime ? startRetentionTime : intersection.getX();
+					xSeries[0] = x;
+					//
+					if(includeBackground) {
+						ySeries[0] = intersection.getY() + peakModel.getBackgroundAbundance((int)x);
+					} else {
+						ySeries[0] = intersection.getY();
+					}
+					//
+					if(mirrored) {
+						ySeries[0] = ySeries[0] * -1;
+					}
+					/*
+					 * This is the highest point of the peak, given by the tangents.
+					 */
+					intersection = Equations.calculateIntersection(increasing, decreasing);
+					/*
+					 * Take a look if the retention time (X) is greater than the
+					 * peaks retention time.<br/> If yes, take the peaks stop
+					 * retention time, otherwise the values would be 0 by default.
+					 */
+					double stopRetentionTime = peakModel.getStopRetentionTime();
+					x = intersection.getX() > stopRetentionTime ? stopRetentionTime : intersection.getX();
+					xSeries[1] = intersection.getX();
+					//
+					if(includeBackground) {
+						ySeries[1] = intersection.getY() + peakModel.getBackgroundAbundance((int)x);
+					} else {
+						ySeries[1] = intersection.getY();
+					}
+					//
+					if(mirrored) {
+						ySeries[1] = ySeries[1] * -1;
+					}
+				} catch(SolverException e) {
 				}
-				//
-				if(mirrored) {
-					ySeries[0] = ySeries[0] * -1;
-				}
-				/*
-				 * This is the highest point of the peak, given by the tangents.
-				 */
-				intersection = Equations.calculateIntersection(increasing, decreasing);
-				/*
-				 * Take a look if the retention time (X) is greater than the
-				 * peaks retention time.<br/> If yes, take the peaks stop
-				 * retention time, otherwise the values would be 0 by default.
-				 */
-				double stopRetentionTime = peakModel.getStopRetentionTime();
-				x = intersection.getX() > stopRetentionTime ? stopRetentionTime : intersection.getX();
-				xSeries[1] = intersection.getX();
-				//
-				if(includeBackground) {
-					ySeries[1] = intersection.getY() + peakModel.getBackgroundAbundance((int)x);
-				} else {
-					ySeries[1] = intersection.getY();
-				}
-				//
-				if(mirrored) {
-					ySeries[1] = ySeries[1] * -1;
-				}
-			} catch(SolverException e) {
-				//
 			}
 		}
 		//
@@ -239,57 +240,59 @@ public class PeakChartSupport {
 		//
 		if(peak != null) {
 			IPeakModel peakModel = peak.getPeakModel();
-			try {
-				IPoint intersection;
-				LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
-				LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
-				LinearEquation baseline = peakModel.getPercentageHeightBaselineEquation(0.0f);
-				double x;
-				/*
-				 * Where does the decreasing tangent crosses the baseline.
-				 */
-				intersection = Equations.calculateIntersection(decreasing, baseline);
-				/*
-				 * Take a look if the retention time (X) is greater than the
-				 * peaks retention time.<br/> If yes, take the peaks stop
-				 * retention time, otherwise the values would be 0 by default.
-				 */
-				double stopRetentionTime = peakModel.getStopRetentionTime();
-				x = intersection.getX() > stopRetentionTime ? stopRetentionTime : intersection.getX();
-				xSeries[0] = intersection.getX();
-				if(includeBackground) {
-					ySeries[0] = intersection.getY() + peakModel.getBackgroundAbundance((int)x);
-				} else {
-					ySeries[0] = intersection.getY();
+			LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
+			LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
+			if(increasing != null && decreasing != null) {
+				try {
+					IPoint intersection;
+					LinearEquation baseline = peakModel.getPercentageHeightBaselineEquation(0.0f);
+					double x;
+					/*
+					 * Where does the decreasing tangent crosses the baseline.
+					 */
+					intersection = Equations.calculateIntersection(decreasing, baseline);
+					/*
+					 * Take a look if the retention time (X) is greater than the
+					 * peaks retention time.<br/> If yes, take the peaks stop
+					 * retention time, otherwise the values would be 0 by default.
+					 */
+					double stopRetentionTime = peakModel.getStopRetentionTime();
+					x = intersection.getX() > stopRetentionTime ? stopRetentionTime : intersection.getX();
+					xSeries[0] = intersection.getX();
+					if(includeBackground) {
+						ySeries[0] = intersection.getY() + peakModel.getBackgroundAbundance((int)x);
+					} else {
+						ySeries[0] = intersection.getY();
+					}
+					//
+					//
+					if(mirrored) {
+						ySeries[0] = ySeries[0] * -1;
+					}
+					/*
+					 * This is the highest point of the peak, given by the tangents.
+					 */
+					intersection = Equations.calculateIntersection(increasing, decreasing);
+					/*
+					 * Take a look if the retention time (X) is lower than the peaks
+					 * retention time.<br/> If yes, take the peaks start retention
+					 * time, otherwise the values would be 0 by default.
+					 */
+					double startRetentionTime = peakModel.getStartRetentionTime();
+					x = intersection.getX() < startRetentionTime ? startRetentionTime : intersection.getX();
+					xSeries[1] = intersection.getX();
+					if(includeBackground) {
+						ySeries[1] = intersection.getY() + peakModel.getBackgroundAbundance((int)x);
+					} else {
+						ySeries[1] = intersection.getY();
+					}
+					//
+					//
+					if(mirrored) {
+						ySeries[1] = ySeries[1] * -1;
+					}
+				} catch(SolverException e) {
 				}
-				//
-				//
-				if(mirrored) {
-					ySeries[0] = ySeries[0] * -1;
-				}
-				/*
-				 * This is the highest point of the peak, given by the tangents.
-				 */
-				intersection = Equations.calculateIntersection(increasing, decreasing);
-				/*
-				 * Take a look if the retention time (X) is lower than the peaks
-				 * retention time.<br/> If yes, take the peaks start retention
-				 * time, otherwise the values would be 0 by default.
-				 */
-				double startRetentionTime = peakModel.getStartRetentionTime();
-				x = intersection.getX() < startRetentionTime ? startRetentionTime : intersection.getX();
-				xSeries[1] = intersection.getX();
-				if(includeBackground) {
-					ySeries[1] = intersection.getY() + peakModel.getBackgroundAbundance((int)x);
-				} else {
-					ySeries[1] = intersection.getY();
-				}
-				//
-				//
-				if(mirrored) {
-					ySeries[1] = ySeries[1] * -1;
-				}
-			} catch(SolverException e) {
 			}
 		}
 		//
@@ -314,25 +317,30 @@ public class PeakChartSupport {
 			if(mirrored) {
 				ySeries[0] = ySeries[0] * -1;
 			}
-			try {
-				IPoint intersection = Equations.calculateIntersection(peakModel.getIncreasingInflectionPointEquation(), peakModel.getDecreasingInflectionPointEquation());
-				/*
-				 * Normally a check if the retention time x is outwards of peak
-				 * range should not be performed as it must be in peaks
-				 * retention time range, it's the maximum.
-				 */
-				// TODO einfach background includen geht nicht
-				xSeries[1] = intersection.getX();
-				if(includeBackground) {
-					ySeries[1] = intersection.getY() + peakModel.getBackgroundAbundance((int)intersection.getX());
-				} else {
-					ySeries[1] = intersection.getY();
+			//
+			LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
+			LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
+			if(increasing != null && decreasing != null) {
+				try {
+					IPoint intersection = Equations.calculateIntersection(increasing, decreasing);
+					/*
+					 * Normally a check if the retention time x is outwards of peak
+					 * range should not be performed as it must be in peaks
+					 * retention time range, it's the maximum.
+					 */
+					// TODO einfach background includen geht nicht
+					xSeries[1] = intersection.getX();
+					if(includeBackground) {
+						ySeries[1] = intersection.getY() + peakModel.getBackgroundAbundance((int)intersection.getX());
+					} else {
+						ySeries[1] = intersection.getY();
+					}
+					//
+					if(mirrored) {
+						ySeries[1] = ySeries[1] * -1;
+					}
+				} catch(SolverException e) {
 				}
-				//
-				if(mirrored) {
-					ySeries[1] = ySeries[1] * -1;
-				}
-			} catch(SolverException e) {
 			}
 		}
 		//
@@ -350,54 +358,58 @@ public class PeakChartSupport {
 			double x;
 			LinearEquation percentageHeightBaseline = peakModel.getPercentageHeightBaselineEquation(height);
 			if(percentageHeightBaseline != null) {
-				try {
-					IPoint p1 = Equations.calculateIntersection(peakModel.getIncreasingInflectionPointEquation(), percentageHeightBaseline);
-					IPoint p2 = Equations.calculateIntersection(peakModel.getDecreasingInflectionPointEquation(), percentageHeightBaseline);
-					/*
-					 * Take a look if the retention time (X) is lower than the
-					 * peaks retention time.<br/> If yes, take the peaks start
-					 * retention time, otherwise the values would be 0 by
-					 * default.
-					 */
-					double startRetentionTime = peakModel.getStartRetentionTime();
-					x = p1.getX() < startRetentionTime ? startRetentionTime : p1.getX();
-					xSeries[0] = p1.getX();
-					/*
-					 * Left intersection between increasing tangent and width at
-					 * percentage height.
-					 */
-					if(includeBackground) {
-						ySeries[0] = p1.getY() + peakModel.getBackgroundAbundance((int)x);
-					} else {
-						ySeries[0] = p1.getY();
+				LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
+				LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
+				if(increasing != null && decreasing != null) {
+					try {
+						IPoint p1 = Equations.calculateIntersection(increasing, percentageHeightBaseline);
+						IPoint p2 = Equations.calculateIntersection(decreasing, percentageHeightBaseline);
+						/*
+						 * Take a look if the retention time (X) is lower than the
+						 * peaks retention time.<br/> If yes, take the peaks start
+						 * retention time, otherwise the values would be 0 by
+						 * default.
+						 */
+						double startRetentionTime = peakModel.getStartRetentionTime();
+						x = p1.getX() < startRetentionTime ? startRetentionTime : p1.getX();
+						xSeries[0] = p1.getX();
+						/*
+						 * Left intersection between increasing tangent and width at
+						 * percentage height.
+						 */
+						if(includeBackground) {
+							ySeries[0] = p1.getY() + peakModel.getBackgroundAbundance((int)x);
+						} else {
+							ySeries[0] = p1.getY();
+						}
+						//
+						if(mirrored) {
+							ySeries[0] = ySeries[0] * -1;
+						}
+						/*
+						 * Take a look if the retention time (X) is greater than the
+						 * peaks retention time.<br/> If yes, take the peaks stop
+						 * retention time, otherwise the values would be 0 by
+						 * default.
+						 */
+						double stopRetentionTime = peakModel.getStopRetentionTime();
+						x = p2.getX() > stopRetentionTime ? stopRetentionTime : p2.getX();
+						xSeries[1] = p2.getX();
+						/*
+						 * Right intersection between increasing tangent and width
+						 * at percentage height.
+						 */
+						if(includeBackground) {
+							ySeries[1] = p2.getY() + peakModel.getBackgroundAbundance((int)x);
+						} else {
+							ySeries[1] = p2.getY();
+						}
+						//
+						if(mirrored) {
+							ySeries[1] = ySeries[1] * -1;
+						}
+					} catch(SolverException e) {
 					}
-					//
-					if(mirrored) {
-						ySeries[0] = ySeries[0] * -1;
-					}
-					/*
-					 * Take a look if the retention time (X) is greater than the
-					 * peaks retention time.<br/> If yes, take the peaks stop
-					 * retention time, otherwise the values would be 0 by
-					 * default.
-					 */
-					double stopRetentionTime = peakModel.getStopRetentionTime();
-					x = p2.getX() > stopRetentionTime ? stopRetentionTime : p2.getX();
-					xSeries[1] = p2.getX();
-					/*
-					 * Right intersection between increasing tangent and width
-					 * at percentage height.
-					 */
-					if(includeBackground) {
-						ySeries[1] = p2.getY() + peakModel.getBackgroundAbundance((int)x);
-					} else {
-						ySeries[1] = p2.getY();
-					}
-					//
-					if(mirrored) {
-						ySeries[1] = ySeries[1] * -1;
-					}
-				} catch(SolverException e) {
 				}
 			}
 			id = "Peak" + postfix + " Width at " + decimalFormat.format(height * 100) + "%";
