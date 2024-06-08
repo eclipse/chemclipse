@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.filter.chromatogram.settings;
 
+import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
@@ -21,6 +23,7 @@ public class IntensityCutOffFilterSettings {
 	private IntensityOption intensityOption = IntensityOption.RELATIVE;
 	@JsonProperty(value = "Max Intensity", defaultValue = "75.0")
 	@JsonPropertyDescription(value = "Cut off intensities higher than the given value.")
+	@FloatSettingsProperty(minValue = 0)
 	private float maxIntensity = 75.0f;
 
 	public IntensityOption getIntensityOption() {

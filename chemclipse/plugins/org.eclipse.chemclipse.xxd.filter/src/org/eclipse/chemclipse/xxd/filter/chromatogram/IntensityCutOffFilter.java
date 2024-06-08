@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
 public class IntensityCutOffFilter implements IProcessTypeSupplier {
 
 	private static final String ID = "org.eclipse.chemclipse.xxd.filter.chromatogram.intensityCutOff";
-	private static final String NAME = "Intensity Cut Off";
+	private static final String NAME = "Cut Off (Intensity)";
 	private static final String DESCRIPTION = "Cut off intensities higher than the given value.";
 
 	@Override
