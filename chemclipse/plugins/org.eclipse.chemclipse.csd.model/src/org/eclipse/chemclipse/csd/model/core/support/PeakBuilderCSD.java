@@ -129,7 +129,9 @@ public class PeakBuilderCSD {
 		 */
 		IScanCSD supplierScanCSD = getPeakScan(totalScanSignals, backgroundEquation);
 		IPeakModelCSD peakModel = new PeakModelCSD(supplierScanCSD, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
-		return new ChromatogramPeakCSD(peakModel, chromatogram);
+		ChromatogramPeakCSD cp = new ChromatogramPeakCSD(peakModel, chromatogram);
+		//
+		return cp;
 	}
 
 	public static IChromatogramPeakCSD createPeak(IChromatogramCSD chromatogram, IScanRange scanRange, float startIntensity, float stopIntensity) throws PeakException {
@@ -196,7 +198,9 @@ public class PeakBuilderCSD {
 		 */
 		IScanCSD supplierScanCSD = getPeakScan(totalScanSignals, backgroundEquation);
 		IPeakModelCSD peakModel = new PeakModelCSD(supplierScanCSD, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
-		return new ChromatogramPeakCSD(peakModel, chromatogram);
+		ChromatogramPeakCSD chromatogramPeak = new ChromatogramPeakCSD(peakModel, chromatogram);
+		//
+		return chromatogramPeak;
 	}
 
 	private static IScanCSD getPeakScan(ITotalScanSignals totalScanSignals, LinearEquation backgroundEquation) {

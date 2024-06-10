@@ -873,15 +873,25 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	public void addPeak(T peak) {
 
 		boolean addPeak = false;
-		if(PreferenceSupplier.isSkipPeakWidthCheck()) {
-			addPeak = true;
-			if(peak.getPeakModel().getWidthByInflectionPoints() <= 0) {
-				peak.addClassifier("Skipped Peak Width Check");
+		IPeakModel peakModel = peak.getPeakModel();
+		if(peakModel.areInflectionPointsAvailable()) {
+			/*
+			 * Skip the validation?
+			 */
+			if(PreferenceSupplier.isSkipPeakWidthCheck()) {
+				addPeak = true;
+				if(peak.getPeakModel().getWidthByInflectionPoints() <= 0) {
+					peak.addClassifier("Skipped Peak Width Check");
+				}
+			} else {
+				addPeak = peak.getPeakModel().getWidthByInflectionPoints() > 0;
 			}
 		} else {
-			addPeak = peak.getPeakModel().getWidthByInflectionPoints() > 0;
+			addPeak = true;
 		}
-		//
+		/*
+		 * Add the peak if the model is valid.
+		 */
 		if(addPeak) {
 			peaks.addPeak(peak);
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add SlopesAbs Function
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.equations;
@@ -171,13 +171,16 @@ public class Equations {
 		if(eq1.equals(eq2)) {
 			throw new SolverException("There could be no intersection found. The equations are congruent.");
 		}
+		//
 		double denominator = eq1.getA() - eq2.getA();
 		double numerator = eq2.getB() - eq1.getB();
 		if(denominator == 0.0d) {
 			throw new SolverException("There could be no intersection found. The equations are parallel.");
 		}
+		//
 		double x = numerator / denominator;
 		double y = eq1.calculateY(x);
+		//
 		return new Point(x, y);
 	}
 

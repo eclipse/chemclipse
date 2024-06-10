@@ -42,10 +42,42 @@ public abstract class AbstractPeakModelStrict implements IPeakModel {
 	}
 
 	@Override
+	public boolean areInflectionPointsAvailable() {
+
+		return increasingInflectionPointEquation != null && decreasingInflectionPointEquation != null;
+	}
+
+	@Override
+	public IPoint calculateIntersection() throws SolverException {
+
+		IPoint point = null;
+		if(areInflectionPointsAvailable()) {
+			point = Equations.calculateIntersection(increasingInflectionPointEquation, decreasingInflectionPointEquation);
+		} else {
+			throw new SolverException("The increasing/decreasing equation is missing.");
+		}
+		//
+		return point;
+	}
+
+	@Override
+	public IPoint calculateIntersection(LinearEquation linearEquation, boolean increasing) throws SolverException {
+
+		IPoint point = null;
+		if(areInflectionPointsAvailable()) {
+			point = Equations.calculateIntersection(increasing ? increasingInflectionPointEquation : decreasingInflectionPointEquation, linearEquation);
+		} else {
+			throw new SolverException("The increasing/decreasing equation is missing.");
+		}
+		//
+		return point;
+	}
+
+	@Override
 	public float getPeakAbundanceByInflectionPoints() {
 
 		float abundance = 0.0f;
-		if(increasingInflectionPointEquation != null && decreasingInflectionPointEquation != null) {
+		if(areInflectionPointsAvailable()) {
 			try {
 				IPoint intersection = Equations.calculateIntersection(increasingInflectionPointEquation, decreasingInflectionPointEquation);
 				abundance = (float)intersection.getY();
@@ -60,7 +92,7 @@ public abstract class AbstractPeakModelStrict implements IPeakModel {
 	public int getRetentionTimeAtPeakMaximumByInflectionPoints() {
 
 		int x = 0;
-		if(increasingInflectionPointEquation != null && decreasingInflectionPointEquation != null) {
+		if(areInflectionPointsAvailable()) {
 			try {
 				IPoint intersection = Equations.calculateIntersection(increasingInflectionPointEquation, decreasingInflectionPointEquation);
 				x = (int)intersection.getX();
@@ -79,7 +111,7 @@ public abstract class AbstractPeakModelStrict implements IPeakModel {
 		 * Because peak and background can be retrieved seperately.
 		 */
 		int width = 0;
-		if(increasingInflectionPointEquation != null && decreasingInflectionPointEquation != null) {
+		if(areInflectionPointsAvailable()) {
 			try {
 				LinearEquation base = new LinearEquation(0, 0);
 				IPoint p1 = Equations.calculateIntersection(increasingInflectionPointEquation, base);
@@ -109,7 +141,7 @@ public abstract class AbstractPeakModelStrict implements IPeakModel {
 	public int getWidthByInflectionPoints(float height) {
 
 		int width = 0;
-		if(increasingInflectionPointEquation != null && decreasingInflectionPointEquation != null) {
+		if(areInflectionPointsAvailable()) {
 			try {
 				LinearEquation percentageHeightBaseline = getPercentageHeightBaselineEquation(height);
 				if(percentageHeightBaseline == null) {
@@ -154,23 +186,6 @@ public abstract class AbstractPeakModelStrict implements IPeakModel {
 		//
 		return abundance;
 	}
-	/*
-	 * TODO - Tailing
-	 */
-
-	// TODO JUnit
-	@Override
-	public LinearEquation getIncreasingInflectionPointEquation() {
-
-		return increasingInflectionPointEquation;
-	}
-
-	// TODO JUnit
-	@Override
-	public LinearEquation getDecreasingInflectionPointEquation() {
-
-		return decreasingInflectionPointEquation;
-	}
 
 	// TODO JUnit
 	@Override
@@ -203,7 +218,7 @@ public abstract class AbstractPeakModelStrict implements IPeakModel {
 		 * implement than to search after the tabular model values, but can it
 		 * be used to determine the peak tailing?
 		 */
-		if(increasingInflectionPointEquation != null && decreasingInflectionPointEquation != null) {
+		if(areInflectionPointsAvailable()) {
 			try {
 				IPoint p1 = Equations.calculateIntersection(increasingInflectionPointEquation, percentageHeightBaseline);
 				IPoint p2 = Equations.calculateIntersection(decreasingInflectionPointEquation, percentageHeightBaseline);

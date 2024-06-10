@@ -170,15 +170,7 @@ public class ExtendedPeakDetailsUI extends Composite implements IExtendedPartUI 
 		 */
 		IPeakModel peakModel = peak.getPeakModel();
 		list.add("PeakType: " + peak.getPeakType());
-		// list.add("Purity: " + decimalFormat.format(peak.getPurity()));
-		LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
-		LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
-		if(increasing != null && decreasing != null) {
-			list.add(getEquationString("Increasing Inflection Point Equation: ", increasing));
-			list.add(getEquationString("Decreasing Inflection Point Equation: ", decreasing));
-			list.add(getEquationString("Percentage Baseline Equation 50%: ", peakModel.getPercentageHeightBaselineEquation(0.5f)));
-		}
-		//
+		list.add(getEquationString("Percentage Baseline Equation 50%: ", peakModel.getPercentageHeightBaselineEquation(0.5f)));
 		list.add("Gradient Angle: " + decimalFormat.format(peakModel.getGradientAngle()));
 		list.add("-------------------------");
 		addRetentionTimes(peakModel);

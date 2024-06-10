@@ -11,9 +11,29 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
+import org.eclipse.chemclipse.numeric.exceptions.SolverException;
 
 public interface IPeakModelStrict {
+
+	boolean areInflectionPointsAvailable();
+
+	/**
+	 * Might throw a solver exception.
+	 * 
+	 * @return {@link IPoint}
+	 * @throws SolverException
+	 */
+	IPoint calculateIntersection() throws SolverException;
+
+	/**
+	 * Might throw a solver exception.
+	 * 
+	 * @return {@link IPoint}
+	 * @throws SolverException
+	 */
+	IPoint calculateIntersection(LinearEquation linearEquation, boolean increasing) throws SolverException;
 
 	/**
 	 * Returns the abundance (height) of the peak determined by use of the
@@ -94,22 +114,4 @@ public interface IPeakModelStrict {
 	 * @return float
 	 */
 	float getDecreasingInflectionPointAbundance(int retentionTime);
-
-	// TODO JUnit
-	/**
-	 * Returns the increasing inflection point equation.
-	 * May return null.
-	 * 
-	 * @return {@link LinearEquation}
-	 */
-	LinearEquation getIncreasingInflectionPointEquation();
-
-	// TODO JUnit
-	/**
-	 * Returns the decreasing inflection point equation.
-	 * May return null.
-	 * 
-	 * @return {@link LinearEquation}
-	 */
-	LinearEquation getDecreasingInflectionPointEquation();
 }

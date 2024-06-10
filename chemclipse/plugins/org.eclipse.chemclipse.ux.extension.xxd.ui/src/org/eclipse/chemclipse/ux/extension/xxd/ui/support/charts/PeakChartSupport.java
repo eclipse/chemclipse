@@ -19,7 +19,6 @@ import java.util.List;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.numeric.core.IPoint;
-import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.numeric.exceptions.SolverException;
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -174,15 +173,13 @@ public class PeakChartSupport {
 		//
 		if(peak != null) {
 			IPeakModel peakModel = peak.getPeakModel();
-			LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
-			LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
-			if(increasing != null && decreasing != null) {
+			if(peakModel.areInflectionPointsAvailable()) {
 				try {
 					LinearEquation baseline = peakModel.getPercentageHeightBaselineEquation(0.0f);
 					/*
 					 * Where does the increasing tangent crosses the baseline.
 					 */
-					IPoint intersection = Equations.calculateIntersection(increasing, baseline);
+					IPoint intersection = peakModel.calculateIntersection(baseline, true);
 					double x;
 					/*
 					 * Take a look if the retention time (X) is lower than the peaks
@@ -205,7 +202,7 @@ public class PeakChartSupport {
 					/*
 					 * This is the highest point of the peak, given by the tangents.
 					 */
-					intersection = Equations.calculateIntersection(increasing, decreasing);
+					intersection = peakModel.calculateIntersection();
 					/*
 					 * Take a look if the retention time (X) is greater than the
 					 * peaks retention time.<br/> If yes, take the peaks stop
@@ -240,9 +237,7 @@ public class PeakChartSupport {
 		//
 		if(peak != null) {
 			IPeakModel peakModel = peak.getPeakModel();
-			LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
-			LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
-			if(increasing != null && decreasing != null) {
+			if(peakModel.areInflectionPointsAvailable()) {
 				try {
 					IPoint intersection;
 					LinearEquation baseline = peakModel.getPercentageHeightBaselineEquation(0.0f);
@@ -250,7 +245,7 @@ public class PeakChartSupport {
 					/*
 					 * Where does the decreasing tangent crosses the baseline.
 					 */
-					intersection = Equations.calculateIntersection(decreasing, baseline);
+					intersection = peakModel.calculateIntersection(baseline, false);
 					/*
 					 * Take a look if the retention time (X) is greater than the
 					 * peaks retention time.<br/> If yes, take the peaks stop
@@ -272,7 +267,7 @@ public class PeakChartSupport {
 					/*
 					 * This is the highest point of the peak, given by the tangents.
 					 */
-					intersection = Equations.calculateIntersection(increasing, decreasing);
+					intersection = peakModel.calculateIntersection();
 					/*
 					 * Take a look if the retention time (X) is lower than the peaks
 					 * retention time.<br/> If yes, take the peaks start retention
@@ -318,11 +313,9 @@ public class PeakChartSupport {
 				ySeries[0] = ySeries[0] * -1;
 			}
 			//
-			LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
-			LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
-			if(increasing != null && decreasing != null) {
+			if(peakModel.areInflectionPointsAvailable()) {
 				try {
-					IPoint intersection = Equations.calculateIntersection(increasing, decreasing);
+					IPoint intersection = peakModel.calculateIntersection();
 					/*
 					 * Normally a check if the retention time x is outwards of peak
 					 * range should not be performed as it must be in peaks
@@ -358,12 +351,10 @@ public class PeakChartSupport {
 			double x;
 			LinearEquation percentageHeightBaseline = peakModel.getPercentageHeightBaselineEquation(height);
 			if(percentageHeightBaseline != null) {
-				LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
-				LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
-				if(increasing != null && decreasing != null) {
+				if(peakModel.areInflectionPointsAvailable()) {
 					try {
-						IPoint p1 = Equations.calculateIntersection(increasing, percentageHeightBaseline);
-						IPoint p2 = Equations.calculateIntersection(decreasing, percentageHeightBaseline);
+						IPoint p1 = peakModel.calculateIntersection(percentageHeightBaseline, true);
+						IPoint p2 = peakModel.calculateIntersection(percentageHeightBaseline, false);
 						/*
 						 * Take a look if the retention time (X) is lower than the
 						 * peaks retention time.<br/> If yes, take the peaks start
