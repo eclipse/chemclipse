@@ -376,10 +376,18 @@ public abstract class AbstractPeakModel extends AbstractPeakModelStrict implemen
 				float intensity = peakIntensityValues.getIntensityValue(retentionTime).getValue();
 				if(first) {
 					if(intensity > halfHeight) {
-						int retentionTimePrevious = retentionTimes.get(i - 1);
-						float intensityPrevious = peakIntensityValues.getIntensityValue(retentionTimePrevious).getValue();
-						leftA = new Point(retentionTimePrevious, intensityPrevious);
-						leftB = new Point(retentionTime, intensity);
+						if(i > 0) {
+							int retentionTimePrevious = retentionTimes.get(i - 1);
+							float intensityPrevious = peakIntensityValues.getIntensityValue(retentionTimePrevious).getValue();
+							leftA = new Point(retentionTimePrevious, intensityPrevious);
+							leftB = new Point(retentionTime, intensity);
+						} else {
+							/*
+							 * Special case if the peak intensity starts above 50%.
+							 */
+							leftA = new Point(retentionTime, intensity);
+							leftB = new Point(retentionTime, intensity);
+						}
 						first = false;
 					}
 				} else {
@@ -406,7 +414,9 @@ public abstract class AbstractPeakModel extends AbstractPeakModelStrict implemen
 					//
 					float rightWidth = retentionTimeCenter - retentionTimeStart;
 					float leftWidth = retentionTimeStop - retentionTimeCenter;
-					tailing = rightWidth / leftWidth;
+					if(leftWidth > 0) {
+						tailing = rightWidth / leftWidth;
+					}
 				}
 			}
 		}
