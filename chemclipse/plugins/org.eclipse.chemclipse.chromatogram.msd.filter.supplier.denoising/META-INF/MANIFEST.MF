@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.6.2",
  org.eclipse.core.commands;bundle-version="3.9.100",
  org.eclipse.chemclipse.rcp.app
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.preferences,
  org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result,

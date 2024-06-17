@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.processing,
  org.eclipse.chemclipse.logging,
  org.eclipse.chemclipse.xxd.filter
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Import-Package: com.fasterxml.jackson.annotation;version="2.12.1",
  com.fasterxml.jackson.core;version="2.12.1",

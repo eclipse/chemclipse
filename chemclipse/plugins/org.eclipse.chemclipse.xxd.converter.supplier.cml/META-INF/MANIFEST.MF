@@ -12,6 +12,6 @@ Import-Package: jakarta.xml.bind;version="4.0.0",
 Bundle-Activator: org.eclipse.chemclipse.xxd.converter.supplier.cml.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.converter
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse

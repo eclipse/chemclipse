@@ -36,5 +36,5 @@ Import-Package: jakarta.annotation;version="2.1.1",
  org.osgi.service.event;version="[1.0.0,2.0.0)"
 Automatic-Module-Name: org.eclipse.chemclipse.rcp.app.ui
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Provide-Capability: osgi.extender; osgi.extender=osgi.serviceloader.processor,osgi.extender; osgi.extender=osgi.serviceloader.registrar,osgi.serviceloader; osgi.serviceloader=org.eclipse.jetty.util.security.CredentialProvider

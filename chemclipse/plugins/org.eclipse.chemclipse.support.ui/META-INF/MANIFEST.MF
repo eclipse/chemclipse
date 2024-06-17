@@ -26,7 +26,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.rcp.ui.icons,
  org.eclipse.chemclipse.model,
  org.eclipse.osgi
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.support.ui.activator,
  org.eclipse.chemclipse.support.ui.editors,

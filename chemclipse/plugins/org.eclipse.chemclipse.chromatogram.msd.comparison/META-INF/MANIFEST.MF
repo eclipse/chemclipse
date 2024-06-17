@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.support;bundle-version="0.8.0",
  org.apache.commons.math3;bundle-version="3.6.1"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions,
  org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum,
  org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.purity,

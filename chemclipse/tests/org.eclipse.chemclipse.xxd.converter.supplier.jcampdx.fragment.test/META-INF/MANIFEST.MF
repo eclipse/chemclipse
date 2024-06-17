@@ -6,6 +6,6 @@ Bundle-SymbolicName: org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.fragm
 Bundle-Version: 0.9.0.qualifier
 Bundle-Vendor: Chemclipse
 Fragment-Host: org.eclipse.chemclipse.xxd.converter.supplier.jcampdx;bundle-version="0.8.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.eclipse.chemclipse.rcp.app.test;bundle-version="0.8.0",
  org.junit;bundle-version="4.13.2"
