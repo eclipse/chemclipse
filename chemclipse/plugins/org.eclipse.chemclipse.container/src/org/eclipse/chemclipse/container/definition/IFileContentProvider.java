@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,7 +15,7 @@ import java.io.File;
 
 public interface IFileContentProvider {
 
-	public int getContentSize(File container);
+	public long getContentSize(File container);
 
 	public File[] getContents(File container);
 }
