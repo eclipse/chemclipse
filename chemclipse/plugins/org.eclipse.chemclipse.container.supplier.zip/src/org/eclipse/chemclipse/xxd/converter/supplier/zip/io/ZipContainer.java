@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,7 +32,8 @@ public class ZipContainer implements IFileContentProvider {
 	private final int BUFFER = 2048;
 	private static final Logger logger = Logger.getLogger(ZipContainer.class);
 
-	public int getContentSize(File file) {
+	@Override
+	public long getContentSize(File file) {
 
 		try (ZipFile zipFile = new ZipFile(file)) {
 			return zipFile.size();
