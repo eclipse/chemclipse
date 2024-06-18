@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMS
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.vsd.converter.chromatogram.ChromatogramConverterVSD;
 import org.eclipse.chemclipse.vsd.model.core.IChromatogramVSD;
 import org.eclipse.chemclipse.vsd.model.core.selection.ChromatogramSelectionVSD;
@@ -86,21 +87,25 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 					case MSD_HIGHRES:
 					case MSD:
 						IProcessingInfo<IChromatogramMSD> processingInfoMSD = ChromatogramConverterMSD.getInstance().convert(file, monitor);
+						ProcessingInfoPartSupport.getInstance().update(processingInfoMSD);
 						IChromatogramMSD chromatogramMSD = processingInfoMSD.getProcessingResult();
 						chromatogramSelections.add(new ChromatogramSelectionMSD(chromatogramMSD, fireUpdate));
 						break;
 					case CSD:
 						IProcessingInfo<IChromatogramCSD> processingInfoCSD = ChromatogramConverterCSD.getInstance().convert(file, monitor);
+						ProcessingInfoPartSupport.getInstance().update(processingInfoCSD);
 						IChromatogramCSD chromatogramCSD = processingInfoCSD.getProcessingResult();
 						chromatogramSelections.add(new ChromatogramSelectionCSD(chromatogramCSD, fireUpdate));
 						break;
 					case WSD:
 						IProcessingInfo<IChromatogramWSD> processingInfoWSD = ChromatogramConverterWSD.getInstance().convert(file, monitor);
+						ProcessingInfoPartSupport.getInstance().update(processingInfoWSD);
 						IChromatogramWSD chromatogramWSD = processingInfoWSD.getProcessingResult();
 						chromatogramSelections.add(new ChromatogramSelectionWSD(chromatogramWSD, fireUpdate));
 						break;
 					case VSD:
 						IProcessingInfo<IChromatogramVSD> processingInfoVSD = ChromatogramConverterVSD.getInstance().convert(file, monitor);
+						ProcessingInfoPartSupport.getInstance().update(processingInfoVSD);
 						IChromatogramVSD chromatogramVSD = processingInfoVSD.getProcessingResult();
 						chromatogramSelections.add(new ChromatogramSelectionVSD(chromatogramVSD, fireUpdate));
 						break;
