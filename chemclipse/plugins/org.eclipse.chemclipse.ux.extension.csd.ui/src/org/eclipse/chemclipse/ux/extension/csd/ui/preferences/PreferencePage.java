@@ -26,10 +26,11 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("Current Selective Detector (MSD)");
+		setTitle("Current Selective Detector (CSD)");
 		setDescription("");
 	}
 
+	@Override
 	public void createFieldEditors() {
 
 		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_OVERLAY_X_OFFSET, "Retention time offset (minutes):", PreferenceSupplier.MIN_X_OFFSET, PreferenceSupplier.MAX_X_OFFSET, getFieldEditorParent()));
@@ -39,6 +40,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_PATH_OPEN_CHROMATOGRAMS, "Path Chromatograms", getFieldEditorParent()));
 	}
 
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}
