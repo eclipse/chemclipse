@@ -43,4 +43,4 @@ jobs:
     - name: Build with Maven
       run: |
         source $HOME/.sdkman/bin/sdkman-init.sh
-        mvn -f chemclipse/releng/org.eclipse.chemclipse.aggregator/pom.xml -T 1C clean verify --batch-mode --no-transfer-progress
+        mvn -f chemclipse/releng/org.eclipse.chemclipse.aggregator/pom.xml -T 1C verify -Pci --batch-mode --no-transfer-progress
