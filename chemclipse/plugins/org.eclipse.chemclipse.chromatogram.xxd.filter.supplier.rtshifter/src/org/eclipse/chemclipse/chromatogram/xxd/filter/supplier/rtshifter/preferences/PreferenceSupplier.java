@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.prefer
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsGapFiller;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsScanFiller;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsStretch;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
@@ -78,6 +79,11 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		FilterSettingsGapFiller settings = new FilterSettingsGapFiller();
 		settings.setLimitFactor(INSTANCE().getInteger(P_LIMIT_FACTOR, DEF_LIMIT_FACTOR));
 		return settings;
+	}
+
+	public static FilterSettingsScanFiller getFilterSettingsFillScans() {
+
+		return new FilterSettingsScanFiller();
 	}
 
 	public static FilterSettingsStretch getFilterSettingsStretch() {

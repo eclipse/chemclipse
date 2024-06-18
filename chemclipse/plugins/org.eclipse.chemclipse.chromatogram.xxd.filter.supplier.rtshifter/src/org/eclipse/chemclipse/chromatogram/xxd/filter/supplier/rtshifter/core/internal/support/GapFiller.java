@@ -16,17 +16,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsGapFiller;
-import org.eclipse.chemclipse.csd.model.core.IScanCSD;
-import org.eclipse.chemclipse.csd.model.implementation.ScanCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
-import org.eclipse.chemclipse.vsd.model.core.IScanVSD;
-import org.eclipse.chemclipse.vsd.model.implementation.ScanVSD;
-import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
-import org.eclipse.chemclipse.wsd.model.core.implementation.ScanWSD;
 
 public class GapFiller {
 
@@ -108,37 +100,9 @@ public class GapFiller {
 	 */
 	private static void addScan(IScan scanReference, List<IScan> gapFillerScans, int retentionTime) {
 
-		IScan scan = createScan(scanReference, retentionTime);
+		IScan scan = ScanUtil.createEmptyScan(scanReference, retentionTime);
 		if(scan != null) {
 			gapFillerScans.add(scan);
 		}
-	}
-
-	/**
-	 * Create an empty scan.
-	 * 
-	 * @param scanReference
-	 * @param retentionTime
-	 * @return IScan
-	 */
-	private static IScan createScan(IScan scanReference, int retentionTime) {
-
-		IScan scan = null;
-		//
-		if(scanReference instanceof IScanCSD) {
-			scan = new ScanCSD(0);
-		} else if(scanReference instanceof IScanMSD) {
-			scan = new VendorMassSpectrum();
-		} else if(scanReference instanceof IScanWSD) {
-			scan = new ScanWSD();
-		} else if(scanReference instanceof IScanVSD) {
-			scan = new ScanVSD();
-		}
-		//
-		if(scan != null) {
-			scan.setRetentionTime(retentionTime);
-		}
-		//
-		return scan;
 	}
 }

@@ -24,5 +24,12 @@
 			filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsGapFiller"            
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.gapfiller">
       </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filter padds scans from retention time 0 until the first scan."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.ChromatogramFilterScanFiller"
+            filterName="Scan Filler (Padding Empty)"
+			filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsScanFiller"            
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanfiller">
+      </ChromatogramFilterSupplier>      
    </extension>
 </plugin>
