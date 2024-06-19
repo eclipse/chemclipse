@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - adjust to API Changes
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io;
@@ -378,6 +378,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 		intensityValues.normalize();
 		//
 		IPeakModelCSD peakModel = new PeakModelCSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
+		peakModel.setStrictModel(true); // Legacy
 		ChromatogramPeakCSD peak = new ChromatogramPeakCSD(peakModel, chromatogram);
 		peak.setDetectorDescription(detectorDescription);
 		peak.setQuantifierDescription(quantifierDescription);

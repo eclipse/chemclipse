@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - adjust to API Changes
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io;
@@ -308,7 +308,9 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		 * If scans of a region have been deleted, peaks shall be not saved, otherwise the import fails.
 		 */
 		IPeakModelCSD peakModel = peak.getPeakModel();
-		if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
+		if(!peakModel.isStrictModel()) {
+			return false;
+		} else if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
 			return false;
 		} else if(peak.getPeakModel().getWidthByInflectionPoints() <= 0) {
 			return false; // P_SKIP_PEAK_WIDTH_CHECK

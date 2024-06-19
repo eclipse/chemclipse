@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -35,6 +35,7 @@ import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.Chromatogra
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramReader_1400;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramReader_1500;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramReader_1501;
+import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramReader_1502;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.model.chromatogram.IVendorScan;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.model.chromatogram.VendorChromatogram;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.model.chromatogram.VendorScan;
@@ -160,6 +161,8 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 			chromatogramReader = new ChromatogramReader_1500();
 		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1501)) {
 			chromatogramReader = new ChromatogramReader_1501();
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1502)) {
+			chromatogramReader = new ChromatogramReader_1502();
 		}
 		//
 		return chromatogramReader;

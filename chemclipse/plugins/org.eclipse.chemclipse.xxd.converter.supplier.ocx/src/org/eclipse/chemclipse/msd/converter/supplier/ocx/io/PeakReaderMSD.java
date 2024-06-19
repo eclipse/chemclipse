@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_1400;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_1500;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_1501;
+import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.PeakReader_1502;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
@@ -96,6 +97,8 @@ public class PeakReaderMSD implements IPeakReader {
 			peakReader = new PeakReader_1500();
 		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1501)) {
 			peakReader = new PeakReader_1501();
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1502)) {
+			peakReader = new PeakReader_1502();
 		}
 		//
 		if(peakReader != null) {

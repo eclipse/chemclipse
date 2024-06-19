@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,21 +7,18 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
-import org.eclipse.chemclipse.model.core.AbstractPeakModel;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
+import org.eclipse.chemclipse.model.implementation.PeakModel;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 
-public abstract class AbstractPeakModelMSD extends AbstractPeakModel implements IPeakModelMSD {
+public abstract class AbstractPeakModelMSD extends PeakModel implements IPeakModelMSD {
 
-	/**
-	 * Renew the UUID on change.
-	 */
 	private static final long serialVersionUID = -673699436662069257L;
 
 	protected AbstractPeakModelMSD(IPeakMassSpectrum peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {

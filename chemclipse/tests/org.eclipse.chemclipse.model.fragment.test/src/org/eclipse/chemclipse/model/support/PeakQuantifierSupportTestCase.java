@@ -61,6 +61,7 @@ public class PeakQuantifierSupportTestCase extends TestCase {
 		peakIntensityValues.addIntensityValue(500, 70.f);
 		peakIntensityValues.addIntensityValue(600, 40.f);
 		IPeakModel peakModel = new PeakModel(peakMaximum, peakIntensityValues, 0.0f, 0.0f);
+		peakModel.setStrictModel(true);
 		//
 		return new Peak(peakModel);
 	}

@@ -331,7 +331,9 @@ public class ChromatogramWriter_1501 extends AbstractChromatogramWriter implemen
 		 * If scans of a region have been deleted, peaks shall be not saved, otherwise the import fails.
 		 */
 		IPeakModelWSD peakModel = peak.getPeakModel();
-		if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
+		if(!peakModel.isStrictModel()) {
+			return false;
+		} else if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
 			return false;
 		}
 		//

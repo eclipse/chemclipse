@@ -22,6 +22,22 @@ public interface IPeakModel extends IPeakModelStrict, Serializable {
 	int MINIMUM_SCANS = 3;
 
 	/**
+	 * If strict model is used, the increasing and decreasing tangents
+	 * are available.
+	 * 
+	 * @return boolean
+	 */
+	boolean isStrictModel();
+
+	/**
+	 * If strict model is set true, the increasing and decreasing tangents
+	 * are calculated. If this fails, strict model is set to false.
+	 * 
+	 * @param boolean
+	 */
+	void setStrictModel(boolean strictModel);
+
+	/**
 	 * Returns the abundance of the background at the given retention time.<br/>
 	 * If the given retention time is out of peak borders, 0 will be returned.<br/>
 	 * The abundance of the background is still 0 based.<br/>

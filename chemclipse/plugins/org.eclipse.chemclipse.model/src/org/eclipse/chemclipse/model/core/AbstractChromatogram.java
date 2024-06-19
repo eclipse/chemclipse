@@ -34,7 +34,6 @@ import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.TripleQuadMethod;
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
-import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
@@ -875,17 +874,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		boolean addPeak = false;
 		IPeakModel peakModel = peak.getPeakModel();
 		if(peakModel.areInflectionPointsAvailable()) {
-			/*
-			 * Skip the validation?
-			 */
-			if(PreferenceSupplier.isSkipPeakWidthCheck()) {
-				addPeak = true;
-				if(peak.getPeakModel().getWidthByInflectionPoints() <= 0) {
-					peak.addClassifier("Skipped Peak Width Check");
-				}
-			} else {
-				addPeak = peak.getPeakModel().getWidthByInflectionPoints() > 0;
-			}
+			addPeak = peak.getPeakModel().getWidthByInflectionPoints() > 0;
 		} else {
 			addPeak = true;
 		}

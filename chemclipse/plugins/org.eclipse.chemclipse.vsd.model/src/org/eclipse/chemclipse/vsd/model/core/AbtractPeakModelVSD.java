@@ -11,16 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.vsd.model.core;
 
-import org.eclipse.chemclipse.model.core.AbstractPeakModel;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
+import org.eclipse.chemclipse.model.implementation.PeakModel;
 
-public abstract class AbtractPeakModelVSD extends AbstractPeakModel implements IPeakModelVSD {
+public abstract class AbtractPeakModelVSD extends PeakModel implements IPeakModelVSD {
 
 	private static final long serialVersionUID = -7270343994063667596L;
 
-	public AbtractPeakModelVSD(IScan peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
+	public AbtractPeakModelVSD(IScan peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance, int b) throws IllegalArgumentException, PeakException {
 
 		super(peakMaximum, peakIntensityValues, startBackgroundAbundance, stopBackgroundAbundance);
 	}

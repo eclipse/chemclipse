@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
-import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
@@ -233,13 +232,20 @@ public abstract class AbstractPeakModelStrict implements IPeakModel {
 		return tailing;
 	}
 
-	protected void calculateInflectionPointEquations() throws PeakException {
+	protected boolean calculateInflectionPointEquations() {
 
 		/*
 		 * Calculate the equation for the points of inflection.<br/> The peak
 		 * maximum has been checked, so it can be used here.
 		 */
-		increasingInflectionPointEquation = peakIntensityValues.calculateIncreasingInflectionPointEquation(peakMaximum.getTotalSignal());
-		decreasingInflectionPointEquation = peakIntensityValues.calculateDecreasingInflectionPointEquation(peakMaximum.getTotalSignal());
+		try {
+			increasingInflectionPointEquation = peakIntensityValues.calculateIncreasingInflectionPointEquation(peakMaximum.getTotalSignal());
+			decreasingInflectionPointEquation = peakIntensityValues.calculateDecreasingInflectionPointEquation(peakMaximum.getTotalSignal());
+		} catch(Exception e) {
+			increasingInflectionPointEquation = null;
+			decreasingInflectionPointEquation = null;
+		}
+		//
+		return areInflectionPointsAvailable();
 	}
 }

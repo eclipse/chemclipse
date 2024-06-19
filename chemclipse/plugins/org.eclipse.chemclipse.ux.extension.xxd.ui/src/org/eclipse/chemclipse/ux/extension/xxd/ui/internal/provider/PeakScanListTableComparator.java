@@ -162,6 +162,12 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 				String classifier2 = PeakClassifierSupport.getClassifier(object2);
 				sortOrder = PreferenceSupplierModel.isSortCaseSensitive() ? classifier2.compareTo(classifier1) : classifier2.compareToIgnoreCase(classifier1);
 				break;
+			case 21:
+				if(object1 instanceof IPeak peak1 && object2 instanceof IPeak peak2) {
+					sortOrder = Boolean.compare(peak2.getPeakModel().isStrictModel(), peak1.getPeakModel().isStrictModel());
+				} else {
+					sortOrder = 0;
+				}
 		}
 		//
 		return sortOrder;

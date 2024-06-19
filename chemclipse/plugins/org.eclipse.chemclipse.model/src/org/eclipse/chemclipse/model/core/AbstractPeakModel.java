@@ -33,7 +33,7 @@ public abstract class AbstractPeakModel extends AbstractPeakModelStrict implemen
 	 * If strict model is used, the inflection points are calculated.
 	 * CAUTION - more tests needed - keep it true for now.
 	 */
-	private boolean strictModel = true;
+	private boolean strictModel = false;
 	/*
 	 * The peak maximum is a mass spectrum or a simple tic signal.
 	 */
@@ -74,7 +74,7 @@ public abstract class AbstractPeakModel extends AbstractPeakModelStrict implemen
 	 * @param startBackgroundAbundance
 	 * @param stopBackgroundAbundance
 	 */
-	protected AbstractPeakModel(IScan peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
+	protected AbstractPeakModel(IScan peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance, boolean strictModel) throws IllegalArgumentException, PeakException {
 
 		super(peakMaximum, peakIntensityValues);
 		/*
@@ -84,12 +84,25 @@ public abstract class AbstractPeakModel extends AbstractPeakModelStrict implemen
 		this.peakIntensityValues = peakIntensityValues;
 		this.startBackgroundAbundance = startBackgroundAbundance;
 		this.stopBackgroundAbundance = stopBackgroundAbundance;
-		//
-		calculatePeakModel();
+		this.strictModel = strictModel;
+		this.temporarilyInfo = new HashMap<>();
 		/*
-		 * Temp info
+		 * Run calculation
 		 */
-		temporarilyInfo = new HashMap<>();
+		calculatePeakModel();
+	}
+
+	@Override
+	public boolean isStrictModel() {
+
+		return strictModel;
+	}
+
+	@Override
+	public void setStrictModel(boolean strictModel) {
+
+		this.strictModel = strictModel;
+		validateStrictModel();
 	}
 
 	@Override
@@ -341,12 +354,7 @@ public abstract class AbstractPeakModel extends AbstractPeakModelStrict implemen
 		checkModelConditions(peakMaximum, peakIntensityValues);
 		backgroundEquation = calculateBackgroundEquation(startBackgroundAbundance, stopBackgroundAbundance);
 		gradientAngle = calculateGradientAngle();
-		/*
-		 * Only if a strict model is used.
-		 */
-		if(strictModel) {
-			calculateInflectionPointEquations();
-		}
+		validateStrictModel();
 	}
 
 	private float calucalteTailingByIntensityValues() {
@@ -422,6 +430,19 @@ public abstract class AbstractPeakModel extends AbstractPeakModelStrict implemen
 		}
 		//
 		return tailing;
+	}
+
+	private void validateStrictModel() {
+
+		/*
+		 * Only if a strict model is used.
+		 */
+		if(strictModel) {
+			boolean success = calculateInflectionPointEquations();
+			if(!success) {
+				strictModel = false;
+			}
+		}
 	}
 
 	@Override

@@ -413,6 +413,7 @@ public class ChromatogramReader_1501 extends AbstractChromatogramReader implemen
 		intensityValues.normalize();
 		//
 		IPeakModelWSD peakModel = new PeakModelWSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
+		peakModel.setStrictModel(true); // Legacy
 		ChromatogramPeakWSD peak = new ChromatogramPeakWSD(peakModel, chromatogram);
 		peak.setDetectorDescription(detectorDescription);
 		peak.setQuantifierDescription(quantifierDescription);

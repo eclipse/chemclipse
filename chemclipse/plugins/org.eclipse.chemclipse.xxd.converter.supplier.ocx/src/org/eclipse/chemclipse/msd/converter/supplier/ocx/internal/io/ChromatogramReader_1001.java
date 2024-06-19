@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io;
 
@@ -317,6 +317,7 @@ public class ChromatogramReader_1001 extends AbstractChromatogramReader implemen
 		intensityValues.normalize();
 		//
 		IPeakModelMSD peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
+		peakModel.setStrictModel(true); // Legacy
 		IChromatogramPeakMSD peak = new ChromatogramPeakMSD(peakModel, chromatogram);
 		peak.setDetectorDescription(detectorDescription);
 		peak.setIntegratorDescription(integratorDescription);

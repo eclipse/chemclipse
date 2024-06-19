@@ -49,7 +49,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String AREA_TOTAL = ExtensionMessages.areaTotal;
 	public static final String START_RETENTION_TIME = ExtensionMessages.startRetentionTime;
 	public static final String STOP_RETENTION_TIME = ExtensionMessages.stopRetentionTime;
-	public static final String WIDTH = ExtensionMessages.width;
+	public static final String WIDTH = ExtensionMessages.widthInflectionPoints;
 	public static final String SCAN_NUMBER_AT_PEAK_MAX = ExtensionMessages.scanNumberAtPeakMax;
 	public static final String SIGNAL_TO_NOISE = ExtensionMessages.signalToNoise;
 	public static final String LEADING = ExtensionMessages.leading;
@@ -61,6 +61,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String AREA_PERCENT = ExtensionMessages.areaPercent;
 	public static final String QUANTIFIER = ExtensionMessages.quantifier;
 	public static final String CLASSIFIER = ExtensionMessages.classifier;
+	public static final String PEAK_MODEL = ExtensionMessages.peakModel;
 	//
 	public static final String PEAK = "PEAK";
 	public static final String SCAN = "SCAN";
@@ -92,7 +93,8 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			BEST_TARGET, //
 			AREA_PERCENT, //
 			QUANTIFIER, //
-			CLASSIFIER //
+			CLASSIFIER, //
+			PEAK_MODEL //
 	};
 	//
 	public static final int[] BOUNDS = { //
@@ -116,7 +118,8 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			100, //
 			100, //
 			100, //
-			100 //
+			100, //
+			30 //
 	};
 
 	public void setChromatogramPeakArea(double chromatogramPeakArea) {
@@ -286,9 +289,12 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			case 19:
 				text = (!peak.getInternalStandards().isEmpty()) ? ISTD : BLANK;
 				break;
-			case 20: {
+			case 20:
 				text = PeakClassifierSupport.getClassifier(peak);
-			}
+				break;
+			case 21:
+				text = peakModel.isStrictModel() ? "S" : "";
+				break;
 		}
 		//
 		return text;
@@ -350,6 +356,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				break;
 			case 19:
 			case 20:
+			case 21:
 				text = BLANK;
 				break;
 		}

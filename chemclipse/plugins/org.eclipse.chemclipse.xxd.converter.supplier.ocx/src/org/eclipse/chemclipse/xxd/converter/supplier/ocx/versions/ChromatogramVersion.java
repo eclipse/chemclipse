@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,8 @@ public enum ChromatogramVersion implements IFormatVersion, ILabel {
 	V_1301(IFormat.CHROMATOGRAM_VERSION_1301, "Dalton v2"), //
 	V_1400(IFormat.CHROMATOGRAM_VERSION_1400, "Lawrence"), //
 	V_1500(IFormat.CHROMATOGRAM_VERSION_1500, "McLafferty v1"), //
-	V_1501(IFormat.CHROMATOGRAM_VERSION_1501, "McLafferty v2"); //
+	V_1501(IFormat.CHROMATOGRAM_VERSION_1501, "McLafferty v2"), //
+	V_1502(IFormat.CHROMATOGRAM_VERSION_1502, "McLafferty v3"); //
 
 	private String version = "";
 	private String release = "";

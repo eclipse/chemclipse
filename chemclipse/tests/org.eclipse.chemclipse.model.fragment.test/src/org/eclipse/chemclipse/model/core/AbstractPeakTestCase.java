@@ -25,11 +25,12 @@ import junit.framework.TestCase;
 @Ignore
 public class AbstractPeakTestCase extends TestCase {
 
-	protected IPeak createPeak(float totalSignal, TreeMap<Integer, Float> retentionTimeIntensityMap, float startBackgroundAbundance, float stopBackgroundAbundance) {
+	protected IPeak createPeak(float totalSignal, TreeMap<Integer, Float> retentionTimeIntensityMap, float startBackgroundAbundance, float stopBackgroundAbundance, boolean strictModel) {
 
 		IScan peakMaximum = new Scan(totalSignal);
 		IPeakIntensityValues peakIntensityValues = create(retentionTimeIntensityMap);
 		IPeakModel peakModel = new PeakModel(peakMaximum, peakIntensityValues, startBackgroundAbundance, stopBackgroundAbundance);
+		peakModel.setStrictModel(strictModel);
 		//
 		return new Peak(peakModel);
 	}

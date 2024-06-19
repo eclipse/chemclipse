@@ -315,6 +315,7 @@ public class ChromatogramReader_0902 extends AbstractChromatogramReader implemen
 		intensityValues.normalize();
 		//
 		IPeakModelMSD peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
+		peakModel.setStrictModel(true); // Legacy
 		IChromatogramPeakMSD peak = new ChromatogramPeakMSD(peakModel, chromatogram);
 		peak.setDetectorDescription(detectorDescription);
 		peak.setIntegratorDescription(integratorDescription);

@@ -120,6 +120,7 @@ public class ExtensionMessages extends NLS {
 	public static String stopRetentionTime;
 	public static String wells;
 	public static String width;
+	public static String widthInflectionPoints;
 	public static String scanNumberAtPeakMax;
 	public static String signalToNoise;
 	public static String leading;
@@ -131,6 +132,7 @@ public class ExtensionMessages extends NLS {
 	public static String areaPercent;
 	public static String quantifier;
 	public static String classifier;
+	public static String peakModel;
 	public static String concentrationUnit;
 	public static String calibrationMethod;
 	public static String crossZero;

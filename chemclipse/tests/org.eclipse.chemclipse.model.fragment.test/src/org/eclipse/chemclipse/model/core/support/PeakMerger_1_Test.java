@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -247,6 +247,8 @@ public class PeakMerger_1_Test extends TestCase {
 		IScan peakMaximum = new Scan(totalSignal);
 		IPeakIntensityValues peakIntensityValues = PeakMerger.create(retentionTimeIntensityMap);
 		IPeakModel peakModel = new PeakModel(peakMaximum, peakIntensityValues, startBackgroundAbundance, stopBackgroundAbundance);
+		peakModel.setStrictModel(true);
+		//
 		return new Peak(peakModel);
 	}
 }

@@ -42,6 +42,6 @@ public class Peak_1_Test extends AbstractPeakTestCase {
 		retentionTimeIntensityMap.put(3033595, 118.0f);
 		retentionTimeIntensityMap.put(3035017, 0.0f);
 		//
-		return createPeak(totalSignal, retentionTimeIntensityMap, startBackgroundAbundance, stopBackgroundAbundance);
+		return createPeak(totalSignal, retentionTimeIntensityMap, startBackgroundAbundance, stopBackgroundAbundance, true);
 	}
 }

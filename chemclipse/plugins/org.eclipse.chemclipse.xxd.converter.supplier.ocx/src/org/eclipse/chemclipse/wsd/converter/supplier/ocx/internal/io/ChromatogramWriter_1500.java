@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - adjust to API Changes
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io;
@@ -339,7 +339,9 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		 * If scans of a region have been deleted, peaks shall be not saved, otherwise the import fails.
 		 */
 		IPeakModelWSD peakModel = peak.getPeakModel();
-		if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
+		if(!peakModel.isStrictModel()) {
+			return false;
+		} else if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
 			return false;
 		}
 		//

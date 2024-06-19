@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -53,6 +53,7 @@ public class DeletePeaksByTarget_1_Test extends TestCase {
 		peakIntensityValues.addIntensityValue(500, 70.f);
 		peakIntensityValues.addIntensityValue(600, 40.f);
 		IPeakModel peakModel = new PeakModel(peakMaximum, peakIntensityValues, 0.0f, 0.0f);
+		peakModel.setStrictModel(true);
 		peak = new Peak(peakModel);
 		//
 		ILibraryInformation libraryInformation = new LibraryInformation();

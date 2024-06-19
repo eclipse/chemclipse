@@ -142,6 +142,7 @@ public class PeakReader_1500 extends AbstractZipReader implements IPeakReader {
 		intensityValues.normalize();
 		//
 		IPeakModelMSD peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
+		peakModel.setStrictModel(true); // Legacy
 		IPeakMSD peak = new PeakMSD(peakModel);
 		peak.setDetectorDescription(detectorDescription);
 		peak.setQuantifierDescription(quantifierDescription);

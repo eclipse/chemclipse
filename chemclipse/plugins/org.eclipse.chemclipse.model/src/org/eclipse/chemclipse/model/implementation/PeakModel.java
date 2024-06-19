@@ -23,6 +23,10 @@ public class PeakModel extends AbstractPeakModel implements IPeakModel {
 
 	public PeakModel(IScan peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
 
-		super(peakMaximum, peakIntensityValues, startBackgroundAbundance, stopBackgroundAbundance);
+		/**
+		 * By default, the strict model is used to ensure backward compatibility.
+		 * If the increasing/decreasing tangent can't be calculated, the less strict model is used.
+		 */
+		super(peakMaximum, peakIntensityValues, startBackgroundAbundance, stopBackgroundAbundance, true);
 	}
 }

@@ -43,8 +43,6 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String DEF_BEST_TARGET_LIBRARY_FIELD = LibraryField.NAME.name();
 	public static final String P_ION_ROUND_METHOD = "ionRoundMethod"; // When changing this value, call clearCacheActiveIonRoundMethod.
 	public static final String DEF_ION_ROUND_METHOD = IonRoundMethod.DEFAULT.name();
-	public static final String P_SKIP_PEAK_WIDTH_CHECK = "skipPeakWidthCheck";
-	public static final boolean DEF_SKIP_PEAK_WIDTH_CHECK = false;
 	/*
 	 * Separation Columns
 	 */
@@ -92,7 +90,6 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_USE_RETENTION_INDEX_QC, Boolean.toString(DEF_USE_RETENTION_INDEX_QC));
 		putDefault(P_BEST_TARGET_LIBRARY_FIELD, DEF_BEST_TARGET_LIBRARY_FIELD);
 		putDefault(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD);
-		putDefault(P_SKIP_PEAK_WIDTH_CHECK, Boolean.toString(DEF_SKIP_PEAK_WIDTH_CHECK));
 		putDefault(P_PARSE_SEPARATION_COLUMN_FROM_HEADER, Boolean.toString(DEF_PARSE_SEPARATION_COLUMN_FROM_HEADER));
 		putDefault(P_SEPARATION_COLUMN_HEADER_FIELD, DEF_SEPARATION_COLUMN_HEADER_FIELD);
 		putDefault(P_SEPARATION_COLUMN_MAPPINGS, DEF_SEPARATION_COLUMN_MAPPINGS);
@@ -208,11 +205,6 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		ionRoundMethod = (ionRoundMethod == null) ? IonRoundMethod.DEFAULT : ionRoundMethod;
 		INSTANCE().put(P_ION_ROUND_METHOD, ionRoundMethod.name());
 		activeIonRoundMethod = ionRoundMethod;
-	}
-
-	public static boolean isSkipPeakWidthCheck() {
-
-		return INSTANCE().getBoolean(P_SKIP_PEAK_WIDTH_CHECK, DEF_SKIP_PEAK_WIDTH_CHECK);
 	}
 
 	public static String getListPathImport() {
