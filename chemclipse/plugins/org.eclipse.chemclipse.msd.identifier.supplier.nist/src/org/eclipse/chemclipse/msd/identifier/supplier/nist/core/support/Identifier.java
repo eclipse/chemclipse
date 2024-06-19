@@ -74,7 +74,6 @@ public class Identifier {
 	private static final String MSP_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msp"; // $NON-NLS-N$
 	private static final String DESCRIPTION = "NIST Peak Identifier";
 	private static final String LIBRARY = "NIST";
-	private static final String COMPOUND_IN_LIB_FACTOR = "InLib Factor: ";
 	/*
 	 * Mass Spectrum/Peak Identifier
 	 */
@@ -691,7 +690,6 @@ public class Identifier {
 		IPeakLibraryInformation libraryInformation = new PeakLibraryInformation();
 		libraryInformation.setName(getName(hit.getName()));
 		libraryInformation.setCasNumber(hit.getCAS());
-		libraryInformation.setMiscellaneous(COMPOUND_IN_LIB_FACTOR + compound.getCompoundInLibraryFactor());
 		libraryInformation.setContributor(LIBRARY);
 		libraryInformation.setReferenceIdentifier(LIBRARY);
 		libraryInformation.setRetentionIndex(hit.getRetentionIndex());
@@ -699,6 +697,7 @@ public class Identifier {
 		 * Get the match factor and reverse match factor values.
 		 */
 		IPeakComparisonResult comparisonResult = new PeakComparisonResult(hit.getMatchFactor(), hit.getReverseMatchFactor(), 0.0f, 0.0f, hit.getProbability());
+		comparisonResult.setInLibFactor(Float.parseFloat(compound.getCompoundInLibraryFactor()));
 		//
 		return new IdentificationTarget(libraryInformation, comparisonResult);
 	}
@@ -803,7 +802,6 @@ public class Identifier {
 		ILibraryInformation libraryInformation = new LibraryInformation();
 		libraryInformation.setName(getName(hit.getName()));
 		libraryInformation.setCasNumber(hit.getCAS());
-		libraryInformation.setMiscellaneous(COMPOUND_IN_LIB_FACTOR + compound.getCompoundInLibraryFactor());
 		libraryInformation.setContributor(LIBRARY);
 		libraryInformation.setReferenceIdentifier(LIBRARY);
 		libraryInformation.setRetentionIndex(hit.getRetentionIndex());
@@ -811,6 +809,7 @@ public class Identifier {
 		 * Get the match factor and reverse match factor values.
 		 */
 		IComparisonResult comparisonResult = new ComparisonResult(hit.getMatchFactor(), hit.getReverseMatchFactor(), 0.0f, 0.0f, hit.getProbability());
+		comparisonResult.setInLibFactor(Float.parseFloat(compound.getCompoundInLibraryFactor()));
 		//
 		return new IdentificationTarget(libraryInformation, comparisonResult);
 	}
