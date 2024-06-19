@@ -20,10 +20,10 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.PreferencesSupport;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.tsd.model.core.IChromatogramTSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramHeatmapData;
@@ -217,7 +217,6 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 		Canvas canvas = new Canvas(parent, SWT.FILL | SWT.BORDER);
 		canvas.setLayoutData(new GridData(GridData.FILL_BOTH));
-		canvas.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		//
 		lightweightSystem = createLightweightSystem(canvas);
 		intensityGraphFigure = createIntensityGraphFigure();
@@ -229,11 +228,10 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 		LightweightSystem lightweightSystem = new LightweightSystem(canvas);
 		if(PreferencesSupport.isDarkTheme()) {
-			lightweightSystem.getRootFigure().setBackgroundColor(getDisplay().getSystemColor(SWT.COLOR_BLACK));
+			lightweightSystem.getRootFigure().setBackgroundColor(Colors.BLACK);
 		} else {
-			lightweightSystem.getRootFigure().setBackgroundColor(getDisplay().getSystemColor(SWT.COLOR_WHITE));
+			lightweightSystem.getRootFigure().setBackgroundColor(Colors.WHITE);
 		}
-		//
 		return lightweightSystem;
 	}
 
@@ -241,13 +239,12 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 		IntensityGraphFigure intensityGraphFigure = new IntensityGraphFigure();
 		if(PreferencesSupport.isDarkTheme()) {
-			intensityGraphFigure.setForegroundColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+			intensityGraphFigure.setForegroundColor(Colors.WHITE);
 		} else {
-			intensityGraphFigure.setForegroundColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+			intensityGraphFigure.setForegroundColor(Colors.BLACK);
 		}
 		intensityGraphFigure.getXAxis().setTitle(LABEL_AXIS_X);
 		intensityGraphFigure.getYAxis().setTitle(LABEL_AXIS_Y);
-		//
 		return intensityGraphFigure;
 	}
 
