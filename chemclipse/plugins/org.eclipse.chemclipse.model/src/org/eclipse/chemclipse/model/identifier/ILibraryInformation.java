@@ -171,14 +171,14 @@ public interface ILibraryInformation extends IClassifier, Serializable {
 	void setReferenceIdentifier(String referenceIdentifier);
 
 	/**
-	 * Returns miscellaneous information, e.g. InLib factors ...
+	 * Returns miscellaneous information ...
 	 * 
 	 * @return String
 	 */
 	String getMiscellaneous();
 
 	/**
-	 * Sets miscellaneous information, e.g. InLib factors ...
+	 * Sets miscellaneous information ...
 	 * 
 	 * @return String
 	 */
