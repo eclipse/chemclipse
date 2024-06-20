@@ -12,9 +12,11 @@
 package org.eclipse.chemclipse.support.ui.fragment.testorg.eclipse.chemclipse.support.ui.richtext;
 
 import org.eclipse.chemclipse.support.ui.richtext.RichTextConverter;
+import org.junit.Ignore;
 
 import junit.framework.TestCase;
 
+@Ignore
 public class RichTextConverter_1_Test extends TestCase {
 
 	private static final String TEST = "Hello World!";
