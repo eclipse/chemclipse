@@ -465,7 +465,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	//
 	String IMAGE_PEAK_RANGE = "peak-range.gif";
 	String IMAGE_PRINT = "print.png";
-	String IMAGE_CLEAR = "clear.gif";
+	String IMAGE_CLEAR = "clear.png";
 	String IMAGE_RULER = "ruler.gif";
 	String IMAGE_SKIP_QUANTIFIED_PEAK = "skipQuantifiedPeak.gif";
 	String IMAGE_DELETE_PEAK = "delete_peak.gif";
