@@ -23,7 +23,6 @@ public class IntegrationTests {
 		TestAssembler testAssembler = new TestAssembler(Activator.getContext().getBundles());
 		TestSuite suite = new TestSuite("Run all integration tests.");
 		testAssembler.assembleTests(suite, "org.eclipse.chemclipse.", "org.eclipse.chemclipse.", "*_ITest");
-		// testAssembler.assembleTests(suite, "net.openchrom.", net.openchrom.", "*_ITest");
 		//
 		return suite;
 	}
