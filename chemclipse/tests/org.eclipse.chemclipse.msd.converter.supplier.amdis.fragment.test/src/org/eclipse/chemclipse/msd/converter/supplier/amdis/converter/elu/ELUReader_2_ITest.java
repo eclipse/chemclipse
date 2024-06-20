@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.elu;
@@ -53,7 +53,8 @@ public class ELUReader_2_ITest extends TestCase {
 
 		try {
 			IPeaks<IPeakMSD> peaks = processingInfo.getProcessingResult();
-			assertEquals(1132, peaks.getPeaks().size());
+			assertEquals(1154, peaks.getPeaks().size());
+			assertEquals(1132, peaks.getPeaks().stream().filter(p -> p.getPeakModel().isStrictModel()).toList().size());
 		} catch(TypeCastException e) {
 			assertTrue(false);
 		}
