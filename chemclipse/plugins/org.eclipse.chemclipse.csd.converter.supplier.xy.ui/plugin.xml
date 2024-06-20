@@ -10,4 +10,14 @@
             name="XY CSD">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditor3x"
+            extensions="xy"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.editors.chromatogramEditor.xy"
+            name="Chromatogram">
+      </editor>
+   </extension>
 </plugin>

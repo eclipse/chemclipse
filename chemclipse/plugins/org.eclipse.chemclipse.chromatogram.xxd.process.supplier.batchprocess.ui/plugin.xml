@@ -30,7 +30,7 @@
             extensions="obj"
             icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif"
             id="org.eclipse.chemclipse.chromatogram.xxd.batchprocess.ui.editors.BatchProcessJobEditor"
-            name="Batch Process Job Editor">
+            name="Batch Process Job">
       </editor>
    </extension>   
    <extension

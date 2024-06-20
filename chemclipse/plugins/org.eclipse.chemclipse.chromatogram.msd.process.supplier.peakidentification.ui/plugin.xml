@@ -26,7 +26,7 @@
             extensions="opi"
             icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif"
             id="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors.PeakIdentificationBatchJobEditor"
-            name="Peak Identification Batch Job Editor">
+            name="Peak Identification Batch Job">
       </editor>
    </extension>
 </plugin>

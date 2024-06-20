@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,8 +18,10 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
@@ -33,10 +35,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
@@ -53,7 +53,6 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 	 * Currently, only the *.ocb format is supported.
 	 */
 	private static final String EDITOR_ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.editors.chromatogramEditor3x";
-	private static final String SUPPLIER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
 	//
 	private ChromatogramEditor chromatogramEditor;
 	private MPart part;
@@ -84,8 +83,9 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		if(dataType != null) {
 			chromatogramEditor = new ChromatogramEditor(dataType, parent, part, dirtyable, DisplayUtils.getShell(), new ProcessTypeSupport(), Activator.getDefault().getEclipseContext());
 		} else {
-			Label label = new Label(parent, SWT.NONE);
-			label.setText("Sorry, the chromatogram couldn't be displayed.");
+			IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+			processingInfo.addErrorMessage("Chromatogram Editor", "Unknown data type.");
+			ProcessingInfoPartSupport.getInstance().update(processingInfo);
 		}
 	}
 
@@ -239,23 +239,7 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 
 	private SupplierFileIdentifier getSupplierFileIdentifier(DataType dataType) {
 
-		SupplierFileIdentifier supplierFileIdentifier = new SupplierFileIdentifier(dataType);
-		ISupplier supplierSupported = null;
-		/*
-		 * Fetch and set the *.ocb specific supplier.
-		 */
-		for(ISupplier supplier : supplierFileIdentifier.getSupplier()) {
-			if(SUPPLIER_ID.equals(supplier.getId())) {
-				supplierSupported = supplier;
-			}
-		}
-		//
-		if(supplierSupported != null) {
-			supplierFileIdentifier.getSupplier().clear();
-			supplierFileIdentifier.getSupplier().add(supplierSupported);
-		}
-		//
-		return supplierFileIdentifier;
+		return new SupplierFileIdentifier(dataType);
 	}
 
 	private boolean isMatch(File file, ISupplierFileIdentifier supplierFileIdentifier) {
