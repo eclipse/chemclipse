@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter;
@@ -44,6 +44,7 @@ public class MatlabParafacPeakImportConverter_6_ITest extends TestCase {
 
 	public void testImport_1() {
 
-		assertEquals(1, peaks.getPeaks().size());
+		assertEquals(2, peaks.getPeaks().size());
+		assertEquals(1, peaks.getPeaks().stream().filter(p -> p.getPeakModel().isStrictModel()).toList().size());
 	}
 }
