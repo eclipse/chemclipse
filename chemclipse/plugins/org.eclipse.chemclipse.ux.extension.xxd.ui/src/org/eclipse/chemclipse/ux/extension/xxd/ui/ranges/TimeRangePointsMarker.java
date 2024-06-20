@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,6 +29,10 @@ import org.eclipse.swtchart.extensions.marker.IBaseChartPaintListener;
 public class TimeRangePointsMarker extends AbstractBaseChartPaintListener implements IBaseChartPaintListener {
 
 	private List<Point> pointSelection = new ArrayList<>();
+	//
+	private static final String START = "Start";
+	private static final String MAX = "Max";
+	private static final String STOP = "Stop";
 
 	public TimeRangePointsMarker(BaseChart baseChart) {
 
@@ -47,9 +51,7 @@ public class TimeRangePointsMarker extends AbstractBaseChartPaintListener implem
 			BaseChart baseChart = getBaseChart();
 			IAxis axisX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
 			if(axisX != null) {
-				int size = pointSelection.size();
-				int last = size - 1;
-				for(int i = 0; i <= last; i++) {
+				for(int i = 0; i < pointSelection.size(); i++) {
 					/*
 					 * It's a manual selection, hence
 					 * x should be always > 0.
@@ -67,7 +69,7 @@ public class TimeRangePointsMarker extends AbstractBaseChartPaintListener implem
 						gc.drawLine(x, 0, x, e.height);
 						gc.drawLine(0, y, e.width, y);
 						//
-						String label = getLabel(i, last);
+						String label = getLabel(i, pointSelection);
 						Point labelSize = gc.textExtent(label);
 						gc.setBackground(Colors.DARK_GRAY);
 						gc.fillRectangle(x - 20, 15, 40, 25);
@@ -82,14 +84,20 @@ public class TimeRangePointsMarker extends AbstractBaseChartPaintListener implem
 		}
 	}
 
-	private String getLabel(int i, int last) {
+	private String getLabel(int i, List<Point> pointSelection) {
 
-		if(i == 0) {
-			return "Start";
-		} else if(i == last) {
-			return "Stop";
-		} else {
-			return "Max";
+		String label = "";
+		if(!pointSelection.isEmpty()) {
+			int last = pointSelection.size() - 1;
+			if(i == 0 || last == 0) {
+				label = pointSelection.get(0).x <= pointSelection.get(last).x ? START : STOP;
+			} else if(i == last) {
+				label = pointSelection.get(0).x <= pointSelection.get(last).x ? STOP : START;
+			} else {
+				label = MAX;
+			}
 		}
+		//
+		return label;
 	}
 }
