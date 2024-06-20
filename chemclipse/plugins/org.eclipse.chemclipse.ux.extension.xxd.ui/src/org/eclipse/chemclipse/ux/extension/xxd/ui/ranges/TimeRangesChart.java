@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -149,18 +149,28 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 			 * Select the previous or next time range via key code.
 			 */
 			if(event.keyCode == SWT.ARROW_LEFT) {
-				TimeRange timeRangePrevious = TimeRangeSupport.getTimeRangePrevious(timeRanges, timeRange);
-				if(timeRangePrevious != null) {
-					select(timeRangePrevious);
-					timeRange = timeRangePrevious;
-				}
+				selectTimeRangePrevious();
 			} else if(event.keyCode == SWT.ARROW_RIGHT) {
-				TimeRange timeRangeNext = TimeRangeSupport.getTimeRangeNext(timeRanges, timeRange);
-				if(timeRangeNext != null) {
-					select(timeRangeNext);
-					timeRange = timeRangeNext;
-				}
+				selectTimeRangeNext();
 			}
+		}
+	}
+
+	public void selectTimeRangePrevious() {
+
+		TimeRange timeRangePrevious = TimeRangeSupport.getTimeRangePrevious(timeRanges, timeRange);
+		if(timeRangePrevious != null) {
+			select(timeRangePrevious);
+			timeRange = timeRangePrevious;
+		}
+	}
+
+	public void selectTimeRangeNext() {
+
+		TimeRange timeRangeNext = TimeRangeSupport.getTimeRangeNext(timeRanges, timeRange);
+		if(timeRangeNext != null) {
+			select(timeRangeNext);
+			timeRange = timeRangeNext;
 		}
 	}
 
