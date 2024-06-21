@@ -9,7 +9,7 @@
             extensions="xlsx"
             icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/excel_document.gif"
             id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.MicrosoftExcelEditor2007"
-            name="Microsoft Excel Editor xlsx">
+            name="Office Open XML Spreadsheet">
       </editor>
       <editor
             class="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.ExcelEditorXls"
@@ -17,7 +17,7 @@
             extensions="xls"
             icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/excel_document.gif"
             id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.MicrosoftExcelEditor2003"
-            name="Microsoft Excel Editor xls">
+            name="Microsoft Excel Spreadsheet">
       </editor>
       <editor
             class="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.WordEditorDocx"
@@ -25,7 +25,7 @@
             extensions="docx"
             icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/word_document.gif"
             id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.MicrosoftWordEditor2007"
-            name="Microsoft Word Editor docx">
+            name="Office Open XML Wordprocessing">
       </editor>
       <editor
             class="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.WordEditorDoc"
@@ -33,7 +33,7 @@
             extensions="doc"
             icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/word_document.gif"
             id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.MicrosoftWordEditor2003"
-            name="Microsoft Word Editor doc">
+            name="Microsoft Word">
       </editor>              
    </extension> 
    <extension
