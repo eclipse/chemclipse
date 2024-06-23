@@ -21,7 +21,6 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.exceptions.NoMassSpectrumConverterAvailableException;
@@ -40,13 +39,11 @@ import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.DatabaseImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumLibraryUI;
-import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
@@ -60,6 +57,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IURIEditorInput;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.part.EditorPart;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -67,7 +70,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
 
-public class DatabaseEditor implements IChemClipseEditor {
+public class DatabaseEditor extends EditorPart {
 
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumLibraryEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.editors.DatabaseEditor";
@@ -75,13 +78,13 @@ public class DatabaseEditor implements IChemClipseEditor {
 	public static final String TOOLTIP = "Mass Spectrum Library - Detector Type: MSD";
 	//
 	private static final Logger logger = Logger.getLogger(DatabaseEditor.class);
+	//
+	private boolean isDirty = false;
 	/*
 	 * Injected member in constructor
 	 */
 	@Inject
 	private MPart part;
-	@Inject
-	private MDirtyable dirtyable;
 	@Inject
 	private MApplication application;
 	@Inject
@@ -96,10 +99,6 @@ public class DatabaseEditor implements IChemClipseEditor {
 	private IMassSpectra massSpectra = null;
 	private ArrayList<EventHandler> registeredEventHandler;
 	private List<Object> objects = new ArrayList<>();
-	/*
-	 * Showing additional info in tabs.
-	 */
-	private TabFolder tabFolder;
 
 	public void registerEvent(String topic, String property) {
 
@@ -146,7 +145,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 		try {
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
-			saveAs();
+			doSaveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
 			Thread.currentThread().interrupt();
@@ -154,20 +153,6 @@ public class DatabaseEditor implements IChemClipseEditor {
 	}
 
 	@Override
-	public boolean saveAs() {
-
-		boolean saveSuccessful = false;
-		if(massSpectra != null) {
-			try {
-				saveSuccessful = DatabaseFileSupport.saveMassSpectra(massSpectra);
-				dirtyable.setDirty(!saveSuccessful);
-			} catch(NoConverterAvailableException e) {
-				logger.warn(e);
-			}
-		}
-		return saveSuccessful;
-	}
-
 	@Focus
 	public void setFocus() {
 
@@ -182,7 +167,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 			Object object = objects.get(0);
 			if(object instanceof IMassSpectra newMassSpectra) {
 				if(object == massSpectra) {
-					dirtyable.setDirty(newMassSpectra.isDirty());
+					isDirty = newMassSpectra.isDirty();
 				}
 			}
 		}
@@ -195,17 +180,6 @@ public class DatabaseEditor implements IChemClipseEditor {
 		createPages(parent);
 		registeredEventHandler = new ArrayList<>();
 		registerEvents();
-	}
-
-	private void createEditorPage() {
-
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Library");
-		//
-		massSpectrumLibraryUI = new MassSpectrumLibraryUI(tabFolder, SWT.NONE);
-		updateMassSpectrumListUI();
-		//
-		tabItem.setControl(massSpectrumLibraryUI);
 	}
 
 	private void createErrorMessagePage(Composite parent) {
@@ -221,14 +195,12 @@ public class DatabaseEditor implements IChemClipseEditor {
 		if(massSpectra != null && massSpectra.getMassSpectrum(1) != null) {
 			String label = ("".equals(massSpectra.getName())) ? massSpectrumFile.getName() : massSpectra.getName();
 			part.setLabel(label);
-			tabFolder = new TabFolder(parent, SWT.BOTTOM);
-			createEditorPage();
 		} else {
 			createErrorMessagePage(parent);
 		}
 	}
 
-	private void importMassSpectra(File file, boolean batch) throws ChromatogramIsNullException {
+	private void importMassSpectra(File file, boolean batch) {
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
 		DatabaseImportRunnable runnable = new DatabaseImportRunnable(file);
@@ -336,12 +308,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 				monitor.subTask("Save Mass Spectra");
 				IProcessingInfo<File> processingInfo = DatabaseConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
 				try {
-					/*
-					 * If no failures have occurred, set the dirty status to
-					 * false.
-					 */
-					processingInfo.getProcessingResult();
-					dirtyable.setDirty(false);
+					isDirty = !processingInfo.hasErrorMessages();
 				} catch(TypeCastException e) {
 					logger.warn(e);
 				}
@@ -361,5 +328,75 @@ public class DatabaseEditor implements IChemClipseEditor {
 	private void updateMassSpectrumListUI() {
 
 		massSpectrumLibraryUI.update(massSpectrumFile, massSpectra);
+	}
+
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+
+		if(massSpectra != null) {
+			try {
+				boolean saveSuccessful = DatabaseFileSupport.saveMassSpectra(massSpectra);
+				isDirty = !saveSuccessful;
+			} catch(NoConverterAvailableException e) {
+				logger.warn(e);
+			}
+		}
+	}
+
+	@Override
+	public void doSaveAs() {
+
+		try {
+			DatabaseFileSupport.saveMassSpectra(Display.getCurrent().getActiveShell(), massSpectra, "Mass Spectra");
+		} catch(NoConverterAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
+	@Override
+	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+
+		setSite(site);
+		setInput(input);
+		//
+		String fileName = input.getName();
+		fileName = fileName.substring(0, fileName.length() - 4);
+		setPartName(fileName);
+		//
+		if(input instanceof IFileEditorInput fileEditorInput) {
+			File file = fileEditorInput.getFile().getLocation().toFile();
+			importMassSpectra(file, true);
+		} else if(input instanceof IURIEditorInput uriEditorInput) {
+			File file = new File(uriEditorInput.getURI());
+			importMassSpectra(file, true);
+		} else {
+			throw new PartInitException("The file could't be loaded.");
+		}
+	}
+
+	@Override
+	public boolean isDirty() {
+
+		return isDirty;
+	}
+
+	@Override
+	public boolean isSaveAsAllowed() {
+
+		return true;
+	}
+
+	@Override
+	public void createPartControl(Composite parent) {
+
+		TabFolder tabFolder = new TabFolder(parent, SWT.BOTTOM);
+		//
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Library");
+		//
+		massSpectrumLibraryUI = new MassSpectrumLibraryUI(tabFolder, SWT.NONE);
+		updateMassSpectrumListUI();
+		//
+		tabItem.setControl(massSpectrumLibraryUI);
 	}
 }

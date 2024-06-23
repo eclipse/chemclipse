@@ -156,7 +156,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	@Override
 	public boolean isSaveAsAllowed() {
 
-		return false; // enable once the Date Explorer can open .obj
+		return false; // enable once the Data Explorer can open .obj
 	}
 
 	@Override
