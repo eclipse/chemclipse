@@ -45,10 +45,6 @@
          version="0.0.0"/>
 
    <plugin
-         id="org.eclipse.chemclipse.chromatogram.batchprocess"
-         version="0.0.0"/>
-
-   <plugin
          id="org.eclipse.chemclipse.converter"
          version="0.0.0"/>
 
@@ -221,23 +217,11 @@
          version="0.0.0"/>
 
    <plugin
-         id="org.eclipse.chemclipse.chromatogram.peak.detector.ui"
-         version="0.0.0"/>
-
-   <plugin
          id="org.eclipse.chemclipse.chromatogram.csd.peak.detector"
          version="0.0.0"/>
 
    <plugin
-         id="org.eclipse.chemclipse.chromatogram.csd.peak.detector.ui"
-         version="0.0.0"/>
-
-   <plugin
          id="org.eclipse.chemclipse.chromatogram.wsd.peak.detector"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.ui"
          version="0.0.0"/>
 
    <plugin
