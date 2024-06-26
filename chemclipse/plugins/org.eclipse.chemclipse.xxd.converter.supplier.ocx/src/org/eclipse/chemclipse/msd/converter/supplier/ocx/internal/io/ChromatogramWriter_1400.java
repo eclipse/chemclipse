@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - adjust to API Changes
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io;
@@ -46,10 +46,12 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.targets.ITarget;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.io.ChromatogramWriterMSD;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.io.IChromatogramMSDZipWriter;
+import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.VendorIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -344,7 +346,7 @@ public class ChromatogramWriter_1400 extends AbstractChromatogramWriter implemen
 		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_PEAKS_MSD);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
-		List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
+		List<IChromatogramPeakMSD> peaks = getPeaks(chromatogram);
 		dataOutputStream.writeInt(peaks.size()); // Number of Peaks
 		for(IChromatogramPeakMSD peak : peaks) {
 			writePeak(dataOutputStream, peak);
@@ -352,6 +354,70 @@ public class ChromatogramWriter_1400 extends AbstractChromatogramWriter implemen
 		//
 		dataOutputStream.flush();
 		zipOutputStream.closeEntry();
+	}
+
+	private List<IChromatogramPeakMSD> getPeaks(IChromatogramMSD chromatogram) {
+
+		TimeRange timeRangeChromatogram = new TimeRange("Chromatogram", chromatogram.getStartRetentionTime(), chromatogram.getStopRetentionTime());
+		List<IChromatogramPeakMSD> peaks = new ArrayList<>();
+		for(IChromatogramPeakMSD peak : chromatogram.getPeaks()) {
+			if(isValidPeak(peak, timeRangeChromatogram)) {
+				if(cleanPeak(peak)) {
+					peaks.add(peak);
+				}
+			}
+		}
+		//
+		return peaks;
+	}
+
+	private boolean isValidPeak(IChromatogramPeakMSD peak, TimeRange timeRangeChromatogram) {
+
+		/*
+		 * If scans of a region have been deleted, peaks shall be not saved, otherwise the import fails.
+		 */
+		IPeakModelMSD peakModel = peak.getPeakModel();
+		if(!peakModel.isStrictModel()) {
+			return false;
+		} else if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
+			return false;
+		} else if(peak.getPeakModel().getWidthByInflectionPoints() <= 0) {
+			return false; // P_SKIP_PEAK_WIDTH_CHECK
+		}
+		//
+		return true;
+	}
+
+	private boolean cleanPeak(IChromatogramPeakMSD peak) {
+
+		IPeakModelMSD peakModel = peak.getPeakModel();
+		IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
+		/*
+		 * Collect the invalid ions
+		 */
+		List<IIon> ionsToRemove = new ArrayList<>();
+		for(IIon ion : massSpectrum.getIons()) {
+			if(isIonInvalid(ion)) {
+				ionsToRemove.add(ion);
+			}
+		}
+		/*
+		 * Remove the invalid ions
+		 */
+		for(IIon ion : ionsToRemove) {
+			massSpectrum.removeIon(ion);
+		}
+		//
+		return massSpectrum.getNumberOfIons() > 0;
+	}
+
+	private boolean isIonInvalid(IIon ion) {
+
+		if(ion.getIon() < VendorIon.MIN_ION && ion.getIon() > VendorIon.MAX_ION) {
+			return true;
+		}
+		//
+		return false;
 	}
 
 	private void writeChromatogramArea(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramMSD chromatogram) throws IOException {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - adjust to API Changes
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io;
@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,6 +52,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.io.ChromatogramWriterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -278,7 +280,7 @@ public class ChromatogramWriter_1400 extends AbstractChromatogramWriter implemen
 		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_PEAKS_CSD);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
-		List<IChromatogramPeakCSD> peaks = chromatogram.getPeaks();
+		List<IChromatogramPeakCSD> peaks = getPeaks(chromatogram);
 		dataOutputStream.writeInt(peaks.size()); // Number of Peaks
 		for(IChromatogramPeakCSD peak : peaks) {
 			writePeak(dataOutputStream, peak);
@@ -286,6 +288,36 @@ public class ChromatogramWriter_1400 extends AbstractChromatogramWriter implemen
 		//
 		dataOutputStream.flush();
 		zipOutputStream.closeEntry();
+	}
+
+	private List<IChromatogramPeakCSD> getPeaks(IChromatogramCSD chromatogram) {
+
+		TimeRange timeRangeChromatogram = new TimeRange("Chromatogram", chromatogram.getStartRetentionTime(), chromatogram.getStopRetentionTime());
+		List<IChromatogramPeakCSD> peaks = new ArrayList<>();
+		for(IChromatogramPeakCSD peak : chromatogram.getPeaks()) {
+			if(isValidPeak(peak, timeRangeChromatogram)) {
+				peaks.add(peak);
+			}
+		}
+		//
+		return peaks;
+	}
+
+	private boolean isValidPeak(IChromatogramPeakCSD peak, TimeRange timeRangeChromatogram) {
+
+		/*
+		 * If scans of a region have been deleted, peaks shall be not saved, otherwise the import fails.
+		 */
+		IPeakModelCSD peakModel = peak.getPeakModel();
+		if(!peakModel.isStrictModel()) {
+			return false;
+		} else if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
+			return false;
+		} else if(peak.getPeakModel().getWidthByInflectionPoints() <= 0) {
+			return false; // P_SKIP_PEAK_WIDTH_CHECK
+		}
+		//
+		return true;
 	}
 
 	private void writeChromatogramArea(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {

@@ -19,13 +19,13 @@ import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IForma
  */
 public enum ChromatogramVersion implements IFormatVersion, ILabel {
 
-	V_0701(IFormat.CHROMATOGRAM_VERSION_0701, "Nernst"), //
-	V_0803(IFormat.CHROMATOGRAM_VERSION_0803, "Dempster"), //
-	V_0903(IFormat.CHROMATOGRAM_VERSION_0903, "Mattauch"), //
-	V_1004(IFormat.CHROMATOGRAM_VERSION_1004, "Aston"), //
-	V_1100(IFormat.CHROMATOGRAM_VERSION_1100, "Diels"), //
-	V_1300(IFormat.CHROMATOGRAM_VERSION_1300, "Dalton v1"), //
-	V_1301(IFormat.CHROMATOGRAM_VERSION_1301, "Dalton v2"), //
+	// V_0701(IFormat.CHROMATOGRAM_VERSION_0701, "Nernst"), //
+	// V_0803(IFormat.CHROMATOGRAM_VERSION_0803, "Dempster"), //
+	// V_0903(IFormat.CHROMATOGRAM_VERSION_0903, "Mattauch"), //
+	// V_1004(IFormat.CHROMATOGRAM_VERSION_1004, "Aston"), //
+	// V_1100(IFormat.CHROMATOGRAM_VERSION_1100, "Diels"), //
+	// V_1300(IFormat.CHROMATOGRAM_VERSION_1300, "Dalton v1"), //
+	// V_1301(IFormat.CHROMATOGRAM_VERSION_1301, "Dalton v2"), //
 	V_1400(IFormat.CHROMATOGRAM_VERSION_1400, "Lawrence"), //
 	V_1500(IFormat.CHROMATOGRAM_VERSION_1500, "McLafferty v1"), //
 	V_1501(IFormat.CHROMATOGRAM_VERSION_1501, "McLafferty v2"), //
