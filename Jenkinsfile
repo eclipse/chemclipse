@@ -10,6 +10,7 @@ pipeline {
 	parameters {
 		booleanParam(name: 'CLEAN_INTEGRATION', defaultValue: false, description: 'Attention: Cleans the integration folder with all branches completely.')
 		booleanParam(name: 'CLEAN_WORKSPACE', defaultValue: false, description: 'Clean the workspace before build')
+		booleanParam(name: 'CODESIGN', defaultValue: false, description: 'Sign the artifacts.')
 		booleanParam(name: 'PUBLISH_PRODUCTS', defaultValue: false, description: 'Copy to the compiled products for Windows, macOS and Linux')
 	}
 	tools {
@@ -36,7 +37,16 @@ pipeline {
 		}
 		stage('build') {
 			steps {
-				sh 'mvn -B -P eclipse-sign -Dtycho.localArtifacts=ignore -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dmaven.test.failure.ignore=true -Dmaven.repo.local=$WORKSPACE/.mvn -f chemclipse/releng/org.eclipse.chemclipse.aggregator/pom.xml clean install'
+				sh """
+					mvn -B ${params.CODESIGN ? '-P eclipse-sign' : ''} \\
+						-Dtycho.localArtifacts=ignore \\
+						-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \\
+						-Dmaven.test.failure.ignore=true \\
+						-Dmaven.repo.local=$WORKSPACE/.mvn \\
+						-f chemclipse/releng/org.eclipse.chemclipse.aggregator/pom.xml \\
+						clean install
+				"""
+
 				archiveArtifacts 'chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/*.zip,chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/*.tar.gz'
 			}
 		}
