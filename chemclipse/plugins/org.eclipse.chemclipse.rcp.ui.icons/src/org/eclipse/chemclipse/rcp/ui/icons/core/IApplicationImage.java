@@ -438,6 +438,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_COPY_CLIPBOARD = "copy-clipboard.png";
 	String IMAGE_ZOOM_LOCKED = "zoomLocked.png";
 	String IMAGE_ZOOM_IN = "zoomIn.png";
+	String IMAGE_ZOOM_OUT = "zoomOut.png";
+	String IMAGE_ZOOM_RESET = "zoomReset.png";
 	String IMAGE_TYPES = "types.png";
 	String IMAGE_VALUE_DECREASE = "valueDecrease.gif";
 	String IMAGE_VALUE_INCREASE = "valueIncrease.gif";
