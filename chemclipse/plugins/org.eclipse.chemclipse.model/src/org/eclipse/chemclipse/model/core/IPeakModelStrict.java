@@ -67,7 +67,7 @@ public interface IPeakModelStrict {
 	int getWidthByInflectionPoints();
 
 	/**
-	 * Returns the peak width at a given height.<br/>
+	 * Returns the peak width at a given height in miliseconds.<br/>
 	 * The width is measured were the equations of the point of inflection
 	 * intersects with the percentage height of the peak.<br/>
 	 * As the height, the abundance (height) by inflection points is chosen. The
