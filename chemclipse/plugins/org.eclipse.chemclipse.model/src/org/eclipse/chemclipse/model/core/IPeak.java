@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -270,6 +270,9 @@ public interface IPeak extends ITargetSupplier, PeakPosition, IClassifier, ISign
 	 */
 	void setMarkedAsDeleted(boolean markedAsDeleted);
 
+	/**
+	 * Returns the scan number at peak stop.
+	 */
 	@Override
 	default int getPeakEnd() {
 
@@ -277,6 +280,9 @@ public interface IPeak extends ITargetSupplier, PeakPosition, IClassifier, ISign
 		return peakModel.getPeakScan(peakModel.getStopRetentionTime()).getScanNumber() - 1;
 	}
 
+	/**
+	 * Returns the scan number at peak start.
+	 */
 	@Override
 	default int getPeakStart() {
 
@@ -284,6 +290,9 @@ public interface IPeak extends ITargetSupplier, PeakPosition, IClassifier, ISign
 		return peakModel.getPeakScan(peakModel.getStartRetentionTime()).getScanNumber() - 1;
 	}
 
+	/**
+	 * Returns the scan number at peak maximum.
+	 */
 	@Override
 	default int getPeakMaximum() {
 
@@ -291,12 +300,18 @@ public interface IPeak extends ITargetSupplier, PeakPosition, IClassifier, ISign
 		return peakModel.getPeakMaximum().getScanNumber() - 1;
 	}
 
+	/**
+	 * Returns the retention time at peak maximum in milliseconds.
+	 */
 	@Override
 	default double getX() {
 
 		return getPeakModel().getRetentionTimeAtPeakMaximum();
 	}
 
+	/**
+	 * Returns the abundance of the peak including background.
+	 */
 	@Override
 	default double getY() {
 
