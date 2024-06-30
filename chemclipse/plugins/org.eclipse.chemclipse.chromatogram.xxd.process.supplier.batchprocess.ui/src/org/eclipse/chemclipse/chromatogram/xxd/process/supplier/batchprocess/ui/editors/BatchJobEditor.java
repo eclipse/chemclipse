@@ -129,12 +129,12 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 				monitor.run(false, false, runnable);
 				batchProcessJob = runnable.getBatchProcessJob();
 			} catch(InvocationTargetException e) {
-				throw new PartInitException("The file could't be loaded.", e.getTargetException());
+				throw new PartInitException("The file couldn't be loaded.", e.getTargetException());
 			} catch(InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
 		} else {
-			throw new PartInitException("The file could't be loaded.");
+			throw new PartInitException("The file couldn't be loaded.");
 		}
 	}
 

@@ -88,7 +88,7 @@ public class EditorCalibration extends MultiPageEditorPart {
 		} else if(input instanceof IURIEditorInput uriEditorInput) {
 			this.file = new File(uriEditorInput.getURI());
 		} else {
-			throw new PartInitException("The file could't be loaded.");
+			throw new PartInitException("Unimplemented editor input " + input.getClass());
 		}
 	}
 

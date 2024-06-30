@@ -370,7 +370,7 @@ public class DatabaseEditor extends EditorPart {
 			File file = new File(uriEditorInput.getURI());
 			importMassSpectra(file, true);
 		} else {
-			throw new PartInitException("The file could't be loaded.");
+			throw new PartInitException("Unimplemented editor input " + input.getClass());
 		}
 	}
 
