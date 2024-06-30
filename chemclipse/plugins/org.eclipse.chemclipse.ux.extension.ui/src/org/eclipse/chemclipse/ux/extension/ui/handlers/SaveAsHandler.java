@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.handlers;
 
-import jakarta.inject.Named;
-
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.core.commands.ParameterizedCommand;
@@ -23,7 +21,11 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor;
 
+import jakarta.inject.Named;
+
+@SuppressWarnings("restriction")
 public class SaveAsHandler {
 
 	private static final Logger logger = Logger.getLogger(SaveAsHandler.class);
@@ -32,7 +34,7 @@ public class SaveAsHandler {
 	boolean canExecute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
 		if(part != null) {
-			if(part.isDirty() || part.getObject() instanceof IChemClipseEditor) {
+			if (part.getObject() instanceof IChemClipseEditor || part.getObject() instanceof CompatibilityEditor) {
 				return true;
 			}
 		}
