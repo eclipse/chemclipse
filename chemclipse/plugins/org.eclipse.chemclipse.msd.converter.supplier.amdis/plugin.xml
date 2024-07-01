@@ -15,7 +15,7 @@
             isImportable="true">
       </DatabaseSupplier>
       <DatabaseSupplier
-            description="Reads and writes NIST Text  (MSP) mass spectra."
+            description="Reads and writes NIST Text (MSP) mass spectra."
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPDatabaseExportConverter"
             fileExtension=".msp"
             filterName="NIST Text (*.msp)"
@@ -50,7 +50,7 @@
             isImportable="false">
       </PeakSupplier>
       <PeakSupplier
-            description="Writes NIST Text  (MSP) mass spectra."
+            description="Writes NIST Text (MSP) mass spectra."
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPPeakExportConverter"
             fileExtension=".msp"
             filterName="NIST Text (*.msp)"

@@ -30,6 +30,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.osgi.service.event.Event;
@@ -84,8 +85,10 @@ public class EditorCalibration extends MultiPageEditorPart {
 		setPartName(fileName);
 		if(input instanceof IFileEditorInput fileEditorInput) {
 			this.file = fileEditorInput.getFile().getLocation().toFile();
+		} else if(input instanceof IURIEditorInput uriEditorInput) {
+			this.file = new File(uriEditorInput.getURI());
 		} else {
-			throw new PartInitException("The file could't be loaded.");
+			throw new PartInitException("Unimplemented editor input " + input.getClass());
 		}
 	}
 

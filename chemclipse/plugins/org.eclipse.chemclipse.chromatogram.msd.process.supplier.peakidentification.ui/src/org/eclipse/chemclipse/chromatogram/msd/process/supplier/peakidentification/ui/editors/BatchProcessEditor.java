@@ -148,7 +148,7 @@ public class BatchProcessEditor extends MultiPageEditorPart {
 				Thread.currentThread().interrupt();
 			}
 		} else {
-			throw new PartInitException("The file could't be loaded.");
+			throw new PartInitException("Unimplemented editor input " + input.getClass());
 		}
 	}
 

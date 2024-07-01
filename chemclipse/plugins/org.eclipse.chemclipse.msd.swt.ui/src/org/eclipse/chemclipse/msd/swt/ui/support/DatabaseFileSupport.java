@@ -124,7 +124,9 @@ public class DatabaseFileSupport {
 	/**
 	 * Opens a file dialog and tries to save the mass spectra
 	 * 
-	 * @param chromatogram
+	 * @param shell
+	 * @param peaks
+	 * @param fileName
 	 * @throws NoConverterAvailableException
 	 */
 	public static void saveMassSpectra(Shell shell, List<IPeakMSD> peaks, String fileName) throws NoConverterAvailableException {
@@ -179,7 +181,9 @@ public class DatabaseFileSupport {
 	/**
 	 * Opens a file dialog and tries to save the mass spectra
 	 * 
+	 * @param shell
 	 * @param massSpectra
+	 * @param fileName
 	 * @throws NoConverterAvailableException
 	 */
 	public static void saveMassSpectra(Shell shell, IMassSpectra massSpectra, String fileName) throws NoConverterAvailableException {
@@ -246,6 +250,7 @@ public class DatabaseFileSupport {
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
 		File data = runnable.getData();
 		if(data == null) {

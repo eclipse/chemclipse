@@ -38,4 +38,24 @@
             name="Database Collector (*.msl)">
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.chemclipse.ux.extension.msd.ui.editors.DatabaseEditor"
+            extensions="msl"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/database.gif"
+            id="org.eclipse.chemclipse.ux.extension.msd.ui.editors.DatabaseEditor.msl"
+            name="Mass Spectra Database">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.chemclipse.ux.extension.msd.ui.editors.DatabaseEditor"
+            extensions="msp"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/database.gif"
+            id="org.eclipse.chemclipse.ux.extension.msd.ui.editors.DatabaseEditor.msp"
+            name="Mass Spectra Database">
+      </editor>
+   </extension>
 </plugin>

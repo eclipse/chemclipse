@@ -156,7 +156,7 @@ public class EditorSampleQuant extends MultiPageEditorPart {
 		if(input instanceof IFileEditorInput fileEditorInput) {
 			file = fileEditorInput.getFile().getLocation().toFile();
 		} else {
-			throw new PartInitException("The file could't be loaded.");
+			throw new PartInitException("Unimplemented editor input " + input.getClass());
 		}
 	}
 
