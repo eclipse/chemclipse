@@ -231,6 +231,11 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_OVERLAY_FOCUS_SELECTION = "overlayFocusSelection";
 	public static final boolean DEF_OVERLAY_FOCUS_SELECTION = false;
 	/*
+	 * Header Data
+	 */
+	public static final String P_HEADER_DATA_USE_RICH_TEXT_EDITOR = "headerDataUseRichTextEditor";
+	public static final boolean DEF_HEADER_DATA_USE_RICH_TEXT_EDITOR = false;
+	/*
 	 * Scans
 	 */
 	public static final String P_SCAN_LABEL_FONT_NAME = "scanLabelFontName";
@@ -1058,6 +1063,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_MAX_DISPLAY_PEAK_TRACES, DEF_MAX_DISPLAY_PEAK_TRACES);
 		putDefault(P_PEAK_TRACES_OFFSET_RETENTION_TIME, DEF_PEAK_TRACES_OFFSET_RETENTION_TIME);
 		/*
+		 * Header Data
+		 */
+		putDefault(P_HEADER_DATA_USE_RICH_TEXT_EDITOR, DEF_HEADER_DATA_USE_RICH_TEXT_EDITOR);
+		/*
 		 * Scans
 		 */
 		putDefault(P_SCAN_LABEL_FONT_NAME, DEF_SCAN_LABEL_FONT_NAME);
@@ -1547,6 +1556,11 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static boolean isHideProcessMethodEntries() {
 
 		return INSTANCE().getBoolean(P_EDIT_HISTORY_HIDE_PROCESS_METHOD_ENTRIES, DEF_EDIT_HISTORY_HIDE_PROCESS_METHOD_ENTRIES);
+	}
+
+	public static boolean isHeaderDataUseRichTextEditor() {
+
+		return INSTANCE().getBoolean(P_HEADER_DATA_USE_RICH_TEXT_EDITOR, DEF_HEADER_DATA_USE_RICH_TEXT_EDITOR);
 	}
 
 	public static HeaderField getChromatogramEditorLabel() {
