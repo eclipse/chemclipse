@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.swt.ui.components.DataMapSupportUI;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.nebula.widgets.richtext.RichTextEditor;
 import org.eclipse.swt.SWT;
@@ -40,6 +41,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -61,7 +63,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<Button> buttonDelete = new AtomicReference<>();
 	private AtomicReference<HeaderDataListUI> tableViewer = new AtomicReference<>();
 	private AtomicReference<Text> miscellaneousControl = new AtomicReference<>();
-	private AtomicReference<RichTextEditor> findingsControl = new AtomicReference<>();
+	private AtomicReference<Control> findingsControl = new AtomicReference<>();
 	//
 	private IMeasurementInfo measurementInfo = null;
 
@@ -275,19 +277,59 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Findings");
 		//
-		RichTextEditor richTextEditor = new RichTextEditor(tabFolder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.WRAP);
-		richTextEditor.addModifyListener(new ModifyListener() {
+		Control editor;
+		boolean useRichTextEditor = isUseRichTextEditor();
+		if(useRichTextEditor) {
+			/*
+			 * RTF
+			 */
+			RichTextEditor richTextEditor = new RichTextEditor(tabFolder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.WRAP);
+			richTextEditor.addModifyListener(new ModifyListener() {
 
-			@Override
-			public void modifyText(ModifyEvent e) {
+				@Override
+				public void modifyText(ModifyEvent e) {
 
-				if(measurementInfo != null) {
-					measurementInfo.setFindings(richTextEditor.getText().trim());
+					if(measurementInfo != null) {
+						measurementInfo.setFindings(richTextEditor.getText().trim());
+					}
 				}
-			}
-		});
-		tabItem.setControl(richTextEditor);
-		findingsControl.set(richTextEditor);
+			});
+			editor = richTextEditor;
+		} else {
+			/*
+			 * ASCII
+			 */
+			Text plainTextEditor = new Text(tabFolder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.WRAP);
+			plainTextEditor.addModifyListener(new ModifyListener() {
+
+				@Override
+				public void modifyText(ModifyEvent e) {
+
+					if(measurementInfo != null) {
+						measurementInfo.setFindings(plainTextEditor.getText().trim());
+					}
+				}
+			});
+			editor = plainTextEditor;
+		}
+		//
+		tabItem.setControl(editor);
+		findingsControl.set(editor);
+	}
+
+	private boolean isUseRichTextEditor() {
+
+		boolean useRichTextEditor = PreferenceSupplier.isHeaderDataUseRichTextEditor();
+		if(useRichTextEditor) {
+			/*
+			 * TODO: Check if WebKit is available - otherwise disable the rich text option
+			 * ---
+			 * org.eclipse.swt.SWTError: No more handles because there is no underlying browser available.
+			 * Please ensure that WebKit with its GTK 3.x/4.x bindings is installed.
+			 */
+		}
+		//
+		return useRichTextEditor;
 	}
 
 	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
@@ -384,11 +426,21 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 			 * Tabs
 			 */
 			miscellaneousControl.get().setText(measurementInfo.getMiscInfo());
-			findingsControl.get().setText(measurementInfo.getFindings());
+			updateFindings(measurementInfo.getFindings());
 		} else {
 			tableViewer.get().setInput(null);
 			miscellaneousControl.get().setText("");
-			findingsControl.get().setText("");
+			updateFindings("");
+		}
+	}
+
+	private void updateFindings(String content) {
+
+		Control control = findingsControl.get();
+		if(control instanceof RichTextEditor richTextEditor) {
+			richTextEditor.setText(content);
+		} else if(control instanceof Text plainTextEditor) {
+			plainTextEditor.setText(content);
 		}
 	}
 
