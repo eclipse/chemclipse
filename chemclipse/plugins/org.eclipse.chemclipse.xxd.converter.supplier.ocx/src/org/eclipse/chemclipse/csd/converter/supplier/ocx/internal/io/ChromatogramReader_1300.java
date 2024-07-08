@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -82,7 +82,7 @@ import org.eclipse.chemclipse.wsd.converter.supplier.ocx.io.ChromatogramReaderWS
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
@@ -174,18 +174,18 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			 * Read the chromatographic information.
 			 */
 			chromatogram = new VendorChromatogram();
-			readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_CSD), closeStream, chromatogram);
-			readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_CSD), closeStream, chromatogram);
-			readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_CSD), closeStream, chromatogram);
+			readMethod(getDataInputStream(object, directoryPrefix + Format.FILE_SYSTEM_SETTINGS_CSD), closeStream, chromatogram);
+			readScans(getDataInputStream(object, directoryPrefix + Format.FILE_SCANS_CSD), closeStream, chromatogram);
+			readBaseline(getDataInputStream(object, directoryPrefix + Format.FILE_BASELINE_CSD), closeStream, chromatogram);
 			subMonitor.worked(20);
-			readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS_CSD), closeStream, chromatogram);
-			readArea(getDataInputStream(object, directoryPrefix + IFormat.FILE_AREA_CSD), closeStream, chromatogram);
+			readPeaks(getDataInputStream(object, directoryPrefix + Format.FILE_PEAKS_CSD), closeStream, chromatogram);
+			readArea(getDataInputStream(object, directoryPrefix + Format.FILE_AREA_CSD), closeStream, chromatogram);
 			subMonitor.worked(20);
-			readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_CSD), closeStream, chromatogram);
-			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_CSD), closeStream, chromatogram);
+			readIdentification(getDataInputStream(object, directoryPrefix + Format.FILE_IDENTIFICATION_CSD), closeStream, chromatogram);
+			readHistory(getDataInputStream(object, directoryPrefix + Format.FILE_HISTORY_CSD), closeStream, chromatogram);
 			subMonitor.worked(20);
-			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_CSD), closeStream, chromatogram);
-			readSeparationColumn(getDataInputStream(object, directoryPrefix + IFormat.FILE_SEPARATION_COLUMN_CSD), closeStream, chromatogram);
+			readMiscellaneous(getDataInputStream(object, directoryPrefix + Format.FILE_MISC_CSD), closeStream, chromatogram);
+			readSeparationColumn(getDataInputStream(object, directoryPrefix + Format.FILE_SEPARATION_COLUMN_CSD), closeStream, chromatogram);
 			setAdditionalInformation(file, chromatogram);
 			subMonitor.worked(20);
 			//
@@ -194,7 +194,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 				 * Read the referenced chromatograms.
 				 * Get the size could lead to an exception if no reference info is stored.
 				 */
-				int size = readChromatogramReferenceInfo(getDataInputStream(object, directoryPrefix + IFormat.FILE_REFERENCE_INFO), closeStream);
+				int size = readChromatogramReferenceInfo(getDataInputStream(object, directoryPrefix + Format.FILE_REFERENCE_INFO), closeStream);
 				readReferencedChromatograms(object, directoryPrefix, chromatogram, size, closeStream, monitor);
 				subMonitor.worked(20);
 			} catch(IOException e) {
@@ -424,7 +424,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 
 	private void setAdditionalInformation(File file, IChromatogramCSD chromatogram) {
 
-		chromatogram.setConverterId(IFormat.CONVERTER_ID_CHROMATOGRAM);
+		chromatogram.setConverterId(Format.CONVERTER_ID_CHROMATOGRAM);
 		chromatogram.setFile(file);
 		// Delay
 		int startRetentionTime = chromatogram.getStartRetentionTime();
@@ -601,8 +601,8 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 
 		for(int i = 0; i < size; i++) {
 			//
-			String directory = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.CHROMATOGRAM_REFERENCE_SEPARATOR + i + IFormat.DIR_SEPARATOR;
-			DataInputStream dataInputStream = getDataInputStream(object, directory + IFormat.FILE_CHROMATOGRAM_TYPE);
+			String directory = directoryPrefix + Format.DIR_CHROMATOGRAM_REFERENCE + Format.CHROMATOGRAM_REFERENCE_SEPARATOR + i + Format.DIR_SEPARATOR;
+			DataInputStream dataInputStream = getDataInputStream(object, directory + Format.FILE_CHROMATOGRAM_TYPE);
 			String dataType = readString(dataInputStream);
 			//
 			if(closeStream) {
@@ -615,20 +615,20 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 
 	private void parseChromatogram(Object object, String dataType, String directoryPrefix, IChromatogramCSD chromatogram, boolean closeStream, IProgressMonitor monitor) throws IOException {
 
-		String directory = directoryPrefix + IFormat.DIR_CHROMATOGRAM_REFERENCE + IFormat.DIR_SEPARATOR;
+		String directory = directoryPrefix + Format.DIR_CHROMATOGRAM_REFERENCE + Format.DIR_SEPARATOR;
 		if(object instanceof ZipFile zipFile) {
 			/*
 			 * Chromatogram
 			 */
-			if(dataType.equals(IFormat.DATA_TYPE_MSD)) {
+			if(dataType.equals(Format.DATA_TYPE_MSD)) {
 				ChromatogramReaderMSD chromatogramReaderMSD = new ChromatogramReaderMSD();
 				IChromatogramMSD chromatogramMSD = chromatogramReaderMSD.read(zipFile, directory, monitor);
 				chromatogram.addReferencedChromatogram(chromatogramMSD);
-			} else if(dataType.equals(IFormat.DATA_TYPE_CSD)) {
+			} else if(dataType.equals(Format.DATA_TYPE_CSD)) {
 				ChromatogramReaderCSD chromatogramReaderCSD = new ChromatogramReaderCSD();
 				IChromatogramCSD chromatogramCSD = chromatogramReaderCSD.read(zipFile, directory, monitor);
 				chromatogram.addReferencedChromatogram(chromatogramCSD);
-			} else if(dataType.equals(IFormat.DATA_TYPE_WSD)) {
+			} else if(dataType.equals(Format.DATA_TYPE_WSD)) {
 				ChromatogramReaderWSD chromatogramReaderWSD = new ChromatogramReaderWSD();
 				IChromatogramWSD chromatogramWSD = chromatogramReaderWSD.read(zipFile, directory, monitor);
 				chromatogram.addReferencedChromatogram(chromatogramWSD);
@@ -807,9 +807,9 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 	private boolean isValidFileFormat(ZipFile zipFile) throws IOException {
 
 		boolean isValid = false;
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, Format.FILE_VERSION);
 		String version = readString(dataInputStream);
-		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
+		if(version.equals(Format.CHROMATOGRAM_VERSION_1300)) {
 			isValid = true;
 		}
 		//

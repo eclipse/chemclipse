@@ -38,7 +38,7 @@ import org.eclipse.chemclipse.wsd.converter.supplier.ocx.io.ChromatogramWriterWS
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.settings.ChromatogramExportSettings;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions.IFormatVersion;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions.VersionConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -90,7 +90,7 @@ public class ChromatogramFileExportProcessSupplier implements IProcessTypeSuppli
 								public void run() {
 
 									IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-									String fileName = chromatogram.getName().isEmpty() ? IFormatVersion.FILE_NAME_CHROMATOGRAM : chromatogram.getName() + IFormatVersion.FILE_EXTENSION_CHROMATOGRAM;
+									String fileName = chromatogram.getName().isEmpty() ? VersionConstants.FILE_NAME_CHROMATOGRAM : chromatogram.getName() + VersionConstants.FILE_EXTENSION_CHROMATOGRAM;
 									/*
 									 * Sometimes the shell is null.
 									 */
@@ -103,9 +103,9 @@ public class ChromatogramFileExportProcessSupplier implements IProcessTypeSuppli
 									//
 									FileDialog fileDialog = new FileDialog(display.getActiveShell(), SWT.SAVE);
 									fileDialog.setOverwrite(true);
-									fileDialog.setText(IFormatVersion.DESCRIPTION_CHROMATOGRAM);
-									fileDialog.setFilterExtensions(new String[]{IFormatVersion.FILTER_EXTENSION_CHROMATOGRAM});
-									fileDialog.setFilterNames(new String[]{IFormatVersion.FILTER_NAME_CHROMATOGRAM});
+									fileDialog.setText(VersionConstants.DESCRIPTION_CHROMATOGRAM);
+									fileDialog.setFilterExtensions(new String[]{VersionConstants.FILTER_EXTENSION_CHROMATOGRAM});
+									fileDialog.setFilterNames(new String[]{VersionConstants.FILTER_NAME_CHROMATOGRAM});
 									fileDialog.setFileName(fileName);
 									fileDialog.setFilterPath(PreferenceSupplier.getListPathExport());
 									String path = fileDialog.open();

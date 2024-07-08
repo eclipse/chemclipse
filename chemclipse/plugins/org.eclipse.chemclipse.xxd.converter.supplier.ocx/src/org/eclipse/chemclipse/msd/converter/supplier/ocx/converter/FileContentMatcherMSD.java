@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,7 @@ import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.converter.core.AbstractFileContentMatcher;
 import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 
 public class FileContentMatcherMSD extends AbstractFileContentMatcher implements IFileContentMatcher {
 
@@ -41,7 +41,7 @@ public class FileContentMatcherMSD extends AbstractFileContentMatcher implements
 					 * DIR_CHROMATOGRAM
 					 * Versions <= 0.9.0.3
 					 */
-					if(name.equals(IFormat.DIR_CHROMATOGRAM_MSD) || name.equals(IFormat.DIR_CHROMATOGRAM)) {
+					if(name.equals(Format.DIR_CHROMATOGRAM_MSD) || name.equals(Format.DIR_CHROMATOGRAM)) {
 						isValidFormat = true;
 						break exitloop;
 					}

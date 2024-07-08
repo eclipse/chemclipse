@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakWriter;
-import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.IConstants;
+import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.MatlabParafac;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
@@ -102,20 +102,20 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 		 * #
 		 */
 		StringBuilder builder = new StringBuilder();
-		builder.append(IConstants.PEAK_IDENTIFIER);
+		builder.append(MatlabParafac.PEAK_IDENTIFIER);
 		builder.append(lineSeparator);
 		//
-		builder.append(IConstants.COMMENT);
+		builder.append(MatlabParafac.COMMENT);
 		builder.append(lineSeparator);
 		//
-		builder.append(IConstants.COMMENT);
+		builder.append(MatlabParafac.COMMENT);
 		builder.append(" ");
 		builder.append("Peak");
 		builder.append(" ");
 		builder.append(peakCounter++);
 		builder.append(lineSeparator);
 		//
-		builder.append(IConstants.COMMENT);
+		builder.append(MatlabParafac.COMMENT);
 		builder.append(lineSeparator);
 		return builder.toString();
 	}
@@ -126,8 +126,8 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 		 * description PARAFAC model, 257820 to 276016 milliseconds, Peak 1
 		 */
 		StringBuilder builder = new StringBuilder();
-		builder.append(IConstants.DESCRIPTION);
-		builder.append(IConstants.VALUE_DELIMITER);
+		builder.append(MatlabParafac.DESCRIPTION);
+		builder.append(MatlabParafac.VALUE_DELIMITER);
 		String modelDescription = peak.getModelDescription();
 		if(modelDescription == null || modelDescription.equals("")) {
 			builder.append("Detector [");
@@ -159,7 +159,7 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 		/*
 		 * Header
 		 */
-		builder.append(IConstants.MASS_SPECTRUM + " " + IConstants.MASS_SPECTRUM_INFO);
+		builder.append(MatlabParafac.MASS_SPECTRUM + " " + MatlabParafac.MASS_SPECTRUM_INFO);
 		builder.append(lineSeparator);
 		/*
 		 * Values
@@ -171,7 +171,7 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 			float abundance = extractedIonSignal.getAbundance(ion);
 			if(abundance > 0.0f) {
 				builder.append(ion);
-				builder.append(IConstants.VALUE_DELIMITER);
+				builder.append(MatlabParafac.VALUE_DELIMITER);
 				builder.append(abundance);
 				builder.append(lineSeparator);
 			}
@@ -193,14 +193,14 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 		/*
 		 * Header
 		 */
-		builder.append(IConstants.ELUTION_PROFILE + " " + IConstants.ELUTION_PROFILE_INFO);
+		builder.append(MatlabParafac.ELUTION_PROFILE + " " + MatlabParafac.ELUTION_PROFILE_INFO);
 		builder.append(lineSeparator);
 		/*
 		 * Values
 		 */
 		for(Integer retentionTime : peakModel.getRetentionTimes()) {
 			builder.append(retentionTime);
-			builder.append(IConstants.VALUE_DELIMITER);
+			builder.append(MatlabParafac.VALUE_DELIMITER);
 			builder.append(peakModel.getPeakAbundance(retentionTime));
 			builder.append(lineSeparator);
 		}
@@ -210,11 +210,11 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 	private void setLineSeparator() {
 
 		if(OperatingSystemUtils.isWindows()) {
-			lineSeparator = IConstants.CRLF;
+			lineSeparator = MatlabParafac.CRLF;
 		} else if(OperatingSystemUtils.isMac()) {
-			lineSeparator = IConstants.CR;
+			lineSeparator = MatlabParafac.CR;
 		} else {
-			lineSeparator = IConstants.LF;
+			lineSeparator = MatlabParafac.LF;
 		}
 	}
 }

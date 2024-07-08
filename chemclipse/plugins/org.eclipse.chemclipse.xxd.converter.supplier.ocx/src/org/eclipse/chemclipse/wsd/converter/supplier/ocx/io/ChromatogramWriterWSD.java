@@ -32,7 +32,7 @@ import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.Chromatogra
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.ChromatogramWriter_1502;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.ChromatogramReferencesSupport;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -66,23 +66,23 @@ public class ChromatogramWriterWSD extends AbstractChromatogramWriter implements
 		 * Check the requested version of the file to be exported.
 		 * TODO Optimize
 		 */
-		if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1005)) {
+		if(versionSave.equals(Format.CHROMATOGRAM_VERSION_1005)) {
 			chromatogramWriter = new ChromatogramWriter_1005();
-		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1006)) {
+		} else if(versionSave.equals(Format.CHROMATOGRAM_VERSION_1006)) {
 			chromatogramWriter = new ChromatogramWriter_1006();
-		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1007)) {
+		} else if(versionSave.equals(Format.CHROMATOGRAM_VERSION_1007)) {
 			chromatogramWriter = new ChromatogramWriter_1007();
-		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1100)) {
+		} else if(versionSave.equals(Format.CHROMATOGRAM_VERSION_1100)) {
 			chromatogramWriter = new ChromatogramWriter_1100();
-		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
+		} else if(versionSave.equals(Format.CHROMATOGRAM_VERSION_1300)) {
 			chromatogramWriter = new ChromatogramWriter_1300();
-		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1301)) {
+		} else if(versionSave.equals(Format.CHROMATOGRAM_VERSION_1301)) {
 			chromatogramWriter = new ChromatogramWriter_1301();
-		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1400)) {
+		} else if(versionSave.equals(Format.CHROMATOGRAM_VERSION_1400)) {
 			chromatogramWriter = new ChromatogramWriter_1400();
-		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1500)) {
+		} else if(versionSave.equals(Format.CHROMATOGRAM_VERSION_1500)) {
 			chromatogramWriter = new ChromatogramWriter_1500();
-		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1501)) {
+		} else if(versionSave.equals(Format.CHROMATOGRAM_VERSION_1501)) {
 			chromatogramWriter = new ChromatogramWriter_1501();
 		} else {
 			chromatogramWriter = new ChromatogramWriter_1502();

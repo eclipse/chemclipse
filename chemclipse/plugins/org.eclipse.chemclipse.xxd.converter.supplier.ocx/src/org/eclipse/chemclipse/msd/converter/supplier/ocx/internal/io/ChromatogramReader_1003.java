@@ -79,7 +79,7 @@ import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -175,14 +175,14 @@ public class ChromatogramReader_1003 extends AbstractChromatogramReader implemen
 		if(useScanProxies) {
 			readScanProxies((ZipFile)object, directoryPrefix, file, chromatogram, monitor);
 		} else {
-			readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_MSD), closeStream, chromatogram, monitor);
+			readScans(getDataInputStream(object, directoryPrefix + Format.FILE_SCANS_MSD), closeStream, chromatogram, monitor);
 		}
-		readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_MSD), closeStream, chromatogram, monitor);
-		readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS_MSD), closeStream, chromatogram, monitor);
-		readArea(getDataInputStream(object, directoryPrefix + IFormat.FILE_AREA_MSD), closeStream, chromatogram, monitor);
-		readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_MSD), closeStream, chromatogram, monitor);
-		readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_MSD), closeStream, chromatogram, monitor);
-		readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_MSD), closeStream, chromatogram, monitor);
+		readBaseline(getDataInputStream(object, directoryPrefix + Format.FILE_BASELINE_MSD), closeStream, chromatogram, monitor);
+		readPeaks(getDataInputStream(object, directoryPrefix + Format.FILE_PEAKS_MSD), closeStream, chromatogram, monitor);
+		readArea(getDataInputStream(object, directoryPrefix + Format.FILE_AREA_MSD), closeStream, chromatogram, monitor);
+		readIdentification(getDataInputStream(object, directoryPrefix + Format.FILE_IDENTIFICATION_MSD), closeStream, chromatogram, monitor);
+		readHistory(getDataInputStream(object, directoryPrefix + Format.FILE_HISTORY_MSD), closeStream, chromatogram, monitor);
+		readMiscellaneous(getDataInputStream(object, directoryPrefix + Format.FILE_MISC_MSD), closeStream, chromatogram, monitor);
 		setAdditionalInformation(file, chromatogram, monitor);
 		//
 		return chromatogram;
@@ -190,7 +190,7 @@ public class ChromatogramReader_1003 extends AbstractChromatogramReader implemen
 
 	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, String directoryPrefix, IProgressMonitor monitor) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + IFormat.FILE_TIC_MSD);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + Format.FILE_TIC_MSD);
 		//
 		IVendorChromatogram chromatogram = new VendorChromatogram();
 		readScansOverview(dataInputStream, chromatogram, monitor);
@@ -220,7 +220,7 @@ public class ChromatogramReader_1003 extends AbstractChromatogramReader implemen
 
 	private void setAdditionalInformation(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) {
 
-		chromatogram.setConverterId(IFormat.CONVERTER_ID_CHROMATOGRAM);
+		chromatogram.setConverterId(Format.CONVERTER_ID_CHROMATOGRAM);
 		chromatogram.setFile(file);
 		// Delay
 		int startRetentionTime = chromatogram.getStartRetentionTime();
@@ -236,7 +236,7 @@ public class ChromatogramReader_1003 extends AbstractChromatogramReader implemen
 
 		IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
 		//
-		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + IFormat.FILE_SCANPROXIES_MSD);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + Format.FILE_SCANPROXIES_MSD);
 		/*
 		 * Scans
 		 */
@@ -250,7 +250,7 @@ public class ChromatogramReader_1003 extends AbstractChromatogramReader implemen
 			float totalSignal = dataInputStream.readFloat(); // Total Signal
 			float retentionIndex = dataInputStream.readFloat(); // Retention Index
 			//
-			IVendorScanProxy massSpectrum = new VendorScanProxy(file, offset, IFormat.CHROMATOGRAM_VERSION_1003, ionTransitionSettings);
+			IVendorScanProxy massSpectrum = new VendorScanProxy(file, offset, Format.CHROMATOGRAM_VERSION_1003, ionTransitionSettings);
 			massSpectrum.setRetentionTime(retentionTime);
 			massSpectrum.setNumberOfIons(numberOfIons);
 			massSpectrum.setTotalSignal(totalSignal);
@@ -682,9 +682,9 @@ public class ChromatogramReader_1003 extends AbstractChromatogramReader implemen
 	private boolean isValidFileFormat(ZipFile zipFile) throws IOException {
 
 		boolean isValid = false;
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, Format.FILE_VERSION);
 		String version = readString(dataInputStream);
-		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1003)) {
+		if(version.equals(Format.CHROMATOGRAM_VERSION_1003)) {
 			isValid = true;
 		}
 		//

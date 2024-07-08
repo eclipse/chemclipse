@@ -63,7 +63,7 @@ import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
@@ -92,7 +92,7 @@ public class PeakReader_1500 extends AbstractZipReader implements IPeakReader {
 	private IPeaks<IPeakMSD> readPeaksFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
 
 		IPeaks<IPeakMSD> peaks = new PeaksMSD();
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_PEAKS_MSD);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, Format.FILE_PEAKS_MSD);
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Peaks", numberOfPeaks);
 		try {

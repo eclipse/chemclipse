@@ -69,7 +69,7 @@ import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.model.quantitation.QuantitationCompound;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -120,7 +120,7 @@ public class DatabaseReader_1000 extends AbstractDatabaseReader implements IData
 			return null;
 		}
 		//
-		readContent(getDataInputStream(object, directoryPrefix + IFormat.FILE_QUANTDB), closeStream, quantitationDatabase, monitor);
+		readContent(getDataInputStream(object, directoryPrefix + Format.FILE_QUANTDB), closeStream, quantitationDatabase, monitor);
 		//
 		return quantitationDatabase;
 	}
@@ -552,9 +552,9 @@ public class DatabaseReader_1000 extends AbstractDatabaseReader implements IData
 		boolean isValid = false;
 		DataInputStream dataInputStream;
 		//
-		dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
+		dataInputStream = getDataInputStream(zipFile, Format.FILE_VERSION);
 		String version = readString(dataInputStream);
-		if(version.equals(IFormat.QUANTDB_VERSION_0001)) {
+		if(version.equals(Format.QUANTDB_VERSION_0001)) {
 			isValid = true;
 		}
 		dataInputStream.close();

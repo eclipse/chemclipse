@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -41,7 +41,7 @@ public abstract class AbstractMethodWriter implements IMethodWriter {
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 		ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(fileOutputStream));
 		zipOutputStream.setLevel(PreferenceSupplier.getMethodCompressionLevel());
-		zipOutputStream.setMethod(IFormat.METHOD_COMPRESSION_TYPE);
+		zipOutputStream.setMethod(Format.METHOD_COMPRESSION_TYPE);
 		/*
 		 * Write the data
 		 */
@@ -64,7 +64,7 @@ public abstract class AbstractMethodWriter implements IMethodWriter {
 		/*
 		 * Version
 		 */
-		ZipEntry zipEntry = new ZipEntry(IFormat.FILE_VERSION);
+		ZipEntry zipEntry = new ZipEntry(Format.FILE_VERSION);
 		zipOutputStream.putNextEntry(zipEntry);
 		DataOutputStream dataOutputStream = new DataOutputStream(zipOutputStream);
 		writeString(dataOutputStream, version);
@@ -77,7 +77,7 @@ public abstract class AbstractMethodWriter implements IMethodWriter {
 		/*
 		 * Data
 		 */
-		ZipEntry zipEntry = new ZipEntry(IFormat.FILE_PROCESS_METHOD);
+		ZipEntry zipEntry = new ZipEntry(Format.FILE_PROCESS_METHOD);
 		zipOutputStream.putNextEntry(zipEntry);
 		DataOutputStream dataOutputStream = new DataOutputStream(zipOutputStream);
 		serializeData(processMethod, dataOutputStream);

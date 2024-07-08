@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -42,7 +42,7 @@ import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -62,7 +62,7 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 		ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(fileOutputStream));
 		zipOutputStream.setLevel(PreferenceSupplier.getChromatogramCompressionLevel());
-		zipOutputStream.setMethod(IFormat.CHROMATOGRAM_COMPRESSION_TYPE);
+		zipOutputStream.setMethod(Format.CHROMATOGRAM_COMPRESSION_TYPE);
 		/*
 		 * Write the data
 		 */
@@ -89,10 +89,10 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		/*
 		 * Version
 		 */
-		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_VERSION);
+		zipEntry = new ZipEntry(directoryPrefix + Format.FILE_VERSION);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
-		String version = IFormat.CHROMATOGRAM_VERSION_0802;
+		String version = Format.CHROMATOGRAM_VERSION_0802;
 		dataOutputStream.writeInt(version.length()); // Length Version
 		dataOutputStream.writeChars(version); // Version
 		//
@@ -107,13 +107,13 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		/*
 		 * Create the overview folder
 		 */
-		zipEntry = new ZipEntry(directoryPrefix + IFormat.DIR_OVERVIEW);
+		zipEntry = new ZipEntry(directoryPrefix + Format.DIR_OVERVIEW);
 		zipOutputStream.putNextEntry(zipEntry);
 		zipOutputStream.closeEntry();
 		/*
 		 * TIC
 		 */
-		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_TIC);
+		zipEntry = new ZipEntry(directoryPrefix + Format.FILE_TIC);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		int scans = chromatogram.getNumberOfScans();
@@ -135,7 +135,7 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		/*
 		 * Create the chromatogram folder
 		 */
-		zipEntry = new ZipEntry(directoryPrefix + IFormat.DIR_CHROMATOGRAM);
+		zipEntry = new ZipEntry(directoryPrefix + Format.DIR_CHROMATOGRAM);
 		zipOutputStream.putNextEntry(zipEntry);
 		zipOutputStream.closeEntry();
 		/*
@@ -156,7 +156,7 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		/*
 		 * Scans
 		 */
-		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_SCANS);
+		zipEntry = new ZipEntry(directoryPrefix + Format.FILE_SCANS);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		int scans = chromatogram.getNumberOfScans();
@@ -179,7 +179,7 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		/*
 		 * Peaks
 		 */
-		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_PEAKS);
+		zipEntry = new ZipEntry(directoryPrefix + Format.FILE_PEAKS);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
@@ -202,7 +202,7 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		/*
 		 * Area
 		 */
-		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_AREA);
+		zipEntry = new ZipEntry(directoryPrefix + Format.FILE_AREA);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		//
@@ -225,7 +225,7 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		/*
 		 * Identification
 		 */
-		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_IDENTIFICATION);
+		zipEntry = new ZipEntry(directoryPrefix + Format.FILE_IDENTIFICATION);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		//
@@ -249,7 +249,7 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		/*
 		 * Edit-History
 		 */
-		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_HISTORY);
+		zipEntry = new ZipEntry(directoryPrefix + Format.FILE_HISTORY);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		IEditHistory editHistory = chromatogram.getEditHistory();
@@ -271,7 +271,7 @@ public class ChromatogramWriter_0802 extends AbstractChromatogramWriter implemen
 		/*
 		 * Miscellaneous
 		 */
-		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_MISC);
+		zipEntry = new ZipEntry(directoryPrefix + Format.FILE_MISC);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		//

@@ -26,7 +26,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.io.ChromatogramWriterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions.IFormatVersion;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions.VersionConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReferencesSupport {
@@ -67,7 +67,7 @@ public class ChromatogramReferencesSupport {
 
 	private static File getFileReference(File file, IChromatogram<?> chromatogram, HeaderField headerField, int i, String type) {
 
-		String extension = IFormatVersion.FILE_EXTENSION_CHROMATOGRAM;
+		String extension = VersionConstants.FILE_EXTENSION_CHROMATOGRAM;
 		String identifier = HeaderUtil.getChromatogramName(chromatogram, headerField, Integer.toString(i));
 		String directory = file.getParentFile().getAbsolutePath();
 		//
