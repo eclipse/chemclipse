@@ -17,11 +17,11 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakImportConverter;
-import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.io.MatlabParafacPeakReader;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -30,6 +30,7 @@ import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 
 public class MatlabParafacPeakImportConverter extends AbstractPeakImportConverter {
 
@@ -46,19 +47,19 @@ public class MatlabParafacPeakImportConverter extends AbstractPeakImportConverte
 			processingInfo = peakReader.read(file, monitor);
 		} catch(FileNotFoundException e) {
 			logger.warn(e);
-			processingMessage = new ProcessingMessage(MessageType.ERROR, IConstants.PROCESS_INFO_DESCRIPTION, "The given file was not found: " + file.getAbsolutePath());
+			processingMessage = new ProcessingMessage(MessageType.ERROR, ConverterMessages.importPeaks, NLS.bind(ConverterMessages.fileNotFound, file.getAbsolutePath()));
 			processingInfo.addMessage(processingMessage);
 		} catch(FileIsNotReadableException e) {
 			logger.warn(e);
-			processingMessage = new ProcessingMessage(MessageType.ERROR, IConstants.PROCESS_INFO_DESCRIPTION, "The given file is not readable: " + file.getAbsolutePath());
+			processingMessage = new ProcessingMessage(MessageType.ERROR, ConverterMessages.importPeaks, NLS.bind(ConverterMessages.failedToReadFile, file.getAbsolutePath()));
 			processingInfo.addMessage(processingMessage);
 		} catch(FileIsEmptyException e) {
 			logger.warn(e);
-			processingMessage = new ProcessingMessage(MessageType.ERROR, IConstants.PROCESS_INFO_DESCRIPTION, "The given file is empty: " + file.getAbsolutePath());
+			processingMessage = new ProcessingMessage(MessageType.ERROR, ConverterMessages.importPeaks, NLS.bind(ConverterMessages.emptyFile, file.getAbsolutePath()));
 			processingInfo.addMessage(processingMessage);
 		} catch(IOException e) {
 			logger.warn(e);
-			processingMessage = new ProcessingMessage(MessageType.ERROR, IConstants.PROCESS_INFO_DESCRIPTION, "There has gone something wrong reading the file: " + file.getAbsolutePath());
+			processingMessage = new ProcessingMessage(MessageType.ERROR, ConverterMessages.importPeaks, NLS.bind(ConverterMessages.failedToReadFile, file.getAbsolutePath()));
 			processingInfo.addMessage(processingMessage);
 		}
 		return processingInfo;
