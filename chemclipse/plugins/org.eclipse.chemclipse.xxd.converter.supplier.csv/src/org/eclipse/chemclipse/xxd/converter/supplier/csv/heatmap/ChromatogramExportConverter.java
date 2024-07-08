@@ -12,9 +12,12 @@
 package org.eclipse.chemclipse.xxd.converter.supplier.csv.heatmap;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramExportConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -25,6 +28,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.csv.internal.converter.Spec
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.io.heatmap.ChromatogramWriter;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 
 public class ChromatogramExportConverter extends AbstractChromatogramExportConverter implements IChromatogramExportConverter {
 
@@ -42,9 +46,12 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 			try {
 				writer.writeChromatogram(file, chromatogramMSD, monitor);
 				processingInfo.setProcessingResult(file);
-			} catch(Exception e) {
-				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
+			} catch(IOException e) {
+				logger.error(e);
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.failedToWriteFile, file.getAbsolutePath()));
+			} catch(FileIsNotWriteableException e) {
+				logger.error(e);
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.fileNotWritable, file.getAbsolutePath()));
 			}
 		}
 		return processingInfo;

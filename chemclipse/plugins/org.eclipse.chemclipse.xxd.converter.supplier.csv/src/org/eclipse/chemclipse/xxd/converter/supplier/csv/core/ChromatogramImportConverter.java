@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
@@ -24,6 +25,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.io.core.ChromatogramReader;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.io.core.ChromatogramWriter;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 
 public class ChromatogramImportConverter extends AbstractChromatogramImportConverter<IChromatogramMSD> {
 
@@ -44,10 +46,10 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 			} catch(InterruptedException e) {
 				logger.warn(e);
 				Thread.currentThread().interrupt();
-				processingInfo.addErrorMessage(DESCRIPTION, "Failed to convert: " + file.getAbsolutePath());
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.failedToReadFile, file.getAbsolutePath()));
 			} catch(IOException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "Failed to convert: " + file.getAbsolutePath());
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.failedToReadFile, file.getAbsolutePath()));
 			}
 		}
 		return processingInfo;
@@ -65,8 +67,8 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 					processingInfo.setProcessingResult(chromatogramOverview);
 				}
 			} catch(IOException e) {
-				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
+				logger.error(e);
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.failedToReadFile, file.getAbsolutePath()));
 			}
 		}
 		return processingInfo;

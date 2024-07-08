@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,10 +12,13 @@
 package org.eclipse.chemclipse.csd.converter.supplier.xy.core;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramExportConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.csd.converter.io.IChromatogramCSDWriter;
 import org.eclipse.chemclipse.csd.converter.supplier.xy.io.ChromatogramWriter;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -24,6 +27,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 
 public class ChromatogramExportConverter extends AbstractChromatogramExportConverter implements IChromatogramExportConverter {
 
@@ -61,9 +65,12 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 						writer.writeChromatogram(fileReference, referenceChromatogramCSD, monitor);
 					}
 				}
-			} catch(Exception e) {
-				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
+			} catch(IOException e) {
+				logger.error(e);
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.failedToWriteFile, file.getAbsolutePath()));
+			} catch(FileIsNotWriteableException e) {
+				logger.error(e);
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.fileNotWritable, file.getAbsolutePath()));
 			}
 			processingInfo.setProcessingResult(file);
 		}
