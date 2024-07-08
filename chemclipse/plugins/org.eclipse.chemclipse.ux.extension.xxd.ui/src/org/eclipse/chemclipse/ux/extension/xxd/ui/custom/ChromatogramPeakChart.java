@@ -76,6 +76,9 @@ public class ChromatogramPeakChart extends ChromatogramChart implements ITraceSu
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scans Selected";
 	//
+	private static final String LABEL_SCAN_TARGETS = "Scan Targets";
+	private static final String LABEL_PEAK_TARGETS = "Peak Targets";
+	//
 	private final PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	private final PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
@@ -130,7 +133,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements ITraceSu
 			addChromatogramData(lineSeriesDataList, peakChartSettings);
 			addBaselineData(lineSeriesDataList, peakChartSettings);
 			addPeakData(peaks, lineSeriesDataList);
-			addIdentifiedScansData(lineSeriesDataList, targetDisplaySettings);
+			addIdentifiedScansData(lineSeriesDataList, targetDisplaySettings, LABEL_SCAN_TARGETS, "Identified Scans");
 			addSelectedScanData(lineSeriesDataList);
 			addSelectedIdentifiedScanData(lineSeriesDataList);
 			addLineSeriesData(lineSeriesDataList);
@@ -169,7 +172,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements ITraceSu
 		clearScanSeries();
 		assignCurrentRangeSelection();
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-		addIdentifiedScansData(lineSeriesDataList, targetDisplaySettings);
+		addIdentifiedScansData(lineSeriesDataList, targetDisplaySettings, LABEL_SCAN_TARGETS, "Identified Scans");
 		addSelectedScanData(lineSeriesDataList);
 		addSelectedIdentifiedScanData(lineSeriesDataList);
 		addLineSeriesData(lineSeriesDataList);
@@ -342,13 +345,13 @@ public class ChromatogramPeakChart extends ChromatogramChart implements ITraceSu
 		}
 		//
 		boolean addLabelMarker = true;
-		addPeaks(lineSeriesDataList, peaksActiveNormal, symbolTypeActiveNormal, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL_ACTIVE, addLabelMarker);
-		addPeaks(lineSeriesDataList, peaksInactiveNormal, symbolTypeInactiveNormal, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_NORMAL_INACTIVE, addLabelMarker);
-		addPeaks(lineSeriesDataList, peaksActiveISTD, symbolTypeActiveIstd, symbolSize, Colors.RED, SERIES_ID_PEAKS_ISTD_ACTIVE, addLabelMarker);
-		addPeaks(lineSeriesDataList, peaksInactiveISTD, symbolTypeInactiveIstd, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_ISTD_INACTIVE, addLabelMarker);
+		addPeaks(lineSeriesDataList, peaksActiveNormal, symbolTypeActiveNormal, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL_ACTIVE, addLabelMarker, LABEL_PEAK_TARGETS, "Active Peaks");
+		addPeaks(lineSeriesDataList, peaksInactiveNormal, symbolTypeInactiveNormal, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_NORMAL_INACTIVE, addLabelMarker, LABEL_PEAK_TARGETS, "Inactive Peaks");
+		addPeaks(lineSeriesDataList, peaksActiveISTD, symbolTypeActiveIstd, symbolSize, Colors.RED, SERIES_ID_PEAKS_ISTD_ACTIVE, addLabelMarker, LABEL_PEAK_TARGETS, "Active Peaks (Internal Standards)");
+		addPeaks(lineSeriesDataList, peaksInactiveISTD, symbolTypeInactiveIstd, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_ISTD_INACTIVE, addLabelMarker, LABEL_PEAK_TARGETS, "Inactive Peaks (Internal Standards)");
 	}
 
-	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, boolean addLabelMarker) {
+	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, boolean addLabelMarker, String label, String description) {
 
 		if(!peaks.isEmpty()) {
 			//
@@ -371,6 +374,9 @@ public class ChromatogramPeakChart extends ChromatogramChart implements ITraceSu
 					IPlotArea plotArea = baseChart.getPlotArea();
 					Collection<? extends TargetReference> peakReferences = TargetReference.getPeakReferences(peaks, targetDisplaySettings);
 					TargetReferenceSettings targetReferenceSettings = new TargetReferenceSettings(peakReferences, targetDisplaySettings, symbolSize * 2);
+					targetReferenceSettings.setBaseChart(baseChart);
+					targetReferenceSettings.setLabel(label);
+					targetReferenceSettings.setDescription(description);
 					TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(targetReferenceSettings);
 					plotArea.addCustomPaintListener(peakLabelMarker);
 					peakLabelMarkerMap.put(seriesId, peakLabelMarker);
@@ -397,7 +403,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements ITraceSu
 			String peakMarkerId = getSelectedPeakSerieId(SERIES_ID_PEAKS_SELECTED_MARKER, index);
 			List<IPeak> peaks = new ArrayList<>();
 			peaks.add(peak);
-			addPeaks(lineSeriesDataList, peaks, symbolTypePeakMarker, symbolSize, colorPeak, peakMarkerId, true);
+			addPeaks(lineSeriesDataList, peaks, symbolTypePeakMarker, symbolSize, colorPeak, peakMarkerId, true, LABEL_PEAK_TARGETS, "Selected Peak");
 			selectedPeakIds.add(peakMarkerId);
 			/*
 			 * Peak
@@ -413,7 +419,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements ITraceSu
 		}
 	}
 
-	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList, ITargetDisplaySettings displaySettings) {
+	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList, ITargetDisplaySettings displaySettings, String label, String description) {
 
 		if(chromatogramSelection != null) {
 			String seriesId = SERIES_ID_IDENTIFIED_SCANS;
@@ -431,6 +437,9 @@ public class ChromatogramPeakChart extends ChromatogramChart implements ITraceSu
 				IPlotArea plotArea = baseChart.getPlotArea();
 				Collection<? extends TargetReference> scanReferences = TargetReference.getScanReferences(scans, targetDisplaySettings);
 				TargetReferenceSettings targetReferenceSettings = new TargetReferenceSettings(scanReferences, targetDisplaySettings, symbolSize * 2);
+				targetReferenceSettings.setBaseChart(baseChart);
+				targetReferenceSettings.setLabel(label);
+				targetReferenceSettings.setDescription(description);
 				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(targetReferenceSettings);
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);

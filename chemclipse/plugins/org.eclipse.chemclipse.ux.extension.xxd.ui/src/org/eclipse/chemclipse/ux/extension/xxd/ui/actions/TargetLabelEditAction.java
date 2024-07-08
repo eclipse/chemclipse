@@ -93,6 +93,10 @@ public class TargetLabelEditAction {
 			}
 			/*
 			 * References
+			 * The reference chart are not required to be set here, as it's the overview table only.
+			 * targetReferenceSettings.setBaseChart();
+			 * targetReferenceSettings.setLabel(label);
+			 * targetReferenceSettings.setDescription(description);
 			 */
 			TargetReferenceSettings targetReferenceSettings = new TargetReferenceSettings(true, PreferenceSupplier.DEF_SYMBOL_SIZE * 2);
 			TargetReferenceLabelMarker targetReferenceLabelMarker = new TargetReferenceLabelMarker(targetReferenceSettings);

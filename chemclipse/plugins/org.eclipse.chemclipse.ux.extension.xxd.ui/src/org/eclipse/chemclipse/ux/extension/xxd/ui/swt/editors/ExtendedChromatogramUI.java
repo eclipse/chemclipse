@@ -217,8 +217,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private static final String IMAGE_REFERENCES = IApplicationImage.IMAGE_EXPAND_ALL;
 	private static final String TOOLTIP_REFERENCES = "the references toolbar.";
 	//
-	public static final String LABEL_SCAN_TARGETS = "Scan Targets";
-	public static final String LABEL_PEAK_TARGETS = "Peak Targets";
+	private static final String LABEL_SCAN_TARGETS = "Scan Targets";
+	private static final String LABEL_PEAK_TARGETS = "Peak Targets";
 	//
 	public static final String SERIES_ID_CHROMATOGRAM = "Chromatogram";
 	//
