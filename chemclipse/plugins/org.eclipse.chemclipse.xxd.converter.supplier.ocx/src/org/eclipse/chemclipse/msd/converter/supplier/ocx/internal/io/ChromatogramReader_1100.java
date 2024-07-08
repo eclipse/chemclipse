@@ -25,6 +25,7 @@ import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
@@ -83,7 +84,6 @@ import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -272,7 +272,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		 * Scans
 		 */
 		int scans = dataInputStream.readInt();
-		SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_SCAN, scans);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.importScan, scans);
 		try {
 			for(int scan = 1; scan <= scans; scan++) {
 				//
@@ -309,7 +309,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		 */
 		IReaderProxy readerProxy = new ReaderProxy_1100();
 		int scans = dataInputStream.readInt();
-		SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_SCAN, scans * 2);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.importScan, scans * 2);
 		try {
 			for(int scan = 1; scan <= scans; scan++) {
 				IVendorScan massSpectrum = new VendorScan();
@@ -329,8 +329,8 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 	private void readBaseline(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		int scans = dataInputStream.readInt(); // Number of Scans
-		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
-		SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_BASELINE, scans * 2);
+		List<IBaselineElement> baselineElements = new ArrayList<>();
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.importBaseline, scans * 2);
 		//
 		try {
 			/*
@@ -377,7 +377,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 	private void readPeaks(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
-		SubMonitor subMonitor = SubMonitor.convert(monitor, IConstants.IMPORT_PEAK, numberOfPeaks);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.importPeaks, numberOfPeaks);
 		try {
 			for(int i = 1; i <= numberOfPeaks; i++) {
 				try {

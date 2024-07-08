@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
@@ -28,9 +29,9 @@ import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.SpecificationValidator;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 
 public class PeakImportConverter extends AbstractPeakImportConverter {
 
@@ -48,19 +49,19 @@ public class PeakImportConverter extends AbstractPeakImportConverter {
 			processingInfo = peakReader.read(file, monitor);
 		} catch(FileNotFoundException e) {
 			logger.warn(e);
-			processingMessage = new ProcessingMessage(MessageType.ERROR, IConstants.PROCESS_INFO_DESCRIPTION, "The given file was not found: " + file.getAbsolutePath());
+			processingMessage = new ProcessingMessage(MessageType.ERROR, ConverterMessages.importPeaks, NLS.bind(ConverterMessages.fileNotFound, file.getAbsolutePath()));
 			processingInfo.addMessage(processingMessage);
 		} catch(FileIsNotReadableException e) {
 			logger.warn(e);
-			processingMessage = new ProcessingMessage(MessageType.ERROR, IConstants.PROCESS_INFO_DESCRIPTION, "The given file is not readable: " + file.getAbsolutePath());
+			processingMessage = new ProcessingMessage(MessageType.ERROR, ConverterMessages.importPeaks, NLS.bind(ConverterMessages.failedToReadFile, file.getAbsolutePath()));
 			processingInfo.addMessage(processingMessage);
 		} catch(FileIsEmptyException e) {
 			logger.warn(e);
-			processingMessage = new ProcessingMessage(MessageType.ERROR, IConstants.PROCESS_INFO_DESCRIPTION, "The given file is empty: " + file.getAbsolutePath());
+			processingMessage = new ProcessingMessage(MessageType.ERROR, ConverterMessages.importPeaks, NLS.bind(ConverterMessages.emptyFile, file.getAbsolutePath()));
 			processingInfo.addMessage(processingMessage);
 		} catch(IOException e) {
 			logger.warn(e);
-			processingMessage = new ProcessingMessage(MessageType.ERROR, IConstants.PROCESS_INFO_DESCRIPTION, "There has gone something wrong reading the file: " + file.getAbsolutePath());
+			processingMessage = new ProcessingMessage(MessageType.ERROR, ConverterMessages.importPeaks, NLS.bind(ConverterMessages.failedToReadFile, file.getAbsolutePath()));
 			processingInfo.addMessage(processingMessage);
 		}
 		return processingInfo;
