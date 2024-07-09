@@ -13,19 +13,13 @@
 package org.eclipse.chemclipse.processing.converter;
 
 import java.io.File;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.support.text.ValueFormat;
-
 public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 
-	private static final Logger logger = Logger.getLogger(AbstractSupplierFileIdentifier.class);
 	private final List<ISupplier> suppliers;
-	private final NumberFormat timeFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 
 	public AbstractSupplierFileIdentifier(List<ISupplier> suppliers) {
 
@@ -159,18 +153,10 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 	public boolean isMatchMagicNumber(File file) {
 
 		for(ISupplier supplier : getSupplier()) {
-			long start = System.currentTimeMillis();
-			boolean matched = supplier.isMatchMagicNumber(file);
-			long end = System.currentTimeMillis();
-			long spent = end - start;
-			if(spent > 10) {
-				logger.info("Magic number check of " + file.getName() + " by " + supplier.getFilterName() + " took " + timeFormat.format(spent / 1000.0d) + " seconds.");
-			}
-			if(matched) {
+			if(supplier.isMatchMagicNumber(file)) {
 				return true;
 			}
 		}
-		//
 		return false;
 	}
 
@@ -178,18 +164,10 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 	public boolean isMatchContent(File file) {
 
 		for(ISupplier supplier : getSupplier()) {
-			long start = System.currentTimeMillis();
-			boolean matched = supplier.isMatchContent(file);
-			long end = System.currentTimeMillis();
-			long spent = end - start;
-			if(spent > 100) {
-				logger.info("File content check of " + file.getName() + " by " + supplier.getFilterName() + " took " + timeFormat.format(spent / 1000.0d) + " seconds.");
-			}
 			if(supplier.isMatchMagicNumber(file) && supplier.isMatchContent(file)) {
 				return true;
 			}
 		}
-		//
 		return false;
 	}
 }
