@@ -26,14 +26,14 @@ import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.methods.ProcessMethod;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MethodReaderWriter_1401 extends ObjectStreamMethodFormat {
 
 	public MethodReaderWriter_1401() {
 
-		super(IFormat.METHOD_VERSION_1401);
+		super(Format.METHOD_VERSION_1401);
 	}
 
 	@Override

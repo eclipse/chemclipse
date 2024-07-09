@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,11 +15,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 
 public abstract class AbstractIO_1501 {
 
-	public static final String VERSION = IFormat.CHROMATOGRAM_VERSION_1501;
+	public static final String VERSION = Format.CHROMATOGRAM_VERSION_1501;
 
 	protected String readString(DataInputStream dataInputStream) throws IOException {
 

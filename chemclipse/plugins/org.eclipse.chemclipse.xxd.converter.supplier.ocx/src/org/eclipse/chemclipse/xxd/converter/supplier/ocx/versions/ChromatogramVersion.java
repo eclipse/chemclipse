@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions;
 
 import org.eclipse.chemclipse.support.text.ILabel;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 
 /*
  * Ensure backward and forward compatibility!
@@ -26,10 +26,10 @@ public enum ChromatogramVersion implements IFormatVersion, ILabel {
 	// V_1100(IFormat.CHROMATOGRAM_VERSION_1100, "Diels"), //
 	// V_1300(IFormat.CHROMATOGRAM_VERSION_1300, "Dalton v1"), //
 	// V_1301(IFormat.CHROMATOGRAM_VERSION_1301, "Dalton v2"), //
-	V_1400(IFormat.CHROMATOGRAM_VERSION_1400, "Lawrence"), //
-	V_1500(IFormat.CHROMATOGRAM_VERSION_1500, "McLafferty v1"), //
-	V_1501(IFormat.CHROMATOGRAM_VERSION_1501, "McLafferty v2"), //
-	V_1502(IFormat.CHROMATOGRAM_VERSION_1502, "McLafferty v3"); //
+	V_1400(Format.CHROMATOGRAM_VERSION_1400, "Lawrence"), //
+	V_1500(Format.CHROMATOGRAM_VERSION_1500, "McLafferty v1"), //
+	V_1501(Format.CHROMATOGRAM_VERSION_1501, "McLafferty v2"), //
+	V_1502(Format.CHROMATOGRAM_VERSION_1502, "McLafferty v3"); //
 
 	private String version = "";
 	private String release = "";

@@ -41,7 +41,7 @@ import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
@@ -102,7 +102,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 
 	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, String directoryPrefix, IProgressMonitor monitor) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + IFormat.FILE_TIC_WSD);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + Format.FILE_TIC_WSD);
 		//
 		IVendorChromatogram chromatogram = new VendorChromatogram();
 		readScansOverview(dataInputStream, chromatogram, monitor);
@@ -141,15 +141,15 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 			 * Read the chromatographic information.
 			 */
 			chromatogram = new VendorChromatogram();
-			readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_WSD), closeStream, chromatogram, monitor);
+			readMethod(getDataInputStream(object, directoryPrefix + Format.FILE_SYSTEM_SETTINGS_WSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
-			readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_WSD), closeStream, chromatogram, monitor);
+			readScans(getDataInputStream(object, directoryPrefix + Format.FILE_SCANS_WSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
-			readBaselines(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_WSD), closeStream, chromatogram, monitor);
+			readBaselines(getDataInputStream(object, directoryPrefix + Format.FILE_BASELINE_WSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
-			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_WSD), closeStream, chromatogram, monitor);
+			readHistory(getDataInputStream(object, directoryPrefix + Format.FILE_HISTORY_WSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
-			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_WSD), closeStream, chromatogram, monitor);
+			readMiscellaneous(getDataInputStream(object, directoryPrefix + Format.FILE_MISC_WSD), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
 			//
 			setAdditionalInformation(file, chromatogram, monitor);
@@ -337,9 +337,9 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 	private boolean isValidFileFormat(ZipFile zipFile) throws IOException {
 
 		boolean isValid = false;
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, Format.FILE_VERSION);
 		String version = readString(dataInputStream);
-		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1100)) {
+		if(version.equals(Format.CHROMATOGRAM_VERSION_1100)) {
 			isValid = true;
 		}
 		//
@@ -350,7 +350,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 
 	private void setAdditionalInformation(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) {
 
-		chromatogram.setConverterId(IFormat.CONVERTER_ID_CHROMATOGRAM);
+		chromatogram.setConverterId(Format.CONVERTER_ID_CHROMATOGRAM);
 		chromatogram.setFile(file);
 		// Delay
 		int startRetentionTime = chromatogram.getStartRetentionTime();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,7 +22,7 @@ import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractMethodReader implements IMethodReader {
@@ -47,7 +47,7 @@ public abstract class AbstractMethodReader implements IMethodReader {
 	private boolean isValidFileFormat(ZipFile zipFile) throws IOException {
 
 		boolean isValid = false;
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, Format.FILE_VERSION);
 		String streamVersion = readString(dataInputStream);
 		if(streamVersion.equals(version)) {
 			isValid = true;
@@ -58,7 +58,7 @@ public abstract class AbstractMethodReader implements IMethodReader {
 
 	private IProcessMethod readData(ZipFile zipFile, File file) throws IOException {
 
-		try (DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_PROCESS_METHOD)) {
+		try (DataInputStream dataInputStream = getDataInputStream(zipFile, Format.FILE_PROCESS_METHOD)) {
 			return deserialize(dataInputStream, file);
 		}
 	}

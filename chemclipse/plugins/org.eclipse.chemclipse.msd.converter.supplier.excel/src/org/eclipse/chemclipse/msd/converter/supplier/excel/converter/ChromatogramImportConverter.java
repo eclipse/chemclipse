@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,14 +16,15 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.supplier.excel.internal.support.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.excel.io.ChromatogramReader;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 
 public class ChromatogramImportConverter extends AbstractChromatogramImportConverter<IChromatogramMSD> {
 
@@ -36,7 +37,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 		IProcessingInfo<IChromatogramMSD> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
 			IChromatogramMSDReader reader = new ChromatogramReader();
-			monitor.subTask(IConstants.IMPORT_EXCEL_CHROMATOGRAM);
+			monitor.subTask(ConverterMessages.importChromatogram);
 			try {
 				IChromatogramMSD chromatogram = reader.read(file, monitor);
 				processingInfo.setProcessingResult(chromatogram);
@@ -44,7 +45,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 				logger.warn(e);
 				Thread.currentThread().interrupt();
 			} catch(IOException e) {
-				processingInfo.addErrorMessage(DESCRIPTION, "Failed to load file: " + file.getAbsolutePath());
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.failedToReadFile, file.getAbsolutePath()));
 				logger.warn(e);
 			}
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,7 +26,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.methods.Method
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.methods.MethodReaderWriter_1401;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.methods.MethodWriter_1000;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.methods.MethodWriter_1001;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -50,13 +50,13 @@ public class MethodExportConverter extends AbstractExportConverter implements IM
 
 		String methodVersion = PreferenceSupplier.getMethodVersionSave();
 		switch(methodVersion) {
-			case IFormat.METHOD_VERSION_0001:
+			case Format.METHOD_VERSION_0001:
 				return new MethodWriter_1000();
-			case IFormat.METHOD_VERSION_0002:
+			case Format.METHOD_VERSION_0002:
 				return new MethodWriter_1001();
-			case IFormat.METHOD_VERSION_0003:
+			case Format.METHOD_VERSION_0003:
 				return new MethodReaderWriter_1003();
-			case IFormat.METHOD_VERSION_1400:
+			case Format.METHOD_VERSION_1400:
 				return new MethodReaderWriter_1004();
 			default:
 				return new MethodReaderWriter_1401();

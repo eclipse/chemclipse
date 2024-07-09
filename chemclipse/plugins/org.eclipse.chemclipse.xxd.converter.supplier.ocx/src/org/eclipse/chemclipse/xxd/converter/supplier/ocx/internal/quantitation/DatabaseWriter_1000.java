@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -45,7 +45,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.RetentionIndexTypeSupport;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -62,7 +62,7 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 		ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(fileOutputStream));
 		zipOutputStream.setLevel(PreferenceSupplier.getChromatogramCompressionLevel());
-		zipOutputStream.setMethod(IFormat.QUANTDB_COMPRESSION_TYPE);
+		zipOutputStream.setMethod(Format.QUANTDB_COMPRESSION_TYPE);
 		/*
 		 * Write the data.
 		 */
@@ -87,10 +87,10 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 		/*
 		 * Version
 		 */
-		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_VERSION);
+		zipEntry = new ZipEntry(directoryPrefix + Format.FILE_VERSION);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
-		String version = IFormat.QUANTDB_VERSION_0001;
+		String version = Format.QUANTDB_VERSION_0001;
 		dataOutputStream.writeInt(version.length()); // Length Version
 		dataOutputStream.writeChars(version); // Version
 		//
@@ -100,7 +100,7 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 
 	private void writeDatabaseFolder(ZipOutputStream zipOutputStream, String directoryPrefix, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor) throws IOException {
 
-		ZipEntry zipEntry = new ZipEntry(directoryPrefix + IFormat.DIR_QUANTDB);
+		ZipEntry zipEntry = new ZipEntry(directoryPrefix + Format.DIR_QUANTDB);
 		zipOutputStream.putNextEntry(zipEntry);
 		zipOutputStream.closeEntry();
 		//
@@ -113,7 +113,7 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Database", size);
 		//
 		try {
-			ZipEntry zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_QUANTDB);
+			ZipEntry zipEntry = new ZipEntry(directoryPrefix + Format.FILE_QUANTDB);
 			zipOutputStream.putNextEntry(zipEntry);
 			DataOutputStream dataOutputStream = new DataOutputStream(zipOutputStream);
 			//

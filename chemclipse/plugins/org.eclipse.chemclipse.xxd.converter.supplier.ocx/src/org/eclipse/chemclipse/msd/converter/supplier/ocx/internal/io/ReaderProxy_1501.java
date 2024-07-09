@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.io.ReaderIO_1501;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 
 /**
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
@@ -43,7 +43,7 @@ public class ReaderProxy_1501 extends AbstractZipReader implements IReaderProxy 
 
 		ZipFile zipFile = new ZipFile(file);
 		try {
-			DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_SCANS_MSD);
+			DataInputStream dataInputStream = getDataInputStream(zipFile, Format.FILE_SCANS_MSD);
 			dataInputStream.skipBytes(offset);
 			readMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings);
 			dataInputStream.close();

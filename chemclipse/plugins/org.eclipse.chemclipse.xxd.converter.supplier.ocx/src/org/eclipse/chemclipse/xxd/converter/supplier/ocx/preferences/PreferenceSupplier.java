@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.Activator;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 
@@ -28,9 +28,9 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	 * *.ocb (measurement data container)
 	 */
 	public static final String P_CHROMATOGRAM_VERSION_SAVE = "chromatogramVersionSave";
-	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = IFormat.CHROMATOGRAM_VERSION_LATEST;
+	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = Format.CHROMATOGRAM_VERSION_LATEST;
 	public static final String P_CHROMATOGRAM_COMPRESSION_LEVEL = "chromatogramCompressionLevel";
-	public static final int DEF_CHROMATOGRAM_COMPRESSION_LEVEL = IFormat.CHROMATOGRAM_COMPRESSION_LEVEL;
+	public static final int DEF_CHROMATOGRAM_COMPRESSION_LEVEL = Format.CHROMATOGRAM_COMPRESSION_LEVEL;
 	public static final String P_CHROMATGRAM_EXPORT_REFERENCES_SEPARATELY = "chromatogramExportReferencesSeparately";
 	public static final boolean DEF_CHROMATGRAM_EXPORT_REFERENCES_SEPARATELY = false;
 	public static final String P_CHROMATGRAM_EXPORT_REFERENCES_HEADER_FIELD = "chromatogramExportReferencesHeaderField";
@@ -49,16 +49,16 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	 * *.ocm (process method container)
 	 */
 	public static final String P_METHOD_VERSION_SAVE = "methodVersionSave";
-	public static final String DEF_METHOD_VERSION_SAVE = IFormat.METHOD_VERSION_LATEST;
+	public static final String DEF_METHOD_VERSION_SAVE = Format.METHOD_VERSION_LATEST;
 	public static final String P_METHOD_COMPRESSION_LEVEL = "methodCompressionLevel";
-	public static final int DEF_METHOD_COMPRESSION_LEVEL = IFormat.METHOD_COMPRESSION_LEVEL;
+	public static final int DEF_METHOD_COMPRESSION_LEVEL = Format.METHOD_COMPRESSION_LEVEL;
 	/*
 	 * *.ocq (quanititation table container)
 	 */
 	public static final String P_QUANTITATION_DB_VERSION_SAVE = "quantitationDatabaseVersionSave";
-	public static final String DEF_QUANTITATION_DB_VERSION_SAVE = IFormat.QUANTDB_VERSION_LATEST;
+	public static final String DEF_QUANTITATION_DB_VERSION_SAVE = Format.QUANTDB_VERSION_LATEST;
 	public static final String P_QUANTITATION_DB_COMPRESSION_LEVEL = "quantitationDatabaseCompressionLevel";
-	public static final int DEF_QUANTITATION_DB_COMPRESSION_LEVEL = IFormat.QUANTDB_COMPRESSION_LEVEL;
+	public static final int DEF_QUANTITATION_DB_COMPRESSION_LEVEL = Format.QUANTDB_COMPRESSION_LEVEL;
 	/*
 	 * General
 	 */

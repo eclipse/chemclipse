@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.internal.converter.SpecificationValidator;
-import org.eclipse.chemclipse.xxd.converter.supplier.csv.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.io.heatmap.ChromatogramWriter;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.osgi.util.NLS;
@@ -42,7 +41,7 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 		IProcessingInfo<File> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 			IChromatogramMSDWriter writer = new ChromatogramWriter();
-			monitor.subTask(IConstants.EXPORT_CSV_CHROMATOGRAM);
+			monitor.subTask(ConverterMessages.exportChromatogram);
 			try {
 				writer.writeChromatogram(file, chromatogramMSD, monitor);
 				processingInfo.setProcessingResult(file);

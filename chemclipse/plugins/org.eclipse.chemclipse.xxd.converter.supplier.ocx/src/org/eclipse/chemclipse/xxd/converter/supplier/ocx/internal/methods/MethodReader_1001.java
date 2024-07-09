@@ -20,13 +20,13 @@ import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessMethod;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 
 public class MethodReader_1001 extends AbstractMethodReader {
 
 	public MethodReader_1001() {
 
-		super(IFormat.METHOD_VERSION_0002);
+		super(Format.METHOD_VERSION_0002);
 	}
 
 	@Override

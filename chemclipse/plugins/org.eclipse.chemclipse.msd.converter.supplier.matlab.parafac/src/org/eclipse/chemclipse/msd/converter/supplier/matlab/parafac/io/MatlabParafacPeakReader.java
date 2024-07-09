@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
-import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.IConstants;
+import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.MatlabParafac;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.ParseStatus;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.PeakSupport;
 import org.eclipse.chemclipse.msd.model.core.IPeakIon;
@@ -55,7 +55,7 @@ public class MatlabParafacPeakReader implements IPeakReader {
 		String firstLine = bufferedReader.readLine();
 		bufferedReader.close();
 		fileReader.close();
-		if(!firstLine.equals(IConstants.PEAK_IDENTIFIER)) {
+		if(!firstLine.equals(MatlabParafac.PEAK_IDENTIFIER)) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Import Peak", "The given file contains no valid *.mpl peak list: " + file);
 			processingInfo.addMessage(processingMessage);
 		}
@@ -81,7 +81,7 @@ public class MatlabParafacPeakReader implements IPeakReader {
 					/*
 					 * Start a peak start.
 					 */
-					if(line.equals(IConstants.PEAK_IDENTIFIER)) {
+					if(line.equals(MatlabParafac.PEAK_IDENTIFIER)) {
 						/*
 						 * Add an existing peak and switch to the next.
 						 */
@@ -142,23 +142,23 @@ public class MatlabParafacPeakReader implements IPeakReader {
 		/*
 		 * 
 		 */
-		if(line.startsWith(IConstants.COMMENT)) {
+		if(line.startsWith(MatlabParafac.COMMENT)) {
 			/*
 			 * Determine the values to be parsed.
 			 */
-			if(line.startsWith(IConstants.MASS_SPECTRUM)) {
+			if(line.startsWith(MatlabParafac.MASS_SPECTRUM)) {
 				parseStatus = ParseStatus.MASS_SPECTRUM;
-			} else if(line.startsWith(IConstants.ELUTION_PROFILE)) {
+			} else if(line.startsWith(MatlabParafac.ELUTION_PROFILE)) {
 				parseStatus = ParseStatus.ELUTION_PROFILE;
 			}
 		} else {
 			/*
 			 * Parse the values.
 			 */
-			String[] values = line.split(IConstants.VALUE_DELIMITER);
+			String[] values = line.split(MatlabParafac.VALUE_DELIMITER);
 			switch(parseStatus) {
 				case DESCRIPTION:
-					if(values[0] != null && values[0].equals(IConstants.DESCRIPTION)) {
+					if(values[0] != null && values[0].equals(MatlabParafac.DESCRIPTION)) {
 						peakSupport.setModelDescription(values[1]);
 					}
 					break;

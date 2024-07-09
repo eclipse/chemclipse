@@ -35,7 +35,7 @@ import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.Chromatogra
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.ChromatogramReader_1501;
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io.ChromatogramReader_1502;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.ReaderHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -120,25 +120,25 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 
 		IChromatogramWSDZipReader chromatogramReader = null;
 		//
-		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1005)) {
+		if(version.equals(Format.CHROMATOGRAM_VERSION_1005)) {
 			chromatogramReader = new ChromatogramReader_1005();
-		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1006)) {
+		} else if(version.equals(Format.CHROMATOGRAM_VERSION_1006)) {
 			chromatogramReader = new ChromatogramReader_1006();
-		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1007)) {
+		} else if(version.equals(Format.CHROMATOGRAM_VERSION_1007)) {
 			chromatogramReader = new ChromatogramReader_1007();
-		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1100)) {
+		} else if(version.equals(Format.CHROMATOGRAM_VERSION_1100)) {
 			chromatogramReader = new ChromatogramReader_1100();
-		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
+		} else if(version.equals(Format.CHROMATOGRAM_VERSION_1300)) {
 			chromatogramReader = new ChromatogramReader_1300();
-		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1301)) {
+		} else if(version.equals(Format.CHROMATOGRAM_VERSION_1301)) {
 			chromatogramReader = new ChromatogramReader_1301();
-		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1400)) {
+		} else if(version.equals(Format.CHROMATOGRAM_VERSION_1400)) {
 			chromatogramReader = new ChromatogramReader_1400();
-		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1500)) {
+		} else if(version.equals(Format.CHROMATOGRAM_VERSION_1500)) {
 			chromatogramReader = new ChromatogramReader_1500();
-		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1501)) {
+		} else if(version.equals(Format.CHROMATOGRAM_VERSION_1501)) {
 			chromatogramReader = new ChromatogramReader_1501();
-		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1502)) {
+		} else if(version.equals(Format.CHROMATOGRAM_VERSION_1502)) {
 			chromatogramReader = new ChromatogramReader_1502();
 		}
 		//

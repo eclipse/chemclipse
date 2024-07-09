@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMS
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.xxd.converter.supplier.zip.internal.converter.IConstants;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions.VersionConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.zip.internal.converter.PathHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -39,7 +39,7 @@ public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 
 		File destinationDirectory = PathHelper.getStoragePathExport();
 		File destinationFile = new File(destinationDirectory.getAbsolutePath() + File.separator + chromatogram.getName());
-		IProcessingInfo<File> processingInfo = ChromatogramConverterMSD.getInstance().convert(destinationFile, chromatogram, IConstants.CONVERTER_ID, monitor);
+		IProcessingInfo<File> processingInfo = ChromatogramConverterMSD.getInstance().convert(destinationFile, chromatogram, VersionConstants.CONVERTER_ID_CHROMATOGRAM, monitor);
 		File export = processingInfo.getProcessingResult();
 		monitor.subTask("Compress the chromatogram");
 		FileOutputStream fileOutputStream = new FileOutputStream(file);

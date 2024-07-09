@@ -48,7 +48,7 @@ import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.InternalStandard;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
@@ -141,13 +141,13 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 			// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 			chromatogram = new VendorChromatogram();
 			subMonitor.worked(20);
-			readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_FID), closeStream, chromatogram, monitor);
+			readMethod(getDataInputStream(object, directoryPrefix + Format.FILE_SYSTEM_SETTINGS_FID), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
-			readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_FID), closeStream, chromatogram, monitor);
+			readScans(getDataInputStream(object, directoryPrefix + Format.FILE_SCANS_FID), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
-			readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_FID), closeStream, chromatogram, monitor);
+			readBaseline(getDataInputStream(object, directoryPrefix + Format.FILE_BASELINE_FID), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
-			readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS_FID), closeStream, chromatogram, monitor);
+			readPeaks(getDataInputStream(object, directoryPrefix + Format.FILE_PEAKS_FID), closeStream, chromatogram, monitor);
 			subMonitor.worked(20);
 			//
 			setAdditionalInformation(file, chromatogram, monitor);
@@ -342,7 +342,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 
 	private void setAdditionalInformation(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) {
 
-		chromatogram.setConverterId(IFormat.CONVERTER_ID_CHROMATOGRAM);
+		chromatogram.setConverterId(Format.CONVERTER_ID_CHROMATOGRAM);
 		chromatogram.setFile(file);
 		// Delay
 		int startRetentionTime = chromatogram.getStartRetentionTime();
@@ -386,9 +386,9 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 	private boolean isValidFileFormat(ZipFile zipFile) throws IOException {
 
 		boolean isValid = false;
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, Format.FILE_VERSION);
 		String version = readString(dataInputStream);
-		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1100)) {
+		if(version.equals(Format.CHROMATOGRAM_VERSION_1100)) {
 			isValid = true;
 		}
 		//
