@@ -185,7 +185,7 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 			if(spent > 100) {
 				logger.info("File content check of " + file.getName() + " by " + supplier.getFilterName() + " took " + timeFormat.format(spent / 1000.0d) + " seconds.");
 			}
-			if(matched) {
+			if(supplier.isMatchMagicNumber(file) && supplier.isMatchContent(file)) {
 				return true;
 			}
 		}

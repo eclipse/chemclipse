@@ -142,7 +142,9 @@ public class ChromatogramTypeSupport {
 
 	public boolean isSupplierFile(ISupplierFileIdentifier supplierFileIdentifier, File file) {
 
-		if(supplierFileIdentifier.isSupplierFile(file) && supplierFileIdentifier.isMatchMagicNumber(file) && supplierFileIdentifier.isMatchContent(file)) {
+		if(supplierFileIdentifier.isSupplierFile(file) //
+				&& supplierFileIdentifier.isMatchMagicNumber(file) //
+				&& supplierFileIdentifier.isMatchContent(file)) {
 			return true;
 		}
 		return false;
