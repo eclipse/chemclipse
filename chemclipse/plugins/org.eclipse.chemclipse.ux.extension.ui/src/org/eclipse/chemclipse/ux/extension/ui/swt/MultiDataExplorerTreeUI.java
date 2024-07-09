@@ -374,7 +374,7 @@ public class MultiDataExplorerTreeUI {
 					continue;
 				}
 				for(ISupplierFileIdentifier supplierFileIdentifier : map.keySet()) {
-					if(supplierFileIdentifier.isMatchContent(file)) {
+					if(supplierFileIdentifier.isMatchMagicNumber(file) && supplierFileIdentifier.isMatchContent(file)) {
 						Collection<ISupplier> suppliers = map.get(supplierFileIdentifier);
 						for(ISupplier supplier : suppliers) {
 							if(supplier.isMatchMagicNumber(file) && supplier.isMatchContent(file)) {
@@ -501,6 +501,9 @@ public class MultiDataExplorerTreeUI {
 			//
 			Collection<ISupplierFileIdentifier> identifiers = getIdentifierSupplier().apply(file).keySet();
 			for(ISupplierFileIdentifier identifier : identifiers) {
+				if(!identifier.isMatchMagicNumber(file)) {
+					continue;
+				}
 				if(!identifier.isMatchContent(file)) {
 					continue;
 				}
