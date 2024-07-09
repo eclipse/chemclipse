@@ -9,7 +9,7 @@
       license-feature-version="1.0.0.qualifier">
 
    <description url="http://www.chemclipse.net">
-      This is a JSON chromatogram converter.
+      This is a text based chromatogram converter.
    </description>
 
    <copyright url="http://www.chemclipse.net">
