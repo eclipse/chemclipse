@@ -13,12 +13,9 @@ package org.eclipse.chemclipse.msd.converter.supplier.ascii.io;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
@@ -34,7 +31,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 	private static final Logger logger = Logger.getLogger(MassSpectraReader.class);
 
 	@Override
-	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
 		IMassSpectra massSpectra = new MassSpectra();
 		IScanMSD massSpectrum = new ScanMSD();

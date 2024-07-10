@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,6 +27,9 @@ public class MassSpectrumFileContentMatcher extends AbstractFileContentMatcher i
 	@Override
 	public boolean checkFileFormat(File file) {
 
+		if(file.length() > HUNDRED_MB) {
+			return true;
+		}
 		boolean isValidFormat = false;
 		try {
 			XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
@@ -42,6 +45,7 @@ public class MassSpectrumFileContentMatcher extends AbstractFileContentMatcher i
 						hasRootElement = true;
 					} else if(elementName.equals("chromatogramList")) {
 						hasChromatogramList = true;
+						break;
 					} else if(elementName.equals("spectrumList")) {
 						hasSpectrumList = true;
 					}
