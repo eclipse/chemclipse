@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class IntensityCutOffFilterSettings {
 
 	@JsonProperty(value = "Intensity Option", defaultValue = "RELATIVE")
-	@JsonPropertyDescription(value = "Define whether to use absolute or rleative intensities.")
+	@JsonPropertyDescription(value = "Define whether to use absolute or relative intensities.")
 	private IntensityOption intensityOption = IntensityOption.RELATIVE;
 	@JsonProperty(value = "Max Intensity", defaultValue = "75.0")
 	@JsonPropertyDescription(value = "Cut off intensities higher than the given value.")
