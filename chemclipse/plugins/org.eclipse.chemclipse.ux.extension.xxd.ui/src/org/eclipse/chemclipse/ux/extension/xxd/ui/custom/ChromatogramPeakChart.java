@@ -47,7 +47,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.IAxis;
 import org.eclipse.swtchart.IAxisSet;
-import org.eclipse.swtchart.ICustomPaintListener;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.ISeries;
@@ -59,6 +58,7 @@ import org.eclipse.swtchart.extensions.core.ISeriesSettings;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
+import org.eclipse.swtchart.extensions.model.ICustomSeries;
 
 public class ChromatogramPeakChart extends ChromatogramChart implements ITraceSupport {
 
@@ -367,8 +367,8 @@ public class ChromatogramPeakChart extends ChromatogramChart implements ITraceSu
 			/*
 			 * Add the labels.
 			 */
+			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
 			if(addLabelMarker) {
-				removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
 				if(targetDisplaySettings != null && targetDisplaySettings.isShowPeakLabels()) {
 					BaseChart baseChart = getBaseChart();
 					IPlotArea plotArea = baseChart.getPlotArea();
@@ -494,15 +494,19 @@ public class ChromatogramPeakChart extends ChromatogramChart implements ITraceSu
 		}
 	}
 
-	private void removeIdentificationLabelMarker(Map<String, ? extends ICustomPaintListener> markerMap, String seriesId) {
+	private void removeIdentificationLabelMarker(Map<String, TargetReferenceLabelMarker> markerMap, String seriesId) {
 
-		IPlotArea plotArea = getBaseChart().getPlotArea();
-		ICustomPaintListener labelMarker = markerMap.get(seriesId);
-		markerMap.remove(seriesId);
+		BaseChart baseChart = getBaseChart();
+		IPlotArea plotArea = baseChart.getPlotArea();
+		TargetReferenceLabelMarker labelMarker = markerMap.get(seriesId);
 		/*
-		 * Remove the label marker.
+		 * Remove the custom series and label marker.
 		 */
 		if(labelMarker != null) {
+			ICustomSeries customSeries = labelMarker.getCustomSeries();
+			if(customSeries != null) {
+				baseChart.deleteCustomSeries(customSeries.getId());
+			}
 			plotArea.removeCustomPaintListener(labelMarker);
 		}
 	}
