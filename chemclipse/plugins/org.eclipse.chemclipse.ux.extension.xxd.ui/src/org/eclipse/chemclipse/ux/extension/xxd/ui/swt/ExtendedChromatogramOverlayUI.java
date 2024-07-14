@@ -258,6 +258,15 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private void createToggleGridButton(Composite parent) {
 
 		Button button = createButtonToggleChartGrid(parent, chartControl, IMAGE_CHART_GRID, chartGridSupport);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				refreshUpdateOverlayChart();
+			}
+		});
+		//
 		buttonChartGrid.set(button);
 	}
 
