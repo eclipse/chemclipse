@@ -1571,4 +1571,9 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 			return HeaderField.NAME;
 		}
 	}
+
+	public static void setChromatogramEditorLabel(HeaderField headerField) {
+
+		INSTANCE().put(P_CHROMATOGRAM_EDITOR_LABEL, headerField.name());
+	}
 }
