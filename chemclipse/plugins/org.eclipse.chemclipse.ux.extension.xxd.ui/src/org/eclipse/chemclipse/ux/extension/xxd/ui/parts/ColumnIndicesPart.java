@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
-import jakarta.inject.Inject;
-
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedColumnIndicesUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+
+import jakarta.inject.Inject;
 
 public class ColumnIndicesPart extends AbstractLibraryInformationPart<ExtendedColumnIndicesUI> {
 

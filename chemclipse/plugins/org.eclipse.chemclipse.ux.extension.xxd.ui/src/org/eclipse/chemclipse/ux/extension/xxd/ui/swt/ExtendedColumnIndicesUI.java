@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Table;
 
 public class ExtendedColumnIndicesUI extends LibraryInformationComposite implements IExtendedPartUI {
 
-	private Button buttonToolbarSearch;
+	private AtomicReference<Button> buttonToolbarSearchControl = new AtomicReference<>();
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private AtomicReference<ColumnIndicesListUI> listControl = new AtomicReference<>();
 
@@ -68,7 +68,7 @@ public class ExtendedColumnIndicesUI extends LibraryInformationComposite impleme
 	private void initialize() {
 
 		initializeToolbarInfo();
-		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH, false);
+		enableToolbar(toolbarSearch, buttonToolbarSearchControl.get(), IMAGE_SEARCH, TOOLTIP_SEARCH, false);
 		//
 		applySettings();
 	}
@@ -82,8 +82,14 @@ public class ExtendedColumnIndicesUI extends LibraryInformationComposite impleme
 		composite.setLayout(new GridLayout(3, false));
 		//
 		createButtonToolbarInfo(composite);
-		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		createButtonToggleSearch(composite);
 		createButtonSettings(composite);
+	}
+
+	private void createButtonToggleSearch(Composite parent) {
+
+		Button button = createButtonToggleToolbar(parent, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		buttonToolbarSearchControl.set(button);
 	}
 
 	private void createToolbarSearch(Composite parent) {

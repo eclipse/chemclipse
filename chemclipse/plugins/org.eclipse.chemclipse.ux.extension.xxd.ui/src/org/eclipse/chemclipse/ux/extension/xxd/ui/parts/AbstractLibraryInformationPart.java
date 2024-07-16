@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,6 +32,12 @@ public abstract class AbstractLibraryInformationPart<T extends LibraryInformatio
 	}
 
 	@Override
+	public void setFocus() {
+
+		getControl().setFocus();
+	}
+
+	@Override
 	protected boolean isUpdateTopic(String topic) {
 
 		return isLibraryInformationTopic(topic);
@@ -43,27 +49,33 @@ public abstract class AbstractLibraryInformationPart<T extends LibraryInformatio
 		if(objects.size() == 1) {
 			if(isLibraryInformationTopic(topic)) {
 				Object object = objects.get(0);
-				ILibraryInformation libraryInformation = null;
-				boolean update = true;
-				//
-				if(object instanceof ILibraryMassSpectrum libraryMassSpectrum) {
-					libraryInformation = libraryMassSpectrum.getLibraryInformation();
-				} else if(object instanceof IIdentificationTarget identificationTarget) {
-					libraryInformation = identificationTarget.getLibraryInformation();
-				} else {
-					/*
-					 * Prevent that the part is cleaned.
-					 * A scan could be a ILibraryMassSpectrum, hence perform
-					 * a check if it's not of type library spectrum.
-					 */
-					if(object instanceof IScan || object instanceof IPeak) {
-						update = false;
-					}
-				}
-				//
-				if(update) {
-					getControl().setInput(libraryInformation);
+				if(isCloseEvent(topic)) {
+					getControl().clear();
+					unloadData();
 					return true;
+				} else {
+					ILibraryInformation libraryInformation = null;
+					boolean update = true;
+					//
+					if(object instanceof ILibraryMassSpectrum libraryMassSpectrum) {
+						libraryInformation = libraryMassSpectrum.getLibraryInformation();
+					} else if(object instanceof IIdentificationTarget identificationTarget) {
+						libraryInformation = identificationTarget.getLibraryInformation();
+					} else {
+						/*
+						 * Prevent that the part is cleaned.
+						 * A scan could be a ILibraryMassSpectrum, hence perform
+						 * a check if it's not of type library spectrum.
+						 */
+						if(object instanceof IScan || object instanceof IPeak) {
+							update = false;
+						}
+					}
+					//
+					if(update) {
+						getControl().setInput(libraryInformation);
+						return true;
+					}
 				}
 			}
 		}
@@ -73,14 +85,26 @@ public abstract class AbstractLibraryInformationPart<T extends LibraryInformatio
 
 	private boolean isLibraryInformationTopic(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
-			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
-			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE)) {
-			return true;
-		}
-		//
-		return false;
+		return isScanTopic(topic) || isPeakTopic(topic) || isIdentificationTopic(topic) || isCloseEvent(topic);
+	}
+
+	private boolean isScanTopic(String topic) {
+
+		return IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION.equals(topic);
+	}
+
+	private boolean isPeakTopic(String topic) {
+
+		return IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION.equals(topic);
+	}
+
+	private boolean isIdentificationTopic(String topic) {
+
+		return IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE.equals(topic);
+	}
+
+	private boolean isCloseEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
 	}
 }
