@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add validationmethod/getter, optimize progressmonitor usage and retrieval of mass spectrum comparator, unify peak/scan identification methods
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.internal.identifier;
@@ -167,11 +167,6 @@ public class FileIdentifier {
 
 		IMassSpectra massSpectra = new MassSpectra();
 		if(isValid(identificationTarget)) {
-			/*
-			 * Extract the target library information.
-			 * Old *.ocb version don't store the identifier id.
-			 * Hence, try to get mass spectrum anyhow.
-			 */
 			massSpectra.addMassSpectra(databasesCache.getDatabaseMassSpectra(identificationTarget, monitor));
 		}
 		//
@@ -180,10 +175,17 @@ public class FileIdentifier {
 
 	public boolean isValid(IIdentificationTarget identificationTarget) {
 
+		/*
+		 * Extract the target library information.
+		 * Old *.ocb version don't store the identifier id.
+		 * Trying to get the cache with an empty identifier leads to
+		 * a java.io.FileNotFoundException, hence skip it.
+		 */
 		if(identificationTarget != null) {
 			String id = identificationTarget.getIdentifier();
-			return IDENTIFIER.equals(id) || "".equals(id);
+			return IDENTIFIER.equals(id);
 		}
+		//
 		return false;
 	}
 
