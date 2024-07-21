@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -55,8 +56,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
@@ -94,7 +93,7 @@ public class DatabaseEditor extends EditorPart {
 	/*
 	 * Mass spectrum selection and the GUI element.
 	 */
-	private MassSpectrumLibraryUI massSpectrumLibraryUI;
+	private AtomicReference<MassSpectrumLibraryUI> massSpectrumLibraryControl = new AtomicReference<>();
 	private File massSpectrumFile = null;
 	private IMassSpectra massSpectra = null;
 	private ArrayList<EventHandler> registeredEventHandler;
@@ -173,6 +172,74 @@ public class DatabaseEditor extends EditorPart {
 		}
 	}
 
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+
+		if(massSpectra != null) {
+			try {
+				boolean saveSuccessful = DatabaseFileSupport.saveMassSpectra(massSpectra);
+				isDirty = !saveSuccessful;
+			} catch(NoConverterAvailableException e) {
+				logger.warn(e);
+			}
+		}
+	}
+
+	@Override
+	public void doSaveAs() {
+
+		try {
+			DatabaseFileSupport.saveMassSpectra(Display.getCurrent().getActiveShell(), massSpectra, "Mass Spectra");
+		} catch(NoConverterAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
+	@Override
+	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+
+		setSite(site);
+		setInput(input);
+		//
+		String fileName = input.getName();
+		fileName = fileName.substring(0, fileName.length() - 4);
+		setPartName(fileName);
+		//
+		if(input instanceof IFileEditorInput fileEditorInput) {
+			File file = fileEditorInput.getFile().getLocation().toFile();
+			importMassSpectra(file, true);
+		} else if(input instanceof IURIEditorInput uriEditorInput) {
+			File file = new File(uriEditorInput.getURI());
+			importMassSpectra(file, true);
+		} else {
+			throw new PartInitException("Unimplemented editor input " + input.getClass());
+		}
+	}
+
+	@Override
+	public boolean isDirty() {
+
+		return isDirty;
+	}
+
+	@Override
+	public boolean isSaveAsAllowed() {
+
+		return true;
+	}
+
+	@Override
+	public void createPartControl(Composite parent) {
+
+		initializeEditor(parent);
+		updateMassSpectrumListUI();
+	}
+
+	private void initializeEditor(Composite parent) {
+
+		massSpectrumLibraryControl.set(new MassSpectrumLibraryUI(parent, SWT.NONE));
+	}
+
 	@PostConstruct
 	private void createControl(Composite parent) {
 
@@ -182,22 +249,29 @@ public class DatabaseEditor extends EditorPart {
 		registerEvents();
 	}
 
+	private void createPages(Composite parent) {
+
+		if(massSpectra != null && massSpectra.getMassSpectrum(1) != null) {
+			part.setLabel(("".equals(massSpectra.getName())) ? massSpectrumFile.getName() : massSpectra.getName());
+			createEditorPage(parent);
+		} else {
+			part.setLabel("Database Editor");
+			createErrorMessagePage(parent);
+		}
+	}
+
+	private void createEditorPage(Composite parent) {
+
+		initializeEditor(parent);
+		updateMassSpectrumListUI();
+	}
+
 	private void createErrorMessagePage(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		Label label = new Label(composite, SWT.NONE);
 		label.setText("The mass spectrum couldn't be loaded.");
-	}
-
-	private void createPages(Composite parent) {
-
-		if(massSpectra != null && massSpectra.getMassSpectrum(1) != null) {
-			String label = ("".equals(massSpectra.getName())) ? massSpectrumFile.getName() : massSpectra.getName();
-			part.setLabel(label);
-		} else {
-			createErrorMessagePage(parent);
-		}
 	}
 
 	private void importMassSpectra(File file, boolean batch) {
@@ -258,7 +332,10 @@ public class DatabaseEditor extends EditorPart {
 	@PreDestroy
 	private void preDestroy() {
 
-		massSpectrumLibraryUI.dispose();
+		MassSpectrumLibraryUI massSpectrumLibraryUI = massSpectrumLibraryControl.get();
+		if(massSpectrumLibraryUI != null) {
+			massSpectrumLibraryUI.dispose();
+		}
 		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE_SELECTION, null);
 		/*
 		 * Remove the editor from the listed parts.
@@ -320,83 +397,19 @@ public class DatabaseEditor extends EditorPart {
 
 	private void update(String topic) {
 
-		if(massSpectrumLibraryUI.isVisible()) {
-			updateObjects(objects, topic);
+		MassSpectrumLibraryUI massSpectrumLibraryUI = massSpectrumLibraryControl.get();
+		if(massSpectrumLibraryUI != null) {
+			if(massSpectrumLibraryUI.isVisible()) {
+				updateObjects(objects, topic);
+			}
 		}
 	}
 
 	private void updateMassSpectrumListUI() {
 
-		massSpectrumLibraryUI.update(massSpectrumFile, massSpectra);
-	}
-
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-
-		if(massSpectra != null) {
-			try {
-				boolean saveSuccessful = DatabaseFileSupport.saveMassSpectra(massSpectra);
-				isDirty = !saveSuccessful;
-			} catch(NoConverterAvailableException e) {
-				logger.warn(e);
-			}
+		MassSpectrumLibraryUI massSpectrumLibraryUI = massSpectrumLibraryControl.get();
+		if(massSpectrumLibraryUI != null) {
+			massSpectrumLibraryUI.update(massSpectrumFile, massSpectra);
 		}
-	}
-
-	@Override
-	public void doSaveAs() {
-
-		try {
-			DatabaseFileSupport.saveMassSpectra(Display.getCurrent().getActiveShell(), massSpectra, "Mass Spectra");
-		} catch(NoConverterAvailableException e) {
-			logger.warn(e);
-		}
-	}
-
-	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-
-		setSite(site);
-		setInput(input);
-		//
-		String fileName = input.getName();
-		fileName = fileName.substring(0, fileName.length() - 4);
-		setPartName(fileName);
-		//
-		if(input instanceof IFileEditorInput fileEditorInput) {
-			File file = fileEditorInput.getFile().getLocation().toFile();
-			importMassSpectra(file, true);
-		} else if(input instanceof IURIEditorInput uriEditorInput) {
-			File file = new File(uriEditorInput.getURI());
-			importMassSpectra(file, true);
-		} else {
-			throw new PartInitException("Unimplemented editor input " + input.getClass());
-		}
-	}
-
-	@Override
-	public boolean isDirty() {
-
-		return isDirty;
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-
-		return true;
-	}
-
-	@Override
-	public void createPartControl(Composite parent) {
-
-		TabFolder tabFolder = new TabFolder(parent, SWT.BOTTOM);
-		//
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Library");
-		//
-		massSpectrumLibraryUI = new MassSpectrumLibraryUI(tabFolder, SWT.NONE);
-		updateMassSpectrumListUI();
-		//
-		tabItem.setControl(massSpectrumLibraryUI);
 	}
 }
