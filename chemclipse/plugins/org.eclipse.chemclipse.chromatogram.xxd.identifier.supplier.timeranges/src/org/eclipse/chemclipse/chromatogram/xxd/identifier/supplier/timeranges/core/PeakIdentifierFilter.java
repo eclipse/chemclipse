@@ -101,24 +101,8 @@ public class PeakIdentifierFilter implements IProcessTypeSupplier {
 					peak.getTargets().add(identificationTarget);
 				}
 			}
-			/*
-			 * Delete unidentified peaks
-			 */
-			List<IPeak> peaksDelete = new ArrayList<>();
-			for(IPeak peak : chromatogram.getPeaks()) {
-				if(peak.getTargets().isEmpty()) {
-					peaksDelete.add(peak);
-				}
-			}
-			deletePeaks(chromatogram, peaksDelete);
 			//
 			return chromatogramSelection;
-		}
-
-		@SuppressWarnings({"rawtypes", "unchecked"})
-		private void deletePeaks(IChromatogram chromatogram, List<IPeak> peaksDelete) {
-
-			chromatogram.removePeaks(peaksDelete);
 		}
 
 		private List<IPeak> getPeaksInFocus(IChromatogram<?> chromatogram, TimeRange timeRange, float limitMatchFactor) {
