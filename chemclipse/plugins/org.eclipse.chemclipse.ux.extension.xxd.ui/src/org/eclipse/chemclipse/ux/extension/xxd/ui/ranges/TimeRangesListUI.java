@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TimeRangesComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TimeRangesEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TimeRangesFilter;
@@ -31,8 +32,11 @@ public class TimeRangesListUI extends ExtendedTableViewer {
 	private TimeRangesLabelProvider labelProvider = new TimeRangesLabelProvider();
 	private TimeRangesComparator tableComparator = new TimeRangesComparator();
 	private TimeRangesFilter listFilter = new TimeRangesFilter();
+	//
+	private IUpdateListener updateListener;
 
 	public TimeRangesListUI(Composite parent, int style) {
+
 		super(parent, style);
 		createColumns();
 	}
@@ -46,6 +50,18 @@ public class TimeRangesListUI extends ExtendedTableViewer {
 	public void setSortEnabled(boolean sortEnabled) {
 
 		setComparator((sortEnabled) ? tableComparator : null);
+	}
+
+	public void setUpdateListener(IUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
+	}
+
+	public void updateContent() {
+
+		if(updateListener != null) {
+			updateListener.update();
+		}
 	}
 
 	public void clear() {

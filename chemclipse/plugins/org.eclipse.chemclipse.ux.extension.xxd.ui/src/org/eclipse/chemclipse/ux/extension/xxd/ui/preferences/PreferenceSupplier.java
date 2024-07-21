@@ -991,6 +991,11 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String DEF_FILTER_PATH_CHROMATOGRAM_WSD = "";
 	public static final String P_FILTER_PATH_RETENTION_INDICES = "filterPathRetentionIndices";
 	public static final String DEF_FILTER_PATH_RETENTION_INDICES = "";
+	//
+	public static final String P_LIST_PATH_IMPORT = "listPathImport";
+	public static final String DEF_LIST_PATH_IMPORT = "";
+	public static final String P_LIST_PATH_EXPORT = "listPathExport";
+	public static final String DEF_LIST_PATH_EXPORT = "";
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -1290,6 +1295,9 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_FILTER_PATH_CHROMATOGRAM_CSD, DEF_FILTER_PATH_CHROMATOGRAM_CSD);
 		putDefault(P_FILTER_PATH_CHROMATOGRAM_WSD, DEF_FILTER_PATH_CHROMATOGRAM_WSD);
 		putDefault(P_FILTER_PATH_RETENTION_INDICES, DEF_FILTER_PATH_RETENTION_INDICES);
+		//
+		putDefault(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		putDefault(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 	}
 
 	private void initializeChromatogramDefaults() {
@@ -1575,5 +1583,25 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static void setChromatogramEditorLabel(HeaderField headerField) {
 
 		INSTANCE().put(P_CHROMATOGRAM_EDITOR_LABEL, headerField.name());
+	}
+
+	public static String getListPathImport() {
+
+		return INSTANCE().get(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+	}
+
+	public static void setListPathImport(String filterPath) {
+
+		INSTANCE().put(P_LIST_PATH_IMPORT, filterPath);
+	}
+
+	public static String getListPathExport() {
+
+		return INSTANCE().get(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
+	}
+
+	public static void setListPathExport(String filterPath) {
+
+		INSTANCE().put(P_LIST_PATH_EXPORT, filterPath);
 	}
 }

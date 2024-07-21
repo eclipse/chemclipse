@@ -17,7 +17,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.e4.core.contexts;bundle-version="1.7.0",
  org.apache.commons.commons-io;bundle-version="2.11.0",
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.7.1",
- org.apache.commons.lang3;bundle-version="3.12.0"
+ org.apache.commons.lang3;bundle-version="3.12.0",
+ com.fasterxml.jackson.core.jackson-core;bundle-version="2.13.5",
+ com.fasterxml.jackson.core.jackson-databind;bundle-version="2.13.5"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.model.baseline,
@@ -47,6 +49,7 @@ Export-Package: org.eclipse.chemclipse.model.baseline,
  org.eclipse.chemclipse.model.ranges,
  org.eclipse.chemclipse.model.results,
  org.eclipse.chemclipse.model.selection,
+ org.eclipse.chemclipse.model.serializer,
  org.eclipse.chemclipse.model.service,
  org.eclipse.chemclipse.model.services,
  org.eclipse.chemclipse.model.settings,
@@ -57,7 +60,9 @@ Export-Package: org.eclipse.chemclipse.model.baseline,
  org.eclipse.chemclipse.model.targets,
  org.eclipse.chemclipse.model.traces,
  org.eclipse.chemclipse.model.types,
- org.eclipse.chemclipse.model.updates
+ org.eclipse.chemclipse.model.updates,
+ org.eclipse.chemclipse.model.validators
 Import-Package: org.osgi.service.component.annotations;version="1.2.0"
-Service-Component: OSGI-INF/org.eclipse.chemclipse.model.supplier.IMeasurementFilterProcessTypeSupplier.xml,
+Service-Component: OSGI-INF/org.eclipse.chemclipse.model.service.TimeRangesSerializationService.xml,
+ OSGI-INF/org.eclipse.chemclipse.model.supplier.IMeasurementFilterProcessTypeSupplier.xml,
  OSGI-INF/org.eclipse.chemclipse.model.supplier.PeakFilterProcessTypeSupplier.xml

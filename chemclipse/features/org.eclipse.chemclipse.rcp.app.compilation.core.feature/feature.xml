@@ -316,4 +316,8 @@
          id="org.eclipse.chemclipse.vsd.converter.supplier.csv.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.timeranges.feature"
+         version="0.0.0"/>
+
 </feature>
