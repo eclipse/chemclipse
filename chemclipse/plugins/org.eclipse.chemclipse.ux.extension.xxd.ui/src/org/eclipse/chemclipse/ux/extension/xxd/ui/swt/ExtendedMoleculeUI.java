@@ -107,6 +107,11 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		createControl();
 	}
 
+	public void clear() {
+
+		setInput(null);
+	}
+
 	public void setInput(ILibraryInformation libraryInformation) {
 
 		this.libraryInformation = libraryInformation;

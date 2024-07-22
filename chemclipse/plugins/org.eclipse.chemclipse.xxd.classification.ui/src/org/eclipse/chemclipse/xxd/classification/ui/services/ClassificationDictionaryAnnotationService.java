@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - width hint
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.classification.ui.services;
 
@@ -33,6 +34,7 @@ public class ClassificationDictionaryAnnotationService extends ClassificationDic
 		classificationDictionaryEditor.setToolTipText(description);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 200;
+		gridData.widthHint = 500;
 		classificationDictionaryEditor.setLayoutData(gridData);
 		//
 		if(currentSelection instanceof String text) {

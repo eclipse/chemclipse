@@ -35,6 +35,7 @@ public class WavenumberSignalsAnnotationService extends WavenumberSignalsSeriali
 		wavenumberSignalsEditor.setToolTipText(description);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 250;
+		gridData.widthHint = 500;
 		wavenumberSignalsEditor.setLayoutData(gridData);
 		//
 		if(currentSelection instanceof String text) {
