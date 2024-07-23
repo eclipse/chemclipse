@@ -15,13 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
@@ -30,37 +28,23 @@ import org.eclipse.chemclipse.swt.ui.services.ImageServiceInput;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMolecule;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.MoleculeImageServiceSupport;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.Clipboard;
-import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseWheelListener;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -68,20 +52,10 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swtchart.extensions.clipboard.ImageArrayTransfer;
-import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
-	private static final Logger logger = Logger.getLogger(ExtendedMoleculeUI.class);
-	//
-	private static final String EMPTY_MESSAGE = "Please select a target to view a molecular structure.";
-	private static final String ERROR_MESSAGE = "The molecule image couldn't be created.";
-	//
-	private static final double SCALE_DEFAULT = 1.0d;
-	private static final double SCALE_DELTA = 0.1d;
-	//
 	private AtomicReference<Button> buttonToolbarInfo = new AtomicReference<>();
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private AtomicReference<Button> buttonToolbarEdit = new AtomicReference<>();
@@ -89,15 +63,10 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<ComboViewer> comboViewerServices = new AtomicReference<>();
 	private AtomicReference<Text> textInput = new AtomicReference<>();
 	private AtomicReference<ComboViewer> comboViewerInput = new AtomicReference<>();
-	private AtomicReference<Canvas> canvasMolecule = new AtomicReference<>();
+	private AtomicReference<MoleculeUI> moleculeControl = new AtomicReference<>();
 	private AtomicReference<Text> textMolecule = new AtomicReference<>();
 	//
-	//
-	private double scaleFactor = SCALE_DEFAULT;
-	private Image imageMolecule = null;
 	private ILibraryInformation libraryInformation;
-	private ILibraryInformation renderedLibraryInformation;
-	private Point renderedSize;
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
@@ -115,15 +84,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	public void setInput(ILibraryInformation libraryInformation) {
 
 		this.libraryInformation = libraryInformation;
-		updateContent();
-	}
-
-	@Override
-	public void dispose() {
-
-		if(imageMolecule != null) {
-			imageMolecule.dispose();
-		}
+		updateContent(Display.getDefault());
 	}
 
 	private void createControl() {
@@ -150,7 +111,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		/*
 		 * Create the image
 		 */
-		updateContent();
+		updateContent(Display.getDefault());
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -213,7 +174,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 				if(isEnterPressed(e)) {
 					libraryInformation = createLibraryInformationByInput();
-					updateContent();
+					updateContent(e.display);
 				}
 			}
 		});
@@ -269,7 +230,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				libraryInformation = createLibraryInformationByInput();
-				updateContent();
+				updateContent(e.display);
 			}
 		});
 		//
@@ -294,77 +255,13 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		Composite composite = new Composite(tabFolder, SWT.BORDER);
 		composite.setLayout(new FillLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		Canvas canvas = createCanvasMolecule(composite);
+		createMoleculeUI(composite);
 		tabItem.setControl(composite);
-		//
-		canvasMolecule.set(canvas);
 	}
 
-	private Canvas createCanvasMolecule(Composite parent) {
+	private void createMoleculeUI(Composite parent) {
 
-		Canvas canvas = new Canvas(parent, SWT.FILL);
-		canvas.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-		//
-		canvas.addControlListener(new ControlAdapter() {
-
-			@Override
-			public void controlResized(ControlEvent e) {
-
-				canvas.redraw();
-			}
-		});
-		//
-		canvas.addMouseWheelListener(new MouseWheelListener() {
-
-			@Override
-			public void mouseScrolled(MouseEvent event) {
-
-				if(getMoleculeImageService().isOnline()) {
-					return;
-				} else {
-					scaleFactor += (event.count > 0) ? SCALE_DELTA : -SCALE_DELTA;
-					canvas.redraw();
-				}
-			}
-		});
-		//
-		canvas.addPaintListener(new PaintListener() {
-
-			@Override
-			public void paintControl(PaintEvent event) {
-
-				drawImage(canvas, event);
-			}
-		});
-		//
-		canvas.addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				if(e.stateMask == SWT.MOD1 && e.keyCode == IKeyboardSupport.KEY_CODE_LC_C) {
-					ImageData imageData = imageMolecule.getImageData();
-					if(imageData != null) {
-						Clipboard clipboard = new Clipboard(e.display);
-						try {
-							if(OperatingSystemUtils.isWindows()) {
-								clipboard.setContents(new Object[]{imageData, imageData}, new Transfer[]{ImageArrayTransfer.getImageTransferWindows(), ImageArrayTransfer.getInstanceWindows()});
-							} else if(OperatingSystemUtils.isLinux()) {
-								clipboard.setContents(new Object[]{imageData}, new Transfer[]{ImageArrayTransfer.getInstanceLinux()});
-							} else if(OperatingSystemUtils.isMac() || OperatingSystemUtils.isUnix()) {
-								clipboard.setContents(new Object[]{imageData}, new Transfer[]{ImageArrayTransfer.getImageTransferMacOS()});
-							}
-						} finally {
-							if(!clipboard.isDisposed()) {
-								clipboard.dispose();
-							}
-						}
-					}
-				}
-			}
-		});
-		//
-		return canvas;
+		moleculeControl.set(new MoleculeUI(parent, SWT.NONE));
 	}
 
 	private void createMoleculeContent(TabFolder tabFolder) {
@@ -453,10 +350,8 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private void reset(Display display) {
 
-		scaleFactor = SCALE_DEFAULT;
-		renderedLibraryInformation = null;
-		updateContent();
-		createMoleculeImage(display);
+		moleculeControl.get().clear(display);
+		updateContent(display);
 	}
 
 	private Button createButtonExport(Composite parent) {
@@ -470,7 +365,8 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(imageMolecule != null) {
+				ImageData imageData = moleculeControl.get().getImageData();
+				if(imageData != null) {
 					FileDialog fileDialog = new FileDialog(e.display.getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
 					fileDialog.setText("Save Molecule");
@@ -482,9 +378,8 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 					String pathname = fileDialog.open();
 					if(pathname != null) {
 						preferenceStore.setValue(PreferenceSupplier.P_MOLECULE_PATH_EXPORT, fileDialog.getFilterPath());
-						ImageData data = imageMolecule.getImageData();
 						ImageLoader loader = new ImageLoader();
-						loader.data = new ImageData[]{data};
+						loader.data = new ImageData[]{imageData};
 						loader.save(pathname, SWT.IMAGE_PNG);
 					}
 				}
@@ -531,179 +426,17 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		return (e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR);
 	}
 
-	private void createMoleculeImage(Display display) {
-
-		String moleculeInfo = "";
-		IMoleculeImageService moleculeImageService = getMoleculeImageService();
-		//
-		if(moleculeImageService != null) {
-			/*
-			 * Canvas and a scale factor are used.
-			 */
-			Point size = calculateImageSize();
-			int width = size.x;
-			int height = size.y;
-			/*
-			 * If the library information is null, take the text.
-			 */
-			if(libraryInformation == null) {
-				libraryInformation = new LibraryInformation();
-				ImageServiceInput imageInput = getImageInput();
-				String text = textInput.get().getText().trim();
-				switch(imageInput) {
-					case SMILES:
-						libraryInformation.setSmiles(text);
-						break;
-					default:
-						libraryInformation.setName(text);
-						break;
-				}
-			}
-			/*
-			 * Skip creation if the molecule image exists already.
-			 * Take a size change of the canvas into account.
-			 */
-			if(!size.equals(renderedSize) || renderedLibraryInformation != libraryInformation) {
-				moleculeInfo = getMoleculeInformation(libraryInformation);
-				if(isSourceDataAvailable(libraryInformation)) {
-					/*
-					 * Dispose is required on images.
-					 */
-					if(imageMolecule != null) {
-						imageMolecule.dispose();
-						imageMolecule = null;
-					}
-					/*
-					 * Create a new molecule image.
-					 */
-					imageMolecule = moleculeImageService.create(display, libraryInformation, width, height);
-					renderedLibraryInformation = libraryInformation;
-					renderedSize = size;
-				} else {
-					logger.info(ERROR_MESSAGE);
-				}
-			}
-		}
-		//
-		toolbarInfo.get().setText(moleculeInfo);
-	}
-
-	private Point calculateImageSize() {
-
-		Point size = canvasMolecule.get().getSize();
-		int width = size.x;
-		int height = size.y;
-		//
-		if(scaleFactor != 1.0d) {
-			width += (int)(size.x * scaleFactor);
-			height += (int)(size.y * scaleFactor);
-		}
-		//
-		return adjustSize(width, height);
-	}
-
-	private Point adjustSize(int width, int height) {
-
-		width = (width <= 0) ? 1 : width;
-		height = (height <= 0) ? 1 : height;
-		//
-		return new Point(width, height);
-	}
-
-	private void drawImage(Canvas canvas, PaintEvent paintEvent) {
-
-		drawImage(canvas, paintEvent.display, paintEvent.gc);
-	}
-
-	private void drawImage(Canvas canvas, Display display, GC gc) {
-
-		if(libraryInformation == null || !isSourceDataAvailable(libraryInformation)) {
-			/*
-			 * Instructions
-			 */
-			Font font = getFont();
-			FontData[] fontData = font.getFontData();
-			int width = gc.stringExtent(EMPTY_MESSAGE).x;
-			int height = fontData[0].getHeight();
-			//
-			Point size = canvas.getSize();
-			int x = (int)(size.x / 2.0d - width / 2.0d);
-			int y = (int)(size.y / 2.0d - height / 2.0d);
-			gc.drawText(EMPTY_MESSAGE, x, y, true);
-		} else {
-			/*
-			 * Molecule
-			 */
-			createMoleculeImage(display);
-			if(imageMolecule != null) {
-				/*
-				 * Image of molecule.
-				 */
-				Rectangle bounds = imageMolecule.getBounds();
-				int srcX = 0;
-				int srcY = 0;
-				int srcWidth = bounds.width;
-				int srcHeight = bounds.height;
-				int destX = 0;
-				int destY = 0;
-				int destWidth = bounds.width;
-				int destHeight = bounds.height;
-				//
-				if(scaleFactor != 1.0d) {
-					destWidth = (int)(bounds.width * scaleFactor);
-					destHeight = (int)(bounds.height * scaleFactor);
-					Point size = canvasMolecule.get().getSize();
-					int corrwidth = (int)(size.x * scaleFactor);
-					int corrheight = (int)(size.y * scaleFactor);
-					destX = (int)(srcWidth / 2.0d - destWidth / 2.0d - corrwidth / 2.0d);
-					destY = (int)(srcHeight / 2.0d - destHeight / 2.0d - corrheight / 2.0d);
-				}
-				/*
-				 * Correction
-				 */
-				Point destSize = adjustSize(destWidth, destHeight);
-				gc.drawImage(imageMolecule, srcX, srcY, srcWidth, srcHeight, destX, destY, destSize.x, destSize.y);
-			} else {
-				/*
-				 * Can't create molecule display.
-				 */
-				Font font = getFont();
-				FontData[] fontData = font.getFontData();
-				int width = gc.stringExtent(ERROR_MESSAGE).x;
-				int height = fontData[0].getHeight();
-				//
-				Point size = canvas.getSize();
-				int x = (int)(size.x / 2.0d - width / 2.0d);
-				int y = (int)(size.y / 2.0d - height / 2.0d);
-				gc.drawText(ERROR_MESSAGE, x, y, true);
-			}
-		}
-	}
-
-	private boolean isSourceDataAvailable(ILibraryInformation libraryInformation) {
-
-		if(!libraryInformation.getName().isEmpty()) {
-			return true;
-		} else if(!libraryInformation.getCasNumber().isEmpty()) {
-			return true;
-		} else if(!libraryInformation.getSmiles().isEmpty()) {
-			return true;
-		} else if(!libraryInformation.getInChI().isEmpty()) {
-			return true;
-		}
-		//
-		return false;
-	}
-
 	private String getMoleculeInformation(ILibraryInformation libraryInformation) {
 
 		StringBuilder builder = new StringBuilder();
 		//
-		builder.append(getInfo(libraryInformation.getName()));
-		builder.append(" | ");
-		builder.append(getInfo(libraryInformation.getCasNumber()));
-		builder.append(" | ");
-		builder.append(getInfo(libraryInformation.getSmiles()));
+		if(libraryInformation != null) {
+			builder.append(getInfo(libraryInformation.getName()));
+			builder.append(" | ");
+			builder.append(getInfo(libraryInformation.getCasNumber()));
+			builder.append(" | ");
+			builder.append(getInfo(libraryInformation.getSmiles()));
+		}
 		//
 		return builder.toString();
 	}
@@ -711,16 +444,6 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private String getInfo(String value) {
 
 		return value.isEmpty() ? "--" : value;
-	}
-
-	private IMoleculeImageService getMoleculeImageService() {
-
-		Object object = comboViewerServices.get().getStructuredSelection().getFirstElement();
-		if(object instanceof IMoleculeImageService moleculeImageService) {
-			return moleculeImageService;
-		}
-		//
-		return null;
 	}
 
 	private ImageServiceInput getImageInput() {
@@ -748,14 +471,15 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	private void updateContent() {
+	private void updateContent(Display display) {
 
 		updateWidgets();
-		canvasMolecule.get().redraw();
+		moleculeControl.get().setInput(display, libraryInformation);
 	}
 
 	private void updateWidgets() {
 
+		toolbarInfo.get().setText(getMoleculeInformation(libraryInformation));
 		setTextMolecule();
 		setTextInput();
 	}
@@ -812,65 +536,20 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private void updateComboViewerImageServices() {
 
-		Object[] moleculeImageServices = Activator.getDefault().getMoleculeImageServices();
+		IMoleculeImageService moleculeImageService = null;
+		Object[] moleculeImageServices = MoleculeImageServiceSupport.getMoleculeImageServices();
+		//
 		if(moleculeImageServices != null) {
 			comboViewerServices.get().setInput(moleculeImageServices);
-			IMoleculeImageService moleculeImageServiceSelection = getMoleculeImageServiceSelection(moleculeImageServices);
-			if(moleculeImageServiceSelection != null) {
-				comboViewerServices.get().setSelection(new StructuredSelection(moleculeImageServiceSelection));
+			moleculeImageService = MoleculeImageServiceSupport.getMoleculeImageServiceSelection(moleculeImageServices);
+			if(moleculeImageService != null) {
+				comboViewerServices.get().setSelection(new StructuredSelection(moleculeImageService));
 			}
 		} else {
 			comboViewerServices.get().setInput(null);
 		}
-	}
-
-	private IMoleculeImageService getMoleculeImageServiceSelection(Object[] moleculeImageServices) {
-
-		IMoleculeImageService moleculeImageServiceSelection = null;
-		if(moleculeImageServices.length > 0) {
-			/*
-			 * Get the stored service preference or the
-			 * first available offline service.
-			 */
-			moleculeImageServiceSelection = getMoleculeImageServicesPreference(moleculeImageServices);
-			if(moleculeImageServiceSelection == null) {
-				List<IMoleculeImageService> moleculeImageServicesOffline = getMoleculeImageServicesOffline(moleculeImageServices);
-				if(!moleculeImageServicesOffline.isEmpty()) {
-					moleculeImageServiceSelection = moleculeImageServicesOffline.get(0);
-				}
-			}
-		}
 		//
-		return moleculeImageServiceSelection;
-	}
-
-	/*
-	 * May return null.
-	 */
-	private IMoleculeImageService getMoleculeImageServicesPreference(Object[] moleculeImageServices) {
-
-		String imageServiceSelection = PreferenceSupplier.getMoleculeImageServiceId();
-		for(int i = 0; i < moleculeImageServices.length; i++) {
-			IMoleculeImageService moleculeImageService = (IMoleculeImageService)moleculeImageServices[i];
-			if(moleculeImageService.getClass().getName().equals(imageServiceSelection)) {
-				return moleculeImageService;
-			}
-		}
-		//
-		return null;
-	}
-
-	private List<IMoleculeImageService> getMoleculeImageServicesOffline(Object[] moleculeImageServices) {
-
-		List<IMoleculeImageService> moleculeImageServicesOffline = new ArrayList<IMoleculeImageService>();
-		for(int i = 0; i < moleculeImageServices.length; i++) {
-			IMoleculeImageService moleculeImageService = (IMoleculeImageService)moleculeImageServices[i];
-			if(!moleculeImageService.isOnline()) {
-				moleculeImageServicesOffline.add(moleculeImageService);
-			}
-		}
-		//
-		return moleculeImageServicesOffline;
+		moleculeControl.get().setMoleculeImageService(moleculeImageService);
 	}
 
 	private void updateComboViewerInputTypes() {
