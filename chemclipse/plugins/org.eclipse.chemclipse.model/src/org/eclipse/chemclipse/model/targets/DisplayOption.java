@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ public enum DisplayOption implements ILabel {
 	RETENTION_TIME_STANDARD("Retention Time [Display Field]"), //
 	RETENTION_INDEX("Retention Index"), //
 	RETENTION_INDEX_STANDARD("Retention Index [Display Field]"), //
+	RETENTION_INDEX_AREA_PERCENT("Retention Index (Area%)"), //
 	AREA_PERCENT("Area%"), //
 	AREA_PERCENT_STANDARD("Area% [Display Field]"); //
 

@@ -353,6 +353,9 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 						case RETENTION_INDEX_STANDARD:
 							labelDisplay = getConcatenatedLabel(TargetReferencesSupport.DECIMAL_FORMAT_RI.format(targetReference.getRetentionIndex()), labelStandard);
 							break;
+						case RETENTION_INDEX_AREA_PERCENT:
+							labelDisplay = TargetReferencesSupport.DECIMAL_FORMAT_RI.format(targetReference.getRetentionIndex()) + " (" + getAreaPercent(targetReference) + ")";
+							break;
 						case AREA_PERCENT:
 							labelDisplay = getAreaPercent(targetReference);
 							break;
