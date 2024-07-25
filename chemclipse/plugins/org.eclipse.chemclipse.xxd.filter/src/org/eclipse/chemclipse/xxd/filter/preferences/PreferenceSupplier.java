@@ -19,6 +19,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 
 	public static final double MIN_CONCENTRATION = 0;
 	public static final double MAX_CONCENTRATION = Double.MAX_VALUE;
+	public static final float MIN_FACTOR = 0.0f;
+	public static final float MAX_FACTOR = 100.0f;
 	//
 	public static final String P_NUMBER_LOWEST = "numberLowest";
 	public static final int DEF_NUMBER_LOWEST = 5;

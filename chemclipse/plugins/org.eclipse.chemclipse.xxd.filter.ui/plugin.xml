@@ -15,5 +15,9 @@
             class="org.eclipse.chemclipse.xxd.filter.ui.icon.DeletePeakIdentficationsMenuIcon"
             id="org.eclipse.chemclipse.xxd.filter.peaks.DeleteTargetsFilter">
       </icon>
+      <icon
+            class="org.eclipse.chemclipse.xxd.filter.ui.icon.TargetTransferMenuIcon"
+            id="org.eclipse.chemclipse.xxd.filter.chromatogram.peakTargetTransfer">
+      </icon>      
    </extension>
 </plugin>
