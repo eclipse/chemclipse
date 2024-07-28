@@ -49,9 +49,24 @@ public class ChromatogramFilterReshape extends AbstractChromatogramFilter implem
 				 * Settings
 				 */
 				HeaderField headerField = filterSettings.getHeaderField();
-				double segmentWidthMinutes = filterSettings.getSegmentWidthMinutes();
+				double segmentWidthSelection = filterSettings.getSegmentWidth();
 				boolean resetRetentionTimes = filterSettings.isResetRetentionTimes();
-				int segmentWidth = (int)Math.round(segmentWidthMinutes * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+				int segmentWidth = 0;
+				switch(filterSettings.getRangeOption()) {
+					case RETENTION_TIME_MIN:
+						/*
+						 * Minutes
+						 */
+						segmentWidth = (int)Math.round(segmentWidthSelection * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+						break;
+					default:
+						/*
+						 * Milliseconds
+						 */
+						segmentWidth = (int)Math.round(segmentWidthSelection);
+						break;
+				}
+				//
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				if(chromatogram.getStopRetentionTime() > segmentWidth) {
 					/*
