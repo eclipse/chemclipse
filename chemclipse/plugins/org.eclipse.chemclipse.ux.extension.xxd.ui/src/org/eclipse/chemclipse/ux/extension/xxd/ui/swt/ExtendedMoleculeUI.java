@@ -12,14 +12,18 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
+import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
 import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
@@ -27,6 +31,7 @@ import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
 import org.eclipse.chemclipse.swt.ui.services.ImageServiceInput;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMolecule;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.MoleculeImageServiceSupport;
@@ -75,6 +80,13 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 		super(parent, style);
 		createControl();
+	}
+
+	@Override
+	public boolean setFocus() {
+
+		updateOnFocus();
+		return true;
 	}
 
 	public void clear() {
@@ -524,6 +536,39 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		}
 		//
 		return libraryInformationByInput;
+	}
+
+	private void updateOnFocus() {
+
+		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+		List<Object> objects = dataUpdateSupport.getUpdates(getLastTopic(dataUpdateSupport.getTopics()));
+		//
+		if(!objects.isEmpty()) {
+			Object object = objects.get(0);
+			if(object instanceof ILibraryMassSpectrum libraryMassSpectrum) {
+				setInput(libraryMassSpectrum.getLibraryInformation());
+			} else if(object instanceof IIdentificationTarget identificationTarget) {
+				setInput(identificationTarget.getLibraryInformation());
+			}
+		}
+	}
+
+	private String getLastTopic(List<String> topics) {
+
+		Collections.reverse(topics);
+		for(String topic : topics) {
+			if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
+				return topic;
+			}
+			if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
+				return topic;
+			}
+			if(topic.equals(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE)) {
+				return topic;
+			}
+		}
+		//
+		return "";
 	}
 
 	private void updateComboViewerInputTypes() {

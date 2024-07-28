@@ -40,6 +40,15 @@ public class MoleculePart extends AbstractPart<ExtendedMoleculeUI> {
 	}
 
 	@Override
+	public void setFocus() {
+
+		ExtendedMoleculeUI control = getControl();
+		if(control != null) {
+			control.setFocus();
+		}
+	}
+
+	@Override
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(objects.size() == 1) {
