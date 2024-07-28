@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
+import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
 import org.eclipse.chemclipse.swt.ui.services.ImageServiceInput;
@@ -104,13 +105,9 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		enableToolbar(toolbarInfo, buttonToolbarInfo.get(), IMAGE_INFO, TOOLTIP_INFO, true);
 		enableToolbar(toolbarEdit, buttonToolbarEdit.get(), IMAGE_EDIT, TOOLTIP_EDIT, false);
 		/*
-		 * Molecule Services / Types
+		 * Input
 		 */
-		updateComboViewerImageServices();
 		updateComboViewerInputTypes();
-		/*
-		 * Create the image
-		 */
 		updateContent(Display.getDefault());
 	}
 
@@ -261,7 +258,24 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private void createMoleculeUI(Composite parent) {
 
-		moleculeControl.set(new MoleculeUI(parent, SWT.NONE));
+		MoleculeUI moleculeUI = new MoleculeUI(parent, SWT.NONE);
+		moleculeUI.setUpdateListenerUI(new IUpdateListenerUI() {
+
+			@Override
+			public void update(Display display) {
+
+				/*
+				 * Only update the combo box if the service has been
+				 * changed via the MoleculeServiceDialog.
+				 */
+				IMoleculeImageService moleculeImageService = MoleculeImageServiceSupport.getMoleculeImageServiceSelection();
+				if(moleculeImageService != null) {
+					comboViewerServices.get().setSelection(new StructuredSelection(moleculeImageService));
+				}
+			}
+		});
+		//
+		moleculeControl.set(moleculeUI);
 	}
 
 	private void createMoleculeContent(TabFolder tabFolder) {
@@ -285,36 +299,10 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		return text;
 	}
 
-	private void createComboViewerServices(Composite composite) {
+	private void createComboViewerServices(Composite parent) {
 
-		ComboViewer comboViewer = new EnhancedComboViewer(composite, SWT.READ_ONLY);
+		ComboViewer comboViewer = MoleculeImageServiceSupport.createComboViewerServices(parent);
 		Combo combo = comboViewer.getCombo();
-		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewer.setLabelProvider(new AbstractLabelProvider() {
-
-			@Override
-			public String getText(Object element) {
-
-				if(element instanceof IMoleculeImageService moleculeImageService) {
-					combo.setToolTipText(moleculeImageService.getDescription());
-					StringBuilder builder = new StringBuilder();
-					builder.append(moleculeImageService.getName());
-					builder.append(" (");
-					builder.append(moleculeImageService.isOnline() ? "online" : "offline");
-					builder.append(")");
-					return builder.toString();
-				}
-				//
-				return null;
-			}
-		});
-		/*
-		 * Select the item.
-		 */
-		combo.setToolTipText("Select a service to create the molecule image.");
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.widthHint = 200;
-		combo.setLayoutData(gridData);
 		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -322,8 +310,8 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 				if(comboViewer.getStructuredSelection().getFirstElement() instanceof IMoleculeImageService moleculeImageService) {
 					PreferenceSupplier.setMoleculeImageServiceId(moleculeImageService.getClass().getName());
+					updateMoleculeService(Display.getDefault());
 				}
-				reset(e.display);
 			}
 		});
 		//
@@ -341,17 +329,11 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				reset(e.display);
+				updateMoleculeService(e.display);
 			}
 		});
 		//
 		return button;
-	}
-
-	private void reset(Display display) {
-
-		moleculeControl.get().clear(display);
-		updateContent(display);
 	}
 
 	private Button createButtonExport(Composite parent) {
@@ -416,9 +398,19 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void apply(Display display) {
 
-				reset(display);
+				updateMoleculeService(display);
 			}
 		});
+	}
+
+	private void updateMoleculeService(Display display) {
+
+		/*
+		 * Update the content
+		 */
+		moleculeControl.get().setMoleculeImageService(MoleculeImageServiceSupport.getMoleculeImageServiceSelection());
+		moleculeControl.get().clear(display);
+		updateContent(display);
 	}
 
 	private boolean isEnterPressed(KeyEvent e) {
@@ -532,24 +524,6 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		}
 		//
 		return libraryInformationByInput;
-	}
-
-	private void updateComboViewerImageServices() {
-
-		IMoleculeImageService moleculeImageService = null;
-		Object[] moleculeImageServices = MoleculeImageServiceSupport.getMoleculeImageServices();
-		//
-		if(moleculeImageServices != null) {
-			comboViewerServices.get().setInput(moleculeImageServices);
-			moleculeImageService = MoleculeImageServiceSupport.getMoleculeImageServiceSelection(moleculeImageServices);
-			if(moleculeImageService != null) {
-				comboViewerServices.get().setSelection(new StructuredSelection(moleculeImageService));
-			}
-		} else {
-			comboViewerServices.get().setInput(null);
-		}
-		//
-		moleculeControl.get().setMoleculeImageService(moleculeImageService);
 	}
 
 	private void updateComboViewerInputTypes() {

@@ -15,8 +15,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.updates.IUpdateListenerUI;
 import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.MoleculeServiceDialog;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.MoleculeImageServiceSupport;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.Transfer;
@@ -28,6 +32,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
@@ -39,6 +45,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swtchart.extensions.clipboard.ImageArrayTransfer;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 
@@ -54,11 +62,12 @@ public class MoleculeUI extends Composite implements IExtendedPartUI {
 	//
 	private double scaleFactor = SCALE_DEFAULT;
 	private Image imageMolecule = null;
-	private Point renderedSize;
-	private ILibraryInformation renderedLibraryInformation;
-	//
+	private Point renderedSize = null;
+	private ILibraryInformation renderedLibraryInformation = null;
 	private IMoleculeImageService moleculeImageService = null;
-	private ILibraryInformation libraryInformation;
+	private ILibraryInformation libraryInformation = null;
+	//
+	private IUpdateListenerUI updateListenerUI = null;
 
 	public MoleculeUI(Composite parent, int style) {
 
@@ -69,9 +78,12 @@ public class MoleculeUI extends Composite implements IExtendedPartUI {
 	@Override
 	public void dispose() {
 
-		if(imageMolecule != null) {
-			imageMolecule.dispose();
-		}
+		disposeImage();
+	}
+
+	public void setUpdateListenerUI(IUpdateListenerUI updateListenerUI) {
+
+		this.updateListenerUI = updateListenerUI;
 	}
 
 	public void setMoleculeImageService(IMoleculeImageService moleculeImageService) {
@@ -82,6 +94,12 @@ public class MoleculeUI extends Composite implements IExtendedPartUI {
 	public void setInput(Display display, ILibraryInformation libraryInformation) {
 
 		this.libraryInformation = libraryInformation;
+		updateInput(display);
+	}
+
+	public void updateInput(Display display) {
+
+		renderedLibraryInformation = null;
 		createMoleculeImage(display);
 		canvasMolecule.get().redraw();
 	}
@@ -91,7 +109,8 @@ public class MoleculeUI extends Composite implements IExtendedPartUI {
 		scaleFactor = SCALE_DEFAULT;
 		libraryInformation = null;
 		renderedLibraryInformation = null;
-		createMoleculeImage(display);
+		disposeImage();
+		canvasMolecule.get().redraw();
 	}
 
 	/**
@@ -179,6 +198,27 @@ public class MoleculeUI extends Composite implements IExtendedPartUI {
 				}
 			}
 		});
+		//
+		Menu menu = new Menu(canvas);
+		MenuItem menuItem = new MenuItem(menu, SWT.NONE);
+		menuItem.setText("Molecule Service");
+		menuItem.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				MoleculeServiceDialog dialog = new MoleculeServiceDialog(e.display.getActiveShell());
+				if(dialog.open() == Window.OK) {
+					moleculeImageService = dialog.getMoleculeImageService();
+					if(moleculeImageService != null) {
+						PreferenceSupplier.setMoleculeImageServiceId(moleculeImageService.getClass().getName());
+					}
+					updateInput(e.display);
+					fireUpdate(e.display);
+				}
+			}
+		});
+		canvas.setMenu(menu);
 		//
 		return canvas;
 	}
@@ -286,15 +326,9 @@ public class MoleculeUI extends Composite implements IExtendedPartUI {
 			if(!size.equals(renderedSize) || renderedLibraryInformation != libraryInformation) {
 				if(isSourceDataAvailable(libraryInformation)) {
 					/*
-					 * Dispose is required on images.
-					 */
-					if(imageMolecule != null) {
-						imageMolecule.dispose();
-						imageMolecule = null;
-					}
-					/*
 					 * Create a new molecule image.
 					 */
+					disposeImage();
 					imageMolecule = moleculeImageService.create(display, libraryInformation, width, height);
 					renderedLibraryInformation = libraryInformation;
 					renderedSize = size;
@@ -302,6 +336,17 @@ public class MoleculeUI extends Composite implements IExtendedPartUI {
 					logger.info(ERROR_MESSAGE);
 				}
 			}
+		}
+	}
+
+	private void disposeImage() {
+
+		/*
+		 * Dispose is required on images.
+		 */
+		if(imageMolecule != null) {
+			imageMolecule.dispose();
+			imageMolecule = null;
 		}
 	}
 
@@ -325,5 +370,12 @@ public class MoleculeUI extends Composite implements IExtendedPartUI {
 		height = (height <= 0) ? 1 : height;
 		//
 		return new Point(width, height);
+	}
+
+	private void fireUpdate(Display display) {
+
+		if(updateListenerUI != null) {
+			updateListenerUI.update(display);
+		}
 	}
 }
