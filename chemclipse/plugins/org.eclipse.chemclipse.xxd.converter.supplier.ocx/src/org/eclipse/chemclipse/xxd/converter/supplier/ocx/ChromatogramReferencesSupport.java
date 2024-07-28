@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.xxd.converter.supplier.ocx;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.io.ChromatogramWriterCSD;
@@ -23,6 +25,7 @@ import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.support.HeaderUtil;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.io.ChromatogramWriterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.io.ChromatogramWriterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
@@ -38,26 +41,29 @@ public class ChromatogramReferencesSupport {
 		ChromatogramWriterWSD chromatogramWriterWSD = new ChromatogramWriterWSD();
 		//
 		HeaderField headerField = PreferenceSupplier.getChromatogramExportReferencesHeaderField();
+		List<IChromatogram<?>> chromatogramReferences = chromatogram.getReferencedChromatograms();
+		DecimalFormat decimalFormat = getDecimalFormatIndex(chromatogramReferences.size());
+		//
 		int i = 1;
-		for(IChromatogram<?> chromatogramReference : chromatogram.getReferencedChromatograms()) {
+		for(IChromatogram<?> chromatogramReference : chromatogramReferences) {
 			if(!chromatogramReference.getScans().isEmpty()) {
 				if(chromatogramReference instanceof IChromatogramCSD referencedChromatogramCSD) {
 					/*
 					 * CSD
 					 */
-					File fileReference = getFileReference(file, chromatogramReference, headerField, i, "CSD");
+					File fileReference = getFileReference(file, chromatogramReference, headerField, decimalFormat.format(i), "CSD");
 					chromatogramWriterCSD.writeChromatogram(fileReference, referencedChromatogramCSD, monitor);
 				} else if(chromatogramReference instanceof IChromatogramMSD referencedChromatogramMSD) {
 					/*
 					 * MSD
 					 */
-					File fileReference = getFileReference(file, chromatogramReference, headerField, i, "MSD");
+					File fileReference = getFileReference(file, chromatogramReference, headerField, decimalFormat.format(i), "MSD");
 					chromatogramWriterMSD.writeChromatogram(fileReference, referencedChromatogramMSD, monitor);
 				} else if(chromatogramReference instanceof IChromatogramWSD referencedChromatogramWSD) {
 					/*
 					 * WSD
 					 */
-					File fileReference = getFileReference(file, chromatogramReference, headerField, i, "WSD");
+					File fileReference = getFileReference(file, chromatogramReference, headerField, decimalFormat.format(i), "WSD");
 					chromatogramWriterWSD.writeChromatogram(fileReference, referencedChromatogramWSD, monitor);
 				}
 			}
@@ -65,10 +71,28 @@ public class ChromatogramReferencesSupport {
 		}
 	}
 
-	private static File getFileReference(File file, IChromatogram<?> chromatogram, HeaderField headerField, int i, String type) {
+	private static DecimalFormat getDecimalFormatIndex(int sizeReferences) {
+
+		/*
+		 * Add at least one digit.
+		 */
+		StringBuilder builder = new StringBuilder();
+		builder.append("0");
+		/*
+		 * Add more digits if available.
+		 */
+		int size = Integer.toString(sizeReferences).length();
+		for(int i = 1; i < size; i++) {
+			builder.append("0");
+		}
+		//
+		return ValueFormat.getDecimalFormatEnglish(builder.toString());
+	}
+
+	private static File getFileReference(File file, IChromatogram<?> chromatogram, HeaderField headerField, String index, String type) {
 
 		String extension = VersionConstants.FILE_EXTENSION_CHROMATOGRAM;
-		String identifier = HeaderUtil.getChromatogramName(chromatogram, headerField, Integer.toString(i));
+		String identifier = HeaderUtil.getChromatogramName(chromatogram, headerField, index);
 		String directory = file.getParentFile().getAbsolutePath();
 		//
 		StringBuilder builder = new StringBuilder();
