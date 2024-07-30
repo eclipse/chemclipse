@@ -76,12 +76,12 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 
 		if(isValidFileFormat(file)) {
 			boolean isNameMarkerAvailable = isNameMarkerAvailable(file);
-			return extractMassSpectra(file, isNameMarkerAvailable);
+			return extractMassSpectra(file, isNameMarkerAvailable, monitor);
 		}
 		return null;
 	}
 
-	private IMassSpectra extractMassSpectra(File file, boolean isNameMarkerAvailable) throws IOException {
+	private IMassSpectra extractMassSpectra(File file, boolean isNameMarkerAvailable, IProgressMonitor monitor) throws IOException {
 
 		String referenceIdentifierMarker = PreferenceSupplier.getReferenceIdentifierMarker();
 		String referenceIdentifierPrefix = PreferenceSupplier.getReferenceIdentifierPrefix();
@@ -99,6 +99,9 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 				 * Parse each line
 				 */
 				while((line = bufferedReader.readLine()) != null) {
+					if(monitor.isCanceled()) {
+						return massSpectra;
+					}
 					/*
 					 * Strip line comments
 					 */

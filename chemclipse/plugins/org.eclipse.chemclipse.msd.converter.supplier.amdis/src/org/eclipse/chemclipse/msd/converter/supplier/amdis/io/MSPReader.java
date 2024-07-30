@@ -184,6 +184,9 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 			 */
 			monitor.beginTask("Extract mass spectra", massSpectraData.size());
 			for(String massSpectrumData : massSpectraData) {
+				if(monitor.isCanceled()) {
+					return massSpectra;
+				}
 				addMassSpectrum(massSpectra, massSpectrumData, referenceIdentifierMarker, referenceIdentifierPrefix);
 				monitor.worked(1);
 			}

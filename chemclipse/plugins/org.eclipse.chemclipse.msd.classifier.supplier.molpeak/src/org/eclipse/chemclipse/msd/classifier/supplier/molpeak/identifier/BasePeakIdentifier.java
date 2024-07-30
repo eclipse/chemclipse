@@ -288,8 +288,7 @@ public class BasePeakIdentifier {
 
 		File file = new File(PathResolver.getAbsolutePath(PathResolver.REFERENCES));
 		IProcessingInfo<IMassSpectra> processingInfo = DatabaseConverter.convert(file, new NullProgressMonitor());
-		IMassSpectra massSpectra = processingInfo.getProcessingResult();
-		return massSpectra;
+		return processingInfo.getProcessingResult();
 	}
 
 	private void setLibraryInformationFields(ILibraryInformation libraryInformation, String name) {

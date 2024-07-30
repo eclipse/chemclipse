@@ -45,7 +45,7 @@ public interface IChromatogramSelectionProcessSupplier<SettingType> extends IPro
 		//
 		return new IProcessExecutionConsumer<IChromatogramSelection<?, ?>>() {
 
-			AtomicReference<IChromatogramSelection<?, ?>> result = new AtomicReference<IChromatogramSelection<?, ?>>(chromatogramSelection);
+			AtomicReference<IChromatogramSelection<?, ?>> result = new AtomicReference<>(chromatogramSelection);
 
 			@Override
 			public <X> void execute(IProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {

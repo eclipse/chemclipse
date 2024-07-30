@@ -359,7 +359,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 						ProgressMonitorDialog dialog = new ProgressMonitorDialog(e.display.getActiveShell());
 						DatabaseImportRunnable databaseImportRunnable = new DatabaseImportRunnable(file);
 						try {
-							dialog.run(false, false, databaseImportRunnable);
+							dialog.run(false, true, databaseImportRunnable);
 							IMassSpectra massSpectra = databaseImportRunnable.getMassSpectra();
 							if(massSpectra.size() > WARN_NUMBER_IMPORT_ENTRIES) {
 								if(MessageDialog.openQuestion(e.display.getActiveShell(), "Import", "Do you really want to import " + massSpectra.size() + " target entries?")) {
