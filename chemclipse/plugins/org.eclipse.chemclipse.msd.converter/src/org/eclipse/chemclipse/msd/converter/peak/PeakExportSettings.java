@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 
@@ -30,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class PeakExportSettings extends AbstractProcessSettings implements IProcessSettings {
 
 	@JsonProperty(value = "Export Folder", defaultValue = "")
-	@FileSettingProperty(onlyDirectory = true)
+	@FileSettingProperty(onlyDirectory = true, dialogType = DialogType.SAVE_DIALOG)
 	private File exportFolder;
 	@JsonProperty(value = "File Name", defaultValue = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION)
 	@JsonPropertyDescription("Set a specific name or use the variables or a combination. Variables: " + //

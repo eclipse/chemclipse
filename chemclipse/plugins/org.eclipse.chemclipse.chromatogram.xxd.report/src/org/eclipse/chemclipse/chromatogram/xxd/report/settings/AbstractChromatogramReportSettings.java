@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.io.File;
 
 import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -23,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public abstract class AbstractChromatogramReportSettings extends AbstractProcessSettings implements IChromatogramReportSettings {
 
 	@JsonProperty(value = "Export Folder", defaultValue = "", required = true)
-	@FileSettingProperty(onlyDirectory = true)
+	@FileSettingProperty(onlyDirectory = true, dialogType = DialogType.SAVE_DIALOG)
 	private File exportFolder;
 	@JsonProperty(value = "Append", defaultValue = "false")
 	private boolean append = false;
