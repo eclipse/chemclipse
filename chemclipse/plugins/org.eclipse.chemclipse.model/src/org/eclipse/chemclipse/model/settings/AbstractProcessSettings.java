@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -36,7 +36,7 @@ public abstract class AbstractProcessSettings implements IProcessSettings {
 		/*
 		 * Remove OS specific file system control characters.
 		 */
-		return FileSystem.getCurrent().toLegalFileName(fileName, (char)'-');
+		return FileSystem.getCurrent().toLegalFileName(fileName, '-');
 	}
 
 	private String replaceFileName(IChromatogram<?> chromatogram, String fileNamePattern) {

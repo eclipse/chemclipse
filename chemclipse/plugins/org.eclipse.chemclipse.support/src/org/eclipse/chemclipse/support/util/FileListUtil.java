@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -44,8 +44,8 @@ public class FileListUtil {
 
 	public List<String> getFiles(String preferenceEntry) {
 
-		List<String> files = new ArrayList<String>();
-		if(preferenceEntry != "") {
+		List<String> files = new ArrayList<>();
+		if(!"".equals(preferenceEntry)) {
 			String[] items = parseString(preferenceEntry);
 			if(items.length > 0) {
 				for(String item : items) {
@@ -62,7 +62,7 @@ public class FileListUtil {
 
 	private List<String> getFileList(String[] items) {
 
-		List<String> files = new ArrayList<String>();
+		List<String> files = new ArrayList<>();
 		if(items != null) {
 			int size = items.length;
 			for(int i = 0; i < size; i++) {

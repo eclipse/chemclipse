@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ public class FileUtil {
 	 * Use only static methods.
 	 */
 	private FileUtil() {
+
 	}
 
 	/**
@@ -35,7 +36,7 @@ public class FileUtil {
 		 */
 		if(file != null) {
 			String fileName = file.getName();
-			if(fileName != null && fileName != "") {
+			if(fileName != null && !"".equals(fileName)) {
 				/*
 				 * Extract the file name.
 				 */

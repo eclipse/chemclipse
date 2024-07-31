@@ -87,7 +87,7 @@ public class ChromatogramReportsProcessSupplier implements IProcessTypeSupplier 
 			String extension = supplier.getFileExtension();
 			if(exportFolder.exists() || exportFolder.mkdirs()) {
 				IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
-				File file = new File(exportFolder, settings.getFileNamePattern().replace(IChromatogramReportSettings.VARIABLE_CHROMATOGRAM_NAME, chromatogram.getName()).replace(IChromatogramReportSettings.VARIABLE_EXTENSION, extension));
+				File file = new File(exportFolder, settings.getFileNamePattern().replace(IProcessSettings.VARIABLE_CHROMATOGRAM_NAME, chromatogram.getName()).replace(IProcessSettings.VARIABLE_EXTENSION, extension));
 				IProcessingInfo<?> info = ChromatogramReports.generate(file, settings.isAppend(), chromatogram, settings, getId(), monitor);
 				messageConsumer.addMessages(info);
 				messageConsumer.addInfoMessage(getName(), "Report written to " + file.getAbsolutePath());
