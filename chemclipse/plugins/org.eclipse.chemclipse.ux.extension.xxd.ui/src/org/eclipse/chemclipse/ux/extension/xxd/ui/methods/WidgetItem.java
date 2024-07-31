@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
 import org.eclipse.chemclipse.support.settings.ComboSettingsProperty.ComboSupplier;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
@@ -36,7 +37,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -374,18 +376,22 @@ public class WidgetItem {
 		layout.verticalSpacing = 0;
 		composite.setLayout(layout);
 		//
-		CLabel label = new CLabel(composite, SWT.NONE);
-		label.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
-		String value = getValueAsString();
-		if(value == null || value.isEmpty()) {
-			label.setText(ExtensionMessages.chooseLocation);
-		} else {
-			label.setText(value);
-		}
-		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
+		Text text = new Text(composite, SWT.BORDER);
+		text.setToolTipText(inputValue.getDescription());
+		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
+		text.setText(AbstractProcessSettings.getCleanedFileValue(getValueAsString()));
+		text.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+
+				currentSelection = new File(text.getText());
+			}
+		});
 		//
 		Button button = new Button(composite, SWT.PUSH);
 		button.setText(" ... ");
+		button.setToolTipText(ExtensionMessages.chooseLocation);
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -418,14 +424,14 @@ public class WidgetItem {
 					}
 					String open = dialog.open();
 					if(open != null) {
-						label.setText(open);
+						text.setText(open);
 						currentSelection = new File(open);
 					}
 				} else {
 					DirectoryDialog dialog = new DirectoryDialog(button.getShell(), style);
 					String open = dialog.open();
 					if(open != null) {
-						label.setText(open);
+						text.setText(open);
 						currentSelection = new File(open);
 					}
 				}

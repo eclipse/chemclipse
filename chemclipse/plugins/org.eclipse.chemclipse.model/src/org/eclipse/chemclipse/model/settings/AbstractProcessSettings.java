@@ -39,6 +39,20 @@ public abstract class AbstractProcessSettings implements IProcessSettings {
 		return FileSystem.getCurrent().toLegalFileName(fileName, '-');
 	}
 
+	/*
+	 * Jackson serializes File.getAbsolutePath()
+	 * which mistakes the placeholder for a relative path and prepends the working directory
+	 * so we remove it again.
+	 */
+	public static String getCleanedFileValue(String value) {
+
+		int startIndex = value.indexOf(IProcessSettings.VARIABLE_CURRENT_DIRECTORY);
+		if(startIndex != -1) {
+			return value.substring(startIndex);
+		}
+		return value;
+	}
+
 	private String replaceFileName(IChromatogram<?> chromatogram, String fileNamePattern) {
 
 		String fileName = fileNamePattern;

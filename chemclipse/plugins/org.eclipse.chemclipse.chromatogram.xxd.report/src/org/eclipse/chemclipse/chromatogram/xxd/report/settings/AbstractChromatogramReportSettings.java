@@ -25,6 +25,10 @@ public abstract class AbstractChromatogramReportSettings extends AbstractProcess
 
 	@JsonProperty(value = "Export Folder", defaultValue = "", required = true)
 	@FileSettingProperty(onlyDirectory = true, dialogType = DialogType.SAVE_DIALOG)
+	@JsonPropertyDescription("Set a specific folder or use the placeholder.\n" + //
+			"Variables:\n" + //
+			VARIABLE_CURRENT_DIRECTORY //
+	)
 	private File exportFolder;
 	@JsonProperty(value = "Append", defaultValue = "false")
 	private boolean append = false;

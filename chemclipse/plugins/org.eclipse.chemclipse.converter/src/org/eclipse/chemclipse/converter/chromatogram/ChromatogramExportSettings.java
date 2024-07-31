@@ -32,6 +32,10 @@ public class ChromatogramExportSettings extends AbstractProcessSettings implemen
 
 	@JsonProperty(value = "Export Folder", defaultValue = "")
 	@FileSettingProperty(onlyDirectory = true, dialogType = DialogType.SAVE_DIALOG)
+	@JsonPropertyDescription("Set an absolute folder or use the variables.\n" + //
+			"Variables:\n" + //
+			VARIABLE_CURRENT_DIRECTORY //
+	)
 	private File exportFolder;
 	@JsonProperty(value = "File Name", defaultValue = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION)
 	@JsonPropertyDescription("Set a specific name or use the variables or a combination.\n" + //
@@ -68,7 +72,6 @@ public class ChromatogramExportSettings extends AbstractProcessSettings implemen
 		if(filenamePattern == null) {
 			return VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION;
 		}
-		//
 		return filenamePattern;
 	}
 
@@ -95,8 +98,18 @@ public class ChromatogramExportSettings extends AbstractProcessSettings implemen
 	@JsonIgnore
 	public File getExportFile(String extension, IChromatogram<?> chromatogram) {
 
-		File exportFolder = getExportFolder();
+		String exportPath = resolvedFolders(chromatogram);
 		String fileName = getFileName(chromatogram, getFileNamePattern(), extension);
-		return new File(exportFolder, fileName);
+		return new File(exportPath, fileName);
+	}
+
+	private String resolvedFolders(IChromatogram<?> chromatogram) {
+
+		String exportPath = getExportFolder().getAbsolutePath();
+		if(exportPath.contains(IProcessSettings.VARIABLE_CURRENT_DIRECTORY)) {
+			exportPath = getCleanedFileValue(exportPath);
+			exportPath = exportPath.replace(IProcessSettings.VARIABLE_CURRENT_DIRECTORY, chromatogram.getFile().getParent());
+		}
+		return exportPath;
 	}
 }

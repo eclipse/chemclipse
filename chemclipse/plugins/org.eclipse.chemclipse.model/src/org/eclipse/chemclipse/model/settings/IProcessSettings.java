@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,6 +18,8 @@ public interface IProcessSettings {
 	public static final String VARIABLE_CHROMATOGRAM_SAMPLEGROUP = "{chromatogram_samplegroup}";
 	public static final String VARIABLE_CHROMATOGRAM_SHORTINFO = "{chromatogram_shortinfo}";
 	public static final String VARIABLE_EXTENSION = "{extension}";
+	//
+	public static final String VARIABLE_CURRENT_DIRECTORY = "{current_directory}";
 
 	/**
 	 * Use this method to set specific system settings.

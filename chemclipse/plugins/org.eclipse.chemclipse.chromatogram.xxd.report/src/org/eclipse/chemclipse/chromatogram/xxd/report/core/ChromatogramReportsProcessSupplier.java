@@ -24,6 +24,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramRepo
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.ICategories;
@@ -83,6 +85,10 @@ public class ChromatogramReportsProcessSupplier implements IProcessTypeSupplier 
 			if(exportFolder == null) {
 				messageConsumer.addErrorMessage(getName(), "No output folder specified and no default configured.");
 				return chromatogramSelection;
+			}
+			if(exportFolder.getAbsolutePath().contains(IProcessSettings.VARIABLE_CURRENT_DIRECTORY)) {
+				String exportPath = AbstractProcessSettings.getCleanedFileValue(exportFolder.getAbsolutePath());
+				exportFolder = new File(exportPath.replace(IProcessSettings.VARIABLE_CURRENT_DIRECTORY, chromatogramSelection.getChromatogram().getFile().getParent()));
 			}
 			String extension = supplier.getFileExtension();
 			if(exportFolder.exists() || exportFolder.mkdirs()) {
