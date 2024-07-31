@@ -387,11 +387,24 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 				boolean sortAscending = Boolean.valueOf(item.getData(KEY).toString());
 				if(sortAscending) {
 					Collections.sort(files, (f1, f2) -> f1.getName().compareTo(f2.getName()));
-					item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_DESC, IApplicationImage.SIZE_16x16));
+					Collections.sort(files, (f1, f2) -> {
+						int nameComparison = f1.getName().compareTo(f2.getName());
+						if(nameComparison == 0) {
+							return f1.getAbsolutePath().compareTo(f2.getAbsolutePath());
+						}
+						return nameComparison;
+					});
+					item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_DESC, IApplicationImageProvider.SIZE_16x16));
 					item.setData(KEY, false);
 				} else {
-					Collections.sort(files, (f1, f2) -> f2.getName().compareTo(f1.getName()));
-					item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_ASC, IApplicationImage.SIZE_16x16));
+					Collections.sort(files, (f1, f2) -> {
+						int nameComparison = f2.getName().compareTo(f1.getName());
+						if(nameComparison == 0) {
+							return f2.getAbsolutePath().compareTo(f1.getAbsolutePath());
+						}
+						return nameComparison;
+					});
+					item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_ASC, IApplicationImageProvider.SIZE_16x16));
 					item.setData(KEY, true);
 				}
 				//
