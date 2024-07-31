@@ -81,7 +81,7 @@ public class ChromatogramReportsProcessSupplier implements IProcessTypeSupplier 
 			}
 			File exportFolder = settings.getExportFolder();
 			if(exportFolder == null) {
-				messageConsumer.addErrorMessage(getName(), "No outputfolder specified and no default configured");
+				messageConsumer.addErrorMessage(getName(), "No output folder specified and no default configured.");
 				return chromatogramSelection;
 			}
 			String extension = supplier.getFileExtension();
@@ -92,7 +92,7 @@ public class ChromatogramReportsProcessSupplier implements IProcessTypeSupplier 
 				messageConsumer.addMessages(info);
 				messageConsumer.addInfoMessage(getName(), "Report written to " + file.getAbsolutePath());
 			} else {
-				messageConsumer.addErrorMessage(getName(), "The specified outputfolder does not exits and can't be created");
+				messageConsumer.addErrorMessage(getName(), "The specified output folder does not exist and can't be created.");
 			}
 			return chromatogramSelection;
 		}

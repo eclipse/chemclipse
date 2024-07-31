@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -70,7 +70,7 @@ public class ChromatogramConverterCSDProcessTypeSupplier implements IProcessType
 			}
 			File exportFolder = processSettings.getExportFolder();
 			if(exportFolder == null) {
-				messageConsumer.addErrorMessage(getName(), "No outputfolder specified and no default configured");
+				messageConsumer.addErrorMessage(getName(), "No output folder specified and no default configured.");
 				return chromatogramSelection;
 			}
 			if(exportFolder.exists() || exportFolder.mkdirs()) {
@@ -84,10 +84,10 @@ public class ChromatogramConverterCSDProcessTypeSupplier implements IProcessType
 						messageConsumer.addInfoMessage(getName(), "Exported data to " + result.getAbsolutePath());
 					}
 				} else {
-					messageConsumer.addWarnMessage(getName(), "Only CSD Chromatograms supported, skipp processing");
+					messageConsumer.addWarnMessage(getName(), "Only CSD chromatograms supported, skip processing.");
 				}
 			} else {
-				messageConsumer.addErrorMessage(getName(), "The specified outputfolder (" + exportFolder.getAbsolutePath() + ") does not exits and can't be created");
+				messageConsumer.addErrorMessage(getName(), "The specified output folder (" + exportFolder.getAbsolutePath() + ") does not exist and can't be created.");
 			}
 			return chromatogramSelection;
 		}
