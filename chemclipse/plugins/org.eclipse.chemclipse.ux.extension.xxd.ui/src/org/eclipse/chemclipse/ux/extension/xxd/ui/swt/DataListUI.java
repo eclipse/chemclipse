@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.columns.SimpleColumnDefinition;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -70,7 +71,7 @@ import org.eclipse.swt.widgets.ToolItem;
 public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 
 	private ExtendedTableViewer tableViewer;
-	private List<File> files = new ArrayList<File>();
+	private List<File> files = new ArrayList<>();
 	private Consumer<Boolean> dirtyListener;
 	private Composite control;
 	private InputWizardSettings inputWizardSettings;
@@ -181,7 +182,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		boolean optionsAvailable = dataTypes.length > 1;
 		int style = optionsAvailable ? SWT.DROP_DOWN : SWT.PUSH;
 		final ToolItem item = new ToolItem(toolBar, style);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Add items to the list.");
 		//
 		if(optionsAvailable) {
@@ -334,7 +335,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		//
 		Button button = new Button(toolbarMain, SWT.PUSH);
 		button.setToolTipText("Open the Settings");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -376,7 +377,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 
 		final String KEY = "SORT_DIRECTION";
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_ASC, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_ASC, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Sort the items.");
 		item.setData(KEY, true);
 		item.addSelectionListener(new SelectionAdapter() {
@@ -387,26 +388,37 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 				boolean sortAscending = Boolean.valueOf(item.getData(KEY).toString());
 				if(sortAscending) {
 					Collections.sort(files, (f1, f2) -> f1.getName().compareTo(f2.getName()));
-					item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_DESC, IApplicationImage.SIZE_16x16));
+					Collections.sort(files, (f1, f2) -> {
+						int nameComparison = f1.getName().compareTo(f2.getName());
+						if(nameComparison == 0) {
+							return f1.getAbsolutePath().compareTo(f2.getAbsolutePath());
+						}
+						return nameComparison;
+					});
+					item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_DESC, IApplicationImageProvider.SIZE_16x16));
 					item.setData(KEY, false);
 				} else {
-					Collections.sort(files, (f1, f2) -> f2.getName().compareTo(f1.getName()));
-					item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_ASC, IApplicationImage.SIZE_16x16));
+					Collections.sort(files, (f1, f2) -> {
+						int nameComparison = f2.getName().compareTo(f1.getName());
+						if(nameComparison == 0) {
+							return f2.getAbsolutePath().compareTo(f1.getAbsolutePath());
+						}
+						return nameComparison;
+					});
+					item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_ASC, IApplicationImageProvider.SIZE_16x16));
 					item.setData(KEY, true);
 				}
-				//
 				tableViewer.setInput(files);
 				updateList(true);
 			}
 		});
-		//
 		return item;
 	}
 
 	private ToolItem createMoveUpButton(ToolBar toolBar) {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Move the items up.");
 		item.addSelectionListener(new SelectionAdapter() {
 
@@ -429,7 +441,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 	private ToolItem createMoveDownButton(ToolBar toolBar) {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Move the items down.");
 		item.addSelectionListener(new SelectionAdapter() {
 
@@ -453,7 +465,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 	private ToolItem createRemoveButton(ToolBar toolBar) {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		item.setToolTipText("Remove the selected items.");
 		item.addSelectionListener(new SelectionAdapter() {
 
@@ -504,7 +516,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 			public void drop(DropTargetEvent event) {
 
 				if(fileTransfer.isSupportedType(event.currentDataType)) {
-					Collection<File> collection = new ArrayList<File>();
+					Collection<File> collection = new ArrayList<>();
 					String[] files = (String[])event.data;
 					for(int i = 0; i < files.length; i++) {
 						File file = new File(files[i]);
