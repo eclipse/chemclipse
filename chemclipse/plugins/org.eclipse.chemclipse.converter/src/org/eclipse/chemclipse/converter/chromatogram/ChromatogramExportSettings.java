@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
 import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 
@@ -30,7 +31,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class ChromatogramExportSettings extends AbstractProcessSettings implements IProcessSettings {
 
 	@JsonProperty(value = "Export Folder", defaultValue = "")
-	@FileSettingProperty(onlyDirectory = true)
+	@FileSettingProperty(onlyDirectory = true, dialogType = DialogType.SAVE_DIALOG)
+	@JsonPropertyDescription("Set an absolute folder or use the variables.\n" + //
+			"Variables:\n" + //
+			VARIABLE_CURRENT_DIRECTORY //
+	)
 	private File exportFolder;
 	@JsonProperty(value = "File Name", defaultValue = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION)
 	@JsonPropertyDescription("Set a specific name or use the variables or a combination.\n" + //
@@ -67,7 +72,6 @@ public class ChromatogramExportSettings extends AbstractProcessSettings implemen
 		if(filenamePattern == null) {
 			return VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION;
 		}
-		//
 		return filenamePattern;
 	}
 
@@ -94,8 +98,18 @@ public class ChromatogramExportSettings extends AbstractProcessSettings implemen
 	@JsonIgnore
 	public File getExportFile(String extension, IChromatogram<?> chromatogram) {
 
-		File exportFolder = getExportFolder();
+		String exportPath = resolvedFolders(chromatogram);
 		String fileName = getFileName(chromatogram, getFileNamePattern(), extension);
-		return new File(exportFolder, fileName);
+		return new File(exportPath, fileName);
+	}
+
+	private String resolvedFolders(IChromatogram<?> chromatogram) {
+
+		String exportPath = getExportFolder().getAbsolutePath();
+		if(exportPath.contains(IProcessSettings.VARIABLE_CURRENT_DIRECTORY)) {
+			exportPath = getCleanedFileValue(exportPath);
+			exportPath = exportPath.replace(IProcessSettings.VARIABLE_CURRENT_DIRECTORY, chromatogram.getFile().getParent());
+		}
+		return exportPath;
 	}
 }

@@ -24,6 +24,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramRepo
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.ICategories;
@@ -81,18 +83,22 @@ public class ChromatogramReportsProcessSupplier implements IProcessTypeSupplier 
 			}
 			File exportFolder = settings.getExportFolder();
 			if(exportFolder == null) {
-				messageConsumer.addErrorMessage(getName(), "No outputfolder specified and no default configured");
+				messageConsumer.addErrorMessage(getName(), "No output folder specified and no default configured.");
 				return chromatogramSelection;
+			}
+			if(exportFolder.getAbsolutePath().contains(IProcessSettings.VARIABLE_CURRENT_DIRECTORY)) {
+				String exportPath = AbstractProcessSettings.getCleanedFileValue(exportFolder.getAbsolutePath());
+				exportFolder = new File(exportPath.replace(IProcessSettings.VARIABLE_CURRENT_DIRECTORY, chromatogramSelection.getChromatogram().getFile().getParent()));
 			}
 			String extension = supplier.getFileExtension();
 			if(exportFolder.exists() || exportFolder.mkdirs()) {
 				IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
-				File file = new File(exportFolder, settings.getFileNamePattern().replace(IChromatogramReportSettings.VARIABLE_CHROMATOGRAM_NAME, chromatogram.getName()).replace(IChromatogramReportSettings.VARIABLE_EXTENSION, extension));
+				File file = new File(exportFolder, settings.getFileNamePattern().replace(IProcessSettings.VARIABLE_CHROMATOGRAM_NAME, chromatogram.getName()).replace(IProcessSettings.VARIABLE_EXTENSION, extension));
 				IProcessingInfo<?> info = ChromatogramReports.generate(file, settings.isAppend(), chromatogram, settings, getId(), monitor);
 				messageConsumer.addMessages(info);
 				messageConsumer.addInfoMessage(getName(), "Report written to " + file.getAbsolutePath());
 			} else {
-				messageConsumer.addErrorMessage(getName(), "The specified outputfolder does not exits and can't be created");
+				messageConsumer.addErrorMessage(getName(), "The specified output folder does not exist and can't be created.");
 			}
 			return chromatogramSelection;
 		}

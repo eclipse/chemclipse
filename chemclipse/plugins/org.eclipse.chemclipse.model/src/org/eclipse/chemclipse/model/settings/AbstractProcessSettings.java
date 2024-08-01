@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -36,7 +36,21 @@ public abstract class AbstractProcessSettings implements IProcessSettings {
 		/*
 		 * Remove OS specific file system control characters.
 		 */
-		return FileSystem.getCurrent().toLegalFileName(fileName, (char)'-');
+		return FileSystem.getCurrent().toLegalFileName(fileName, '-');
+	}
+
+	/*
+	 * Jackson serializes File.getAbsolutePath()
+	 * which mistakes the placeholder for a relative path and prepends the working directory
+	 * so we remove it again.
+	 */
+	public static String getCleanedFileValue(String value) {
+
+		int startIndex = value.indexOf(IProcessSettings.VARIABLE_CURRENT_DIRECTORY);
+		if(startIndex != -1) {
+			return value.substring(startIndex);
+		}
+		return value;
 	}
 
 	private String replaceFileName(IChromatogram<?> chromatogram, String fileNamePattern) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.support.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,14 +44,10 @@ public class DilutionListUtil {
 
 	public List<String> getDilutions(String preferenceEntry) {
 
-		List<String> dilutions = new ArrayList<String>();
-		if(preferenceEntry != "") {
+		List<String> dilutions = new ArrayList<>();
+		if(!"".equals(preferenceEntry)) {
 			String[] items = parseString(preferenceEntry);
-			if(items.length > 0) {
-				for(String item : items) {
-					dilutions.add(item);
-				}
-			}
+			dilutions = Arrays.asList(items);
 		}
 		Collections.sort(dilutions);
 		return dilutions;
@@ -58,12 +55,9 @@ public class DilutionListUtil {
 
 	private List<String> getDilutions(String[] items) {
 
-		List<String> dilutions = new ArrayList<String>();
+		List<String> dilutions = new ArrayList<>();
 		if(items != null) {
-			int size = items.length;
-			for(int i = 0; i < size; i++) {
-				dilutions.add(items[i]);
-			}
+			dilutions = Arrays.asList(items);
 		}
 		return dilutions;
 	}

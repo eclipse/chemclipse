@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.support.model.RangesInteger;
 
@@ -76,7 +75,7 @@ public class TraceSettingUtil implements IStringSerialization<String> {
 		try {
 			if(deserialize != null && !deserialize.isEmpty()) {
 				String[] decodedArray = objectMapper.readValue(deserialize, String[].class);
-				return Arrays.stream(decodedArray).collect(Collectors.toList());
+				return Arrays.stream(decodedArray).toList();
 			}
 		} catch(IOException e) {
 		}
@@ -102,7 +101,7 @@ public class TraceSettingUtil implements IStringSerialization<String> {
 			 */
 			decodedArray = new String[0];
 		}
-		return Arrays.stream(decodedArray).collect(Collectors.toList());
+		return Arrays.stream(decodedArray).toList();
 	}
 
 	public int compare(String s1, String s2) {
