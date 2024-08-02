@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.xxd.process.supplier.pca.core.preprocessing;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISamples;
@@ -41,6 +42,6 @@ public abstract class AbstractPreprocessing implements IPreprocessing {
 
 	protected <V extends IVariable, S extends ISample> List<S> selectSamples(ISamples<V, S> samples) {
 
-		return samples.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).toList();
+		return samples.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
 	}
 }

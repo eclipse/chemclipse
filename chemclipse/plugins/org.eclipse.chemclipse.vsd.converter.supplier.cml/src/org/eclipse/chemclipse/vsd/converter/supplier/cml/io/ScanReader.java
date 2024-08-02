@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -128,7 +127,7 @@ public class ScanReader {
 								waveNumbers = Arrays.stream( //
 										StringUtils.split(array.getValue())) //
 										.map(Double::parseDouble) //
-										.collect(Collectors.toList()); //
+										.toList(); //
 							}
 						}
 					}
@@ -139,11 +138,13 @@ public class ScanReader {
 							if(array.getUnits().equals("cml:absorbance")) {
 								absorbances = Arrays.stream( //
 										StringUtils.split(array.getValue())) //
-										.map(Double::parseDouble).toList(); //
+										.map(Double::parseDouble) //
+										.toList();
 							} else if(array.getUnits().equals("jcampUnits:transmittance")) {
 								transmittances = Arrays.stream( //
 										StringUtils.split(array.getValue())) //
-										.map(Double::parseDouble).toList(); //
+										.map(Double::parseDouble) //
+										.toList(); //
 							}
 						}
 					}

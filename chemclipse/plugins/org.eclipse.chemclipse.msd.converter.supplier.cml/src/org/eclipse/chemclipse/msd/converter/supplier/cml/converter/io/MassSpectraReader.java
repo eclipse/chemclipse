@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -104,7 +103,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 							mzs = Arrays.stream( //
 									StringUtils.split(array.getValue())) //
 									.map(Double::parseDouble) //
-									.collect(Collectors.toList()); //
+									.toList(); //
 						}
 					}
 					Yaxis yAxis = spectrumData.getYaxis();
@@ -116,7 +115,8 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 							}
 							abundances = Arrays.stream( //
 									StringUtils.split(array.getValue())) //
-									.map(Double::parseDouble).toList(); //
+									.map(Double::parseDouble)//
+									.toList();
 						}
 					}
 					try {

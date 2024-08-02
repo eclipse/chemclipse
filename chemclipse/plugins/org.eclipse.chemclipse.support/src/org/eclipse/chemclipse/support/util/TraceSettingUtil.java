@@ -75,7 +75,7 @@ public class TraceSettingUtil implements IStringSerialization<String> {
 		try {
 			if(deserialize != null && !deserialize.isEmpty()) {
 				String[] decodedArray = objectMapper.readValue(deserialize, String[].class);
-				return Arrays.stream(decodedArray).toList();
+				return Arrays.asList(decodedArray);
 			}
 		} catch(IOException e) {
 		}
@@ -101,7 +101,7 @@ public class TraceSettingUtil implements IStringSerialization<String> {
 			 */
 			decodedArray = new String[0];
 		}
-		return Arrays.stream(decodedArray).toList();
+		return Arrays.asList(decodedArray);
 	}
 
 	public int compare(String s1, String s2) {

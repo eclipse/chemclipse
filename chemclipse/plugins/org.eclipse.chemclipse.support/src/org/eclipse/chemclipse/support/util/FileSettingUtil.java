@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,7 +46,7 @@ public class FileSettingUtil implements IStringSerialization<File> {
 
 		if(data != null && !data.isEmpty()) {
 			try {
-				return Arrays.stream(objectMapper.readValue(data, String[].class)).map(File::new).toList();
+				return Arrays.stream(objectMapper.readValue(data, String[].class)).map(File::new).collect(Collectors.toList());
 			} catch(IOException e) {
 			}
 		}
