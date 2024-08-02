@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.se
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.support.editor.SystemEditor;
+import org.eclipse.chemclipse.support.ui.editors.SystemEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramWriter {
