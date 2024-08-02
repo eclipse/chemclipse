@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,7 @@ public class PeakInputFilesWizard extends Wizard {
 	private List<String> selectedPeakFiles;
 
 	public PeakInputFilesWizard() {
+
 		super();
 		setNeedsProgressMonitor(true);
 	}
@@ -37,7 +38,7 @@ public class PeakInputFilesWizard extends Wizard {
 
 		ISelection selection = inputEntriesPage.getSelection();
 		IStructuredSelection structuredSelection = (IStructuredSelection)selection;
-		selectedPeakFiles = new ArrayList<String>();
+		selectedPeakFiles = new ArrayList<>();
 		for(Object element : structuredSelection.toList()) {
 			selectedPeakFiles.add(element.toString());
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.xxd.classification.model;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.support.text.ILabel;
 
@@ -42,6 +41,6 @@ public enum Reference implements ILabel {
 
 	public static String[] getItems() {
 
-		return Arrays.stream(Reference.values()).map(Enum::name).collect(Collectors.toList()).toArray(new String[Reference.values().length]);
+		return Arrays.stream(Reference.values()).map(Enum::name).toList().toArray(new String[Reference.values().length]);
 	}
 }
