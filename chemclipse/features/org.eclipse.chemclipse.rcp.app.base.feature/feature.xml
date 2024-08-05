@@ -63,6 +63,10 @@
    <plugin
          id="org.eclipse.chemclipse.model"
          version="0.0.0"/>
+         
+   <plugin
+         id="org.eclipse.chemclipse.model.ui"
+         version="0.0.0"/>          
 
    <plugin
          id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector"
