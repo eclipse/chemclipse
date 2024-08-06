@@ -96,6 +96,7 @@ public interface IChemClipseEvents {
 	String TOPIC_LIBRARY_MSD_UPDATE_SELECTION = "library/msd/update/selection";
 	//
 	String TOPIC_PROCESSING_INFO_UPDATE = "processinginfo/update";
+	String TOPIC_PROCESSING_FILE_CREATED = "processing/file/created"; // $NON-NLS-1$
 	String TOPIC_EDIT_HISTORY_UPDATE = "edithistory/update"; // $NON-NLS-1$
 	//
 	String TOPIC_EDITOR_CHROMATOGRAM_UPDATE = "editor/chromatogram/update";

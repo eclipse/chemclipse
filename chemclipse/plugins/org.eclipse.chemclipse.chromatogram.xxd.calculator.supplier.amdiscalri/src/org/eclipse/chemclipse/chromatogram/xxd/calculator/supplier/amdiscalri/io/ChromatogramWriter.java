@@ -20,7 +20,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.se
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.support.ui.editors.SystemEditor;
+import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramWriter {
@@ -39,9 +40,6 @@ public class ChromatogramWriter {
 		ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogram, deriveMissingIndices, useCuratedNames);
 		CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
 		calibrationFileWriter.write(file, separationColumnIndices);
-		//
-		if(indexExportSettings.isOpenReportAfterProcessing()) {
-			SystemEditor.open(file);
-		}
+		UpdateNotifier.update(IChemClipseEvents.TOPIC_PROCESSING_FILE_CREATED, file);
 	}
 }
