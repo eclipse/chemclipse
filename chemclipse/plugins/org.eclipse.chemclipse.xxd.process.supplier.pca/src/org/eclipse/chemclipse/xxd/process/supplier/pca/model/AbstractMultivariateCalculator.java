@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -81,6 +81,14 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		sampleIndex++;
 	}
 
+	public void setSampleData(DMatrixRMaj sampleData) {
+
+		if(sampleData.getNumRows() != this.sampleData.getNumRows() || sampleData.getNumCols() != this.sampleData.getNumCols()) {
+			throw new IllegalArgumentException("Invalid matrix dimensions");
+		}
+		this.sampleData = sampleData;
+	}
+
 	protected ArrayList<String> getGroupNames() {
 
 		return groupNames;
@@ -150,11 +158,11 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	@Override
 	public double[] getLoadingVector(int component) {
 
-		if(component < 0 || component >= numComps) {
+		if(component <= 0 || component > numComps) {
 			throw new IllegalArgumentException("Invalid component");
 		}
 		DMatrixRMaj loadingVector = new DMatrixRMaj(1, sampleData.numCols);
-		CommonOps_DDRM.extract(loadings, component, component + 1, 0, sampleData.numCols, loadingVector, 0, 0);
+		CommonOps_DDRM.extract(loadings, component - 1, component, 0, sampleData.numCols, loadingVector, 0, 0);
 		return loadingVector.data;
 	}
 

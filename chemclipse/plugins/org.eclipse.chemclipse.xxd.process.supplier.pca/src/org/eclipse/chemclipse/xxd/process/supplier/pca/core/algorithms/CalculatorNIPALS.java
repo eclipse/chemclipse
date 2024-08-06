@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate Gmbh.
+ * Copyright (c) 2018, 2024 Lablicate Gmbh.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.core.algorithms;
 
+import java.util.Random;
+
 import org.eclipse.chemclipse.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.AbstractMultivariateCalculator;
 import org.ejml.data.DMatrixRMaj;
@@ -19,8 +21,33 @@ import org.ejml.dense.row.NormOps_DDRM;
 
 public class CalculatorNIPALS extends AbstractMultivariateCalculator {
 
+	static final int SEED = 10;
+
 	public CalculatorNIPALS(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
+
 		super(numObs, numVars, numComps);
+	}
+
+	public CalculatorNIPALS(DMatrixRMaj matrix, int numComps) {
+
+		super(matrix.getNumRows(), matrix.getNumCols(), numComps);
+		setSampleData(matrix);
+	}
+
+	public void replaceZeroColsWithSmallRandom() {
+
+		DMatrixRMaj matrix = getSampleData();
+		DMatrixRMaj colSums = CommonOps_DDRM.sumCols(matrix, null);
+		DMatrixRMaj randCol = new DMatrixRMaj(matrix.numRows, 1);
+		final Random rand = new Random(SEED);
+		for(int i = 0; i < matrix.numRows; i++) {
+			randCol.set(i, 0, rand.nextDouble(1.e-20, 1.e-19));
+		}
+		for(int i = 0; i < matrix.numCols; i++) {
+			if(colSums.get(i) == 0) {
+				CommonOps_DDRM.insert(randCol, matrix, 0, i);
+			}
+		}
 	}
 
 	@Override
