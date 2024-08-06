@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -299,7 +299,7 @@ public class ProcessorPCA {
 		 * Print the basis vectors.
 		 */
 		List<double[]> loadingVectors = new ArrayList<double[]>();
-		for(int principalComponent = 0; principalComponent < numberOfPrincipalComponents; principalComponent++) {
+		for(int principalComponent = 1; principalComponent <= numberOfPrincipalComponents; principalComponent++) {
 			double[] loadingVector = principalComponentAnalysis.getLoadingVector(principalComponent);
 			loadingVectors.add(loadingVector);
 		}
