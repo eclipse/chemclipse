@@ -3,7 +3,8 @@
       id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.feature"
       label="Peak Detector First Derivative"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding"
+      provider-name="ChemClipse"
+      plugin="org.eclipse.chemclipse.feature.branding"
       license-feature="org.eclipse.license"
       license-feature-version="1.0.0.qualifier">
 
@@ -21,16 +22,38 @@
 
    <plugin
          id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.csd.peak.detector.supplier.firstderivative"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.csd.peak.detector.supplier.firstderivative.ui"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.firstderivative"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.firstderivative.fragment.test"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.firstderivative.ui"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.supplier.firstderivative"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.supplier.firstderivative.ui"
+         version="0.0.0"/>
 
 </feature>

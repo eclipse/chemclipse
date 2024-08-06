@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.peakDetectorSupplier">
+      <PeakDetector
+            description="%FirstDerivativeDescription"
+            id="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.supplier.firstderivative"
+            peakDetector="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.supplier.firstderivative.core.PeakDetectorWSD"
+            peakDetectorName="%FirstDerivative"
+            peakDetectorSettings="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsWSD">
+      </PeakDetector>
+   </extension>
+</plugin>

@@ -1,25 +1,18 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative
 Bundle-ManifestVersion: 2
-Bundle-Name: FirstDerivative Peak Detector
+Bundle-Name: First Derivative Peak Detector
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.Activator
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.chemclipse.msd.model;bundle-version="0.8.0",
- org.eclipse.chemclipse.chromatogram.msd.peak.detector;bundle-version="0.8.0",
  org.eclipse.chemclipse.logging;bundle-version="0.8.0",
  org.eclipse.chemclipse.processing;bundle-version="0.8.0",
  org.eclipse.chemclipse.model;bundle-version="0.8.0",
- org.eclipse.chemclipse.csd.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.chromatogram.peak.detector;bundle-version="0.8.0",
- org.eclipse.chemclipse.chromatogram.csd.peak.detector;bundle-version="0.8.0",
  org.eclipse.chemclipse.support;bundle-version="0.8.0",
  org.eclipse.chemclipse.numeric;bundle-version="0.8.0",
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.6.2",
- org.eclipse.chemclipse.chromatogram.wsd.peak.detector;bundle-version="0.8.0",
- org.eclipse.chemclipse.wsd.model;bundle-version="0.8.0",
- org.eclipse.chemclipse.nmr.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.chromatogram.xxd.calculator;bundle-version="0.8.0",
  org.eclipse.chemclipse.chromatogram.xxd.classifier;bundle-version="0.8.0",
  org.eclipse.e4.core.services;bundle-version="2.3.400"
@@ -27,12 +20,11 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core,
  org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.model,
- org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences,
- org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings,
- org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support
+ org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.services,
+ org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support,
+ org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences
 Bundle-Vendor: ChemClipse
 Import-Package: com.fasterxml.jackson.databind.annotation;version="2.9.93",
  org.apache.commons.lang3;version="3.1.0",
  org.osgi.service.component.annotations;version="1.2.0"
-Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.FirstDerivativePeakDetector.xml,
- OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.services.FirstDerivativeMaximaService.xml
+Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.services.FirstDerivativeMaximaService.xml
