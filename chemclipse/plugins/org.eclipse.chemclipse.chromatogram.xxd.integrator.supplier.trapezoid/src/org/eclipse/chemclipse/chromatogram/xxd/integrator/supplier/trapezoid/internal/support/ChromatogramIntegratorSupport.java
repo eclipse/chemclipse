@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support;
 
@@ -44,8 +44,9 @@ public class ChromatogramIntegratorSupport {
 		/*
 		 * Get the chromatogram and background area.
 		 */
-		List<IIntegrationEntry> chromatogramIntegrationEntries = calculateChromatogramIntegrationEntry(chromatogramSelection, monitor);
-		List<IIntegrationEntry> backgroundIntegrationEntries = calculateBackgroundIntegrationEntry(chromatogramSelection, monitor);
+		double scaleFactor = chromatogramIntegrationSettings.getScaleFactor();
+		List<IIntegrationEntry> chromatogramIntegrationEntries = calculateChromatogramIntegrationEntry(chromatogramSelection, scaleFactor, monitor);
+		List<IIntegrationEntry> backgroundIntegrationEntries = calculateBackgroundIntegrationEntry(chromatogramSelection, scaleFactor, monitor);
 		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		chromatogram.setIntegratedArea(chromatogramIntegrationEntries, backgroundIntegrationEntries, INTEGRATOR_DESCRIPTION);
 		/*
@@ -66,7 +67,7 @@ public class ChromatogramIntegratorSupport {
 	 * @param monitor
 	 * @return
 	 */
-	private List<IIntegrationEntry> calculateChromatogramIntegrationEntry(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
+	private List<IIntegrationEntry> calculateChromatogramIntegrationEntry(IChromatogramSelection<?, ?> chromatogramSelection, double scaleFactor, IProgressMonitor monitor) {
 
 		List<IIntegrationEntry> chromatogramIntegrationEntries = new ArrayList<>();
 		ChromatogramIntegrator chromatogramIntegrator = new ChromatogramIntegrator();
@@ -76,9 +77,9 @@ public class ChromatogramIntegratorSupport {
 		 */
 		IIntegrationEntry chromatogramIntegrationEntry = null;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			chromatogramIntegrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, chromatogramArea);
+			chromatogramIntegrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, chromatogramArea * scaleFactor);
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-			chromatogramIntegrationEntry = new IntegrationEntry(chromatogramArea);
+			chromatogramIntegrationEntry = new IntegrationEntry(chromatogramArea * scaleFactor);
 		}
 		//
 		if(chromatogramIntegrationEntry != null) {
@@ -88,7 +89,7 @@ public class ChromatogramIntegratorSupport {
 		return chromatogramIntegrationEntries;
 	}
 
-	private List<IIntegrationEntry> calculateBackgroundIntegrationEntry(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
+	private List<IIntegrationEntry> calculateBackgroundIntegrationEntry(IChromatogramSelection<?, ?> chromatogramSelection, double scaleFactor, IProgressMonitor monitor) {
 
 		List<IIntegrationEntry> backgroundIntegrationEntries = new ArrayList<>();
 		BackgroundIntegrator backgroundIntegrator = new BackgroundIntegrator();
@@ -98,9 +99,9 @@ public class ChromatogramIntegratorSupport {
 		 */
 		IIntegrationEntry backgroundIntegrationEntry = null;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			backgroundIntegrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, backgroundArea);
+			backgroundIntegrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, backgroundArea * scaleFactor);
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-			backgroundIntegrationEntry = new IntegrationEntry(backgroundArea);
+			backgroundIntegrationEntry = new IntegrationEntry(backgroundArea * scaleFactor);
 		}
 		//
 		if(backgroundIntegrationEntry != null) {

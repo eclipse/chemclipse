@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Matthias Mailänder - list ions to integrate
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings;
@@ -16,12 +16,14 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.Ab
 import org.eclipse.chemclipse.model.core.IMarkedTrace;
 import org.eclipse.chemclipse.model.core.IMarkedTraces;
 import org.eclipse.chemclipse.model.core.MarkedTrace;
+import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.LabelProperty;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 
@@ -32,6 +34,10 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 	@LabelProperty(value = "%TracesToIntegrate", tooltip = "%TracesToIntegrateDescription")
 	@StringSettingsProperty(regExp = "(\\d+[;|\\s]?)+", description = "%MustBeSpaceSeparatedDigits", isMultiLine = false, allowEmpty = false)
 	private String tracesToIntegrate = TIC;
+	@JsonProperty(value = "Scale Factor", defaultValue = "1.0")
+	@JsonPropertyDescription(value = "To enable a comparison of the area with other systems, a scale factor can be used.")
+	@DoubleSettingsProperty(minValue = Double.MIN_VALUE, maxValue = Double.MAX_VALUE)
+	private double scaleFactor = 1.0d;
 	/*
 	 * The selected ions are handled separately.
 	 * They must not be persisted. If selected ions is
@@ -88,5 +94,15 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 	public void setUseAreaConstraint(boolean useAreaConstraint) {
 
 		this.useAreaConstraint = useAreaConstraint;
+	}
+
+	public double getScaleFactor() {
+
+		return scaleFactor;
+	}
+
+	public void setScaleFactor(double scaleFactor) {
+
+		this.scaleFactor = scaleFactor;
 	}
 }

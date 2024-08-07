@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor;
 
@@ -28,8 +28,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegration
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.Segment;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.SegmentAreaCalculator;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
@@ -47,7 +45,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IIonPercentages;
 import org.eclipse.chemclipse.msd.model.core.support.IonPercentages;
-import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.support.l10n.TranslationSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakModelWSD;
@@ -63,10 +60,8 @@ import org.eclipse.e4.core.services.translation.TranslationService;
  * First, each peak will be integrated.<br/>
  * Then, each integration result will be analyzed if it matches the integration
  * settings.
- * 
- * @author Philip Wenig
  */
-public class PeakIntegrator {
+public class PeakIntegrator extends AbstractIntegrator {
 
 	/*
 	 * The FirstDerivative seems to use a correction factor.
@@ -74,8 +69,6 @@ public class PeakIntegrator {
 	 */
 	private static TranslationService translationService = TranslationSupport.getTranslationService();
 	private static final String INTEGRATOR_DESCRIPTION = translationService.translate("%Trapezoid", Activator.getContributorURI());
-	//
-	private static final double CORRECTION_FACTOR_TRAPEZOID = 100.0d; // ChemStation Factor
 
 	public IPeakIntegrationResult integrate(IPeak peak, PeakIntegrationSettings peakIntegrationSettings) throws ValueMustNotBeNullException {
 
@@ -84,18 +77,13 @@ public class PeakIntegrator {
 		/*
 		 * The background shall be not included normally.
 		 */
-		boolean includeBackground = peakIntegrationSettings.isIncludeBackground();
-		boolean useAreaConstraint = peakIntegrationSettings.isUseAreaConstraint();
-		ISettingStatus settingStatus;
 		PeakIntegrationResult result = null;
-		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
-		//
-		List<? extends IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getMarkedTraces(), includeBackground, useAreaConstraint);
+		List<? extends IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, peakIntegrationSettings);
 		peak.setIntegratedArea(integrationEntries, INTEGRATOR_DESCRIPTION);
 		/*
 		 * Get the peak area if the peak should be reported.
 		 */
-		settingStatus = peakIntegrationSettings.getSettingStatus(peak);
+		ISettingStatus settingStatus = peakIntegrationSettings.getSettingStatus(peak);
 		if(settingStatus.report()) {
 			double integratedArea = calculateIntegratedArea(integrationEntries);
 			result = getPeakIntegrationResult(peak, integratedArea, peakIntegrationSettings);
@@ -235,8 +223,14 @@ public class PeakIntegrator {
 	 * 
 	 * @return List<IIntegrationEntry>
 	 */
-	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, IBaselineSupport baselineSupport, IMarkedTraces<IMarkedTrace> markedTraces, boolean includeBackground, boolean useAreaConstraint) {
+	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, PeakIntegrationSettings peakIntegrationSettings) {
 
+		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
+		IMarkedTraces<IMarkedTrace> markedTraces = peakIntegrationSettings.getMarkedTraces();
+		boolean includeBackground = peakIntegrationSettings.isIncludeBackground();
+		boolean useAreaConstraint = peakIntegrationSettings.isUseAreaConstraint();
+		double scaleFactor = peakIntegrationSettings.getScaleFactor();
+		//
 		List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 		if(peak instanceof IPeakMSD peakMSD) {
 			/*
@@ -256,11 +250,11 @@ public class PeakIntegrator {
 				for(Integer ion : ions) {
 					float correctionFactor = ionPercentages.getPercentage(ion) / IIonPercentages.MAX_PERCENTAGE;
 					double integratedArea = integratedAreaTIC * correctionFactor;
-					integrationEntry = new IntegrationEntry(ion, integratedArea);
+					integrationEntry = new IntegrationEntry(ion, integratedArea * scaleFactor);
 					integrationEntries.add(integrationEntry);
 				}
 			} else {
-				integrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, integratedAreaTIC);
+				integrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, integratedAreaTIC * scaleFactor);
 				integrationEntries.add(integrationEntry);
 			}
 		} else if(peak instanceof IPeakCSD) {
@@ -268,7 +262,7 @@ public class PeakIntegrator {
 			 * FID
 			 */
 			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground, useAreaConstraint);
-			IIntegrationEntry integrationEntry = new IntegrationEntry(integratedAreaTIC);
+			IIntegrationEntry integrationEntry = new IntegrationEntry(integratedAreaTIC * scaleFactor);
 			integrationEntries.add(integrationEntry);
 		} else if(peak instanceof IPeakWSD peakWSD) {
 			/*
@@ -289,11 +283,11 @@ public class PeakIntegrator {
 					for(Integer wavelength : wavelengths) {
 						float correctionFactor = wavelengthPercentages.getPercentage(wavelength) / WavelengthPercentages.MAX_PERCENTAGE;
 						double integratedArea = integratedAreaTIC * correctionFactor;
-						integrationEntry = new IntegrationEntry(wavelength, integratedArea);
+						integrationEntry = new IntegrationEntry(wavelength, integratedArea * scaleFactor);
 						integrationEntries.add(integrationEntry);
 					}
 				} else {
-					integrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, integratedAreaTIC);
+					integrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, integratedAreaTIC * scaleFactor);
 					integrationEntries.add(integrationEntry);
 				}
 			}
@@ -343,7 +337,7 @@ public class PeakIntegrator {
 			float peakAbundanceStart = peakModel.getPeakAbundance(startRetentionTime);
 			float peakAbundanceStop = peakModel.getPeakAbundance(stopRetentionTime);
 			//
-			integratedArea += calculatePeakArea(startRetentionTime, stopRetentionTime, peakAbundanceStart, peakAbundanceStop);
+			integratedArea += calculateArea(startRetentionTime, stopRetentionTime, peakAbundanceStart, peakAbundanceStop);
 			/*
 			 * If the peak should be integrated as it is, skip the baseline
 			 * correction. It is implemented in the method
@@ -367,30 +361,6 @@ public class PeakIntegrator {
 		}
 		//
 		return integratedArea;
-	}
-
-	/**
-	 * Calculate the area of the peak in the given retention time
-	 * segment.<br/>
-	 * 
-	 * This method should only calculate the absolute
-	 * peak area. Any other correction will be calculated in
-	 * calculateBaselineCorrectedPeakArea.
-	 * 
-	 * @param startRetentionTime
-	 * @param stopRetentionTime
-	 * @return double
-	 */
-	private double calculatePeakArea(int startRetentionTime, int stopRetentionTime, float peakAbundanceStart, float peakAbundanceStop) {
-
-		// PeakSignalPoint
-		Point psp1 = new Point(startRetentionTime, peakAbundanceStart);
-		Point psp2 = new Point(stopRetentionTime, peakAbundanceStop);
-		// PeakBaselinePoint
-		Point pbp1 = new Point(startRetentionTime, 0.0f);
-		Point pbp2 = new Point(stopRetentionTime, 0.0f);
-		Segment segment = new Segment(pbp1, pbp2, psp1, psp2);
-		return SegmentAreaCalculator.calculateSegmentArea(segment) / CORRECTION_FACTOR_TRAPEZOID;
 	}
 
 	/**
@@ -432,14 +402,7 @@ public class PeakIntegrator {
 			/*
 			 * Calculate the area, that needs to be corrected.
 			 */
-			// ChromatogramBaselinePoint
-			Point cbp1 = new Point(startRetentionTime, chromatogramBaselineStart);
-			Point cbp2 = new Point(stopRetentionTime, chromatogramBaselineStop);
-			// PeakBaselinePoint
-			Point pbp1 = new Point(startRetentionTime, peakModel.getBackgroundAbundance(startRetentionTime));
-			Point pbp2 = new Point(stopRetentionTime, peakModel.getBackgroundAbundance(stopRetentionTime));
-			Segment segment = new Segment(cbp1, cbp2, pbp1, pbp2);
-			integratedArea = SegmentAreaCalculator.calculateSegmentArea(segment) / CORRECTION_FACTOR_TRAPEZOID;
+			integratedArea = calculateArea(startRetentionTime, stopRetentionTime, peakModel.getBackgroundAbundance(startRetentionTime), peakModel.getBackgroundAbundance(stopRetentionTime), chromatogramBaselineStart, chromatogramBaselineStop);
 		}
 		return integratedArea;
 	}
