@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.support.RawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -69,7 +69,7 @@ public class BasePeakDetector<P extends IPeak, C extends IChromatogram<P>, R> ex
 		int size = slopes.size();
 		int scanOffset = slopes.getStartScan() - 1;
 		IRawPeak rawPeak;
-		List<IRawPeak> rawPeaks = new ArrayList<IRawPeak>();
+		List<IRawPeak> rawPeaks = new ArrayList<>();
 		int limit = size - CONSECUTIVE_SCAN_STEPS;
 		SubMonitor subMonitor = SubMonitor.convert(monitor, limit);
 		for(int i = 1; i <= limit; i++) {
@@ -119,7 +119,7 @@ public class BasePeakDetector<P extends IPeak, C extends IChromatogram<P>, R> ex
 
 		boolean isValid = false;
 		int width = rawPeak.getStopScan() - rawPeak.getStartScan() + 1;
-		if(width >= IPeakModelMSD.MINIMUM_SCANS) {
+		if(width >= IPeakModel.MINIMUM_SCANS) {
 			isValid = true;
 		}
 		return isValid;
