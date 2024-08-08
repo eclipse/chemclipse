@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,6 +35,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new LabelFieldEditor("Export Options", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_CALIBRATION_EXPORT_USE_CURATED_NAMES, "Use Curated Names", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES, "Derive Missing Indices", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_OPEN_REPORT_AFTER_PROCESSING, "Open report after processing", getFieldEditorParent()));
 	}
 
 	@Override

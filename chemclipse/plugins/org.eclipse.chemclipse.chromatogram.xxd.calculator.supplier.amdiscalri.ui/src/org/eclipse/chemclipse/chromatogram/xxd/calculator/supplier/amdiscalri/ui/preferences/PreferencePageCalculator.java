@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,6 +32,7 @@ public class PreferencePageCalculator extends FieldEditorPreferencePage implemen
 		setDescription("");
 	}
 
+	@Override
 	public void createFieldEditors() {
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
@@ -46,6 +47,7 @@ public class PreferencePageCalculator extends FieldEditorPreferencePage implemen
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_PROCESS_REFERENCED_CHROMATOGRAMS, "Process Referenced Chromatograms", getFieldEditorParent()));
 	}
 
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

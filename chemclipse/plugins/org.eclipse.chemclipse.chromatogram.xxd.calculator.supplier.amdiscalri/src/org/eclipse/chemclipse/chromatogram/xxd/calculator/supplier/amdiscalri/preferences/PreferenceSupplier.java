@@ -47,6 +47,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String DEF_FILTER_PATH_MODELS_MSD = "";
 	public static final String P_FILTER_PATH_MODELS_CSD = "filterPathModelsCSD";
 	public static final String DEF_FILTER_PATH_MODELS_CSD = "";
+	public static final String P_OPEN_REPORT_AFTER_PROCESSING = "openReportAfterProcessing";
+	public static final boolean DEF_OPEN_REPORT_AFTER_PROCESSING = true;
 	/*
 	 * Alkane Identifier
 	 */
@@ -115,6 +117,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES, Boolean.toString(DEF_CALIBRATION_EXPORT_DERIVE_MISSING_INDICES));
 		putDefault(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
 		putDefault(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
+		putDefault(P_OPEN_REPORT_AFTER_PROCESSING, Boolean.toString(DEF_OPEN_REPORT_AFTER_PROCESSING));
 	}
 
 	public static PeakIdentifierAlkaneSettings getPeakIdentifierAlkaneSettings() {
@@ -279,6 +282,11 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static void setListPathExport(String filterPath) {
 
 		INSTANCE().put(P_LIST_PATH_EXPORT, filterPath);
+	}
+
+	public static boolean isOpenReportAfterProcessing() {
+
+		return INSTANCE().getBoolean(P_OPEN_REPORT_AFTER_PROCESSING, DEF_OPEN_REPORT_AFTER_PROCESSING);
 	}
 
 	private static CalculatorStrategy getCalculatorStrategy() {

@@ -20,8 +20,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.editor.SystemEditor;
 import org.eclipse.chemclipse.support.literature.LiteratureReference;
+import org.eclipse.chemclipse.support.ui.editors.SystemEditor;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;

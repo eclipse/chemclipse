@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,13 +9,14 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.support.editor;
+package org.eclipse.chemclipse.support.ui.editors;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.net.URL;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.swt.program.Program;
 
 public class SystemEditor {
 
@@ -28,16 +29,17 @@ public class SystemEditor {
 
 		boolean success = false;
 		try {
-			if(Desktop.isDesktopSupported()) {
-				if(file != null && file.exists()) {
-					Desktop.getDesktop().open(file);
-					success = true;
-				}
+			Program program = Program.findProgram(FilenameUtils.getExtension(file.getName()));
+			if(program == null) {
+				program = Program.findProgram("txt");
+			}
+			if(program != null) {
+				program.execute(file.getAbsolutePath());
+				success = true;
 			}
 		} catch(Exception e) {
 			logger.warn(e);
 		}
-		//
 		return success;
 	}
 
@@ -45,16 +47,13 @@ public class SystemEditor {
 
 		boolean success = false;
 		try {
-			if(Desktop.isDesktopSupported()) {
-				if(url != null) {
-					Desktop.getDesktop().browse(url.toURI());
-					success = true;
-				}
+			if(url != null) {
+				Program.launch(url.toString());
+				success = true;
 			}
 		} catch(Exception e) {
 			logger.warn(e);
 		}
-		//
 		return success;
 	}
 }

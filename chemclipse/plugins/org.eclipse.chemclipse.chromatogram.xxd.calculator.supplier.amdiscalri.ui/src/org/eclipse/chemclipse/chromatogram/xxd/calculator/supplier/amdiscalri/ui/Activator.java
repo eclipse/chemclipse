@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.pr
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
+import org.eclipse.chemclipse.support.ui.editors.SystemEditor;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -81,6 +82,7 @@ public class Activator extends AbstractActivatorUI {
 		if(eventBroker != null) {
 			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.EVENT_BROKER_DATA, IChemClipseEvents.TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS));
 			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.EVENT_BROKER_DATA, IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS));
+			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.EVENT_BROKER_DATA, IChemClipseEvents.TOPIC_PROCESSING_FILE_CREATED));
 		}
 	}
 
@@ -107,6 +109,10 @@ public class Activator extends AbstractActivatorUI {
 							} else if(IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS.equals(topic)) {
 								if(libraries.contains(library)) {
 									libraries.remove(library); // REMOVE
+								}
+							} else if(IChemClipseEvents.TOPIC_PROCESSING_FILE_CREATED.equals(topic)) {
+								if(PreferenceSupplier.isOpenReportAfterProcessing()) {
+									SystemEditor.open(file);
 								}
 							}
 							PreferenceSupplier.setRetentionIndexFiles(libraries);

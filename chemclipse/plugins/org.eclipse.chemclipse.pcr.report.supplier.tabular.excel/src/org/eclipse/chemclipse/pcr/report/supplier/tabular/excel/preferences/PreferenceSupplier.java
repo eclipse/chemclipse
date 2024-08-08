@@ -93,7 +93,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		return INSTANCE().get(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 	}
 
-	public static Boolean isOpenReport() {
+	public static boolean isOpenReport() {
 
 		return INSTANCE().getBoolean(P_OPEN_REPORT, DEF_OPEN_REPORT);
 	}

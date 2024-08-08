@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,6 +34,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.pcr.converter.core.AbstractPlateExportConverter;
 import org.eclipse.chemclipse.pcr.converter.core.IPlateExportConverter;
 import org.eclipse.chemclipse.pcr.model.core.IChannel;
@@ -48,7 +49,7 @@ import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMappings;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.WellComparator;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.support.editor.SystemEditor;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PCRExportConverter extends AbstractPlateExportConverter implements IPlateExportConverter {
@@ -107,9 +108,7 @@ public class PCRExportConverter extends AbstractPlateExportConverter implements 
 			processingInfo.addErrorMessage(DESCRIPTION, "Input/Output problem.");
 			logger.warn(e);
 		}
-		if(PreferenceSupplier.isOpenReport()) {
-			SystemEditor.open(file);
-		}
+		UpdateNotifier.update(IChemClipseEvents.TOPIC_PROCESSING_FILE_CREATED, file);
 		return processingInfo;
 	}
 

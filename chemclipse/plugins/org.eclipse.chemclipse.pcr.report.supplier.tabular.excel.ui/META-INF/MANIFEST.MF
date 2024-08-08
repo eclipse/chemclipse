@@ -9,13 +9,17 @@ Bundle-Vendor: ChemClipse
 Require-Bundle: org.eclipse.chemclipse.model;bundle-version="0.9.0",
  org.eclipse.chemclipse.pcr.report.supplier.tabular;bundle-version="0.9.0",
  org.eclipse.chemclipse.support;bundle-version="0.9.0",
- org.eclipse.chemclipse.support.ui,
- org.eclipse.jface,
- org.eclipse.ui.workbench,
+ org.eclipse.chemclipse.support.ui;bundle-version="0.9.0",
+ org.eclipse.jface;bundle-version="3.34.0",
+ org.eclipse.ui.workbench;bundle-version="3.132.0",
  org.eclipse.chemclipse.pcr.report.supplier.tabular.ui;bundle-version="0.9.0",
  org.eclipse.core.runtime;bundle-version="3.24.100",
  org.eclipse.chemclipse.pcr.report.supplier.tabular.excel;bundle-version="0.9.0",
- org.eclipse.chemclipse.xxd.process.ui,
- org.eclipse.chemclipse.rcp.ui.icons
+ org.eclipse.chemclipse.xxd.process.ui;bundle-version="0.9.0",
+ org.eclipse.chemclipse.rcp.ui.icons;bundle-version="0.9.0",
+ org.eclipse.chemclipse.logging;bundle-version="0.9.0",
+ org.eclipse.e4.core.services;bundle-version="2.4.400",
+ org.osgi.service.event;bundle-version="1.4.1",
+ org.eclipse.e4.core.contexts;bundle-version="1.12.600"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
