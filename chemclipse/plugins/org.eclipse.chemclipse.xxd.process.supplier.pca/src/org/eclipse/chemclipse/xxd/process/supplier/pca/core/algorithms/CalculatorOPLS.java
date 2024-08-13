@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,17 +30,17 @@ public class CalculatorOPLS extends AbstractMultivariateCalculator {
 
 	private DMatrixRMaj getYVector() {
 
-		HashSet<String> groupNamesSet = new HashSet<>();
-		ArrayList<String> groupNames = getGroupNames();
-		double[] vector = new double[groupNames.size()];
-		groupNamesSet.addAll(groupNames);
-		List<String> uniqueGroupNames = Arrays.asList(groupNamesSet.toArray(new String[groupNamesSet.size()]));
+		HashSet<String> classificationNamesSet = new HashSet<>();
+		ArrayList<String> classificationNames = getClassificationNames();
+		double[] vector = new double[classificationNames.size()];
+		classificationNamesSet.addAll(classificationNames);
+		List<String> uniqueClassificationNames = Arrays.asList(classificationNamesSet.toArray(new String[classificationNamesSet.size()]));
 		int yIterator = 0;
-		for(String myString : groupNames) {
-			vector[yIterator] = uniqueGroupNames.indexOf(myString);
+		for(String classificator : classificationNames) {
+			vector[yIterator] = uniqueClassificationNames.indexOf(classificator);
 			yIterator++;
 		}
-		return new DMatrixRMaj(groupNames.size(), 1, true, vector);
+		return new DMatrixRMaj(classificationNames.size(), 1, true, vector);
 	}
 
 	@Override
@@ -56,9 +56,6 @@ public class CalculatorOPLS extends AbstractMultivariateCalculator {
 		DMatrixRMaj w_ortho = new DMatrixRMaj(1, numberOfVariables);
 		DMatrixRMaj X = new DMatrixRMaj(getSampleData());
 		DMatrixRMaj y = new DMatrixRMaj(getYVector());
-		// DenseMatrix64F y_avg = getAvgYVector();
-		// DenseMatrix64F x_avg = getAvgXVector();
-		// DenseMatrix64F x_sd = getSDXVector();
 		DMatrixRMaj te = new DMatrixRMaj(numberOfSamples, 1);
 		DMatrixRMaj p = new DMatrixRMaj(1, numberOfVariables);
 		DMatrixRMaj w = new DMatrixRMaj(1, numberOfVariables);
