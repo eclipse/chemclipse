@@ -28,8 +28,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import jakarta.inject.Named;
-
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveChooserDialog;
 import org.eclipse.chemclipse.support.ui.workbench.PerspectiveSupport;
@@ -54,17 +52,15 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
-/**
- * Handles the extension tiles area
- *
- */
+import jakarta.inject.Named;
+
 public class WelcomeViewExtensionHandler {
 
 	private static final Logger logger = Logger.getLogger(WelcomeViewExtensionHandler.class);
@@ -118,10 +114,10 @@ public class WelcomeViewExtensionHandler {
 		this.maxTiles = Math.max(minTiles, preferenceStore.getInt(PREFERENCE_MAX_TILES));
 		addedTiles = restoreSet(preferenceStore.getString(PREFERENCE_ADDED));
 		removedTiles = restoreSet(preferenceStore.getString(PREFERENCE_REMOVED));
-		initTiles();
+		initialize();
 	}
 
-	private void initTiles() {
+	private void initialize() {
 
 		for(TileDefinition tileDefinition : getAllExtensions()) {
 			String id = getExtensionId(tileDefinition);
@@ -129,9 +125,11 @@ public class WelcomeViewExtensionHandler {
 				setTile(createTile(), tileDefinition, true);
 			}
 		}
+		//
 		while(tiles < minTiles) {
 			createTile();
 		}
+		//
 		updateTiles();
 	}
 
@@ -143,7 +141,7 @@ public class WelcomeViewExtensionHandler {
 			Menu popupMenu = new Menu(tile);
 			MenuItem deleteItem = new MenuItem(popupMenu, SWT.NONE);
 			deleteItem.setText("Remove Shortcut");
-			deleteItem.addSelectionListener(new SelectionListener() {
+			deleteItem.addSelectionListener(new SelectionAdapter() {
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -156,18 +154,15 @@ public class WelcomeViewExtensionHandler {
 						tileContainer.removeTaskTile(tile);
 						tiles--;
 					}
+					//
 					try {
 						updateTiles();
 					} catch(Exception ex) {
 						ex.printStackTrace();
 					}
 				}
-
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
 			});
+			//
 			tile.setData(DATA_POPUP_MENU, popupMenu);
 			tiles++;
 			return tile;
@@ -200,41 +195,50 @@ public class WelcomeViewExtensionHandler {
 
 	private void updateTiles() {
 
-		// fetch unused ones ...
 		List<TileDefinition> unusedExtensions = getUnusedExtensions();
-		// fetch used ones..
-		List<TileDefinition> used = getUsedExtensions();
-		// fill space with defaultShow tiles if there is unused space except a final 'Add shortcut' tile ....
+		List<TileDefinition> usedExtensions = getUsedExtensions();
+		/*
+		 * Fill the space with defaultShow tiles if there is unused space
+		 * except a final 'Add shortcut' tile ....
+		 */
 		for(Iterator<TileDefinition> iterator = unusedExtensions.iterator(); iterator.hasNext();) {
-			if(used.size() < maxTiles - 1) {
+			if(usedExtensions.size() < maxTiles - 1) {
 				TileDefinition defaultExtension = iterator.next();
-				// fill space with ones defined as defaultShow
+				/*
+				 * Fill the space with ones defined as defaultShow
+				 * but only if the user has not previously explicitly removed this one!
+				 */
 				if(defaultExtension.isDefaultShow(subcontext)) {
-					// but only if the user has not previously explicitly removed this one!
 					if(!removedTiles.contains(getExtensionId(defaultExtension))) {
 						iterator.remove();
-						used.add(defaultExtension);
+						usedExtensions.add(defaultExtension);
 					}
 				}
 			} else {
 				break;
 			}
 		}
-		// sort them
-		Collections.sort(used, EXTENSION_COMPARATOR);
-		// now we can update all tiles text and status...
+		/*
+		 * Sort
+		 */
+		Collections.sort(usedExtensions, EXTENSION_COMPARATOR);
 		boolean hasShortcut = unusedExtensions.isEmpty();
 		for(TaskTile tile : tileContainer.getTiles()) {
-			hasShortcut = updateTile(used, hasShortcut, tile);
+			hasShortcut = updateTile(usedExtensions, hasShortcut, tile);
 		}
-		// try to extend if possible
-		while(!used.isEmpty() || !hasShortcut) {
+		/*
+		 * Extend
+		 */
+		while(!usedExtensions.isEmpty() || !hasShortcut) {
 			TaskTile tile = createTile();
 			if(tile == null) {
 				break;
 			}
-			hasShortcut = updateTile(used, hasShortcut, tile);
+			hasShortcut = updateTile(usedExtensions, hasShortcut, tile);
 		}
+		/*
+		 * Store
+		 */
 		preferenceStore.setValue(PREFERENCE_ADDED, serializeSet(addedTiles));
 		preferenceStore.setValue(PREFERENCE_REMOVED, serializeSet(removedTiles));
 		if(preferenceStore instanceof IPersistentPreferenceStore store) {
@@ -260,6 +264,7 @@ public class WelcomeViewExtensionHandler {
 			}
 			hasShortcut = setTile(tile, extension, hasShortcut);
 		}
+		//
 		return hasShortcut;
 	}
 
@@ -268,6 +273,7 @@ public class WelcomeViewExtensionHandler {
 		if(tile == null) {
 			return false;
 		}
+		//
 		ExtensionTileDefinition extensionTileDefinition = (ExtensionTileDefinition)tile.getDefinition();
 		extensionTileDefinition.delegate = extension;
 		if(extension != null) {
@@ -282,14 +288,17 @@ public class WelcomeViewExtensionHandler {
 				extensionTileDefinition.addshortcut = false;
 			}
 		}
+		//
 		tile.updateFromDefinition();
 		return hasShortcut;
 	}
 
 	private void selectExtensionForTile(ExtensionTileDefinition definition, Shell shell, PerspectiveSupport perspectiveSupport) {
 
+		/*
+		 * Show selection dialog to the user...
+		 */
 		List<TileDefinition> allExtensions = getUnusedExtensions();
-		// show selection dialog to the user...
 		TileSelectionDialog dialog = new TileSelectionDialog(shell, allExtensions.toArray(new TileDefinition[0]), new ColumnLabelProvider() {
 
 			Map<IConfigurationElement, Image> images = new IdentityHashMap<>();
@@ -301,9 +310,11 @@ public class WelcomeViewExtensionHandler {
 				if(labelProvider != null) {
 					return labelProvider.getText(element);
 				}
+				//
 				if(element instanceof TileDefinition tileDefinition) {
 					return tileDefinition.getTitle();
 				}
+				//
 				return super.getText(element);
 			}
 
@@ -316,28 +327,29 @@ public class WelcomeViewExtensionHandler {
 					if(image == null) {
 						MPerspective perspectiveModel = perspectiveSupport.getPerspectiveModel(configurationElement.getAttribute(ATTRIBUTE_PERSPECTIVE_ID));
 						if(perspectiveModel != null) {
-							URI iconURI = null;
 							try {
-								iconURI = new URI(perspectiveModel.getIconURI());
+								URI iconURI = new URI(perspectiveModel.getIconURI());
+								if(iconURI != null) {
+									try (InputStream stream = iconURI.toURL().openStream()) {
+										image = new Image(shell.getDisplay(), stream);
+										images.put(configurationElement, image);
+									} catch(Exception e) {
+										logger.warn(e);
+									}
+								}
 							} catch(URISyntaxException e) {
 								logger.warn(e);
-							}
-							if(iconURI != null) {
-								try (InputStream stream = iconURI.toURL().openStream()) {
-									image = new Image(shell.getDisplay(), stream);
-									images.put(configurationElement, image);
-								} catch(IOException e) {
-									logger.warn(e);
-								}
 							}
 						}
 					}
 					return image;
 				}
+				//
 				ILabelProvider labelProvider = Adapters.adapt(element, ILabelProvider.class);
 				if(labelProvider != null) {
 					return labelProvider.getImage(element);
 				}
+				//
 				return super.getImage(element);
 			}
 
@@ -350,6 +362,7 @@ public class WelcomeViewExtensionHandler {
 				super.dispose();
 			}
 		});
+		//
 		if(dialog.open() == Window.OK) {
 			TileDefinition element = dialog.getSelectedElement();
 			definition.delegate = element;
@@ -386,7 +399,9 @@ public class WelcomeViewExtensionHandler {
 	private List<TileDefinition> getAllExtensions() {
 
 		List<TileDefinition> result = new ArrayList<>();
-		// first query the extension registry
+		/*
+		 * Query the extension registry
+		 */
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
 		for(IConfigurationElement element : elements) {
@@ -395,14 +410,18 @@ public class WelcomeViewExtensionHandler {
 				result.add(definition);
 			}
 		}
-		// then add dynamic services
+		/*
+		 * Add dynamic services.
+		 */
 		TileDefinition[] definitions = Activator.getDefault().getTileDefinitions();
 		for(TileDefinition definition : definitions) {
 			if(definitionAcceptor != null && definitionAcceptor.test(definition)) {
 				result.add(definition);
 			}
 		}
-		// now add the private ones
+		/*
+		 * Add the private tiles.
+		 */
 		result.addAll(privateTileDefinitions);
 		return result;
 	}
@@ -425,6 +444,7 @@ public class WelcomeViewExtensionHandler {
 		if(serializedSet != null && !serializedSet.trim().isEmpty()) {
 			result.addAll(Arrays.asList(serializedSet.split("\t")));
 		}
+		//
 		return result;
 	}
 
