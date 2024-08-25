@@ -18,6 +18,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.ChromatogramWriter_0701;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.ChromatogramWriter_0801;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io.ChromatogramWriter_0802;
@@ -122,7 +123,7 @@ public class ChromatogramWriterMSD extends AbstractChromatogramWriter implements
 		 * Monitor Message
 		 */
 		monitor.setTaskName("Open Chromatography Binary");
-		monitor.subTask("Export Chromatogram");
+		monitor.subTask(ConverterMessages.exportChromatogram);
 		/*
 		 * Load all scan proxies before exporting the file.
 		 */

@@ -31,6 +31,12 @@ public class ConverterMessages extends NLS {
 	public static String cancelledConversion;
 	public static String importScan;
 	public static String importBaseline;
+	public static String readChromatogram;
+	public static String writeChromatogram;
+	public static String writeScans;
+	public static String readPeaks;
+	public static String readDatabase;
+	public static String writeMassSpectra;
 	//
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, ConverterMessages.class);

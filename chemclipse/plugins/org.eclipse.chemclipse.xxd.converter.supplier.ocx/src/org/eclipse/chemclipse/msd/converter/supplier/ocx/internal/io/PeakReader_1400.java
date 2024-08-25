@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.converter.io.IFileHelper;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.columns.SeparationColumnType;
@@ -94,7 +95,7 @@ public class PeakReader_1400 extends AbstractZipReader implements IPeakReader {
 		IPeaks<IPeakMSD> peaks = new PeaksMSD();
 		DataInputStream dataInputStream = getDataInputStream(zipFile, Format.FILE_PEAKS_MSD);
 		int numberOfPeaks = dataInputStream.readInt();
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Peaks", numberOfPeaks);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.readPeaks, numberOfPeaks);
 		try {
 			for(int i = 1; i <= numberOfPeaks; i++) {
 				try {

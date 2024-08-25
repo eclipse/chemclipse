@@ -80,6 +80,7 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
@@ -142,7 +143,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 	private IChromatogramCSD readZipData(Object object, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
 		IVendorChromatogram chromatogram = null;
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Chromatogram", 100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.readChromatogram, 100);
 		//
 		try {
 			boolean closeStream;

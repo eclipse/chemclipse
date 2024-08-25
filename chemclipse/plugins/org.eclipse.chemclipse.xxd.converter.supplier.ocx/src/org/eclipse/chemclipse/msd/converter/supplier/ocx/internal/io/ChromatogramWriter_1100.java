@@ -54,6 +54,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IScanProxy;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.RetentionIndexTypeSupport;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.ScanProxy;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -141,7 +142,7 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 
 	private void writeChromatogramFolder(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Chromatogram", 100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.writeChromatogram, 100);
 		try {
 			/*
 			 * Create the chromatogram folder
