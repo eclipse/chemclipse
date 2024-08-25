@@ -18,7 +18,6 @@ import static org.eclipse.chemclipse.converter.io.IFileHelper.writeStringCollect
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,7 +71,7 @@ import org.eclipse.core.runtime.SubMonitor;
 public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implements IChromatogramCSDZipWriter {
 
 	@Override
-	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		/*
 		 * ZIP

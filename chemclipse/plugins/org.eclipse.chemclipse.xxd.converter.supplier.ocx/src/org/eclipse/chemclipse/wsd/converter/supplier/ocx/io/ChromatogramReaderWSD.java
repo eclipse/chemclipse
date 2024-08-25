@@ -42,7 +42,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader implements IChromatogramWSDZipReader {
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramOverview chromatogramOverview = null;
 		ReaderHelper readerHelper = new ReaderHelper();

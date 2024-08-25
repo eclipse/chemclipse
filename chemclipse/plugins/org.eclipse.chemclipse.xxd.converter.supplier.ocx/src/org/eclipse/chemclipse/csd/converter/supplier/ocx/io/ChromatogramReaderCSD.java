@@ -13,13 +13,10 @@
 package org.eclipse.chemclipse.csd.converter.supplier.ocx.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.csd.converter.io.AbstractChromatogramCSDReader;
 import org.eclipse.chemclipse.csd.converter.io.IChromatogramCSDReader;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramReader_1001;
@@ -53,7 +50,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader implements IChromatogramCSDZipReader {
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramOverview chromatogramOverview = null;
 		ReaderHelper readerHelper = new ReaderHelper();
@@ -77,7 +74,7 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 	}
 
 	@Override
-	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramCSD chromatogramCSD = null;
 		ReaderHelper readerHelper = new ReaderHelper();

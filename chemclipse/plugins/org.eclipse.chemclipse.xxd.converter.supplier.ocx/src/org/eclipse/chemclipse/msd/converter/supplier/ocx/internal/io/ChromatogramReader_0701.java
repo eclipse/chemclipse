@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.msd.converter.supplier.ocx.internal.io;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,8 +20,6 @@ import java.util.List;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
@@ -75,35 +72,26 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 	private static final Logger logger = Logger.getLogger(ChromatogramReader_0701.class);
 
 	@Override
-	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramMSD chromatogram = null;
-		ZipFile zipFile = new ZipFile(file);
-		try {
+		try (ZipFile zipFile = new ZipFile(file)) {
 			if(isValidFileFormat(zipFile)) {
-				// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 				chromatogram = readFromZipFile(zipFile, "", file, monitor);
 			}
-		} finally {
-			zipFile.close();
 		}
-		//
 		return chromatogram;
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramOverview chromatogramOverview = null;
-		ZipFile zipFile = new ZipFile(file);
-		try {
+		try (ZipFile zipFile = new ZipFile(file)) {
 			if(isValidFileFormat(zipFile)) {
 				chromatogramOverview = readOverviewFromZipFile(zipFile, "", monitor);
 			}
-		} finally {
-			zipFile.close();
 		}
-		//
 		return chromatogramOverview;
 	}
 
@@ -182,7 +170,7 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; scan++) {
 			massSpectrum = new VendorScan();
-			int retentionTime = dataInputStream.readInt(); // Retention Time
+			int retentionTime = dataInputStream.readInt();
 			float abundance = dataInputStream.readFloat(); // Total Signal
 			ion = new VendorIon(AbstractIon.TIC_ION, abundance);
 			massSpectrum.setRetentionTime(retentionTime);
@@ -212,12 +200,9 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 		 */
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			IVendorScan massSpectrum = readMassSpectrum(dataInputStream);
 			chromatogram.addScan(massSpectrum);
 		}
-		//
-		//
 		if(closeStream) {
 			dataInputStream.close();
 		}
@@ -225,9 +210,8 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 
 	private void readPeaks(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
+		int numberOfPeaks = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfPeaks; i++) {
-			// monitor.subTask(IConstants.IMPORT_PEAK + i);
 			try {
 				IChromatogramPeakMSD peak = readPeak(dataInputStream, chromatogram, monitor);
 				chromatogram.addPeak(peak);
@@ -258,7 +242,7 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 		int numberOfRetentionTimes = dataInputStream.readInt(); // Number Retention Times
 		IPeakIntensityValues intensityValues = new PeakIntensityValues(Float.MAX_VALUE);
 		for(int i = 1; i <= numberOfRetentionTimes; i++) {
-			int retentionTime = dataInputStream.readInt(); // Retention Time
+			int retentionTime = dataInputStream.readInt();
 			float relativeIntensity = dataInputStream.readFloat(); // Intensity
 			intensityValues.addIntensityValue(retentionTime, relativeIntensity);
 		}
@@ -282,7 +266,7 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 
 	private List<IIntegrationEntry> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
 
-		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 		int numberOfIntegrationEntries = dataInputStream.readInt(); // Number Integration Entries
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double ion = dataInputStream.readDouble(); // m/z
@@ -423,7 +407,7 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 		 */
 		massSpectrum.setMassSpectrometer(getMassSpectrometerValue(massSpectrometer));
 		massSpectrum.setMassSpectrumType(getMassSpectrumTypeValue(massSpectrumType));
-		int retentionTime = dataInputStream.readInt(); // Retention Time
+		int retentionTime = dataInputStream.readInt();
 		float retentionIndex = dataInputStream.readFloat(); // Retention Index
 		massSpectrum.setRetentionTime(retentionTime);
 		massSpectrum.setRetentionIndex(retentionIndex);
@@ -451,7 +435,7 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 		 */
 		massSpectrum.setMassSpectrometer(getMassSpectrometerValue(massSpectrometer));
 		massSpectrum.setMassSpectrumType(getMassSpectrumTypeValue(massSpectrumType));
-		int retentionTime = dataInputStream.readInt(); // Retention Time
+		int retentionTime = dataInputStream.readInt();
 		float retentionIndex = dataInputStream.readFloat(); // Retention Index
 		massSpectrum.setRetentionTime(retentionTime);
 		massSpectrum.setRetentionIndex(retentionIndex);

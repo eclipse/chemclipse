@@ -78,9 +78,8 @@ public class PeakReader_0801 extends AbstractZipReader implements IPeakReader {
 		IPeaks<IPeakMSD> peaks = new PeaksMSD();
 		DataInputStream dataInputStream = getDataInputStream(zipFile, Format.FILE_PEAKS);
 		//
-		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
+		int numberOfPeaks = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfPeaks; i++) {
-			// monitor.subTask(IConstants.IMPORT_PEAK + i);
 			try {
 				IPeakMSD peak = readPeak(dataInputStream, monitor);
 				peaks.addPeak(peak);
@@ -112,7 +111,7 @@ public class PeakReader_0801 extends AbstractZipReader implements IPeakReader {
 		int numberOfRetentionTimes = dataInputStream.readInt(); // Number Retention Times
 		IPeakIntensityValues intensityValues = new PeakIntensityValues(Float.MAX_VALUE);
 		for(int i = 1; i <= numberOfRetentionTimes; i++) {
-			int retentionTime = dataInputStream.readInt(); // Retention Time
+			int retentionTime = dataInputStream.readInt();
 			float relativeIntensity = dataInputStream.readFloat(); // Intensity
 			intensityValues.addIntensityValue(retentionTime, relativeIntensity);
 		}
@@ -149,7 +148,7 @@ public class PeakReader_0801 extends AbstractZipReader implements IPeakReader {
 		massSpectrum.setMassSpectrometer(massSpectrometer);
 		massSpectrum.setMassSpectrumType(massSpectrumType);
 		massSpectrum.setPrecursorIon(precursorIon);
-		int retentionTime = dataInputStream.readInt(); // Retention Time
+		int retentionTime = dataInputStream.readInt();
 		float retentionIndex = dataInputStream.readFloat(); // Retention Index
 		massSpectrum.setRetentionTime(retentionTime);
 		massSpectrum.setRetentionIndex(retentionIndex);

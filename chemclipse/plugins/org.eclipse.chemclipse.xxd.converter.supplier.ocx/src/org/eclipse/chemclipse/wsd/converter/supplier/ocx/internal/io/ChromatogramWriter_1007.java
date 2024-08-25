@@ -42,7 +42,6 @@ public class ChromatogramWriter_1007 extends AbstractChromatogramWriter implemen
 	@Override
 	public void writeChromatogram(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		// monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
 		/*
 		 * ZIP
 		 */
@@ -107,7 +106,6 @@ public class ChromatogramWriter_1007 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeInt(scans); // Number of Scans
 		// Retention Times - Total Signals
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_SCANS + scan);
 			IScanWSD scanWSD = chromatogram.getSupplierScan(scan);
 			int scanSignalTotal = scanWSD.getScanSignals().size();
 			dataOutputStream.writeInt(scanSignalTotal);
@@ -187,7 +185,6 @@ public class ChromatogramWriter_1007 extends AbstractChromatogramWriter implemen
 		int scans = chromatogram.getNumberOfScans();
 		dataOutputStream.writeInt(scans);
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_SCANS + scan);
 			IScanWSD scanWSD = chromatogram.getSupplierScan(scan);
 			int scanSignalTotal = scanWSD.getScanSignals().size();
 			dataOutputStream.writeInt(scanSignalTotal);
@@ -236,7 +233,6 @@ public class ChromatogramWriter_1007 extends AbstractChromatogramWriter implemen
 		IBaselineModel baselineModel = chromatogram.getBaselineModel();
 		// Scans
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_BASELINE + scan);
 			int retentionTime = chromatogram.getSupplierScan(scan).getRetentionTime();
 			float backgroundAbundance = baselineModel.getBackgroundAbundance(retentionTime);
 			dataOutputStream.writeInt(retentionTime); // Retention Time

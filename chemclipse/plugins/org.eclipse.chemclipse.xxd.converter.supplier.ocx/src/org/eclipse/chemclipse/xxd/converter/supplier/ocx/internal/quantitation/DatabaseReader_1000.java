@@ -405,7 +405,7 @@ public class DatabaseReader_1000 extends AbstractDatabaseReader implements IData
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream);
-			Set<String> synonyms = new HashSet<String>();
+			Set<String> synonyms = new HashSet<>();
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
@@ -451,7 +451,7 @@ public class DatabaseReader_1000 extends AbstractDatabaseReader implements IData
 
 	private List<IIntegrationEntry> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
 
-		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 		int numberOfIntegrationEntries = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double signal = dataInputStream.readDouble();
@@ -477,7 +477,7 @@ public class DatabaseReader_1000 extends AbstractDatabaseReader implements IData
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream);
-			Set<String> synonyms = new HashSet<String>();
+			Set<String> synonyms = new HashSet<>();
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));

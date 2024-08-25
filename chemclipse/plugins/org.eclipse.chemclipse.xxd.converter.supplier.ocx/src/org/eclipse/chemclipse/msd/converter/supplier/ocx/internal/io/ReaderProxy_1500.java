@@ -84,7 +84,7 @@ public class ReaderProxy_1500 extends AbstractZipReader implements IReaderProxy 
 
 	private void readNormalMassSpectrum(IScanMSD massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings) throws IOException {
 
-		int retentionTime = dataInputStream.readInt(); // Retention Time
+		int retentionTime = dataInputStream.readInt();
 		int relativeRetentionTime = dataInputStream.readInt();
 		int retentionTimeColumn1 = dataInputStream.readInt();
 		int retentionTimeColumn2 = dataInputStream.readInt();
@@ -172,7 +172,7 @@ public class ReaderProxy_1500 extends AbstractZipReader implements IReaderProxy 
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			Set<String> synonyms = new HashSet<>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));

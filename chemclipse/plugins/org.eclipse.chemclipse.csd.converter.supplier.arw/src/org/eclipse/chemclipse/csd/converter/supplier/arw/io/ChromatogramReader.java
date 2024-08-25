@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,13 +12,10 @@
 package org.eclipse.chemclipse.csd.converter.supplier.arw.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.csd.converter.io.AbstractChromatogramCSDReader;
 import org.eclipse.chemclipse.csd.converter.supplier.arw.io.support.ChromatogramArrayReader;
 import org.eclipse.chemclipse.csd.converter.supplier.arw.io.support.IChromatogramArrayReader;
@@ -38,13 +35,13 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 	private static final Pattern scanPattern = Pattern.compile("(.*)(\t)(.*)");
 
 	@Override
-	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		return readChromatogram(file, monitor);
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		return readChromatogram(file, monitor);
 	}
