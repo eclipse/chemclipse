@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
@@ -30,6 +31,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 
 public class ScanWriter {
 
@@ -81,8 +83,8 @@ public class ScanWriter {
 	private IIdentificationTarget getIdentificationTarget(int scanNumber) {
 
 		ILibraryInformation libraryInformation = new LibraryInformation();
-		libraryInformation.setName("Scan " + Integer.toString(scanNumber));
+		libraryInformation.setName(NLS.bind(ConverterMessages.scan, scanNumber));
 		//
-		return new IdentificationTarget(libraryInformation,ComparisonResult.COMPARISON_RESULT_BEST_MATCH);
+		return new IdentificationTarget(libraryInformation, ComparisonResult.COMPARISON_RESULT_BEST_MATCH);
 	}
 }
