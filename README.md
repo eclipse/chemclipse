@@ -2,9 +2,7 @@
 
 # ChemClipse
 
-The Eclipse ChemClipse project offers functionality for data reading and processing in the domain of
-Cheminformatics and Bioinformatics.
-Currently it offers workflows in the following areas:
+Eclipse ChemClipse supports the user to analyse data acquired from systems used in analytical chemistry. In particular, chromatography coupled with mass spectrometry (GC/MS) or flame-ionization detectors (GC/FID) is used to identify and/or monitor chemical substances. It's an important task e.g. for quality control issues. Groceries, for example, are under strict control. Producers, traders and retailers try to prevent that groceries contain harmful chemical substances. The presence or absence of those chemical substances is identified, among others, by using GC/MS or GC/FID techniques. Nevertheless, it requires some experience to evaluate the data sets, recorded by the instruments. Hence, ChemClipse supports the chemists to evaluate the analytical data sets and to create reports. Moreover, it offers a rich set of functionality to edit the data sets as well as an easy to use GUI. Its main functionality is listed as follows:
 * chromatography
   * coupled with mass spectrometry (GC/MS)
   * flame-ionization detectors (GC/FID)
