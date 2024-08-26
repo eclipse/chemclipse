@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.model.statistics.ISample;
 
 public interface IMultivariateCalculator {
 
-	void addObservation(double[] obsData, ISample sampleKey, String groupName);
+	void addObservation(double[] obsData, ISample sampleKey, String groupName, String classificationName);
 
 	void compute();
 

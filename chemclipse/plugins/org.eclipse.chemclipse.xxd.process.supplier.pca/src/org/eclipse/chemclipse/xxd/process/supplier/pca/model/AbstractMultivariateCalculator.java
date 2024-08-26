@@ -29,6 +29,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	private DMatrixRMaj sampleData;
 	private ArrayList<ISample> sampleKeys = new ArrayList<>();
 	private ArrayList<String> groupNames = new ArrayList<>();
+	private ArrayList<String> classificationNames = new ArrayList<>();
 	private int sampleIndex;
 	private boolean computeSuccess;
 
@@ -66,7 +67,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	}
 
 	@Override
-	public void addObservation(double[] obsData, ISample sampleKey, String groupName) {
+	public void addObservation(double[] obsData, ISample sampleKey, String groupName, String classificationName) {
 		/*
 		 * if(obsData.length < sampleData.getNumCols()) {
 		 * this.invalidatePca();
@@ -78,6 +79,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		}
 		sampleKeys.add(sampleKey);
 		groupNames.add(groupName);
+		classificationNames.add(classificationName);
 		sampleIndex++;
 	}
 
@@ -92,6 +94,11 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	protected ArrayList<String> getGroupNames() {
 
 		return groupNames;
+	}
+
+	protected ArrayList<String> getClassificationNames() {
+
+		return classificationNames;
 	}
 
 	public DMatrixRMaj getScores() {

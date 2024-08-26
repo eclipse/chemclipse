@@ -225,7 +225,7 @@ public class ProcessorPCA {
 			}
 		}
 		//
-		final Set<String> groups = samples.getSampleList().stream().map(s -> s.getGroupName()).distinct().collect(Collectors.toList()).stream().limit(2).collect(Collectors.toSet());
+		final Set<String> classifications = samples.getSampleList().stream().map(s -> s.getClassification()).distinct().collect(Collectors.toList()).stream().limit(2).collect(Collectors.toSet());
 		for(ISample sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
 			if(sample.isSelected()) {
@@ -243,8 +243,8 @@ public class ProcessorPCA {
 		}
 		//
 		if(algorithm.equals(Algorithm.OPLS)) {
-			Map<ISample, double[]> groupSelected = selectedSamples.entrySet().stream().filter(e -> groups.contains(e.getKey().getGroupName())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
-			return groupSelected;
+			Map<ISample, double[]> classificationSelected = selectedSamples.entrySet().stream().filter(e -> classifications.contains(e.getKey().getClassification())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+			return classificationSelected;
 		}
 		//
 		return selectedSamples;
@@ -364,7 +364,7 @@ public class ProcessorPCA {
 		 * Add the samples.
 		 */
 		for(Map.Entry<ISample, double[]> entry : pcaPeakMap.entrySet()) {
-			principalComponentAnalysis.addObservation(entry.getValue(), entry.getKey(), entry.getKey().getGroupName());
+			principalComponentAnalysis.addObservation(entry.getValue(), entry.getKey(), entry.getKey().getGroupName(), entry.getKey().getClassification());
 		}
 		//
 		return principalComponentAnalysis;
