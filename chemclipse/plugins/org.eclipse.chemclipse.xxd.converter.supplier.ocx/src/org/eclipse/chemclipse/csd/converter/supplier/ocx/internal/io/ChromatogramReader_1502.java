@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,8 +21,6 @@ import java.util.List;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.io.IFileHelper;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.io.ChromatogramReaderCSD;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.io.IChromatogramCSDZipReader;
@@ -65,10 +62,12 @@ import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.io.ChromatogramReaderWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.io.AbstractIO_1502;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.io.ReaderIO_1502;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.BaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
@@ -82,34 +81,26 @@ public class ChromatogramReader_1502 extends AbstractChromatogramReader implemen
 	private ReaderIO_1502 reader = new ReaderIO_1502();
 
 	@Override
-	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramCSD chromatogram = null;
-		ZipFile zipFile = new ZipFile(file);
-		try {
+		try (ZipFile zipFile = new ZipFile(file)) {
 			if(isValidFileFormat(zipFile)) {
 				chromatogram = readFromZipFile(zipFile, "", file, monitor);
 			}
-		} finally {
-			zipFile.close();
 		}
-		//
 		return chromatogram;
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramOverview chromatogramOverview = null;
-		ZipFile zipFile = new ZipFile(file);
-		try {
+		try (ZipFile zipFile = new ZipFile(file)) {
 			if(isValidFileFormat(zipFile)) {
 				chromatogramOverview = readFromZipFile(zipFile, "", file, monitor);
 			}
-		} finally {
-			zipFile.close();
 		}
-		//
 		return chromatogramOverview;
 	}
 
@@ -139,7 +130,7 @@ public class ChromatogramReader_1502 extends AbstractChromatogramReader implemen
 	private IChromatogramCSD readZipData(Object object, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
 		IVendorChromatogram chromatogram = null;
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Chromatogram", 100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.readChromatogram, 100);
 		//
 		try {
 			boolean closeStream;
@@ -266,10 +257,10 @@ public class ChromatogramReader_1502 extends AbstractChromatogramReader implemen
 		for(int i = 0; i < models; i++) {
 			String baselineId = readString(dataInputStream);
 			chromatogram.setActiveBaseline(baselineId); // Baseline Id
-			List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
+			List<IBaselineElement> baselineElements = new ArrayList<>();
 			for(int scan = 1; scan <= scans; scan++) {
-				int retentionTime = dataInputStream.readInt(); // Retention Time
-				float backgroundAbundance = dataInputStream.readFloat(); // Background Abundance
+				int retentionTime = dataInputStream.readInt();
+				float backgroundAbundance = dataInputStream.readFloat();
 				IBaselineElement baselineElement = new BaselineElement(retentionTime, backgroundAbundance);
 				baselineElements.add(baselineElement);
 			}
@@ -302,7 +293,7 @@ public class ChromatogramReader_1502 extends AbstractChromatogramReader implemen
 
 	private void readPeaks(DataInputStream dataInputStream, boolean closeStream, IChromatogramCSD chromatogram) throws IOException {
 
-		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
+		int numberOfPeaks = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfPeaks; i++) {
 			try {
 				IChromatogramPeakCSD peak = readPeak(dataInputStream, chromatogram);
@@ -442,7 +433,7 @@ public class ChromatogramReader_1502 extends AbstractChromatogramReader implemen
 
 	private List<IIntegrationEntry> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
 
-		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 		int numberOfIntegrationEntries = dataInputStream.readInt(); // Number Integration Entries
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double integratedArea = dataInputStream.readDouble(); // Integrated Area
@@ -454,7 +445,7 @@ public class ChromatogramReader_1502 extends AbstractChromatogramReader implemen
 
 	private List<IInternalStandard> readInternalStandards(DataInputStream dataInputStream) throws IOException {
 
-		List<IInternalStandard> internalStandards = new ArrayList<IInternalStandard>();
+		List<IInternalStandard> internalStandards = new ArrayList<>();
 		int numberOfInternalStandards = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfInternalStandards; i++) {
 			String name = readString(dataInputStream);
@@ -562,11 +553,11 @@ public class ChromatogramReader_1502 extends AbstractChromatogramReader implemen
 				dataInputStream.close();
 			}
 			//
-			parseChromatogram(object, dataType, directory, chromatogram, closeStream, monitor);
+			parseChromatogram(object, dataType, directory, chromatogram, monitor);
 		}
 	}
 
-	private void parseChromatogram(Object object, String dataType, String directoryPrefix, IChromatogramCSD chromatogram, boolean closeStream, IProgressMonitor monitor) throws IOException {
+	private void parseChromatogram(Object object, String dataType, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		String directory = directoryPrefix + Format.DIR_CHROMATOGRAM_REFERENCE + Format.DIR_SEPARATOR;
 		if(object instanceof ZipFile zipFile) {
@@ -648,7 +639,7 @@ public class ChromatogramReader_1502 extends AbstractChromatogramReader implemen
 		boolean isValid = false;
 		DataInputStream dataInputStream = getDataInputStream(zipFile, Format.FILE_VERSION);
 		String version = readString(dataInputStream);
-		if(version.equals(ReaderIO_1502.VERSION)) {
+		if(version.equals(AbstractIO_1502.VERSION)) {
 			isValid = true;
 		}
 		//

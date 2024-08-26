@@ -18,7 +18,6 @@ import static org.eclipse.chemclipse.converter.io.IFileHelper.writeStringCollect
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,6 +57,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.io.AbstractIO_
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.io.WriterIO_1502;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.RetentionIndexTypeSupport;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -71,7 +71,7 @@ public class ChromatogramWriter_1502 extends AbstractChromatogramWriter implemen
 	private WriterIO_1502 writer = new WriterIO_1502();
 
 	@Override
-	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		/*
 		 * ZIP
@@ -94,17 +94,17 @@ public class ChromatogramWriter_1502 extends AbstractChromatogramWriter implemen
 	@Override
 	public void writeChromatogram(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		writeVersion(zipOutputStream, directoryPrefix, monitor);
+		writeVersion(zipOutputStream, directoryPrefix);
 		writeChromatogramFolder(zipOutputStream, directoryPrefix, chromatogram, monitor);
 		/*
 		 * Referenced Chromatograms
 		 */
 		List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
-		writeChromatogramReferenceInfo(zipOutputStream, directoryPrefix, referencedChromatograms, monitor);
+		writeChromatogramReferenceInfo(zipOutputStream, directoryPrefix, referencedChromatograms);
 		writeReferencedChromatograms(zipOutputStream, directoryPrefix, referencedChromatograms, monitor);
 	}
 
-	private void writeVersion(ZipOutputStream zipOutputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException {
+	private void writeVersion(ZipOutputStream zipOutputStream, String directoryPrefix) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -124,7 +124,7 @@ public class ChromatogramWriter_1502 extends AbstractChromatogramWriter implemen
 
 	private void writeChromatogramFolder(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Chromatogram", 100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.writeChromatogram, 100);
 		try {
 			/*
 			 * Create the chromatogram folder
@@ -192,7 +192,7 @@ public class ChromatogramWriter_1502 extends AbstractChromatogramWriter implemen
 		int scans = chromatogram.getNumberOfScans();
 		dataOutputStream.writeInt(scans); // Number of Scans
 		//
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Scans", scans);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.writeScans, scans);
 		try {
 			for(int scan = 1; scan <= scans; scan++) {
 				IScanCSD scanCSD = chromatogram.getSupplierScan(scan);
@@ -303,7 +303,6 @@ public class ChromatogramWriter_1502 extends AbstractChromatogramWriter implemen
 		if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
 			return false;
 		}
-		//
 		return true;
 	}
 
@@ -527,7 +526,7 @@ public class ChromatogramWriter_1502 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeChromatogramReferenceInfo(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram<?>> referencedChromatograms, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramReferenceInfo(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram<?>> referencedChromatograms) throws IOException {
 
 		ZipEntry zipEntryType = new ZipEntry(directoryPrefix + Format.FILE_REFERENCE_INFO);
 		zipOutputStream.putNextEntry(zipEntryType);
@@ -538,7 +537,7 @@ public class ChromatogramWriter_1502 extends AbstractChromatogramWriter implemen
 
 	private void writeReferencedChromatograms(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram<?>> referencedChromatograms, IProgressMonitor monitor) throws IOException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Chromatogram", referencedChromatograms.size() * 20);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.writeChromatogram, referencedChromatograms.size() * 20);
 		try {
 			ChromatogramWriterMSD chromatogramWriterMSD = new ChromatogramWriterMSD();
 			ChromatogramWriterCSD chromatogramWriterCSD = new ChromatogramWriterCSD();

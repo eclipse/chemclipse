@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.RetentionIndexTypeSupport;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -43,7 +44,6 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 	@Override
 	public void writeChromatogram(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		// monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
 		/*
 		 * ZIP
 		 */
@@ -108,7 +108,6 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeInt(scans); // Number of Scans
 		// Retention Times - Total Signals
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_SCANS + scan);
 			IScanWSD scanWSD = chromatogram.getSupplierScan(scan);
 			int scanSignalTotal = scanWSD.getScanSignals().size();
 			dataOutputStream.writeInt(scanSignalTotal);
@@ -133,7 +132,7 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 
 	private void writeChromatogramFolder(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Chromatogram", 100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.writeChromatogram, 100);
 		try {
 			/*
 			 * Create the chromatogram folder
@@ -194,7 +193,6 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 		int scans = chromatogram.getNumberOfScans();
 		dataOutputStream.writeInt(scans);
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_SCANS + scan);
 			IScanWSD scanWSD = chromatogram.getSupplierScan(scan);
 			int scanSignalTotal = scanWSD.getScanSignals().size();
 			dataOutputStream.writeInt(scanSignalTotal);
@@ -243,7 +241,6 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 		IBaselineModel baselineModel = chromatogram.getBaselineModel();
 		// Scans
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_BASELINE + scan);
 			int retentionTime = chromatogram.getSupplierScan(scan).getRetentionTime();
 			float backgroundAbundance = baselineModel.getBackgroundAbundance(retentionTime);
 			dataOutputStream.writeInt(retentionTime); // Retention Time

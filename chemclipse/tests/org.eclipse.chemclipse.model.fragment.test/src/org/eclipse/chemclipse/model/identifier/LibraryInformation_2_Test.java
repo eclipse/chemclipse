@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -58,7 +58,7 @@ public class LibraryInformation_2_Test extends TestCase {
 
 	public void testGetSynonyms_5() {
 
-		Set<String> synonyms = new HashSet<String>();
+		Set<String> synonyms = new HashSet<>();
 		synonyms.add("Philip");
 		synonyms.add("is");
 		synonyms.add("the");

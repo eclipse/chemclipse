@@ -13,12 +13,12 @@
 package org.eclipse.chemclipse.csd.converter.supplier.ocx.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.zip.ZipOutputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramWriter_1001;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramWriter_1002;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io.ChromatogramWriter_1003;
@@ -42,7 +42,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramWriterCSD extends AbstractChromatogramWriter implements IChromatogramCSDZipWriter {
 
 	@Override
-	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		IChromatogramCSDZipWriter chromatogramWriter = getChromatogramWriter(chromatogram, monitor);
 		chromatogramWriter.writeChromatogram(file, chromatogram, monitor);
@@ -102,7 +102,7 @@ public class ChromatogramWriterCSD extends AbstractChromatogramWriter implements
 		 * Monitor Message
 		 */
 		monitor.setTaskName("Open Chromatography Binary");
-		monitor.subTask("Export Chromatogram");
+		monitor.subTask(ConverterMessages.exportChromatogram);
 		//
 		return chromatogramWriter;
 	}

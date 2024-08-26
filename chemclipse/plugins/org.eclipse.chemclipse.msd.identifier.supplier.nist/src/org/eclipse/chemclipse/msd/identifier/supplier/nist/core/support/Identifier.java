@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -457,7 +458,7 @@ public class Identifier {
 	 */
 	private void prepareFiles(IExtendedRuntimeSupport runtimeSupport, IMassSpectra massSpectra, IProgressMonitor monitor) throws IOException {
 
-		monitor.subTask("Write the peak mass spectra.");
+		monitor.subTask(ConverterMessages.writeMassSpectra);
 		INistSupport nistSupport = runtimeSupport.getNistSupport();
 		/*
 		 * Export the mass spectra (MASSSPECTRA.MSL) file.
@@ -490,7 +491,7 @@ public class Identifier {
 		/*
 		 * Export the mass spectra (MASSSPECTRA.MSP) file.
 		 */
-		monitor.subTask("Write the peak mass spectra to msp file.");
+		monitor.subTask(ConverterMessages.writeMassSpectra);
 		DatabaseConverter.convert(file, massSpectra, false, MSP_CONVERTER_ID, monitor);
 	}
 

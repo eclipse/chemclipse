@@ -57,7 +57,6 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 	@Override
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		// monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
 		/*
 		 * ZIP
 		 */
@@ -122,7 +121,6 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeInt(scans); // Number of Scans
 		// Retention Times - Total Signals
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_SCAN + scan);
 			dataOutputStream.writeInt(chromatogram.getScan(scan).getRetentionTime()); // Retention Time
 			dataOutputStream.writeFloat(chromatogram.getScan(scan).getTotalSignal()); // Total Signal
 		}
@@ -166,7 +164,6 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeInt(scans); // Number of Scans
 		// Scans
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_SCAN + scan);
 			IVendorMassSpectrum massSpectrum = chromatogram.getSupplierScan(scan);
 			writeMassSpectrum(dataOutputStream, massSpectrum);
 		}
@@ -191,7 +188,6 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		IBaselineModel baselineModel = chromatogram.getBaselineModel();
 		// Scans
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_BASELINE + scan);
 			int retentionTime = chromatogram.getSupplierScan(scan).getRetentionTime();
 			float backgroundAbundance = baselineModel.getBackgroundAbundance(retentionTime);
 			dataOutputStream.writeInt(retentionTime); // Retention Time
@@ -215,9 +211,7 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
 		dataOutputStream.writeInt(peaks.size()); // Number of Peaks
 		// Peaks
-		// int counter = 1;
 		for(IChromatogramPeakMSD peak : peaks) {
-			// monitor.subTask(IConstants.EXPORT_PEAK + counter++);
 			writePeak(dataOutputStream, peak);
 		}
 		//

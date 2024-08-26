@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -123,7 +123,7 @@ public class ReferencePeakMSDTestCase extends TestCase {
 			 * XIC integration entries
 			 */
 			referencePeakMSD = new PeakMSD(peakModel, "XIC");
-			List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+			List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 			float totalSignal = referencePeakMSD.getPeakModel().getPeakMassSpectrum().getTotalSignal();
 			for(IIon ion : referencePeakMSD.getPeakModel().getPeakMassSpectrum().getIons()) {
 				double percentageIonIntensity = (1.0d / totalSignal) * ion.getAbundance();
@@ -136,7 +136,7 @@ public class ReferencePeakMSDTestCase extends TestCase {
 			 * TIC integration entries
 			 */
 			referencePeakMSD = new PeakMSD(peakModel, "TIC");
-			List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+			List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 			IIntegrationEntry integrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, baseArea * scale);
 			integrationEntries.add(integrationEntry);
 			referencePeakMSD.setIntegratedArea(integrationEntries, "Test Integrator TIC");

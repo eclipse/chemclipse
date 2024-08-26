@@ -63,7 +63,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader implements IChromatogramMSDZipReader {
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramOverview chromatogramOverview = null;
 		ReaderHelper readerHelper = new ReaderHelper();
@@ -87,7 +87,7 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 	}
 
 	@Override
-	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramMSD chromatogramMSD;
 		ReaderHelper readerHelper = new ReaderHelper();

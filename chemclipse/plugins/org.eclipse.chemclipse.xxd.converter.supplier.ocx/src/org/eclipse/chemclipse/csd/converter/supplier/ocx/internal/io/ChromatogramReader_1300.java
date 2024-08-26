@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,8 +23,6 @@ import java.util.Set;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.io.ChromatogramReaderCSD;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.io.IChromatogramCSDZipReader;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.model.chromatogram.IVendorChromatogram;
@@ -81,8 +78,9 @@ import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.io.ChromatogramReaderWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.BaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
@@ -96,34 +94,26 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 	private static final String CLASSIFIER_DELIMITER = " ";
 
 	@Override
-	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramCSD chromatogram = null;
-		ZipFile zipFile = new ZipFile(file);
-		try {
+		try (ZipFile zipFile = new ZipFile(file)) {
 			if(isValidFileFormat(zipFile)) {
 				chromatogram = readFromZipFile(zipFile, "", file, monitor);
 			}
-		} finally {
-			zipFile.close();
 		}
-		//
 		return chromatogram;
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramOverview chromatogramOverview = null;
-		ZipFile zipFile = new ZipFile(file);
-		try {
+		try (ZipFile zipFile = new ZipFile(file)) {
 			if(isValidFileFormat(zipFile)) {
 				chromatogramOverview = readFromZipFile(zipFile, "", file, monitor);
 			}
-		} finally {
-			zipFile.close();
 		}
-		//
 		return chromatogramOverview;
 	}
 
@@ -153,7 +143,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 	private IChromatogramCSD readZipData(Object object, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
 		IVendorChromatogram chromatogram = null;
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Chromatogram", 100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.readChromatogram, 100);
 		//
 		try {
 			boolean closeStream;
@@ -276,10 +266,10 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		 * Get the Baseline
 		 */
 		int scans = dataInputStream.readInt(); // Number of Scans
-		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
+		List<IBaselineElement> baselineElements = new ArrayList<>();
 		for(int scan = 1; scan <= scans; scan++) {
-			int retentionTime = dataInputStream.readInt(); // Retention Time
-			float backgroundAbundance = dataInputStream.readFloat(); // Background Abundance
+			int retentionTime = dataInputStream.readInt();
+			float backgroundAbundance = dataInputStream.readFloat();
 			IBaselineElement baselineElement = new BaselineElement(retentionTime, backgroundAbundance);
 			baselineElements.add(baselineElement);
 		}
@@ -310,7 +300,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 
 	private void readPeaks(DataInputStream dataInputStream, boolean closeStream, IChromatogramCSD chromatogram) throws IOException {
 
-		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
+		int numberOfPeaks = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfPeaks; i++) {
 			try {
 				IChromatogramPeakCSD peak = readPeak(dataInputStream, chromatogram);
@@ -438,7 +428,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 
 	private List<IIntegrationEntry> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
 
-		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 		int numberOfIntegrationEntries = dataInputStream.readInt(); // Number Integration Entries
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double integratedArea = dataInputStream.readDouble(); // Integrated Area
@@ -450,7 +440,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 
 	private List<IInternalStandard> readInternalStandards(DataInputStream dataInputStream) throws IOException {
 
-		List<IInternalStandard> internalStandards = new ArrayList<IInternalStandard>();
+		List<IInternalStandard> internalStandards = new ArrayList<>();
 		int numberOfInternalStandards = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfInternalStandards; i++) {
 			String name = readString(dataInputStream);
@@ -482,7 +472,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			Set<String> synonyms = new HashSet<>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
@@ -662,7 +652,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			Set<String> synonyms = new HashSet<>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
@@ -725,7 +715,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
-			Set<String> synonyms = new HashSet<String>(); // Synonyms
+			Set<String> synonyms = new HashSet<>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));

@@ -69,6 +69,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IScanProxy;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.RetentionIndexTypeSupport;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.ScanProxy;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -162,7 +163,7 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 
 	private void writeChromatogramFolder(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Chromatogram", 100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.writeChromatogram, 100);
 		try {
 			/*
 			 * Create the chromatogram folder
@@ -231,7 +232,7 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		int scans = chromatogram.getNumberOfScans();
 		dataOutputStream.writeInt(scans); // Number of Scans
 		//
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Scans", scans);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.writeScans, scans);
 		try {
 			for(int scan = 1; scan <= scans; scan++) {
 				/*
@@ -794,7 +795,7 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 
 	private void writeReferencedChromatograms(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram<?>> referencedChromatograms, IProgressMonitor monitor) throws IOException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Write Chromatogram", referencedChromatograms.size() * 20);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.writeChromatogram, referencedChromatograms.size() * 20);
 		try {
 			ChromatogramWriterMSD chromatogramWriterMSD = new ChromatogramWriterMSD();
 			ChromatogramWriterCSD chromatogramWriterCSD = new ChromatogramWriterCSD();

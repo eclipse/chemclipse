@@ -81,9 +81,8 @@ public class PeakReader_0803 extends AbstractZipReader implements IPeakReader {
 		IPeaks<IPeakMSD> peaks = new PeaksMSD();
 		DataInputStream dataInputStream = getDataInputStream(zipFile, Format.FILE_PEAKS);
 		//
-		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
+		int numberOfPeaks = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfPeaks; i++) {
-			// monitor.subTask(IConstants.IMPORT_PEAK + i);
 			try {
 				IPeakMSD peak = readPeak(dataInputStream, monitor);
 				peaks.addPeak(peak);
@@ -117,7 +116,7 @@ public class PeakReader_0803 extends AbstractZipReader implements IPeakReader {
 		int numberOfRetentionTimes = dataInputStream.readInt(); // Number Retention Times
 		IPeakIntensityValues intensityValues = new PeakIntensityValues(Float.MAX_VALUE);
 		for(int i = 1; i <= numberOfRetentionTimes; i++) {
-			int retentionTime = dataInputStream.readInt(); // Retention Time
+			int retentionTime = dataInputStream.readInt();
 			float relativeIntensity = dataInputStream.readFloat(); // Intensity
 			intensityValues.addIntensityValue(retentionTime, relativeIntensity);
 		}
@@ -154,7 +153,7 @@ public class PeakReader_0803 extends AbstractZipReader implements IPeakReader {
 		massSpectrum.setMassSpectrometer(massSpectrometer);
 		massSpectrum.setMassSpectrumType(massSpectrumType);
 		massSpectrum.setPrecursorIon(precursorIon);
-		int retentionTime = dataInputStream.readInt(); // Retention Time
+		int retentionTime = dataInputStream.readInt();
 		float retentionIndex = dataInputStream.readFloat(); // Retention Index
 		massSpectrum.setRetentionTime(retentionTime);
 		massSpectrum.setRetentionIndex(retentionIndex);
@@ -202,7 +201,7 @@ public class PeakReader_0803 extends AbstractZipReader implements IPeakReader {
 
 	private List<IIntegrationEntry> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
 
-		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 		int numberOfIntegrationEntries = dataInputStream.readInt(); // Number Integration Entries
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double ion = dataInputStream.readDouble(); // m/z

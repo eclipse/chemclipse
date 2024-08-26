@@ -81,8 +81,9 @@ import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.PeakModelWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.BaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
@@ -164,7 +165,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 	private IChromatogramWSD readZipData(Object object, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
 		IVendorChromatogram chromatogram = null;
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Chromatogram", 100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.readChromatogram, 100);
 		try {
 			boolean closeStream;
 			if(object instanceof ZipFile) {
@@ -313,7 +314,6 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 		int scans = dataInputStream.readInt();
 		List<IBaselineElement> baselineElements = new ArrayList<>();
 		for(int scan = 1; scan <= scans; ++scan) {
-			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			int retentionTime = dataInputStream.readInt();
 			float backgroundAbundance = dataInputStream.readFloat();
 			IBaselineElement baselineElement = new BaselineElement(retentionTime, backgroundAbundance);
@@ -346,7 +346,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 
 	private void readPeaks(DataInputStream dataInputStream, boolean closeStream, IChromatogramWSD chromatogram) throws IOException {
 
-		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
+		int numberOfPeaks = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfPeaks; i++) {
 			try {
 				IChromatogramPeakWSD peak = readPeak(dataInputStream, chromatogram);

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
@@ -109,7 +110,7 @@ public abstract class AbstractMassSpectraWriter extends AbstractWriter implement
 		 * Get all mass spectra, test to null and append them with the given
 		 * file writer.
 		 */
-		monitor.beginTask("Write Mass Spectra", massSpectra.size());
+		monitor.beginTask(ConverterMessages.writeMassSpectra, massSpectra.size());
 		for(int i = 1; i <= massSpectra.size(); i++) {
 			IScanMSD massSpectrum = massSpectra.getMassSpectrum(i);
 			/*

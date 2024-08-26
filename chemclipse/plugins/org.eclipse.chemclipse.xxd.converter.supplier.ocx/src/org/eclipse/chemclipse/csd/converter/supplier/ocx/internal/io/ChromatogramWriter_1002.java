@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.csd.converter.supplier.ocx.internal.io;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -43,9 +42,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implements IChromatogramCSDZipWriter {
 
 	@Override
-	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
-		// monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
 		/*
 		 * ZIP
 		 */
@@ -67,11 +65,11 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 	@Override
 	public void writeChromatogram(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		writeVersion(zipOutputStream, directoryPrefix, monitor);
+		writeVersion(zipOutputStream, directoryPrefix);
 		writeChromatogramFolder(zipOutputStream, directoryPrefix, chromatogram, monitor);
 	}
 
-	private void writeVersion(ZipOutputStream zipOutputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException {
+	private void writeVersion(ZipOutputStream zipOutputStream, String directoryPrefix) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -101,13 +99,13 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		/*
 		 * WRITE THE FILES
 		 */
-		writeChromatogramScans(zipOutputStream, directoryPrefix, chromatogram, monitor);
-		writeChromatogramBaseline(zipOutputStream, directoryPrefix, chromatogram, monitor);
-		writeChromatogramPeaks(zipOutputStream, directoryPrefix, chromatogram, monitor);
-		writeChromatogramArea(zipOutputStream, directoryPrefix, chromatogram, monitor);
+		writeChromatogramScans(zipOutputStream, directoryPrefix, chromatogram);
+		writeChromatogramBaseline(zipOutputStream, directoryPrefix, chromatogram);
+		writeChromatogramPeaks(zipOutputStream, directoryPrefix, chromatogram);
+		writeChromatogramArea(zipOutputStream, directoryPrefix, chromatogram);
 	}
 
-	private void writeChromatogramScans(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramScans(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -119,11 +117,8 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		int scans = chromatogram.getNumberOfScans();
 		dataOutputStream.writeInt(scans); // Number of Scans
-		// Scans
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_SCAN + scan);
 			IScanCSD scanFID = chromatogram.getSupplierScan(scan);
-			//
 			dataOutputStream.writeInt(scanFID.getRetentionTime()); // Retention Time
 			dataOutputStream.writeFloat(scanFID.getRetentionIndex()); // Retention Index
 			dataOutputStream.writeFloat(scanFID.getTotalSignal()); // Total Signal
@@ -133,7 +128,7 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeChromatogramBaseline(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramBaseline(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -147,9 +142,7 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeInt(scans); // Number of Scans
 		//
 		IBaselineModel baselineModel = chromatogram.getBaselineModel();
-		// Scans
 		for(int scan = 1; scan <= scans; scan++) {
-			// monitor.subTask(IConstants.EXPORT_BASELINE + scan);
 			int retentionTime = chromatogram.getSupplierScan(scan).getRetentionTime();
 			float backgroundAbundance = baselineModel.getBackgroundAbundance(retentionTime);
 			dataOutputStream.writeInt(retentionTime); // Retention Time
@@ -160,7 +153,7 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeChromatogramPeaks(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramPeaks(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
@@ -172,10 +165,7 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		List<IChromatogramPeakCSD> peaks = chromatogram.getPeaks();
 		dataOutputStream.writeInt(peaks.size()); // Number of Peaks
-		// Peaks
-		// int counter = 1;
 		for(IChromatogramPeakCSD peak : peaks) {
-			// monitor.subTask(IConstants.EXPORT_PEAK + counter++);
 			writePeak(dataOutputStream, peak);
 		}
 		//
@@ -183,7 +173,7 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	private void writeChromatogramArea(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void writeChromatogramArea(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;

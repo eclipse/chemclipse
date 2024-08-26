@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.wsd.converter.supplier.ocx.internal.io;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,8 +20,6 @@ import java.util.List;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.columns.SeparationColumnType;
@@ -40,8 +37,8 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.BaselineElement;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IBaselineElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -51,35 +48,26 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramReader_1006 extends AbstractChromatogramReader implements IChromatogramWSDZipReader {
 
 	@Override
-	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramWSD chromatogram = null;
-		ZipFile zipFile = new ZipFile(file);
-		try {
+		try (ZipFile zipFile = new ZipFile(file)) {
 			if(isValidFileFormat(zipFile)) {
-				// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 				chromatogram = readFromZipFile(zipFile, "", file, monitor);
 			}
-		} finally {
-			zipFile.close();
 		}
-		//
 		return chromatogram;
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramOverview chromatogramOverview = null;
-		ZipFile zipFile = new ZipFile(file);
-		try {
+		try (ZipFile zipFile = new ZipFile(file)) {
 			if(isValidFileFormat(zipFile)) {
 				chromatogramOverview = readOverviewFromZipFile(zipFile, "", monitor);
 			}
-		} finally {
-			zipFile.close();
 		}
-		//
 		return chromatogramOverview;
 	}
 
@@ -139,7 +127,6 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 		/*
 		 * Read the chromatographic information.
 		 */
-		// monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 		chromatogram = new VendorChromatogram();
 		readMethod(getDataInputStream(object, directoryPrefix + Format.FILE_SYSTEM_SETTINGS_WSD), closeStream, chromatogram, monitor);
 		readScans(getDataInputStream(object, directoryPrefix + Format.FILE_SCANS_WSD), closeStream, chromatogram, monitor);
@@ -156,7 +143,6 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; ++scan) {
-			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			IScanWSD scanObject = new VendorScan();
 			int scanSignals = dataInputStream.readInt();
 			//
@@ -208,7 +194,6 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; ++scan) {
-			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			IScanWSD scanWSD = new VendorScan();
 			int scanSignals = dataInputStream.readInt();
 			//
@@ -257,9 +242,8 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 	private void readBaselines(DataInputStream dataInputStream, boolean closeStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		int scans = dataInputStream.readInt();
-		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
+		List<IBaselineElement> baselineElements = new ArrayList<>();
 		for(int scan = 1; scan <= scans; ++scan) {
-			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
 			int retentionTime = dataInputStream.readInt();
 			float backgroundAbundance = dataInputStream.readFloat();
 			IBaselineElement baselineElement = new BaselineElement(retentionTime, backgroundAbundance);

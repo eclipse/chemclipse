@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.columns.SeparationColumnType;
@@ -130,7 +131,7 @@ public class DatabaseReader_1000 extends AbstractDatabaseReader implements IData
 		quantitationDatabase.setOperator(readString(dataInputStream));
 		quantitationDatabase.setDescription(readString(dataInputStream));
 		int size = dataInputStream.readInt();
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Database", size);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ConverterMessages.readDatabase, size);
 		//
 		try {
 			for(int i = 0; i < size; i++) {
@@ -405,7 +406,7 @@ public class DatabaseReader_1000 extends AbstractDatabaseReader implements IData
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream);
-			Set<String> synonyms = new HashSet<String>();
+			Set<String> synonyms = new HashSet<>();
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
@@ -451,7 +452,7 @@ public class DatabaseReader_1000 extends AbstractDatabaseReader implements IData
 
 	private List<IIntegrationEntry> readIntegrationEntries(DataInputStream dataInputStream) throws IOException {
 
-		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+		List<IIntegrationEntry> integrationEntries = new ArrayList<>();
 		int numberOfIntegrationEntries = dataInputStream.readInt();
 		for(int i = 1; i <= numberOfIntegrationEntries; i++) {
 			double signal = dataInputStream.readDouble();
@@ -477,7 +478,7 @@ public class DatabaseReader_1000 extends AbstractDatabaseReader implements IData
 			String database = readString(dataInputStream);
 			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream);
-			Set<String> synonyms = new HashSet<String>();
+			Set<String> synonyms = new HashSet<>();
 			int numberOfSynonyms = dataInputStream.readInt();
 			for(int j = 0; j < numberOfSynonyms; j++) {
 				synonyms.add(readString(dataInputStream));
