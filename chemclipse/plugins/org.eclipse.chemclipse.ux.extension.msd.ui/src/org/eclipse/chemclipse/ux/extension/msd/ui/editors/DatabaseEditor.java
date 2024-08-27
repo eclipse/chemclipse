@@ -40,11 +40,13 @@ import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.DatabaseImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumLibraryUI;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
@@ -69,7 +71,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
 
-public class DatabaseEditor extends EditorPart {
+public class DatabaseEditor extends EditorPart implements IChemClipseEditor {
 
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumLibraryEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.editors.DatabaseEditor";
@@ -84,6 +86,8 @@ public class DatabaseEditor extends EditorPart {
 	 */
 	@Inject
 	private MPart part;
+	@Inject
+	private MDirtyable dirtyable;
 	@Inject
 	private MApplication application;
 	@Inject
@@ -167,6 +171,9 @@ public class DatabaseEditor extends EditorPart {
 			if(object instanceof IMassSpectra newMassSpectra) {
 				if(object == massSpectra) {
 					isDirty = newMassSpectra.isDirty();
+					if(dirtyable != null) {
+						dirtyable.setDirty(isDirty);
+					}
 				}
 			}
 		}
@@ -179,6 +186,9 @@ public class DatabaseEditor extends EditorPart {
 			try {
 				boolean saveSuccessful = DatabaseFileSupport.saveMassSpectra(massSpectra);
 				isDirty = !saveSuccessful;
+				if(dirtyable != null) {
+					dirtyable.setDirty(isDirty);
+				}
 			} catch(NoConverterAvailableException e) {
 				logger.warn(e);
 			}
@@ -225,6 +235,18 @@ public class DatabaseEditor extends EditorPart {
 	@Override
 	public boolean isSaveAsAllowed() {
 
+		return true;
+	}
+
+	@Override
+	public boolean saveAs() {
+
+		try {
+			DatabaseFileSupport.saveMassSpectra(Display.getCurrent().getActiveShell(), massSpectra, "Mass Spectra");
+		} catch(NoConverterAvailableException e) {
+			logger.warn(e);
+			return false;
+		}
 		return true;
 	}
 
@@ -386,6 +408,9 @@ public class DatabaseEditor extends EditorPart {
 				IProcessingInfo<File> processingInfo = DatabaseConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
 				try {
 					isDirty = !processingInfo.hasErrorMessages();
+					if(dirtyable != null) {
+						dirtyable.setDirty(isDirty);
+					}
 				} catch(TypeCastException e) {
 					logger.warn(e);
 				}
