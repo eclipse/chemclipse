@@ -325,6 +325,10 @@
          version="0.0.0"/>
 
    <plugin
+         id="bcutil"
+         version="0.0.0"/>
+
+   <plugin
          id="org.eclipse.equinox.jsp.jasper"
          version="0.0.0"/>
 
