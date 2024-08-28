@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Lorenz Gerber - initial API and implementation
+ * Philip Wenig - refactoring use variables
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.core.preprocessing;
 
@@ -37,24 +38,23 @@ public class SmallValuesReplacer extends AbstractDataModificator implements IRep
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
 		List<V> variables = samples.getVariables();
-		List<S> sampleList = samples.getSampleList();
+		List<S> sampleList = samples.getSamples();
 		final Random rand = new Random();
 		for(int i = 0; i < variables.size(); i++) {
-			if(skipVariable(samples, i)) {
-				continue;
-			}
-			for(S sample : sampleList) {
-				if(sample.isSelected() || !isOnlySelected()) {
-					ISampleData<?> sampleData = sample.getSampleData().get(i);
-					if(Double.isNaN(getData(sampleData))) {
-						double replacement = -1.0;
-						while(replacement < 0) {
-							replacement = Double.longBitsToDouble(rand.nextLong());
-							if(!(replacement > 1.e-20 && replacement > 0 && replacement < 1.e-19)) {
-								replacement = -1.0;
+			if(useVariable(samples, i)) {
+				for(S sample : sampleList) {
+					if(sample.isSelected() || !isOnlySelected()) {
+						ISampleData<?> sampleData = sample.getSampleData().get(i);
+						if(Double.isNaN(getData(sampleData))) {
+							double replacement = -1.0;
+							while(replacement < 0) {
+								replacement = Double.longBitsToDouble(rand.nextLong());
+								if(!(replacement > 1.e-20 && replacement > 0 && replacement < 1.e-19)) {
+									replacement = -1.0;
+								}
 							}
+							sampleData.setModifiedData(replacement);
 						}
-						sampleData.setModifiedData(replacement);
 					}
 				}
 			}

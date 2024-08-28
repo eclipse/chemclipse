@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,28 +37,27 @@ public class MeanValuesReplacer extends AbstractDataModificator implements IRepl
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
 		List<V> variables = samples.getVariables();
-		List<S> sampleList = samples.getSampleList();
+		List<S> sampleList = samples.getSamples();
 		for(int i = 0; i < variables.size(); i++) {
-			if(skipVariable(samples, i)) {
-				continue;
-			}
-			double sum = 0;
-			int count = 0;
-			for(S sample : sampleList) {
-				if(sample.isSelected() || !isOnlySelected()) {
-					double sampleData = getData(sample.getSampleData().get(i));
-					if(!Double.isNaN(sampleData)) {
-						sum += sampleData;
-						count++;
+			if(useVariable(samples, i)) {
+				double sum = 0;
+				int count = 0;
+				for(S sample : sampleList) {
+					if(sample.isSelected() || !isOnlySelected()) {
+						double sampleData = getData(sample.getSampleData().get(i));
+						if(!Double.isNaN(sampleData)) {
+							sum += sampleData;
+							count++;
+						}
 					}
 				}
-			}
-			double mean = count != 0 ? sum / count : 0;
-			for(S sample : sampleList) {
-				if(sample.isSelected() || !isOnlySelected()) {
-					ISampleData<?> sampleData = sample.getSampleData().get(i);
-					if(Double.isNaN(getData(sampleData))) {
-						sampleData.setModifiedData(mean);
+				double mean = count != 0 ? sum / count : 0;
+				for(S sample : sampleList) {
+					if(sample.isSelected() || !isOnlySelected()) {
+						ISampleData<?> sampleData = sample.getSampleData().get(i);
+						if(Double.isNaN(getData(sampleData))) {
+							sampleData.setModifiedData(mean);
+						}
 					}
 				}
 			}

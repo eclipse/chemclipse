@@ -48,7 +48,7 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class ProcessorPCA {
 
-	public <V extends IVariable, S extends ISample> void cleanUselessVariables(EvaluationPCA evaluationPCA, IProgressMonitor monitor) {
+	public <V extends IVariable, S extends ISample> void cleanUnusedVariables(EvaluationPCA evaluationPCA, IProgressMonitor monitor) {
 
 		if(evaluationPCA != null) {
 			ISamplesPCA<? extends IVariable, ? extends ISample> samples = evaluationPCA.getSamples();
@@ -56,30 +56,34 @@ public class ProcessorPCA {
 				/*
 				 * Collect
 				 */
-				List<Integer> removeIndices = new ArrayList<>();
+				List<IVariable> removeVariables = new ArrayList<>();
 				List<? extends IVariable> variables = samples.getVariables();
-				List<? extends ISample> sampleList = samples.getSampleList();
+				List<? extends ISample> sampleList = samples.getSamples();
+				List<Integer> indices = new ArrayList<>();
 				//
 				for(int i = 0; i < variables.size(); i++) {
-					if(isUselessVariable(samples, i)) {
-						removeIndices.add(i);
+					IVariable variable = variables.get(i);
+					if(!variable.isSelected() || isInvalidVariable(samples, i)) {
+						removeVariables.add(variable);
+						indices.add(i);
 					}
 				}
 				/*
 				 * Remove
 				 */
-				int offset = 0;
-				for(int removeIndex : removeIndices) {
-					/*
-					 * Remove Variables/Samples
-					 */
-					int index = removeIndex - offset;
-					samples.getVariables().remove(index);
-					for(ISample sample : sampleList) {
-						sample.getSampleData().remove(index);
+				samples.getVariables().removeAll(removeVariables);
+				for(ISample sample : sampleList) {
+					List<? extends ISampleData<?>> sampleData = sample.getSampleData();
+					List<ISampleData<?>> sampleDataRemove = new ArrayList<>();
+					for(int index : indices) {
+						sampleDataRemove.add(sampleData.get(index));
 					}
-					offset++;
+					sampleData.removeAll(sampleDataRemove);
 				}
+				/*
+				 * Data Matrix
+				 */
+				calculateFeatureDataMatrix(evaluationPCA);
 			}
 		}
 	}
@@ -151,44 +155,8 @@ public class ProcessorPCA {
 				/*
 				 * Feature Data Matrix
 				 */
-				List<String> sampleNames = new ArrayList<>();
-				List<Feature> features = new ArrayList<>();
 				evaluationPCA = new EvaluationPCA(samples, results);
-				List<? extends IVariable> variableList = samples.getVariables();
-				List<? extends ISample> sampleList = samples.getSampleList();
-				/*
-				 * Samples
-				 */
-				for(ISample sample : sampleList) {
-					sampleNames.add(sample.getSampleName());
-				}
-				/*
-				 * variable.getClassification() // null
-				 * variable.getDescription() // null
-				 * variable.getType() // Retention time (min)
-				 * variable.getValue() // 3.466
-				 */
-				for(IVariable variable : variableList) {
-					features.add(new Feature(variable));
-				}
-				//
-				for(int i = 0; i < sampleList.size(); i++) {
-					/*
-					 * sampleData.getData() // 50327.8
-					 * sampleData.getModifiedData() // 0.524298283655198
-					 * sampleData.isEmpty() // false
-					 * sampleData.getData2() // e.g. PeakMSD
-					 */
-					ISample sample = sampleList.get(i);
-					List<? extends ISampleData<?>> sampleDataList = sample.getSampleData();
-					for(int j = 0; j < sampleDataList.size(); j++) {
-						ISampleData<?> sampleData = sampleDataList.get(j);
-						features.get(j).getSampleData().add(sampleData);
-					}
-				}
-				//
-				FeatureDataMatrix featureDataMatrix = new FeatureDataMatrix(sampleNames, features);
-				evaluationPCA.setFeatureDataMatrix(featureDataMatrix);
+				calculateFeatureDataMatrix(evaluationPCA);
 				subMonitor.worked(20);
 			} finally {
 				SubMonitor.done(subMonitor);
@@ -196,6 +164,50 @@ public class ProcessorPCA {
 		}
 		//
 		return evaluationPCA;
+	}
+
+	private void calculateFeatureDataMatrix(EvaluationPCA evaluationPCA) {
+
+		ISamplesPCA<? extends IVariable, ? extends ISample> samplesPCA = evaluationPCA.getSamples();
+		/*
+		 * Feature Data Matrix
+		 */
+		List<? extends IVariable> variables = samplesPCA.getVariables();
+		List<? extends ISample> samples = samplesPCA.getSamples();
+		/*
+		 * Samples
+		 */
+		List<String> sampleNames = new ArrayList<>();
+		for(ISample sample : samples) {
+			sampleNames.add(sample.getSampleName());
+		}
+		/*
+		 * variable.getClassification() //
+		 * variable.getDescription() //
+		 * variable.getType() // Retention time (min)
+		 * variable.getValue() // 3.466
+		 */
+		List<Feature> features = new ArrayList<>();
+		for(IVariable variable : variables) {
+			features.add(new Feature(variable));
+		}
+		//
+		for(int i = 0; i < samples.size(); i++) {
+			/*
+			 * sampleData.getData() // 50327.8
+			 * sampleData.getModifiedData() // 0.524298283655198
+			 * sampleData.isEmpty() // false
+			 * sampleData.getDataObject() // e.g. PeakMSD
+			 */
+			ISample sample = samples.get(i);
+			List<? extends ISampleData<?>> sampleDataList = sample.getSampleData();
+			for(int j = 0; j < sampleDataList.size(); j++) {
+				ISampleData<?> sampleData = sampleDataList.get(j);
+				features.get(j).getSampleData().add(sampleData);
+			}
+		}
+		//
+		evaluationPCA.setFeatureDataMatrix(new FeatureDataMatrix(sampleNames, features));
 	}
 
 	private <V extends IVariable, S extends ISample> Map<ISample, double[]> extractData(ISamples<V, S> samples, Algorithm algorithm, IAnalysisSettings settings, boolean[] isSelectedVariable) {
@@ -209,7 +221,7 @@ public class ProcessorPCA {
 			IVariable variable = variables.get(i);
 			isSelectedVariable[i] = isSelectedVariable[i] & variable.isSelected();
 			if(settings.isRemoveUselessVariables()) {
-				if(isUselessVariable(samples, i)) {
+				if(isInvalidVariable(samples, i)) {
 					isSelectedVariable[i] = false;
 					variable.setSelected(false);
 				}
@@ -225,8 +237,8 @@ public class ProcessorPCA {
 			}
 		}
 		//
-		final Set<String> classifications = samples.getSampleList().stream().map(s -> s.getClassification()).distinct().collect(Collectors.toList()).stream().limit(2).collect(Collectors.toSet());
-		for(ISample sample : samples.getSampleList()) {
+		final Set<String> classifications = samples.getSamples().stream().map(s -> s.getClassification()).distinct().collect(Collectors.toList()).stream().limit(2).collect(Collectors.toSet());
+		for(ISample sample : samples.getSamples()) {
 			double[] selectedSampleData = null;
 			if(sample.isSelected()) {
 				List<? extends ISampleData<?>> data = sample.getSampleData();
@@ -265,7 +277,7 @@ public class ProcessorPCA {
 			//
 			if(isVariableSelected(variable, variablesSelectionMap)) {
 				if(settings.isRemoveUselessVariables()) {
-					if(isUselessVariable(samples, i)) {
+					if(isInvalidVariable(samples, i)) {
 						selectedVariables[i] = false;
 						variable.setSelected(false);
 					}
@@ -279,18 +291,9 @@ public class ProcessorPCA {
 		return selectedVariables;
 	}
 
-	private <V extends IVariable, S extends ISample> boolean isUselessVariable(ISamples<V, S> samples, int i) {
+	private <V extends IVariable, S extends ISample> boolean isInvalidVariable(ISamples<V, S> samples, int row) {
 
-		int numEmptyValues = 0;
-		for(ISample sample : samples.getSampleList()) {
-			if(sample.isSelected()) {
-				if(!sample.getSampleData().get(i).isEmpty()) {
-					numEmptyValues++;
-				}
-			}
-		}
-		//
-		return numEmptyValues <= 1;
+		return !samples.containsValidData(row);
 	}
 
 	private List<double[]> getLoadingVectors(IMultivariateCalculator principalComponentAnalysis, int numberOfPrincipalComponents) {
@@ -303,6 +306,7 @@ public class ProcessorPCA {
 			double[] loadingVector = principalComponentAnalysis.getLoadingVector(principalComponent);
 			loadingVectors.add(loadingVector);
 		}
+		//
 		return loadingVectors;
 	}
 
@@ -313,6 +317,7 @@ public class ProcessorPCA {
 		for(int i = 0; i < numberOfPrincipalComponents; i++) {
 			explainedVariances[i] = 100.0 / summedVariance * principalComponentAnalysis.getExplainedVariance(i);
 		}
+		//
 		return explainedVariances;
 	}
 
@@ -324,6 +329,7 @@ public class ProcessorPCA {
 			cumulativeExplainedVariances[i] = cumVarTemp + explainedVariances[i];
 			cumVarTemp = cumulativeExplainedVariances[i];
 		}
+		//
 		return cumulativeExplainedVariances;
 	}
 
@@ -333,6 +339,7 @@ public class ProcessorPCA {
 		if(it.hasNext()) {
 			return it.next().getValue().length;
 		}
+		//
 		return -1;
 	}
 

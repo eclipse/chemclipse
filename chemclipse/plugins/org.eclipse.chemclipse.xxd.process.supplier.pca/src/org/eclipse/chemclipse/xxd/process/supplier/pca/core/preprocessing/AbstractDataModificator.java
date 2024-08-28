@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,40 +19,13 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 
 public abstract class AbstractDataModificator extends AbstractPreprocessing implements IDataModificator {
 
-	private boolean modifyOnlySelectedVariable = false;
-	private boolean removeUselessVariables = true;
+	protected double getData(ISampleData<?> sampleData) {
 
-	protected double getData(ISampleData<?> data) {
-
-		return data.getModifiedData();
+		return sampleData.getModifiedData();
 	}
 
-	@Override
-	public boolean isModifyOnlySelectedVariable() {
+	protected <V extends IVariable, S extends ISample> boolean useVariable(ISamples<V, S> samples, int row) {
 
-		return modifyOnlySelectedVariable;
-	}
-
-	@Override
-	public void setModifyOnlySelectedVariable(boolean modifyOnlySelectedVariable) {
-
-		this.modifyOnlySelectedVariable = modifyOnlySelectedVariable;
-	}
-
-	@Override
-	public boolean isRemoveUselessVariables() {
-
-		return removeUselessVariables;
-	}
-
-	@Override
-	public void setRemoveUselessVariables(boolean removeUselessVariables) {
-
-		this.removeUselessVariables = removeUselessVariables;
-	}
-
-	protected <V extends IVariable, S extends ISample> boolean skipVariable(ISamples<V, S> samples, int order) {
-
-		return (modifyOnlySelectedVariable && !samples.getVariables().get(order).isSelected()) || (modifyOnlySelectedVariable && removeUselessVariables && !samples.selectVariable(order));
+		return samples.getVariables().get(row).isSelected() && samples.containsValidData(row);
 	}
 }

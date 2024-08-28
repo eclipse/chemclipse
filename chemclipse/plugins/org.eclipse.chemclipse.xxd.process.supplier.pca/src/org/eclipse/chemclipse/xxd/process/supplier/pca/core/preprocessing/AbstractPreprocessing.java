@@ -42,6 +42,6 @@ public abstract class AbstractPreprocessing implements IPreprocessing {
 
 	protected <V extends IVariable, S extends ISample> List<S> selectSamples(ISamples<V, S> samples) {
 
-		return samples.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
+		return samples.getSamples().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,7 +24,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class FilterSettings implements IFilterSettings {
 
 	private List<IFilter> filters = new ArrayList<>();
-	private boolean onlySelected = true;
 	private boolean resetSelectedRetentionTimes = true;
 
 	public FilterSettings() {
@@ -36,7 +35,7 @@ public class FilterSettings implements IFilterSettings {
 		for(IFilter filter : filterSettings.getFilters()) {
 			this.filters.add(filter);
 		}
-		this.onlySelected = filterSettings.isOnlySelected();
+		//
 		this.resetSelectedRetentionTimes = filterSettings.isResetSelectedRetentionTimes();
 	}
 
@@ -50,12 +49,6 @@ public class FilterSettings implements IFilterSettings {
 	public List<IFilter> getFilters() {
 
 		return filters;
-	}
-
-	@Override
-	public boolean isOnlySelected() {
-
-		return onlySelected;
 	}
 
 	@Override
@@ -79,19 +72,12 @@ public class FilterSettings implements IFilterSettings {
 		}
 		if(filters != null && !filters.isEmpty()) {
 			for(int i = 0; i < filters.size(); i++) {
-				filters.get(i).setOnlySelected(onlySelected);
 				List<Boolean> result = filters.get(i).filter(samples);
 				for(int j = 0; j < result.size(); j++) {
 					variables.get(j).setSelected(variables.get(j).isSelected() && result.get(j));
 				}
 			}
 		}
-	}
-
-	@Override
-	public void setOnlySelected(boolean onlySelected) {
-
-		this.onlySelected = onlySelected;
 	}
 
 	private <V extends IVariable, S extends ISample> void setSelect(ISamples<V, S> samples, boolean selection) {

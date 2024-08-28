@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -169,7 +169,7 @@ public class PeakRetentionIndexExtractor extends AbstractClassifierDescriptionEx
 		List<IVariable> extractedRetentionIndices = samples.getVariables();
 		boolean useQuantitationValue = ValueOption.CONCENTRATION.equals(valueOption);
 		//
-		for(Sample sample : samples.getSampleList()) {
+		for(Sample sample : samples.getSamples()) {
 			Iterator<IVariable> it = extractedRetentionIndices.iterator();
 			SortedMap<Integer, IPeak> extractPeak = extractData.get(sample.getSampleName());
 			if(extractPeak != null) {

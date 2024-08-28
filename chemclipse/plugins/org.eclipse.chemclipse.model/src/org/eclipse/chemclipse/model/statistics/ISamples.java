@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - optimize valid calculation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.statistics;
 
@@ -15,32 +16,31 @@ import java.util.List;
 
 public interface ISamples<V extends IVariable, S extends ISample> {
 
-	List<S> getSampleList();
+	List<S> getSamples();
 
 	List<V> getVariables();
 
 	/**
-	 * return true if there are at least two not empty data
+	 * Returns true if at least 2 samples contain
+	 * data for the given feature.
 	 * 
 	 * @param row
-	 *            - row index start from 0
-	 * @return
+	 * @return boolean
 	 */
-	default boolean selectVariable(int row) {
+	default boolean containsValidData(int row) {
 
-		int numEmptyValues = 0;
-		for(ISample sample : getSampleList()) {
+		int counter = 0;
+		for(ISample sample : getSamples()) {
 			if(sample.isSelected()) {
 				if(!sample.getSampleData().get(row).isEmpty()) {
-					numEmptyValues++;
+					counter++;
+					if(counter >= 2) {
+						return true;
+					}
 				}
 			}
 		}
 		//
-		if(numEmptyValues <= 1) {
-			return false;
-		}
-		//
-		return true;
+		return false;
 	}
 }

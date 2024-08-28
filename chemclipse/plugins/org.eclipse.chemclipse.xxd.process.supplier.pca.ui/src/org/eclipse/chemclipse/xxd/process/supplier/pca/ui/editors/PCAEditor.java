@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
- * Dr. Philip Wenig - get rid of JavaFX
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.editors;
 

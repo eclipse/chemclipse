@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,15 +38,14 @@ public class CenteringMedian extends AbstractCentering {
 
 		List<V> variables = samples.getVariables();
 		for(int i = 0; i < variables.size(); i++) {
-			if(skipVariable(samples, i)) {
-				continue;
+			if(useVariable(samples, i)) {
+				double value = getCenteringValue(samples.getSamples(), i, MEDIAN);
+				int j = i;
+				samples.getSamples().stream().forEach(s -> {
+					ISampleData<?> data = s.getSampleData().get(j);
+					data.setModifiedData(getData(data) - value);
+				});
 			}
-			final double value = getCenteringValue(samples.getSampleList(), i, MEDIAN);
-			final int j = i;
-			samples.getSampleList().stream().forEach(s -> {
-				ISampleData<?> data = s.getSampleData().get(j);
-				data.setModifiedData(getData(data) - value);
-			});
 		}
 	}
 

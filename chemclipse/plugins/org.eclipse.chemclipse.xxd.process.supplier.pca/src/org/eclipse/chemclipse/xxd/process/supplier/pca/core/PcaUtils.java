@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -58,7 +58,7 @@ public class PcaUtils {
 		Map<String, double[]> selectedSamples = new HashMap<>();
 		List<V> variables = samples.getVariables();
 		int numSelected = (int)variables.stream().filter(r -> r.isSelected()).count();
-		for(S sample : samples.getSampleList()) {
+		for(S sample : samples.getSamples()) {
 			double[] selectedSampleData = null;
 			if(sample.isSelected()) {
 				List<? extends ISampleData<?>> data = sample.getSampleData();
@@ -335,8 +335,8 @@ public class PcaUtils {
 	 */
 	public static <S extends ISample> void sortSampleListByName(List<S> samples) {
 
-		Comparator<ISample> comparator = (arg0, arg1) -> {
-			return arg0.getSampleName().compareTo(arg1.getSampleName());
+		Comparator<ISample> comparator = (s1, s2) -> {
+			return s1.getSampleName().compareTo(s2.getSampleName());
 		};
 		Collections.sort(samples, comparator);
 	}

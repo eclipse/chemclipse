@@ -383,7 +383,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 						try {
 							PreferenceSupplier.setPathImportFile(fileDialog.getFilterPath());
 							File file = new File(path);
-							SampleTemplateIO.read(file, samples.getSampleList());
+							SampleTemplateIO.read(file, samples.getSamples());
 							updateSampleList();
 						} catch(IOException e1) {
 							MessageDialog.openWarning(e.display.getActiveShell(), "Import", "Failed to read the sample template.");
@@ -420,7 +420,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 						try {
 							PreferenceSupplier.setPathExportFile(fileDialog.getFilterPath());
 							File file = new File(path);
-							SampleTemplateIO.write(file, samples.getSampleList());
+							SampleTemplateIO.write(file, samples.getSamples());
 							MessageDialog.openInformation(e.display.getActiveShell(), "Export", "The sample template has been exported successfully.");
 						} catch(FileNotFoundException e1) {
 							MessageDialog.openWarning(e.display.getActiveShell(), "Export", "The sample template file couldn't be found.");
@@ -563,7 +563,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			analysisSettings.setColorScheme(colorScheme);
 			LabelOptionPCA labelOptionPCA = analysisSettings.getLabelOptionPCA();
 			//
-			List<ISample> sampleList = samples.getSampleList();
+			List<ISample> sampleList = samples.getSamples();
 			Map<String, Color> colorMap = ColorSupport.getColorMapSamples(sampleList, labelOptionPCA, colorScheme);
 			for(ISample sample : sampleList) {
 				String colorGroup = ColorSupport.getColorGroup(sample, labelOptionPCA);
@@ -580,7 +580,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 		SamplesListUI sampleListUI = sampleListControl.get();
 		if(samples != null) {
-			sampleListUI.updateInput(samples.getSampleList());
+			sampleListUI.updateInput(samples.getSamples());
 		} else {
 			sampleListUI.updateInput(null);
 		}

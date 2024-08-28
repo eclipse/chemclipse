@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,16 +33,4 @@ public interface IPreprocessingSettings extends IDataModification {
 	IReplacer getReplacer();
 
 	void setReplacer(IReplacer replacer);
-
-	boolean isModifyOnlySelectedVariable();
-
-	void setModifyOnlySelectedVariable(boolean modifyOnlySelectedVariable);
-
-	boolean isOnlySelected();
-
-	void setOnlySelected(boolean onlySelected);
-
-	boolean isRemoveUselessVariables();
-
-	void setRemoveUselessVariables(boolean removeUselessVariables);
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -162,7 +162,7 @@ public class ScanExtractionSupport {
 
 	private void interpolation(Samples samples, Map<String, NavigableMap<Integer, Float>> extractScans, UnivariateInterpolator interpolator) {
 
-		for(Sample sample : samples.getSampleList()) {
+		for(Sample sample : samples.getSamples()) {
 			List<PeakSampleData> data = sample.getSampleData();
 			NavigableMap<Integer, Float> scans = extractScans.get(sample.getSampleName());
 			double[] retentionTime = new double[scans.size()];
@@ -187,7 +187,7 @@ public class ScanExtractionSupport {
 
 	private void setClosestScan(Samples samples, Map<String, NavigableMap<Integer, Float>> extractScans) {
 
-		for(Sample sample : samples.getSampleList()) {
+		for(Sample sample : samples.getSamples()) {
 			List<PeakSampleData> sampleData = sample.getSampleData();
 			NavigableMap<Integer, Float> scans = extractScans.get(sample.getSampleName());
 			for(int i = beginRetentionTimeMax; i <= endRetentionTimeMin; i += retentionTimeWindow) {
@@ -213,7 +213,7 @@ public class ScanExtractionSupport {
 		Set<Integer> retentionTimesSet = extractScans.entrySet().iterator().next().getValue().keySet();
 		List<Integer> retentionTimes = new ArrayList<>(retentionTimesSet);
 		Collections.sort(retentionTimes);
-		for(Sample sample : samples.getSampleList()) {
+		for(Sample sample : samples.getSamples()) {
 			Iterator<Integer> iterator = retentionTimes.iterator();
 			List<PeakSampleData> data = sample.getSampleData();
 			NavigableMap<Integer, Float> scans = extractScans.get(sample.getSampleName());

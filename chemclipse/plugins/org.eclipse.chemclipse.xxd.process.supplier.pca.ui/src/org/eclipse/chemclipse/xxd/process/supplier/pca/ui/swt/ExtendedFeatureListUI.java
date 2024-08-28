@@ -155,16 +155,16 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Remove useless variables.");
+		button.setToolTipText("Remove unused variables.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CLEAR, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openConfirm(e.display.getActiveShell(), "Variables", "Remove all useless variables?")) {
+				if(MessageDialog.openConfirm(e.display.getActiveShell(), "Variables", "Remove all unused variables?")) {
 					ProcessorPCA processorPCA = new ProcessorPCA();
-					processorPCA.cleanUselessVariables(evaluationPCA, new NullProgressMonitor());
+					processorPCA.cleanUnusedVariables(evaluationPCA, new NullProgressMonitor());
 					updateInput(true);
 				}
 			}

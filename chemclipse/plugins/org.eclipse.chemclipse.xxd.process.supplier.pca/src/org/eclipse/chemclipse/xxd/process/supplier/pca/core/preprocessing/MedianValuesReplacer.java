@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,32 +38,33 @@ public class MedianValuesReplacer extends AbstractDataModificator implements IRe
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
 		List<V> variables = samples.getVariables();
-		List<S> sampleList = samples.getSampleList();
+		List<S> sampleList = samples.getSamples();
 		for(int i = 0; i < variables.size(); i++) {
-			if(skipVariable(samples, i)) {
-				continue;
-			}
-			List<Double> collectedValues = new ArrayList<>();
-			for(S sample : sampleList) {
-				if(sample.isSelected() || !isOnlySelected()) {
-					double sampleData = getData(sample.getSampleData().get(i));
-					if(!Double.isNaN(sampleData)) {
-						collectedValues.add(sampleData);
+			if(useVariable(samples, i)) {
+				List<Double> collectedValues = new ArrayList<>();
+				for(S sample : sampleList) {
+					if(sample.isSelected() || !isOnlySelected()) {
+						double sampleData = getData(sample.getSampleData().get(i));
+						if(!Double.isNaN(sampleData)) {
+							collectedValues.add(sampleData);
+						}
 					}
 				}
-			}
-			int lenght = collectedValues.size();
-			collectedValues.sort(Double::compare);
-			double median = 0;
-			if(lenght != 0) {
-				median = lenght % 2 == 0 ? (collectedValues.get(lenght / 2 - 1) + collectedValues.get(lenght / 2)) / 2.0 // even
-						: collectedValues.get(lenght / 2); //
-			}
-			for(S sample : sampleList) {
-				if(sample.isSelected() || !isOnlySelected()) {
-					ISampleData<?> sampleData = sample.getSampleData().get(i);
-					if(Double.isNaN(getData(sampleData))) {
-						sampleData.setModifiedData(median);
+				//
+				int lenght = collectedValues.size();
+				collectedValues.sort(Double::compare);
+				double median = 0;
+				if(lenght != 0) {
+					median = lenght % 2 == 0 ? (collectedValues.get(lenght / 2 - 1) + collectedValues.get(lenght / 2)) / 2.0 // even
+							: collectedValues.get(lenght / 2); //
+				}
+				//
+				for(S sample : sampleList) {
+					if(sample.isSelected() || !isOnlySelected()) {
+						ISampleData<?> sampleData = sample.getSampleData().get(i);
+						if(Double.isNaN(getData(sampleData))) {
+							sampleData.setModifiedData(median);
+						}
 					}
 				}
 			}

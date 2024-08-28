@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,7 @@ public class Samples extends AbstractSamples<IVariable, Sample> implements ISamp
 
 		super();
 		for(Sample sample : samples) {
-			getSampleList().add(sample);
+			getSamples().add(sample);
 		}
 	}
 

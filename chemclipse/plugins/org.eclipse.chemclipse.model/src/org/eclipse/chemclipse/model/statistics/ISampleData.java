@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,7 @@ public interface ISampleData<T> {
 	default boolean isEmpty() {
 
 		return Double.isNaN(getData());
-	};
+	}
 
 	void setModifiedData(double normalizedData);
 

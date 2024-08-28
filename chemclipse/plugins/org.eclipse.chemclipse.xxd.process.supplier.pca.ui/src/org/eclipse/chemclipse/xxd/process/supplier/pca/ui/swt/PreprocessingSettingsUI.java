@@ -72,8 +72,6 @@ public class PreprocessingSettingsUI extends Composite {
 	private ComboViewer comboViewerTransformation;
 	private ComboViewer comboViewerCentering;
 	private ComboViewer comboViewerScaling;
-	private Button checkBoxRemove;
-	private Button checkBoxSelect;
 	//
 	private Label labelFormula;
 	private Canvas canvasFormula;
@@ -127,9 +125,6 @@ public class PreprocessingSettingsUI extends Composite {
 		createLabel(this, LABEL_SCALE);
 		comboViewerScaling = createComboViewerScale(this);
 		createButtonInfoFormula(this, comboViewerScaling);
-		//
-		checkBoxRemove = createCheckBoxRemoveVariables(this);
-		checkBoxSelect = createCheckBoxSelectVariables(this);
 		//
 		labelFormula = createLabelFormula(this);
 		canvasFormula = createCanvas(this);
@@ -331,52 +326,6 @@ public class PreprocessingSettingsUI extends Composite {
 		return button;
 	}
 
-	private Button createCheckBoxRemoveVariables(Composite parent) {
-
-		Button button = new Button(parent, SWT.CHECK);
-		button.setText("Remove variables, which contain less than two values.");
-		button.setToolTipText("Remove Variables");
-		button.setSelection(preprocessingSettings.isRemoveUselessVariables());
-		//
-		GridData gridData = new GridData();
-		gridData.horizontalSpan = 3;
-		button.setLayoutData(gridData);
-		//
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				preprocessingSettings.setRemoveUselessVariables(button.getSelection());
-			}
-		});
-		//
-		return button;
-	}
-
-	private Button createCheckBoxSelectVariables(Composite parent) {
-
-		Button button = new Button(parent, SWT.CHECK);
-		button.setText("Use only selected variables for data processing.");
-		button.setToolTipText("Selected Variables");
-		button.setSelection(preprocessingSettings.isModifyOnlySelectedVariable());
-		//
-		GridData gridData = new GridData();
-		gridData.horizontalSpan = 3;
-		button.setLayoutData(gridData);
-		//
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				preprocessingSettings.setModifyOnlySelectedVariable(button.getSelection());
-			}
-		});
-		//
-		return button;
-	}
-
 	private Canvas createCanvas(Composite parent) {
 
 		Canvas canvas = new Canvas(parent, SWT.BORDER);
@@ -445,9 +394,6 @@ public class PreprocessingSettingsUI extends Composite {
 						break;
 				}
 			}
-			//
-			checkBoxRemove.setSelection(preprocessingSettings.isRemoveUselessVariables());
-			checkBoxSelect.setSelection(preprocessingSettings.isModifyOnlySelectedVariable());
 		}
 	}
 
