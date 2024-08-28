@@ -14,12 +14,17 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.editors.SystemEditor;
+import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
@@ -30,6 +35,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.ProcessorPCA;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.io.FeatureDataMatrixIO;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.EvaluationPCA;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Feature;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.FeatureDataMatrix;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.PreferencePage;
@@ -128,10 +134,40 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 
 	private void createList(Composite parent) {
 
-		FeatureListUI list = new FeatureListUI(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION | SWT.VIRTUAL);
-		list.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		FeatureListUI featureListUI = new FeatureListUI(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION | SWT.VIRTUAL);
+		featureListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		list.setUpdateListener(new IUpdateListener() {
+		ITableSettings tableSettings = featureListUI.getTableSettings();
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Toggle Use";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return "Features";
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				Iterator<?> iterator = featureListUI.getStructuredSelection().iterator();
+				while(iterator.hasNext()) {
+					if(iterator.next() instanceof Feature feature) {
+						IVariable variable = feature.getVariable();
+						variable.setSelected(!variable.isSelected());
+					}
+				}
+				featureListUI.refresh();
+			}
+		});
+		featureListUI.applySettings(tableSettings);
+		//
+		featureListUI.setUpdateListener(new IUpdateListener() {
 
 			@Override
 			public void update() {
@@ -140,7 +176,7 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 			}
 		});
 		//
-		listControl.set(list);
+		listControl.set(featureListUI);
 	}
 
 	private void createToolbarInfo(Composite parent) {
