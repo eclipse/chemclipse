@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.model;
 
-import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IPreprocessingSettings;
 
 public interface IAnalysisSettings {
@@ -36,10 +35,6 @@ public interface IAnalysisSettings {
 	LabelOptionPCA getLabelOptionPCA();
 
 	void setLabelOptionPCA(LabelOptionPCA labelOptionPCA);
-
-	void setFilterSettings(IFilterSettings filterSettings);
-
-	IFilterSettings getFilterSettings();
 
 	void setPreprocessingSettings(IPreprocessingSettings preprocessingSettings);
 

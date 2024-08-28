@@ -85,7 +85,6 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<SamplesListUI> sampleListControl = new AtomicReference<>();
 	private AtomicReference<ComboViewer> labelOptionControl = new AtomicReference<>();
 	private AtomicReference<PreprocessingSettingsUI> preprocessingSettingsControl = new AtomicReference<>();
-	private AtomicReference<FilterSettingsUI> filterSettingsControl = new AtomicReference<>();
 
 	public AnalysisEditorUI(Composite parent, int style) {
 
@@ -260,12 +259,11 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 	private TabFolder createDataTab(Composite parent) {
 
-		TabFolder tabFolder = new TabFolder(parent, SWT.TOP);
+		TabFolder tabFolder = new TabFolder(parent, SWT.BOTTOM);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
 		createSamplesSection(tabFolder);
 		createPreprocessingUI(tabFolder);
-		createFilterUI(tabFolder);
 		//
 		return tabFolder;
 	}
@@ -454,18 +452,6 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		preprocessingSettingsControl.set(preprocessingSettingsUI);
 	}
 
-	private void createFilterUI(TabFolder tabFolder) {
-
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Filter");
-		//
-		FilterSettingsUI filterSettingsUI = new FilterSettingsUI(tabFolder, SWT.NONE);
-		filterSettingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
-		//
-		tabItem.setControl(filterSettingsUI);
-		filterSettingsControl.set(filterSettingsUI);
-	}
-
 	private void applySettings(Display display) {
 
 		if(samples != null) {
@@ -509,12 +495,10 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 		if(analysisSettings != null) {
 			preprocessingSettingsControl.get().setInput(analysisSettings.getPreprocessingSettings());
-			filterSettingsControl.get().setInput(analysisSettings.getFilterSettings());
 			spinnerPCs.setSelection(analysisSettings.getNumberOfPrincipalComponents());
 			comboViewerAlgorithm.setSelection(new StructuredSelection(analysisSettings.getAlgorithm()));
 		} else {
 			preprocessingSettingsControl.get().setInput(null);
-			filterSettingsControl.get().setInput(null);
 		}
 	}
 

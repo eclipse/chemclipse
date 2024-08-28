@@ -92,7 +92,7 @@ public class ProcessorPCA {
 
 		EvaluationPCA evaluationPCA = null;
 		if(samples != null) {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, "Run PCA", 180);
+			SubMonitor subMonitor = SubMonitor.convert(monitor, "Run PCA", 160);
 			try {
 				/*
 				 * Settings
@@ -109,12 +109,6 @@ public class ProcessorPCA {
 				 */
 				IPreprocessingSettings preprocessingSettings = analysisSettings.getPreprocessingSettings();
 				preprocessingSettings.process(samples, monitor);
-				subMonitor.worked(20);
-				/*
-				 * Filtering
-				 */
-				IFilterSettings filterSettings = analysisSettings.getFilterSettings();
-				filterSettings.process(samples, monitor);
 				subMonitor.worked(20);
 				/*
 				 * Variable Extraction

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.wizards;
 import java.util.List;
 
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IExtractionData;
-import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PcaExtractionMassSpectra;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IAnalysisSettings;
@@ -27,7 +26,6 @@ public class MassSpectrumInputWizard extends Wizard implements IInputWizard {
 	private MassSpectrumSettingsWizardPage massSpectrumSettingsWizardPage = new MassSpectrumSettingsWizardPage();
 	private MassSpectrumFilesWizardPage massSpectrumFilesWizardPage = new MassSpectrumFilesWizardPage();
 	private PreprocessingWizardPage preprocessingWizardPage = new PreprocessingWizardPage();
-	private FilterWizardPage filterWizardPage = new FilterWizardPage();
 	/*
 	 * Will be created when finishing the report.
 	 */
@@ -39,7 +37,6 @@ public class MassSpectrumInputWizard extends Wizard implements IInputWizard {
 		addPage(massSpectrumSettingsWizardPage);
 		addPage(massSpectrumFilesWizardPage);
 		addPage(preprocessingWizardPage);
-		addPage(filterWizardPage);
 	}
 
 	@Override
@@ -64,12 +61,6 @@ public class MassSpectrumInputWizard extends Wizard implements IInputWizard {
 	public IPreprocessingSettings getPreprocessingSettings() {
 
 		return preprocessingWizardPage.getPreprocessingSettings();
-	}
-
-	@Override
-	public IFilterSettings getFilterSettings() {
-
-		return filterWizardPage.getFilterSettings();
 	}
 
 	@Override

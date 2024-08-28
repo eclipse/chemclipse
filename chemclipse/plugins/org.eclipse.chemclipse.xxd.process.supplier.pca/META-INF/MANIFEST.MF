@@ -28,7 +28,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.xxd.process.supplier.pca.core,
  org.eclipse.chemclipse.xxd.process.supplier.pca.core.algorithms,
- org.eclipse.chemclipse.xxd.process.supplier.pca.core.filters,
  org.eclipse.chemclipse.xxd.process.supplier.pca.core.preprocessing,
  org.eclipse.chemclipse.xxd.process.supplier.pca.exception,
  org.eclipse.chemclipse.xxd.process.supplier.pca.extraction,

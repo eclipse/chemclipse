@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.List;
 
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IExtractionData;
-import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PcaExtractionFileBinary;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PcaExtractionFileText;
@@ -27,7 +26,6 @@ public class FilesInputWizard extends Wizard implements IInputWizard {
 
 	private FileSettingsWizardPage fileSettingsWizardPage = new FileSettingsWizardPage();
 	private PreprocessingWizardPage preprocessingWizardPage = new PreprocessingWizardPage();
-	private FilterWizardPage filterWizardPage = new FilterWizardPage();
 	/*
 	 * Will be created when finishing the report.
 	 */
@@ -51,7 +49,6 @@ public class FilesInputWizard extends Wizard implements IInputWizard {
 		//
 		addPage(fileSettingsWizardPage);
 		addPage(preprocessingWizardPage);
-		addPage(filterWizardPage);
 	}
 
 	@Override
@@ -76,12 +73,6 @@ public class FilesInputWizard extends Wizard implements IInputWizard {
 	public IPreprocessingSettings getPreprocessingSettings() {
 
 		return preprocessingWizardPage.getPreprocessingSettings();
-	}
-
-	@Override
-	public IFilterSettings getFilterSettings() {
-
-		return filterWizardPage.getFilterSettings();
 	}
 
 	@Override

@@ -15,8 +15,6 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.quickstart;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import jakarta.inject.Named;
-
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IExtractionData;
@@ -33,6 +31,8 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
+
+import jakarta.inject.Named;
 
 public abstract class WizardTile implements TileDefinition {
 
@@ -57,7 +57,6 @@ public abstract class WizardTile implements TileDefinition {
 				 */
 				IAnalysisSettings analysisSettings = wizard.getAnalysisSettings();
 				analysisSettings.setPreprocessingSettings(wizard.getPreprocessingSettings());
-				analysisSettings.setFilterSettings(wizard.getFilterSettings());
 				IExtractionData extractionData = wizard.getExtractionData();
 				title = analysisSettings.getTitle();
 				//

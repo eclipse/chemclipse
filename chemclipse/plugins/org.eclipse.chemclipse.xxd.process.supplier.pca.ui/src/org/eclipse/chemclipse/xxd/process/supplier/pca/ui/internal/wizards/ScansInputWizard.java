@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.wizards;
 import java.util.List;
 
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IExtractionData;
-import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PcaExtractionScans;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.extraction.ScanExtractionSupport.ExtractionType;
@@ -29,7 +28,6 @@ public class ScansInputWizard extends Wizard implements IInputWizard {
 	private ScanFilesWizardPage scanFilesWizardPage = new ScanFilesWizardPage();
 	private GroupNamesWizardPage groupNamesWizardPage = new GroupNamesWizardPage();
 	private PreprocessingWizardPage preprocessingWizardPage = new PreprocessingWizardPage();
-	private FilterWizardPage filterWizardPage = new FilterWizardPage();
 	/*
 	 * Will be created when finishing the report.
 	 */
@@ -42,7 +40,6 @@ public class ScansInputWizard extends Wizard implements IInputWizard {
 		addPage(scanFilesWizardPage);
 		addPage(groupNamesWizardPage);
 		addPage(preprocessingWizardPage);
-		addPage(filterWizardPage);
 	}
 
 	@Override
@@ -70,12 +67,6 @@ public class ScansInputWizard extends Wizard implements IInputWizard {
 	}
 
 	@Override
-	public IFilterSettings getFilterSettings() {
-
-		return filterWizardPage.getFilterSettings();
-	}
-
-	@Override
 	public boolean performFinish() {
 
 		List<IDataInputEntry> dataInputs = getDataInputEntries();
@@ -84,6 +75,7 @@ public class ScansInputWizard extends Wizard implements IInputWizard {
 		ExtractionType scanAlignment = scanSettingsWizardPage.getExtractionType();
 		int maximalNumberScans = scanSettingsWizardPage.getMaximalNumberScans();
 		pcaExtractionData = new PcaExtractionScans(retentionTimeWindow, maximalNumberScans, dataInputs, scanAlignment, useDefaultProperties);
+		//
 		return true;
 	}
 }

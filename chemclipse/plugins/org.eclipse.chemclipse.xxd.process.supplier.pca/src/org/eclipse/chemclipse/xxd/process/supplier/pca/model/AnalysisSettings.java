@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.model;
 
-import org.eclipse.chemclipse.xxd.process.supplier.pca.core.FilterSettings;
-import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PreprocessingSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.preferences.PreferenceSupplier;
@@ -28,7 +26,6 @@ public class AnalysisSettings implements IAnalysisSettings {
 	private String colorScheme = PreferenceSupplier.getColorScheme();
 	//
 	private IPreprocessingSettings preprocessingSettings = new PreprocessingSettings();
-	private IFilterSettings filterSettings = new FilterSettings();
 
 	public AnalysisSettings() {
 
@@ -42,7 +39,6 @@ public class AnalysisSettings implements IAnalysisSettings {
 		this.labelOptionPCA = analysisSettings.getLabelOptionPCA();
 		//
 		this.preprocessingSettings = new PreprocessingSettings(analysisSettings.getPreprocessingSettings());
-		this.filterSettings = new FilterSettings(analysisSettings.getFilterSettings());
 	}
 
 	@Override
@@ -127,17 +123,5 @@ public class AnalysisSettings implements IAnalysisSettings {
 	public void setPreprocessingSettings(IPreprocessingSettings preprocessingSettings) {
 
 		this.preprocessingSettings = preprocessingSettings;
-	}
-
-	@Override
-	public IFilterSettings getFilterSettings() {
-
-		return filterSettings;
-	}
-
-	@Override
-	public void setFilterSettings(IFilterSettings filterSettings) {
-
-		this.filterSettings = filterSettings;
 	}
 }
