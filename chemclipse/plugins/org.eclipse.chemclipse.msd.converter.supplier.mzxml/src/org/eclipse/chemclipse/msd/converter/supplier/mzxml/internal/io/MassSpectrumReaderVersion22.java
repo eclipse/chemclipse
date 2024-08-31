@@ -28,16 +28,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.DataProcessing;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.MsRun;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.ObjectFactory;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.Peaks;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.Scan;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorIon;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model.DataProcessing;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model.MsRun;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model.ObjectFactory;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model.Peaks;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model.Scan;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorMassSpectra;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorMassSpectra;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
@@ -50,11 +48,11 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
-public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader implements IMassSpectraReader {
+public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader implements IMassSpectraReader {
 
-	public static final String VERSION = "mzXML_2.0";
+	public static final String VERSION = "mzXML_2.2";
 	//
-	private static final Logger logger = Logger.getLogger(MassSpectrumReaderVersion20.class);
+	private static final Logger logger = Logger.getLogger(MassSpectrumReaderVersion22.class);
 
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
@@ -117,10 +115,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 					/*
 					 * Get m/z and intensity (m/z-int)
 					 */
-					double mz = AbstractIon.getIon(values[peakIndex]);
-					float intensity = (float)values[peakIndex + 1];
-					IVendorIon ion = new VendorIon(mz, intensity);
-					massSpectrum.addIon(ion);
+					massSpectrum.addIon(new VendorIon(values[peakIndex], (float)values[peakIndex + 1]));
 				}
 				monitor.worked(1);
 			}
