@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,8 +14,10 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.swt;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.IMassSpectrumFilterSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.IMassSpectrumFilterSupport;
@@ -23,9 +25,11 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.MassSpec
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpectrumIdentifier;
+import org.eclipse.chemclipse.model.core.IMassSpectrumPeak;
 import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -37,8 +41,11 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.IAxis.Position;
+import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
+import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
@@ -49,6 +56,7 @@ import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
+import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
@@ -85,11 +93,15 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 
 		deleteSeries();
 		if(massSpectrum != null) {
-			List<ILineSeriesData> barSeriesDataList = new ArrayList<>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			ISeriesData seriesData = getMassSpectrum(massSpectrum);
 			ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-			barSeriesDataList.add(lineSeriesData);
-			addSeriesData(barSeriesDataList, MAX_NUMBER_MZ);
+			lineSeriesDataList.add(lineSeriesData);
+			if(massSpectrum instanceof IVendorStandaloneMassSpectrum standaloneMassSpectrum) {
+				LineSeriesData peakLineSeriesData = getPeaks(standaloneMassSpectrum);
+				lineSeriesDataList.add(peakLineSeriesData);
+			}
+			addSeriesData(lineSeriesDataList, MAX_NUMBER_MZ);
 			UpdateNotifier.update(massSpectrum);
 		}
 	}
@@ -237,5 +249,46 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 		}
 		//
 		return new SeriesData(xSeries, ySeries, "Mass Spectrum");
+	}
+
+	private LineSeriesData getPeaks(IVendorStandaloneMassSpectrum massSpectrum) {
+
+		ISeriesData peakSeriesData = createPeakSeries("Peaks", massSpectrum, 0, 0);
+		LineSeriesData peakSeries = new LineSeriesData(peakSeriesData);
+		ILineSeriesSettings lineSeriesSettings = peakSeries.getLineSeriesSettings();
+		lineSeriesSettings.setEnableArea(false);
+		lineSeriesSettings.setLineStyle(LineStyle.NONE);
+		lineSeriesSettings.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
+		lineSeriesSettings.setSymbolSize(5);
+		if(Display.isSystemDarkTheme()) {
+			lineSeriesSettings.setLineColor(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+			lineSeriesSettings.setSymbolColor(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+		} else {
+			lineSeriesSettings.setLineColor(getDisplay().getSystemColor(SWT.COLOR_GRAY));
+			lineSeriesSettings.setSymbolColor(getDisplay().getSystemColor(SWT.COLOR_GRAY));
+		}
+		return peakSeries;
+	}
+
+	public static ISeriesData createPeakSeries(String id, IVendorStandaloneMassSpectrum massSpectrum, double yOffset, double xOffset) {
+
+		List<IMassSpectrumPeak> peaks = massSpectrum.getPeaks();
+		int size = peaks.size();
+		double[] xSeries = new double[size];
+		double[] ySeries = new double[size];
+		int index = 0;
+		for(IMassSpectrumPeak peak : peaks) {
+			Optional<IIon> nearestIon = massSpectrum.getIons().stream() //
+					.min(Comparator.comparingDouble(i -> Math.abs(i.getIon() - peak.getIon())));
+			if(nearestIon.isPresent()) {
+				xSeries[index] = nearestIon.get().getIon() + xOffset;
+				ySeries[index] = nearestIon.get().getAbundance() + yOffset;
+			} else {
+				xSeries[index] = Double.NaN;
+				ySeries[index] = Double.NaN;
+			}
+			index++;
+		}
+		return new SeriesData(xSeries, ySeries, id);
 	}
 }
