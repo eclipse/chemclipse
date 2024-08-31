@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.msd.converter.supplier.mzxml.preferences;
 
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.Activator;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ChromatogramWriter32;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion32;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ChromatogramReaderVersion32;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 
@@ -55,8 +55,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static String[][] getChromatogramVersions() {
 
 		String[][] elements = new String[1][2];
-		elements[0][0] = ReaderVersion32.VERSION.split("_")[1];
-		elements[0][1] = ReaderVersion32.VERSION;
+		elements[0][0] = ChromatogramReaderVersion32.VERSION.split("_")[1];
+		elements[0][1] = ChromatogramReaderVersion32.VERSION;
 		return elements;
 	}
 

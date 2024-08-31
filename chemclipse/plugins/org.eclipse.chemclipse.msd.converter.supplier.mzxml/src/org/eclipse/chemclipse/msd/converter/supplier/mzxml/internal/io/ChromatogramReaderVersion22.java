@@ -26,13 +26,13 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model.DataProcessing;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model.MsInstrument;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model.MsRun;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model.ObjectFactory;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model.Peaks;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model.Scan;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model.Software;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v22.model.DataProcessing;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v22.model.MsInstrument;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v22.model.MsRun;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v22.model.ObjectFactory;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v22.model.Peaks;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v22.model.Scan;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v22.model.Software;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorScan;
@@ -52,11 +52,11 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
-public class ReaderVersion21 extends AbstractReaderVersion implements IChromatogramMSDReader {
+public class ChromatogramReaderVersion22 extends AbstractChromatogramReaderVersion implements IChromatogramMSDReader {
 
-	public static final String VERSION = "mzXML_2.1";
+	public static final String VERSION = "mzXML_2.2";
 	//
-	private static final Logger logger = Logger.getLogger(ReaderVersion21.class);
+	private static final Logger logger = Logger.getLogger(ChromatogramReaderVersion22.class);
 	private static final int ION_PRECISION = 6;
 
 	@Override
