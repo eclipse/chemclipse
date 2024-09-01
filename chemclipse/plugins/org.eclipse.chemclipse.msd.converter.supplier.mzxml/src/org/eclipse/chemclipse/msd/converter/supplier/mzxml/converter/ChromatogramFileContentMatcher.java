@@ -19,7 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.chemclipse.converter.core.AbstractFileContentMatcher;
 import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.AbstractReaderVersion;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.AbstractChromatogramReaderVersion;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -37,11 +37,11 @@ public class ChromatogramFileContentMatcher extends AbstractFileContentMatcher i
 			documentBuilderFactory.setNamespaceAware(true);
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(file);
-			NodeList root = document.getElementsByTagNameNS("*", AbstractReaderVersion.NODE_MZXML);
+			NodeList root = document.getElementsByTagNameNS("*", AbstractChromatogramReaderVersion.NODE_MZXML);
 			if(root.getLength() != 1) {
 				return isValidFormat;
 			}
-			NodeList scanList = document.getElementsByTagName(AbstractReaderVersion.NODE_SCAN);
+			NodeList scanList = document.getElementsByTagName(AbstractChromatogramReaderVersion.NODE_SCAN);
 			if(scanList.getLength() > 1) {
 				isValidFormat = true;
 			}

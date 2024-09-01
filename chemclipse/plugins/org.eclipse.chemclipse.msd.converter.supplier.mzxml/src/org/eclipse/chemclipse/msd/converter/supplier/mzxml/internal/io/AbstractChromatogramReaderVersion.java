@@ -39,13 +39,13 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public abstract class AbstractReaderVersion extends AbstractChromatogramMSDReader implements IChromatogramMSDReader {
+public abstract class AbstractChromatogramReaderVersion extends AbstractChromatogramMSDReader implements IChromatogramMSDReader {
 
 	public static final String NODE_MZXML = "mzXML";
 	public static final String NODE_MS_RUN = "msRun";
 	public static final String NODE_SCAN = "scan";
 	//
-	private static final Logger logger = Logger.getLogger(AbstractReaderVersion.class);
+	private static final Logger logger = Logger.getLogger(AbstractChromatogramReaderVersion.class);
 
 	@Override
 	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {

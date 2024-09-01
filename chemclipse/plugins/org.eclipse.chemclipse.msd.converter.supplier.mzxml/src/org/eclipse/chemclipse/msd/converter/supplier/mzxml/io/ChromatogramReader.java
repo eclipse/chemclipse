@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,12 +19,12 @@ import java.io.IOException;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion20;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion21;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion22;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion30;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion31;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion32;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ChromatogramReaderVersion20;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ChromatogramReaderVersion21;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ChromatogramReaderVersion22;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ChromatogramReaderVersion30;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ChromatogramReaderVersion31;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ChromatogramReaderVersion32;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.io.exception.UnknownVersionException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -39,18 +39,18 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 			fileReader.read(charBuffer);
 		}
 		final String header = new String(charBuffer);
-		if(header.contains(ReaderVersion20.VERSION)) {
-			chromatogramReader = new ReaderVersion20();
-		} else if(header.contains(ReaderVersion21.VERSION)) {
-			chromatogramReader = new ReaderVersion21();
-		} else if(header.contains(ReaderVersion22.VERSION)) {
-			chromatogramReader = new ReaderVersion22();
-		} else if(header.contains(ReaderVersion30.VERSION)) {
-			chromatogramReader = new ReaderVersion30();
-		} else if(header.contains(ReaderVersion31.VERSION)) {
-			chromatogramReader = new ReaderVersion31();
-		} else if(header.contains(ReaderVersion32.VERSION)) {
-			chromatogramReader = new ReaderVersion32();
+		if(header.contains(ChromatogramReaderVersion20.VERSION)) {
+			chromatogramReader = new ChromatogramReaderVersion20();
+		} else if(header.contains(ChromatogramReaderVersion21.VERSION)) {
+			chromatogramReader = new ChromatogramReaderVersion21();
+		} else if(header.contains(ChromatogramReaderVersion22.VERSION)) {
+			chromatogramReader = new ChromatogramReaderVersion22();
+		} else if(header.contains(ChromatogramReaderVersion30.VERSION)) {
+			chromatogramReader = new ChromatogramReaderVersion30();
+		} else if(header.contains(ChromatogramReaderVersion31.VERSION)) {
+			chromatogramReader = new ChromatogramReaderVersion31();
+		} else if(header.contains(ChromatogramReaderVersion32.VERSION)) {
+			chromatogramReader = new ChromatogramReaderVersion32();
 		} else {
 			throw new UnknownVersionException();
 		}

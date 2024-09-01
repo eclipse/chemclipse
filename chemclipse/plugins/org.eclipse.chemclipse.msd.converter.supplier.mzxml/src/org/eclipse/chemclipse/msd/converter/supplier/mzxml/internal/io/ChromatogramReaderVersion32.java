@@ -54,11 +54,11 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
-public class ReaderVersion32 extends AbstractReaderVersion implements IChromatogramMSDReader {
+public class ChromatogramReaderVersion32 extends AbstractChromatogramReaderVersion implements IChromatogramMSDReader {
 
 	public static final String VERSION = "mzXML_3.2";
 	//
-	private static final Logger logger = Logger.getLogger(ReaderVersion32.class);
+	private static final Logger logger = Logger.getLogger(ChromatogramReaderVersion32.class);
 	private static final int ION_PRECISION = 6;
 
 	@Override
