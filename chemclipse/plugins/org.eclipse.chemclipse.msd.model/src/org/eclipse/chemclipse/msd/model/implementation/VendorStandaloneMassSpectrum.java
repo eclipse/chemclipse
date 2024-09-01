@@ -22,7 +22,7 @@ public class VendorStandaloneMassSpectrum extends AbstractVendorStandaloneMassSp
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = 7540947309609765366L;
+	private static final long serialVersionUID = 7540947309609765367L;
 	public static final int MAX_IONS = Integer.MAX_VALUE;
 
 	@Override

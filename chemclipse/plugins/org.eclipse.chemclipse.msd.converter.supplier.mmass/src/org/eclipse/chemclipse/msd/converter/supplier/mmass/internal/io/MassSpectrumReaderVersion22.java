@@ -28,6 +28,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.MassSpectrumPeak;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.model.IVendorIon;
@@ -71,7 +72,7 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 					Element element = (Element)node;
 					readDescription(element, massSpectrum);
 					readSpectrum(element, massSpectrum);
-					// TODO: peaklist
+					readPeakList(element, massSpectrum);
 					// TODO: annotations
 				}
 			}
@@ -149,6 +150,24 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 			double mz = AbstractIon.getIon(mzs[i]);
 			IVendorIon ion = new VendorIon(mz, intensity);
 			massSpectrum.addIon(ion);
+		}
+	}
+
+	private void readPeakList(Element element, IVendorStandaloneMassSpectrum massSpectrum) throws DOMException, DataFormatException {
+
+		NodeList peakList = element.getElementsByTagName("peaklist");
+		for(int i = 0; i < peakList.getLength(); i++) {
+			Node node = peakList.item(i);
+			Element peakListElement = (Element)node;
+			NodeList peakNodeList = peakListElement.getElementsByTagName("peak");
+			for(int n = 0; n < peakNodeList.getLength(); n++) {
+				Node peak = peakNodeList.item(n);
+				Element peakElement = (Element)peak;
+				MassSpectrumPeak massSpectrumPeak = new MassSpectrumPeak();
+				String mz = peakElement.getAttribute("mz");
+				massSpectrumPeak.setIon(Double.parseDouble(mz));
+				massSpectrum.getPeaks().add(massSpectrumPeak);
+			}
 		}
 	}
 

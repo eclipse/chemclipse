@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,7 +12,11 @@
 package org.eclipse.chemclipse.msd.model.core;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import org.eclipse.chemclipse.model.core.IMassSpectrumPeak;
 
 public abstract class AbstractVendorStandaloneMassSpectrum extends AbstractVendorMassSpectrum implements IVendorStandaloneMassSpectrum {
 
@@ -20,7 +24,7 @@ public abstract class AbstractVendorStandaloneMassSpectrum extends AbstractVendo
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = 7180911179209208597L;
+	private static final long serialVersionUID = 7180911179209208598L;
 	//
 	private File file;
 	private String sample;
@@ -28,6 +32,7 @@ public abstract class AbstractVendorStandaloneMassSpectrum extends AbstractVendo
 	private String operator;
 	private Date acquisitionDate;
 	private String instrument;
+	private List<IMassSpectrumPeak> peaks = new ArrayList<>();
 
 	@Override
 	public File getFile() {
@@ -109,5 +114,11 @@ public abstract class AbstractVendorStandaloneMassSpectrum extends AbstractVendo
 	public void setDescription(String description) {
 
 		this.description = description;
+	}
+
+	@Override
+	public List<IMassSpectrumPeak> getPeaks() {
+
+		return peaks;
 	}
 }
