@@ -12,10 +12,8 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter;
 
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendorChromatogram;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorScan;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 
@@ -43,12 +41,7 @@ public class XmlReader {
 
 		int ions = Math.min(mzs.length, intensities.length);
 		for(int i = 0; i < ions; i++) {
-			double intensity = intensities[i];
-			double mz = AbstractIon.getIon(mzs[i]);
-			if(intensity >= Float.MIN_VALUE && intensity <= Float.MAX_VALUE) {
-				IVendorIon ion = new VendorIon(mz, (float)intensity);
-				massSpectrum.addIon(ion);
-			}
+			massSpectrum.addIon(new VendorIon(mzs[i], (float)intensities[i]));
 		}
 	}
 }

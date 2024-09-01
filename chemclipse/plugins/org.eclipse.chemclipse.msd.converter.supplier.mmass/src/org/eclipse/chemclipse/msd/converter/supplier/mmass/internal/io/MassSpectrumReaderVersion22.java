@@ -35,7 +35,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.model.IVend
 import org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.model.IVendorMassSpectra;
 import org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.model.VendorMassSpectra;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
@@ -146,9 +145,7 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 			}
 		}
 		for(int i = 0; i < points; i++) {
-			float intensity = intensities[i];
-			double mz = AbstractIon.getIon(mzs[i]);
-			IVendorIon ion = new VendorIon(mz, intensity);
+			IVendorIon ion = new VendorIon(mzs[i], intensities[i]);
 			massSpectrum.addIon(ion);
 		}
 	}

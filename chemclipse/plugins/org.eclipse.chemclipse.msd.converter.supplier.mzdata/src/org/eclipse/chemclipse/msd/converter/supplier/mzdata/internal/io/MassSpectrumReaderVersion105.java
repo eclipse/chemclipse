@@ -27,11 +27,9 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.ParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.PersonType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorMassSpectra;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.VendorMassSpectra;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.VendorStandaloneMassSpectrum;
@@ -98,10 +96,7 @@ public class MassSpectrumReaderVersion105 extends AbstractMassSpectraReader impl
 			double[] intensities = ReaderVersion105.parseData(spectrum.getIntenArrayBinary().getData());
 			int length = Math.min(mzs.length, intensities.length);
 			for(int i = 0; i < length; i++) {
-				double mz = AbstractIon.getIon(mzs[i]);
-				float intensity = (float)intensities[i];
-				IVendorIon ion = new VendorIon(mz, intensity);
-				massSpectrum.addIon(ion);
+				massSpectrum.addIon(new VendorIon(mzs[i], (float)intensities[i]));
 			}
 		} catch(SAXException e) {
 			logger.warn(e);
