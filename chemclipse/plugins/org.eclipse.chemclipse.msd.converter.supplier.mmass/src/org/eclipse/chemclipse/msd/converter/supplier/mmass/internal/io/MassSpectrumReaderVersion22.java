@@ -108,8 +108,10 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 			massSpectrum.setSampleName(description.getElementsByTagName("title").item(0).getTextContent());
 			try {
 				String date = description.getElementsByTagName("date").item(0).getAttributes().getNamedItem("value").getTextContent();
-				SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy", Locale.ENGLISH);
-				massSpectrum.setDate(dateFormat.parse(date));
+				if(!date.isEmpty()) {
+					SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy", Locale.ENGLISH);
+					massSpectrum.setDate(dateFormat.parse(date));
+				}
 			} catch(ParseException e) {
 				logger.warn(e);
 			}
