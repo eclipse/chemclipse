@@ -33,11 +33,9 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.Ms
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.Peaks;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.Scan;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorMassSpectra;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorMassSpectra;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
@@ -117,10 +115,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 					/*
 					 * Get m/z and intensity (m/z-int)
 					 */
-					double mz = AbstractIon.getIon(values[peakIndex]);
-					float intensity = (float)values[peakIndex + 1];
-					IVendorIon ion = new VendorIon(mz, intensity);
-					massSpectrum.addIon(ion);
+					massSpectrum.addIon(new VendorIon(values[peakIndex], (float)values[peakIndex + 1]));
 				}
 				monitor.worked(1);
 			}
