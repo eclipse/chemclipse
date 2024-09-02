@@ -173,6 +173,10 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 				MassSpectrumPeak massSpectrumPeak = new MassSpectrumPeak();
 				String mz = peakElement.getAttribute("mz");
 				massSpectrumPeak.setIon(Double.parseDouble(mz));
+				String intensity = peakElement.getAttribute("intensity");
+				massSpectrumPeak.setAbundance(Double.parseDouble(intensity));
+				String sn = peakElement.getAttribute("sn");
+				massSpectrumPeak.setSignalToNoise(Double.parseDouble(sn));
 				massSpectrum.getPeaks().add(massSpectrumPeak);
 			}
 		}

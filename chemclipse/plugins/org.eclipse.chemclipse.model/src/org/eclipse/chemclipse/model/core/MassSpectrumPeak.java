@@ -22,6 +22,8 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 public class MassSpectrumPeak implements IMassSpectrumPeak {
 
 	private double mz;
+	private double intensity;
+	private double sn;
 	private final Set<String> classifier = new LinkedHashSet<>();
 	private Set<IIdentificationTarget> identificationTargets = new HashSet<>();
 
@@ -35,6 +37,30 @@ public class MassSpectrumPeak implements IMassSpectrumPeak {
 	public void setIon(double mz) {
 
 		this.mz = mz;
+	}
+
+	@Override
+	public double getAbundance() {
+
+		return intensity;
+	}
+
+	@Override
+	public void setAbundance(double intensity) {
+
+		this.intensity = intensity;
+	}
+
+	@Override
+	public double getSignalToNoise() {
+
+		return sn;
+	}
+
+	@Override
+	public void setSignalToNoise(double sn) {
+
+		this.sn = sn;
 	}
 
 	@Override

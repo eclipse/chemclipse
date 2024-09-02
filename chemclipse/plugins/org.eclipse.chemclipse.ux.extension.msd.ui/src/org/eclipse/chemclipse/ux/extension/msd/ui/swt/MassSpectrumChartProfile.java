@@ -14,10 +14,8 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.swt;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.IMassSpectrumFilterSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.IMassSpectrumFilterSupport;
@@ -283,15 +281,8 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 		double[] ySeries = new double[size];
 		int index = 0;
 		for(IMassSpectrumPeak peak : peaks) {
-			Optional<IIon> nearestIon = massSpectrum.getIons().stream() //
-					.min(Comparator.comparingDouble(i -> Math.abs(i.getIon() - peak.getIon())));
-			if(nearestIon.isPresent()) {
-				xSeries[index] = nearestIon.get().getIon() + xOffset;
-				ySeries[index] = nearestIon.get().getAbundance() + yOffset;
-			} else {
-				xSeries[index] = Double.NaN;
-				ySeries[index] = Double.NaN;
-			}
+			xSeries[index] = peak.getIon() + xOffset;
+			ySeries[index] = peak.getAbundance() + yOffset;
 			index++;
 		}
 		return new SeriesData(xSeries, ySeries, id);

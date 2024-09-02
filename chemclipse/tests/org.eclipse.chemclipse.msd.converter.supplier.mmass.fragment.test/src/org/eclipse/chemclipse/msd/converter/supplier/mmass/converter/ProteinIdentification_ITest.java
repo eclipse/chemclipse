@@ -61,7 +61,10 @@ public class ProteinIdentification_ITest extends TestCase {
 
 		List<IMassSpectrumPeak> peaks = massSpectrum.getPeaks();
 		assertEquals(38, peaks.size());
-		assertEquals(568.274371d, peaks.get(0).getIon());
+		IMassSpectrumPeak firstPeak = peaks.get(0);
+		assertEquals(568.274371d, firstPeak.getIon());
+		assertEquals(261.089388d, firstPeak.getAbundance());
+		assertEquals(11.571d, firstPeak.getSignalToNoise());
 	}
 
 	@Test

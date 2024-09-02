@@ -20,4 +20,21 @@ public interface IMassSpectrumPeak extends ISpectrumPeak {
 	double getIon();
 
 	void setIon(double mz);
+
+	/**
+	 * 
+	 * @return intensity
+	 */
+	double getAbundance();
+
+	void setAbundance(double intensity);
+
+	/**
+	 * 
+	 * 
+	 * @return s/n
+	 */
+	double getSignalToNoise();
+
+	void setSignalToNoise(double sn);
 }
