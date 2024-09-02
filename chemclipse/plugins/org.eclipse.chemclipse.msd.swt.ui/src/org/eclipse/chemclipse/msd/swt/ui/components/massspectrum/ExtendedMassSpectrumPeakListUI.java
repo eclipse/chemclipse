@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,29 +11,29 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class ExtendedMassSpectrumIonsListUI extends Composite {
+public class ExtendedMassSpectrumPeakListUI extends Composite {
 
-	private MassSpectrumIonsListUI massSpectrumIonsListUI;
+	private MassSpectrumPeakListUI massSpectrumPeaksListUI;
 
-	public ExtendedMassSpectrumIonsListUI(Composite parent, int style) {
+	public ExtendedMassSpectrumPeakListUI(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
 	}
 
-	public void update(IScanMSD scanMSD) {
+	public void update(IVendorStandaloneMassSpectrum standaloneMassSpectrum) {
 
-		massSpectrumIonsListUI.update(scanMSD);
+		massSpectrumPeaksListUI.update(standaloneMassSpectrum);
 	}
 
 	private void createControl() {
 
 		setLayout(new FillLayout());
-		massSpectrumIonsListUI = new MassSpectrumIonsListUI(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.VIRTUAL);
+		massSpectrumPeaksListUI = new MassSpectrumPeakListUI(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.VIRTUAL);
 	}
 }

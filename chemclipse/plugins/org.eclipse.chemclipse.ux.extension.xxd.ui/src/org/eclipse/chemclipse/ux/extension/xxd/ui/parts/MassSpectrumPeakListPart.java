@@ -14,28 +14,28 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.List;
 
-import jakarta.inject.Inject;
-
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.ExtendedMassSpectrumIonsListUI;
+import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.ExtendedMassSpectrumPeakListUI;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class MassSpectrumScanListPart extends AbstractPart<ExtendedMassSpectrumIonsListUI> {
+import jakarta.inject.Inject;
+
+public class MassSpectrumPeakListPart extends AbstractPart<ExtendedMassSpectrumPeakListUI> {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
 
 	@Inject
-	public MassSpectrumScanListPart(Composite parent) {
+	public MassSpectrumPeakListPart(Composite parent) {
 
 		super(parent, TOPIC);
 	}
 
 	@Override
-	protected ExtendedMassSpectrumIonsListUI createControl(Composite parent) {
+	protected ExtendedMassSpectrumPeakListUI createControl(Composite parent) {
 
-		return new ExtendedMassSpectrumIonsListUI(parent, SWT.NONE);
+		return new ExtendedMassSpectrumPeakListUI(parent, SWT.NONE);
 	}
 
 	@Override
@@ -43,12 +43,11 @@ public class MassSpectrumScanListPart extends AbstractPart<ExtendedMassSpectrumI
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IScanMSD scanMSD) {
-				getControl().update(scanMSD);
+			if(object instanceof IVendorStandaloneMassSpectrum vendorStandaloneMassSpectrum) {
+				getControl().update(vendorStandaloneMassSpectrum);
 				return true;
 			}
 		}
-		//
 		return false;
 	}
 

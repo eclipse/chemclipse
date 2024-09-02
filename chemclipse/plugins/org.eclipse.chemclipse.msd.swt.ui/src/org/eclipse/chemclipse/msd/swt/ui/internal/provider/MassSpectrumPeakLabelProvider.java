@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,11 +14,11 @@ package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IIonTransition;
+import org.eclipse.chemclipse.model.core.IMassSpectrumPeak;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
@@ -26,7 +26,7 @@ public class MassSpectrumPeakLabelProvider extends AbstractChemClipseLabelProvid
 
 	public MassSpectrumPeakLabelProvider() {
 
-		super("0.0##");
+		super("0.0####");
 	}
 
 	@Override
@@ -42,20 +42,20 @@ public class MassSpectrumPeakLabelProvider extends AbstractChemClipseLabelProvid
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 
-		/*
-		 * SYNCHRONIZE: IonListLabelProvider IonListLabelComparator MassSpectrumIonListView
-		 */
-		DecimalFormat decimalFormat = getDecimalFormat();
+		DecimalFormat ionDecimalFormat = getDecimalFormat();
+		DecimalFormat abundanceFormat = getIntegerDecimalFormatInstance();
+		DecimalFormat signalToNoiseDecimalFormat = ValueFormat.getDecimalFormatEnglish("0.0");
 		String text = "";
-		if(element instanceof IIon ion) {
-			IIonTransition ionTransition = ion.getIonTransition();
+		if(element instanceof IMassSpectrumPeak peak) {
 			switch(columnIndex) {
 				case 0: // m/z
-					String mz = decimalFormat.format(ion.getIon());
-					text = (ionTransition == null) ? mz : Integer.toString((int)ionTransition.getQ1StartIon()) + " > " + mz;
+					text = ionDecimalFormat.format(peak.getIon());
 					break;
 				case 1: // intensity
-					text = decimalFormat.format(ion.getAbundance());
+					text = abundanceFormat.format(peak.getAbundance());
+					break;
+				case 2: // s/n
+					text = signalToNoiseDecimalFormat.format(peak.getSignalToNoise());
 					break;
 				default:
 					text = "n.v.";
