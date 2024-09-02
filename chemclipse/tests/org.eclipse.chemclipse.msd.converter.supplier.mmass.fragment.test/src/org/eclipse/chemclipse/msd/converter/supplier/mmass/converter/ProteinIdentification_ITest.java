@@ -15,6 +15,8 @@ import java.io.File;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IMassSpectrumPeak;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.supplier.mmass.TestPathHelper;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
@@ -59,6 +61,21 @@ public class ProteinIdentification_ITest extends TestCase {
 
 		List<IMassSpectrumPeak> peaks = massSpectrum.getPeaks();
 		assertEquals(38, peaks.size());
-		assertEquals(568.274371d, peaks.get(0).getIon());
+		IMassSpectrumPeak firstPeak = peaks.get(0);
+		assertEquals(568.274371d, firstPeak.getIon());
+		assertEquals(261.089388d, firstPeak.getAbundance());
+		assertEquals(11.571d, firstPeak.getSignalToNoise());
+	}
+
+	@Test
+	public void testAnnotations() {
+
+		List<IMassSpectrumPeak> peaks = massSpectrum.getPeaks();
+		IMassSpectrumPeak basePeak = peaks.get(8);
+		IIdentificationTarget firstEntry = basePeak.getTargets().iterator().next();
+		assertEquals("mMass annotation", firstEntry.getIdentifier());
+		ILibraryInformation info = firstEntry.getLibraryInformation();
+		assertEquals("My BasePeak", info.getName());
+		assertEquals(993.010000d, info.getMolWeight());
 	}
 }

@@ -19,6 +19,7 @@ import java.nio.FloatBuffer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -27,8 +28,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IMassSpectrumPeak;
 import org.eclipse.chemclipse.model.core.MassSpectrumPeak;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.model.IVendorIon;
@@ -56,9 +63,7 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
 		IVendorStandaloneMassSpectrum massSpectrum = null;
-		//
 		try {
-			//
 			massSpectrum = new VendorStandaloneMassSpectrum();
 			massSpectrum.setFile(file);
 			massSpectrum.setIdentifier(file.getName());
@@ -70,9 +75,10 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 				if(node.getNodeType() == Node.ELEMENT_NODE) {
 					Element element = (Element)node;
 					readDescription(element, massSpectrum);
-					readSpectrum(element, massSpectrum);
+					readSpectrum(element, massSpectrum, monitor);
 					readPeakList(element, massSpectrum);
-					// TODO: annotations
+					readAnnotations(element, massSpectrum);
+					// TODO: sequences
 				}
 			}
 		} catch(SAXException e) {
@@ -123,7 +129,7 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 		}
 	}
 
-	private void readSpectrum(Element element, IVendorMassSpectrum massSpectrum) throws DOMException, DataFormatException {
+	private void readSpectrum(Element element, IVendorMassSpectrum massSpectrum, IProgressMonitor monitor) throws DOMException, DataFormatException {
 
 		int points = 0;
 		float[] mzs = null;
@@ -133,6 +139,7 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 			Node node = spectrumList.item(i);
 			Element spectrum = (Element)node;
 			points = Integer.parseInt(spectrum.getAttribute("points"));
+			monitor.beginTask(ConverterMessages.importScan, points);
 			Node mzArray = spectrum.getElementsByTagName("mzArray").item(0);
 			checkArray(mzArray.getAttributes());
 			mzs = decodeFloatArray(decompress(Base64.decodeBase64(mzArray.getTextContent())));
@@ -149,10 +156,11 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 		for(int i = 0; i < points; i++) {
 			IVendorIon ion = new VendorIon(mzs[i], intensities[i]);
 			massSpectrum.addIon(ion);
+			monitor.worked(1);
 		}
 	}
 
-	private void readPeakList(Element element, IVendorStandaloneMassSpectrum massSpectrum) throws DOMException, DataFormatException {
+	private void readPeakList(Element element, IVendorStandaloneMassSpectrum massSpectrum) throws DOMException {
 
 		NodeList peakList = element.getElementsByTagName("peaklist");
 		for(int i = 0; i < peakList.getLength(); i++) {
@@ -165,7 +173,39 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 				MassSpectrumPeak massSpectrumPeak = new MassSpectrumPeak();
 				String mz = peakElement.getAttribute("mz");
 				massSpectrumPeak.setIon(Double.parseDouble(mz));
+				String intensity = peakElement.getAttribute("intensity");
+				massSpectrumPeak.setAbundance(Double.parseDouble(intensity));
+				String sn = peakElement.getAttribute("sn");
+				massSpectrumPeak.setSignalToNoise(Double.parseDouble(sn));
 				massSpectrum.getPeaks().add(massSpectrumPeak);
+			}
+		}
+	}
+
+	private void readAnnotations(Element element, IVendorStandaloneMassSpectrum massSpectrum) throws DOMException {
+
+		NodeList annotationsList = element.getElementsByTagName("annotations");
+		for(int i = 0; i < annotationsList.getLength(); i++) {
+			Node node = annotationsList.item(i);
+			Element annotationsElement = (Element)node;
+			NodeList annotationList = annotationsElement.getElementsByTagName("annotation");
+			for(int n = 0; n < annotationList.getLength(); n++) {
+				Node annotationNode = annotationList.item(n);
+				Element annotationElement = (Element)annotationNode;
+				String peakMZ = annotationElement.getAttribute("peakMZ");
+				Optional<IMassSpectrumPeak> nearestPeak = massSpectrum.getPeaks().stream().filter(p -> p.getIon() == Double.parseDouble(peakMZ)).findFirst();
+				if(nearestPeak.isPresent()) {
+					ILibraryInformation libraryInformation = new LibraryInformation();
+					String calcMZ = annotationElement.getAttribute("calcMZ");
+					if(!calcMZ.isEmpty()) {
+						libraryInformation.setMolWeight(Double.parseDouble(calcMZ));
+					}
+					libraryInformation.setName(annotationElement.getTextContent());
+					ComparisonResult comparisionResult = new ComparisonResult(1f, 1f, 1f, 1f);
+					IdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisionResult);
+					identificationTarget.setIdentifier("mMass annotation");
+					nearestPeak.get().getTargets().add(identificationTarget);
+				}
 			}
 		}
 	}

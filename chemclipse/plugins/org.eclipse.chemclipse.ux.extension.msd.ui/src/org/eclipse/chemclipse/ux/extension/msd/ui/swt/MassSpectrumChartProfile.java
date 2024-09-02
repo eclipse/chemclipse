@@ -14,10 +14,8 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.swt;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.IMassSpectrumFilterSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.IMassSpectrumFilterSupport;
@@ -26,6 +24,8 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpec
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.model.core.IMassSpectrumPeak;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
+import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
@@ -59,6 +60,7 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
+import org.eclipse.swtchart.extensions.marker.LabelMarker;
 import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 
 public class MassSpectrumChartProfile extends LineChart implements IMassSpectrumChart {
@@ -100,6 +102,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 			if(massSpectrum instanceof IVendorStandaloneMassSpectrum standaloneMassSpectrum) {
 				LineSeriesData peakLineSeriesData = getPeaks(standaloneMassSpectrum);
 				lineSeriesDataList.add(peakLineSeriesData);
+				createAnnotations(standaloneMassSpectrum);
 			}
 			addSeriesData(lineSeriesDataList, MAX_NUMBER_MZ);
 			UpdateNotifier.update(massSpectrum);
@@ -112,7 +115,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 		chartSettings.setTitle("");
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(true);
-		chartSettings.setVerticalSliderVisible(true);
+		chartSettings.setVerticalSliderVisible(false);
 		chartSettings.setCreateMenu(true);
 		//
 		chartSettings.addMenuEntry(new UpdateMenuEntry());
@@ -127,7 +130,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 		rangeRestriction.setExtendMinX(2.0d);
 		rangeRestriction.setExtendMaxX(2.0d);
 		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
-		rangeRestriction.setExtendMaxY(0.1d);
+		rangeRestriction.setExtendMaxY(0.5d);
 		//
 		setPrimaryAxisSet(chartSettings);
 		addSecondaryAxisSet(chartSettings);
@@ -278,17 +281,31 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 		double[] ySeries = new double[size];
 		int index = 0;
 		for(IMassSpectrumPeak peak : peaks) {
-			Optional<IIon> nearestIon = massSpectrum.getIons().stream() //
-					.min(Comparator.comparingDouble(i -> Math.abs(i.getIon() - peak.getIon())));
-			if(nearestIon.isPresent()) {
-				xSeries[index] = nearestIon.get().getIon() + xOffset;
-				ySeries[index] = nearestIon.get().getAbundance() + yOffset;
-			} else {
-				xSeries[index] = Double.NaN;
-				ySeries[index] = Double.NaN;
-			}
+			xSeries[index] = peak.getIon() + xOffset;
+			ySeries[index] = peak.getAbundance() + yOffset;
 			index++;
 		}
 		return new SeriesData(xSeries, ySeries, id);
+	}
+
+	private void createAnnotations(IVendorStandaloneMassSpectrum massSpectrum) {
+
+		IPlotArea plotarea = getBaseChart().getPlotArea();
+		LabelMarker labelMarker = new LabelMarker(getBaseChart());
+		List<IMassSpectrumPeak> peaks = massSpectrum.getPeaks();
+		List<String> labels = new ArrayList<>();
+		for(IMassSpectrumPeak peak : peaks) {
+			if(peak.getTargets().isEmpty()) {
+				labels.add("");
+			} else if(peak.getTargets().iterator().hasNext()) {
+				IIdentificationTarget identificationTarget = peak.getTargets().iterator().next();
+				ILibraryInformation info = identificationTarget.getLibraryInformation();
+				if(info != null) {
+					labels.add(info.getName());
+				}
+			}
+		}
+		labelMarker.setLabels(labels, 1, SWT.VERTICAL);
+		plotarea.addCustomPaintListener(labelMarker);
 	}
 }
