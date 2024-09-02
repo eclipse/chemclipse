@@ -28,6 +28,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMassSpectrumPeak;
 import org.eclipse.chemclipse.model.core.MassSpectrumPeak;
@@ -74,7 +75,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 				if(node.getNodeType() == Node.ELEMENT_NODE) {
 					Element element = (Element)node;
 					readDescription(element, massSpectrum);
-					readSpectrum(element, massSpectrum);
+					readSpectrum(element, massSpectrum, monitor);
 					readPeakList(element, massSpectrum);
 					readAnnotations(element, massSpectrum);
 					// TODO: sequences
@@ -128,7 +129,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 		}
 	}
 
-	private void readSpectrum(Element element, IVendorMassSpectrum massSpectrum) throws DOMException, DataFormatException {
+	private void readSpectrum(Element element, IVendorMassSpectrum massSpectrum, IProgressMonitor monitor) throws DOMException, DataFormatException {
 
 		int points = 0;
 		float[] mzs = null;
@@ -138,6 +139,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 			Node node = spectrumList.item(i);
 			Element spectrum = (Element)node;
 			points = Integer.parseInt(spectrum.getAttribute("points"));
+			monitor.beginTask(ConverterMessages.importScan, points);
 			Node mzArray = spectrum.getElementsByTagName("mzArray").item(0);
 			checkArray(mzArray.getAttributes());
 			mzs = decodeFloatArray(decompress(Base64.decodeBase64(mzArray.getTextContent())));
@@ -154,6 +156,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 		for(int i = 0; i < points; i++) {
 			IVendorIon ion = new VendorIon(mzs[i], intensities[i]);
 			massSpectrum.addIon(ion);
+			monitor.worked(1);
 		}
 	}
 
