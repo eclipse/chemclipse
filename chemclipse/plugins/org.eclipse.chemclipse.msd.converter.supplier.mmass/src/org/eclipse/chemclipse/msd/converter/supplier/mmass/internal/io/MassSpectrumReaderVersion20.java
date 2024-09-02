@@ -48,9 +48,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader implements IMassSpectraReader {
+public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader implements IMassSpectraReader {
 
-	private static final Logger logger = Logger.getLogger(MassSpectrumReaderVersion22.class);
+	private static final Logger logger = Logger.getLogger(MassSpectrumReaderVersion20.class);
 
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
