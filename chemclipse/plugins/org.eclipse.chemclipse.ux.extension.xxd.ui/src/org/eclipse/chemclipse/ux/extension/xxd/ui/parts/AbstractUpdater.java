@@ -146,7 +146,10 @@ public abstract class AbstractUpdater<T extends Composite> {
 
 	private boolean updateSelection(List<Object> objects, String topic) {
 
-		if(DataUpdateSupport.isVisible(control)) {
+		/*
+		 * Enforce an update in case of an editor close event.
+		 */
+		if(DataUpdateSupport.isVisible(control) || topic.matches(IChemClipseEvents.EDITOR_CLOSE_REGEX)) {
 			if(isUpdateTopic(topic)) {
 				return updateData(objects, topic);
 			}
