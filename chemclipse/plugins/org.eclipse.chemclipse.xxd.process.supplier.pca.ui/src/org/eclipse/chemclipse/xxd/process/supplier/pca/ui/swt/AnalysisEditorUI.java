@@ -33,6 +33,8 @@ import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.io.SampleTemplateIO;
@@ -41,7 +43,9 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.LabelOptionPCA;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.model.ResultPCA;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.runnable.CalculationExecutor;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.PreferencePageLoadingPlot;
@@ -75,9 +79,6 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(AnalysisEditorUI.class);
 	//
-	private ISamplesPCA<IVariable, ISample> samples = null;
-	private EvaluationPCA evaluationPCA = null;
-	//
 	private Button buttonToolbarSearch;
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private Spinner spinnerPCs;
@@ -85,11 +86,40 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<SamplesListUI> sampleListControl = new AtomicReference<>();
 	private AtomicReference<ComboViewer> labelOptionControl = new AtomicReference<>();
 	private AtomicReference<PreprocessingSettingsUI> preprocessingSettingsControl = new AtomicReference<>();
+	//
+	private ISamplesPCA<IVariable, ISample> samples = null;
+	private EvaluationPCA evaluationPCA = null;
+	//
+	private Composite control;
 
 	public AnalysisEditorUI(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
+		//
+		DataUpdateSupport dataUpdateSupport = new DataUpdateSupport(Activator.getDefault().getEventBroker());
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PCA_UPDATE_RESULT, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.add(new IDataUpdateListener() {
+
+			@Override
+			public void update(String topic, List<Object> objects) {
+
+				if(evaluationPCA != null) {
+					if(DataUpdateSupport.isVisible(control)) {
+						if(IChemClipseEvents.TOPIC_PCA_UPDATE_RESULT.equals(topic)) {
+							if(objects.size() == 1) {
+								Object object = objects.get(0);
+								if(object instanceof ResultPCA resultPCA) {
+									if(evaluationPCA.getResults().getPcaResultList().contains(resultPCA)) {
+										sampleListControl.get().setSelection(new StructuredSelection(resultPCA.getSample()));
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
 	}
 
 	@Override
@@ -114,6 +144,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		createDataTab(this);
 		//
 		initialize();
+		control = this;
 	}
 
 	private void initialize() {

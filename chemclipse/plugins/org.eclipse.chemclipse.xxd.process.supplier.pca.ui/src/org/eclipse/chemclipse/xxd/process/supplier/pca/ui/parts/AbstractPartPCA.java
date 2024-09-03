@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,6 +34,7 @@ public abstract class AbstractPartPCA<T extends Composite> extends AbstractPart<
 		subscribeAdditionalTopic(IChemClipseEvents.TOPIC_PCA_UPDATE_COLORSCHEME, IChemClipseEvents.EVENT_BROKER_DATA);
 		subscribeAdditionalTopic(IChemClipseEvents.TOPIC_PCA_UPDATE_FEATURES, IChemClipseEvents.EVENT_BROKER_DATA);
 		subscribeAdditionalTopic(IChemClipseEvents.TOPIC_PCA_UPDATE_LABELS, IChemClipseEvents.EVENT_BROKER_DATA);
+		subscribeAdditionalTopic(IChemClipseEvents.TOPIC_PCA_UPDATE_RESULT, IChemClipseEvents.EVENT_BROKER_DATA);
 		subscribeAdditionalTopic(IChemClipseEvents.TOPIC_EDITOR_PCA_CLOSE, IChemClipseEvents.EVENT_BROKER_DATA);
 	}
 

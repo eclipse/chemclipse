@@ -74,6 +74,7 @@ public interface IChemClipseEvents {
 	String TOPIC_PCA_UPDATE_FEATURES = "pca/update/features";
 	String TOPIC_PCA_UPDATE_COLORSCHEME = "pca/update/colorscheme";
 	String TOPIC_PCA_UPDATE_LABELS = "pca/update/labels";
+	String TOPIC_PCA_UPDATE_RESULT = "pca/update/result";
 	//
 	String TOPIC_METHOD_SELECTED = "methods/select";
 	String TOPIC_METHOD_CREATED = "methods/create";

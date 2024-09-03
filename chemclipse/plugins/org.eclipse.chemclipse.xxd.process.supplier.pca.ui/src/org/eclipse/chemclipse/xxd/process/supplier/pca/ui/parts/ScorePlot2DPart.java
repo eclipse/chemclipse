@@ -7,18 +7,18 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.parts;
 
 import java.util.List;
 
-import jakarta.inject.Inject;
-
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt.ExtendedScorePlot2D;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+
+import jakarta.inject.Inject;
 
 public class ScorePlot2DPart extends AbstractPartPCA<ExtendedScorePlot2D> {
 
