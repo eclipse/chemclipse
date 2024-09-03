@@ -79,10 +79,10 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(AnalysisEditorUI.class);
 	//
-	private Button buttonToolbarSearch;
+	private AtomicReference<Button> buttonToolbarSearchControl = new AtomicReference<>();
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
-	private Spinner spinnerPCs;
-	private ComboViewer comboViewerAlgorithm;
+	private AtomicReference<Spinner> spinnerControlPC = new AtomicReference<>();
+	private AtomicReference<ComboViewer> comboViewerAlgorithmControl = new AtomicReference<>();
 	private AtomicReference<SamplesListUI> sampleListControl = new AtomicReference<>();
 	private AtomicReference<ComboViewer> labelOptionControl = new AtomicReference<>();
 	private AtomicReference<PreprocessingSettingsUI> preprocessingSettingsControl = new AtomicReference<>();
@@ -149,7 +149,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 	private void initialize() {
 
-		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_EDIT, false);
+		enableToolbar(toolbarSearch, buttonToolbarSearchControl.get(), IMAGE_SEARCH, TOOLTIP_EDIT, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -161,9 +161,9 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		composite.setLayout(new GridLayout(6, false));
 		//
 		createLabel(composite, "Number of PCs:");
-		spinnerPCs = createSpinnerPrincipleComponents(composite);
+		createSpinnerPrincipleComponents(composite);
 		createLabel(composite, "Algorithm:");
-		comboViewerAlgorithm = createComboViewerAlgorithm(composite);
+		createComboViewerAlgorithm(composite);
 		createButtonRun(composite);
 		createSettingsButton(composite);
 	}
@@ -175,7 +175,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		return label;
 	}
 
-	private Spinner createSpinnerPrincipleComponents(Composite parent) {
+	private void createSpinnerPrincipleComponents(Composite parent) {
 
 		Spinner spinner = new Spinner(parent, SWT.BORDER);
 		spinner.setToolTipText("Number of Principal Components");
@@ -197,10 +197,10 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			}
 		});
 		//
-		return spinner;
+		spinnerControlPC.set(spinner);
 	}
 
-	private ComboViewer createComboViewerAlgorithm(Composite parent) {
+	private void createComboViewerAlgorithm(Composite parent) {
 
 		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
@@ -237,8 +237,9 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		});
 		//
 		comboViewer.setInput(Algorithm.values());
-		combo.select(0);
-		return comboViewer;
+		comboViewer.setSelection(new StructuredSelection(Algorithm.NIPALS));
+		//
+		comboViewerAlgorithmControl.set(comboViewer);
 	}
 
 	private Button createButtonRun(Composite parent) {
@@ -323,11 +324,16 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(5, false));
 		//
-		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		createButtonToggleToolbar(composite);
 		createComboViewerLabelOption(composite);
 		createButtonColorScheme(composite);
 		createButtonImport(composite);
 		createButtonExport(composite);
+	}
+
+	private void createButtonToggleToolbar(Composite parent) {
+
+		buttonToolbarSearchControl.set(createButtonToggleToolbar(parent, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH));
 	}
 
 	private void createComboViewerLabelOption(Composite parent) {
@@ -526,8 +532,8 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 		if(analysisSettings != null) {
 			preprocessingSettingsControl.get().setInput(analysisSettings.getPreprocessingSettings());
-			spinnerPCs.setSelection(analysisSettings.getNumberOfPrincipalComponents());
-			comboViewerAlgorithm.setSelection(new StructuredSelection(analysisSettings.getAlgorithm()));
+			spinnerControlPC.get().setSelection(analysisSettings.getNumberOfPrincipalComponents());
+			comboViewerAlgorithmControl.get().setSelection(new StructuredSelection(analysisSettings.getAlgorithm()));
 		} else {
 			preprocessingSettingsControl.get().setInput(null);
 		}
