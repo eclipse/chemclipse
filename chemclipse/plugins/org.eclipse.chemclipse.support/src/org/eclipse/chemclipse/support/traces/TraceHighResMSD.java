@@ -46,9 +46,9 @@ public class TraceHighResMSD extends TraceGenericDelta {
 		if(getDelta() > 0 && getMZ() > 0) {
 			int ppm = (int)Math.round((getDelta() / getMZ()) * ITrace.MILLION);
 			if(ppm >= 1) {
-				builder.append(ITrace.INFIX_HIGHRES_RANGE_STANDARD);
+				builder.append(ITrace.INFIX_RANGE_STANDARD);
 				builder.append(ppm);
-				builder.append(ITrace.POSTFIX_HIGHRES_PPM);
+				builder.append(ITrace.POSTFIX_UNIT_PPM);
 			}
 		}
 		builder.append(getScaleFactorAsString());

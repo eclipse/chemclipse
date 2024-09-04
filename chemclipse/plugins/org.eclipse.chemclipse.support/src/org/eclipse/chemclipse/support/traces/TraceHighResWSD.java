@@ -26,4 +26,28 @@ public class TraceHighResWSD extends TraceGenericDelta {
 
 		setValue(wavelength);
 	}
+
+	public double getStartWavelength() {
+
+		return getWavelength() - getDelta();
+	}
+
+	public double getStopWavelength() {
+
+		return getWavelength() + getDelta();
+	}
+
+	@Override
+	public String toString() {
+
+		StringBuilder builder = new StringBuilder();
+		builder.append(getWavelength());
+		if(getDelta() > 0 && getWavelength() > 0) {
+			builder.append(ITrace.INFIX_RANGE_STANDARD);
+			builder.append(getDelta());
+		}
+		builder.append(getScaleFactorAsString());
+		//
+		return builder.toString();
+	}
 }

@@ -15,24 +15,31 @@ import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum TraceType implements ILabel {
 
-	GENERIC("Generic"), //
-	MSD_NOMINAL("Quadrupole, IonTrap, ..."), //
-	MSD_TANDEM("MS/MS, ..."), //
-	MSD_HIGHRES("Orbitrap, TOF, ..."), //
-	WSD_RASTERED("UV/Vis, DAD, ... (rastered)"), //
-	WSD_HIGHRES("UV/Vis, DAD, ..."), //
-	VSD_RASTERED("FTIR, Raman, ... (rastered)"); //
+	GENERIC("Generic", TraceGeneric.class), //
+	MSD_NOMINAL("Quadrupole, IonTrap", TraceNominalMSD.class), //
+	MSD_TANDEM("MS/MS", TraceTandemMSD.class), //
+	MSD_HIGHRES("Orbitrap, TOF", TraceHighResMSD.class), //
+	WSD_RASTERED("UV/Vis, DAD (rastered)", TraceRasteredWSD.class), //
+	WSD_HIGHRES("UV/Vis, DAD", TraceHighResWSD.class), //
+	VSD_RASTERED("FTIR, Raman (rastered)", TraceRasteredVSD.class); //
 
 	private String label = "";
+	private Class<? extends ITrace> clazz = null;
 
-	private TraceType(String label) {
+	private TraceType(String label, Class<? extends ITrace> clazz) {
 
 		this.label = label;
+		this.clazz = clazz;
 	}
 
 	@Override
 	public String label() {
 
 		return label;
+	}
+
+	public Class<? extends ITrace> clazz() {
+
+		return clazz;
 	}
 }

@@ -17,10 +17,20 @@ public interface ITrace {
 
 	String PREFIX_SCALE_FACTOR = "(x";
 	String POSTFIX_SCALE_FACTOR = ")";
-	String INFIX_HIGHRES_RANGE_STANDARD = "±";
-	String INFIX_HIGHRES_RANGE_SIMPLE = "+-";
-	String POSTFIX_HIGHRES_PPM = "ppm";
+	String INFIX_RANGE_STANDARD = "±";
+	String INFIX_RANGE_SIMPLE = "+-";
+	String POSTFIX_UNIT_PPM = "ppm";
 	int MILLION = 1000000;
+
+	double getValue();
+
+	/**
+	 * The value must be >= 0.
+	 * 
+	 * @param value
+	 * @return {@link ITrace}
+	 */
+	AbstractTrace setValue(double value);
 
 	double getScaleFactor();
 

@@ -11,20 +11,31 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.traces;
 
-public class TraceGeneric extends AbstractTrace {
-
-	public int getTrace() {
-
-		return getValueAsInt();
-	}
+public class Trace_Generic_00_Test extends TraceTestCase {
 
 	@Override
-	public String toString() {
+	protected void setUp() throws Exception {
 
-		StringBuilder builder = new StringBuilder();
-		builder.append(getTrace());
-		builder.append(getScaleFactorAsString());
-		//
-		return builder.toString();
+		super.setUp();
+	}
+
+	public void test1() {
+
+		assertNull(TraceFactory.parseTrace("", TraceGeneric.class));
+	}
+
+	public void test2() {
+
+		assertNull(TraceFactory.parseTrace("A", TraceGeneric.class));
+	}
+
+	public void test3() {
+
+		assertNull(TraceFactory.parseTrace("0", TraceGeneric.class));
+	}
+
+	public void test4() {
+
+		assertNull(TraceFactory.parseTrace("-1", TraceGeneric.class));
 	}
 }

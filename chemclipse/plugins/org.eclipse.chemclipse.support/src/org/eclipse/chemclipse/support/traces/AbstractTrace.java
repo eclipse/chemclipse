@@ -13,8 +13,23 @@ package org.eclipse.chemclipse.support.traces;
 
 public abstract class AbstractTrace implements ITrace {
 
-	private double scaleFactor = 1.0d;
 	private double value = 0.0d;
+	private double scaleFactor = 1.0d;
+
+	@Override
+	public double getValue() {
+
+		return value;
+	}
+
+	@Override
+	public AbstractTrace setValue(double value) {
+
+		if(value >= 0) {
+			this.value = value;
+		}
+		return this;
+	}
 
 	@Override
 	public double getScaleFactor() {
@@ -34,16 +49,5 @@ public abstract class AbstractTrace implements ITrace {
 	protected int getValueAsInt() {
 
 		return (int)(Math.round(value));
-	}
-
-	protected double getValue() {
-
-		return value;
-	}
-
-	protected AbstractTrace setValue(double value) {
-
-		this.value = value;
-		return this;
 	}
 }
