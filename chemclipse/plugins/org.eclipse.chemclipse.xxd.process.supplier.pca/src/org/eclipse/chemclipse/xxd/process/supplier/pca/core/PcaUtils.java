@@ -9,6 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  * Philip Wenig - get rid of JavaFX
+ * Lorenz Gerber - Opls target group
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.core;
 
@@ -117,7 +118,7 @@ public class PcaUtils {
 	/**
 	 * 
 	 * @param pcaResults
-	 * @return all groupName {@link IResultPCA#getGroupName()}
+	 * @return all groupName {@link IResultPCA#getOplsTargetGroupName()}
 	 */
 	public static Set<String> getGroupNames(List<IResultPCA> pcaResults) {
 

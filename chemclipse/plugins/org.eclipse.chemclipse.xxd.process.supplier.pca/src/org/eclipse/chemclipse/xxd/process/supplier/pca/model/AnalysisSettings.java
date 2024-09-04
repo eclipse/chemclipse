@@ -9,6 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  * Philip Wenig - added a title
+ * Lorenz Gerber - Opls Target Selection
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.model;
 
@@ -24,6 +25,7 @@ public class AnalysisSettings implements IAnalysisSettings {
 	private boolean removeUselessVariables = PreferenceSupplier.isRemoveUselessVariables();
 	private LabelOptionPCA labelOptionPCA = PreferenceSupplier.getLabelOptionPCA();
 	private String colorScheme = PreferenceSupplier.getColorScheme();
+	private String groupName = "--";
 	//
 	private IPreprocessingSettings preprocessingSettings = new PreprocessingSettings();
 
@@ -75,6 +77,18 @@ public class AnalysisSettings implements IAnalysisSettings {
 	public void setAlgorithm(Algorithm algorithm) {
 
 		this.algorithm = algorithm;
+	}
+
+	@Override
+	public String getOplsTargetGroupName() {
+
+		return this.groupName;
+	}
+
+	@Override
+	public void setOplsTargetGroupName(String groupName) {
+
+		this.groupName = groupName;
 	}
 
 	@Override
