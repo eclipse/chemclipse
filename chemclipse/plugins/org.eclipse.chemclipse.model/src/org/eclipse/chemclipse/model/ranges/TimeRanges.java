@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.ranges;
 
@@ -130,9 +130,9 @@ public class TimeRanges {
 			String[] values = item.split("\\" + TimeRangeListUtil.SEPARATOR_ENTRY);
 			String identifier = ((values.length > 0) ? values[0].trim() : "");
 			int start = ((values.length > 1) ? calculateRetentionTime(values[1]) : 0);
-			int center = ((values.length > 2) ? calculateRetentionTime(values[2]) : 0);
+			int maximum = ((values.length > 2) ? calculateRetentionTime(values[2]) : 0);
 			int stop = ((values.length > 3) ? calculateRetentionTime(values[3]) : 0);
-			timeRange = new TimeRange(identifier, start, center, stop);
+			timeRange = new TimeRange(identifier, start, maximum, stop);
 		}
 		//
 		return timeRange;
@@ -242,7 +242,7 @@ public class TimeRanges {
 		builder.append(" ");
 		builder.append(TimeRangeListUtil.SEPARATOR_ENTRY);
 		builder.append(" ");
-		builder.append(calculateRetentionTimeMinutes(timeRange.getCenter()));
+		builder.append(calculateRetentionTimeMinutes(timeRange.getMaximum()));
 		builder.append(" ");
 		builder.append(TimeRangeListUtil.SEPARATOR_ENTRY);
 		builder.append(" ");

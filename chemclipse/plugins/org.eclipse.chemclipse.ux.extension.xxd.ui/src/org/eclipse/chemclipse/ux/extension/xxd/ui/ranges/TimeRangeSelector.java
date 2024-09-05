@@ -13,6 +13,9 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
@@ -24,7 +27,7 @@ public class TimeRangeSelector {
 		/*
 		 * Try to get the time range and adjust the start | stop value.
 		 */
-		TimeRange timeRange = selectRange(baseChart, event, -1, -1, timeRanges);
+		TimeRange timeRange = selectRange(baseChart, event.x, -1, -1, timeRanges);
 		if(timeRange != null) {
 			double x = baseChart.getSelectedPrimaryAxisValue(event.x, IExtendedChart.X_AXIS);
 			int selection = (int)x;
@@ -50,42 +53,63 @@ public class TimeRangeSelector {
 	 * @param timeRanges
 	 * @return TimeRange
 	 */
-	public static TimeRange selectRange(BaseChart baseChart, Event event, int xStart, int xStop, TimeRanges timeRanges) {
+	public static TimeRange selectRange(BaseChart baseChart, int xEvent, int xStart, int xStop, TimeRanges timeRanges) {
 
 		/*
 		 * Try to get the closest identifier of the user x selection.
 		 */
 		if(timeRanges != null) {
-			String identifier = "";
-			int minDelta = Integer.MAX_VALUE;
-			double x = baseChart.getSelectedPrimaryAxisValue(event.x, IExtendedChart.X_AXIS);
-			int selection = (int)x;
-			//
-			for(TimeRange timeRange : timeRanges.values()) {
-				int deltaStart = Math.abs(selection - timeRange.getStart());
-				int deltaStop = Math.abs(selection - timeRange.getStop());
-				int delta = Math.min(deltaStart, deltaStop);
+			TimeRange timeRange = null;
+			int x = (int)baseChart.getSelectedPrimaryAxisValue(xEvent, IExtendedChart.X_AXIS);
+			TimeRange timeRangeLocked = TimeRangeSupport.getTimeRangeLocked(timeRanges.values());
+			if(timeRangeLocked != null) {
+				/*
+				 * Locked Element
+				 */
+				timeRange = timeRangeLocked;
+			} else {
+				/*
+				 * Normal Search
+				 */
+				String identifier = "";
+				int minDelta = Integer.MAX_VALUE;
 				//
-				if(delta < minDelta) {
-					minDelta = delta;
-					identifier = timeRange.getIdentifier();
+				for(TimeRange timeRangeX : timeRanges.values()) {
+					int deltaStart = Math.abs(x - timeRangeX.getStart());
+					int deltaStop = Math.abs(x - timeRangeX.getStop());
+					int delta = Math.min(deltaStart, deltaStop);
+					//
+					if(delta < minDelta) {
+						minDelta = delta;
+						identifier = timeRangeX.getIdentifier();
+					}
+				}
+				/*
+				 * Try to get the time range and adjust the start | stop value.
+				 * This could be also null if no time range was matched.
+				 */
+				timeRange = timeRanges.get(identifier);
+				if(timeRange != null) {
+					if(xStart != -1 && xStop != -1) {
+						double positionStart = baseChart.getSelectedPrimaryAxisValue(xStart, IExtendedChart.X_AXIS);
+						double positionStop = baseChart.getSelectedPrimaryAxisValue(xStop, IExtendedChart.X_AXIS);
+						//
+						if(positionStart < timeRange.getStart() && positionStop < timeRange.getStart()) {
+							timeRange = null; // The selection is left of the time range area.
+						} else if(positionStart > timeRange.getStop() && positionStop > timeRange.getStop()) {
+							timeRange = null; // The selection is right of the time range area.
+						}
+					}
 				}
 			}
 			/*
-			 * Try to get the time range and adjust the start | stop value.
-			 * This could be also null if no time range was matched.
+			 * Only select the time range if it is inside of a certain offset.
 			 */
-			TimeRange timeRange = timeRanges.get(identifier);
-			if(timeRange != null) {
-				if(xStart != -1 && xStop != -1) {
-					double positionStart = baseChart.getSelectedPrimaryAxisValue(xStart, IExtendedChart.X_AXIS);
-					double positionStop = baseChart.getSelectedPrimaryAxisValue(xStop, IExtendedChart.X_AXIS);
-					//
-					if(positionStart < timeRange.getStart() && positionStop < timeRange.getStart()) {
-						timeRange = null; // The selection is left of the time range area.
-					} else if(positionStart > timeRange.getStop() && positionStop > timeRange.getStop()) {
-						timeRange = null; // The selection is right of the time range area.
-					}
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+			int xOffset = preferenceStore.getInt(PreferenceSupplier.P_TIME_RANGE_SELECTION_OFFSET);
+			if(timeRange != null && xOffset >= 0) {
+				if(x < (timeRange.getStart() - xOffset) || x > (timeRange.getStop() + xOffset)) {
+					timeRange = null;
 				}
 			}
 			//

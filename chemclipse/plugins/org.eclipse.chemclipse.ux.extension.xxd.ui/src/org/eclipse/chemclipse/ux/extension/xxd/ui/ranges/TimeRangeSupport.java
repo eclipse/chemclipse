@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,6 +20,48 @@ import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
 
 public class TimeRangeSupport {
+
+	public static boolean containsUpdateLock(TimeRanges timeRanges) {
+
+		return getTimeRangeLocked(timeRanges.values()) != null;
+	}
+
+	public static TimeRange getTimeRangeLocked(Collection<TimeRange> timeRanges) {
+
+		for(TimeRange timeRange : timeRanges) {
+			if(timeRange.isLocked()) {
+				return timeRange;
+			}
+		}
+		//
+		return null;
+	}
+
+	public static boolean toggleUpdateLock(TimeRanges timeRanges, TimeRange timeRange) {
+
+		boolean locked = !timeRange.isLocked();
+		if(locked) {
+			setUpdateLock(timeRanges, timeRange);
+		} else {
+			timeRange.setLocked(false);
+		}
+		//
+		return locked;
+	}
+
+	public static void setUpdateLock(TimeRanges timeRanges, TimeRange timeRange) {
+
+		/*
+		 * Deactivate all locks.
+		 */
+		for(TimeRange timeRangeX : timeRanges.values()) {
+			timeRangeX.setLocked(false);
+		}
+		/*
+		 * Update lock true on selected range.
+		 */
+		timeRange.setLocked(true);
+	}
 
 	public static TimeRange getTimeRangePrevious(TimeRanges timeRanges, TimeRange timeRange) {
 

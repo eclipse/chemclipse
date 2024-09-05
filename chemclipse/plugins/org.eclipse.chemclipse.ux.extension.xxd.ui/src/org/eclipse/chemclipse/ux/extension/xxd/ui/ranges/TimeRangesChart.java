@@ -281,7 +281,7 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 			/*
 			 * Update the existing time range or create a new one.
 			 */
-			TimeRange timeRange = TimeRangeSelector.selectRange(getBaseChart(), event, xStart, xStop, timeRanges);
+			TimeRange timeRange = TimeRangeSelector.selectRange(getBaseChart(), event.x, xStart, xStop, timeRanges);
 			if(timeRange != null) {
 				/*
 				 * Update

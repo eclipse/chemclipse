@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
@@ -16,6 +16,9 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -34,15 +37,11 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 
 	private static final int INVISIBLE = -1;
 	//
-	private Color colorAreaSelected = Colors.DARK_RED;
-	private Color colorLabelSelected = Colors.BLACK;
-	private Color colorAreaNormal = Colors.GRAY;
-	private Color colorLabelNormal = Colors.DARK_GRAY;
-	//
 	private Set<TimeRange> timeRanges = new HashSet<>();
-	private TimeRange timeRangeSelected = null;
+	private TimeRange timeRangeSelection = null;
+	private TimeRange timeRangeHover = null;
+	private int hoverPositionX = -1;
 	private Transform transform = new Transform(Display.getDefault());
-	private boolean plotCenterOnly = false;
 
 	public TimeRangeMarker(BaseChart baseChart) {
 
@@ -55,19 +54,25 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 		return timeRanges;
 	}
 
-	public void setTimeRangeSelected(TimeRange timeRangeSelected) {
+	public void setTimeRangeSelection(TimeRange timeRange) {
 
-		this.timeRangeSelected = timeRangeSelected;
+		this.timeRangeSelection = timeRange;
 	}
 
-	public boolean isPlotCenterOnly() {
+	public TimeRange getTimeRangeSelection() {
 
-		return plotCenterOnly;
+		return timeRangeSelection;
 	}
 
-	public void setPlotCenterOnly(boolean plotCenterOnly) {
+	public void clearTimeRangeHover() {
 
-		this.plotCenterOnly = plotCenterOnly;
+		setTimeRangeHover(null, -1);
+	}
+
+	public void setTimeRangeHover(TimeRange timeRange, int hoverPositionX) {
+
+		this.timeRangeHover = timeRange;
+		this.hoverPositionX = hoverPositionX;
 	}
 
 	@Override
@@ -75,10 +80,16 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 
 		if(!getBaseChart().isBufferActive()) {
 			GC gc = e.gc;
-			for(TimeRange timeRange : timeRanges) {
-				boolean isSelected = timeRange.equals(timeRangeSelected);
-				plotMarker(gc, timeRange, isSelected);
+			//
+			TimeRange timeRangeLocked = TimeRangeSupport.getTimeRangeLocked(timeRanges);
+			if(timeRangeLocked != null) {
+				plotMarker(gc, timeRangeLocked);
+			} else {
+				for(TimeRange timeRange : timeRanges) {
+					plotMarker(gc, timeRange);
+				}
 			}
+			//
 			gc.setAlpha(255);
 		}
 	}
@@ -89,7 +100,7 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 		transform.dispose();
 	}
 
-	private void plotMarker(GC gc, TimeRange timeRange, boolean isSelected) {
+	private void plotMarker(GC gc, TimeRange timeRange) {
 
 		BaseChart baseChart = getBaseChart();
 		if(baseChart.getSeriesSet().getSeries().length > 0) {
@@ -100,27 +111,43 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 				/*
 				 * Settings
 				 */
+				boolean isSelected = timeRange.equals(timeRangeSelection);
+				boolean isHovered = timeRange.equals(timeRangeHover);
+				//
 				Range rangeX = xAxis.getRange();
 				IPlotArea plotArea = baseChart.getPlotArea();
 				Point rectangle = plotArea instanceof Scrollable scrollable ? scrollable.getSize() : plotArea.getSize();
-				Color colorArea = isSelected ? colorAreaSelected : colorAreaNormal;
-				Color colorLabel = isSelected ? colorLabelSelected : colorLabelNormal;
-				//
-				if(plotCenterOnly) {
-					/*
-					 * Print center
-					 */
-					int xStop = printLine(gc, rectangle, rangeX, timeRange.getCenter(), colorArea, 1);
-					printLabel(gc, rectangle, timeRange.getIdentifier(), xStop, colorLabel);
-				} else {
-					/*
-					 * Print lines, rectangle and label
-					 */
-					int xStart = printLine(gc, rectangle, rangeX, timeRange.getStart(), colorArea, 1);
-					printLine(gc, rectangle, rangeX, timeRange.getCenter(), colorArea, 1);
-					int xStop = printLine(gc, rectangle, rangeX, timeRange.getStop(), colorArea, 1);
-					fillRectangle(gc, rectangle, xStart, xStop, colorArea);
-					printLabel(gc, rectangle, timeRange.getIdentifier(), xStop, colorLabel);
+				Color colorArea = isSelected ? (timeRange.isLocked() ? Colors.RED : Colors.DARK_RED) : Colors.GRAY;
+				Color colorLabel = isSelected ? (timeRange.isLocked() ? Colors.DARK_RED : Colors.BLACK) : Colors.DARK_GRAY;
+				/*
+				 * Print lines, rectangle and label
+				 */
+				int xStart = printLine(gc, rectangle, rangeX, timeRange.getStart(), colorArea, 1);
+				int xCenter = printLine(gc, rectangle, rangeX, timeRange.getCenter(), colorArea, 1);
+				int xStop = printLine(gc, rectangle, rangeX, timeRange.getStop(), colorArea, 1);
+				fillRectangle(gc, rectangle, xStart, xStop, colorArea);
+				printLabel(gc, rectangle, timeRange, xStop, colorLabel);
+				/*
+				 * Hover the left or right part of the closest time range.
+				 */
+				if(isHovered) {
+					if(hoverPositionX >= 0) {
+						IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+						int offset = preferenceStore.getInt(PreferenceSupplier.P_TIME_RANGE_SELECTION_OFFSET);
+						if(hoverPositionX >= (timeRange.getStart() - offset) && hoverPositionX <= (timeRange.getStop() + offset)) {
+							int start;
+							int stop;
+							if(hoverPositionX < timeRangeHover.getCenter()) {
+								start = xStart;
+								stop = xCenter;
+							} else {
+								start = xCenter;
+								stop = xStop;
+							}
+							Color color = timeRange.isLocked() ? Colors.DARK_RED : (isSelected ? Colors.DARK_GRAY : Colors.GRAY);
+							fillRectangle(gc, rectangle, start, stop, color);
+						}
+					}
 				}
 			}
 		}
@@ -150,9 +177,15 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 		}
 	}
 
-	private void printLabel(GC gc, Point rectangle, String label, int xStop, Color color) {
+	private void printLabel(GC gc, Point rectangle, TimeRange timeRange, int xStop, Color color) {
 
 		if(xStop > INVISIBLE) {
+			//
+			String label = timeRange.getIdentifier();
+			if(timeRange.isLocked()) {
+				label += " (locked)";
+			}
+			//
 			gc.setTransform(transform);
 			Point labelSize = gc.textExtent(label);
 			int xLabel = -labelSize.x - (rectangle.y - labelSize.x) + (rectangle.y / 20);
@@ -163,7 +196,7 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 			int yLabel = xStop;
 			gc.setAlpha(255);
 			gc.setForeground(color);
-			gc.setLineWidth(1);
+			gc.setLineWidth(timeRange.isLocked() ? 2 : 1);
 			gc.drawText(label, xLabel, yLabel, true);
 			gc.setTransform(null);
 		}

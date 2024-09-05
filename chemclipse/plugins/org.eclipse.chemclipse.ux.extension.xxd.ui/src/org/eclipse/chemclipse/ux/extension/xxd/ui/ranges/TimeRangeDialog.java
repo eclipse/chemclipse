@@ -70,7 +70,7 @@ public class TimeRangeDialog extends Dialog {
 	@Override
 	protected Point getInitialSize() {
 
-		return new Point(450, 150);
+		return new Point(450, 200);
 	}
 
 	@Override

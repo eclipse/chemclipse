@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
@@ -32,9 +32,6 @@ public class TimeRangesComparator extends AbstractRecordTableComparator implemen
 					sortOrder = Integer.compare(timeRange2.getStart(), timeRange1.getStart());
 					break;
 				case 2:
-					sortOrder = Integer.compare(timeRange2.getCenter(), timeRange1.getCenter());
-					break;
-				case 3:
 					sortOrder = Integer.compare(timeRange2.getStop(), timeRange1.getStop());
 					break;
 			}

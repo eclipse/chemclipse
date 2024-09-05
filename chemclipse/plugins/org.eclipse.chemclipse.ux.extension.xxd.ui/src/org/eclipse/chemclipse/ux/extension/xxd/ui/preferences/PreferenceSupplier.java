@@ -89,6 +89,9 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	//
 	public static final double MIN_RANGE = -Double.MAX_VALUE;
 	public static final double MAX_RANGE = Double.MAX_VALUE;
+	//
+	public static final int MIN_TIME_RANGE_SELECTION_OFFSET = -1; // No Selection
+	public static final int MAX_TIME_RANGE_SELECTION_OFFSET = Integer.MAX_VALUE;
 	/*
 	 * General / Task Quick Access
 	 */
@@ -471,8 +474,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	 */
 	public static final String P_TIME_RANGE_TEMPLATE_FOLDER = "timeRangeTemplateFolder";
 	public static final String DEF_TIME_RANGE_TEMPLATE_FOLDER = "";
-	public static final String P_SHOW_TIME_RANGE_SPINNER_LABEL = "showTimeRangeSpinnerLabel";
-	public static final boolean DEF_SHOW_TIME_RANGE_SPINNER_LABEL = false;
+	public static final String P_TIME_RANGE_SELECTION_OFFSET = "timeRangeSelectionOffset";
+	public static final int DEF_TIME_RANGE_SELECTION_OFFSET = 10000; // ms
 	/*
 	 * Named Traces
 	 */
@@ -1478,7 +1481,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		 * Time Ranges
 		 */
 		putDefault(P_TIME_RANGE_TEMPLATE_FOLDER, DEF_TIME_RANGE_TEMPLATE_FOLDER);
-		putDefault(P_SHOW_TIME_RANGE_SPINNER_LABEL, DEF_SHOW_TIME_RANGE_SPINNER_LABEL);
+		putDefault(P_TIME_RANGE_SELECTION_OFFSET, DEF_TIME_RANGE_SELECTION_OFFSET);
 		/*
 		 * Named Traces
 		 */

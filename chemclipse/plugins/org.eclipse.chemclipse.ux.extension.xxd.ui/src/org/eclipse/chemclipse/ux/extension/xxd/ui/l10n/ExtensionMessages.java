@@ -191,7 +191,7 @@ public class ExtensionMessages extends NLS {
 	public static String referenceID;
 	public static String referenceLabel;
 	public static String startTimeMin;
-	public static String centerTimeMin;
+	public static String maximumTimeMin;
 	public static String stopTimeMin;
 	public static String chromatogramLengthModified;
 	public static String scanIdentification;

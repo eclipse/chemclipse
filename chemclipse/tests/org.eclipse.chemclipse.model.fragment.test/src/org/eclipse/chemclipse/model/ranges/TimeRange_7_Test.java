@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.ranges;
 
@@ -42,7 +42,7 @@ public class TimeRange_7_Test extends TestCase {
 
 	public void test2() {
 
-		assertEquals(350, timeRange.getCenter());
+		assertEquals(350, timeRange.getMaximum());
 	}
 
 	public void test3() {
@@ -54,7 +54,7 @@ public class TimeRange_7_Test extends TestCase {
 
 		timeRange.updateStart(501);
 		assertEquals(200, timeRange.getStart());
-		assertEquals(350, timeRange.getCenter());
+		assertEquals(350, timeRange.getMaximum());
 		assertEquals(500, timeRange.getStop());
 	}
 
@@ -62,7 +62,7 @@ public class TimeRange_7_Test extends TestCase {
 
 		timeRange.updateStop(199);
 		assertEquals(200, timeRange.getStart());
-		assertEquals(350, timeRange.getCenter());
+		assertEquals(350, timeRange.getMaximum());
 		assertEquals(500, timeRange.getStop());
 	}
 
@@ -70,22 +70,22 @@ public class TimeRange_7_Test extends TestCase {
 
 		timeRange.updateStart(250);
 		assertEquals(250, timeRange.getStart());
-		assertEquals(350, timeRange.getCenter());
+		assertEquals(350, timeRange.getMaximum());
 		assertEquals(500, timeRange.getStop());
 		//
-		timeRange.updateCenter();
-		assertEquals(375, timeRange.getCenter());
+		timeRange.updateMaximum();
+		assertEquals(375, timeRange.getMaximum());
 	}
 
 	public void test7() {
 
 		timeRange.updateStop(550);
 		assertEquals(200, timeRange.getStart());
-		assertEquals(350, timeRange.getCenter());
+		assertEquals(350, timeRange.getMaximum());
 		assertEquals(550, timeRange.getStop());
 		//
-		timeRange.updateCenter();
-		assertEquals(375, timeRange.getCenter());
+		timeRange.updateMaximum();
+		assertEquals(375, timeRange.getMaximum());
 	}
 
 	public void test8() {
@@ -93,10 +93,10 @@ public class TimeRange_7_Test extends TestCase {
 		timeRange.updateStart(250);
 		timeRange.updateStop(550);
 		assertEquals(250, timeRange.getStart());
-		assertEquals(350, timeRange.getCenter());
+		assertEquals(350, timeRange.getMaximum());
 		assertEquals(550, timeRange.getStop());
 		//
-		timeRange.updateCenter();
-		assertEquals(400, timeRange.getCenter());
+		timeRange.updateMaximum();
+		assertEquals(400, timeRange.getMaximum());
 	}
 }

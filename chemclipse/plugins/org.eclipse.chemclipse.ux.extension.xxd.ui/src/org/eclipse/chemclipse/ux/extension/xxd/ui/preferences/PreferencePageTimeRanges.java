@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -29,7 +29,7 @@ public class PreferencePageTimeRanges extends FieldEditorPreferencePage implemen
 
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_TIME_RANGE_SPINNER_LABEL, "Show the time range labels", getFieldEditorParent()));
+		addField(new ExtendedIntegerFieldEditor(PreferenceSupplier.P_TIME_RANGE_SELECTION_OFFSET, "Offset [ms] (Selection)", PreferenceSupplier.MIN_TIME_RANGE_SELECTION_OFFSET, PreferenceSupplier.MAX_TIME_RANGE_SELECTION_OFFSET, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

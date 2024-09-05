@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
@@ -32,7 +32,7 @@ public class TimeRangeValidator implements IValidator<Object> {
 	//
 	private String identifier = "";
 	private int retentionTimeStart = 0;
-	private int retentionTimeCenter = 0;
+	private int retentionTimeMaximum = 0;
 	private int retentionTimeStop = 0;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
@@ -94,18 +94,18 @@ public class TimeRangeValidator implements IValidator<Object> {
 				if(timeRange != null) {
 					switch(marker) {
 						case START:
-							if(retentionTime > timeRange.getCenter()) {
-								message = "The retention time must be <= center (" + getRetentionTimeMinutes(timeRange.getCenter()) + ").";
+							if(retentionTime > timeRange.getMaximum()) {
+								message = "The retention time must be <= maximum (" + getRetentionTimeMinutes(timeRange.getMaximum()) + ").";
 							}
 							break;
-						case CENTER:
+						case MAXIMUM:
 							if(retentionTime < timeRange.getStart() || retentionTime > timeRange.getStop()) {
 								message = "The retention time must be >= start (" + getRetentionTimeMinutes(timeRange.getStart()) + ") and <= stop (" + getRetentionTimeMinutes(timeRange.getStop()) + ").";
 							}
 							break;
 						case STOP:
-							if(retentionTime < timeRange.getCenter()) {
-								message = "The retention time must be >= center (" + getRetentionTimeMinutes(timeRange.getCenter()) + ").";
+							if(retentionTime < timeRange.getMaximum()) {
+								message = "The retention time must be >= maximum (" + getRetentionTimeMinutes(timeRange.getMaximum()) + ").";
 							}
 							break;
 					}
@@ -126,17 +126,17 @@ public class TimeRangeValidator implements IValidator<Object> {
 			if(values.length == 4) {
 				identifier = values[0].trim();
 				retentionTimeStart = (int)(Double.parseDouble(values[1].trim()) * TimeRange.MINUTE_FACTOR);
-				retentionTimeCenter = (int)(Double.parseDouble(values[2].trim()) * TimeRange.MINUTE_FACTOR);
+				retentionTimeMaximum = (int)(Double.parseDouble(values[2].trim()) * TimeRange.MINUTE_FACTOR);
 				retentionTimeStop = (int)(Double.parseDouble(values[3].trim()) * TimeRange.MINUTE_FACTOR);
 				//
 				if("".equals(identifier)) {
 					message = "Please specify an identifier.";
-				} else if(retentionTimeStart > retentionTimeCenter) {
-					message = "Start > Center";
-				} else if(retentionTimeStart > retentionTimeCenter || retentionTimeStart > retentionTimeStop) {
+				} else if(retentionTimeStart > retentionTimeMaximum) {
+					message = "Start > Maximum";
+				} else if(retentionTimeStart > retentionTimeMaximum || retentionTimeStart > retentionTimeStop) {
 					message = "Start > Stop";
-				} else if(retentionTimeCenter > retentionTimeStop) {
-					message = "Center > Stop";
+				} else if(retentionTimeMaximum > retentionTimeStop) {
+					message = "Maximum > Stop";
 				}
 			}
 		} catch(Exception e) {
@@ -170,9 +170,9 @@ public class TimeRangeValidator implements IValidator<Object> {
 		return retentionTimeStart;
 	}
 
-	public int getRetentionTimeCenter() {
+	public int getRetentionTimeMaximum() {
 
-		return retentionTimeCenter;
+		return retentionTimeMaximum;
 	}
 
 	public int getRetentionTimeStop() {

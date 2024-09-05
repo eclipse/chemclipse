@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.ranges;
 
@@ -21,7 +21,7 @@ public class TimeRange {
 
 	public enum Marker {
 		START, //
-		CENTER, //
+		MAXIMUM, //
 		STOP //
 	}
 
@@ -30,10 +30,18 @@ public class TimeRange {
 	private String identifier = "";
 	/*
 	 * Milliseconds
+	 * ---
+	 * Maximum is currently not used, but might
+	 * be important when processes are used that
+	 * need a user selected maximum position.
 	 */
 	private int start = 0;
-	private int center = 0;
+	private int maximum = 0;
 	private int stop = 0;
+	/*
+	 * Transient
+	 */
+	private boolean locked = false;
 
 	/**
 	 * Start / Stop in milliseconds.
@@ -49,30 +57,30 @@ public class TimeRange {
 
 	public TimeRange(TimeRange timeRange) throws IllegalArgumentException {
 
-		this(timeRange.getIdentifier(), timeRange.getStart(), timeRange.getCenter(), timeRange.getStop());
+		this(timeRange.getIdentifier(), timeRange.getStart(), timeRange.getMaximum(), timeRange.getStop());
 	}
 
 	/**
-	 * Start / Center / Stop in milliseconds.
-	 * Auto-correction of start/center/stop if performed.
+	 * Start / Maximum / Stop in milliseconds.
+	 * Auto-correction of start/maximum/stop if performed.
 	 * 
 	 * @param start
-	 * @param center
+	 * @param maximum
 	 * @param stop
 	 */
-	public TimeRange(String identifier, int start, int center, int stop) throws IllegalArgumentException {
+	public TimeRange(String identifier, int start, int maximum, int stop) throws IllegalArgumentException {
 
 		/*
 		 * Validity checks.
 		 */
-		if(start < 0 || center < 0 || stop < 0) {
-			throw new IllegalArgumentException("Start/Center/Stop must be >= 0.");
+		if(start < 0 || maximum < 0 || stop < 0) {
+			throw new IllegalArgumentException("Start/Maximum/Stop must be >= 0.");
 		}
 		//
 		this.identifier = (identifier != null) ? identifier : "";
 		this.start = Math.min(start, stop);
 		this.stop = Math.max(start, stop);
-		updateCenter();
+		updateMaximum();
 	}
 
 	public String getIdentifier() {
@@ -87,7 +95,12 @@ public class TimeRange {
 
 	public int getCenter() {
 
-		return center;
+		return calculateCenter(start, stop);
+	}
+
+	public int getMaximum() {
+
+		return maximum;
 	}
 
 	public int getStop() {
@@ -99,13 +112,13 @@ public class TimeRange {
 
 		this.start = Math.min(start, stop);
 		this.stop = Math.max(start, stop);
-		updateCenter();
+		updateMaximum();
 	}
 
-	public void update(int start, int center, int stop) {
+	public void update(int start, int maximum, int stop) {
 
 		update(start, stop);
-		updateCenter(center);
+		updateMaximum(maximum);
 	}
 
 	/**
@@ -118,30 +131,30 @@ public class TimeRange {
 
 		if(start <= stop) {
 			this.start = start;
-			if(start >= center) {
-				updateCenter();
+			if(start >= maximum) {
+				updateMaximum();
 			}
 		}
 	}
 
 	/**
-	 * Calculates the center, based on start/stop.
+	 * Calculates the maximum, based on start/stop.
 	 */
-	public void updateCenter() {
+	public void updateMaximum() {
 
-		this.center = (int)calculateCenter(start, stop);
+		this.maximum = (int)calculateCenter(start, stop);
 	}
 
 	/**
-	 * Updates the center time.
-	 * The center time must be >= start time and <= stop time, otherwise no update is performed.
+	 * Updates the maximum time.
+	 * The maximum time must be >= start time and <= stop time, otherwise no update is performed.
 	 * 
-	 * @param center
+	 * @param maximum
 	 */
-	public void updateCenter(int center) {
+	public void updateMaximum(int maximum) {
 
-		if(center >= start && center <= stop) {
-			this.center = center;
+		if(maximum >= start && maximum <= stop) {
+			this.maximum = maximum;
 		}
 	}
 
@@ -155,10 +168,20 @@ public class TimeRange {
 
 		if(stop >= start) {
 			this.stop = stop;
-			if(stop <= center) {
-				updateCenter();
+			if(stop <= maximum) {
+				updateMaximum();
 			}
 		}
+	}
+
+	public boolean isLocked() {
+
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+
+		this.locked = locked;
 	}
 
 	private static int calculateCenter(int start, int stop) {
@@ -179,6 +202,7 @@ public class TimeRange {
 			 */
 			center = min;
 		}
+		//
 		return center;
 	}
 
@@ -212,6 +236,6 @@ public class TimeRange {
 	@Override
 	public String toString() {
 
-		return "TimeRange [identifier=" + identifier + ", start=" + start + ", center=" + center + ", stop=" + stop + "]";
+		return "TimeRange [identifier=" + identifier + ", start=" + start + ", maximum=" + maximum + ", stop=" + stop + "]";
 	}
 }

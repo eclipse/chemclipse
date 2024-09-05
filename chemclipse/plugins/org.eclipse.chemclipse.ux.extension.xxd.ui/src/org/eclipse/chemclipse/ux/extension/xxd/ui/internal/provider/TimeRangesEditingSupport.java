@@ -54,8 +54,6 @@ public class TimeRangesEditingSupport extends EditingSupport {
 		if(element instanceof TimeRange timeRange) {
 			if(column.equals(TimeRangesLabelProvider.START)) {
 				return formatValue(timeRange.getStart());
-			} else if(column.equals(TimeRangesLabelProvider.CENTER)) {
-				return formatValue(timeRange.getCenter());
 			} else if(column.equals(TimeRangesLabelProvider.STOP)) {
 				return formatValue(timeRange.getStop());
 			}
@@ -69,8 +67,6 @@ public class TimeRangesEditingSupport extends EditingSupport {
 		if(element instanceof TimeRange timeRange) {
 			if(column.equals(TimeRangesLabelProvider.START)) {
 				timeRange.updateStart(parseValue(value));
-			} else if(column.equals(TimeRangesLabelProvider.CENTER)) {
-				timeRange.updateCenter(parseValue(value));
 			} else if(column.equals(TimeRangesLabelProvider.STOP)) {
 				timeRange.updateStop(parseValue(value));
 			}

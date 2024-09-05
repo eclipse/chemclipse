@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
@@ -16,14 +16,21 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.core.IExtendedChart;
+import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 import org.eclipse.swtchart.extensions.core.ScrollableChart;
+import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 
 public class TimeRangesChromatogramUI extends Composite implements IExtendedPartUI {
 
@@ -155,6 +162,70 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 		IChartSettings chartSettings = timeRangesChart.getChartSettings();
 		chartSettings.addHandledEventProcessor(timeRangeAdjustmentHandler);
 		chartSettings.addHandledEventProcessor(timeRangeSelectionHandler);
+		chartSettings.addHandledEventProcessor(new IHandledEventProcessor() {
+
+			@Override
+			public int getEvent() {
+
+				return IKeyboardSupport.EVENT_KEY_UP;
+			}
+
+			@Override
+			public int getButton() {
+
+				return IKeyboardSupport.KEY_CODE_LC_L;
+			}
+
+			@Override
+			public int getStateMask() {
+
+				return SWT.NONE;
+			}
+
+			@Override
+			public void handleEvent(BaseChart baseChart, Event event) {
+
+				TimeRange timeRange = timeRangeMarker.getTimeRangeSelection();
+				if(timeRange != null) {
+					TimeRangeSupport.toggleUpdateLock(timeRanges, timeRange);
+					updateTimeRangeMarker(timeRange);
+					fireUpdate(timeRange);
+				}
+			}
+		});
+		chartSettings.addHandledEventProcessor(new IHandledEventProcessor() {
+
+			@Override
+			public int getEvent() {
+
+				return IKeyboardSupport.EVENT_KEY_UP;
+			}
+
+			@Override
+			public int getButton() {
+
+				return SWT.DEL;
+			}
+
+			@Override
+			public int getStateMask() {
+
+				return SWT.NONE;
+			}
+
+			@Override
+			public void handleEvent(BaseChart baseChart, Event event) {
+
+				TimeRange timeRange = timeRangeMarker.getTimeRangeSelection();
+				if(timeRange != null) {
+					if(MessageDialog.openQuestion(event.display.getActiveShell(), "Time Range", "Would you like to delete '" + timeRange.getIdentifier() + "'?")) {
+						timeRanges.remove(timeRange);
+						updateInput();
+						fireUpdate(null);
+					}
+				}
+			}
+		});
 		timeRangesChart.applySettings(chartSettings);
 		//
 		timeRangesChart.setUpdateListener(new ITimeRangeUpdateListener() {
@@ -168,6 +239,23 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 				chartControl.get().updateTimeRangeMarker(timeRange);
 				updateTimeRangeMarker(timeRange);
 				fireUpdate(timeRange);
+			}
+		});
+		//
+		BaseChart baseChart = timeRangesChart.getBaseChart();
+		IPlotArea plotArea = baseChart.getPlotArea();
+		plotArea.addMouseMoveListener(new MouseMoveListener() {
+
+			@Override
+			public void mouseMove(MouseEvent e) {
+
+				TimeRange timeRange = TimeRangeSelector.selectRange(baseChart, e.x, -1, -1, timeRanges);
+				if(timeRange != null) {
+					int hoverPositionX = (int)baseChart.getSelectedPrimaryAxisValue(e.x, IExtendedChart.X_AXIS);
+					timeRangeMarker.setTimeRangeHover(timeRange, hoverPositionX);
+				} else {
+					timeRangeMarker.clearTimeRangeHover();
+				}
 			}
 		});
 		//
@@ -222,7 +310,7 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 			chartControl.get().updateTimeRangeMarker(timeRange);
 			rangesControl.get().select(timeRange);
 			timeRangeMarker.getTimeRanges().addAll(timeRanges.values());
-			timeRangeMarker.setTimeRangeSelected(timeRange);
+			timeRangeMarker.setTimeRangeSelection(timeRange);
 		} else {
 			/*
 			 * Hide the time range composite.

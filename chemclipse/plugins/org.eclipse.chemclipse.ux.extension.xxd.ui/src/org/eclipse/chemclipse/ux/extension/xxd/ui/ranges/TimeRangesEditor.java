@@ -386,7 +386,7 @@ public class TimeRangesEditor extends Composite {
 				if(timeRange != null) {
 					if(timeRange.getStop() == 0) {
 						timeRange.updateStop(chromatogram.getStartRetentionTime());
-						timeRange.updateCenter();
+						timeRange.updateMaximum();
 					}
 				} else {
 					timeRanges.add(new TimeRange(clipStartIdentifier, 0, chromatogram.getStartRetentionTime()));

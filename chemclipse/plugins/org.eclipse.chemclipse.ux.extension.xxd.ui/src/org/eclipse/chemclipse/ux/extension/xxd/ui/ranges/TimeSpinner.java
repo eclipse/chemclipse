@@ -17,15 +17,11 @@ import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TimeRangesLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -35,15 +31,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class TimeSpinner extends Composite {
 
 	private static final int STEP_RETENTION_TIME = 1000; // milliseconds
 	//
-	private Label label;
-	private Label spacer;
 	private Text text;
 	private Button buttonDecrease;
 	private Button buttonIncrease;
@@ -53,24 +46,18 @@ public class TimeSpinner extends Composite {
 	private ITimeRangeUpdateListener updateListener = null;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public TimeSpinner(Composite parent, int style, TimeRange.Marker marker) {
 
 		super(parent, style);
 		this.marker = marker;
 		createControl();
-		/*
-		 * Update the descriptions based on the selected marker.
-		 */
-		updateDescriptions();
 	}
 
 	@Override
 	public void update() {
 
 		super.update();
-		updateLabel();
 	}
 
 	public void setUpdateListener(ITimeRangeUpdateListener updateListener) {
@@ -97,34 +84,16 @@ public class TimeSpinner extends Composite {
 		gridLayout.marginRight = 0;
 		setLayout(gridLayout);
 		//
-		label = createInfo(this);
-		spacer = createSpacer(this);
-		//
 		text = createText(this);
 		buttonDecrease = createButtonModify(this, false);
 		buttonIncrease = createButtonModify(this, true);
 		//
-		updateLabel();
+		initialize();
 	}
 
-	private Label createInfo(Composite parent) {
+	private void initialize() {
 
-		Label label = new Label(parent, SWT.NONE);
-		label.setText(""); // Will be set dynamically.
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.CENTER;
-		label.setLayoutData(gridData);
-		return label;
-	}
-
-	private Label createSpacer(Composite parent) {
-
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("");
-		GridData gridData = new GridData();
-		gridData.horizontalSpan = 2;
-		label.setLayoutData(gridData);
-		return label;
+		updateDescriptions();
 	}
 
 	private Text createText(Composite parent) {
@@ -204,8 +173,8 @@ public class TimeSpinner extends Composite {
 			case START:
 				retentionTime = adjustTime(timeRange.getStart(), increase);
 				break;
-			case CENTER:
-				retentionTime = adjustTime(timeRange.getCenter(), increase);
+			case MAXIMUM:
+				retentionTime = adjustTime(timeRange.getMaximum(), increase);
 				break;
 			case STOP:
 				retentionTime = adjustTime(timeRange.getStop(), increase);
@@ -225,8 +194,8 @@ public class TimeSpinner extends Composite {
 			case START:
 				timeRange.updateStart(retentionTime);
 				break;
-			case CENTER:
-				timeRange.updateCenter(retentionTime);
+			case MAXIMUM:
+				timeRange.updateMaximum(retentionTime);
 				break;
 			case STOP:
 				timeRange.updateStop(retentionTime);
@@ -247,15 +216,14 @@ public class TimeSpinner extends Composite {
 			case START:
 				description = TimeRangesLabelProvider.START;
 				break;
-			case CENTER:
-				description = TimeRangesLabelProvider.CENTER;
+			case MAXIMUM:
+				description = TimeRangesLabelProvider.MAXIMUM;
 				break;
 			case STOP:
 				description = TimeRangesLabelProvider.STOP;
 				break;
 		}
 		//
-		label.setText(description);
 		text.setToolTipText(description);
 	}
 
@@ -269,8 +237,8 @@ public class TimeSpinner extends Composite {
 			case START:
 				retentionTime = getRetentionTimeMinutes(timeRange.getStart());
 				break;
-			case CENTER:
-				retentionTime = getRetentionTimeMinutes(timeRange.getCenter());
+			case MAXIMUM:
+				retentionTime = getRetentionTimeMinutes(timeRange.getMaximum());
 				break;
 			case STOP:
 				retentionTime = getRetentionTimeMinutes(timeRange.getStop());
@@ -292,13 +260,6 @@ public class TimeSpinner extends Composite {
 	private String getRetentionTimeMinutes(int milliseconds) {
 
 		return decimalFormat.format(milliseconds / TimeRange.MINUTE_FACTOR);
-	}
-
-	private void updateLabel() {
-
-		boolean visible = preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_TIME_RANGE_SPINNER_LABEL);
-		PartSupport.setControlVisibility(label, visible);
-		PartSupport.setControlVisibility(spacer, visible);
 	}
 
 	private void fireUpdate(TimeRange timeRange) {

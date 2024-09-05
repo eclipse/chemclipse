@@ -24,9 +24,13 @@ import org.eclipse.swt.graphics.Image;
 
 public class TimeRangesLabelProvider extends AbstractChemClipseLabelProvider {
 
+	/*
+	 * The maximum is currently not displayed as it is not
+	 * used in a specific case yet.
+	 */
 	public static final String IDENTIFIER = ExtensionMessages.identifier;
 	public static final String START = ExtensionMessages.startTimeMin;
-	public static final String CENTER = ExtensionMessages.centerTimeMin;
+	public static final String MAXIMUM = ExtensionMessages.maximumTimeMin;
 	public static final String STOP = ExtensionMessages.stopTimeMin;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
@@ -34,12 +38,10 @@ public class TimeRangesLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String[] TITLES = { //
 			IDENTIFIER, //
 			START, //
-			CENTER, //
 			STOP //
 	};
 	public static final int[] BOUNDS = { //
 			200, //
-			130, //
 			130, //
 			130 //
 	};
@@ -66,9 +68,6 @@ public class TimeRangesLabelProvider extends AbstractChemClipseLabelProvider {
 					text = calculateRetentionTimeMinutes(timeRange.getStart());
 					break;
 				case 2:
-					text = calculateRetentionTimeMinutes(timeRange.getCenter());
-					break;
-				case 3:
 					text = calculateRetentionTimeMinutes(timeRange.getStop());
 					break;
 			}

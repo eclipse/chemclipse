@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.ranges;
 
@@ -42,7 +42,7 @@ public class TimeRange_8_Test extends TestCase {
 
 	public void test2() {
 
-		assertEquals(350, timeRange.getCenter());
+		assertEquals(350, timeRange.getMaximum());
 	}
 
 	public void test3() {
@@ -54,7 +54,7 @@ public class TimeRange_8_Test extends TestCase {
 
 		timeRange.update(600, 800);
 		assertEquals(600, timeRange.getStart());
-		assertEquals(700, timeRange.getCenter());
+		assertEquals(700, timeRange.getMaximum());
 		assertEquals(800, timeRange.getStop());
 	}
 
@@ -62,7 +62,7 @@ public class TimeRange_8_Test extends TestCase {
 
 		timeRange.update(800, 600);
 		assertEquals(600, timeRange.getStart());
-		assertEquals(700, timeRange.getCenter());
+		assertEquals(700, timeRange.getMaximum());
 		assertEquals(800, timeRange.getStop());
 	}
 }
