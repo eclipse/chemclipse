@@ -86,7 +86,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private AtomicReference<Spinner> spinnerControlPC = new AtomicReference<>();
 	private AtomicReference<ComboViewer> comboViewerAlgorithmControl = new AtomicReference<>();
-	private ComboViewer comboViewerOplsTarget;
+	private AtomicReference<ComboViewer> comboViewerOplsTarget = new AtomicReference<>();
 	private AtomicReference<SamplesListUI> sampleListControl = new AtomicReference<>();
 	private AtomicReference<ComboViewer> labelOptionControl = new AtomicReference<>();
 	private AtomicReference<PreprocessingSettingsUI> preprocessingSettingsControl = new AtomicReference<>();
@@ -236,11 +236,11 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 						IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
 						if(analysisSettings != null) {
 							analysisSettings.setAlgorithm(algorithm);
-							analysisSettings.setOplsTargetGroupName(comboViewerOplsTarget.getStructuredSelection().getFirstElement().toString());
+							analysisSettings.setOplsTargetGroupName(comboViewerOplsTarget.get().getStructuredSelection().getFirstElement().toString());
 							if(algorithm.equals(Algorithm.OPLS)) {
-								comboViewerOplsTarget.getControl().setEnabled(true);
+								comboViewerOplsTarget.get().getControl().setEnabled(true);
 							} else {
-								comboViewerOplsTarget.getControl().setEnabled(false);
+								comboViewerOplsTarget.get().getControl().setEnabled(false);
 							}
 						}
 					}
@@ -393,10 +393,10 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 	private void createComboViewerOplsTarget(Composite parent) {
 
-		comboViewerOplsTarget = new EnhancedComboViewer(parent, SWT.BORDER | SWT.READ_ONLY);
-		Combo combo = comboViewerOplsTarget.getCombo();
-		comboViewerOplsTarget.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewerOplsTarget.setLabelProvider(new AbstractLabelProvider() {
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.BORDER | SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
 			@Override
 			public String getText(Object element) {
@@ -409,8 +409,10 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			}
 		});
 		//
-		combo.setToolTipText("OPLS Y Target Group");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.setToolTipText("Using Classification Column for OPLS");
+		GridData gridData = new GridData();
+		gridData.widthHint = 250;
+		combo.setLayoutData(gridData);
 		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -419,7 +421,12 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 				if(samples != null) {
 					IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
 					if(analysisSettings != null) {
-						analysisSettings.setOplsTargetGroupName(comboViewerOplsTarget.getStructuredSelection().getFirstElement().toString());
+						analysisSettings.setOplsTargetGroupName(comboViewer.getStructuredSelection().getFirstElement().toString());
+						if(comboViewer.getStructuredSelection().getFirstElement().toString().equals("--")) {
+							combo.setToolTipText("Using Classification Column for OPLS");
+						} else {
+							combo.setToolTipText("Using selected Group against the rest for OPLS");
+						}
 					}
 				}
 			}
@@ -428,13 +435,13 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		if(samples == null) {
 			oplsGroupTargets = new ArrayList<>();
 			oplsGroupTargets.add("--");
-			comboViewerOplsTarget.setInput(oplsGroupTargets);
+			comboViewer.setInput(oplsGroupTargets);
 		} else {
 			updateOplsGroupTargets();
 		}
-		comboViewerOplsTarget.setInput(oplsGroupTargets);
-		comboViewerOplsTarget.setSelection(new StructuredSelection(oplsGroupTargets.get(0)));
-		labelOptionControl.set(comboViewerOplsTarget);
+		comboViewer.setInput(oplsGroupTargets);
+		comboViewer.setSelection(new StructuredSelection(oplsGroupTargets.get(0)));
+		comboViewerOplsTarget.set(comboViewer);
 	}
 
 	private Button createButtonColorScheme(Composite parent) {
@@ -601,12 +608,12 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			preprocessingSettingsControl.get().setInput(analysisSettings.getPreprocessingSettings());
 			spinnerControlPC.get().setSelection(analysisSettings.getNumberOfPrincipalComponents());
 			comboViewerAlgorithmControl.get().setSelection(new StructuredSelection(analysisSettings.getAlgorithm()));
-			comboViewerOplsTarget.setInput(oplsGroupTargets);
+			comboViewerOplsTarget.get().setInput(oplsGroupTargets);
 			int selectedIndex = oplsGroupTargets.indexOf(analysisSettings.getOplsTargetGroupName());
 			if(selectedIndex != -1) {
-				comboViewerOplsTarget.setSelection(new StructuredSelection(oplsGroupTargets.get(selectedIndex)));
+				comboViewerOplsTarget.get().setSelection(new StructuredSelection(oplsGroupTargets.get(selectedIndex)));
 			} else {
-				comboViewerOplsTarget.setSelection(new StructuredSelection(oplsGroupTargets.get(0)));
+				comboViewerOplsTarget.get().setSelection(new StructuredSelection(oplsGroupTargets.get(0)));
 			}
 		} else {
 			preprocessingSettingsControl.get().setInput(null);
@@ -626,9 +633,9 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			if(analysisSettings != null) {
 				labelOptionControl.get().setSelection(new StructuredSelection(analysisSettings.getLabelOptionPCA()));
 				if(analysisSettings.getAlgorithm() == Algorithm.OPLS) {
-					comboViewerOplsTarget.getControl().setEnabled(true);
+					comboViewerOplsTarget.get().getControl().setEnabled(true);
 				} else {
-					comboViewerOplsTarget.getControl().setEnabled(false);
+					comboViewerOplsTarget.get().getControl().setEnabled(false);
 				}
 			}
 		} else {
