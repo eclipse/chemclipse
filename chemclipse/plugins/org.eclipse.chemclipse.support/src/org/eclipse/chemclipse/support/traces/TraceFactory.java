@@ -36,6 +36,14 @@ public class TraceFactory {
 	private static final Pattern PATTERN_GENERIC_DIGITS = Pattern.compile("(\\d+\\.?\\d+)(.*)");
 	private static final Pattern PATTERN_TANDEM_MSD = Pattern.compile("(\\d+)(\\s+>\\s+)(\\d+\\.?\\d?)(\\s+@)(\\d+)(.*)");
 
+	public static boolean isTraceDefinition(String content) {
+
+		/*
+		 * TODO
+		 */
+		return content.contains(ITrace.INFIX_RANGE_STANDARD) || content.contains(ITrace.INFIX_RANGE_SIMPLE);
+	}
+
 	public static <T extends ITrace> List<T> parseTraces(String content, Class<T> clazz) {
 
 		List<T> elements = new ArrayList<>();
@@ -96,46 +104,6 @@ public class TraceFactory {
 		}
 		//
 		return elements;
-	}
-
-	private static <T extends ITrace> void addTraceSpecific(String part, List<T> elements, Class<T> clazz) {
-
-		T specificTrace = parseTrace(part, clazz);
-		if(specificTrace != null) {
-			elements.add(specificTrace);
-		}
-	}
-
-	private static <T extends ITrace> void addTraceGeneric(String part, List<T> elements, Class<T> clazz) {
-
-		int trace = parseInteger(part);
-		if(trace > 0) {
-			try {
-				T genericTrace = clazz.getDeclaredConstructor().newInstance();
-				genericTrace.setValue(trace);
-				elements.add(genericTrace);
-			} catch(Exception e) {
-			}
-		}
-	}
-
-	private static <T extends ITrace> void addTraceRange(String trace, List<T> elements, Class<T> clazz) {
-
-		String[] parts = trace.trim().split(SEPARATOR_TRACE_RANGE);
-		if(parts.length == 2) {
-			int start = parseInteger(parts[0]);
-			int stop = parseInteger(parts[1]);
-			if(start > 0 && start < stop) {
-				for(int i = start; i <= stop; i++) {
-					try {
-						T genericTrace = clazz.getDeclaredConstructor().newInstance();
-						genericTrace.setValue(i);
-						elements.add(genericTrace);
-					} catch(Exception e) {
-					}
-				}
-			}
-		}
 	}
 
 	public static <T extends ITrace> T parseTrace(String content, Class<T> clazz) {
@@ -451,6 +419,46 @@ public class TraceFactory {
 		}
 		//
 		return lines;
+	}
+
+	private static <T extends ITrace> void addTraceSpecific(String part, List<T> elements, Class<T> clazz) {
+
+		T specificTrace = parseTrace(part, clazz);
+		if(specificTrace != null) {
+			elements.add(specificTrace);
+		}
+	}
+
+	private static <T extends ITrace> void addTraceGeneric(String part, List<T> elements, Class<T> clazz) {
+
+		int trace = parseInteger(part);
+		if(trace > 0) {
+			try {
+				T genericTrace = clazz.getDeclaredConstructor().newInstance();
+				genericTrace.setValue(trace);
+				elements.add(genericTrace);
+			} catch(Exception e) {
+			}
+		}
+	}
+
+	private static <T extends ITrace> void addTraceRange(String trace, List<T> elements, Class<T> clazz) {
+
+		String[] parts = trace.trim().split(SEPARATOR_TRACE_RANGE);
+		if(parts.length == 2) {
+			int start = parseInteger(parts[0]);
+			int stop = parseInteger(parts[1]);
+			if(start > 0 && start < stop) {
+				for(int i = start; i <= stop; i++) {
+					try {
+						T genericTrace = clazz.getDeclaredConstructor().newInstance();
+						genericTrace.setValue(i);
+						elements.add(genericTrace);
+					} catch(Exception e) {
+					}
+				}
+			}
+		}
 	}
 
 	private static boolean isTraceInteger(String content) {

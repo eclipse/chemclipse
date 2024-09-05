@@ -44,6 +44,10 @@ import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.chemclipse.support.traces.ITrace;
+import org.eclipse.chemclipse.support.traces.TraceFactory;
+import org.eclipse.chemclipse.support.traces.TraceHighResMSD;
+import org.eclipse.chemclipse.support.traces.TraceType;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
@@ -666,6 +670,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.XIC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.SIC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.TSC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.HIC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC, DisplayType.BPC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC, DisplayType.XIC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC, DisplayType.SIC));
@@ -698,6 +703,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						appendXVC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					} else if(displayType.equals(DisplayType.SVC)) {
 						appendSVC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
+					} else if(displayType.equals(DisplayType.HIC)) {
+						appendHIC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					} else {
 						appendTIC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					}
@@ -791,6 +798,61 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 							ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, seriesId, displayType, derivative, color, markedIons, false);
 							lineSeriesData.getSettings().setDescription("m/z " + Integer.toString(ion) + " (" + description + ")");
 							lineSeriesDataList.add(lineSeriesData);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void appendHIC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
+
+		String seriesId;
+		Color color;
+		//
+		BaseChart baseChart = chartControl.get().getBaseChart();
+		Derivative derivative = getSelectedDerivative();
+		/*
+		 * High Resolution Ion Chromatogram
+		 */
+		List<? extends ITrace> traces = getTraceSelection(displayType);
+		if(chromatogram instanceof IChromatogramMSD) {
+			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
+			for(ITrace trace : traces) {
+				if(trace instanceof TraceHighResMSD) {
+					seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + trace.toString() + OverlayChartSupport.OVERLAY_STOP_MARKER;
+					color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+					availableSeriesIds.add(seriesId);
+					selectionSeries.add(seriesId);
+					if(!baseChart.isSeriesContained(seriesId)) {
+						ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, derivative, color, Arrays.asList(trace), false);
+						lineSeriesData.getSettings().setDescription(trace.toString() + " (" + description + ")");
+						lineSeriesDataList.add(lineSeriesData);
+					}
+				}
+			}
+		}
+		/*
+		 * References
+		 */
+		if(preferenceStore.getBoolean(PreferenceSupplier.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
+			int j = 1;
+			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+				if(referencedChromatogram instanceof IChromatogramMSD) {
+					String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, false);
+					for(ITrace trace : traces) {
+						if(trace instanceof TraceHighResMSD) {
+							String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
+							seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + trace.toString() + OverlayChartSupport.OVERLAY_STOP_MARKER;
+							color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+							availableSeriesIds.add(seriesId);
+							selectionSeries.add(seriesId);
+							if(!baseChart.isSeriesContained(seriesId)) {
+								ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, seriesId, derivative, color, Arrays.asList(trace), false);
+								lineSeriesData.getSettings().setDescription(trace.toString() + " (" + description + ")");
+								lineSeriesDataList.add(lineSeriesData);
+							}
 						}
 					}
 				}
@@ -1302,6 +1364,37 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		return Derivative.NONE;
 	}
 
+	private List<? extends ITrace> getTraceSelection(DisplayType displayType) {
+
+		List<ITrace> traces = new ArrayList<>();
+		/*
+		 * Map the types
+		 */
+		TraceType traceType;
+		switch(displayType) {
+			case HIC:
+				traceType = TraceType.MSD_HIGHRES;
+				break;
+			default:
+				/*
+				 * TODO - map all types
+				 */
+				traceType = null;
+				break;
+		}
+		/*
+		 * Get the traces.
+		 */
+		if(traceType != null) {
+			NamedTrace namedTrace = toolbarNamedTraces.get().getNamedTrace();
+			if(namedTrace != null) {
+				traces.addAll(TraceFactory.parseTraces(namedTrace.getTraces(), traceType.clazz()));
+			}
+		}
+		//
+		return traces;
+	}
+
 	private List<Number> getSelectedTraces(boolean isNominal) {
 
 		List<Number> traceList = new ArrayList<>();
@@ -1331,7 +1424,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		Set<DisplayType> overlayType = getDisplayType();
 		return overlayType.contains(DisplayType.XIC) || //
 				overlayType.contains(DisplayType.SIC) || //
-				overlayType.contains(DisplayType.TSC);
+				overlayType.contains(DisplayType.TSC) || //
+				overlayType.contains(DisplayType.HIC);
 	}
 
 	private boolean isExtractedWavelengthsModusEnabled() {

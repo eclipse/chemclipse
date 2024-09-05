@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,6 +39,8 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
+import org.eclipse.chemclipse.support.traces.ITrace;
+import org.eclipse.chemclipse.support.traces.TraceHighResMSD;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -189,6 +192,18 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, displayType, derivative, color, signals, baseline, useRetentionIndex);
 	}
 
+	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, Derivative derivative, Color color, List<ITrace> traces, boolean baseline) {
+
+		return getLineSeriesData(chromatogram, seriesId, derivative, color, traces, false, false);
+	}
+
+	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, Derivative derivative, Color color, List<ITrace> traces, boolean baseline, boolean useRetentionIndex) {
+
+		int startScan = 1;
+		int stopScan = chromatogram.getNumberOfScans();
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, derivative, color, traces, baseline, useRetentionIndex);
+	}
+
 	@Deprecated
 	public ILineSeriesData getLineSeriesData(IExtractedWavelengthSignals extractedWavelengthSignals, int wavelength, String seriesId, DisplayType dataType) {
 
@@ -318,6 +333,90 @@ public class ChromatogramChartSupport {
 				}
 				index++;
 			}
+		}
+		/*
+		 * remove NAN values
+		 */
+		int numberNaN = (int)Arrays.stream(ySeries).filter(Double::isNaN).count();
+		if(numberNaN > 0) {
+			int newSize = ySeries.length - numberNaN;
+			double[] xSeriesWithoutNanValues = new double[newSize];
+			double[] ySeriesWithoutNanValues = new double[newSize];
+			int j = 0;
+			for(int i = 0; i < ySeries.length; i++) {
+				if(!Double.isNaN(ySeries[i])) {
+					xSeriesWithoutNanValues[j] = xSeries[i];
+					ySeriesWithoutNanValues[j] = ySeries[i];
+					j++;
+				}
+			}
+			xSeries = xSeriesWithoutNanValues;
+			ySeries = ySeriesWithoutNanValues;
+		}
+		/*
+		 * Calculate a derivative?
+		 */
+		int order = derivative.order();
+		for(int i = 1; i <= order; i++) {
+			ySeries = calculateDerivate(ySeries);
+		}
+		/*
+		 * Add the series.
+		 */
+		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
+		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+		lineSeriesSettings.setLineColor(color);
+		lineSeriesSettings.setLineStyle(lineStyle);
+		lineSeriesSettings.setEnableArea(showArea);
+		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
+		lineSeriesSettingsHighlight.setLineWidth(2);
+		//
+		return lineSeriesData;
+	}
+
+	private ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, int startScan, int stopScan, String seriesId, Derivative derivative, Color color, List<ITrace> traces, boolean baseline, boolean useRetentionIndex) {
+
+		IBaselineModel baselineModel = baseline ? chromatogram.getBaselineModel() : null;
+		//
+		double[] xSeries;
+		double[] ySeries;
+		//
+		/*
+		 * Normal
+		 */
+		int length = stopScan - startScan + 1;
+		xSeries = new double[length];
+		ySeries = new double[length];
+		//
+		int index = 0;
+		for(int i = startScan; i <= stopScan; i++) {
+			/*
+			 * Get the retention time and intensity.
+			 */
+			IScan scan = chromatogram.getScan(i);
+			int retentionTime = scan.getRetentionTime();
+			float retentionIndex = scan.getRetentionIndex();
+			if(useRetentionIndex) {
+				if(retentionIndex > 0) {
+					xSeries[index] = retentionIndex;
+					if(baseline) {
+						ySeries[index] = baselineModel.getBackground(retentionTime);
+					} else {
+						ySeries[index] = getIntensity(scan, traces);
+					}
+				} else {
+					ySeries[index] = Double.NaN;
+				}
+			} else {
+				xSeries[index] = retentionTime;
+				if(baseline) {
+					ySeries[index] = baselineModel.getBackground(retentionTime);
+				} else {
+					ySeries[index] = getIntensity(scan, traces);
+				}
+			}
+			index++;
 		}
 		/*
 		 * remove NAN values
@@ -563,6 +662,28 @@ public class ChromatogramChartSupport {
 					int wavenumber = (int)Math.round(scanSignal.getWavenumber());
 					if(traces.contains(wavenumber)) {
 						intensity = scanSignal.getIntensity();
+					}
+				}
+			}
+		}
+		//
+		return intensity;
+	}
+
+	private double getIntensity(IScan scan, List<ITrace> traces) {
+
+		double intensity = 0;
+		//
+		for(ITrace trace : traces) {
+			if(trace instanceof TraceHighResMSD traceHighResMSD) {
+				if(scan instanceof IScanMSD scanMSD) {
+					double startMZ = traceHighResMSD.getStartMZ();
+					double stopMZ = traceHighResMSD.getStopMZ();
+					for(IIon ion : scanMSD.getIons()) {
+						double mz = ion.getIon();
+						if(mz >= startMZ && mz <= stopMZ) {
+							intensity += ion.getAbundance();
+						}
 					}
 				}
 			}

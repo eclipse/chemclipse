@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.traces.TraceFactory;
 import org.eclipse.chemclipse.support.util.NamedTraceListUtil;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -31,25 +32,35 @@ public class TraceValidator implements IValidator<Object> {
 	private static final String ERROR_VALUE = "The trace value can't be parsed: ";
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.#");
-	private Set<Double> traces = new TreeSet<Double>();
+	private Set<Double> tracesNumber = new TreeSet<Double>();
+	private String tracesString = "";
 
 	@Override
 	public IStatus validate(Object value) {
 
-		traces.clear();
+		tracesNumber.clear();
+		tracesString = "";
+		//
 		String message = null;
 		if(value == null) {
 			message = ERROR;
 		} else {
 			if(value instanceof String text) {
-				String[] values = text.split(NamedTraceListUtil.SEPARATOR_TRACE);
-				exitloop:
-				for(String val : values) {
-					try {
-						traces.add(Double.parseDouble(val));
-					} catch(NumberFormatException e) {
-						message = ERROR_VALUE + val;
-						break exitloop;
+				if(TraceFactory.isTraceDefinition(text)) {
+					tracesString = text;
+				} else {
+					/*
+					 * Classic Support
+					 */
+					String[] values = text.split(NamedTraceListUtil.SEPARATOR_TRACE);
+					exitloop:
+					for(String val : values) {
+						try {
+							tracesNumber.add(Double.parseDouble(val));
+						} catch(NumberFormatException e) {
+							message = ERROR_VALUE + val;
+							break exitloop;
+						}
 					}
 				}
 			} else {
@@ -66,13 +77,13 @@ public class TraceValidator implements IValidator<Object> {
 
 	public List<Double> getTracesAsDouble() {
 
-		return new ArrayList<Double>(traces);
+		return new ArrayList<Double>(tracesNumber);
 	}
 
 	public List<Integer> getTracesAsInteger() {
 
 		Set<Integer> trazes = new HashSet<>();
-		for(double trace : traces) {
+		for(double trace : tracesNumber) {
 			trazes.add(Math.round((float)trace));
 		}
 		return new ArrayList<>(trazes);
@@ -81,13 +92,18 @@ public class TraceValidator implements IValidator<Object> {
 	public String getTracesAsString() {
 
 		StringBuilder builder = new StringBuilder();
-		Iterator<Double> iterator = traces.iterator();
-		while(iterator.hasNext()) {
-			builder.append(decimalFormat.format(iterator.next()));
-			if(iterator.hasNext()) {
-				builder.append(NamedTraceListUtil.SEPARATOR_TRACE);
+		if(tracesString.isBlank()) {
+			Iterator<Double> iterator = tracesNumber.iterator();
+			while(iterator.hasNext()) {
+				builder.append(decimalFormat.format(iterator.next()));
+				if(iterator.hasNext()) {
+					builder.append(NamedTraceListUtil.SEPARATOR_TRACE);
+				}
 			}
+		} else {
+			builder.append(tracesString);
 		}
+		//
 		return builder.toString();
 	}
 }
