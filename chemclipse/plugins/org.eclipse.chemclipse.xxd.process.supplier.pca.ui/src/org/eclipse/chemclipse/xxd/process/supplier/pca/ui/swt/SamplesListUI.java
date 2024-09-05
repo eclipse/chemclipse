@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
+ * Lorenz Gerber - Opls Target Group
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.provider.SamplesComparator;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.provider.SamplesEditingSupport;
@@ -36,6 +38,8 @@ public class SamplesListUI extends ExtendedTableViewer {
 	private final ITableLabelProvider labelProvider = new SamplesLabelProvider();
 	private final ViewerComparator comparator = new SamplesComparator();
 	private final SamplesListFilter listFilter = new SamplesListFilter();
+	//
+	private IUpdateListener updateListener;
 
 	public SamplesListUI(Composite parent, int style) {
 
@@ -52,6 +56,18 @@ public class SamplesListUI extends ExtendedTableViewer {
 
 		listFilter.setSearchText(searchText, caseSensitive);
 		refresh();
+	}
+
+	public void setUpdateListener(IUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
+	}
+
+	public void updateContent() {
+
+		if(updateListener != null) {
+			updateListener.update();
+		}
 	}
 
 	private void createColumns() {

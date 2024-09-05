@@ -9,6 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  * Philip Wenig - added a title field
+ * Lorenz Gerber - added Opls Target Group field
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.model;
 
@@ -27,6 +28,10 @@ public interface IAnalysisSettings {
 	Algorithm getAlgorithm();
 
 	void setAlgorithm(Algorithm algorithm);
+
+	String getOplsTargetGroupName();
+
+	void setOplsTargetGroupName(String groupName);
 
 	boolean isRemoveUselessVariables();
 

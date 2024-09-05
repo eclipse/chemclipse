@@ -23,24 +23,39 @@ import org.ejml.dense.row.CommonOps_DDRM;
 
 public class CalculatorOPLS extends AbstractMultivariateCalculator {
 
-	public CalculatorOPLS(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
+	private String oplsTargetGroup;
+
+	public CalculatorOPLS(int numObs, int numVars, int numComps, String oplsTargetGroup) throws MathIllegalArgumentException {
 
 		super(numObs, numVars, numComps);
+		this.oplsTargetGroup = oplsTargetGroup;
 	}
 
 	private DMatrixRMaj getYVector() {
 
-		HashSet<String> classificationNamesSet = new HashSet<>();
-		ArrayList<String> classificationNames = getClassificationNames();
-		double[] vector = new double[classificationNames.size()];
-		classificationNamesSet.addAll(classificationNames);
-		List<String> uniqueClassificationNames = Arrays.asList(classificationNamesSet.toArray(new String[classificationNamesSet.size()]));
 		int yIterator = 0;
-		for(String classificator : classificationNames) {
-			vector[yIterator] = uniqueClassificationNames.indexOf(classificator);
-			yIterator++;
+		if(oplsTargetGroup.equals("--")) {
+			HashSet<String> classificationNamesSet = new HashSet<>();
+			ArrayList<String> classificationNames = getClassificationNames();
+			double[] vector = new double[classificationNames.size()];
+			classificationNamesSet.addAll(classificationNames);
+			List<String> uniqueClassificationNames = Arrays.asList(classificationNamesSet.toArray(new String[classificationNamesSet.size()]));
+			for(String classificator : classificationNames) {
+				vector[yIterator] = uniqueClassificationNames.indexOf(classificator);
+				yIterator++;
+			}
+			return new DMatrixRMaj(classificationNames.size(), 1, true, vector);
+		} else {
+			ArrayList<String> groupNames = getGroupNames();
+			double[] vector = new double[groupNames.size()];
+			for(String groupName : groupNames) {
+				if(groupName.equals(oplsTargetGroup)) {
+					vector[yIterator] = 1.0;
+				}
+				yIterator++;
+			}
+			return new DMatrixRMaj(groupNames.size(), 1, true, vector);
 		}
-		return new DMatrixRMaj(classificationNames.size(), 1, true, vector);
 	}
 
 	@Override

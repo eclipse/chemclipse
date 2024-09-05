@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip Wenig - initial API and implementation
+ * Lorenz Gerber - Opls Target selection
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedComboViewer;
+import org.eclipse.chemclipse.support.updates.IUpdateListener;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
@@ -83,6 +86,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private AtomicReference<Spinner> spinnerControlPC = new AtomicReference<>();
 	private AtomicReference<ComboViewer> comboViewerAlgorithmControl = new AtomicReference<>();
+	private AtomicReference<ComboViewer> comboViewerOplsTarget = new AtomicReference<>();
 	private AtomicReference<SamplesListUI> sampleListControl = new AtomicReference<>();
 	private AtomicReference<ComboViewer> labelOptionControl = new AtomicReference<>();
 	private AtomicReference<PreprocessingSettingsUI> preprocessingSettingsControl = new AtomicReference<>();
@@ -91,6 +95,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 	private EvaluationPCA evaluationPCA = null;
 	//
 	private Composite control;
+	private ArrayList<String> oplsGroupTargets;
 
 	public AnalysisEditorUI(Composite parent, int style) {
 
@@ -132,6 +137,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 	public void setInput(ISamplesPCA<IVariable, ISample> samples) {
 
 		this.samples = samples;
+		updateOplsGroupTargets();
 		applyColorScheme();
 		updateControls();
 	}
@@ -230,6 +236,12 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 						IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
 						if(analysisSettings != null) {
 							analysisSettings.setAlgorithm(algorithm);
+							analysisSettings.setOplsTargetGroupName(comboViewerOplsTarget.get().getStructuredSelection().getFirstElement().toString());
+							if(algorithm.equals(Algorithm.OPLS)) {
+								comboViewerOplsTarget.get().getControl().setEnabled(true);
+							} else {
+								comboViewerOplsTarget.get().getControl().setEnabled(false);
+							}
 						}
 					}
 				}
@@ -322,9 +334,10 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
 		createButtonToggleToolbar(composite);
+		createComboViewerOplsTarget(composite);
 		createComboViewerLabelOption(composite);
 		createButtonColorScheme(composite);
 		createButtonImport(composite);
@@ -376,6 +389,59 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		comboViewer.setInput(LabelOptionPCA.values());
 		comboViewer.setSelection(new StructuredSelection(LabelOptionPCA.SAMPLE_NAME));
 		labelOptionControl.set(comboViewer);
+	}
+
+	private void createComboViewerOplsTarget(Composite parent) {
+
+		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.BORDER | SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof String) {
+					return (String)element.toString();
+				} else {
+					return "";
+				}
+			}
+		});
+		//
+		combo.setToolTipText("Using Classification Column for OPLS");
+		GridData gridData = new GridData();
+		gridData.widthHint = 250;
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(samples != null) {
+					IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
+					if(analysisSettings != null) {
+						analysisSettings.setOplsTargetGroupName(comboViewer.getStructuredSelection().getFirstElement().toString());
+						if(comboViewer.getStructuredSelection().getFirstElement().toString().equals("--")) {
+							combo.setToolTipText("Using Classification Column for OPLS");
+						} else {
+							combo.setToolTipText("Using selected Group against the rest for OPLS");
+						}
+					}
+				}
+			}
+		});
+		//
+		if(samples == null) {
+			oplsGroupTargets = new ArrayList<>();
+			oplsGroupTargets.add("--");
+			comboViewer.setInput(oplsGroupTargets);
+		} else {
+			updateOplsGroupTargets();
+		}
+		comboViewer.setInput(oplsGroupTargets);
+		comboViewer.setSelection(new StructuredSelection(oplsGroupTargets.get(0)));
+		comboViewerOplsTarget.set(comboViewer);
 	}
 
 	private Button createButtonColorScheme(Composite parent) {
@@ -473,6 +539,14 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		SamplesListUI sampleListUI = new SamplesListUI(composite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
 		Table table = sampleListUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		sampleListUI.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update() {
+
+				updateSampleList();
+			}
+		});
 		//
 		sampleListControl.set(sampleListUI);
 	}
@@ -534,6 +608,13 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			preprocessingSettingsControl.get().setInput(analysisSettings.getPreprocessingSettings());
 			spinnerControlPC.get().setSelection(analysisSettings.getNumberOfPrincipalComponents());
 			comboViewerAlgorithmControl.get().setSelection(new StructuredSelection(analysisSettings.getAlgorithm()));
+			comboViewerOplsTarget.get().setInput(oplsGroupTargets);
+			int selectedIndex = oplsGroupTargets.indexOf(analysisSettings.getOplsTargetGroupName());
+			if(selectedIndex != -1) {
+				comboViewerOplsTarget.get().setSelection(new StructuredSelection(oplsGroupTargets.get(selectedIndex)));
+			} else {
+				comboViewerOplsTarget.get().setSelection(new StructuredSelection(oplsGroupTargets.get(0)));
+			}
 		} else {
 			preprocessingSettingsControl.get().setInput(null);
 		}
@@ -551,6 +632,11 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			updateWidgets(analysisSettings);
 			if(analysisSettings != null) {
 				labelOptionControl.get().setSelection(new StructuredSelection(analysisSettings.getLabelOptionPCA()));
+				if(analysisSettings.getAlgorithm() == Algorithm.OPLS) {
+					comboViewerOplsTarget.get().getControl().setEnabled(true);
+				} else {
+					comboViewerOplsTarget.get().getControl().setEnabled(false);
+				}
 			}
 		} else {
 			updateWidgets(null);
@@ -602,8 +688,24 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		SamplesListUI sampleListUI = sampleListControl.get();
 		if(samples != null) {
 			sampleListUI.updateInput(samples.getSamples());
+			updateOplsGroupTargets();
+			updateWidgets(samples.getAnalysisSettings());
 		} else {
 			sampleListUI.updateInput(null);
+		}
+	}
+
+	private void updateOplsGroupTargets() {
+
+		if(samples != null) {
+			List<String> fromSamples = new ArrayList<>();
+			fromSamples.add("--");
+			fromSamples.addAll(samples.getSamples().stream().map(x -> x.getGroupName()).distinct().toList());
+			if(!oplsGroupTargets.toString().equals(fromSamples.toString())) {
+				oplsGroupTargets.clear();
+				oplsGroupTargets.add("--");
+				oplsGroupTargets.addAll(samples.getSamples().stream().map(x -> x.getGroupName()).distinct().toList());
+			}
 		}
 	}
 }

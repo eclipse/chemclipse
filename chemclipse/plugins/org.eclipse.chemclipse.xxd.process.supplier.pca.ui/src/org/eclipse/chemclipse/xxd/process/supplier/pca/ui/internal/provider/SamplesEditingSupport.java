@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,13 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
+ * Lorenz Gerber - Opls Target Group
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.provider;
 
 import org.eclipse.chemclipse.model.statistics.ISample;
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt.SamplesListUI;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColorCellEditor;
@@ -25,10 +26,10 @@ import org.eclipse.swt.graphics.RGB;
 public class SamplesEditingSupport extends EditingSupport {
 
 	private CellEditor cellEditor;
-	private final ExtendedTableViewer tableViewer;
+	private final SamplesListUI tableViewer;
 	private final String column;
 
-	public SamplesEditingSupport(ExtendedTableViewer tableViewer, String column) {
+	public SamplesEditingSupport(SamplesListUI tableViewer, String column) {
 
 		super(tableViewer);
 		this.column = column;
@@ -99,7 +100,8 @@ public class SamplesEditingSupport extends EditingSupport {
 					sample.setDescription((String)value);
 					break;
 			}
-			tableViewer.refresh(element);
+			tableViewer.refresh();
+			tableViewer.updateContent();
 		}
 	}
 }

@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
- * Lorenz Gerber - PCA adapter, algorithm
+ * Lorenz Gerber - PCA adapter, algorithm, opls target group
  * Philip Wenig - get rid of JavaFX, feature selection
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.core;
@@ -123,7 +123,7 @@ public class ProcessorPCA {
 				/*
 				 * Prepare PCA Calculation
 				 */
-				IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numberVariables, numberOfPrincipalComponents, algorithm);
+				IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numberVariables, numberOfPrincipalComponents, algorithm, analysisSettings.getOplsTargetGroupName());
 				subMonitor.worked(20);
 				/*
 				 * Compute PCA
@@ -347,7 +347,7 @@ public class ProcessorPCA {
 	 * @return PrincipalComponentAnalysis
 	 * @throws Exception
 	 */
-	private IMultivariateCalculator setupPCA(Map<ISample, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents, Algorithm algorithm) throws MathIllegalArgumentException {
+	private IMultivariateCalculator setupPCA(Map<ISample, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents, Algorithm algorithm, String oplsTargetGroup) throws MathIllegalArgumentException {
 
 		/*
 		 * Initialize the PCA analysis.
@@ -359,7 +359,7 @@ public class ProcessorPCA {
 		} else if(algorithm.equals(Algorithm.SVD)) {
 			principalComponentAnalysis = new CalculatorSVD(numSamples, sampleSize, numberOfPrincipalComponents);
 		} else if(algorithm.equals(Algorithm.OPLS)) {
-			principalComponentAnalysis = new CalculatorOPLS(numSamples, sampleSize, numberOfPrincipalComponents);
+			principalComponentAnalysis = new CalculatorOPLS(numSamples, sampleSize, numberOfPrincipalComponents, oplsTargetGroup);
 		}
 		/*
 		 * Add the samples.
