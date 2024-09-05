@@ -11,12 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.msd.model.core.AbstractVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.AbstractStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
 
-public class VendorMassSpectrum extends AbstractVendorStandaloneMassSpectrum implements IVendorStandaloneMassSpectrum {
+public class VendorMassSpectrum extends AbstractStandaloneMassSpectrum implements IVendorMassSpectrum {
 
 	private static final long serialVersionUID = 9103911623007941476L;
 	//

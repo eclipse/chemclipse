@@ -43,9 +43,8 @@ import org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.model.IVend
 import org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.model.VendorMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
-import org.eclipse.chemclipse.msd.model.implementation.VendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.implementation.StandaloneMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -62,9 +61,9 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
-		IVendorStandaloneMassSpectrum massSpectrum = null;
+		IStandaloneMassSpectrum massSpectrum = null;
 		try {
-			massSpectrum = new VendorStandaloneMassSpectrum();
+			massSpectrum = new StandaloneMassSpectrum();
 			massSpectrum.setFile(file);
 			massSpectrum.setIdentifier(file.getName());
 			massSpectrum.setMassSpectrumType((short)1); // profile
@@ -104,7 +103,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 		return document.getElementsByTagName("mSD");
 	}
 
-	private void readDescription(Element element, IVendorStandaloneMassSpectrum massSpectrum) {
+	private void readDescription(Element element, IStandaloneMassSpectrum massSpectrum) {
 
 		NodeList descriptionList = element.getElementsByTagName("description");
 		for(int i = 0; i < descriptionList.getLength(); i++) {
@@ -129,7 +128,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 		}
 	}
 
-	private void readSpectrum(Element element, IVendorMassSpectrum massSpectrum, IProgressMonitor monitor) throws DOMException, DataFormatException {
+	private void readSpectrum(Element element, IStandaloneMassSpectrum massSpectrum, IProgressMonitor monitor) throws DOMException, DataFormatException {
 
 		int points = 0;
 		float[] mzs = null;
@@ -160,7 +159,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 		}
 	}
 
-	private void readPeakList(Element element, IVendorStandaloneMassSpectrum massSpectrum) throws DOMException {
+	private void readPeakList(Element element, IStandaloneMassSpectrum massSpectrum) throws DOMException {
 
 		NodeList peakList = element.getElementsByTagName("peaklist");
 		for(int i = 0; i < peakList.getLength(); i++) {
@@ -182,7 +181,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 		}
 	}
 
-	private void readAnnotations(Element element, IVendorStandaloneMassSpectrum massSpectrum) throws DOMException {
+	private void readAnnotations(Element element, IStandaloneMassSpectrum massSpectrum) throws DOMException {
 
 		NodeList annotationsList = element.getElementsByTagName("annotations");
 		for(int i = 0; i < annotationsList.getLength(); i++) {

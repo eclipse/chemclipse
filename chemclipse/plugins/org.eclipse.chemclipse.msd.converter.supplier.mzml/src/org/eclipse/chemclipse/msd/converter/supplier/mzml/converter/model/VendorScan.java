@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model;
 
-import org.eclipse.chemclipse.msd.model.core.AbstractVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.AbstractScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 
-public class VendorScan extends AbstractVendorStandaloneMassSpectrum implements IVendorScan {
+public class VendorScan extends AbstractScanMSD implements IVendorScan {
 
 	private static final long serialVersionUID = -2545043408685013930L;
 	//
@@ -25,24 +25,6 @@ public class VendorScan extends AbstractVendorStandaloneMassSpectrum implements 
 	public VendorScan() {
 
 		super();
-	}
-
-	@Override
-	public int getMaxPossibleIons() {
-
-		return MAX_MASSFRAGMENTS;
-	}
-
-	@Override
-	public int getMinPossibleRetentionTime() {
-
-		return MIN_RETENTION_TIME;
-	}
-
-	@Override
-	public int getMaxPossibleRetentionTime() {
-
-		return MAX_RETENTION_TIME;
 	}
 
 	@Override

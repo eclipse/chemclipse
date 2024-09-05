@@ -31,8 +31,8 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorMassSpe
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.VendorMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
-import org.eclipse.chemclipse.msd.model.implementation.VendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.implementation.StandaloneMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -51,7 +51,7 @@ public class MassSpectrumReaderVersion105 extends AbstractMassSpectraReader impl
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
-		IVendorStandaloneMassSpectrum massSpectrum = null;
+		IStandaloneMassSpectrum massSpectrum = null;
 		//
 		try {
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -63,7 +63,7 @@ public class MassSpectrumReaderVersion105 extends AbstractMassSpectraReader impl
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			MzData mzData = (MzData)unmarshaller.unmarshal(nodeList.item(0));
 			//
-			massSpectrum = new VendorStandaloneMassSpectrum();
+			massSpectrum = new StandaloneMassSpectrum();
 			massSpectrum.setSampleName(mzData.getDescription().getAdmin().getSampleName());
 			for(PersonType contact : mzData.getDescription().getAdmin().getContact()) {
 				String contactDetails = "";

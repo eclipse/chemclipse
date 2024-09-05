@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,7 +46,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionGroup;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransition;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.chemclipse.support.history.EditInformation;
@@ -144,7 +144,7 @@ public class ChromatogramReaderVersion10 extends AbstractChromatogramReader impl
 			}
 			RunType run = mzML.getRun();
 			for(SpectrumType spectrum : run.getSpectrumList().getSpectrum()) {
-				IVendorMassSpectrum massSpectrum = new VendorMassSpectrum();
+				IStandaloneMassSpectrum massSpectrum = new VendorMassSpectrum();
 				for(CVParamType cvParam : spectrum.getCvParam()) {
 					if(cvParam.getAccession().equals("MS:1000127") && cvParam.getName().equals("centroid spectrum")) {
 						massSpectrum.setMassSpectrumType((short)0);

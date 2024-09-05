@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.model.core.IMassSpectrumPeak;
  * 
  * @author Matthias Mailänder
  */
-public interface IVendorStandaloneMassSpectrum extends IVendorMassSpectrum {
+public interface IStandaloneMassSpectrum extends IRegularMassSpectrum {
 
 	/**
 	 * Returns the file, see setFile().
@@ -47,7 +47,6 @@ public interface IVendorStandaloneMassSpectrum extends IVendorMassSpectrum {
 	 */
 	String getName();
 
-	//
 	String getSampleName();
 
 	void setSampleName(String name);

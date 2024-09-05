@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.ExtendedMassSpectrumPeakListUI;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.swt.SWT;
@@ -43,8 +43,8 @@ public class MassSpectrumPeakListPart extends AbstractPart<ExtendedMassSpectrumP
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IVendorStandaloneMassSpectrum vendorStandaloneMassSpectrum) {
-				getControl().update(vendorStandaloneMassSpectrum);
+			if(object instanceof IStandaloneMassSpectrum standaloneMassSpectrum) {
+				getControl().update(standaloneMassSpectrum);
 				return true;
 			}
 		}

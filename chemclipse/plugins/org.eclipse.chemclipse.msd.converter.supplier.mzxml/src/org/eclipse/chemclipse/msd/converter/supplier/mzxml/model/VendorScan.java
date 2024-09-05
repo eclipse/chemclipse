@@ -11,37 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.model;
 
-import org.eclipse.chemclipse.msd.model.core.AbstractVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.AbstractScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.Polarity;
 
-public class VendorScan extends AbstractVendorStandaloneMassSpectrum implements IVendorScan {
+public class VendorScan extends AbstractScanMSD implements IVendorScan {
 
 	private static final long serialVersionUID = -6772709008581956403L;
 	//
-	public static final int MAX_IONS = 65535;
-	public static final int MIN_RETENTION_TIME = 0;
-	public static final int MAX_RETENTION_TIME = Integer.MAX_VALUE;
-	//
 	private Polarity polarity;
-
-	@Override
-	public int getMaxPossibleIons() {
-
-		return MAX_IONS;
-	}
-
-	@Override
-	public int getMaxPossibleRetentionTime() {
-
-		return MAX_RETENTION_TIME;
-	}
-
-	@Override
-	public int getMinPossibleRetentionTime() {
-
-		return MIN_RETENTION_TIME;
-	}
 
 	@Override
 	public Polarity getPolarity() {

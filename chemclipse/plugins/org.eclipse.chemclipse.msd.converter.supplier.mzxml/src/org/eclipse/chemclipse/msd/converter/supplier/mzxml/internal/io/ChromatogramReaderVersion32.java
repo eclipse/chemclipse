@@ -113,7 +113,7 @@ public class ChromatogramReaderVersion32 extends AbstractChromatogramReaderVersi
 				long retentionTime = scan.getRetentionTime().getTimeInMillis(new Date());
 				// MS, MS/MS
 				short msLevel = scan.getMsLevel().shortValue();
-				massSpectrum.setMassSpectrometer(msLevel);
+				// massSpectrum.setMassSpectrometer(msLevel);
 				// float collisionEnergy = 0.0f;
 				// double filter1Ion = 0.0d;
 				//

@@ -30,7 +30,7 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
@@ -299,8 +299,8 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 		String name = ("".equals(massSpectra.getName())) ? "NoName" : massSpectra.getName();
 		massSpectrum = massSpectra.getMassSpectrum(1);
 		massSpectrum.setDirty(false);
-		if(massSpectrum instanceof IVendorStandaloneMassSpectrum vendorStandaloneMassSpectrum) {
-			name = vendorStandaloneMassSpectrum.getName();
+		if(massSpectrum instanceof IStandaloneMassSpectrum standaloneMassSpectrum) {
+			name = standaloneMassSpectrum.getName();
 		} else if(massSpectrum instanceof IRegularLibraryMassSpectrum regularLibraryMassSpectrum) {
 			ILibraryInformation libraryInformation = regularLibraryMassSpectrum.getLibraryInformation();
 			if(libraryInformation != null) {

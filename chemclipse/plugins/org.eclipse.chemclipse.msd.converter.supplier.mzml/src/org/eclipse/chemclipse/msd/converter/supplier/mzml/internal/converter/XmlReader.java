@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendo
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
 public class XmlReader {
 
@@ -37,7 +37,7 @@ public class XmlReader {
 		}
 	}
 
-	public static void addIons(double[] intensities, double[] mzs, IVendorMassSpectrum massSpectrum) {
+	public static void addIons(double[] intensities, double[] mzs, IScanMSD massSpectrum) {
 
 		int ions = Math.min(mzs.length, intensities.length);
 		for(int i = 0; i < ions; i++) {
