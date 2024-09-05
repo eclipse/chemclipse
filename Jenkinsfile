@@ -25,16 +25,6 @@ pipeline {
 		buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '1'))
 	}
 	stages {
-		stage ('clean workspace') {
-			when {
-				environment name: 'CLEAN_WORKSPACE', value: 'true'
-			}
-			steps {
-				cleanWs notFailBuild: true
-				//we must checkout again here because we have just cleared the data :-)
-				checkout scm
-			}
-		}
 		stage('build') {
 			steps {
 				sh """
