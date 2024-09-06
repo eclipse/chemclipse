@@ -9,7 +9,6 @@ pipeline {
 	}
 	parameters {
 		booleanParam(name: 'CLEAN_INTEGRATION', defaultValue: false, description: 'Attention: Cleans the integration folder with all branches completely.')
-		booleanParam(name: 'CLEAN_WORKSPACE', defaultValue: false, description: 'Clean the workspace before build')
 		booleanParam(name: 'CODESIGN', defaultValue: false, description: 'Sign the artifacts.')
 		booleanParam(name: 'PUBLISH_PRODUCTS', defaultValue: false, description: 'Copy to the compiled products for Windows, macOS and Linux')
 	}
