@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.Test;
@@ -98,7 +98,7 @@ public class ChromatogramImportConverterTinyProteoWizard10_ITest extends TestCas
 	@Test
 	public void testFirstScan()  {
 
-		IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)chromatogram.getScan(1);
+		IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)chromatogram.getScan(1);
 		assertEquals("Ions", 15, massSpectrum.getNumberOfIons());
 		assertEquals(15f, massSpectrum.getIon(0).getAbundance());
 		assertEquals(14f, massSpectrum.getIon(1).getAbundance());

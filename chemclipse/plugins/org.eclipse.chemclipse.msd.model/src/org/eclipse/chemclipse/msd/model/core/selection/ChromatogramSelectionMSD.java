@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIonTransitions;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIonTransitions;
@@ -40,7 +40,7 @@ import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
  */
 public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChromatogramPeakMSD, IChromatogramMSD> implements IChromatogramSelectionMSD {
 
-	private IVendorMassSpectrum selectedScan;
+	private IRegularMassSpectrum selectedScan;
 	private IMarkedIons selectedIons;
 	private IMarkedIons excludedIons;
 	private IMarkedIonTransitions markedIonTransitions;
@@ -99,7 +99,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	}
 
 	@Override
-	public IVendorMassSpectrum getSelectedScan() {
+	public IRegularMassSpectrum getSelectedScan() {
 
 		return selectedScan;
 	}
@@ -172,7 +172,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void setSelectedScan(IScan selectedScan) {
 
-		if(selectedScan instanceof IVendorMassSpectrum vendorMassSpectrum) {
+		if(selectedScan instanceof IRegularMassSpectrum vendorMassSpectrum) {
 			setSelectedScan(vendorMassSpectrum);
 		}
 	}
@@ -180,13 +180,13 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void setSelectedScan(IScan selectedScan, boolean update) {
 
-		if(selectedScan instanceof IVendorMassSpectrum vendorMassSpectrum) {
+		if(selectedScan instanceof IRegularMassSpectrum vendorMassSpectrum) {
 			setSelectedScan(vendorMassSpectrum, update);
 		}
 	}
 
 	@Override
-	public void setSelectedScan(IVendorMassSpectrum selectedScan) {
+	public void setSelectedScan(IRegularMassSpectrum selectedScan) {
 
 		/*
 		 * FireUpdateChange will be called in the validate method.
@@ -195,7 +195,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	}
 
 	@Override
-	public void setSelectedScan(IVendorMassSpectrum selectedScan, boolean update) {
+	public void setSelectedScan(IRegularMassSpectrum selectedScan, boolean update) {
 
 		if(selectedScan != null) {
 			this.selectedScan = selectedScan;

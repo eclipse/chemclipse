@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.internal.support;
 
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.junit.Ignore;
@@ -59,7 +59,7 @@ public class ChromatogramTestCase extends TestCase {
 	private IChromatogramMSD createChromatogram() {
 
 		IChromatogramMSD chromatogram = new ChromatogramMSD();
-		IVendorMassSpectrum scan;
+		IRegularMassSpectrum scan;
 		for(int i = 1; i <= 10; i++) {
 			scan = new VendorMassSpectrum();
 			chromatogram.addScan(scan);

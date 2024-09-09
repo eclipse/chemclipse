@@ -40,7 +40,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
@@ -163,7 +162,7 @@ public class ChromatogramWriter_0902 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeInt(scans); // Number of Scans
 		// Scans
 		for(int scan = 1; scan <= scans; scan++) {
-			IVendorMassSpectrum massSpectrum = chromatogram.getSupplierScan(scan);
+			IRegularMassSpectrum massSpectrum = chromatogram.getSupplierScan(scan);
 			writeMassSpectrum(dataOutputStream, massSpectrum);
 		}
 		//

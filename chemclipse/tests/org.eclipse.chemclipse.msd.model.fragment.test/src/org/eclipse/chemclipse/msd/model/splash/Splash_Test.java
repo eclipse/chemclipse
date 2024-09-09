@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.splash;
 
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 
@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 
 public class Splash_Test extends TestCase {
 
-	IVendorMassSpectrum massSpectrum;
+	IRegularMassSpectrum massSpectrum;
 
 	@Override
 	protected void setUp() throws Exception {

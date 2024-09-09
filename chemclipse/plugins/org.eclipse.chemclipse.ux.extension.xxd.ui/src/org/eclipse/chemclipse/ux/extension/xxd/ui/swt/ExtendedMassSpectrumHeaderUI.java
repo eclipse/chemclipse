@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.swt.SWT;
@@ -29,7 +29,7 @@ public class ExtendedMassSpectrumHeaderUI extends Composite {
 		createControl();
 	}
 
-	public void updateMassSpectrum(IVendorMassSpectrum massSpectrum) {
+	public void updateMassSpectrum(IRegularMassSpectrum massSpectrum) {
 
 		StringBuilder builder = new StringBuilder();
 		if(massSpectrum != null) {

@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.msd.model.core.selection;
 import org.easymock.EasyMock;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 
@@ -24,7 +24,7 @@ public class ChromatogramSelection_8_Test extends TestCase {
 
 	private IChromatogramMSD chromatogram;
 	private IChromatogramSelectionMSD selection;
-	private IVendorMassSpectrum scan;
+	private IRegularMassSpectrum scan;
 	private IChromatogramPeakMSD peak;
 
 	@Override

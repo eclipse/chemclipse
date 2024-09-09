@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.exceptions.F
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.FilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -80,7 +80,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		/*
 		 * Exclude the calculated ions from each scan.
 		 */
-		IVendorMassSpectrum supplierMassSpectrum;
+		IRegularMassSpectrum supplierMassSpectrum;
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());

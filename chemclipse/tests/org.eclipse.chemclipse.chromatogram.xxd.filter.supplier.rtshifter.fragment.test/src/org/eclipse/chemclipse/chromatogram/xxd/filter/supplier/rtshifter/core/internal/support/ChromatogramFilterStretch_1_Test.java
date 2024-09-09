@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.i
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsStretch;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 
@@ -39,7 +39,7 @@ public class ChromatogramFilterStretch_1_Test extends ChromatogramTestCase {
 
 	public void test_1() {
 
-		IVendorMassSpectrum scan;
+		IRegularMassSpectrum scan;
 		/*
 		 * PRE TESTS
 		 */
@@ -53,7 +53,7 @@ public class ChromatogramFilterStretch_1_Test extends ChromatogramTestCase {
 
 	public void test_2() {
 
-		IVendorMassSpectrum scan;
+		IRegularMassSpectrum scan;
 		try {
 			FilterSettingsStretch settings = new FilterSettingsStretch();
 			settings.setScanDelay(3200);

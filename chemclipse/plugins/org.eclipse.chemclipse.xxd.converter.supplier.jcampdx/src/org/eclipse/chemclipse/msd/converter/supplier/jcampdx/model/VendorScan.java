@@ -11,41 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model;
 
-import org.eclipse.chemclipse.msd.model.core.AbstractVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.AbstractRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 
-public class VendorScan extends AbstractVendorMassSpectrum implements IVendorScan {
+public class VendorScan extends AbstractRegularMassSpectrum implements IVendorScan {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
 	private static final long serialVersionUID = -8269450222663957541L;
-	public static final int MAX_IONS = 2000;
-	public static final int MIN_RETENTION_TIME = 0;
-	public static final int MAX_RETENTION_TIME = Integer.MAX_VALUE;
 
-	// -------------------------------------------ISupplierMassSpectrum
-	@Override
-	public int getMaxPossibleIons() {
-
-		return MAX_IONS;
-	}
-
-	@Override
-	public int getMaxPossibleRetentionTime() {
-
-		return MAX_RETENTION_TIME;
-	}
-
-	@Override
-	public int getMinPossibleRetentionTime() {
-
-		return MIN_RETENTION_TIME;
-	}
-
-	// -------------------------------------------ISupplierMassSpectrum
-	// -------------------------------IMassSpectrumCloneable
 	/**
 	 * Keep in mind, it is a covariant return.<br/>
 	 * IMassSpectrum is needed. This mass spectrum is a subtype of
@@ -76,5 +52,4 @@ public class VendorScan extends AbstractVendorMassSpectrum implements IVendorSca
 
 		return makeDeepCopy();
 	}
-	// -------------------------------IMassSpectrumCloneable
 }

@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.in
 
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
@@ -27,7 +27,7 @@ import junit.framework.TestCase;
 public class SimpleChromatogramTestCase extends TestCase {
 
 	protected IChromatogramMSD chromatogram;
-	protected IVendorMassSpectrum supplierMassSpectrum;
+	protected IRegularMassSpectrum supplierMassSpectrum;
 	protected IIon ion;
 	protected IChromatogramSelectionMSD chromatogramSelection;
 

@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.msd.model.xic;
 
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 
 public class ExtractedIonSignals_8_Test extends TestCase {
 
-	private IVendorMassSpectrum supplierMassSpectrum;
+	private IRegularMassSpectrum supplierMassSpectrum;
 	private IIon defaultIon;
 	private IExtractedIonSignals extractedIonSignals;
 	private IExtractedIonSignal extractedIonSignal;

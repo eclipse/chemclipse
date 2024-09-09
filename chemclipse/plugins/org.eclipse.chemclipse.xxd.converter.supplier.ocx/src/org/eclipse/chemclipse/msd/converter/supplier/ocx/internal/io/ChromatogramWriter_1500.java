@@ -30,6 +30,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.csd.converter.supplier.ocx.io.ChromatogramWriterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
@@ -60,7 +61,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.io.ChromatogramWriterWSD;
@@ -69,7 +69,6 @@ import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.IScanProxy;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.RetentionIndexTypeSupport;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.ScanProxy;
-import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -238,7 +237,7 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 				/*
 				 * Write separate scan proxy values.
 				 */
-				IVendorMassSpectrum massSpectrum = chromatogram.getSupplierScan(scan);
+				IRegularMassSpectrum massSpectrum = chromatogram.getSupplierScan(scan);
 				int offset = dataOutputStream.size();
 				int retentionTime = massSpectrum.getRetentionTime();
 				int numberOfIons = massSpectrum.getNumberOfIons();

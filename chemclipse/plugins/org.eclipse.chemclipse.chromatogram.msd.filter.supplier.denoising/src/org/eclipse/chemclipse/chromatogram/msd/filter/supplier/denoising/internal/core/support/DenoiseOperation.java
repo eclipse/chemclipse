@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignals;
@@ -76,7 +76,7 @@ public class DenoiseOperation extends AbstractOperation {
 		for(int scan = startScan; scan <= stopScan; scan++) {
 			try {
 				IExtractedIonSignal extractedIonSignal = extractedIonSignals.getExtractedIonSignal(scan);
-				IVendorMassSpectrum supplierMassSpectrum = chromatogram.getSupplierScan(scan);
+				IRegularMassSpectrum supplierMassSpectrum = chromatogram.getSupplierScan(scan);
 				previousExtractedIonSignals.add(supplierMassSpectrum.getExtractedIonSignal());
 				replaceIons(extractedIonSignal, supplierMassSpectrum);
 			} catch(NoExtractedIonSignalStoredException e) {
@@ -114,7 +114,7 @@ public class DenoiseOperation extends AbstractOperation {
 		for(int scan = startScan; scan <= stopScan; scan++) {
 			try {
 				IExtractedIonSignal extractedIonSignal = previousExtractedIonSignals.getExtractedIonSignal(scan);
-				IVendorMassSpectrum supplierMassSpectrum = chromatogram.getSupplierScan(scan);
+				IRegularMassSpectrum supplierMassSpectrum = chromatogram.getSupplierScan(scan);
 				replaceIons(extractedIonSignal, supplierMassSpectrum);
 			} catch(NoExtractedIonSignalStoredException e) {
 				logger.warn(e);
@@ -131,7 +131,7 @@ public class DenoiseOperation extends AbstractOperation {
 	 * @param extractedIonSignal
 	 * @param supplierMassSpectrum
 	 */
-	private static void replaceIons(IExtractedIonSignal extractedIonSignal, IVendorMassSpectrum supplierMassSpectrum) {
+	private static void replaceIons(IExtractedIonSignal extractedIonSignal, IRegularMassSpectrum supplierMassSpectrum) {
 
 		int startIon = extractedIonSignal.getStartIon();
 		int stopIon = extractedIonSignal.getStopIon();

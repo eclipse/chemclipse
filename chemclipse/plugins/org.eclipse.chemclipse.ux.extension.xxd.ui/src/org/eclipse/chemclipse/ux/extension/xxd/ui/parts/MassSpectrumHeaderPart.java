@@ -16,7 +16,7 @@ import java.util.List;
 
 import jakarta.inject.Inject;
 
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedMassSpectrumHeaderUI;
 import org.eclipse.swt.SWT;
@@ -43,7 +43,7 @@ public class MassSpectrumHeaderPart extends AbstractPart<ExtendedMassSpectrumHea
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IVendorMassSpectrum vendorMassSpectrum) {
+			if(object instanceof IRegularMassSpectrum vendorMassSpectrum) {
 				getControl().updateMassSpectrum(vendorMassSpectrum);
 				return true;
 			} else {

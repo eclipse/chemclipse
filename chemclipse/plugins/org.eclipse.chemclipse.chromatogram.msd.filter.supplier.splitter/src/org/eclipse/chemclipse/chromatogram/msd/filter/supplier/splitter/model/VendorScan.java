@@ -11,41 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.model;
 
-import org.eclipse.chemclipse.msd.model.core.AbstractVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.AbstractRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
-public class VendorScan extends AbstractVendorMassSpectrum implements IVendorMassSpectrum {
+public class VendorScan extends AbstractRegularMassSpectrum implements IRegularMassSpectrum {
 
-	private static final long serialVersionUID = 4479075020972518951L;
-	//
-	public static final int MAX_IONS = 500000;
-	public static final int MIN_RETENTION_TIME = 0;
-	public static final int MAX_RETENTION_TIME = Integer.MAX_VALUE;
+	private static final long serialVersionUID = 4479075020372518951L;
 
 	@Override
-	public int getMaxPossibleIons() {
+	public IRegularMassSpectrum makeDeepCopy() throws CloneNotSupportedException {
 
-		return MAX_IONS;
-	}
-
-	@Override
-	public int getMaxPossibleRetentionTime() {
-
-		return MAX_RETENTION_TIME;
-	}
-
-	@Override
-	public int getMinPossibleRetentionTime() {
-
-		return MIN_RETENTION_TIME;
-	}
-
-	@Override
-	public IVendorMassSpectrum makeDeepCopy() throws CloneNotSupportedException {
-
-		IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)super.clone();
+		IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)super.clone();
 		IIon clonedIon;
 		//
 		for(IIon ion : getIons()) {

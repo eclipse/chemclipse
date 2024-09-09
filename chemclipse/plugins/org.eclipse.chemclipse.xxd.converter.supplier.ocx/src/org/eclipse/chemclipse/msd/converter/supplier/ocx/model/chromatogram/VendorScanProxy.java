@@ -16,12 +16,12 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.supplier.ocx.io.ProxyReaderMSD;
-import org.eclipse.chemclipse.msd.model.core.AbstractVendorMassSpectrumProxy;
+import org.eclipse.chemclipse.msd.model.core.AbstractRegularMassSpectrumProxy;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-public class VendorScanProxy extends AbstractVendorMassSpectrumProxy implements IVendorScanProxy {
+public class VendorScanProxy extends AbstractRegularMassSpectrumProxy implements IVendorScanProxy {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
@@ -44,24 +44,6 @@ public class VendorScanProxy extends AbstractVendorMassSpectrumProxy implements 
 	}
 
 	@Override
-	public int getMaxPossibleIons() {
-
-		return MAX_IONS;
-	}
-
-	@Override
-	public int getMinPossibleRetentionTime() {
-
-		return MIN_RETENTION_TIME;
-	}
-
-	@Override
-	public int getMaxPossibleRetentionTime() {
-
-		return MAX_RETENTION_TIME;
-	}
-
-	@Override
 	public void importIons() {
 
 		try {
@@ -72,7 +54,6 @@ public class VendorScanProxy extends AbstractVendorMassSpectrumProxy implements 
 		}
 	}
 
-	// -------------------------------IMassSpectrumCloneable
 	/**
 	 * Keep in mind, it is a covariant return.<br/>
 	 * IMassSpectrum is needed. IMassSpectrum is a subtype of
@@ -103,5 +84,4 @@ public class VendorScanProxy extends AbstractVendorMassSpectrumProxy implements 
 
 		return makeDeepCopy();
 	}
-	// -------------------------------IMassSpectrumCloneable
 }

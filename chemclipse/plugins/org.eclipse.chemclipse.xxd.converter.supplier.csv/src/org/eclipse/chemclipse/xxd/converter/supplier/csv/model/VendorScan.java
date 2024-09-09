@@ -11,61 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.csv.model;
 
-import org.eclipse.chemclipse.msd.model.core.AbstractVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.AbstractRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 
-public class VendorScan extends AbstractVendorMassSpectrum implements IVendorScan {
+public class VendorScan extends AbstractRegularMassSpectrum implements IVendorScan {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = -8416701833314906892L;
-	/*
-	 * MIN/MAX Bounds
-	 */
-	public static final int MAX_IONS = 2000;
-	public static final int MIN_RETENTION_TIME = 0;
-	public static final int MAX_RETENTION_TIME = Integer.MAX_VALUE;
+	private static final long serialVersionUID = -8416701834314906892L;
 
-	@Override
-	public int getMaxPossibleIons() {
-
-		return MAX_IONS;
-	}
-
-	@Override
-	public int getMaxPossibleRetentionTime() {
-
-		return MAX_RETENTION_TIME;
-	}
-
-	@Override
-	public int getMinPossibleRetentionTime() {
-
-		return MIN_RETENTION_TIME;
-	}
-
-	@Override
-	public String toString() {
-
-		StringBuilder builder = new StringBuilder();
-		builder.append(super.toString());
-		builder.append(getClass().getName());
-		builder.append("maxPossibleIons=" + getMaxPossibleIons());
-		builder.append(",");
-		builder.append("maxPossibleRetentionTime=" + getMaxPossibleRetentionTime());
-		builder.append(",");
-		builder.append("minPossibleRetentionTime=" + getMinPossibleRetentionTime());
-		builder.append("]");
-		return builder.toString();
-	}
-
-	/**
-	 * Keep in mind, it is a covariant return.<br/>
-	 * IMassSpectrum is needed. IAgilentMassSpectrum is a subtype of
-	 * ISupplierMassSpectrum is a subtype of IMassSpectrum.
-	 */
 	@Override
 	public IVendorScan makeDeepCopy() throws CloneNotSupportedException {
 

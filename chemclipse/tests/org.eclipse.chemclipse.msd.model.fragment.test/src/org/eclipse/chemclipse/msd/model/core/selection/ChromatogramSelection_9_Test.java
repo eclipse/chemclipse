@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.msd.model.core.selection;
 
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
@@ -24,7 +24,7 @@ public class ChromatogramSelection_9_Test extends TestCase {
 
 	private IChromatogramMSD chromatogram;
 	private IChromatogramSelectionMSD selection;
-	private IVendorMassSpectrum massSpectrum;
+	private IRegularMassSpectrum massSpectrum;
 	private IIon ion;
 
 	@Override
@@ -59,7 +59,7 @@ public class ChromatogramSelection_9_Test extends TestCase {
 
 	public void testGetSelectedScan_1() {
 
-		IVendorMassSpectrum selectedScan = selection.getSelectedScan();
+		IRegularMassSpectrum selectedScan = selection.getSelectedScan();
 		assertNotNull(selectedScan);
 		assertEquals("RetentionTime", 500, selectedScan.getRetentionTime());
 	}

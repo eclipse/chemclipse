@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
@@ -68,7 +68,7 @@ public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 
 		for(IScan scan : chromatogram.getScans()) {
 			monitor.subTask("Export Scan " + scan.getScanNumber());
-			if(scan instanceof IVendorMassSpectrum scanMassSpectrum) {
+			if(scan instanceof IRegularMassSpectrum scanMassSpectrum) {
 				/*
 				 * Export each scan.
 				 */

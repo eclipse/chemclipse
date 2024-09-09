@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,17 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram;
 
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 
-public interface IVendorScan extends IVendorMassSpectrum {
-
-	/**
-	 * MAX_IONS The total amount of ions to be stored in the
-	 * chemclipse chromatogram.<br/>
-	 * It does not mean, that ion 65535 is the upper bound, but only 65535 mass
-	 * fragments can be stored in a mass spectrum.
-	 */
-	int MAX_IONS = 65535;
-	int MIN_RETENTION_TIME = 0;
-	int MAX_RETENTION_TIME = Integer.MAX_VALUE;
+public interface IVendorScan extends IRegularMassSpectrum {
 }

@@ -11,30 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.cml.model;
 
-import org.eclipse.chemclipse.msd.model.core.AbstractVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.AbstractRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 
-public class VendorScan extends AbstractVendorMassSpectrum implements IVendorScan {
+public class VendorScan extends AbstractRegularMassSpectrum implements IVendorScan {
 
 	private static final long serialVersionUID = 5126859600909644680L;
-
-	@Override
-	public int getMaxPossibleIons() {
-
-		return Integer.MAX_VALUE;
-	}
-
-	@Override
-	public int getMaxPossibleRetentionTime() {
-
-		return Integer.MAX_VALUE;
-	}
-
-	@Override
-	public int getMinPossibleRetentionTime() {
-
-		return 0;
-	}
 
 	/**
 	 * Keep in mind, it is a covariant return.<br/>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.xxd.converter.supplier.ocx.io;
 
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.TestPathHelper;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -230,13 +230,13 @@ public class ChromatogramReader_1_MSD_1501_ITest extends ChromatogramReaderMSDTe
 
 	public void testReader_22() {
 
-		IVendorMassSpectrum massSpectrum = chromatogram.getSupplierScan(37);
+		IRegularMassSpectrum massSpectrum = chromatogram.getSupplierScan(37);
 		assertEquals(16, massSpectrum.getTargets().size());
 	}
 
 	public void testReader_23() {
 
-		IVendorMassSpectrum massSpectrum = chromatogram.getSupplierScan(44);
+		IRegularMassSpectrum massSpectrum = chromatogram.getSupplierScan(44);
 		assertEquals(16, massSpectrum.getTargets().size());
 	}
 

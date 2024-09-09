@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.msd.swt.ui.converter;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
@@ -26,7 +26,7 @@ import junit.framework.TestCase;
 public class ChromatogramOverviewTestCase extends TestCase {
 
 	private IChromatogramMSD chromatogram;
-	private IVendorMassSpectrum massSpectrum;
+	private IRegularMassSpectrum massSpectrum;
 
 	@Override
 	protected void setUp() throws Exception {

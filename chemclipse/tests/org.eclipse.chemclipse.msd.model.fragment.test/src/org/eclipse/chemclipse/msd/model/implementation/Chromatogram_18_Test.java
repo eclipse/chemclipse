@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
@@ -33,7 +33,7 @@ import junit.framework.TestCase;
 public class Chromatogram_18_Test extends TestCase {
 
 	private IChromatogramMSD chromatogram;
-	private IVendorMassSpectrum supplierMassSpectrum;
+	private IRegularMassSpectrum supplierMassSpectrum;
 	private IIon ion;
 	private IExtractedIonSignals extractedIonSignals;
 	private IExtractedIonSignal extractedIonSignal;

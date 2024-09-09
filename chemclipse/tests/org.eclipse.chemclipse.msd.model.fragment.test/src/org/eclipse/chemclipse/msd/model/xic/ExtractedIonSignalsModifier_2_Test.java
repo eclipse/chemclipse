@@ -17,7 +17,7 @@ import java.util.List;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
@@ -31,7 +31,7 @@ import junit.framework.TestCase;
 public class ExtractedIonSignalsModifier_2_Test extends TestCase {
 
 	private IChromatogramMSD chromatogram;
-	private IVendorMassSpectrum supplierMassSpectrum;
+	private IRegularMassSpectrum supplierMassSpectrum;
 	private IIon supplierIon;
 	private IExtractedIonSignals extractedIonSignals;
 	private IExtractedIonSignal extractedIonSignal;

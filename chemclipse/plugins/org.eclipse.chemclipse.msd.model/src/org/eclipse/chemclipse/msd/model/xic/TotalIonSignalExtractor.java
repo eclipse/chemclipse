@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.model.signals.TotalScanSignal;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.TotalScanSignals;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 
@@ -128,7 +128,7 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 		/*
 		 * Add the selected scans.
 		 */
-		IVendorMassSpectrum ms;
+		IRegularMassSpectrum ms;
 		for(int scan = startScan; scan <= stopScan; scan++) {
 			ms = chromatogram.getSupplierScan(scan);
 			totalIonSignal = new TotalScanSignal(ms.getRetentionTime(), ms.getRetentionIndex(), ms.getTotalSignal(excludedIons));
@@ -153,7 +153,7 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 		 * Get each scan signal.
 		 */
 		for(IScan scan : chromatogram.getScans()) {
-			if(scan instanceof IVendorMassSpectrum ms) {
+			if(scan instanceof IRegularMassSpectrum ms) {
 				/*
 				 * Get the excluded version if necessary.
 				 */

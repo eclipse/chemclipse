@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -62,7 +62,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.Sp
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -201,7 +201,7 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 				//
 				spectrum.setScanList(scanList);
 				spectrum.setBinaryDataArrayList(binaryDataArrayList);
-				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scanMSD;
+				IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)scanMSD;
 				CVParamType cvParamType = new CVParamType();
 				if(massSpectrum.getMassSpectrometer() == 1) {
 					cvParamType.setCvRef(MS);
@@ -456,7 +456,7 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 		ParamGroupType fileContent = new ParamGroupType();
 		//
 		IScanMSD scanMSD = (IScanMSD)chromatogram.getScan(1);
-		IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scanMSD;
+		IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)scanMSD;
 		//
 		CVParamType cvParamSpectrum = new CVParamType();
 		if(massSpectrum.getMassSpectrometer() == 1) {
