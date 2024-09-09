@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.VendorChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.Test;
@@ -86,7 +86,7 @@ public class ChromatogramImportConverterMyoDta105_ITest extends TestCase {
 	@Test
 	public void testFirstScan() {
 
-		IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)chromatogram.getScan(1);
+		IScanMSD massSpectrum = (IScanMSD)chromatogram.getScan(1);
 		assertEquals("Ions", 331, massSpectrum.getNumberOfIons());
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -36,7 +36,7 @@ public class ExtendedMassSpectrumHeaderUI extends Composite {
 			addHeaderLine(builder, "Data", massSpectrum.getMassSpectrumTypeDescription());
 			addHeaderLine(builder, "Technique", "MS" + massSpectrum.getMassSpectrometer());
 			addHeaderLine(builder, "Ions", Integer.toString(massSpectrum.getNumberOfIons()));
-			if(massSpectrum instanceof IVendorStandaloneMassSpectrum standaloneMassSpectrum) {
+			if(massSpectrum instanceof IStandaloneMassSpectrum standaloneMassSpectrum) {
 				addHeaderLine(builder, "Name", standaloneMassSpectrum.getName());
 				addHeaderLine(builder, "File", standaloneMassSpectrum.getFile().getName());
 				addHeaderLine(builder, "Sample", standaloneMassSpectrum.getSampleName());

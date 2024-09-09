@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
-import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumPeakLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -35,7 +35,7 @@ public class MassSpectrumPeakListUI extends ExtendedTableViewer {
 		createColumns();
 	}
 
-	public void update(IVendorStandaloneMassSpectrum standaloneMassSpectrum) {
+	public void update(IStandaloneMassSpectrum standaloneMassSpectrum) {
 
 		if(standaloneMassSpectrum != null) {
 			setContentProviders();

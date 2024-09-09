@@ -11,37 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.msd.model.core.AbstractVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.AbstractStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
 
-public class VendorStandaloneMassSpectrum extends AbstractVendorStandaloneMassSpectrum implements IVendorStandaloneMassSpectrum {
+public class StandaloneMassSpectrum extends AbstractStandaloneMassSpectrum implements IStandaloneMassSpectrum {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = 7540947309609765367L;
-	public static final int MAX_IONS = Integer.MAX_VALUE;
-
-	@Override
-	public int getMaxPossibleIons() {
-
-		return MAX_IONS;
-	}
-
-	@Override
-	public int getMaxPossibleRetentionTime() {
-
-		return 0; // TODO: this should move away
-	}
-
-	@Override
-	public int getMinPossibleRetentionTime() {
-
-		return 0; // TODO: this should move away
-	}
+	private static final long serialVersionUID = 7540947309609765368L;
 
 	/**
 	 * Keep in mind, it is a covariant return.<br/>

@@ -37,7 +37,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorMassSpec
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
@@ -57,7 +57,7 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
-		IVendorStandaloneMassSpectrum massSpectrum = null;
+		IStandaloneMassSpectrum massSpectrum = null;
 		//
 		try {
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();

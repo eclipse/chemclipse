@@ -21,7 +21,7 @@ import jakarta.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -264,7 +264,7 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 
 	private ILineSeriesData getLineSeriesData(IScanMSD scanMSD) {
 
-		if(scanMSD instanceof IVendorStandaloneMassSpectrum massSpectrum) {
+		if(scanMSD instanceof IStandaloneMassSpectrum massSpectrum) {
 			ILineSeriesData lineSeriesData = new LineSeriesData(getSeriesDataProcessed(scanMSD, massSpectrum.getName()));
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setLineColor(Colors.RED);

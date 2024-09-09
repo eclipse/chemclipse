@@ -18,7 +18,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IMassSpectrumPeak;
 
-public abstract class AbstractVendorStandaloneMassSpectrum extends AbstractVendorMassSpectrum implements IVendorStandaloneMassSpectrum {
+public abstract class AbstractStandaloneMassSpectrum extends AbstractRegularMassSpectrum implements IStandaloneMassSpectrum {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
-import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -26,7 +26,7 @@ public class ExtendedMassSpectrumPeakListUI extends Composite {
 		createControl();
 	}
 
-	public void update(IVendorStandaloneMassSpectrum standaloneMassSpectrum) {
+	public void update(IStandaloneMassSpectrum standaloneMassSpectrum) {
 
 		massSpectrumPeaksListUI.update(standaloneMassSpectrum);
 	}

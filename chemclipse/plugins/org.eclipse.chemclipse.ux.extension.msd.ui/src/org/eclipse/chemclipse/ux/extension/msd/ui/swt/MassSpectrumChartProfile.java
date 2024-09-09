@@ -29,7 +29,7 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.chemclipse.processing.core.ICategories;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -99,7 +99,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 			ISeriesData seriesData = getMassSpectrum(massSpectrum);
 			ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 			lineSeriesDataList.add(lineSeriesData);
-			if(massSpectrum instanceof IVendorStandaloneMassSpectrum standaloneMassSpectrum) {
+			if(massSpectrum instanceof IStandaloneMassSpectrum standaloneMassSpectrum) {
 				LineSeriesData peakLineSeriesData = getPeaks(standaloneMassSpectrum);
 				lineSeriesDataList.add(peakLineSeriesData);
 				createAnnotations(standaloneMassSpectrum);
@@ -254,7 +254,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 		return new SeriesData(xSeries, ySeries, "Mass Spectrum");
 	}
 
-	private LineSeriesData getPeaks(IVendorStandaloneMassSpectrum massSpectrum) {
+	private LineSeriesData getPeaks(IStandaloneMassSpectrum massSpectrum) {
 
 		ISeriesData peakSeriesData = createPeakSeries("Peaks", massSpectrum, 0, 0);
 		LineSeriesData peakSeries = new LineSeriesData(peakSeriesData);
@@ -273,7 +273,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 		return peakSeries;
 	}
 
-	public static ISeriesData createPeakSeries(String id, IVendorStandaloneMassSpectrum massSpectrum, double yOffset, double xOffset) {
+	public static ISeriesData createPeakSeries(String id, IStandaloneMassSpectrum massSpectrum, double yOffset, double xOffset) {
 
 		List<IMassSpectrumPeak> peaks = massSpectrum.getPeaks();
 		int size = peaks.size();
@@ -288,7 +288,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 		return new SeriesData(xSeries, ySeries, id);
 	}
 
-	private void createAnnotations(IVendorStandaloneMassSpectrum massSpectrum) {
+	private void createAnnotations(IStandaloneMassSpectrum massSpectrum) {
 
 		IPlotArea plotarea = getBaseChart().getPlotArea();
 		LabelMarker labelMarker = new LabelMarker(getBaseChart());
