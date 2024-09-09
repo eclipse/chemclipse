@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
@@ -32,7 +32,7 @@ public class ChromatogramSelectionsTestCase extends TestCase {
 	private IChromatogramMSD chromatogram;
 	private List<IChromatogramSelection<?, ?>> chromatogramSelections;
 	private IChromatogramSelectionMSD chromatogramSelection;
-	private IVendorMassSpectrum massSpectrum;
+	private IRegularMassSpectrum massSpectrum;
 
 	@Override
 	protected void setUp() throws Exception {

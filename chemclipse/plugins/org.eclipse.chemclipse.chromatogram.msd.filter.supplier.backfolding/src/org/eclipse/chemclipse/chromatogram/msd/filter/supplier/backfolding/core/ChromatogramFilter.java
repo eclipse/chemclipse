@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.setti
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -73,7 +73,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		BackfoldingShifter backfoldingShifter = new BackfoldingShifter();
 		IExtractedIonSignals extractedIonSignals = backfoldingShifter.shiftIons(chromatogramSelection, filterSettings, monitor);
 		IScanMSD massSpectrum;
-		IVendorMassSpectrum supplierMassSpectrum;
+		IRegularMassSpectrum supplierMassSpectrum;
 		/*
 		 * Use the start and stop scan range.
 		 */

@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.junit.Ignore;
 
 import junit.framework.TestCase;
@@ -41,7 +41,7 @@ public class ChromatogramPeaksTestCase extends TestCase {
 	private float stopBackgroundAbundance = 0.0f;
 	private IChromatogramMSD chromatogram;
 	private IIon ion;
-	private IVendorMassSpectrum supplierMassSpectrum;
+	private IRegularMassSpectrum supplierMassSpectrum;
 	private IChromatogramPeakMSD peak1;
 	private IChromatogramPeakMSD peak2;
 	private IChromatogramPeakMSD peak3;

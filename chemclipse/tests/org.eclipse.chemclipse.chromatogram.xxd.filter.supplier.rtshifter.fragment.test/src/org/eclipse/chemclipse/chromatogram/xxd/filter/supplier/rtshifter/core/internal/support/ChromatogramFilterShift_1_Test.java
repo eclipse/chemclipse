@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.i
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 
@@ -39,7 +39,7 @@ public class ChromatogramFilterShift_1_Test extends ChromatogramTestCase {
 
 	public void testShiftBackward_1() {
 
-		IVendorMassSpectrum scan;
+		IRegularMassSpectrum scan;
 		/*
 		 * PRE TESTS
 		 */
@@ -53,7 +53,7 @@ public class ChromatogramFilterShift_1_Test extends ChromatogramTestCase {
 
 	public void testShiftBackward_2() {
 
-		IVendorMassSpectrum scan;
+		IRegularMassSpectrum scan;
 		try {
 			FilterSettingsShift supplierFilterSettings = new FilterSettingsShift(-0, true);
 			RetentionTimeShifter.shiftRetentionTimes(chromatogramSelection, supplierFilterSettings);
@@ -70,7 +70,7 @@ public class ChromatogramFilterShift_1_Test extends ChromatogramTestCase {
 
 	public void testShiftBackward_3() {
 
-		IVendorMassSpectrum scan;
+		IRegularMassSpectrum scan;
 		try {
 			FilterSettingsShift supplierFilterSettings = new FilterSettingsShift(-1000, true);
 			RetentionTimeShifter.shiftRetentionTimes(chromatogramSelection, supplierFilterSettings);
@@ -87,7 +87,7 @@ public class ChromatogramFilterShift_1_Test extends ChromatogramTestCase {
 
 	public void testShiftBackward_4() {
 
-		IVendorMassSpectrum scan;
+		IRegularMassSpectrum scan;
 		try {
 			FilterSettingsShift supplierFilterSettings = new FilterSettingsShift(-1499, true);
 			RetentionTimeShifter.shiftRetentionTimes(chromatogramSelection, supplierFilterSettings);
@@ -104,7 +104,7 @@ public class ChromatogramFilterShift_1_Test extends ChromatogramTestCase {
 
 	public void testShiftBackward_5() {
 
-		IVendorMassSpectrum scan;
+		IRegularMassSpectrum scan;
 		try {
 			FilterSettingsShift supplierFilterSettings = new FilterSettingsShift(-1500, true);
 			RetentionTimeShifter.shiftRetentionTimes(chromatogramSelection, supplierFilterSettings);
@@ -121,7 +121,7 @@ public class ChromatogramFilterShift_1_Test extends ChromatogramTestCase {
 
 	public void testShiftBackward_6() {
 
-		IVendorMassSpectrum scan;
+		IRegularMassSpectrum scan;
 		try {
 			FilterSettingsShift supplierFilterSettings = new FilterSettingsShift(-2000, true);
 			RetentionTimeShifter.shiftRetentionTimes(chromatogramSelection, supplierFilterSettings);

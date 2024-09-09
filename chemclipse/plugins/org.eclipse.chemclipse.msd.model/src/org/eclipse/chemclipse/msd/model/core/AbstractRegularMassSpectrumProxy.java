@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
  * the complete ion data is loaded when it is needed.
  *
  */
-public abstract class AbstractVendorMassSpectrumProxy extends AbstractVendorMassSpectrum implements IVendorMassSpectrumProxy {
+public abstract class AbstractRegularMassSpectrumProxy extends AbstractRegularMassSpectrum implements IMassSpectrumProxy {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
@@ -94,7 +94,7 @@ public abstract class AbstractVendorMassSpectrumProxy extends AbstractVendorMass
 	}
 
 	@Override
-	public AbstractVendorMassSpectrumProxy addIons(List<IIon> ions, boolean addIntensities) {
+	public AbstractRegularMassSpectrumProxy addIons(List<IIon> ions, boolean addIntensities) {
 
 		checkProxyAndImportOnDemand();
 		super.addIons(ions, addIntensities);
@@ -102,7 +102,7 @@ public abstract class AbstractVendorMassSpectrumProxy extends AbstractVendorMass
 	}
 
 	@Override
-	public AbstractVendorMassSpectrumProxy addIon(IIon ion, boolean checked) {
+	public AbstractRegularMassSpectrumProxy addIon(IIon ion, boolean checked) {
 
 		checkProxyAndImportOnDemand();
 		super.addIon(ion, checked);
@@ -110,7 +110,7 @@ public abstract class AbstractVendorMassSpectrumProxy extends AbstractVendorMass
 	}
 
 	@Override
-	public AbstractVendorMassSpectrumProxy removeIon(IIon ion) {
+	public AbstractRegularMassSpectrumProxy removeIon(IIon ion) {
 
 		checkProxyAndImportOnDemand();
 		super.removeIon(ion);
@@ -118,7 +118,7 @@ public abstract class AbstractVendorMassSpectrumProxy extends AbstractVendorMass
 	}
 
 	@Override
-	public AbstractVendorMassSpectrumProxy removeAllIons() {
+	public AbstractRegularMassSpectrumProxy removeAllIons() {
 
 		checkProxyAndImportOnDemand();
 		super.removeAllIons();
@@ -126,7 +126,7 @@ public abstract class AbstractVendorMassSpectrumProxy extends AbstractVendorMass
 	}
 
 	@Override
-	public AbstractVendorMassSpectrumProxy removeIon(int ion) {
+	public AbstractRegularMassSpectrumProxy removeIon(int ion) {
 
 		checkProxyAndImportOnDemand();
 		super.removeIon(ion);
@@ -134,7 +134,7 @@ public abstract class AbstractVendorMassSpectrumProxy extends AbstractVendorMass
 	}
 
 	@Override
-	public AbstractVendorMassSpectrumProxy removeIons(Set<Integer> ions) {
+	public AbstractRegularMassSpectrumProxy removeIons(Set<Integer> ions) {
 
 		checkProxyAndImportOnDemand();
 		super.removeIons(ions);
@@ -142,7 +142,7 @@ public abstract class AbstractVendorMassSpectrumProxy extends AbstractVendorMass
 	}
 
 	@Override
-	public AbstractVendorMassSpectrumProxy removeIons(IMarkedIons excludedIons) {
+	public AbstractRegularMassSpectrumProxy removeIons(IMarkedIons excludedIons) {
 
 		checkProxyAndImportOnDemand();
 		super.removeIons(excludedIons);
@@ -206,21 +206,21 @@ public abstract class AbstractVendorMassSpectrumProxy extends AbstractVendorMass
 	}
 
 	@Override
-	public IIon getIon(int ion)  {
+	public IIon getIon(int ion) {
 
 		checkProxyAndImportOnDemand();
 		return super.getIon(ion);
 	}
 
 	@Override
-	public IIon getIon(double ion)  {
+	public IIon getIon(double ion) {
 
 		checkProxyAndImportOnDemand();
 		return super.getIon(ion);
 	}
 
 	@Override
-	public IIon getIon(double ion, int precision)  {
+	public IIon getIon(double ion, int precision) {
 
 		checkProxyAndImportOnDemand();
 		return super.getIon(ion, precision);

@@ -13,43 +13,21 @@ package org.eclipse.chemclipse.msd.model.implementation;
 
 import org.eclipse.chemclipse.msd.model.core.AbstractStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 
-public class VendorMassSpectrum extends AbstractStandaloneMassSpectrum implements IVendorMassSpectrum {
+public class VendorMassSpectrum extends AbstractStandaloneMassSpectrum implements IRegularMassSpectrum {
 
-	private static final long serialVersionUID = 9103911623007941476L;
-	//
-	public static final int MAX_IONS = 65535;
-	public static final int MIN_RETENTION_TIME = 0;
-	public static final int MAX_RETENTION_TIME = Integer.MAX_VALUE;
+	private static final long serialVersionUID = 9103911623007941473L;
 
 	@Override
-	public int getMaxPossibleIons() {
-
-		return MAX_IONS;
-	}
-
-	@Override
-	public int getMaxPossibleRetentionTime() {
-
-		return MAX_RETENTION_TIME;
-	}
-
-	@Override
-	public int getMinPossibleRetentionTime() {
-
-		return MIN_RETENTION_TIME;
-	}
-
-	@Override
-	public IVendorMassSpectrum makeDeepCopy() throws CloneNotSupportedException {
+	public IRegularMassSpectrum makeDeepCopy() throws CloneNotSupportedException {
 
 		/*
 		 * The method super.clone() is not used here to avoid removing the mass
 		 * fragments from the mass spectrum and to add freshly created ones
 		 * again.
 		 */
-		IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)super.clone();
+		IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)super.clone();
 		IIon defaultIon;
 		/*
 		 * The instance variables have been copied by super.clone();.<br/> The

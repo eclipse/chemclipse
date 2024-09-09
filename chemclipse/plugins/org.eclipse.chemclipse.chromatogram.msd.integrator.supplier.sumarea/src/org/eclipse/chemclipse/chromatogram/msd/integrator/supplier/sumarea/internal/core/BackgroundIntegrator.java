@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
@@ -49,8 +49,8 @@ public class BackgroundIntegrator extends AbstractSumareaIntegrator implements I
 			IExtractedIonSignals extractedIonSignals = extractedIonSignalExtractor.getExtractedIonSignals(chromatogramSelection);
 			IExtractedIonSignal startSignal;
 			IExtractedIonSignal stopSignal;
-			IVendorMassSpectrum supplierMassSpectrumStart;
-			IVendorMassSpectrum supplierMassSpectrumStop;
+			IRegularMassSpectrum supplierMassSpectrumStart;
+			IRegularMassSpectrum supplierMassSpectrumStop;
 			int start;
 			int stop;
 			double ionPercentage = 0.0d;
@@ -83,7 +83,7 @@ public class BackgroundIntegrator extends AbstractSumareaIntegrator implements I
 		return backgroundArea;
 	}
 
-	private double calculateIonPercentageOfScans(IVendorMassSpectrum supplierMassSpectrumStart, IVendorMassSpectrum supplierMassSpectrumStop, int ion) {
+	private double calculateIonPercentageOfScans(IRegularMassSpectrum supplierMassSpectrumStart, IRegularMassSpectrum supplierMassSpectrumStop, int ion) {
 
 		IExtractedIonSignal extractedIonSignalStart = supplierMassSpectrumStart.getExtractedIonSignal();
 		IExtractedIonSignal extractedIonSignalStop = supplierMassSpectrumStop.getExtractedIonSignal();

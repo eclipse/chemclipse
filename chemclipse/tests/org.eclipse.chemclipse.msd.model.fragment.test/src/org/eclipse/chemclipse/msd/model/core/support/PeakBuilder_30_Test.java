@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
@@ -38,7 +38,7 @@ import junit.framework.TestCase;
 public class PeakBuilder_30_Test extends TestCase {
 
 	private IChromatogramMSD chromatogram;
-	private IVendorMassSpectrum massSpectrum;
+	private IRegularMassSpectrum massSpectrum;
 	private IIon defaultIon;
 	private IExtractedIonSignals extractedIonSignals;
 	private IScanRange scanRange;

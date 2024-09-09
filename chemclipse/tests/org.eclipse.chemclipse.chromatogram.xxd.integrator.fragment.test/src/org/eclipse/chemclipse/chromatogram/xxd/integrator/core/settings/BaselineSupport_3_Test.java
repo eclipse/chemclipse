@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 import org.eclipse.chemclipse.model.baseline.BaselineModel;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 
@@ -24,7 +24,7 @@ public class BaselineSupport_3_Test extends TestCase {
 
 	private IBaselineSupport baselineSupport;
 	private IChromatogramMSD chromatogram;
-	private IVendorMassSpectrum ms;
+	private IRegularMassSpectrum ms;
 	private IBaselineModel baselineModel;
 
 	@Override

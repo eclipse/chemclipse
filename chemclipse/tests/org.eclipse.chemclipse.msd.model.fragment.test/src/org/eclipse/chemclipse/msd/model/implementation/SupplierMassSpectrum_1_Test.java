@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import junit.framework.TestCase;
 
 public class SupplierMassSpectrum_1_Test extends TestCase {
 
-	private IVendorMassSpectrum massSpectrum;
+	private IRegularMassSpectrum massSpectrum;
 
 	@Override
 	protected void setUp() throws Exception {

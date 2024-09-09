@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 
 public class GaussianPeakFactoryMSD {
 
@@ -54,7 +54,7 @@ public class GaussianPeakFactoryMSD {
 			peakIntensities.addIntensityValue(rt, (float)gaussian.value(rt));
 		}
 		peakIntensities.normalize();
-		final IVendorMassSpectrum vendorMassSpectrum = chromatogramMSD.getSupplierScan(scanNumber);
+		final IRegularMassSpectrum vendorMassSpectrum = chromatogramMSD.getSupplierScan(scanNumber);
 		final IPeakModelMSD peakModelMSD = new PeakModelMSD(new PeakMassSpectrum(vendorMassSpectrum), peakIntensities, startBackgroundAbundance, stopBackgroundAbundance);
 		return new PeakMSD(peakModelMSD);
 	}
@@ -77,7 +77,7 @@ public class GaussianPeakFactoryMSD {
 			peakIntensities.addIntensityValue(rt, (float)gaussian.value(rt));
 		}
 		peakIntensities.normalize();
-		final IVendorMassSpectrum vendorMassSpectrum = chromatogramMSD.getSupplierScan(scanNumber);
+		final IRegularMassSpectrum vendorMassSpectrum = chromatogramMSD.getSupplierScan(scanNumber);
 		/*
 		 * Here we pass the retention times and indexes
 		 */

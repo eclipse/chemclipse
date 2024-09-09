@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.msd.model.implementation;
 import org.eclipse.chemclipse.msd.model.core.AbstractStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 
 public class StandaloneMassSpectrum extends AbstractStandaloneMassSpectrum implements IStandaloneMassSpectrum {
 
@@ -30,14 +30,14 @@ public class StandaloneMassSpectrum extends AbstractStandaloneMassSpectrum imple
 	 * IMassSpectrum.
 	 */
 	@Override
-	public IVendorMassSpectrum makeDeepCopy() throws CloneNotSupportedException {
+	public IRegularMassSpectrum makeDeepCopy() throws CloneNotSupportedException {
 
 		/*
 		 * The method super.clone() is not used here to avoid removing the mass
 		 * fragments from the mass spectrum and to add freshly created ones
 		 * again.
 		 */
-		IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)super.clone();
+		IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)super.clone();
 		IIon defaultIon;
 		/*
 		 * The instance variables have been copied by super.clone();.<br/> The

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,7 +15,7 @@ package org.eclipse.chemclipse.msd.model.core.selection;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIonTransitions;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 
@@ -46,16 +46,16 @@ public interface IChromatogramSelectionMSD extends IChromatogramSelection<IChrom
 	 * Returns the selected scan of the current chromatogram or null, if none is
 	 * stored.
 	 *
-	 * @return {@link IVendorMassSpectrum}
+	 * @return {@link IRegularMassSpectrum}
 	 */
 	@Override
-	IVendorMassSpectrum getSelectedScan();
+	IRegularMassSpectrum getSelectedScan();
 
 	/**
 	 * Sets the selected scan of the current chromatogram.<br/>
 	 * The scan must not be null.
 	 */
-	void setSelectedScan(IVendorMassSpectrum selectedScan);
+	void setSelectedScan(IRegularMassSpectrum selectedScan);
 
 	/**
 	 * Use this convenient method, if you don't want to fire and update.
@@ -63,7 +63,7 @@ public interface IChromatogramSelectionMSD extends IChromatogramSelection<IChrom
 	 * @param selectedScan
 	 * @param update
 	 */
-	void setSelectedScan(IVendorMassSpectrum selectedScan, boolean update);
+	void setSelectedScan(IRegularMassSpectrum selectedScan, boolean update);
 
 	/**
 	 * Returns a list of selected ions.

@@ -138,7 +138,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	@Override
 	public IScanMSD getScan(int scan, IMarkedIons excludedIons) {
 
-		IVendorMassSpectrum supplierMassSpectrum = getSupplierScan(scan);
+		IRegularMassSpectrum supplierMassSpectrum = getSupplierScan(scan);
 		if(supplierMassSpectrum == null) {
 			return null;
 		}
@@ -146,13 +146,13 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	}
 
 	@Override
-	public IVendorMassSpectrum getSupplierScan(int scan) {
+	public IRegularMassSpectrum getSupplierScan(int scan) {
 
 		int position = scan;
 		if(position > 0 && position <= getScans().size()) {
 			IScan storedScan = getScans().get(--position);
-			if(storedScan instanceof IVendorMassSpectrum vendorMassSpectrum) {
-				return vendorMassSpectrum;
+			if(storedScan instanceof IRegularMassSpectrum regularMassSpectrum) {
+				return regularMassSpectrum;
 			}
 		}
 		return null;
