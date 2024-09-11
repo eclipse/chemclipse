@@ -30,7 +30,6 @@ Export-Package: org.eclipse.chemclipse.csd.converter.supplier.ocx.converter,
  org.eclipse.chemclipse.msd.converter.supplier.ocx.io,
  org.eclipse.chemclipse.wsd.converter.supplier.ocx.converter,
  org.eclipse.chemclipse.wsd.converter.supplier.ocx.io,
- org.eclipse.chemclipse.xxd.converter.supplier.io.exception,
  org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences,
  org.eclipse.chemclipse.xxd.converter.supplier.ocx.settings,
  org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions

@@ -16,13 +16,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.eclipse.chemclipse.converter.exceptions.UnknownVersionException;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.MassSpectrumReaderVersion20;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.MassSpectrumReaderVersion21;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.MassSpectrumReaderVersion22;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.xxd.converter.supplier.io.exception.UnknownVersionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassSpectrumReader extends AbstractMassSpectraReader implements IMassSpectraReader {

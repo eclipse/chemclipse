@@ -7,11 +7,11 @@
             description="Reads mzML Chromatograms"
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.ChromatogramExportConverter"
             fileExtension=".mzML"
-            filterName="mzML Chromatogram (*.mzML)"
+            filterName="MSD Chromatogram (*.mzML)"
             id="org.eclipse.chemclipse.msd.converter.supplier.mzml"
             importContentMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.ChromatogramFileContentMatcher"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MagicNumberMatcher"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.mzml.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
@@ -26,7 +26,7 @@
             id="org.eclipse.chemclipse.msd.converter.supplier.mzml.ms"
             importContentMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MassSpectrumFileContentMatcher"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MassSpectrumImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MagicNumberMatcher"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.mzml.converter.MagicNumberMatcher"
             isExportable="false"
             isImportable="true">
       </MassSpectrumSupplier>

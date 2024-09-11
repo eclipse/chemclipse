@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,10 +18,10 @@ import java.io.IOException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader110;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.io.ChromatogramWriterVersion110;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.io.ChromatogramWriterVersion110;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.xxd.converter.supplier.mzml.io.XmlReader110;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramWriter extends AbstractChromatogramWriter implements IChromatogramMSDWriter {

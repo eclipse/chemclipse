@@ -13,9 +13,9 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.preferences;
 
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.Activator;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader110;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.chemclipse.xxd.converter.supplier.mzml.io.XmlReader110;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier implements IPreferenceSupplier {
 

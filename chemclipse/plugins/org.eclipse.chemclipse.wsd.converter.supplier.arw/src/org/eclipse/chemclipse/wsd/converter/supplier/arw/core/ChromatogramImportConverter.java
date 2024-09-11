@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,8 +12,10 @@
 package org.eclipse.chemclipse.wsd.converter.supplier.arw.core;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -21,11 +23,11 @@ import org.eclipse.chemclipse.wsd.converter.io.IChromatogramWSDReader;
 import org.eclipse.chemclipse.wsd.converter.supplier.arw.io.ChromatogramReader;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 
 public class ChromatogramImportConverter extends AbstractChromatogramImportConverter<IChromatogramWSD> {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramImportConverter.class);
-	private static final String DESCRIPTION = "Arw Import Converter";
 
 	@Override
 	public IProcessingInfo<IChromatogramWSD> convert(File file, IProgressMonitor monitor) {
@@ -36,12 +38,11 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 			try {
 				IChromatogramWSD chromatogram = chromatogramReader.read(file, monitor);
 				processingInfo.setProcessingResult(chromatogram);
-			} catch(Exception e) {
+			} catch(IOException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "An error occured to import the file: " + file.getAbsolutePath());
+				processingInfo.addErrorMessage(ConverterMessages.importChromatogram, NLS.bind(ConverterMessages.failedToReadFile, file.getAbsolutePath()));
 			}
 		}
-		//
 		return processingInfo;
 	}
 
@@ -54,12 +55,11 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 			try {
 				IChromatogramOverview chromatogramOverview = chromatogramReader.readOverview(file, monitor);
 				processingInfo.setProcessingResult(chromatogramOverview);
-			} catch(Exception e) {
+			} catch(IOException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "An error occured to import the file: " + file.getAbsolutePath());
+				processingInfo.addErrorMessage(ConverterMessages.importChromatogram, NLS.bind(ConverterMessages.failedToReadFile, file.getAbsolutePath()));
 			}
 		}
-		//
 		return processingInfo;
 	}
 }

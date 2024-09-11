@@ -96,7 +96,7 @@ public class ChromatogramImportConverterTinyProteoWizard10_ITest extends TestCas
 	}
 
 	@Test
-	public void testFirstScan()  {
+	public void testFirstScan() {
 
 		IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)chromatogram.getScan(1);
 		assertEquals("Ions", 15, massSpectrum.getNumberOfIons());

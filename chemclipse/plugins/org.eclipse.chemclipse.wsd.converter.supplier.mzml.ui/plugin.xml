@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.wsd.converter.ui.converterPreferencePage"
+            class="org.eclipse.chemclipse.wsd.converter.supplier.mzml.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.msd.converter.supplier.mzml.ui.preferences.converterPreferencePage"
+            name="mzML Converter">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.wsd.converter.supplier.mzml.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.wsd.converter.supplier.mzml">
+      </icon>
+   </extension>
+</plugin>

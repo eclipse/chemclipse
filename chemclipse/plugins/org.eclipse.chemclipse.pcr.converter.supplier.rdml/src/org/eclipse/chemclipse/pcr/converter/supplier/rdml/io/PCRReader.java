@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,9 +23,9 @@ import java.util.zip.ZipFile;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.chemclipse.converter.exceptions.UnknownVersionException;
 import org.eclipse.chemclipse.pcr.converter.supplier.rdml.model.IPCRReader;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
-import org.eclipse.chemclipse.xxd.converter.supplier.io.exception.UnknownVersionException;
 import org.xml.sax.SAXException;
 
 import jakarta.xml.bind.JAXBException;
