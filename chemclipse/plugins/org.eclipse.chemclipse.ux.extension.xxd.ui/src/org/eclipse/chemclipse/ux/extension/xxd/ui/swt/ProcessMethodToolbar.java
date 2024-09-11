@@ -188,6 +188,8 @@ public class ProcessMethodToolbar extends ToolBar {
 		builder.append("Description");
 		builder.append("\t");
 		builder.append("Settings");
+		builder.append("\t");
+		builder.append("Id");
 		builder.append(lineDelimiter);
 		/*
 		 * Data
@@ -199,6 +201,8 @@ public class ProcessMethodToolbar extends ToolBar {
 				builder.append(processEntry.getDescription());
 				builder.append("\t");
 				builder.append(processEntry.getSettings());
+				builder.append("\t");
+				builder.append(processEntry.getProcessorId());
 				builder.append(lineDelimiter);
 			}
 		}
