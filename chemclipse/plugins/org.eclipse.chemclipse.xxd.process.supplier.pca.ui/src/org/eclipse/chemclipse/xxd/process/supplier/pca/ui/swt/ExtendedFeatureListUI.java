@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip Wenig - initial API and implementation
+ * Lorenz Gerber - update feature table selection from loading plot
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -30,6 +32,8 @@ import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.ProcessorPCA;
@@ -38,9 +42,11 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Feature;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.FeatureDataMatrix;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -61,11 +67,37 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 	//
 	private EvaluationPCA evaluationPCA = null;
 	private FeatureDataMatrix featureDataMatrix = null;
+	//
+	private Composite control;
 
 	public ExtendedFeatureListUI(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
+		//
+		DataUpdateSupport dataUpdateSupport = new DataUpdateSupport(Activator.getDefault().getEventBroker());
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PCA_UPDATE_RESULT, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.add(new IDataUpdateListener() {
+
+			@Override
+			public void update(String topic, List<Object> objects) {
+
+				if(evaluationPCA != null) {
+					if(DataUpdateSupport.isVisible(control)) {
+						if(IChemClipseEvents.TOPIC_PCA_UPDATE_RESULT.equals(topic)) {
+							if(objects.size() == 1) {
+								Object object = objects.get(0);
+								if(object instanceof Feature feature) {
+									if(evaluationPCA.getFeatureDataMatrix().getFeatures().contains(feature)) {
+										listControl.get().setSelection(new StructuredSelection(feature));
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
 	}
 
 	public void setInput(EvaluationPCA evaluationPCA) {
@@ -91,6 +123,7 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 		createToolbarInfo(this);
 		//
 		initialize();
+		control = this;
 	}
 
 	private void initialize() {
