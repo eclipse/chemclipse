@@ -18,12 +18,6 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.chemclipse.msd.converter.supplier.cml.l10n.messages"; //$NON-NLS-1$
 	//
 	public static String description;
-	public static String noMassSpectraStored;
-	public static String fileNotFound;
-	public static String fileNotReadable;
-	public static String fileIsEmpty;
-	public static String ioError;
-	public static String fileNotWriteable;
 	public static String singleSpectrum;
 	//
 	static {

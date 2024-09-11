@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,6 +18,7 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseImportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
@@ -26,6 +27,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.MSPReader;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 
 public class MSPDatabaseImportConverter extends AbstractDatabaseImportConverter {
 
@@ -44,20 +46,20 @@ public class MSPDatabaseImportConverter extends AbstractDatabaseImportConverter 
 				if(massSpectra != null && !massSpectra.isEmpty()) {
 					processingInfo.setProcessingResult(massSpectra);
 				} else {
-					processingInfo.addErrorMessage(DESCRIPTION, "No mass spectra are stored." + file.getAbsolutePath());
+					processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.noMassSpectraStored, file.getAbsolutePath()));
 				}
 			} catch(FileNotFoundException e) {
-				logger.warn(e.getLocalizedMessage());
-				processingInfo.addErrorMessage(DESCRIPTION, "The file couldn't be found: " + file.getAbsolutePath());
+				logger.warn(e);
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.fileNotFound, file.getAbsolutePath()));
 			} catch(FileIsNotReadableException e) {
-				logger.warn(e.getLocalizedMessage());
-				processingInfo.addErrorMessage(DESCRIPTION, "The file is not readable: " + file.getAbsolutePath());
+				logger.warn(e);
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.fileNotReadable, file.getAbsolutePath()));
 			} catch(FileIsEmptyException e) {
-				logger.warn(e.getLocalizedMessage());
-				processingInfo.addErrorMessage(DESCRIPTION, "The file is empty: " + file.getAbsolutePath());
+				logger.warn(e);
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.emptyFile, file.getAbsolutePath()));
 			} catch(IOException e) {
-				logger.warn(e.getLocalizedMessage(), e);
-				processingInfo.addErrorMessage(DESCRIPTION, "Something has gone completely wrong: " + file.getAbsolutePath());
+				logger.warn(e);
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.failedToReadFile, file.getAbsolutePath()));
 			}
 		}
 		return processingInfo;

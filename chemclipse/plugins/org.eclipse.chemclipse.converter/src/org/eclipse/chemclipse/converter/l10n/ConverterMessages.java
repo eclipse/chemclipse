@@ -37,6 +37,7 @@ public class ConverterMessages extends NLS {
 	public static String readPeaks;
 	public static String readDatabase;
 	public static String writeMassSpectra;
+	public static String noMassSpectraStored;
 	//
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, ConverterMessages.class);

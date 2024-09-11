@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseExportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
@@ -43,13 +44,13 @@ public class DatabaseExportConverter extends AbstractDatabaseExportConverter {
 				processingInfo.setProcessingResult(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(Messages.description, NLS.bind(Messages.fileNotFound, file.getAbsolutePath()));
+				processingInfo.addErrorMessage(Messages.description, NLS.bind(ConverterMessages.fileNotFound, file.getAbsolutePath()));
 			} catch(FileIsNotWriteableException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(Messages.description, NLS.bind(Messages.fileNotWriteable, file.getAbsolutePath()));
+				processingInfo.addErrorMessage(Messages.description, NLS.bind(ConverterMessages.fileNotWritable, file.getAbsolutePath()));
 			} catch(IOException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(Messages.description, NLS.bind(Messages.ioError, file.getAbsolutePath()));
+				processingInfo.addErrorMessage(Messages.description, NLS.bind(ConverterMessages.failedToWriteFile, file.getAbsolutePath()));
 			}
 		}
 		return processingInfo;

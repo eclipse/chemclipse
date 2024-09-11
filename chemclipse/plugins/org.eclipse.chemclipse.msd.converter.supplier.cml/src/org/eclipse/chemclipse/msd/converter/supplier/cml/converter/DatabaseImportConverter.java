@@ -17,6 +17,7 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseImportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
@@ -49,20 +50,20 @@ public class DatabaseImportConverter extends AbstractDatabaseImportConverter {
 				if(massSpectra != null && !massSpectra.isEmpty()) {
 					processingInfo.setProcessingResult(massSpectra);
 				} else {
-					processingInfo.addErrorMessage(Messages.description, NLS.bind(Messages.noMassSpectraStored, file.getAbsolutePath()));
+					processingInfo.addErrorMessage(Messages.description, NLS.bind(ConverterMessages.noMassSpectraStored, file.getAbsolutePath()));
 				}
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(Messages.description, NLS.bind(Messages.fileNotFound, file.getAbsolutePath()));
+				processingInfo.addErrorMessage(Messages.description, NLS.bind(ConverterMessages.fileNotFound, file.getAbsolutePath()));
 			} catch(FileIsNotReadableException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(Messages.description, NLS.bind(Messages.fileNotReadable, file.getAbsolutePath()));
+				processingInfo.addErrorMessage(Messages.description, NLS.bind(ConverterMessages.fileNotReadable, file.getAbsolutePath()));
 			} catch(FileIsEmptyException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(Messages.description, NLS.bind(Messages.fileIsEmpty, file.getAbsolutePath()));
+				processingInfo.addErrorMessage(Messages.description, NLS.bind(ConverterMessages.emptyFile, file.getAbsolutePath()));
 			} catch(IOException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(Messages.description, NLS.bind(Messages.ioError, file.getAbsolutePath()));
+				processingInfo.addErrorMessage(Messages.description, NLS.bind(ConverterMessages.failedToReadFile, file.getAbsolutePath()));
 			}
 		}
 		return processingInfo;
