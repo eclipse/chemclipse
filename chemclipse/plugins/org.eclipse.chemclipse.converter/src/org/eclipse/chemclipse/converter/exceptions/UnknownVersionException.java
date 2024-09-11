@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Alexander Kerner - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.converter.supplier.io.exception;
+package org.eclipse.chemclipse.converter.exceptions;
 
 import java.io.IOException;
 
