@@ -36,6 +36,7 @@ public class ChromatogramFileContentMatcher extends AbstractFileContentMatcher i
 			XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(new FileInputStream(file));
 			boolean hasChromatogramList = false;
 			boolean hasRootElement = false;
+			boolean hasMS = false;
 			while(xmlStreamReader.hasNext()) {
 				int eventType = xmlStreamReader.next();
 				if(eventType == XMLStreamConstants.START_ELEMENT) {
@@ -44,8 +45,24 @@ public class ChromatogramFileContentMatcher extends AbstractFileContentMatcher i
 						hasRootElement = true;
 					} else if(elementName.equals("chromatogramList")) {
 						hasChromatogramList = true;
+					} else if(elementName.equals("fileContent")) {
+						while(xmlStreamReader.hasNext()) {
+							int innerEventType = xmlStreamReader.next();
+							if(innerEventType == XMLStreamConstants.START_ELEMENT && xmlStreamReader.getLocalName().equals("cvParam")) {
+								String accession = xmlStreamReader.getAttributeValue(null, "accession");
+								String paramName = xmlStreamReader.getAttributeValue(null, "name");
+								if(accession.equals("MS:1000579") && paramName.equals("MS1 spectrum") || //
+										accession.equals("MS:1000580") && paramName.equals("MSn spectrum")) {
+									hasMS = true;
+									break;
+								}
+							}
+							if(innerEventType == XMLStreamConstants.END_ELEMENT && xmlStreamReader.getLocalName().equals("fileContent")) {
+								break;
+							}
+						}
 					}
-					if(hasRootElement && hasChromatogramList) {
+					if(hasRootElement && hasChromatogramList && hasMS) {
 						isValidFormat = true;
 						break;
 					}
