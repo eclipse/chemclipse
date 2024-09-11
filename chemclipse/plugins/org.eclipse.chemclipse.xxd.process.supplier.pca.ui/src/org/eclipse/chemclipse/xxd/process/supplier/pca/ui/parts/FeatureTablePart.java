@@ -9,17 +9,18 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  * Philip Wenig - get rid of JavaFX, feature selection
+ * Lorenz Gerber - update feature table selection from loading plot
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.parts;
 
 import java.util.List;
 
-import jakarta.inject.Inject;
-
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt.ExtendedFeatureListUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+
+import jakarta.inject.Inject;
 
 public class FeatureTablePart extends AbstractPartPCA<ExtendedFeatureListUI> {
 
