@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Philip Wenig - initial API and implementation
- * Lorenz Gerber - Opls Target selection
+ * Lorenz Gerber - Opls Target selection, Group assigner
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 
@@ -50,6 +50,8 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.model.ResultPCA;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.runnable.CalculationExecutor;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.wizards.GroupNamingWizard;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.PreferencePageLoadingPlot;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.PreferencePageScorePlot;
@@ -60,6 +62,8 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -96,6 +100,9 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 	//
 	private Composite control;
 	private ArrayList<String> oplsGroupTargets;
+	//
+	public static final int DEFAULT_WIDTH = 500;
+	public static final int DEFAULT_HEIGHT = 600;
 
 	public AnalysisEditorUI(Composite parent, int style) {
 
@@ -301,6 +308,21 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		toolbarSearch.set(searchSupportUI);
 	}
 
+	private void createNamingWizard(Composite parent) {
+
+		IWizard wizard = new GroupNamingWizard(samples);
+		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(control.getShell(), wizard);
+		wizardDialog.setMinimumPageSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		//
+		try {
+			if(wizardDialog.open() == Window.OK) {
+				updateSampleList();
+			}
+		} finally {
+			wizard.dispose();
+		}
+	}
+
 	private TabFolder createDataTab(Composite parent) {
 
 		TabFolder tabFolder = new TabFolder(parent, SWT.BOTTOM);
@@ -334,9 +356,10 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(6, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
 		createButtonToggleToolbar(composite);
+		createButtonNamingWizard(composite);
 		createComboViewerOplsTarget(composite);
 		createComboViewerLabelOption(composite);
 		createButtonColorScheme(composite);
@@ -442,6 +465,25 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		comboViewer.setInput(oplsGroupTargets);
 		comboViewer.setSelection(new StructuredSelection(oplsGroupTargets.get(0)));
 		comboViewerOplsTarget.set(comboViewer);
+	}
+
+	private Button createButtonNamingWizard(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Group Naming Wizard.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImageProvider.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				createNamingWizard(parent);
+				// applyColorScheme(e.display);
+			}
+		});
+		//
+		return button;
 	}
 
 	private Button createButtonColorScheme(Composite parent) {
