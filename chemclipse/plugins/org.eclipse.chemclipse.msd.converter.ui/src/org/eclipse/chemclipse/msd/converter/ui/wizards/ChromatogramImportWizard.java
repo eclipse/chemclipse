@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.RawFileSelectionWizardPage;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions.VersionConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -38,7 +39,6 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramImportWizard.class);
 	private static final String DESCRIPTION = "Chromatogram MSD Import";
-	private static final String CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
 	private RawFileSelectionWizardPage rawFileSelectionWizardPage;
 	private ImportDirectoryWizardPage importDirectoryWizardPage;
 
@@ -111,7 +111,7 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 						 * Export
 						 */
 						File outputFile = new File(directory + chromatogram.getName());
-						ChromatogramConverterMSD.getInstance().convert(outputFile, chromatogram, CONVERTER_ID, monitor);
+						ChromatogramConverterMSD.getInstance().convert(outputFile, chromatogram, VersionConstants.CONVERTER_ID_CHROMATOGRAM, monitor);
 					} catch(TypeCastException e) {
 						logger.warn(e);
 					}

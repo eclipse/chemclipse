@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions.VersionConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -51,9 +52,6 @@ public class SampleQuantProcessor {
 	//
 	private static final String EXTENSION_POINT_ID_RTERES = "net.openchrom.msd.converter.supplier.agilent.hp.report.rteres";
 	private static final String EXTENSION_POINT_ID_SUMRPT = "net.openchrom.msd.converter.supplier.agilent.hp.report.sumrpt";
-	//
-	private static final String CHROMATOGRAM_CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
-	private static final String CHROMATOGRAM_FILE_EXTENSION = ".ocb";
 	//
 	private Pattern pattern = Pattern.compile("(\\d+)-(\\d\\d)-(\\d)"); // CAS#
 
@@ -90,8 +88,8 @@ public class SampleQuantProcessor {
 			/*
 			 * Export the chromatogram
 			 */
-			File chromatogramExportFile = new File(sampleQuantReportFile.getAbsolutePath().replace(REPORT_FILE_EXTENSION, CHROMATOGRAM_FILE_EXTENSION));
-			IProcessingInfo<File> processingInfoExport = ChromatogramConverterMSD.getInstance().convert(chromatogramExportFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
+			File chromatogramExportFile = new File(sampleQuantReportFile.getAbsolutePath().replace(REPORT_FILE_EXTENSION, VersionConstants.FILE_EXTENSION_CHROMATOGRAM));
+			IProcessingInfo<File> processingInfoExport = ChromatogramConverterMSD.getInstance().convert(chromatogramExportFile, chromatogramMSD, VersionConstants.CONVERTER_ID_CHROMATOGRAM, monitor);
 			sampleQuantReport.setPathChromatogramEdited(processingInfoExport.getProcessingResult().getAbsolutePath());
 			/*
 			 * Write sample quant report

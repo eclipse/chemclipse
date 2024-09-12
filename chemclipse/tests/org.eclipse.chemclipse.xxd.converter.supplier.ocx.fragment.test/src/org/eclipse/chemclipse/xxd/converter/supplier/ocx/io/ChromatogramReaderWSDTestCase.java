@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions.VersionConstants;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.Ignore;
 
@@ -29,14 +30,13 @@ public class ChromatogramReaderWSDTestCase extends TestCase {
 	protected IChromatogramWSD chromatogram;
 	protected String pathImport;
 	protected File fileImport;
-	private static final String EXTENSION_POINT_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
 		fileImport = new File(this.pathImport);
-		IProcessingInfo<IChromatogramWSD> processingInfo = ChromatogramConverterWSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		IProcessingInfo<IChromatogramWSD> processingInfo = ChromatogramConverterWSD.getInstance().convert(fileImport, VersionConstants.CONVERTER_ID_CHROMATOGRAM, new NullProgressMonitor());
 		try {
 			chromatogram = processingInfo.getProcessingResult();
 		} catch(TypeCastException e) {

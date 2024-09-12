@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramSelectionWizardPage;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions.VersionConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -41,7 +42,6 @@ public class ChromatogramReportExportWizard extends Wizard implements IExportWiz
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReportExportWizard.class);
 	private static final String DESCRIPTION = "Chromatogram Report";
-	private static final String CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
 	private ChromatogramSelectionWizardPage chromatogramSelectionWizardPage;
 	private ReportSupplierSelectionWizardPage reportSupplierSelectionWizardPage;
 
@@ -89,7 +89,7 @@ public class ChromatogramReportExportWizard extends Wizard implements IExportWiz
 							 * Load each chromatogram
 							 */
 							File chromatogramFile = new File(inputFile);
-							IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(chromatogramFile, CONVERTER_ID, monitor);
+							IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(chromatogramFile, VersionConstants.CONVERTER_ID_CHROMATOGRAM, monitor);
 							try {
 								IChromatogramMSD chromatogram = processingInfo.getProcessingResult();
 								if(chromatogram != null) {

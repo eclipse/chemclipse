@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.support.ui.swt.EnhancedCombo;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions.VersionConstants;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
@@ -32,9 +33,9 @@ import org.eclipse.swt.widgets.Text;
 public class ImportDirectoryWizardPage extends WizardPage {
 
 	private static final String CONVERTER_LABEL_XY = "*.xy";
-	private static final String CONVERTER_LABEL_OCB = "*.ocb";
+	private static final String CONVERTER_LABEL_OCB = VersionConstants.FILE_EXTENSION_CHROMATOGRAM;
 	private static final String CONVERTER_ID_XY = "org.eclipse.chemclipse.csd.converter.supplier.xy";
-	private static final String CONVERTER_ID_OCB = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
+	private static final String CONVERTER_ID_OCB = VersionConstants.CONVERTER_ID_CHROMATOGRAM;
 	//
 	private Map<String, String> converterIds;
 	//
@@ -44,7 +45,7 @@ public class ImportDirectoryWizardPage extends WizardPage {
 	public ImportDirectoryWizardPage(String pageName, String title, ImageDescriptor titleImage) {
 
 		super(pageName, title, titleImage);
-		converterIds = new HashMap<String, String>();
+		converterIds = new HashMap<>();
 		converterIds.put(CONVERTER_LABEL_XY, CONVERTER_ID_XY);
 		converterIds.put(CONVERTER_LABEL_OCB, CONVERTER_ID_OCB);
 	}
@@ -74,7 +75,7 @@ public class ImportDirectoryWizardPage extends WizardPage {
 		gridDataCombo.horizontalSpan = 2;
 		comboConverter = EnhancedCombo.create(container, SWT.NONE);
 		comboConverter.select(1);
-		comboConverter.setItems(new String[]{CONVERTER_LABEL_XY, CONVERTER_LABEL_OCB});
+		comboConverter.setItems(CONVERTER_LABEL_XY, CONVERTER_LABEL_OCB);
 		comboConverter.setLayoutData(gridDataCombo);
 		//
 		GridData gridDataText = new GridData(GridData.FILL_HORIZONTAL);
