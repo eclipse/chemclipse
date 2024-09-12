@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 Lablicate GmbH.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizardPage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions.VersionConstants;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -49,8 +50,6 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 	private RetentionIndexWizardElements wizardElements = new RetentionIndexWizardElements();
 	//
 	private static final String CALIBRATION_FILE_EXTENSION = ".cal";
-	private static final String CHROMATOGRAM_FILE_EXTENSION = ".ocb";
-	private static final String CHROMATOGRAM_CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
 	//
 	private PageCalibrationSettings pageCalibrationSettings;
 	private InputEntriesWizardPage pageInputEntriesMSD;
@@ -196,17 +195,17 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 			 * Export the chromatogram.
 			 */
 			String path = calibrationFile.getAbsolutePath();
-			File chromatogramFile = new File(path.substring(0, path.length() - CALIBRATION_FILE_EXTENSION.length()) + CHROMATOGRAM_FILE_EXTENSION);
+			File chromatogramFile = new File(path.substring(0, path.length() - CALIBRATION_FILE_EXTENSION.length()) + VersionConstants.FILE_EXTENSION_CHROMATOGRAM);
 			IChromatogramSelection<?, ?> chromatogramSelection = wizardElements.getChromatogramSelection();
 			if(wizardElements.isUseMassSpectrometryData()) {
 				if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 					IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogram();
-					ChromatogramConverterMSD.getInstance().convert(chromatogramFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
+					ChromatogramConverterMSD.getInstance().convert(chromatogramFile, chromatogramMSD, VersionConstants.CONVERTER_ID_CHROMATOGRAM, monitor);
 				}
 			} else {
 				if(chromatogramSelection instanceof IChromatogramSelectionCSD chromatogramSelectionCSD) {
 					IChromatogramCSD chromatogramCSD = chromatogramSelectionCSD.getChromatogram();
-					ChromatogramConverterCSD.getInstance().convert(chromatogramFile, chromatogramCSD, CHROMATOGRAM_CONVERTER_ID, monitor);
+					ChromatogramConverterCSD.getInstance().convert(chromatogramFile, chromatogramCSD, VersionConstants.CONVERTER_ID_CHROMATOGRAM, monitor);
 				}
 			}
 		} catch(Exception e) {

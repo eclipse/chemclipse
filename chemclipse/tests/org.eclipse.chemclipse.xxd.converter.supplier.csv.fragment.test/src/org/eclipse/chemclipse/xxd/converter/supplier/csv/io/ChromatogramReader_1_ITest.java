@@ -16,6 +16,7 @@ import java.io.File;
 import org.eclipse.chemclipse.model.settings.Delimiter;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.TestPathHelper;
 import org.eclipse.chemclipse.xxd.converter.supplier.csv.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.xxd.converter.supplier.ocx.versions.VersionConstants;
 
 public class ChromatogramReader_1_ITest extends ChromatogramWriterTestCase {
 
@@ -28,7 +29,7 @@ public class ChromatogramReader_1_ITest extends ChromatogramWriterTestCase {
 		 * Import
 		 */
 		pathImport = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1);
-		extensionPointImport = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
+		extensionPointImport = VersionConstants.CONVERTER_ID_CHROMATOGRAM;
 		/*
 		 * Export/Reimport
 		 */
