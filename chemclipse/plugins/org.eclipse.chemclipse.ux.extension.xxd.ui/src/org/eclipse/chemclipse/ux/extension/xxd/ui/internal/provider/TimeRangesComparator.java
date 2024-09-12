@@ -26,16 +26,17 @@ public class TimeRangesComparator extends AbstractRecordTableComparator implemen
 			//
 			switch(getPropertyIndex()) {
 				case 0:
-					sortOrder = timeRange2.getIdentifier().compareTo(timeRange1.getIdentifier());
-					break;
-				case 1:
 					sortOrder = Integer.compare(timeRange2.getStart(), timeRange1.getStart());
 					break;
-				case 2:
+				case 1:
 					sortOrder = Integer.compare(timeRange2.getStop(), timeRange1.getStop());
+					break;
+				case 2:
+					sortOrder = timeRange2.getIdentifier().compareTo(timeRange1.getIdentifier());
 					break;
 			}
 		}
+		//
 		if(getDirection() == ASCENDING) {
 			sortOrder = -sortOrder;
 		}

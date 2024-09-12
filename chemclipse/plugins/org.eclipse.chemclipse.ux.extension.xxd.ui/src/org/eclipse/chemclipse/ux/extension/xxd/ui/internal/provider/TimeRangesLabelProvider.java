@@ -36,14 +36,14 @@ public class TimeRangesLabelProvider extends AbstractChemClipseLabelProvider {
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 	//
 	public static final String[] TITLES = { //
-			IDENTIFIER, //
 			START, //
-			STOP //
+			STOP, //
+			IDENTIFIER //
 	};
 	public static final int[] BOUNDS = { //
-			200, //
 			130, //
-			130 //
+			130, //
+			200 //
 	};
 
 	@Override
@@ -62,13 +62,13 @@ public class TimeRangesLabelProvider extends AbstractChemClipseLabelProvider {
 		if(element instanceof TimeRange timeRange) {
 			switch(columnIndex) {
 				case 0:
-					text = timeRange.getIdentifier();
-					break;
-				case 1:
 					text = calculateRetentionTimeMinutes(timeRange.getStart());
 					break;
-				case 2:
+				case 1:
 					text = calculateRetentionTimeMinutes(timeRange.getStop());
+					break;
+				case 2:
+					text = timeRange.getIdentifier();
 					break;
 			}
 		}
