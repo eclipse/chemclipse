@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -45,6 +46,7 @@ public class PCRImportRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask(ExtensionMessages.importPlate, IProgressMonitor.UNKNOWN);
 			IProcessingInfo<?> processingInfo = PlateConverterPCR.convert(file, monitor);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo);
 			plate = (IPlate)processingInfo.getProcessingResult();
 		} catch(Exception e) {
 			logger.error(e);
