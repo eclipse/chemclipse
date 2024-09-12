@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2023 Lablicate GmbH.
+ * Copyright (c) 2018, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
 import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -49,6 +50,7 @@ public class SequenceImportRunnable implements IRunnableWithProgress {
 		try {
 			subMonitor.worked(1);
 			IProcessingInfo<ISequence<? extends ISequenceRecord>> processingInfo = SequenceConverter.convert(file, monitor);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo);
 			sequence = processingInfo.getProcessingResult();
 			subMonitor.worked(2);
 		} catch(Exception e) {

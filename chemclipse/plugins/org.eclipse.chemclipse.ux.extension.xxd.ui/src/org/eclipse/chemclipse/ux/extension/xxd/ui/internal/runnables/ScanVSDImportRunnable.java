@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.vsd.converter.core.ScanConverterVSD;
 import org.eclipse.chemclipse.vsd.model.core.ISpectrumVSD;
@@ -45,6 +46,7 @@ public class ScanVSDImportRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask(ExtensionMessages.importScan, IProgressMonitor.UNKNOWN);
 			IProcessingInfo<?> processingInfo = ScanConverterVSD.convert(file, monitor);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo);
 			spectrumVSD = (ISpectrumVSD)processingInfo.getProcessingResult();
 		} catch(Exception e) {
 			logger.error(e);

@@ -17,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.wsd.converter.core.ScanConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.ISpectrumWSD;
@@ -46,6 +47,7 @@ public class ScanWSDImportRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask(ExtensionMessages.importScan, IProgressMonitor.UNKNOWN);
 			IProcessingInfo<?> processingInfo = ScanConverterWSD.convert(file, monitor);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo);
 			spectrumWSD = (ISpectrumWSD)processingInfo.getProcessingResult();
 		} catch(Exception e) {
 			logger.error(e);

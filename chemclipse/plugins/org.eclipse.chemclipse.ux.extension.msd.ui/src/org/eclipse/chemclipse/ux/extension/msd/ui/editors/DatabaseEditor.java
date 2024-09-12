@@ -293,7 +293,7 @@ public class DatabaseEditor extends EditorPart implements IChemClipseEditor {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		Label label = new Label(composite, SWT.NONE);
-		label.setText("The mass spectrum couldn't be loaded.");
+		label.setText("The database mass spectrum couldn't be loaded.");
 	}
 
 	private void importMassSpectra(File file, boolean batch) {

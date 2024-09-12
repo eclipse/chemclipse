@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -44,13 +45,12 @@ public class MassSpectrumImportRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Import Mass Spectrum", IProgressMonitor.UNKNOWN);
 			IProcessingInfo<IMassSpectra> processingInfo = MassSpectrumConverter.convert(file, monitor);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo);
 			massSpectra = processingInfo.getProcessingResult();
 		} catch(Exception e) {
 			/*
 			 * Exceptions: FileNotFoundException
-			 * NoChromatogramConverterAvailableException
 			 * FileIsNotReadableException FileIsEmptyException
-			 * ChromatogramIsNullException
 			 */
 			logger.warn(e);
 		} finally {
