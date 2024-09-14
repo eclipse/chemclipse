@@ -21,12 +21,13 @@ import javax.xml.stream.XMLStreamReader;
 import org.eclipse.chemclipse.converter.core.AbstractFileContentMatcher;
 import org.eclipse.chemclipse.converter.core.IFileContentMatcher;
 
-public class FileContentMatcher extends AbstractFileContentMatcher implements IFileContentMatcher {
+public class MassSpectrumFileContentMatcher extends AbstractFileContentMatcher implements IFileContentMatcher {
 
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		boolean isValidFormat = false;
+		boolean hasMassSpectrum = false;
+		boolean hasPeakList = false;
 		try {
 			XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
 			XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(new FileInputStream(file));
@@ -36,8 +37,10 @@ public class FileContentMatcher extends AbstractFileContentMatcher implements IF
 					if(xmlStreamReader.getLocalName().equals("spectrum")) {
 						String type = xmlStreamReader.getAttributeValue(null, "type");
 						if(type != null && type.equals("massSpectrum")) {
-							isValidFormat = true;
+							hasMassSpectrum = true;
 						}
+					} else if(xmlStreamReader.getLocalName().equals("peakList")) {
+						hasPeakList = true;
 					}
 				}
 			}
@@ -45,6 +48,6 @@ public class FileContentMatcher extends AbstractFileContentMatcher implements IF
 		} catch(Exception e) {
 			// fail silently
 		}
-		return isValidFormat;
+		return hasMassSpectrum && hasPeakList;
 	}
 }
