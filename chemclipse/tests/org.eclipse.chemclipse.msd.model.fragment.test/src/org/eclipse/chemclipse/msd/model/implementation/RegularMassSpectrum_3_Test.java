@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
+
+import junit.framework.TestCase;
 
 public class RegularMassSpectrum_3_Test extends TestCase {
 
@@ -41,23 +41,17 @@ public class RegularMassSpectrum_3_Test extends TestCase {
 
 	public void test_2() {
 
-		massSpectrum.setMassSpectrumType((short)2);
-		assertEquals(2, massSpectrum.getMassSpectrumType());
+		massSpectrum.setMassSpectrumType(null);
+		assertEquals(null, massSpectrum.getMassSpectrumType());
 	}
 
 	public void test_3() {
-
-		massSpectrum.setMassSpectrumType((short)2);
-		assertEquals("Unknown", massSpectrum.getMassSpectrumTypeDescription());
-	}
-
-	public void test_4() {
 
 		massSpectrum.setTimeSegmentId(3);
 		assertEquals(3, massSpectrum.getTimeSegmentId());
 	}
 
-	public void test_5() {
+	public void test_4() {
 
 		massSpectrum.setCycleNumber(3);
 		assertEquals(3, massSpectrum.getCycleNumber());

@@ -39,6 +39,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.Vend
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
@@ -47,7 +48,6 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.MassSpectrometer;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.MassSpectrumType;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -224,20 +224,12 @@ public class PeakReader_0701 extends AbstractZipReader implements IPeakReader {
 		return value;
 	}
 
-	/**
-	 * Legacy.
-	 * Convert between Enum and short value.
-	 * 
-	 * @param massSpectrometer
-	 * @return
-	 */
-	private short getMassSpectrumTypeValue(String massSpectrumType) {
+	private MassSpectrumType getMassSpectrumTypeValue(String massSpectrumType) {
 
-		MassSpectrumType msType = MassSpectrumType.valueOf(massSpectrumType);
-		short value = 0; // centroid
-		if(msType == MassSpectrumType.PROFILE) {
-			value = 1;
+		MassSpectrumType type = MassSpectrumType.CENTROID;
+		if(massSpectrumType.equals("PROFILE")) {
+			type = MassSpectrumType.PROFILE;
 		}
-		return value;
+		return type;
 	}
 }

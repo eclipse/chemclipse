@@ -38,6 +38,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
@@ -73,7 +74,11 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 			massSpectrum.setFile(file);
 			massSpectrum.setIdentifier(file.getName());
 			for(DataProcessing dataProcessing : msrun.getDataProcessing()) {
-				massSpectrum.setMassSpectrumType((short)(Boolean.TRUE.equals(dataProcessing.isCentroided()) ? 0 : 1));
+				if(dataProcessing.isCentroided()) {
+					massSpectrum.setMassSpectrumType(MassSpectrumType.CENTROID);
+				} else {
+					massSpectrum.setMassSpectrumType(MassSpectrumType.PROFILE);
+				}
 			}
 			List<Scan> scans = msrun.getScan();
 			monitor.beginTask("Read scans", scans.size());

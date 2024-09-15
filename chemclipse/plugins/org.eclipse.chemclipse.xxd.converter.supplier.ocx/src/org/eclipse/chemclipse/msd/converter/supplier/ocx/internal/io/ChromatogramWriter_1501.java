@@ -55,6 +55,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.wsd.converter.supplier.ocx.io.ChromatogramWriterWSD;
@@ -514,7 +515,7 @@ public class ChromatogramWriter_1501 extends AbstractChromatogramWriter implemen
 	private void writeMassSpectrum(DataOutputStream dataOutputStream, IRegularMassSpectrum massSpectrum) throws IOException {
 
 		dataOutputStream.writeShort(massSpectrum.getMassSpectrometer()); // Mass Spectrometer
-		dataOutputStream.writeShort(massSpectrum.getMassSpectrumType()); // Mass Spectrum Type
+		dataOutputStream.writeShort(getMassSpectrumType(massSpectrum.getMassSpectrumType())); // Mass Spectrum Type
 		dataOutputStream.writeDouble(massSpectrum.getPrecursorIon()); // Precursor Ion (0 if MS1 or none has been selected)
 		writeNormalMassSpectrum(dataOutputStream, massSpectrum);
 	}
@@ -772,5 +773,14 @@ public class ChromatogramWriter_1501 extends AbstractChromatogramWriter implemen
 		} finally {
 			SubMonitor.done(subMonitor);
 		}
+	}
+
+	private short getMassSpectrumType(MassSpectrumType massSpectrumType) {
+
+		short type = 0;
+		if(massSpectrumType == MassSpectrumType.PROFILE) {
+			type = 1;
+		}
+		return type;
 	}
 }

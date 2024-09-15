@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendo
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.chemclipse.xxd.converter.supplier.mzml.io.BinaryReader110;
 import org.eclipse.chemclipse.xxd.converter.supplier.mzml.io.XmlReader110;
@@ -76,9 +77,9 @@ public class MassSpectrumReaderVersion110 extends AbstractMassSpectraReader impl
 			for(SpectrumType spectrum : run.getSpectrumList().getSpectrum()) {
 				for(CVParamType cvParam : spectrum.getCvParam()) {
 					if(cvParam.getAccession().equals("MS:1000127") && cvParam.getName().equals("centroid spectrum")) {
-						massSpectrum.setMassSpectrumType((short)0);
+						massSpectrum.setMassSpectrumType(MassSpectrumType.CENTROID);
 					} else if(cvParam.getAccession().equals("MS:1000128") && cvParam.getName().equals("profile spectrum")) {
-						massSpectrum.setMassSpectrumType((short)1);
+						massSpectrum.setMassSpectrumType(MassSpectrumType.PROFILE);
 					}
 				}
 				for(BinaryDataArrayType binaryDataArrayType : spectrum.getBinaryDataArrayList().getBinaryDataArray()) {

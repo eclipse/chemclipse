@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.Vend
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.io.ReaderIO_1502;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
@@ -59,7 +60,7 @@ public class ReaderProxy_1502 extends AbstractZipReader implements IReaderProxy 
 		short massSpectrumType = dataInputStream.readShort(); // Mass Spectrum Type
 		double precursorIon = dataInputStream.readDouble(); // Precursor Ion (0 if MS1 or none has been selected)
 		massSpectrum.setMassSpectrometer(massSpectrometer);
-		massSpectrum.setMassSpectrumType(massSpectrumType);
+		massSpectrum.setMassSpectrumType(getMassSpectrumType(massSpectrumType));
 		massSpectrum.setPrecursorIon(precursorIon);
 		readNormalMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings);
 		/*
@@ -143,7 +144,15 @@ public class ReaderProxy_1502 extends AbstractZipReader implements IReaderProxy 
 			ionTransition.setDwell(dwell);
 			ion = new VendorIon(mz, abundance, ionTransition);
 		}
-		//
 		return ion;
+	}
+
+	private MassSpectrumType getMassSpectrumType(short massSpectrumType) {
+
+		MassSpectrumType type = MassSpectrumType.CENTROID;
+		if(massSpectrumType == 1) {
+			type = MassSpectrumType.PROFILE;
+		}
+		return type;
 	}
 }

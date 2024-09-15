@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -400,7 +401,7 @@ public class ScanChartUI extends ScrollableChart {
 			 */
 			usedSignalType = SignalType.CENTROID;
 			if(scan instanceof IRegularMassSpectrum massSpectrum) {
-				if(massSpectrum.getMassSpectrumType() == 1) {
+				if(massSpectrum.getMassSpectrumType() == MassSpectrumType.PROFILE) {
 					usedSignalType = SignalType.PROFILE;
 				}
 			} else if(scan instanceof IScanWSD scanWSD) {

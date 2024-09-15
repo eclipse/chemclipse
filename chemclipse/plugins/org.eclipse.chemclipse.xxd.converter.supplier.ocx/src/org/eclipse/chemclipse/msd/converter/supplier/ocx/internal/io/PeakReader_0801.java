@@ -42,6 +42,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.ocx.model.chromatogram.Vend
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
@@ -146,7 +147,7 @@ public class PeakReader_0801 extends AbstractZipReader implements IPeakReader {
 		double precursorIon = dataInputStream.readDouble(); // Precursor Ion (0 if MS1 or none has been selected)
 		IPeakMassSpectrum massSpectrum = new PeakMassSpectrum();
 		massSpectrum.setMassSpectrometer(massSpectrometer);
-		massSpectrum.setMassSpectrumType(massSpectrumType);
+		massSpectrum.setMassSpectrumType(getMassSpectrumType(massSpectrumType));
 		massSpectrum.setPrecursorIon(precursorIon);
 		int retentionTime = dataInputStream.readInt();
 		float retentionIndex = dataInputStream.readFloat(); // Retention Index
@@ -241,5 +242,14 @@ public class PeakReader_0801 extends AbstractZipReader implements IPeakReader {
 			//
 			peak.addQuantitationEntry(quantitationEntry);
 		}
+	}
+
+	private MassSpectrumType getMassSpectrumType(short massSpectrumType) {
+
+		MassSpectrumType type = MassSpectrumType.CENTROID;
+		if(massSpectrumType == 1) {
+			type = MassSpectrumType.PROFILE;
+		}
+		return type;
 	}
 }

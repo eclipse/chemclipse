@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,9 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
+
+import junit.framework.TestCase;
 
 public class RegularMassSpectrum_1_Test extends TestCase {
 
@@ -40,12 +41,12 @@ public class RegularMassSpectrum_1_Test extends TestCase {
 
 	public void test_2() {
 
-		assertEquals(0, massSpectrum.getMassSpectrumType());
+		assertEquals(MassSpectrumType.CENTROID, massSpectrum.getMassSpectrumType());
 	}
 
 	public void test_3() {
 
-		assertEquals("Centroid", massSpectrum.getMassSpectrumTypeDescription());
+		assertEquals("Centroid", massSpectrum.getMassSpectrumType().label());
 	}
 
 	public void test_4() {

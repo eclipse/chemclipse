@@ -45,6 +45,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.RetentionIndexTypeSupport;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
@@ -273,7 +274,7 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 	private static void writeMassSpectrum(DataOutputStream dataOutputStream, IRegularMassSpectrum massSpectrum) throws IOException {
 
 		dataOutputStream.writeShort(massSpectrum.getMassSpectrometer());
-		dataOutputStream.writeShort(massSpectrum.getMassSpectrumType());
+		dataOutputStream.writeShort(getMassSpectrumType(massSpectrum.getMassSpectrumType()));
 		dataOutputStream.writeDouble(massSpectrum.getPrecursorIon());
 		writeNormalMassSpectrum(dataOutputStream, massSpectrum);
 	}
@@ -384,5 +385,14 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 
 		dataOutputStream.writeInt(value.length());
 		dataOutputStream.writeChars(value);
+	}
+
+	private static short getMassSpectrumType(MassSpectrumType massSpectrumType) {
+
+		short type = 0;
+		if(massSpectrumType == MassSpectrumType.PROFILE) {
+			type = 1;
+		}
+		return type;
 	}
 }

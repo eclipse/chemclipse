@@ -44,6 +44,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.model.Vendo
 import org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.model.VendorMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.implementation.StandaloneMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.DOMException;
@@ -66,7 +67,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 			massSpectrum = new StandaloneMassSpectrum();
 			massSpectrum.setFile(file);
 			massSpectrum.setIdentifier(file.getName());
-			massSpectrum.setMassSpectrumType((short)1); // profile
+			massSpectrum.setMassSpectrumType(MassSpectrumType.PROFILE);
 			//
 			NodeList nodeList = getTopNode(file);
 			for(int i = 0; i < nodeList.getLength(); i++) {

@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionGroup;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransition;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.chemclipse.support.history.EditInformation;
@@ -146,9 +147,9 @@ public class ChromatogramReaderVersion10 extends AbstractChromatogramReader impl
 				IStandaloneMassSpectrum massSpectrum = new VendorMassSpectrum();
 				for(CVParamType cvParam : spectrum.getCvParam()) {
 					if(cvParam.getAccession().equals("MS:1000127") && cvParam.getName().equals("centroid spectrum")) {
-						massSpectrum.setMassSpectrumType((short)0);
+						massSpectrum.setMassSpectrumType(MassSpectrumType.CENTROID);
 					} else if(cvParam.getAccession().equals("MS:1000128") && cvParam.getName().equals("profile spectrum")) {
-						massSpectrum.setMassSpectrumType((short)1);
+						massSpectrum.setMassSpectrumType(MassSpectrumType.PROFILE);
 					}
 					if(cvParam.getAccession().equals("MS:1000511") && cvParam.getName().equals("ms level")) {
 						short msLevel = Short.parseShort(cvParam.getValue());

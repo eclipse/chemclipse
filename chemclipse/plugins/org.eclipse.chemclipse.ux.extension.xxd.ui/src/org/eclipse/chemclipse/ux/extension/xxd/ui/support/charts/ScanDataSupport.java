@@ -87,7 +87,7 @@ public class ScanDataSupport {
 				builder.append(massSpectrum.getMassSpectrometer());
 				builder.append(" | ");
 				builder.append("Type: ");
-				builder.append(massSpectrum.getMassSpectrumTypeDescription());
+				builder.append(massSpectrum.getMassSpectrumType().label());
 			}
 			//
 			builder.append(" | ");

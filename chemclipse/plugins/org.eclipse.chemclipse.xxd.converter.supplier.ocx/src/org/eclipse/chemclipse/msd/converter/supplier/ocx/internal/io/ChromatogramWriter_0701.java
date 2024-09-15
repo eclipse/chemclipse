@@ -36,11 +36,11 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.MassSpectrometer;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.MassSpectrumType;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -279,7 +279,7 @@ public class ChromatogramWriter_0701 extends AbstractChromatogramWriter implemen
 	private void writeMassSpectrum(DataOutputStream dataOutputStream, IRegularMassSpectrum massSpectrum) throws IOException {
 
 		writeString(dataOutputStream, getMassSpectrometer(massSpectrum.getMassSpectrometer()).toString()); // Mass Spectrometer
-		writeString(dataOutputStream, getMassSpectrumType(massSpectrum.getMassSpectrumType()).toString()); // Mass Spectrum Type
+		writeString(dataOutputStream, String.valueOf(getMassSpectrumType(massSpectrum.getMassSpectrumType()))); // Mass Spectrum Type
 		dataOutputStream.writeInt(massSpectrum.getRetentionTime()); // Retention Time
 		dataOutputStream.writeFloat(massSpectrum.getRetentionIndex()); // Retention Index
 		List<IIon> ions = massSpectrum.getIons();
@@ -382,11 +382,11 @@ public class ChromatogramWriter_0701 extends AbstractChromatogramWriter implemen
 		return detector;
 	}
 
-	private MassSpectrumType getMassSpectrumType(short massSpectrumType) {
+	private short getMassSpectrumType(MassSpectrumType massSpectrumType) {
 
-		MassSpectrumType type = MassSpectrumType.CENTROID;
-		if(massSpectrumType == 1) {
-			type = MassSpectrumType.PROFILE;
+		short type = 0;
+		if(massSpectrumType == MassSpectrumType.PROFILE) {
+			type = 1;
 		}
 		return type;
 	}
