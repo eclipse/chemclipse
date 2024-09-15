@@ -274,4 +274,6 @@ public interface IChromatogram<T extends IPeak> extends SegmentedMeasurement, IM
 			removeAnalysisSegment(segment);
 		}
 	}
+
+	ChromatographyType getChromatographyType();
 }

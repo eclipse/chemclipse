@@ -57,6 +57,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	private int scanDelay = 4500;
 	private int scanInterval = 1000; // 1000ms = 1 scan per second
 	private final List<ChromatogramAnalysisSegment> analysisSegments = new ArrayList<>();
+	private ChromatographyType chromatographyType = null;
 	/*
 	 * This flag marks whether the chromatogram has been
 	 * set to unload modus. It is used e.g. when loading
@@ -962,6 +963,12 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	@Override
 	public void updateAnalysisSegment(IAnalysisSegment segment, IScanRange range) {
 
+	}
+
+	@Override
+	public ChromatographyType getChromatographyType() {
+
+		return chromatographyType;
 	}
 
 	@Override
