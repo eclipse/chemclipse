@@ -1,10 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2024 Lablicate GmbH.
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
@@ -19,31 +19,24 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseImportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
+import org.eclipse.chemclipse.msd.converter.massspectrum.AbstractMassSpectrumImportConverter;
 import org.eclipse.chemclipse.msd.converter.supplier.cml.converter.io.MassSpectraReader;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.osgi.util.NLS;
 
-public class DatabaseImportConverter extends AbstractDatabaseImportConverter {
+public class MassSpectrumImportConverter extends AbstractMassSpectrumImportConverter {
 
-	private static final Logger logger = Logger.getLogger(DatabaseImportConverter.class);
-	private static String DESCRIPTION = "CML Mass Spectrum Import";
+	private static final Logger logger = Logger.getLogger(MassSpectrumImportConverter.class);
+	private static final String DESCRIPTION = "CML Mass Spectrum Import";
 
 	@Override
 	public IProcessingInfo<IMassSpectra> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
-		/*
-		 * Checks if the file is null or empty ...
-		 */
-		IProcessingInfo<IMassSpectra> processingInfoValidate = super.validate(file);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		IProcessingInfo<IMassSpectra> processingInfo = super.validate(file);
+		if(!processingInfo.hasErrorMessages()) {
 			try {
 				IMassSpectraReader massSpectraReader = new MassSpectraReader();
 				IMassSpectra massSpectra = massSpectraReader.read(file, monitor);

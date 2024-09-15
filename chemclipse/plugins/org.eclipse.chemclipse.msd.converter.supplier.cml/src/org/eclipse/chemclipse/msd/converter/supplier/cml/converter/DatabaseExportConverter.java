@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseExportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.cml.converter.io.MassSpectraWriter;
-import org.eclipse.chemclipse.msd.converter.supplier.cml.l10n.Messages;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -32,6 +31,7 @@ import org.eclipse.osgi.util.NLS;
 public class DatabaseExportConverter extends AbstractDatabaseExportConverter {
 
 	private static final Logger logger = Logger.getLogger(DatabaseExportConverter.class);
+	private static String DESCRIPTION = "CML Mass Spectrum Export";
 
 	@Override
 	public IProcessingInfo<File> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
@@ -44,13 +44,13 @@ public class DatabaseExportConverter extends AbstractDatabaseExportConverter {
 				processingInfo.setProcessingResult(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(Messages.description, NLS.bind(ConverterMessages.fileNotFound, file.getAbsolutePath()));
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.fileNotFound, file.getAbsolutePath()));
 			} catch(FileIsNotWriteableException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(Messages.description, NLS.bind(ConverterMessages.fileNotWritable, file.getAbsolutePath()));
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.fileNotWritable, file.getAbsolutePath()));
 			} catch(IOException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(Messages.description, NLS.bind(ConverterMessages.failedToWriteFile, file.getAbsolutePath()));
+				processingInfo.addErrorMessage(DESCRIPTION, NLS.bind(ConverterMessages.failedToWriteFile, file.getAbsolutePath()));
 			}
 		}
 		return processingInfo;
