@@ -44,6 +44,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.core.PeaksMSD;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
@@ -216,7 +217,7 @@ public class PeakReader_1501 extends AbstractZipReader implements IPeakReader {
 		//
 		IPeakMassSpectrum massSpectrum = new PeakMassSpectrum();
 		massSpectrum.setMassSpectrometer(massSpectrometer);
-		massSpectrum.setMassSpectrumType(massSpectrumType);
+		massSpectrum.setMassSpectrumType(getMassSpectrumType(massSpectrumType));
 		massSpectrum.setPrecursorIon(precursorIon);
 		//
 		readNormalMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings);
@@ -354,5 +355,14 @@ public class PeakReader_1501 extends AbstractZipReader implements IPeakReader {
 		} catch(Exception e) {
 			return QuantitationFlag.NONE;
 		}
+	}
+
+	private MassSpectrumType getMassSpectrumType(short massSpectrumType) {
+
+		MassSpectrumType type = MassSpectrumType.CENTROID;
+		if(massSpectrumType == 1) {
+			type = MassSpectrumType.PROFILE;
+		}
+		return type;
 	}
 }

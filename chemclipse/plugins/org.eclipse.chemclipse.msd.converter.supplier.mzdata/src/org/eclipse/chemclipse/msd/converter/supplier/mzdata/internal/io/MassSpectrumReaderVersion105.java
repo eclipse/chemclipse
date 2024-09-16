@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.VendorMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.implementation.StandaloneMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
@@ -86,7 +87,11 @@ public class MassSpectrumReaderVersion105 extends AbstractMassSpectraReader impl
 				for(Object object : processingMethod.getCvParamOrUserParam()) {
 					if(object instanceof CvParamType cvParamType) {
 						if(cvParamType.getName().equals("peakProcessing")) {
-							massSpectrum.setMassSpectrumType((short)(cvParamType.getValue().equals("centroided") ? 0 : 1));
+							if(cvParamType.getValue().equals("centroided")) {
+								massSpectrum.setMassSpectrumType(MassSpectrumType.CENTROID);
+							} else {
+								massSpectrum.setMassSpectrumType(MassSpectrumType.PROFILE);
+							}
 						}
 					}
 				}

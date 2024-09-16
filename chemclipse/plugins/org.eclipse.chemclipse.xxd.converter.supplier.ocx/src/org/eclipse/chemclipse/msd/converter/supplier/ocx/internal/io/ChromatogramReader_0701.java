@@ -52,6 +52,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
@@ -60,7 +61,6 @@ import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.Format;
 import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.MassSpectrometer;
-import org.eclipse.chemclipse.xxd.converter.supplier.ocx.internal.support.MassSpectrumType;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -478,14 +478,13 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 	 * @param massSpectrometer
 	 * @return
 	 */
-	private short getMassSpectrumTypeValue(String massSpectrumType) {
+	private MassSpectrumType getMassSpectrumTypeValue(String massSpectrumType) {
 
-		MassSpectrumType msType = MassSpectrumType.valueOf(massSpectrumType);
-		short value = 0; // centroid
-		if(msType == MassSpectrumType.PROFILE) {
-			value = 1;
+		MassSpectrumType type = MassSpectrumType.CENTROID;
+		if(massSpectrumType.equals("PROFILE")) {
+			type = MassSpectrumType.PROFILE;
 		}
-		return value;
+		return type;
 	}
 
 	private boolean isValidFileFormat(ZipFile zipFile) throws IOException {
@@ -496,7 +495,6 @@ public class ChromatogramReader_0701 extends AbstractChromatogramReader implemen
 		if(version.equals(Format.CHROMATOGRAM_VERSION_0701)) {
 			isValid = true;
 		}
-		//
 		dataInputStream.close();
 		return isValid;
 	}

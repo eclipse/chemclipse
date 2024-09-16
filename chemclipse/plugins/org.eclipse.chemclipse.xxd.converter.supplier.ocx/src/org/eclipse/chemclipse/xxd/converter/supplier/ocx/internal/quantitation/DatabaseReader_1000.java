@@ -63,6 +63,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
@@ -312,7 +313,7 @@ public class DatabaseReader_1000 extends AbstractDatabaseReader implements IData
 		//
 		IPeakMassSpectrum massSpectrum = new PeakMassSpectrum();
 		massSpectrum.setMassSpectrometer(massSpectrometer);
-		massSpectrum.setMassSpectrumType(massSpectrumType);
+		massSpectrum.setMassSpectrumType(getMassSpectrumType(massSpectrumType));
 		massSpectrum.setPrecursorIon(precursorIon);
 		//
 		readNormalMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings);
@@ -561,5 +562,14 @@ public class DatabaseReader_1000 extends AbstractDatabaseReader implements IData
 		dataInputStream.close();
 		//
 		return isValid;
+	}
+
+	private MassSpectrumType getMassSpectrumType(short massSpectrumType) {
+
+		MassSpectrumType type = MassSpectrumType.CENTROID;
+		if(massSpectrumType == 1) {
+			type = MassSpectrumType.PROFILE;
+		}
+		return type;
 	}
 }

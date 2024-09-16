@@ -55,6 +55,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
@@ -442,7 +443,7 @@ public class ChromatogramReader_0801 extends AbstractChromatogramReader implemen
 		double precursorIon = dataInputStream.readDouble(); // Precursor Ion (0 if MS1 or none has been selected)
 		IVendorScan massSpectrum = new VendorScan();
 		massSpectrum.setMassSpectrometer(massSpectrometer);
-		massSpectrum.setMassSpectrumType(massSpectrumType);
+		massSpectrum.setMassSpectrumType(getMassSpectrumType(massSpectrumType));
 		massSpectrum.setPrecursorIon(precursorIon);
 		int retentionTime = dataInputStream.readInt();
 		float retentionIndex = dataInputStream.readFloat(); // Retention Index
@@ -468,7 +469,7 @@ public class ChromatogramReader_0801 extends AbstractChromatogramReader implemen
 		double precursorIon = dataInputStream.readDouble(); // Precursor Ion (0 if MS1 or none has been selected)
 		IPeakMassSpectrum massSpectrum = new PeakMassSpectrum();
 		massSpectrum.setMassSpectrometer(massSpectrometer);
-		massSpectrum.setMassSpectrumType(massSpectrumType);
+		massSpectrum.setMassSpectrumType(getMassSpectrumType(massSpectrumType));
 		massSpectrum.setPrecursorIon(precursorIon);
 		int retentionTime = dataInputStream.readInt();
 		float retentionIndex = dataInputStream.readFloat(); // Retention Index
@@ -498,5 +499,14 @@ public class ChromatogramReader_0801 extends AbstractChromatogramReader implemen
 		//
 		dataInputStream.close();
 		return isValid;
+	}
+
+	private MassSpectrumType getMassSpectrumType(short massSpectrumType) {
+
+		MassSpectrumType type = MassSpectrumType.CENTROID;
+		if(massSpectrumType == 1) {
+			type = MassSpectrumType.PROFILE;
+		}
+		return type;
 	}
 }

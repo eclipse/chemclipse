@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -34,28 +34,9 @@ public interface IRegularMassSpectrum extends IScanMSD {
 	 */
 	void setMassSpectrometer(short massSpectrometer);
 
-	/**
-	 * Returns the mass spectrum type.
-	 * 0 = centroid
-	 * 1 = profile
-	 * 
-	 * @return {@link MassSpectrumType}
-	 */
-	short getMassSpectrumType();
+	MassSpectrumType getMassSpectrumType();
 
-	/**
-	 * Returns a descriptions of the stored type.
-	 * 
-	 * @return String
-	 */
-	String getMassSpectrumTypeDescription();
-
-	/**
-	 * Sets the mass spectrum type (centroid = 0, profile = 1).
-	 * 
-	 * @param short
-	 */
-	void setMassSpectrumType(short massSpectrumType);
+	void setMassSpectrumType(MassSpectrumType massSpectrumType);
 
 	double getPrecursorIon();
 

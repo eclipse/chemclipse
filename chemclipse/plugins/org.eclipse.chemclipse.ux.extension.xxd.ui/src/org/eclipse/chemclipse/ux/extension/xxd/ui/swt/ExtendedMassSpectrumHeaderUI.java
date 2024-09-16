@@ -33,7 +33,7 @@ public class ExtendedMassSpectrumHeaderUI extends Composite {
 
 		StringBuilder builder = new StringBuilder();
 		if(massSpectrum != null) {
-			addHeaderLine(builder, "Data", massSpectrum.getMassSpectrumTypeDescription());
+			addHeaderLine(builder, "Data", massSpectrum.getMassSpectrumType().label());
 			addHeaderLine(builder, "Technique", "MS" + massSpectrum.getMassSpectrometer());
 			addHeaderLine(builder, "Ions", Integer.toString(massSpectrum.getNumberOfIons()));
 			if(massSpectrum instanceof IStandaloneMassSpectrum standaloneMassSpectrum) {

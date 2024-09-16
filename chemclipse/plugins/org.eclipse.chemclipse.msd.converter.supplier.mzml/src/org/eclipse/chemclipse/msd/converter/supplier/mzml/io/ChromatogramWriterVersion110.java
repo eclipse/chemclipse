@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.xxd.converter.supplier.mzml.io.XmlReader110;
 import org.eclipse.chemclipse.xxd.converter.supplier.mzml.io.XmlWriter110;
 import org.eclipse.chemclipse.xxd.converter.supplier.mzml.model.v110.BinaryDataArrayListType;
@@ -460,11 +461,11 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 	private CVParamType createSpectrumType(IRegularMassSpectrum massSpectrum) {
 
 		CVParamType cvParamSpectrumType = new CVParamType();
-		if(massSpectrum.getMassSpectrumType() == 0) {
+		if(massSpectrum.getMassSpectrumType() == MassSpectrumType.CENTROID) {
 			cvParamSpectrumType.setCvRef(XmlWriter110.MS);
 			cvParamSpectrumType.setAccession("MS:1000127");
 			cvParamSpectrumType.setName("centroid spectrum");
-		} else if(massSpectrum.getMassSpectrumType() == 1) {
+		} else if(massSpectrum.getMassSpectrumType() == MassSpectrumType.PROFILE) {
 			cvParamSpectrumType.setCvRef(XmlWriter110.MS);
 			cvParamSpectrumType.setAccession("MS:1000128");
 			cvParamSpectrumType.setName("profile spectrum");

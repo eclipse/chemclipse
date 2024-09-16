@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
@@ -313,7 +314,7 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 		 */
 		boolean isProfile;
 		if(massSpectrum instanceof IRegularMassSpectrum regularLibraryMassSpectrum) {
-			isProfile = regularLibraryMassSpectrum.getMassSpectrumType() == 1;
+			isProfile = regularLibraryMassSpectrum.getMassSpectrumType() == MassSpectrumType.PROFILE;
 		} else {
 			isProfile = PreferenceSupplier.useProfileMassSpectrumView();
 		}

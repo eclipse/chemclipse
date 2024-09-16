@@ -35,6 +35,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.cml.model.VendorLibraryMass
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.model.implementation.StandaloneMassSpectrum;
 import org.eclipse.chemclipse.xxd.converter.supplier.cml.io.RootElement;
@@ -72,7 +73,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 				if(peakList != null) {
 					IStandaloneMassSpectrum massSpectrum = new StandaloneMassSpectrum();
 					massSpectrum.setFile(file);
-					massSpectrum.setMassSpectrumType((short)1); // profile
+					massSpectrum.setMassSpectrumType(MassSpectrumType.PROFILE);
 					readIons(spectrum, massSpectrum);
 					readPeaks(peakList, massSpectrum);
 					massSpectra.addMassSpectrum(massSpectrum);

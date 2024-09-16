@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,10 +26,10 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  */
 public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implements IRegularMassSpectrum {
 
-	private static final long serialVersionUID = 6001414280468244074L;
+	private static final long serialVersionUID = 6051414280468244074L;
 	//
 	private short massSpectrometer; // TODO: enum?
-	private short massSpectrumType; // TODO: enum?
+	private MassSpectrumType massSpectrumType;
 	private double precursorIon;
 	private double precursorBasePeak;
 
@@ -42,7 +42,7 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 
 		super();
 		massSpectrometer = 1; // MS1
-		massSpectrumType = 0; // 0 = Centroid, 1 = Profile
+		massSpectrumType = MassSpectrumType.CENTROID;
 	}
 
 	protected AbstractRegularMassSpectrum(Collection<? extends IIon> ions) {
@@ -67,7 +67,7 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 		}
 	}
 
-	protected AbstractRegularMassSpectrum(short massSpectrometer, short massSpectrumType) {
+	protected AbstractRegularMassSpectrum(short massSpectrometer, MassSpectrumType massSpectrumType) {
 
 		this();
 		setMassSpectrometer(massSpectrometer);
@@ -105,31 +105,13 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 	}
 
 	@Override
-	public short getMassSpectrumType() {
+	public MassSpectrumType getMassSpectrumType() {
 
 		return massSpectrumType;
 	}
 
 	@Override
-	public String getMassSpectrumTypeDescription() {
-
-		String massSpectrumTypeDescription;
-		switch(massSpectrumType) {
-			case 0:
-				massSpectrumTypeDescription = "Centroid";
-				break;
-			case 1:
-				massSpectrumTypeDescription = "Profile";
-				break;
-			default:
-				massSpectrumTypeDescription = "Unknown";
-				break;
-		}
-		return massSpectrumTypeDescription;
-	}
-
-	@Override
-	public void setMassSpectrumType(short massSpectrumType) {
+	public void setMassSpectrumType(MassSpectrumType massSpectrumType) {
 
 		this.massSpectrumType = massSpectrumType;
 	}
