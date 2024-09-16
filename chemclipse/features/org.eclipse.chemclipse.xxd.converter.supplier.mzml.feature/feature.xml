@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.chemclipse.msd.converter.supplier.mzml.feature"
+      id="org.eclipse.chemclipse.xxd.converter.supplier.mzml.feature"
       label="mzML Converter"
       version="0.9.0.qualifier"
       provider-name="ChemClipse"

@@ -121,7 +121,7 @@
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.chemclipse.msd.converter.supplier.mzml.feature"
+         id="org.eclipse.chemclipse.xxd.converter.supplier.mzml.feature"
          version="0.0.0"/>
 
    <includes
