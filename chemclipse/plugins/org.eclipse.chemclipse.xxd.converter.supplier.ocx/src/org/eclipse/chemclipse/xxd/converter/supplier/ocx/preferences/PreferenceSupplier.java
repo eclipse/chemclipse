@@ -30,7 +30,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final String P_CHROMATOGRAM_VERSION_SAVE = "chromatogramVersionSave";
 	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = Format.CHROMATOGRAM_VERSION_LATEST;
 	public static final String P_CHROMATOGRAM_COMPRESSION_LEVEL = "chromatogramCompressionLevel";
-	public static final int DEF_CHROMATOGRAM_COMPRESSION_LEVEL = Format.CHROMATOGRAM_COMPRESSION_LEVEL;
+	public static final int DEF_CHROMATOGRAM_COMPRESSION_LEVEL = 1; // compromise between file size and write speed
 	public static final String P_CHROMATGRAM_EXPORT_REFERENCES_SEPARATELY = "chromatogramExportReferencesSeparately";
 	public static final boolean DEF_CHROMATGRAM_EXPORT_REFERENCES_SEPARATELY = false;
 	public static final String P_CHROMATGRAM_EXPORT_REFERENCES_HEADER_FIELD = "chromatogramExportReferencesHeaderField";

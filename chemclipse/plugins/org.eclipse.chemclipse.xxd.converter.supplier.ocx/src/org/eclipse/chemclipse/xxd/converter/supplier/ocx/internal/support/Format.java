@@ -32,7 +32,6 @@ public class Format {
 	/*
 	 * Chromatogram (*.ocb)
 	 */
-	public static final int CHROMATOGRAM_COMPRESSION_LEVEL = 9; // 0 - 9 => 0 no compression
 	public static final int CHROMATOGRAM_COMPRESSION_TYPE = ZipOutputStream.DEFLATED;
 	//
 	public static final String CHROMATOGRAM_VERSION_0701 = "0.7.0.1"; // Version 0.7.0, Release 1 (Nernst)
