@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -101,6 +101,14 @@ public class UpdateNotifier {
 		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 		if(eventBroker != null) {
 			eventBroker.send(IChemClipseEvents.TOPIC_QUANT_DB_COMPOUND_UPDATE, quantitationCompound);
+		}
+	}
+
+	public static void updateParts() {
+
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		if(eventBroker != null) {
+			eventBroker.send(IChemClipseEvents.TOPIC_PART_UPDATE, "Force the listening parts to update their content.");
 		}
 	}
 }

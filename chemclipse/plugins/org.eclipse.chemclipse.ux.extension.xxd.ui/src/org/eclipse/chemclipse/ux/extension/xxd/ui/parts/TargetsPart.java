@@ -63,6 +63,8 @@ public class TargetsPart extends AbstractPart<ExtendedTargetsUI> {
 						getControl().updateChromatogram((IChromatogramSelection<IPeak, ?>)chromatogramSelection);
 						return true;
 					}
+				} else if(isPartUpdateEvent(topic)) {
+					getControl().updatePart();
 				} else if(isScanTopic(topic) || isPeakTopic(topic) || isIdentificationTopic(topic)) {
 					getControl().updateOther(object);
 					return true;
@@ -76,7 +78,12 @@ public class TargetsPart extends AbstractPart<ExtendedTargetsUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return isChromatogramTopic(topic) || isScanTopic(topic) || isPeakTopic(topic) || isIdentificationTopic(topic) || isCloseEvent(topic);
+		return isChromatogramTopic(topic) || //
+				isScanTopic(topic) || //
+				isPeakTopic(topic) || //
+				isIdentificationTopic(topic) || //
+				isPartUpdateEvent(topic) || //
+				isCloseEvent(topic); //
 	}
 
 	private boolean isChromatogramTopic(String topic) {
@@ -97,6 +104,11 @@ public class TargetsPart extends AbstractPart<ExtendedTargetsUI> {
 	private boolean isIdentificationTopic(String topic) {
 
 		return IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION.equals(topic);
+	}
+
+	private boolean isPartUpdateEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_PART_UPDATE.equals(topic);
 	}
 
 	private boolean isCloseEvent(String topic) {

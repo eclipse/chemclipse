@@ -141,6 +141,12 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		updateTargets(getDisplay());
 	}
 
+	public void updatePart() {
+
+		targetListOther.get().refresh();
+		targetListChromatogram.get().refresh();
+	}
+
 	public void updateChromatogram(IChromatogramSelection<IPeak, ?> chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;

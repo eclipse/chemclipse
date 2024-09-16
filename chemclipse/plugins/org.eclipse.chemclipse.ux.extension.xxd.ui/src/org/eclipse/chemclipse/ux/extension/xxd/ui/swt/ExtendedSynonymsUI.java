@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,9 +15,14 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -104,11 +109,51 @@ public class ExtendedSynonymsUI extends LibraryInformationComposite implements I
 
 	private void createTableSection(Composite parent) {
 
-		SynonymsListUI listUI = new SynonymsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		Table table = listUI.getTable();
+		SynonymsListUI synonymsListUI = new SynonymsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		Table table = synonymsListUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		listControl.set(listUI);
+		ITableSettings tableSettings = synonymsListUI.getTableSettings();
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Swap Synonym <-> Name";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return "Targets";
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				ILibraryInformation libraryInformation = getLibraryInformation();
+				if(libraryInformation != null) {
+					Object object = extendedTableViewer.getStructuredSelection().getFirstElement();
+					if(object instanceof String synonym) {
+						/*
+						 * Exchange synonym and name
+						 */
+						String name = libraryInformation.getName();
+						libraryInformation.setName(synonym);
+						libraryInformation.getSynonyms().remove(synonym);
+						libraryInformation.getSynonyms().add(name);
+						/*
+						 * Update
+						 */
+						updateInput();
+						extendedTableViewer.setSelection(new StructuredSelection(name));
+						UpdateNotifierUI.updateParts(extendedTableViewer.getControl().getDisplay());
+					}
+				}
+			}
+		});
+		//
+		listControl.set(synonymsListUI);
 	}
 
 	private void createButtonSettings(Composite parent) {
