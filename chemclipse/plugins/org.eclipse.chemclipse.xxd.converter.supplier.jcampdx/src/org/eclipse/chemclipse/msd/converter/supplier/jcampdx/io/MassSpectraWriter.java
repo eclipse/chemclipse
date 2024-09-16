@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
@@ -31,11 +30,6 @@ public class MassSpectraWriter implements IMassSpectraWriter {
 
 	@Override
 	public void write(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
-
-	}
-
-	@Override
-	public void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
 
 	}
 }
