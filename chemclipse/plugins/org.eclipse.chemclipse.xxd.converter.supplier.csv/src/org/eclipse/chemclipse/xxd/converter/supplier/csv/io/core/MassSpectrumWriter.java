@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2024 Matthias Mailänder.
+ * Copyright (c) 2016, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.xxd.converter.supplier.csv.io.core;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -42,34 +41,24 @@ public class MassSpectrumWriter implements IMassSpectraWriter {
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
 	@Override
-	public void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
+	public void write(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		MassSpectra massSpectra = new MassSpectra();
 		massSpectra.addMassSpectrum(massSpectrum);
-		writeMassSpectrumToCsv(massSpectra, fileWriter);
+		writeMassSpectrumToCsv(massSpectra, file, append);
 	}
 
 	@Override
-	public void write(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void write(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
-		FileWriter fileWriter = new FileWriter(file, append);
-		MassSpectra massSpectra = new MassSpectra();
-		massSpectra.addMassSpectrum(massSpectrum);
-		writeMassSpectrumToCsv(massSpectra, fileWriter);
+		writeMassSpectrumToCsv(massSpectra, file, append);
 	}
 
-	@Override
-	public void write(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
-
-		FileWriter fileWriter = new FileWriter(file, append);
-		writeMassSpectrumToCsv(massSpectra, fileWriter);
-	}
-
-	private void writeMassSpectrumToCsv(IMassSpectra massSpectra, FileWriter fileWriter) throws IOException {
+	private void writeMassSpectrumToCsv(IMassSpectra massSpectra, File file, boolean append) throws IOException {
 
 		if(massSpectra != null) {
 			CSVPrinter csvFilePrinter = null;
-			try {
+			try (FileWriter fileWriter = new FileWriter(file, append)) {
 				csvFilePrinter = new CSVPrinter(fileWriter, CSVFormat.EXCEL);
 				//
 				for(IScanMSD massSpectrum : massSpectra.getList()) {

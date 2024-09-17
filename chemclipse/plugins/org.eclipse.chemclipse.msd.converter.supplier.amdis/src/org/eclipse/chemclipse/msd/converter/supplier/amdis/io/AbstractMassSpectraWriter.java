@@ -20,14 +20,13 @@ import java.util.List;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public abstract class AbstractMassSpectraWriter extends AbstractWriter implements IMassSpectraWriter {
+public abstract class AbstractMassSpectraWriter extends AbstractWriter implements IMassSpectraFileWriter {
 
 	private static final int MAX_SPECTRA_CHUNK = 65535;
 	private static final Logger logger = Logger.getLogger(AbstractMassSpectraWriter.class);

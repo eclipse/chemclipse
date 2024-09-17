@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.cml.converter.io;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -67,12 +66,6 @@ public class MassSpectraWriter extends AbstractMassSpectraWriter implements IMas
 	public void write(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		write(file, massSpectra.getMassSpectrum(1), false, monitor);
-	}
-
-	@Override
-	public void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
-
-		throw new UnsupportedOperationException();
 	}
 
 	private Spectrum createSpectrum(IScanMSD massSpectrum) {
