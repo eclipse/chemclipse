@@ -98,16 +98,19 @@ public class ChromatogramReaderVersion20 extends AbstractChromatogramReaderVersi
 				 * Get the mass spectra.
 				 */
 				IVendorScan massSpectrum = new VendorScan();
+				int retentionTime = scan.getRetentionTime().multiply(1000).getSeconds(); // milliseconds
+				massSpectrum.setRetentionTime(retentionTime);
+				/*
+				 * Polarity
+				 */
 				String polarity = scan.getPolarity();
-				if(polarity != null && !polarity.isEmpty()) {
+				if(polarity != null) {
 					if(polarity.equals("+")) {
 						massSpectrum.setPolarity(Polarity.POSITIVE);
 					} else if(polarity.equals("-")) {
 						massSpectrum.setPolarity(Polarity.NEGATIVE);
 					}
 				}
-				int retentionTime = scan.getRetentionTime().multiply(1000).getSeconds(); // milliseconds
-				massSpectrum.setRetentionTime(retentionTime);
 				/*
 				 * Get the ions.
 				 */

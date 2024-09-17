@@ -11,12 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.model;
 
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.Polarity;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 
-public interface IVendorScan extends IScanMSD {
-
-	Polarity getPolarity();
-
-	void setPolarity(Polarity polarity);
+public interface IVendorScan extends IRegularMassSpectrum {
 }

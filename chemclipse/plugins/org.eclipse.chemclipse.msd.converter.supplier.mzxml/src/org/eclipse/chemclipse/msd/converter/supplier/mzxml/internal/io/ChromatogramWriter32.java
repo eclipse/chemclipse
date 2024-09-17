@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -37,7 +37,9 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Sc
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.Polarity;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import jakarta.xml.bind.JAXBContext;
@@ -69,6 +71,15 @@ public class ChromatogramWriter32 extends AbstractChromatogramWriter implements 
 					values[i] = ion.getIon();
 					values[i + 1] = ion.getAbundance();
 					i += 2;
+				}
+				if(scanMSD instanceof IRegularMassSpectrum regularMassSpectrum) {
+					if(regularMassSpectrum.getPolarity() != null) {
+						if(regularMassSpectrum.getPolarity() == Polarity.POSITIVE) {
+							exportScan.setPolarity("+");
+						} else if(regularMassSpectrum.getPolarity() == Polarity.NEGATIVE) {
+							exportScan.setPolarity("-");
+						}
+					}
 				}
 				exportScan.setMsLevel(BigInteger.valueOf(1)); // TODO
 				Peaks peaks = new Peaks();

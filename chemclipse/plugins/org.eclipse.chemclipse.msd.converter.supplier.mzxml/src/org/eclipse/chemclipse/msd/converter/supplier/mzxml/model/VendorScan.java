@@ -11,30 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.model;
 
-import org.eclipse.chemclipse.msd.model.core.AbstractScanMSD;
+import org.eclipse.chemclipse.msd.model.core.AbstractRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.Polarity;
 
-public class VendorScan extends AbstractScanMSD implements IVendorScan {
+public class VendorScan extends AbstractRegularMassSpectrum implements IVendorScan {
 
-	private static final long serialVersionUID = -6772709008581956403L;
-	//
-	private Polarity polarity;
-
-	@Override
-	public Polarity getPolarity() {
-
-		if(polarity != null) {
-			return polarity;
-		}
-		return Polarity.NONE;
-	}
-
-	@Override
-	public void setPolarity(Polarity polarity) {
-
-		this.polarity = polarity;
-	}
+	private static final long serialVersionUID = -6772709208581956403L;
 
 	@Override
 	public IVendorScan makeDeepCopy() throws CloneNotSupportedException {

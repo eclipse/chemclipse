@@ -26,12 +26,13 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  */
 public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implements IRegularMassSpectrum {
 
-	private static final long serialVersionUID = 6051414280468244074L;
+	private static final long serialVersionUID = 6051414280468344074L;
 	//
-	private short massSpectrometer; // TODO: enum?
+	private short massSpectrometer;
 	private MassSpectrumType massSpectrumType;
 	private double precursorIon;
 	private double precursorBasePeak;
+	private Polarity polarity;
 
 	/**
 	 * By default:
@@ -138,5 +139,20 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 	public void setPrecursorBasePeak(double precursorBasePeak) {
 
 		this.precursorBasePeak = precursorBasePeak;
+	}
+
+	@Override
+	public Polarity getPolarity() {
+
+		if(polarity != null) {
+			return polarity;
+		}
+		return Polarity.NONE;
+	}
+
+	@Override
+	public void setPolarity(Polarity polarity) {
+
+		this.polarity = polarity;
 	}
 }

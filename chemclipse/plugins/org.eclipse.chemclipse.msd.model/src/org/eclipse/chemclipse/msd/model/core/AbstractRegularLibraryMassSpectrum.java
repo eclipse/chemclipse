@@ -28,11 +28,10 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = -3521383640386911035L;
+	private static final long serialVersionUID = -3521383640386912035L;
 	//
 	private ILibraryInformation libraryInformation;
 	private String precursorType;
-	private Polarity polarity;
 	private double neutralMass = 0.0d;
 	private Map<String, String> properties = null; // Initialization on demand
 
@@ -87,29 +86,6 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	}
 
 	@Override
-	public Polarity getPolarity() {
-
-		if(polarity != null) {
-			return polarity;
-		}
-		if(properties != null) {
-			String precursorType = getProperty(PROPERTY_PRECURSOR_TYPE);
-			if(precursorType.contains("]+")) {
-				return Polarity.POSITIVE;
-			} else if(precursorType.contains("]-")) {
-				return Polarity.NEGATIVE;
-			}
-		}
-		return Polarity.NONE;
-	}
-
-	@Override
-	public void setPolarity(Polarity polarity) {
-
-		this.polarity = polarity;
-	}
-
-	@Override
 	public Set<String> getPropertyKeySet() {
 
 		if(properties == null) {
@@ -137,6 +113,23 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 		}
 		//
 		properties.put(key, value);
+	}
+
+	@Override
+	public Polarity getPolarity() {
+
+		if(super.getPolarity() != null && super.getPolarity() != Polarity.NONE) {
+			return super.getPolarity();
+		}
+		if(properties != null) {
+			String precursorType = getProperty(PROPERTY_PRECURSOR_TYPE);
+			if(precursorType.contains("]+")) {
+				return Polarity.POSITIVE;
+			} else if(precursorType.contains("]-")) {
+				return Polarity.NEGATIVE;
+			}
+		}
+		return Polarity.NONE;
 	}
 
 	/*

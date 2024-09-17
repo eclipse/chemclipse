@@ -30,10 +30,6 @@ public interface IRegularLibraryMassSpectrum extends IRegularMassSpectrum, ILibr
 
 	void setNeutralMass(double neutralMass);
 
-	Polarity getPolarity();
-
-	void setPolarity(Polarity polarity);
-
 	Set<String> getPropertyKeySet();
 
 	String getProperty(String property);
