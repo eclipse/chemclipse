@@ -25,6 +25,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.chemclipse.converter.l10n.ConverterMessages;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
@@ -82,7 +83,7 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 				}
 			}
 			List<Scan> scans = msrun.getScan();
-			monitor.beginTask("Read scans", scans.size());
+			monitor.beginTask(ConverterMessages.readScans, scans.size());
 			for(Scan scan : scans) {
 				/*
 				 * Polarity
