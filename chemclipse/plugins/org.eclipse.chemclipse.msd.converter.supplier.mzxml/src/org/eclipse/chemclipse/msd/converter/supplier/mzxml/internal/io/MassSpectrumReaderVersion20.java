@@ -39,6 +39,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorMassSpect
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
+import org.eclipse.chemclipse.msd.model.core.Polarity;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
@@ -84,6 +85,17 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 			monitor.beginTask("Read scans", scans.size());
 			for(Scan scan : scans) {
 				/*
+				 * Polarity
+				 */
+				String polarity = scan.getPolarity();
+				if(polarity != null && !polarity.isEmpty()) {
+					if(polarity.equals("+")) {
+						massSpectrum.setPolarity(Polarity.POSITIVE);
+					} else if(polarity.equals("-")) {
+						massSpectrum.setPolarity(Polarity.NEGATIVE);
+					}
+				}
+				/*
 				 * Get the ions.
 				 */
 				Peaks peaks = scan.getPeaks();
@@ -115,7 +127,6 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 						values[index] = floatBuffer.get(index);
 					}
 				}
-				//
 				for(int peakIndex = 0; peakIndex < values.length - 1; peakIndex += 2) {
 					/*
 					 * Get m/z and intensity (m/z-int)

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.model.implementation;
 
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.Polarity;
 
 import junit.framework.TestCase;
 
@@ -53,25 +52,20 @@ public class RegularLibraryMassSpectrum_4_Test extends TestCase {
 
 	public void test4() {
 
-		assertEquals(Polarity.NONE, massSpectrum.getPolarity());
+		assertEquals(0, massSpectrum.getPropertyKeySet().size());
 	}
 
 	public void test5() {
 
-		assertEquals(0, massSpectrum.getPropertyKeySet().size());
+		assertEquals("", massSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_PRECURSOR_TYPE));
 	}
 
 	public void test6() {
 
-		assertEquals("", massSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_PRECURSOR_TYPE));
-	}
-
-	public void test7() {
-
 		assertEquals("", massSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_COLLISION_ENERGY));
 	}
 
-	public void test8() {
+	public void test7() {
 
 		assertEquals("", massSpectrum.getProperty(IRegularLibraryMassSpectrum.PROPERTY_INSTRUMENT_NAME));
 	}

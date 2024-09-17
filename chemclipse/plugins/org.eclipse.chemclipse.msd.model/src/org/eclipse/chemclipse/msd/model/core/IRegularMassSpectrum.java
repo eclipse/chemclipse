@@ -45,4 +45,8 @@ public interface IRegularMassSpectrum extends IScanMSD {
 	double getPrecursorBasePeak();
 
 	void setPrecursorBasePeak(double precursorBasePeak);
+
+	Polarity getPolarity();
+
+	void setPolarity(Polarity polarity);
 }

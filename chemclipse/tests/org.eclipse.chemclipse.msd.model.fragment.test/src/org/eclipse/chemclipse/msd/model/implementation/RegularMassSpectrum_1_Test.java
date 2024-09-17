@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.msd.model.implementation;
 
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
+import org.eclipse.chemclipse.msd.model.core.Polarity;
 
 import junit.framework.TestCase;
 
@@ -57,5 +58,10 @@ public class RegularMassSpectrum_1_Test extends TestCase {
 	public void test_5() {
 
 		assertEquals(1, massSpectrum.getCycleNumber());
+	}
+
+	public void test6() {
+
+		assertEquals(Polarity.NONE, massSpectrum.getPolarity());
 	}
 }
