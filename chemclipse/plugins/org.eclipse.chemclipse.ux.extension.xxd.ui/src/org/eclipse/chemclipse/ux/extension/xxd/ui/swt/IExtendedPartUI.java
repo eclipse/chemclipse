@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -182,6 +182,11 @@ public interface IExtendedPartUI {
 
 	default Button createButtonToggleChartGrid(Composite parent, AtomicReference<? extends ScrollableChart> chartControl, String image, ChartGridSupport chartGridSupport) {
 
+		return createButtonToggleChartGrid(parent, Arrays.asList(chartControl), image, chartGridSupport);
+	}
+
+	default Button createButtonToggleChartGrid(Composite parent, List<AtomicReference<? extends ScrollableChart>> chartControls, String image, ChartGridSupport chartGridSupport) {
+
 		Button button = new Button(parent, SWT.TOGGLE);
 		button.setText("");
 		setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_CHART_GRID, false);
@@ -190,14 +195,19 @@ public interface IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				ScrollableChart scrollableChart = chartControl.get();
-				if(scrollableChart != null) {
-					IChartSettings chartSettings = scrollableChart.getChartSettings();
-					boolean isGridDisplayed = !chartGridSupport.isGridDisplayed(chartSettings);
-					chartGridSupport.showGrid(scrollableChart.getChartSettings(), isGridDisplayed);
-					scrollableChart.applySettings(chartSettings);
-					setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_CHART_GRID, isGridDisplayed);
+				Boolean isGridDisplayed = null;
+				for(AtomicReference<? extends ScrollableChart> chartControl : chartControls) {
+					ScrollableChart scrollableChart = chartControl.get();
+					if(scrollableChart != null) {
+						IChartSettings chartSettings = scrollableChart.getChartSettings();
+						if(isGridDisplayed == null) {
+							isGridDisplayed = !chartGridSupport.isGridDisplayed(chartSettings);
+						}
+						chartGridSupport.showGrid(scrollableChart.getChartSettings(), isGridDisplayed);
+						scrollableChart.applySettings(chartSettings);
+					}
 				}
+				setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_CHART_GRID, isGridDisplayed);
 			}
 		});
 		//
