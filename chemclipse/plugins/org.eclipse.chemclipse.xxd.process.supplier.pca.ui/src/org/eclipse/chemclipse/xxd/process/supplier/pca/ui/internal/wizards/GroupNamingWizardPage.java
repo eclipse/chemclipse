@@ -210,7 +210,7 @@ public class GroupNamingWizardPage extends AbstractAnalysisWizardPage {
 		List<ISample> samplesCopy = new ArrayList<ISample>();
 		//
 		for(ISample sample : samples) {
-			ISample sampleCopy = new Sample(sample.getSampleName(), sample.getGroupName());
+			ISample sampleCopy = new Sample(sample.getSampleName(), sample.getGroupName(), sample.getDescription());
 			sampleCopy.setSelected(false);
 			samplesCopy.add(sampleCopy);
 		}
