@@ -504,7 +504,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		Label label = labelStatus.get();
 		if(chartControl.get().getBaseChart().isDataShifted()) {
 			label.setText("The displayed data is shifted.");
-			label.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
+			label.setBackground(Colors.LIGHT_YELLOW);
 		} else {
 			label.setText("");
 			label.setBackground(null);

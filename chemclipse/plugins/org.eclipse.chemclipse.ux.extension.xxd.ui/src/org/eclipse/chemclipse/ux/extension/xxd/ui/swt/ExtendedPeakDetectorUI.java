@@ -1058,7 +1058,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		switch(status) {
 			case 0:
 				labelDetectionModus.setText(MESSAGE_DETECTION_MODUS);
-				labelDetectionModus.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
+				labelDetectionModus.setBackground(Colors.LIGHT_YELLOW);
 				break;
 			case 1:
 				labelDetectionModus.setText(MESSAGE_DETECTION_MODUS);

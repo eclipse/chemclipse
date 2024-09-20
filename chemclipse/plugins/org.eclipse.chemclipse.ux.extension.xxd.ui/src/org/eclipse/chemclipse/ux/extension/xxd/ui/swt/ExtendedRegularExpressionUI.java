@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Lablicate GmbH.
+ * Copyright (c) 2023, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -286,10 +286,10 @@ public class ExtendedRegularExpressionUI extends Composite implements IExtendedP
 		 * Display feedback.
 		 */
 		if(message != null) {
-			toolbarInfo.get().setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
+			toolbarInfo.get().setBackground(Colors.LIGHT_YELLOW);
 			toolbarInfo.get().setText(message);
 		} else {
-			toolbarInfo.get().setBackground(Colors.getColor(Colors.LIGHT_GREEN));
+			toolbarInfo.get().setBackground(Colors.LIGHT_GREEN);
 			toolbarInfo.get().setText("The content was matched successfully.");
 		}
 	}
@@ -328,7 +328,7 @@ public class ExtendedRegularExpressionUI extends Composite implements IExtendedP
 			styleRange.start = offset + index;
 			styleRange.length = length;
 			styleRange.fontStyle = SWT.BOLD;
-			styleRange.background = Colors.getColor(Colors.LIGHT_YELLOW);
+			styleRange.background = Colors.LIGHT_YELLOW;
 			styleRange.foreground = Colors.BLACK;
 		}
 		//

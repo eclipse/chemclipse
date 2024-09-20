@@ -180,10 +180,10 @@ public class TimeRangeDialog extends Dialog {
 		//
 		Label label = feedbackControl.get();
 		if(message == null) {
-			label.setBackground(Colors.getColor(Colors.LIGHT_GREEN));
+			label.setBackground(Colors.LIGHT_GREEN);
 			label.setText("The name is valid.");
 		} else {
-			label.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
+			label.setBackground(Colors.LIGHT_YELLOW);
 			label.setText(message);
 		}
 	}

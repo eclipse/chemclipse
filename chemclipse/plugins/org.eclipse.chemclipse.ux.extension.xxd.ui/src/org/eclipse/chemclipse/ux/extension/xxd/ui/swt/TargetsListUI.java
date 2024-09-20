@@ -216,13 +216,13 @@ public class TargetsListUI extends ExtendedTableViewer {
 								}
 								//
 								if(deviation < deviationWarn) {
-									cell.setBackground(Colors.getColor(Colors.LIGHT_GREEN));
+									cell.setBackground(Colors.LIGHT_GREEN);
 									cell.setForeground(Colors.BLACK);
 								} else if(deviation < deviationError) {
-									cell.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
+									cell.setBackground(Colors.LIGHT_YELLOW);
 									cell.setForeground(Colors.BLACK);
 								} else {
-									cell.setBackground(Colors.getColor(Colors.LIGHT_RED));
+									cell.setBackground(Colors.LIGHT_RED);
 									cell.setForeground(Colors.BLACK);
 								}
 							}
@@ -271,13 +271,13 @@ public class TargetsListUI extends ExtendedTableViewer {
 								}
 								//
 								if(deviation < deviationWarn) {
-									cell.setBackground(Colors.getColor(Colors.LIGHT_GREEN));
+									cell.setBackground(Colors.LIGHT_GREEN);
 									cell.setForeground(Colors.BLACK);
 								} else if(deviation < deviationError) {
-									cell.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
+									cell.setBackground(Colors.LIGHT_YELLOW);
 									cell.setForeground(Colors.BLACK);
 								} else {
-									cell.setBackground(Colors.getColor(Colors.LIGHT_RED));
+									cell.setBackground(Colors.LIGHT_RED);
 									cell.setForeground(Colors.BLACK);
 								}
 							}

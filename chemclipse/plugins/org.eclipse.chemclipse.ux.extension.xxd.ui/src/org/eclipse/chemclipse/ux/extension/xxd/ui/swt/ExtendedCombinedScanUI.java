@@ -329,7 +329,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		if("".equals(message)) {
 			label.setBackground(getBackground());
 		} else {
-			label.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
+			label.setBackground(Colors.LIGHT_YELLOW);
 		}
 	}
 

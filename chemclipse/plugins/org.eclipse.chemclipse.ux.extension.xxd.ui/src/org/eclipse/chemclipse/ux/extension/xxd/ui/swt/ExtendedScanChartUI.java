@@ -626,7 +626,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 			Color color = null;
 			label.setBackground(color);
 		} else {
-			label.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
+			label.setBackground(Colors.LIGHT_YELLOW);
 		}
 	}
 

@@ -369,6 +369,6 @@ public class ExtendedPeakQuantReferencesUI extends Composite implements IExtende
 	private void setLabelInputError(String message) {
 
 		labelInputErrors.setText(message);
-		labelInputErrors.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
+		labelInputErrors.setBackground(Colors.LIGHT_YELLOW);
 	}
 }

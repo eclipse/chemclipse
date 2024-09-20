@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Lablicate GmbH.
+ * Copyright (c) 2008, 2024 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.support;
 
@@ -25,6 +25,8 @@ import org.eclipse.swt.widgets.Display;
 
 public class Colors {
 
+	public static final int ALPHA_TRANSPARENT = 0;
+	public static final int ALPHA_OPAQUE = 255;
 	/*
 	 * System colors
 	 */
@@ -44,11 +46,13 @@ public class Colors {
 	public static final Color YELLOW = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_YELLOW);
 	public static final Color DARK_YELLOW = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_YELLOW);
 	/*
-	 * User specific colors.
+	 * Map specific colors
 	 */
-	public static final RGB LIGHT_RED = new RGB(249, 154, 152);
-	public static final RGB LIGHT_GREEN = new RGB(166, 255, 139);
-	public static final RGB LIGHT_YELLOW = new RGB(255, 254, 136);
+	private static final Map<Integer, Map<RGB, Color>> COLOR_MAP_RGB = new HashMap<Integer, Map<RGB, Color>>(); // Alpha and Colors
+	//
+	public static final Color LIGHT_RED = Colors.getColor(new RGB(249, 154, 152));
+	public static final Color LIGHT_GREEN = Colors.getColor(new RGB(166, 255, 139));
+	public static final Color LIGHT_YELLOW = Colors.getColor(new RGB(255, 254, 136));
 	/*
 	 * These are system color ids, defined org.eclipse.swt.SWT. If you use own
 	 * color, dispose them, if not needed any more.
@@ -165,12 +169,6 @@ public class Colors {
 	 * 
 	 */
 	public static final String COLOR_SCHEME_UNLIMITED = "Unlimited";
-	/*
-	 * Variable Colors
-	 */
-	public static final int ALPHA_OPAQUE = 255;
-	public static final int ALPHA_TRANSPARENT = 0;
-	private static Map<Integer, Map<RGB, Color>> colorMap; // Alpha and Colors
 	/**
 	 * Creates a color array.
 	 */
@@ -265,10 +263,10 @@ public class Colors {
 		/*
 		 * Get the alpha color map.
 		 */
-		Map<RGB, Color> alphaColors = colorMap.get(alpha);
+		Map<RGB, Color> alphaColors = COLOR_MAP_RGB.get(alpha);
 		if(alphaColors == null) {
 			alphaColors = new HashMap<RGB, Color>();
-			colorMap.put(alpha, alphaColors);
+			COLOR_MAP_RGB.put(alpha, alphaColors);
 		}
 		/*
 		 * Get the color.
@@ -354,8 +352,6 @@ public class Colors {
 		 * In this case, we use system colors. We do not need to dispose them.
 		 * If you use own colors, dispose them, if not needed any more.
 		 */
-		colorMap = new HashMap<Integer, Map<RGB, Color>>();
-		//
 		colorsGradientRed = initialize(colorIdsGradientRed);
 		colorsGradient = initialize(colorIdsGradient);
 		colorsGradientRedContrast = initialize(colorIdsGradientRedContrast);

@@ -17,8 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import jakarta.inject.Inject;
-
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
@@ -60,6 +58,8 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
+
+import jakarta.inject.Inject;
 
 public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtendedPartUI {
 
@@ -301,7 +301,7 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 
 		if(chartControl.get().getBaseChart().isDataShifted()) {
 			labelStatus.setText("The displayed data is shifted.");
-			labelStatus.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
+			labelStatus.setBackground(Colors.LIGHT_YELLOW);
 		} else {
 			labelStatus.setText("");
 			labelStatus.setBackground(null);
