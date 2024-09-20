@@ -54,6 +54,19 @@ public class Colors {
 	public static final Color LIGHT_GREEN = Colors.getColor(new RGB(166, 255, 139));
 	public static final Color LIGHT_YELLOW = Colors.getColor(new RGB(255, 254, 136));
 	/*
+	 * Levels 01 - 10 (light to dark)
+	 */
+	public static final Color GREEN_LEVEL_01 = Colors.getColor(new RGB(229, 255, 213));
+	public static final Color GREEN_LEVEL_02 = Colors.getColor(new RGB(204, 255, 170));
+	public static final Color GREEN_LEVEL_03 = Colors.getColor(new RGB(179, 255, 128));
+	public static final Color GREEN_LEVEL_04 = Colors.getColor(new RGB(153, 255, 85));
+	public static final Color GREEN_LEVEL_05 = Colors.getColor(new RGB(127, 255, 42));
+	public static final Color GREEN_LEVEL_06 = Colors.getColor(new RGB(102, 255, 0));
+	public static final Color GREEN_LEVEL_07 = Colors.getColor(new RGB(85, 255, 0));
+	public static final Color GREEN_LEVEL_08 = Colors.getColor(new RGB(68, 255, 0));
+	public static final Color GREEN_LEVEL_09 = Colors.getColor(new RGB(51, 255, 0));
+	public static final Color GREEN_LEVEL_10 = Colors.getColor(new RGB(34, 255, 0));
+	/*
 	 * These are system color ids, defined org.eclipse.swt.SWT. If you use own
 	 * color, dispose them, if not needed any more.
 	 * The colors are black -> dark red -> red
