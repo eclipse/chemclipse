@@ -21,18 +21,20 @@ import org.eclipse.swt.graphics.Image;
 public class SampleGroupAssignerLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String SAMPLE_NAME = "Sample Name";
+	public static final String DESCRIPTION = "Description";
 	public static final String SELECT = "Select";
 	public static final String GROUP_NAME = "Group Name";
-	public static final int INDEX_COLOR = 2;
 	//
 	public static String[] TITLES = {//
 			SAMPLE_NAME, //
+			DESCRIPTION, //
 			SELECT, //
 			GROUP_NAME //
 	};
 	//
 	public static int[] BOUNDS = {//
-			300, //
+			100, //
+			200, //
 			30, //
 			100, //
 	};
@@ -40,9 +42,9 @@ public class SampleGroupAssignerLabelProvider extends AbstractChemClipseLabelPro
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 
-		if(columnIndex == 0) {
+		if(columnIndex == 0 && columnIndex == 1) {
 			return getImage(element);
-		} else if(columnIndex == 1) {
+		} else if(columnIndex == 2) {
 			if(element instanceof ISample sample) {
 				if(sample.isSelected()) {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImageProvider.SIZE_16x16);
@@ -65,9 +67,12 @@ public class SampleGroupAssignerLabelProvider extends AbstractChemClipseLabelPro
 					text = sample.getSampleName() != null ? sample.getSampleName() : "";
 					break;
 				case 1:
-					text = ""; // Checkbox
+					text = sample.getDescription() != null ? sample.getDescription() : "";
 					break;
 				case 2:
+					text = ""; // Checkbox
+					break;
+				case 3:
 					text = sample.getGroupName() != null ? sample.getGroupName() : "";
 					break;
 			}
