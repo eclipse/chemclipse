@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Philip Wenig - initial API and implementation
- * Lorenz Gerber - Opls Target selection, Group assigner
+ * Lorenz Gerber - OPLS Target selection, Group assigner
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 
@@ -308,10 +308,10 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		toolbarSearch.set(searchSupportUI);
 	}
 
-	private void createNamingWizard(Composite parent) {
+	private void createNamingWizard(Shell shell) {
 
 		IWizard wizard = new GroupNamingWizard(samples);
-		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(control.getShell(), wizard);
+		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(shell, wizard);
 		wizardDialog.setMinimumPageSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		//
 		try {
@@ -360,7 +360,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		//
 		createButtonToggleToolbar(composite);
 		createButtonNamingWizard(composite);
-		createComboViewerOplsTarget(composite);
+		createComboViewerTargetOPLS(composite);
 		createComboViewerLabelOption(composite);
 		createButtonColorScheme(composite);
 		createButtonImport(composite);
@@ -414,7 +414,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		labelOptionControl.set(comboViewer);
 	}
 
-	private void createComboViewerOplsTarget(Composite parent) {
+	private void createComboViewerTargetOPLS(Composite parent) {
 
 		ComboViewer comboViewer = new EnhancedComboViewer(parent, SWT.BORDER | SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
@@ -478,7 +478,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				createNamingWizard(parent);
+				createNamingWizard(e.display.getActiveShell());
 				// applyColorScheme(e.display);
 			}
 		});

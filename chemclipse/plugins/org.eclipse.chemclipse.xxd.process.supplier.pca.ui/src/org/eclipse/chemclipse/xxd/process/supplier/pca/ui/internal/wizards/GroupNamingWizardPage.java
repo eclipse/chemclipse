@@ -17,10 +17,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.IVariable;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt.SampleGroupAssignerListUI;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -34,15 +38,25 @@ import org.eclipse.swt.widgets.Text;
 public class GroupNamingWizardPage extends AbstractAnalysisWizardPage {
 
 	private AtomicReference<SampleGroupAssignerListUI> sampleGroupAssignerListControl = new AtomicReference<>();
-	private ISamplesPCA<IVariable, ISample> samples;
-	private AtomicReference<Text> groupName = new AtomicReference<Text>();
+	private AtomicReference<Text> textGroupNameControl = new AtomicReference<Text>();
+	//
+	private List<ISample> samples;
 
-	public GroupNamingWizardPage(ISamplesPCA<IVariable, ISample> samples) {
+	public GroupNamingWizardPage(ISamplesPCA<IVariable, ISample> samplesPCA) {
 
 		super(GroupNamingWizardPage.class.getName());
 		setTitle("Group Naming Tool");
 		setDescription("Tool for quickly naming/creating/assigning Groups");
-		this.samples = samples;
+		/*
+		 * Make a deep copy of the sample and group name to
+		 * avoid modifying the original sample.
+		 */
+		this.samples = extractSamples(samplesPCA.getSamples());
+	}
+
+	public List<ISample> getSamples() {
+
+		return samples;
 	}
 
 	@Override
@@ -50,9 +64,17 @@ public class GroupNamingWizardPage extends AbstractAnalysisWizardPage {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, true));
-		createToolbar(composite);
+		//
+		createToolbarMain(composite);
 		createSampleGroupAssignerListUI(composite);
+		//
 		setControl(parent);
+		initialize();
+	}
+
+	private void initialize() {
+
+		sampleGroupAssignerListControl.get().updateInput(samples);
 	}
 
 	private void createSampleGroupAssignerListUI(Composite composite) {
@@ -60,86 +82,86 @@ public class GroupNamingWizardPage extends AbstractAnalysisWizardPage {
 		SampleGroupAssignerListUI sampleGroupAssignerListUI = new SampleGroupAssignerListUI(composite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
 		Table table = sampleGroupAssignerListUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
 		sampleGroupAssignerListControl.set(sampleGroupAssignerListUI);
-		sampleGroupAssignerListUI.updateInput(extractSamples(samples.getSamples()));
 	}
 
-	private List<ISample> extractSamples(List<ISample> samples) {
-
-		List<ISample> groupNamingSamples = new ArrayList<ISample>();
-		for(ISample sample : samples) {
-			ISample groupNamingSample = new Sample(sample.getSampleName(), sample.getGroupName());
-			groupNamingSample.setSelected(false);
-			groupNamingSamples.add(groupNamingSample);
-		}
-		return groupNamingSamples;
-	}
-
-	private void createToolbar(Composite parent) {
+	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.BEGINNING;
-		composite.setLayoutData(gridData);
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		composite.setLayout(new GridLayout(5, false));
 		//
+		createLabelGroupName(composite);
+		createTextGroupName(composite);
 		createButtonAssign(composite);
-		createLabel(composite, "Group Name:");
-		createGroupNameEntry(composite);
-		createButtonZeroSelection(composite);
 		createButtonInverseSelection(composite);
+		createButtonClearSelection(composite);
 	}
 
-	private Label createLabel(Composite parent, String text) {
+	private Label createLabelGroupName(Composite parent) {
 
 		Label label = new Label(parent, SWT.NONE);
-		label.setText(text);
+		label.setText("Group Name:");
+		//
 		return label;
 	}
 
 	private Button createButtonAssign(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Assign Groups to selected Samples.");
-		button.setText("Assign Groups");
+		button.setText("");
+		button.setToolTipText("Assign the group name to the selected samples.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				sampleGroupAssignerListControl.get().assignGroups(groupName.get().getText());
+				assignGroupName();
 			}
 		});
 		//
 		return button;
 	}
 
-	private void createGroupNameEntry(Composite parent) {
+	private void createTextGroupName(Composite parent) {
 
-		Text text = new Text(parent, SWT.NONE);
-		text.setToolTipText("Enter Groupname to be assigned to Samples");
-		GridData gridData = new GridData();
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("");
+		text.setToolTipText("Enter the group name to be assigned to the selected samples.");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		text.setLayoutData(gridData);
-		groupName.set(text);
+		text.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
+					assignGroupName();
+				}
+			}
+		});
+		//
+		textGroupNameControl.set(text);
 	}
 
-	private Button createButtonZeroSelection(Composite parent) {
+	private Button createButtonClearSelection(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Unselect all.");
-		button.setText("Unselect");
+		button.setText("");
+		button.setToolTipText("Clear all selections.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CLEAR, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				@SuppressWarnings("unchecked")
-				List<ISample> groupNamingSamples = (List<ISample>)sampleGroupAssignerListControl.get().getInput();
-				for(ISample sample : groupNamingSamples) {
+				for(ISample sample : samples) {
 					sample.setSelected(false);
 				}
-				sampleGroupAssignerListControl.get().updateInput(groupNamingSamples);
+				refreshSamplesList();
 			}
 		});
 		//
@@ -149,32 +171,50 @@ public class GroupNamingWizardPage extends AbstractAnalysisWizardPage {
 	private Button createButtonInverseSelection(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Inverse Select Samples.");
-		button.setText("Inverse");
+		button.setText("");
+		button.setToolTipText("Inverse the sample selection.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				@SuppressWarnings("unchecked")
-				List<ISample> groupNamingSamples = (List<ISample>)sampleGroupAssignerListControl.get().getInput();
-				for(ISample sample : groupNamingSamples) {
-					if(sample.isSelected()) {
-						sample.setSelected(false);
-					} else {
-						sample.setSelected(true);
-					}
+				for(ISample sample : samples) {
+					sample.setSelected(!sample.isSelected());
 				}
-				sampleGroupAssignerListControl.get().updateInput(groupNamingSamples);
+				refreshSamplesList();
 			}
 		});
 		//
 		return button;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<ISample> getGroupSamples() {
+	private void assignGroupName() {
 
-		return (List<ISample>)sampleGroupAssignerListControl.get().getInput();
+		String groupName = textGroupNameControl.get().getText().trim();
+		for(ISample sample : samples) {
+			if(sample.isSelected()) {
+				sample.setGroupName(groupName);
+			}
+		}
+		refreshSamplesList();
+	}
+
+	private void refreshSamplesList() {
+
+		sampleGroupAssignerListControl.get().refresh();
+	}
+
+	private List<ISample> extractSamples(List<ISample> samples) {
+
+		List<ISample> samplesCopy = new ArrayList<ISample>();
+		//
+		for(ISample sample : samples) {
+			ISample sampleCopy = new Sample(sample.getSampleName(), sample.getGroupName());
+			sampleCopy.setSelected(false);
+			samplesCopy.add(sampleCopy);
+		}
+		//
+		return samplesCopy;
 	}
 }

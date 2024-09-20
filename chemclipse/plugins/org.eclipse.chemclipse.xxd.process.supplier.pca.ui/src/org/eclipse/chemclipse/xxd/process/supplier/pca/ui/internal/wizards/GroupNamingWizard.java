@@ -39,10 +39,11 @@ public class GroupNamingWizard extends Wizard implements IWizard {
 	@Override
 	public boolean performFinish() {
 
-		List<ISample> groupSamples = this.groupNamingWizardPage.getGroupSamples();
+		List<ISample> groupSamples = this.groupNamingWizardPage.getSamples();
 		for(int i = 0; i < groupSamples.size(); i++) {
 			samples.getSamples().get(i).setGroupName(groupSamples.get(i).getGroupName());
 		}
+		//
 		return true;
 	}
 }

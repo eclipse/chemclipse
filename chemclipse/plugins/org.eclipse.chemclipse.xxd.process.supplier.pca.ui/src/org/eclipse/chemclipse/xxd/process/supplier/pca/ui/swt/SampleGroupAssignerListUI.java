@@ -72,16 +72,4 @@ public class SampleGroupAssignerListUI extends ExtendedTableViewer {
 
 		return !SamplesLabelProvider.SAMPLE_NAME.equals(label);
 	}
-
-	public void assignGroups(String groupName) {
-
-		@SuppressWarnings("unchecked")
-		List<ISample> groupNamingSamples = (List<ISample>)this.getInput();
-		for(ISample sample : groupNamingSamples) {
-			if(sample.isSelected()) {
-				sample.setGroupName(groupName);
-			}
-		}
-		this.updateInput(groupNamingSamples);
-	}
 }
