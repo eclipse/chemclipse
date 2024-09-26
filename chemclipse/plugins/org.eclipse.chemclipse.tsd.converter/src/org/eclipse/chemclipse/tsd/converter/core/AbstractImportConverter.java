@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Lablicate GmbH.
+ * Copyright (c) 2021, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,11 +13,14 @@ package org.eclipse.chemclipse.tsd.converter.core;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.tsd.converter.core.model.TraceRangeMatcher;
 import org.eclipse.chemclipse.tsd.model.core.IChromatogramTSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -52,6 +55,12 @@ public abstract class AbstractImportConverter extends AbstractChromatogramImport
 		}
 		//
 		return processingInfo;
+	}
+
+	@Override
+	public IChromatogram<?> extract(IChromatogramTSD chromatogramTSD, TraceRangeMatcher traceRangeMatcher, IProgressMonitor monitor) throws IOException {
+
+		return null;
 	}
 
 	private void setFile(File file, IChromatogramTSD chromatogramTSD) {

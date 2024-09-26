@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.tsd.converter.chromatogram;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import org.eclipse.chemclipse.converter.chromatogram.ChromatogramSupplier;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverter;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.core.Converter;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.processing.DataCategory;
@@ -28,6 +30,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.tsd.converter.Activator;
 import org.eclipse.chemclipse.tsd.converter.chromatogram.model.ConverterAdapterServiceTSD;
 import org.eclipse.chemclipse.tsd.converter.core.IImportConverterTSD;
+import org.eclipse.chemclipse.tsd.converter.core.model.TraceRangeMatcher;
 import org.eclipse.chemclipse.tsd.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.tsd.converter.service.IConverterServiceTSD;
 import org.eclipse.chemclipse.tsd.model.core.IChromatogramPeakTSD;
@@ -41,7 +44,7 @@ public class ChromatogramConverterTSD implements IChromatogramConverter<IChromat
 
 	private static ChromatogramConverterTSD instance = null;
 
-	public static IChromatogramConverter<IChromatogramPeakTSD, IChromatogramTSD> getInstance() {
+	public static ChromatogramConverterTSD getInstance() {
 
 		if(instance == null) {
 			instance = new ChromatogramConverterTSD();
@@ -61,6 +64,24 @@ public class ChromatogramConverterTSD implements IChromatogramConverter<IChromat
 		}
 		//
 		return chromatogramConverterSupport;
+	}
+
+	public IChromatogram<?> extract(IChromatogramTSD chromatogramTSD, TraceRangeMatcher traceRangeMatcher, IProgressMonitor monitor) {
+
+		IChromatogram<?> chromatogram = null;
+		//
+		exitloop:
+		for(IConverterServiceTSD converterServiceTSD : getConverterServicesTSD()) {
+			try {
+				chromatogram = converterServiceTSD.getImportConverter().extract(chromatogramTSD, traceRangeMatcher, monitor);
+				if(chromatogram != null) {
+					break exitloop;
+				}
+			} catch(IOException e) {
+			}
+		}
+		//
+		return chromatogram;
 	}
 
 	private List<ChromatogramSupplier> getChromatogramSupplier(List<IConverterServiceTSD> converterServices) {

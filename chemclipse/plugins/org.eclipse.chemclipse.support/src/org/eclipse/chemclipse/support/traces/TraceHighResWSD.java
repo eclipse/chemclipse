@@ -29,12 +29,12 @@ public class TraceHighResWSD extends TraceGenericDelta {
 
 	public double getStartWavelength() {
 
-		return getWavelength() - getDelta();
+		return getStartValue();
 	}
 
 	public double getStopWavelength() {
 
-		return getWavelength() + getDelta();
+		return getStopValue();
 	}
 
 	@Override

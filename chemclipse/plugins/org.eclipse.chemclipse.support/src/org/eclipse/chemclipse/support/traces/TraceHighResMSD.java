@@ -30,12 +30,12 @@ public class TraceHighResMSD extends TraceGenericDelta {
 
 	public double getStartMZ() {
 
-		return getMZ() - getDelta();
+		return getStartValue();
 	}
 
 	public double getStopMZ() {
 
-		return getMZ() + getDelta();
+		return getStopValue();
 	}
 
 	@Override

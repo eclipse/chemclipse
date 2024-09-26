@@ -23,5 +23,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.tsd.converter.chromatogram,
  org.eclipse.chemclipse.tsd.converter.core,
+ org.eclipse.chemclipse.tsd.converter.core.model,
  org.eclipse.chemclipse.tsd.converter.preferences,
  org.eclipse.chemclipse.tsd.converter.service

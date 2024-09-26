@@ -38,4 +38,14 @@ public class TraceGenericDelta extends AbstractTrace {
 		}
 		return this;
 	}
+
+	public double getStartValue() {
+
+		return getValue() - delta;
+	}
+
+	public double getStopValue() {
+
+		return getValue() + delta;
+	}
 }
