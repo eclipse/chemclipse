@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.model.ScanSe
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsCleaner;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDeleteIdentifier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDuplicator;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsObfuscator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRemover;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRetentionIndexSelector;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsScanMerger;
@@ -43,6 +44,11 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final boolean DEF_MERGE_SCANS = true;
 	public static final String P_CLIP_SCAN_NUMBER_PATTERN = "clipScanNumberPattern";
 	public static final String DEF_CLIP_SCAN_NUMBER_PATTERN = "1";
+	//
+	public static final String P_OBFUSCATE_SCANS = "obfuscateScans";
+	public static final boolean DEF_OBFUSCATE_SCANS = true;
+	public static final String P_OBFUSCATE_PEAKS = "obfuscatePeaks";
+	public static final boolean DEF_OBFUSCATE_PEAKS = false;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -63,6 +69,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_SCAN_SELECTOR_VALUE, Double.toString(DEF_SCAN_SELECTOR_VALUE));
 		putDefault(P_MERGE_SCANS, Boolean.toString(DEF_MERGE_SCANS));
 		putDefault(P_CLIP_SCAN_NUMBER_PATTERN, DEF_CLIP_SCAN_NUMBER_PATTERN);
+		putDefault(P_OBFUSCATE_SCANS, DEF_OBFUSCATE_SCANS);
+		putDefault(P_OBFUSCATE_PEAKS, DEF_OBFUSCATE_PEAKS);
 	}
 
 	public static FilterSettingsCleaner getCleanerFilterSettings() {
@@ -82,6 +90,15 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 
 		FilterSettingsDuplicator settings = new FilterSettingsDuplicator();
 		settings.setMergeScans(INSTANCE().getBoolean(P_MERGE_SCANS, DEF_MERGE_SCANS));
+		//
+		return settings;
+	}
+
+	public static FilterSettingsObfuscator getObfuscatorFilterSettings() {
+
+		FilterSettingsObfuscator settings = new FilterSettingsObfuscator();
+		settings.setScans(INSTANCE().getBoolean(P_OBFUSCATE_SCANS, DEF_OBFUSCATE_SCANS));
+		settings.setPeaks(INSTANCE().getBoolean(P_OBFUSCATE_PEAKS, DEF_OBFUSCATE_PEAKS));
 		//
 		return settings;
 	}

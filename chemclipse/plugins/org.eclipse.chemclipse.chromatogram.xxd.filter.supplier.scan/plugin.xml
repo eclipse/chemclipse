@@ -51,6 +51,13 @@
             filterName="Retention Index Selector"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRetentionIndexSelector"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.retentionindexselector">
-      </ChromatogramFilterSupplier>              
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filters obfuscates scans and peaks."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core.FilterObfuscator"
+            filterName="Obfuscator"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsObfuscator"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.obfuscator">
+      </ChromatogramFilterSupplier>                 
    </extension>
 </plugin>

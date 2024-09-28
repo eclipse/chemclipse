@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Lablicate GmbH.
+ * Copyright (c) 2011, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -58,5 +58,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Scan Clipper", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceSupplier.P_CLIP_SCAN_NUMBER_PATTERN, "Scan Number Pattern", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Obfuscator", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_OBFUSCATE_SCANS, "Scans", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_OBFUSCATE_PEAKS, "Peaks", getFieldEditorParent()));
 	}
 }
