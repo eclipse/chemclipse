@@ -44,4 +44,5 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.calculator.s
  OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.services.RetentionIndexAssignerAnnotationService.xml,
  OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.services.RetentionIndexMarkerAnnotationService.xml,
  OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.services.ScanIdentifierSettingsService.xml
-Export-Package: org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt
+Export-Package: org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.dialogs,
+ org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt
