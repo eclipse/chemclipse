@@ -66,6 +66,11 @@ public class TraceFactory {
 							addTraceGeneric(part, elements, clazz);
 						}
 					}
+				} else {
+					String trace = line.trim();
+					if(trace.contains(ITrace.INFIX_RANGE_SIMPLE) || (!trace.contains(SEPARATOR_TRACE_RANGE) && !trace.contains(" "))) {
+						addTraceSpecific(trace, content, elements, clazz);
+					}
 				}
 			} else {
 				String[] traces = line.split(SEPARATOR_TRACE_ITEM);
@@ -84,19 +89,7 @@ public class TraceFactory {
 								addTraceGeneric(trace, elements, clazz);
 							}
 						} else {
-							if(containsRangeMarker(part)) {
-								if(containsUnitMarkerPPM(content)) {
-									if(isSupportHighResMSD(clazz)) {
-										addTraceSpecific(part, elements, clazz);
-									}
-								} else {
-									if(isSupportHighRes(clazz)) {
-										addTraceSpecific(part, elements, clazz);
-									}
-								}
-							} else {
-								addTraceSpecific(part, elements, clazz);
-							}
+							addTraceSpecific(part, content, elements, clazz);
 						}
 					}
 				}
@@ -419,6 +412,23 @@ public class TraceFactory {
 		}
 		//
 		return lines;
+	}
+
+	private static <T extends ITrace> void addTraceSpecific(String part, String content, List<T> elements, Class<T> clazz) {
+
+		if(containsRangeMarker(part)) {
+			if(containsUnitMarkerPPM(content)) {
+				if(isSupportHighResMSD(clazz)) {
+					addTraceSpecific(part, elements, clazz);
+				}
+			} else {
+				if(isSupportHighRes(clazz)) {
+					addTraceSpecific(part, elements, clazz);
+				}
+			}
+		} else {
+			addTraceSpecific(part, elements, clazz);
+		}
 	}
 
 	private static <T extends ITrace> void addTraceSpecific(String part, List<T> elements, Class<T> clazz) {

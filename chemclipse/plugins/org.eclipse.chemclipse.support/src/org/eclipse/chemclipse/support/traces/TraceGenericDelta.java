@@ -48,4 +48,9 @@ public class TraceGenericDelta extends AbstractTrace {
 
 		return getValue() + delta;
 	}
+
+	public boolean matches(double value) {
+
+		return value >= getStartValue() && value <= getStopValue();
+	}
 }

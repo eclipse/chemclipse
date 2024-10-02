@@ -38,18 +38,31 @@ public class TraceHighResMSD extends TraceGenericDelta {
 		return getStopValue();
 	}
 
+	public int getPPM() {
+
+		int ppm = 0;
+		if(getDelta() > 0 && getMZ() > 0) {
+			ppm = (int)Math.round((getDelta() / getMZ()) * ITrace.MILLION);
+		}
+		//
+		return ppm;
+	}
+
+	public void setPPM(int ppm) {
+
+		setDelta(getMZ() * ppm / ITrace.MILLION);
+	}
+
 	@Override
 	public String toString() {
 
 		StringBuilder builder = new StringBuilder();
 		builder.append(getMZ());
-		if(getDelta() > 0 && getMZ() > 0) {
-			int ppm = (int)Math.round((getDelta() / getMZ()) * ITrace.MILLION);
-			if(ppm >= 1) {
-				builder.append(ITrace.INFIX_RANGE_STANDARD);
-				builder.append(ppm);
-				builder.append(ITrace.POSTFIX_UNIT_PPM);
-			}
+		int ppm = getPPM();
+		if(ppm >= 1) {
+			builder.append(ITrace.INFIX_RANGE_STANDARD);
+			builder.append(ppm);
+			builder.append(ITrace.POSTFIX_UNIT_PPM);
 		}
 		builder.append(getScaleFactorAsString());
 		//
