@@ -30,6 +30,7 @@ public class UnknownTargetBuilder {
 	public static ILibraryInformation getLibraryInformationUnknown(IScan unknown, TargetUnknownSettings targetUnknownSettings, String traces) {
 
 		/*
+		 * Unknown
 		 * Unknown [57,71,43,85,41]
 		 * Unknown [57,71,43,85,41 RI 782]
 		 * Unknown [57,71,43,85,41 RT 4.34]
@@ -64,9 +65,12 @@ public class UnknownTargetBuilder {
 			float retentionIndex = unknown.getRetentionIndex();
 			builder.append(ValueFormat.getDecimalFormatEnglish("0").format(retentionIndex));
 		}
-		//
+		/*
+		 * Trim the entry to prevent a white space at the end
+		 * e.g. when no start/stop marker are set.
+		 */
 		builder.append(targetUnknownSettings.getMarkerStop());
-		libraryInformation.setName(builder.toString());
+		libraryInformation.setName(builder.toString().trim());
 		//
 		return libraryInformation;
 	}
@@ -76,6 +80,7 @@ public class UnknownTargetBuilder {
 		if(matchQuality < MIN_FACTOR || matchQuality > MAX_FACTOR) {
 			matchQuality = MAX_FACTOR;
 		}
+		//
 		return new ComparisonResult(matchQuality, 0.0f, 0.0f, 0.0f);
 	}
 }
