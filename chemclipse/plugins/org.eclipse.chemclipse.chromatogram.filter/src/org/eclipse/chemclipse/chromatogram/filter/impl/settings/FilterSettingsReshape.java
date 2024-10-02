@@ -28,10 +28,13 @@ public class FilterSettingsReshape extends AbstractChromatogramFilterSettings {
 	@JsonProperty(value = "Range Option", defaultValue = "RETENTION_TIME_MIN")
 	@JsonPropertyDescription(value = "Select whether to use minutes or milliseconds.")
 	private RangeOption rangeOption = RangeOption.RETENTION_TIME_MIN;
-	@JsonProperty(value = "Segment Width", defaultValue = "3.0")
+	@JsonProperty(value = "Segment Width (Default)", defaultValue = "3.0")
 	@JsonPropertyDescription(value = "Reshape the chromatogram and cut it into references given the segment width in minutes.")
 	@DoubleSettingsProperty(minValue = PreferenceSupplier.MIN_RETENTION_TIME_MINUTES, maxValue = PreferenceSupplier.MAX_RETENTION_TIME_MINUTES)
-	private double segmentWidth = 3.0d;
+	private double segmentWidthDefault = 3.0d;
+	@JsonProperty(value = "Recurring Peak Name", defaultValue = "")
+	@JsonPropertyDescription(value = "Select a recurring target to automatically adjust the segment width to an optimal value.")
+	private String recurringPeakName = "";
 	@JsonProperty(value = "Reset Retention Times", defaultValue = "false")
 	@JsonPropertyDescription(value = "The retention times are recalculated for each chromatogram with a scan delay of 0.")
 	private boolean resetRetentionTimes = false;
@@ -56,14 +59,24 @@ public class FilterSettingsReshape extends AbstractChromatogramFilterSettings {
 		this.rangeOption = rangeOption;
 	}
 
-	public double getSegmentWidth() {
+	public double getSegmentWidthDefault() {
 
-		return segmentWidth;
+		return segmentWidthDefault;
 	}
 
-	public void setSegmentWidth(double segmentWidth) {
+	public void setSegmentWidthDefault(double segmentWidthDefault) {
 
-		this.segmentWidth = segmentWidth;
+		this.segmentWidthDefault = segmentWidthDefault;
+	}
+
+	public String getRecurringPeakName() {
+
+		return recurringPeakName;
+	}
+
+	public void setRecurringPeakName(String recurringPeakName) {
+
+		this.recurringPeakName = recurringPeakName;
 	}
 
 	public boolean isResetRetentionTimes() {
