@@ -486,4 +486,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	//
 	String IMAGE_UNZOOM = "unzoomChromatogram.gif";
 	String IMAGE_STACK = "stack.png";
+	String IMAGE_CRITERIUM = "criterium.png";
+	String IMAGE_PARAMETER = "parameter.png";
 }
