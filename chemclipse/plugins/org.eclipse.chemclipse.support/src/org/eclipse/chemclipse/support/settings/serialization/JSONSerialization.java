@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 Lablicate GmbH.
+ * Copyright (c) 2019, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.chemclipse.support.Activator;
+import org.eclipse.chemclipse.support.settings.ISettingsMigrator;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 
 import com.fasterxml.jackson.core.Version;
@@ -41,38 +42,54 @@ public class JSONSerialization implements SettingsSerialization {
 		@Override
 		public JavaType findTypeMapping(DeserializationConfig config, JavaType type) {
 
-			Class<?> src = type.getRawClass();
-			Class<?> dst = MAPPINGS.get(src);
+			Class<?> sourceClass = type.getRawClass();
+			Class<?> destinationClass = MAPPINGS.get(sourceClass);
 			//
-			if(dst == null) {
+			if(destinationClass == null) {
 				return null;
 			}
-			return config.getTypeFactory().constructSpecializedType(type, dst);
+			return config.getTypeFactory().constructSpecializedType(type, destinationClass);
 		}
 	};
 
 	@Override
 	public Map<InputValue, Object> fromObject(Collection<? extends InputValue> inputValues, Object object) throws IOException {
 
-		LinkedHashMap<InputValue, Object> result = new LinkedHashMap<>();
+		/*
+		 * Set the defaults.
+		 */
+		LinkedHashMap<InputValue, Object> resultMap = new LinkedHashMap<>();
 		for(InputValue inputValue : inputValues) {
-			result.put(inputValue, inputValue.getDefaultValue());
+			resultMap.put(inputValue, inputValue.getDefaultValue());
 		}
-		//
+		/*
+		 * Fetch the used settings.
+		 */
 		if(object != null) {
-			Map<?, ?> map = createMapper().convertValue(object, HashMap.class);
-			for(Entry<?, ?> entry : map.entrySet()) {
-				for(InputValue inputValue : inputValues) {
-					if(inputValue.getName().equals(entry.getKey())) {
-						Object value = entry.getValue();
-						if(value != null) {
-							result.put(inputValue, value);
-						}
+			Map<String, InputValue> inputValueMap = getInputValueMap(inputValues);
+			Map<?, ?> settingsMap = createMapper().convertValue(object, HashMap.class);
+			for(Entry<?, ?> entry : settingsMap.entrySet()) {
+				InputValue inputValue = inputValueMap.get(entry.getKey());
+				if(inputValue != null) {
+					Object value = entry.getValue();
+					if(value != null) {
+						resultMap.put(inputValue, value);
 					}
 				}
 			}
 		}
-		return result;
+		//
+		return resultMap;
+	}
+
+	private Map<String, InputValue> getInputValueMap(Collection<? extends InputValue> inputValues) {
+
+		Map<String, InputValue> inputValueMap = new HashMap<>();
+		for(InputValue inputValue : inputValues) {
+			inputValueMap.put(inputValue.getName(), inputValue);
+		}
+		//
+		return inputValueMap;
 	}
 
 	@Override
@@ -118,6 +135,9 @@ public class JSONSerialization implements SettingsSerialization {
 
 		if(object != null && content != null && !content.isEmpty()) {
 			createMapper().readerForUpdating(object).readValue(content);
+			if(object instanceof ISettingsMigrator settingsMigrator) {
+				settingsMigrator.transferToLatestVersion(content);
+			}
 		}
 	}
 
