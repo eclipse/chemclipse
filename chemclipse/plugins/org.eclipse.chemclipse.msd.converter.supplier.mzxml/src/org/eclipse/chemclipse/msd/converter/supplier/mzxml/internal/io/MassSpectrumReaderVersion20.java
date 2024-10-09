@@ -76,7 +76,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 			massSpectrum.setFile(file);
 			massSpectrum.setIdentifier(file.getName());
 			for(DataProcessing dataProcessing : msrun.getDataProcessing()) {
-				if(dataProcessing.isCentroided()) {
+				if(Boolean.TRUE.equals(dataProcessing.isCentroided())) {
 					massSpectrum.setMassSpectrumType(MassSpectrumType.CENTROID);
 				} else {
 					massSpectrum.setMassSpectrumType(MassSpectrumType.PROFILE);
