@@ -54,7 +54,7 @@ public class PcaExtractionFileBinary implements IExtractionData {
 		return extract();
 	}
 
-	public static void write(File file, Samples samples) {
+	public static boolean write(File file, Samples samples) {
 
 		try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file))) {
 			/*
@@ -92,7 +92,9 @@ public class PcaExtractionFileBinary implements IExtractionData {
 			dataOutputStream.flush();
 		} catch(Exception e) {
 			logger.warn(e);
+			return false;
 		}
+		return true;
 	}
 
 	private Samples extract() {
