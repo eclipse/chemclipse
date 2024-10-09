@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v104.model.
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v104.model.MzData;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v104.model.MzData.SpectrumList.Spectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v104.model.ObjectFactory;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v104.model.ParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v104.model.PersonType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.io.AbstractChromatogramReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorChromatogram;
@@ -82,9 +83,12 @@ public class ChromatogramReaderVersion104 extends AbstractChromatogramReader imp
 			chromatogram.setInstrument(mzData.getDescription().getInstrument().getInstrumentName());
 			DataProcessingType dataProcessing = mzData.getDescription().getDataProcessing();
 			Software software = dataProcessing.getSoftware();
-			for(Object object : dataProcessing.getProcessingMethod().getCvParamOrUserParam()) {
-				if(object instanceof CvParamType cvParamType) {
-					chromatogram.getEditHistory().add(new EditInformation(cvParamType.getName(), software.getName() + " " + software.getVersion()));
+			ParamType processingMethod = dataProcessing.getProcessingMethod();
+			if(processingMethod != null) {
+				for(Object object : processingMethod.getCvParamOrUserParam()) {
+					if(object instanceof CvParamType cvParamType) {
+						chromatogram.getEditHistory().add(new EditInformation(cvParamType.getName(), software.getName() + " " + software.getVersion()));
+					}
 				}
 			}
 			for(Spectrum spectrum : mzData.getSpectrumList().getSpectrum()) {
