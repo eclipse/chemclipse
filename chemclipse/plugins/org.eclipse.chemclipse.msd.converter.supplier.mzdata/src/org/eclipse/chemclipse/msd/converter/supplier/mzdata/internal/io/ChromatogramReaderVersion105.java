@@ -20,6 +20,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.AdminType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.CvParamType;
@@ -28,6 +29,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData.SpectrumList.Spectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.ObjectFactory;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.ParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.PersonType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.io.AbstractChromatogramReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorChromatogram;
@@ -83,9 +85,12 @@ public class ChromatogramReaderVersion105 extends AbstractChromatogramReader imp
 			chromatogram.setInstrument(mzData.getDescription().getInstrument().getInstrumentName());
 			DataProcessingType dataProcessing = mzData.getDescription().getDataProcessing();
 			Software software = dataProcessing.getSoftware();
-			for(Object object : dataProcessing.getProcessingMethod().getCvParamOrUserParam()) {
-				if(object instanceof CvParamType cvParamType) {
-					chromatogram.getEditHistory().add(new EditInformation(cvParamType.getName(), software.getName() + " " + software.getVersion()));
+			ParamType processingMethod = dataProcessing.getProcessingMethod();
+			if(processingMethod != null) {
+				for(Object object : processingMethod.getCvParamOrUserParam()) {
+					if(object instanceof CvParamType cvParamType) {
+						chromatogram.getEditHistory().add(new EditInformation(cvParamType.getName(), software.getName() + " " + software.getVersion()));
+					}
 				}
 			}
 			for(Spectrum spectrum : mzData.getSpectrumList().getSpectrum()) {
@@ -98,7 +103,9 @@ public class ChromatogramReaderVersion105 extends AbstractChromatogramReader imp
 				for(Object object : params) {
 					if(object instanceof CvParamType cvParamType) {
 						if(cvParamType.getName().equals("TimeInSeconds")) {
-							retentionTime = Math.round(Float.parseFloat(cvParamType.getValue()) * 1000); // milliseconds
+							retentionTime = (int)Math.round(Double.parseDouble(cvParamType.getValue()) * IChromatogramOverview.SECOND_CORRELATION_FACTOR);
+						} else if(cvParamType.getName().equals("TimeInMinutes")) {
+							retentionTime = (int)Math.round(Double.parseDouble(cvParamType.getValue()) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 						}
 					}
 				}
