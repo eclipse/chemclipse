@@ -16,10 +16,10 @@ import org.eclipse.chemclipse.support.text.ILabel;
 public enum DeletePeakOption implements ILabel {
 
 	NONE("--"), //
-	ALL("Peaks (All)"), //
-	UNIDENTIFIED("Peaks (Unidentified)"), //
-	ACTIVE("Peaks (Active for Analysis)"), //
-	INACTIVE("Peaks (Inactive for Analysis)"); //
+	ALL("All"), //
+	UNIDENTIFIED("Unidentified"), //
+	ACTIVE("Active for Analysis"), //
+	INACTIVE("Inactive for Analysis"); //
 
 	private String label = "";
 
