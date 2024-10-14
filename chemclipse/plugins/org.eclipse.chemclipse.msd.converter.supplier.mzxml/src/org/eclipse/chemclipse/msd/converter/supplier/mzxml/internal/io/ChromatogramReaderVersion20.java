@@ -40,7 +40,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorScan;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorScan;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.Polarity;
 import org.eclipse.chemclipse.support.history.EditInformation;
@@ -58,7 +57,6 @@ public class ChromatogramReaderVersion20 extends AbstractChromatogramReaderVersi
 	public static final String VERSION = "mzXML_2.0";
 	//
 	private static final Logger logger = Logger.getLogger(ChromatogramReaderVersion20.class);
-	private static final int ION_PRECISION = 6;
 
 	@Override
 	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
@@ -149,7 +147,7 @@ public class ChromatogramReaderVersion20 extends AbstractChromatogramReaderVersi
 					/*
 					 * Get m/z and intensity (m/z-int)
 					 */
-					double mz = AbstractIon.getIon(values[peakIndex], ION_PRECISION);
+					double mz = values[peakIndex];
 					float intensity = (float)values[peakIndex + 1];
 					IVendorIon ion = new VendorIon(mz, intensity);
 					massSpectrum.addIon(ion);
