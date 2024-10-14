@@ -148,7 +148,7 @@ public class ChromatogramReaderVersion22 extends AbstractChromatogramReaderVersi
 					 * Get m/z and intensity (m/z-int)
 					 */
 					IVendorIon ion = new VendorIon(values[peakIndex], (float)values[peakIndex + 1]);
-					massSpectrum.addIon(ion);
+					massSpectrum.addIon(ion, false);
 				}
 				chromatogram.addScan(massSpectrum);
 				monitor.worked(1);

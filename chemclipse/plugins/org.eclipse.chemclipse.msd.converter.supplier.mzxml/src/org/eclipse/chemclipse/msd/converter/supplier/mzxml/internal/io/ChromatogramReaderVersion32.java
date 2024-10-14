@@ -42,7 +42,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorScan;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorScan;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.Polarity;
 import org.eclipse.chemclipse.support.history.EditInformation;
@@ -60,7 +59,8 @@ public class ChromatogramReaderVersion32 extends AbstractChromatogramReaderVersi
 	public static final String VERSION = "mzXML_3.2";
 	//
 	private static final Logger logger = Logger.getLogger(ChromatogramReaderVersion32.class);
-	private static final int ION_PRECISION = 6;
+	//
+	private Inflater inflater = new Inflater();
 
 	@Override
 	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
@@ -144,7 +144,7 @@ public class ChromatogramReaderVersion32 extends AbstractChromatogramReaderVersi
 					 */
 					String compressionType = peaks.getCompressionType();
 					if(compressionType != null && compressionType.equalsIgnoreCase("zlib")) {
-						Inflater inflater = new Inflater();
+						inflater.reset();
 						inflater.setInput(byteBuffer.array());
 						byte[] byteArray = new byte[byteBuffer.capacity() * 10];
 						byteBuffer = ByteBuffer.wrap(byteArray, 0, inflater.inflate(byteArray));
@@ -181,7 +181,7 @@ public class ChromatogramReaderVersion32 extends AbstractChromatogramReaderVersi
 						/*
 						 * Get m/z and intensity (m/z-int)
 						 */
-						double mz = AbstractIon.getIon(values[peakIndex], ION_PRECISION);
+						double mz = values[peakIndex];
 						float intensity = (float)values[peakIndex + 1];
 						// if(msLevel >= 2) {
 						// try {
@@ -197,7 +197,7 @@ public class ChromatogramReaderVersion32 extends AbstractChromatogramReaderVersi
 						// } else {
 						// massSpectrum.addIon(new VendorIon(mz, intensity));
 						// }
-						massSpectrum.addIon(new VendorIon(mz, intensity));
+						massSpectrum.addIon(new VendorIon(mz, intensity), false);
 					}
 				}
 				chromatogram.addScan(massSpectrum);

@@ -59,6 +59,8 @@ public class ChromatogramReaderVersion30 extends AbstractChromatogramReaderVersi
 	public static final String VERSION = "mzXML_3.0";
 	//
 	private static final Logger logger = Logger.getLogger(ChromatogramReaderVersion30.class);
+	//
+	private Inflater inflater = new Inflater();
 
 	@Override
 	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
@@ -121,7 +123,7 @@ public class ChromatogramReaderVersion30 extends AbstractChromatogramReaderVersi
 					 */
 					String compressionType = peaks.getCompressionType();
 					if(compressionType != null && compressionType.equalsIgnoreCase("zlib")) {
-						Inflater inflater = new Inflater();
+						inflater.reset();
 						inflater.setInput(byteBuffer.array());
 						byte[] byteArray = new byte[byteBuffer.capacity() * 10];
 						byteBuffer = ByteBuffer.wrap(byteArray, 0, inflater.inflate(byteArray));
@@ -159,7 +161,7 @@ public class ChromatogramReaderVersion30 extends AbstractChromatogramReaderVersi
 						 * Get m/z and intensity (m/z-int)
 						 */
 						IVendorIon ion = new VendorIon(values[peakIndex], (float)values[peakIndex + 1]);
-						massSpectrum.addIon(ion);
+						massSpectrum.addIon(ion, false);
 					}
 				}
 				chromatogram.addScan(massSpectrum);
