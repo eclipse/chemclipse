@@ -63,5 +63,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new LabelFieldEditor("Obfuscator", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_OBFUSCATE_SCANS, "Scans", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_OBFUSCATE_PEAKS, "Peaks", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Scan Delay/Interval Recaculator", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_INTERVAL_RESET_RETENTION_TIMES, "Reset Retention Times", getFieldEditorParent()));
 	}
 }

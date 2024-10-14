@@ -58,6 +58,13 @@
             filterName="Obfuscator"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsObfuscator"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.obfuscator">
-      </ChromatogramFilterSupplier>                 
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filters recalculates the scan delay and interval."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core.FilterDelayInterval"
+            filterName="Recalculate Scan Delay/Interval"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDelayInterval"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.delayinterval">
+      </ChromatogramFilterSupplier>                       
    </extension>
 </plugin>

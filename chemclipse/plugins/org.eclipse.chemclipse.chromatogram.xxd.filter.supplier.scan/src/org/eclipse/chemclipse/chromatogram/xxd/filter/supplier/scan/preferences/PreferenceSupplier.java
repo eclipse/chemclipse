@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.model.ScanSe
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsCleaner;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDeleteIdentifier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDuplicator;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDelayInterval;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsObfuscator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRemover;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRetentionIndexSelector;
@@ -49,6 +50,9 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 	public static final boolean DEF_OBFUSCATE_SCANS = true;
 	public static final String P_OBFUSCATE_PEAKS = "obfuscatePeaks";
 	public static final boolean DEF_OBFUSCATE_PEAKS = false;
+	//
+	public static final String P_INTERVAL_RESET_RETENTION_TIMES = "intervalResetRetentionTimes";
+	public static final boolean DEF_INTERVAL_RESET_RETENTION_TIMES = false;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -71,6 +75,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		putDefault(P_CLIP_SCAN_NUMBER_PATTERN, DEF_CLIP_SCAN_NUMBER_PATTERN);
 		putDefault(P_OBFUSCATE_SCANS, DEF_OBFUSCATE_SCANS);
 		putDefault(P_OBFUSCATE_PEAKS, DEF_OBFUSCATE_PEAKS);
+		putDefault(P_INTERVAL_RESET_RETENTION_TIMES, DEF_INTERVAL_RESET_RETENTION_TIMES);
 	}
 
 	public static FilterSettingsCleaner getCleanerFilterSettings() {
@@ -99,6 +104,14 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier implements IP
 		FilterSettingsObfuscator settings = new FilterSettingsObfuscator();
 		settings.setScans(INSTANCE().getBoolean(P_OBFUSCATE_SCANS, DEF_OBFUSCATE_SCANS));
 		settings.setPeaks(INSTANCE().getBoolean(P_OBFUSCATE_PEAKS, DEF_OBFUSCATE_PEAKS));
+		//
+		return settings;
+	}
+
+	public static FilterSettingsDelayInterval getIntervalFilterSettings() {
+
+		FilterSettingsDelayInterval settings = new FilterSettingsDelayInterval();
+		settings.setResetRetentionTimes(INSTANCE().getBoolean(P_INTERVAL_RESET_RETENTION_TIMES, DEF_INTERVAL_RESET_RETENTION_TIMES));
 		//
 		return settings;
 	}
