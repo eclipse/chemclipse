@@ -197,7 +197,7 @@ public class ChromatogramReaderVersion32 extends AbstractChromatogramReaderVersi
 						// } else {
 						// massSpectrum.addIon(new VendorIon(mz, intensity));
 						// }
-						massSpectrum.addIon(new VendorIon(mz, intensity));
+						massSpectrum.addIon(new VendorIon(mz, intensity), false);
 					}
 				}
 				chromatogram.addScan(massSpectrum);

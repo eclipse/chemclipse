@@ -150,7 +150,7 @@ public class ChromatogramReaderVersion20 extends AbstractChromatogramReaderVersi
 					double mz = values[peakIndex];
 					float intensity = (float)values[peakIndex + 1];
 					IVendorIon ion = new VendorIon(mz, intensity);
-					massSpectrum.addIon(ion);
+					massSpectrum.addIon(ion, false);
 				}
 				chromatogram.addScan(massSpectrum);
 				monitor.worked(1);

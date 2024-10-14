@@ -133,7 +133,7 @@ public class MassSpectrumReaderVersion21 extends AbstractMassSpectraReader imple
 					/*
 					 * Get m/z and intensity (m/z-int)
 					 */
-					massSpectrum.addIon(new VendorIon(values[peakIndex], (float)values[peakIndex + 1]));
+					massSpectrum.addIon(new VendorIon(values[peakIndex], (float)values[peakIndex + 1]), false);
 				}
 				monitor.worked(1);
 			}
