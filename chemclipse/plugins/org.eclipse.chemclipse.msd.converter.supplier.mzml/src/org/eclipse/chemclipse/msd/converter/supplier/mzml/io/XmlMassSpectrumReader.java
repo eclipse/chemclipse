@@ -41,7 +41,7 @@ public class XmlMassSpectrumReader {
 
 		int ions = Math.min(mzs.length, intensities.length);
 		for(int i = 0; i < ions; i++) {
-			massSpectrum.addIon(new VendorIon(mzs[i], (float)intensities[i]));
+			massSpectrum.addIon(new VendorIon(mzs[i], (float)intensities[i]), false);
 		}
 	}
 }
