@@ -101,7 +101,7 @@ public class MassSpectrumReaderVersion105 extends AbstractMassSpectraReader impl
 			double[] intensities = ReaderVersion105.parseData(spectrum.getIntenArrayBinary().getData());
 			int length = Math.min(mzs.length, intensities.length);
 			for(int i = 0; i < length; i++) {
-				massSpectrum.addIon(new VendorIon(mzs[i], (float)intensities[i]));
+				massSpectrum.addIon(new VendorIon(mzs[i], (float)intensities[i]), false);
 			}
 		} catch(SAXException e) {
 			logger.warn(e);
