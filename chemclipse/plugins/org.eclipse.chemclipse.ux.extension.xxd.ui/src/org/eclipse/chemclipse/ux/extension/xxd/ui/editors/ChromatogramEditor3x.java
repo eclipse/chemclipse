@@ -42,7 +42,9 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IURIEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
@@ -210,8 +212,17 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 
 	private boolean isActivatePart(IWorkbenchPartReference partRef) {
 
-		IWorkbenchPartReference partThis = getSite().getPage().getReference(getSite().getPart());
-		return partThis == partRef;
+		boolean activatePart = false;
+		IWorkbenchPartSite workbenchPartSite = getSite();
+		if(workbenchPartSite != null) {
+			IWorkbenchPage workbenchPage = workbenchPartSite.getPage();
+			if(workbenchPage != null) {
+				IWorkbenchPartReference partThis = workbenchPage.getReference(workbenchPartSite.getPart());
+				activatePart = (partThis == partRef);
+			}
+		}
+		//
+		return activatePart;
 	}
 
 	private DataType getDataType() {
@@ -225,10 +236,12 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 			/*
 			 * Check the data format.
 			 */
-			if(isMatch(file, getSupplierFileIdentifier(DataType.MSD))) {
-				dataType = DataType.MSD;
-			} else if(isMatch(file, getSupplierFileIdentifier(DataType.CSD))) {
+			if(isMatch(file, getSupplierFileIdentifier(DataType.CSD))) {
 				dataType = DataType.CSD;
+			} else if(isMatch(file, getSupplierFileIdentifier(DataType.MSD))) {
+				dataType = DataType.MSD;
+			} else if(isMatch(file, getSupplierFileIdentifier(DataType.VSD))) {
+				dataType = DataType.VSD;
 			} else if(isMatch(file, getSupplierFileIdentifier(DataType.WSD))) {
 				dataType = DataType.WSD;
 			}
