@@ -155,7 +155,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 		}
 		for(int i = 0; i < points; i++) {
 			IVendorIon ion = new VendorIon(mzs[i], intensities[i]);
-			massSpectrum.addIon(ion);
+			massSpectrum.addIon(ion, false);
 			monitor.worked(1);
 		}
 	}
