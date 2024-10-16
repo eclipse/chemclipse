@@ -23,7 +23,7 @@ public class XmlMassSpectrumReader {
 
 	}
 
-	public static void addIons(double[] intensities, double[] retentionTimes, IVendorChromatogram chromatogram) {
+	public static void addTotalSignals(double[] intensities, double[] retentionTimes, IVendorChromatogram chromatogram) {
 
 		int tic = Math.min(retentionTimes.length, intensities.length);
 		for(int i = 0; i < tic; i++) {
