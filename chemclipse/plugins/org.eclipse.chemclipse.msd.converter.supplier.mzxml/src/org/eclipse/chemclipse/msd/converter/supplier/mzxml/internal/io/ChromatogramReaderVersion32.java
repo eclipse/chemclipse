@@ -35,6 +35,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Ms
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.MsRun;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Peaks;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.PrecursorMz;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Scan;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Software;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorChromatogram;
@@ -43,7 +44,9 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorChromatog
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.Polarity;
+import org.eclipse.chemclipse.msd.model.implementation.IonTransition;
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
@@ -78,7 +81,6 @@ public class ChromatogramReaderVersion32 extends AbstractChromatogramReaderVersi
 			MsRun msrun = (MsRun)unmarshaller.unmarshal(nodeList.item(0));
 			//
 			chromatogram = new VendorChromatogram();
-			// IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
 			boolean isTandemMeasurement = isTandemMeasurement(msrun);
 			int cycleNumber = isTandemMeasurement ? 1 : 0;
 			//
@@ -117,19 +119,16 @@ public class ChromatogramReaderVersion32 extends AbstractChromatogramReaderVersi
 				}
 				// MS, MS/MS
 				short msLevel = scan.getMsLevel().shortValue();
-				// massSpectrum.setMassSpectrometer(msLevel);
-				// float collisionEnergy = 0.0f;
-				// double filter1Ion = 0.0d;
+				massSpectrum.setMassSpectrometer(msLevel);
 				//
-				if(msLevel >= 2) {
-					// collisionEnergy = scan.getCollisionEnergy();
-					// if(scan.getPrecursorMz().size() >= 1) {
-					// filter1Ion = AbstractIon.getIon(scan.getPrecursorMz().get(0).getValue(), 2);
-					// }
-				} else {
-					cycleNumber++;
+				if(!scan.getPrecursorMz().isEmpty()) {
+					PrecursorMz precursor = scan.getPrecursorMz().get(0);
+					massSpectrum.setPrecursorIon(precursor.getValue());
 				}
 				//
+				if(msLevel < 2) {
+					cycleNumber++;
+				}
 				if(cycleNumber >= 1) {
 					massSpectrum.setCycleNumber(cycleNumber);
 				}
@@ -176,28 +175,19 @@ public class ChromatogramReaderVersion32 extends AbstractChromatogramReaderVersi
 							values[index] = floatBuffer.get(index);
 						}
 					}
-					//
 					for(int peakIndex = 0; peakIndex < values.length - 1; peakIndex += 2) {
 						/*
 						 * Get m/z and intensity (m/z-int)
 						 */
 						double mz = values[peakIndex];
 						float intensity = (float)values[peakIndex + 1];
-						// if(msLevel >= 2) {
-						// try {
-						// double filter3Ion = mz; // daughter m/z start
-						// double filter1Resolution = 1.0d; // q1 resolution
-						// double filter3Resolution = 1.0d; // q3 resolution
-						// int transitionGroup = 1; // transition group
-						// IIonTransition ionTransition = ionTransitionSettings.getIonTransition(filter1Ion, filter3Ion, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
-						// massSpectrum.addIon(new VendorIon(mz, intensity, ionTransition));
-						// } catch(IonTransitionIsNullException e) {
-						// logger.warn(e);
-						// }
-						// } else {
-						// massSpectrum.addIon(new VendorIon(mz, intensity));
-						// }
-						massSpectrum.addIon(new VendorIon(mz, intensity), false);
+						if(msLevel >= 2) {
+							IIonTransition ionTransition = new IonTransition(massSpectrum.getPrecursorIon(), mz, scan.getCollisionEnergy(), 1, 1, 0);
+							massSpectrum.addIon(new VendorIon(mz, intensity, ionTransition), false);
+							chromatogram.getIonTransitionSettings().getIonTransitions().add(ionTransition);
+						} else {
+							massSpectrum.addIon(new VendorIon(mz, intensity), false);
+						}
 					}
 				}
 				chromatogram.addScan(massSpectrum);
@@ -212,7 +202,6 @@ public class ChromatogramReaderVersion32 extends AbstractChromatogramReaderVersi
 		} catch(DataFormatException e) {
 			logger.warn(e);
 		}
-		//
 		chromatogram.setConverterId("");
 		chromatogram.setFile(file);
 		return chromatogram;

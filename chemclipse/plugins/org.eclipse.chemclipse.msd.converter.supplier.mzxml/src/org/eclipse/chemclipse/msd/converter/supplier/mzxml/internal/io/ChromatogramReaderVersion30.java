@@ -34,16 +34,18 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v30.model.Ms
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v30.model.MsRun;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v30.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v30.model.Peaks;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v30.model.PrecursorMz;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v30.model.Scan;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v30.model.Software;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorChromatogram;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorScan;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.Polarity;
+import org.eclipse.chemclipse.msd.model.implementation.IonTransition;
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
@@ -78,6 +80,8 @@ public class ChromatogramReaderVersion30 extends AbstractChromatogramReaderVersi
 			MsRun msrun = (MsRun)unmarshaller.unmarshal(nodeList.item(0));
 			//
 			chromatogram = new VendorChromatogram();
+			boolean isTandemMeasurement = isTandemMeasurement(msrun);
+			int cycleNumber = isTandemMeasurement ? 1 : 0;
 			//
 			for(MsInstrument instrument : msrun.getMsInstrument()) {
 				chromatogram.setInstrument(instrument.getMsManufacturer().getTheValue() + " " + instrument.getMsModel().getTheValue());
@@ -113,6 +117,22 @@ public class ChromatogramReaderVersion30 extends AbstractChromatogramReaderVersi
 						massSpectrum.setPolarity(Polarity.NEGATIVE);
 					}
 				}
+				// MS, MS/MS
+				short msLevel = scan.getMsLevel().shortValue();
+				massSpectrum.setMassSpectrometer(msLevel);
+				//
+				if(!scan.getPrecursorMz().isEmpty()) {
+					PrecursorMz precursor = scan.getPrecursorMz().get(0);
+					massSpectrum.setPrecursorIon(precursor.getValue());
+				}
+				//
+				if(msLevel < 2) {
+					cycleNumber++;
+				}
+				if(cycleNumber >= 1) {
+					massSpectrum.setCycleNumber(cycleNumber);
+				}
+				massSpectrum.setRetentionTime(retentionTime);
 				/*
 				 * Get the ions.
 				 */
@@ -155,13 +175,19 @@ public class ChromatogramReaderVersion30 extends AbstractChromatogramReaderVersi
 							values[index] = floatBuffer.get(index);
 						}
 					}
-					//
 					for(int peakIndex = 0; peakIndex < values.length - 1; peakIndex += 2) {
 						/*
 						 * Get m/z and intensity (m/z-int)
 						 */
-						IVendorIon ion = new VendorIon(values[peakIndex], (float)values[peakIndex + 1]);
-						massSpectrum.addIon(ion, false);
+						double mz = values[peakIndex];
+						float intensity = (float)values[peakIndex + 1];
+						if(msLevel >= 2) {
+							IIonTransition ionTransition = new IonTransition(massSpectrum.getPrecursorIon(), mz, scan.getCollisionEnergy(), 1, 1, 0);
+							massSpectrum.addIon(new VendorIon(mz, intensity, ionTransition), false);
+							chromatogram.getIonTransitionSettings().getIonTransitions().add(ionTransition);
+						} else {
+							massSpectrum.addIon(new VendorIon(mz, intensity), false);
+						}
 					}
 				}
 				chromatogram.addScan(massSpectrum);
@@ -176,9 +202,18 @@ public class ChromatogramReaderVersion30 extends AbstractChromatogramReaderVersi
 		} catch(DataFormatException e) {
 			logger.warn(e);
 		}
-		//
 		chromatogram.setConverterId("");
 		chromatogram.setFile(file);
 		return chromatogram;
+	}
+
+	private boolean isTandemMeasurement(MsRun msrun) {
+
+		for(Scan scan : msrun.getScan()) {
+			if(scan.getMsLevel().shortValue() > 1) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
