@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -28,7 +26,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Feature;
-import org.eclipse.chemclipse.xxd.process.supplier.pca.model.FeatureDelta;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IResultPCA;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IResultsPCA;
@@ -52,6 +49,8 @@ public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 
 	private AtomicReference<LoadingsPlot> plotControl = new AtomicReference<>();
 	private AtomicReference<PrincipalComponentUI> principalComponentControl = new AtomicReference<>();
+	private double pointX;
+	private double pointY;
 	//
 	private EvaluationPCA evaluationPCA = null;
 
@@ -104,7 +103,7 @@ public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 			@Override
 			public int getEvent() {
 
-				return IMouseSupport.EVENT_MOUSE_DOUBLE_CLICK;
+				return IMouseSupport.EVENT_MOUSE_DOWN;
 			}
 
 			@Override
@@ -116,7 +115,49 @@ public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 			@Override
 			public int getStateMask() {
 
-				return SWT.NONE;
+				return SWT.MOD1;
+			}
+
+			@Override
+			public void handleEvent(BaseChart baseChart, Event event) {
+
+				if(evaluationPCA != null) {
+					/*
+					 * Determine the x|y coordinates.
+					 */
+					Rectangle rectangle = baseChart.getPlotArea().getBounds();
+					int x = event.x;
+					int y = event.y;
+					int width = rectangle.width;
+					int height = rectangle.height;
+					/*
+					 * Calculate the selected point.
+					 */
+					Range rangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
+					Range rangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
+					pointX = rangeX.lower + (rangeX.upper - rangeX.lower) * ((1.0d / width) * x);
+					pointY = rangeY.lower + (rangeY.upper - rangeY.lower) * ((1.0d / height) * (height - y));
+				}
+			}
+		});
+		chartSettings.addHandledEventProcessor(new IHandledEventProcessor() {
+
+			@Override
+			public int getEvent() {
+
+				return IMouseSupport.EVENT_MOUSE_UP;
+			}
+
+			@Override
+			public int getButton() {
+
+				return IMouseSupport.MOUSE_BUTTON_LEFT;
+			}
+
+			@Override
+			public int getStateMask() {
+
+				return SWT.MOD1;
 			}
 
 			@Override
@@ -137,7 +178,7 @@ public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 					Range rangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
 					Range rangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
 					double pX = rangeX.lower + (rangeX.upper - rangeX.lower) * ((1.0d / width) * x);
-					double pY = rangeY.lower + (rangeY.upper - rangeY.lower) * ((1.0d / height) * y);
+					double pY = rangeY.lower + (rangeY.upper - rangeY.lower) * ((1.0d / height) * (height - y));
 					/*
 					 * Map the result deltas.
 					 */
@@ -145,25 +186,35 @@ public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 					int pcX = principalComponentUI.getPCX();
 					int pcY = principalComponentUI.getPCY();
 					IResultsPCA<? extends IResultPCA, ? extends IVariable> resultsPCA = evaluationPCA.getResults();
-					List<FeatureDelta> featureDeltas = new ArrayList<>();
+					// List<FeatureDelta> featureDeltas = new ArrayList<>();
+					List<Feature> featureSelected = new ArrayList<>();
 					//
 					// Here need to prepare a result object with loading vectors per variable
 					//
 					for(int i = 0; i < resultsPCA.getExtractedVariables().size(); i++) {
 						double[] variableLoading = getVariableLoading(resultsPCA, i);
 						IPoint pointResult = getPoint(variableLoading, pcX, pcY, i);
-						double deltaX = Math.abs(pointResult.getX() - pX);
-						double deltaY = Math.abs(pointResult.getY() - pY);
-						featureDeltas.add(new FeatureDelta(evaluationPCA.getFeatureDataMatrix().getFeatures().get(i), deltaX, deltaY));
+						if(pointResult.getX() > pointX && pointResult.getX() < pX && pointResult.getY() < pointY && pointResult.getY() > pY) {
+							featureSelected.add(evaluationPCA.getFeatureDataMatrix().getFeatures().get(i));
+						}
+						// double deltaX = Math.abs(pointResult.getX() - pX);
+						// double deltaY = Math.abs(pointResult.getY() - pY);
+						// featureDeltas.add(new FeatureDelta(evaluationPCA.getFeatureDataMatrix().getFeatures().get(i), deltaX, deltaY));
 					}
 					/*
 					 * Get the closest result.
 					 */
-					if(!featureDeltas.isEmpty()) {
-						Collections.sort(featureDeltas, Comparator.comparing(FeatureDelta::getDeltaX).thenComparing(FeatureDelta::getDeltaY));
-						FeatureDelta featureDelta = featureDeltas.get(0);
-						Feature feature = featureDelta.getFeature();
-						UpdateNotifierUI.update(event.display, IChemClipseEvents.TOPIC_PCA_UPDATE_RESULT, feature);
+					if(!featureSelected.isEmpty()) {
+						UpdateNotifierUI.update(event.display, IChemClipseEvents.TOPIC_PCA_UPDATE_RESULT, featureSelected.toArray());
+						// featureSelected.toArray();
+						// for(Feature feature : featureSelected) {
+						//
+						// UpdateNotifierUI.update(event.display, IChemClipseEvents.TOPIC_PCA_UPDATE_RESULT, feature);
+						// }
+						// Collections.sort(featureDeltas, Comparator.comparing(FeatureDelta::getDeltaX).thenComparing(FeatureDelta::getDeltaY));
+						// FeatureDelta featureDelta = featureDeltas.get(0);
+						// Feature feature = featureDelta.getFeature();
+						// UpdateNotifierUI.update(event.display, IChemClipseEvents.TOPIC_PCA_UPDATE_RESULT, feature);
 					}
 				}
 			}

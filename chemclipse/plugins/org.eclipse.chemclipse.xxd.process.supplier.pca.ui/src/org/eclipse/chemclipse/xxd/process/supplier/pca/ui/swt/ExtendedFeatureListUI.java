@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -87,11 +88,16 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 						if(IChemClipseEvents.TOPIC_PCA_UPDATE_RESULT.equals(topic)) {
 							if(objects.size() == 1) {
 								Object object = objects.get(0);
-								if(object instanceof Feature feature) {
-									if(evaluationPCA.getFeatureDataMatrix().getFeatures().contains(feature)) {
-										listControl.get().setSelection(new StructuredSelection(feature));
+								ArrayList<Feature> features = new ArrayList<>();
+								if(object instanceof Object[] values) {
+									int length = values.length;
+									for(int i = 0; i < length; i++) {
+										if(values[i] instanceof Feature feature) {
+											features.add(feature);
+										}
 									}
 								}
+								listControl.get().setSelection(new StructuredSelection(features));
 							}
 						}
 					}
