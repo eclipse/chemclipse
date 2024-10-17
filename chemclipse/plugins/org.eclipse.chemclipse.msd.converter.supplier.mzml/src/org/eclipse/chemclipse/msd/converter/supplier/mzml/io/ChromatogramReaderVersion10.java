@@ -90,7 +90,7 @@ public class ChromatogramReaderVersion10 extends AbstractChromatogramReader impl
 			readSample(mzML, chromatogram);
 			readInstrument(mzML, chromatogram);
 			readEditHistory(mzML, chromatogram);
-			readSpectrum(mzML.getRun(), chromatogram, monitor);
+			readSpectrum(mzML, chromatogram, monitor);
 		} catch(ParserConfigurationException e) {
 			logger.warn(e);
 		} catch(SAXException e) {
@@ -118,15 +118,22 @@ public class ChromatogramReaderVersion10 extends AbstractChromatogramReader impl
 		return massSpectrum;
 	}
 
-	private void readSpectrum(RunType run, IVendorChromatogram chromatogram, IProgressMonitor monitor) {
+	private void readSpectrum(MzMLType mzML, IVendorChromatogram chromatogram, IProgressMonitor monitor) {
 
-		monitor.beginTask(ConverterMessages.readScans, run.getSpectrumList().getCount().intValue());
-		for(SpectrumType spectrum : run.getSpectrumList().getSpectrum()) {
+		monitor.beginTask(ConverterMessages.readScans, mzML.getRun().getSpectrumList().getCount().intValue());
+		int cycleNumber = isMultiStageMassSpectrum(mzML) ? 1 : 0;
+		for(SpectrumType spectrum : mzML.getRun().getSpectrumList().getSpectrum()) {
 			ScanType scanType = spectrum.getSpectrumDescription().getScan();
 			if(scanType == null) {
 				continue;
 			}
 			IRegularMassSpectrum massSpectrum = readMassSpectrum(spectrum);
+			if(massSpectrum.getMassSpectrometer() < 2) {
+				cycleNumber++;
+			}
+			if(cycleNumber >= 1) {
+				massSpectrum.setCycleNumber(cycleNumber);
+			}
 			setRetentionTime(scanType, massSpectrum);
 			readIons(spectrum, massSpectrum, chromatogram);
 			chromatogram.addScan(massSpectrum);
@@ -299,5 +306,15 @@ public class ChromatogramReaderVersion10 extends AbstractChromatogramReader impl
 				}
 			}
 		}
+	}
+
+	private boolean isMultiStageMassSpectrum(MzMLType mzML) {
+
+		for(CVParamType cvParam : mzML.getFileDescription().getFileContent().getCvParam()) {
+			if(cvParam.getAccession().equals("MS:1000580") && cvParam.getName().equals("MSn spectrum")) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

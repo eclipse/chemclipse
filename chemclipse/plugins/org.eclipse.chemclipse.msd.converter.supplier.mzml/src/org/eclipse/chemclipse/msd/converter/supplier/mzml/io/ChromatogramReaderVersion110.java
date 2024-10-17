@@ -83,7 +83,7 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 			chromatogram.setFile(file);
 			MzMLType mzML = XmlReader110.getMzML(file);
 			MetadataReader110.readMetadata(mzML, chromatogram);
-			readSpectrum(mzML.getRun(), chromatogram, monitor);
+			readSpectrum(mzML, chromatogram, monitor);
 		} catch(ParserConfigurationException e) {
 			logger.warn(e);
 		} catch(SAXException e) {
@@ -119,12 +119,19 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 		XmlMassSpectrumReader.addTotalSignals(intensities, retentionTimes, chromatogram);
 	}
 
-	private void readSpectrum(RunType run, IVendorChromatogram chromatogram, IProgressMonitor monitor) {
+	private void readSpectrum(MzMLType mzML, IVendorChromatogram chromatogram, IProgressMonitor monitor) {
 
-		SpectrumListType spectrumList = run.getSpectrumList();
+		SpectrumListType spectrumList = mzML.getRun().getSpectrumList();
 		monitor.beginTask(ConverterMessages.readScans, spectrumList.getCount().intValue());
-		for(SpectrumType spectrum : run.getSpectrumList().getSpectrum()) {
+		int cycleNumber = isMultiStageMassSpectrum(mzML) ? 1 : 0;
+		for(SpectrumType spectrum : mzML.getRun().getSpectrumList().getSpectrum()) {
 			IRegularMassSpectrum massSpectrum = readMassSpectrum(spectrum);
+			if(massSpectrum.getMassSpectrometer() < 2) {
+				cycleNumber++;
+			}
+			if(cycleNumber >= 1) {
+				massSpectrum.setCycleNumber(cycleNumber);
+			}
 			setRetentionTime(spectrum, massSpectrum);
 			readIons(spectrum, massSpectrum, chromatogram);
 			chromatogram.addScan(massSpectrum);
@@ -244,5 +251,15 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 			}
 		}
 		return massSpectrum;
+	}
+
+	private boolean isMultiStageMassSpectrum(MzMLType mzML) {
+
+		for(CVParamType cvParam : mzML.getFileDescription().getFileContent().getCvParam()) {
+			if(cvParam.getAccession().equals("MS:1000580") && cvParam.getName().equals("MSn spectrum")) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
