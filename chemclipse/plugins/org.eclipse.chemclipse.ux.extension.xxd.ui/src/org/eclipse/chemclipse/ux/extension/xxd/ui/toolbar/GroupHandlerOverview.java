@@ -71,4 +71,10 @@ public class GroupHandlerOverview extends AbstractGroupHandler {
 
 		return IMAGE_SHOW;
 	}
+
+	@Override
+	public String getMainMenuSuffix() {
+
+		return ".overview";
+	}
 }

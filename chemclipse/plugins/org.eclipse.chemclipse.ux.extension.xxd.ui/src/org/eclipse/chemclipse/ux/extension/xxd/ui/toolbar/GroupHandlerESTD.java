@@ -76,4 +76,10 @@ public class GroupHandlerESTD extends AbstractGroupHandler {
 
 		return IMAGE_SHOW;
 	}
+
+	@Override
+	public String getMainMenuSuffix() {
+
+		return ".estd";
+	}
 }
