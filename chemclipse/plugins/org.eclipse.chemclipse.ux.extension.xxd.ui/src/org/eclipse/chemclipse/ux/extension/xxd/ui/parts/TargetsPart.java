@@ -54,6 +54,7 @@ public class TargetsPart extends AbstractPart<ExtendedTargetsUI> {
 		if(objects.size() == 1) {
 			if(isCloseEvent(topic)) {
 				getControl().clear();
+				getControl().updateChromatogram(null);
 				unloadData();
 				return true;
 			} else {
