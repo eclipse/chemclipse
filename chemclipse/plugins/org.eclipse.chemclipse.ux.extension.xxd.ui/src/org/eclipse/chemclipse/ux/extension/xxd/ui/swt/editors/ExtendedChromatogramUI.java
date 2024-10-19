@@ -276,7 +276,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	//
 	private boolean suspendUpdate = false;
 	private IProcessSupplierContext processTypeSupport;
-	private ITargetDisplaySettings targetDisplaySettings;
 	private Predicate<IProcessSupplier<?>> dataCategoryPredicate = null;
 	//
 	private Object menuCache = null;
@@ -415,7 +414,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			 */
 			this.chromatogramSelection = chromatogramSelection;
 			dataCategoryPredicate = IProcessSupplierContext.createDataCategoryPredicate(getDataCategory());
-			targetDisplaySettings = null;
 			toolbarAlignmentControl.get().update(chromatogramSelection);
 			updateToolbar();
 			//
@@ -501,7 +499,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			}
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-			addSelectedPeakData(lineSeriesDataList, getTargetSettings());
+			ITargetDisplaySettings targetDisplaySettings = chromatogramSelection.getChromatogram();
+			addSelectedPeakData(lineSeriesDataList, targetDisplaySettings);
 			addLineSeriesData(lineSeriesDataList);
 			adjustChromatogramSelectionRange();
 		}
@@ -939,28 +938,17 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private void addChromatogramSeriesData() {
 
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-		ITargetDisplaySettings targetSettings = getTargetSettings();
+		ITargetDisplaySettings targetDisplaySettings = chromatogramSelection.getChromatogram();
 		//
 		addChromatogramData(lineSeriesDataList);
-		addPeakData(lineSeriesDataList, targetSettings);
-		addIdentifiedScansData(lineSeriesDataList, targetSettings);
-		addSelectedPeakData(lineSeriesDataList, targetSettings);
+		addPeakData(lineSeriesDataList, targetDisplaySettings);
+		addIdentifiedScansData(lineSeriesDataList, targetDisplaySettings);
+		addSelectedPeakData(lineSeriesDataList, targetDisplaySettings);
 		addSelectedScanData(lineSeriesDataList);
 		addSelectedIdentifiedScanData(lineSeriesDataList);
 		addBaselineData(lineSeriesDataList);
 		//
 		addLineSeriesData(lineSeriesDataList);
-	}
-
-	private ITargetDisplaySettings getTargetSettings() {
-
-		if(targetDisplaySettings == null) {
-			if(chromatogramSelection != null) {
-				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-				targetDisplaySettings = chromatogram;
-			}
-		}
-		return targetDisplaySettings;
 	}
 
 	private void addChromatogramData(List<ILineSeriesData> lineSeriesDataList) {
