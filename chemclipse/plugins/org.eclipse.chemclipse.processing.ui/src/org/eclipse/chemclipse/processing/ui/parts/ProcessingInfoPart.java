@@ -36,6 +36,7 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
 
 import jakarta.annotation.PostConstruct;
@@ -138,6 +139,14 @@ public class ProcessingInfoPart {
 					MessageConsoleAppender.printDone(message.getMessage());
 				}
 			}
+		}
+	}
+
+	@Inject
+	public void close(@Optional @UIEventTopic(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE) Event event) {
+
+		if(processingInfoUI != null) {
+			processingInfoUI.update(null);
 		}
 	}
 }
