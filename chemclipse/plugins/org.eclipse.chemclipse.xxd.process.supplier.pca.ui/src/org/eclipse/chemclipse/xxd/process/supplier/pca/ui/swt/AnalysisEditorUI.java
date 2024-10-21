@@ -121,11 +121,15 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 						if(IChemClipseEvents.TOPIC_PCA_UPDATE_RESULT.equals(topic)) {
 							if(objects.size() == 1) {
 								Object object = objects.get(0);
-								if(object instanceof ResultPCA resultPCA) {
-									if(evaluationPCA.getResults().getPcaResultList().contains(resultPCA)) {
-										sampleListControl.get().setSelection(new StructuredSelection(resultPCA.getSample()));
+								ArrayList<ISample> samples = new ArrayList<>();
+								if(object instanceof Object[] values) {
+									for(int i = 0; i < values.length; i++) {
+										if(values[i] instanceof ResultPCA result) {
+											samples.add(result.getSample());
+										}
 									}
 								}
+								sampleListControl.get().setSelection(new StructuredSelection(samples));
 							}
 						}
 					}
