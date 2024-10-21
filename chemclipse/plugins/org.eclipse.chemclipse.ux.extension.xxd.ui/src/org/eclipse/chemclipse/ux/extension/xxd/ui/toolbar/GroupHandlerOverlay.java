@@ -71,4 +71,10 @@ public class GroupHandlerOverlay extends AbstractGroupHandler {
 
 		return IMAGE_SHOW;
 	}
+
+	@Override
+	public String getMainMenuSuffix() {
+
+		return ".overlay";
+	}
 }

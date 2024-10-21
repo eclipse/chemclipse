@@ -217,11 +217,21 @@
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_JUb5cDCZEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledmenuitem.createProcessMethod" label="%CreateProcessMethod" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/methodAdd.gif" command="_y4XVADCYEeuREPdzMrDpOQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Jtia4DOXEeuREPdzMrDpOQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
-    <elements xsi:type="menu:ToolBarSeparator" xmi:id="_Mz2EgDOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.toolbarseparator.0"/>
+    <elements xsi:type="menu:ToolBarSeparator" xmi:id="_Mz2EgDOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.toolbarseparator.history"/>
     <elements xsi:type="menu:HandledToolItem" xmi:id="_L8rzADOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledtoolitem.undo" label="%Undo" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/undo_edit.png" command="_9e0bQDOWEeuREPdzMrDpOQ"/>
     <elements xsi:type="menu:HandledToolItem" xmi:id="_MROfoDOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledtoolitem.redo" label="%Redo" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/redo_edit.png" command="_9wG_kDOWEeuREPdzMrDpOQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_hfr2EDmzEe6JZff1ZvLO9g" featurename="descriptors" parentElementId="xpath:/">
     <elements xsi:type="basic_1:PartDescriptor" xmi:id="_i-v1EDmzEe6JZff1ZvLO9g" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.regularExpressionPart" label="Regular Expression (Tester)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/interpolate.png" tooltip="This part offers a smart way to test regular expressions." closeable="true" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.RegularExpressionPart"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_BGWfII4-Ee-oY-nH1TVkXQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.view">
+    <elements xsi:type="menu:Menu" xmi:id="_xTIBgI4-Ee-oY-nH1TVkXQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.view.overview" label="%Overview" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
+    <elements xsi:type="menu:Menu" xmi:id="_vLQWEI4-Ee-oY-nH1TVkXQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.view.overlay" label="%Overlay" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverlay.gif"/>
+    <elements xsi:type="menu:Menu" xmi:id="_z6P0wI4-Ee-oY-nH1TVkXQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.view.scans" label="%Scans" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
+    <elements xsi:type="menu:Menu" xmi:id="_ytQdMI4-Ee-oY-nH1TVkXQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.view.peaks" label="%Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedPeak.gif"/>
+    <elements xsi:type="menu:Menu" xmi:id="_iZbCUI4-Ee-oY-nH1TVkXQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.view.chromatogram" label="%Chromatogram" iconURI="platform:/plugin/org.eclipse.chemclipse.ux.extension.xxd.ui/icons/16x16/chromatogram.gif"/>
+    <elements xsi:type="menu:Menu" xmi:id="_qvYnsI4-Ee-oY-nH1TVkXQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.view.istd" label="%ISTD" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/internalStandardsDefault.gif"/>
+    <elements xsi:type="menu:Menu" xmi:id="_o7r1cI4-Ee-oY-nH1TVkXQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.view.estd" label="%ESTD" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/externalStandardsDefault.gif"/>
+    <elements xsi:type="menu:Menu" xmi:id="_s_C9MI4-Ee-oY-nH1TVkXQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.view.misc" label="%Miscellaneous" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/measurementResults.gif"/>
   </fragments>
 </fragment:ModelFragments>

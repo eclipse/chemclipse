@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Lablicate GmbH.
+ * Copyright (c) 2020, 2024 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,15 +14,19 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.activator.ContextAddon;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.commands.MCommand;
+import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.model.application.ui.menu.MDirectMenuItem;
 import org.eclipse.e4.ui.model.application.ui.menu.MDirectToolItem;
 import org.eclipse.e4.ui.model.application.ui.menu.MHandledMenuItem;
@@ -34,9 +38,13 @@ import org.eclipse.swt.widgets.Display;
 
 public abstract class AbstractGroupHandler implements IGroupHandler {
 
+	private static final Logger logger = Logger.getLogger(AbstractGroupHandler.class);
+	//
 	private static final String COMMAND_ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.command.partHandler";
 	private static final String SETTINGS_CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.SettingsHandler";
 	private static final String ACTION_CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.ActionHandler";
+	private static final String MAIN_MENU_VIEW = "org.eclipse.chemclipse.rcp.app.ui.menu.view";
+	private static final String MAIN_MENU_VIEW_PREFIX = "org.eclipse.chemclipse.ux.extension.xxd.ui.view";
 	//
 	private static final String TOOL_ITEM_ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.directtoolitem";
 	private static final String HANDLED_MENU_ITEM = "org.eclipse.chemclipse.ux.extension.xxd.ui.handledmenuitem";
@@ -98,7 +106,8 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 				@Override
 				public void run() {
 
-					updateMenuItems(directToolItem, modelService);
+					updateMenuItems(directToolItem.getMenu(), modelService);
+					updateMenuItems(getSubMenuFromMainMenu(), modelService);
 				}
 			});
 		}
@@ -217,10 +226,9 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 		return null;
 	}
 
-	private void updateMenuItems(MDirectToolItem directToolItem, EModelService modelService) {
+	private void updateMenuItems(MMenu menu, EModelService modelService) {
 
 		List<MenuContribution> menuContributions = new ArrayList<>();
-		MMenu menu = directToolItem.getMenu();
 		//
 		List<IPartHandler> partHandlersMandatory = getPartHandlerMandatory();
 		List<IPartHandler> partHandlersAdditional = getPartHandlerAdditional();
@@ -232,6 +240,19 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 		populateSettingsMenu(menu, modelService, menuContributions);
 		//
 		addMenuItems(menu, menuContributions);
+	}
+
+	private MMenu getSubMenuFromMainMenu() {
+
+		try {
+			MApplication application = ContextAddon.getApplication();
+			MWindow window = application.getChildren().get(0);
+			MMenu mainMenuSubMenuView = getSubMenu(window.getMainMenu(), MAIN_MENU_VIEW);
+			return getSubMenu(mainMenuSubMenuView, MAIN_MENU_VIEW_PREFIX + getMainMenuSuffix());
+		} catch(NotDefinedException e) {
+			logger.warn(e);
+		}
+		return null;
 	}
 
 	private void populateHandler(MMenu menu, EModelService modelService, List<IPartHandler> partHandlers, List<MenuContribution> menuContributions, int offset) {
@@ -414,5 +435,14 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 	private String normalize(String value) {
 
 		return value.toLowerCase().replaceAll("[^a-z]", "").trim();
+	}
+
+	private MMenu getSubMenu(MMenu menu, String parent) throws NotDefinedException {
+
+		Optional<MMenuElement> element = menu.getChildren().stream().filter(c -> c.getElementId().equals(parent)).findFirst();
+		if(element.isPresent() && element.get() instanceof MMenu foundMenu) {
+			return foundMenu;
+		}
+		throw new NotDefinedException(parent);
 	}
 }

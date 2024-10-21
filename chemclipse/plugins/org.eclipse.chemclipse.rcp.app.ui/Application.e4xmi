@@ -22,9 +22,12 @@
       <children xsi:type="menu:Menu" xmi:id="_QrQhQDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.plugins" label="%Plugins">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_WAg5QDiWEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.updates" visible="false" label="%CheckUpdates" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/updates.gif" enabled="false" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>
       </children>
+      <children xsi:type="menu:Menu" xmi:id="_Kt7o8I40Ee-oY-nH1TVkXQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.view" label="%View">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_MBtwADilEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.selectView" label="%SelectView" iconURI="platform:/plugin/org.eclipse.ui.views/icons/full/elcl16/new.png" command="_ASbeYDilEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_V3TKEI40Ee-oY-nH1TVkXQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.view"/>
+      </children>
       <children xsi:type="menu:Menu" xmi:id="_DSko4DiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.window" label="%Window">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_lA-LQDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.perspectiveSwitcher" label="%PerspectiveSwitcher" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/new_persp.png" tooltip="" mnemonics="" command="_XUgbQDiXEeKDEdWQrkwLnQ"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_MBtwADilEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.selectView" label="%SelectView" iconURI="platform:/plugin/org.eclipse.ui.views/icons/full/elcl16/new.png" command="_ASbeYDilEeKDEdWQrkwLnQ"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_oDZQ8K2nEeuLFPgaKUTizg" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.resetperspective" label="%ResetPerspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/reset.gif" command="_X4T0YKzhEeu9gOO-5hThuA"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_PpiZsGTlEe2pDehzkyrxqQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.3"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_0NmMgGTlEe2pDehzkyrxqQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.quickaccess" label="%QuickAccess" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/search.gif" mnemonics="" command="_VHTxUGTiEe2pDehzkyrxqQ"/>
