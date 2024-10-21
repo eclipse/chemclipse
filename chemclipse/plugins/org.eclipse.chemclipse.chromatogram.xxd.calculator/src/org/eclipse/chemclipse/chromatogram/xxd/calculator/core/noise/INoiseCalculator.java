@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - refactor the API for more general use cases
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise;
@@ -19,6 +19,8 @@ import org.eclipse.chemclipse.model.support.NoiseSegment;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface INoiseCalculator {
+
+	float getNoiseFactor();
 
 	/**
 	 * Calculates the SignalToNoise ration for the given chromatogram, segment with and intensity

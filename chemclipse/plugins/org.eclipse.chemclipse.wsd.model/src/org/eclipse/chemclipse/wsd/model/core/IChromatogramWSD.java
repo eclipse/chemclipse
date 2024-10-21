@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,15 +7,18 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core;
 
 import java.util.Set;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 
 public interface IChromatogramWSD extends IChromatogram<IChromatogramPeakWSD>, IChromatogramWSDBaseline {
+
+	INoiseCalculator getNoiseCalculator();
 
 	/**
 	 * Returns a supplier scan or null, if no supplier

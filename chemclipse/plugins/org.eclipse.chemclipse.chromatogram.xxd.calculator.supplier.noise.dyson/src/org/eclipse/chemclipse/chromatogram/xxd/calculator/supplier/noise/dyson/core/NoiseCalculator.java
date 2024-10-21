@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2023 Lablicate GmbH.
+ * Copyright (c) 2014, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - refactor the code to use NoiseSegments
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.core;
@@ -34,18 +34,25 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public class NoiseCalculator implements INoiseCalculator {
 
-	private IChromatogram<?> chromatogram;
-	private float noiseValue = Float.NaN;
+	private IChromatogram<?> chromatogram = null;
+	private float noiseFactor = Float.NaN;
+
+	@Override
+	public float getNoiseFactor() {
+
+		return noiseFactor;
+	}
 
 	@Override
 	public float getSignalToNoiseRatio(IChromatogram<?> chromatogram, float intensity) {
 
 		if(chromatogram != this.chromatogram) {
-			noiseValue = calculateNoiseFactorByDyson(chromatogram);
+			noiseFactor = calculateNoiseFactorByDyson(chromatogram);
 			this.chromatogram = chromatogram;
 		}
-		if(Float.isFinite(noiseValue) && noiseValue > 0) {
-			return intensity / noiseValue;
+		//
+		if(Float.isFinite(noiseFactor) && noiseFactor > 0) {
+			return intensity / noiseFactor;
 		} else {
 			return Float.NaN;
 		}

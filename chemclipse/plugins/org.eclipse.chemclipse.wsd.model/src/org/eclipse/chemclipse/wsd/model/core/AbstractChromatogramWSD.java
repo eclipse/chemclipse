@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2023 Lablicate GmbH.
+ * Copyright (c) 2013, 2024 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,7 +35,7 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 
 	private static final long serialVersionUID = -7048942996283330150L;
 	//
-	private INoiseCalculator noiseCalculator;
+	private INoiseCalculator noiseCalculator = null;
 	private final Map<Double, IBaselineModel> baselineModels;
 
 	public AbstractChromatogramWSD() {
@@ -44,16 +44,10 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 		updateNoiseCalculator();
 	}
 
-	private void updateNoiseCalculator() {
+	@Override
+	public INoiseCalculator getNoiseCalculator() {
 
-		String noiseCalculatorId;
-		NoiseSegmentMeasurementResult noiseResult = getMeasurementResult(NoiseSegmentMeasurementResult.class);
-		if(noiseResult != null) {
-			noiseCalculatorId = noiseResult.getNoiseCalculatorId();
-		} else {
-			noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
-		}
-		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
+		return noiseCalculator;
 	}
 
 	@Override
@@ -157,5 +151,17 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 		if(chromatogramResult instanceof NoiseSegmentMeasurementResult) {
 			recalculateTheNoiseFactor();
 		}
+	}
+
+	private void updateNoiseCalculator() {
+
+		String noiseCalculatorId;
+		NoiseSegmentMeasurementResult noiseResult = getMeasurementResult(NoiseSegmentMeasurementResult.class);
+		if(noiseResult != null) {
+			noiseCalculatorId = noiseResult.getNoiseCalculatorId();
+		} else {
+			noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
+		}
+		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
 	}
 }

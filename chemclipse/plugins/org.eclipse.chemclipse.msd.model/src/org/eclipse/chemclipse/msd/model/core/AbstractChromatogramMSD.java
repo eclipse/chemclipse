@@ -61,9 +61,15 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	//
 	public static final int DEFAULT_SEGMENT_WIDTH = 10;
 	private final IIonTransitionSettings ionTransitionSettings;
-	private INoiseCalculator noiseCalculator;
+	private INoiseCalculator noiseCalculator = null;
 	private ImmutableZeroIon immutableZeroIon;
 	private IScanMSD combinedMassSpectrum;
+
+	@Override
+	public INoiseCalculator getNoiseCalculator() {
+
+		return noiseCalculator;
+	}
 
 	protected AbstractChromatogramMSD() {
 

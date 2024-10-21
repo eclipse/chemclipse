@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  * Christoph Läubrich - refactor to use noise segments for calculations
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.core;
@@ -47,8 +47,14 @@ import org.eclipse.core.runtime.SubMonitor;
  */
 public class NoiseCalculator implements IonNoiseCalculator {
 
-	private IChromatogram<?> chromatogram;
+	private IChromatogram<?> chromatogram = null;
 	private float noiseFactor = Float.NaN;
+
+	@Override
+	public float getNoiseFactor() {
+
+		return noiseFactor;
+	}
 
 	@Override
 	public float getSignalToNoiseRatio(IChromatogram<?> chromatogram, float intensity) {

@@ -55,6 +55,7 @@ public class PartSupport {
 	public static final String PARTDESCRIPTOR_BASELINE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.baselinePartDescriptor";
 	public static final String PARTDESCRIPTOR_HEADER_DATA = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.headerDataPartDescriptor";
 	public static final String PARTDESCRIPTOR_CHROMATOGRAM_STATISTICS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramStatisticsPartDescriptor";
+	public static final String PARTDESCRIPTOR_CHROMATOGRAM_SIGNAL_NOISE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramSignalNoisePartDescriptor";
 	public static final String PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramOverviewPartDescriptor";
 	public static final String PARTDESCRIPTOR_CHROMATOGRAM_SCAN_INFO = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.chromatogramScanInfoPartDescriptor";
 	public static final String PARTDESCRIPTOR_SCAN_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanChartPartDescriptor";
