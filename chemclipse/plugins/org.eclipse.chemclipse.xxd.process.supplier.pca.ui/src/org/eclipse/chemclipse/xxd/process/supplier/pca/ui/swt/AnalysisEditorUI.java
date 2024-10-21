@@ -128,8 +128,10 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 											samples.add(result.getSample());
 										}
 									}
+									if(samples.size() > 0) {
+										sampleListControl.get().setSelection(new StructuredSelection(samples));
+									}
 								}
-								sampleListControl.get().setSelection(new StructuredSelection(samples));
 							}
 						}
 					}
