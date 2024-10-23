@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
+<contexts>
+   <context id="loadings_plot" title="Loadings Plot">
+      <description>In the Loading Plot, the data points represent the Features and their position explains the influence on the Sample Scores.</description>
+      <topic label="Controls" href="html/controls/loadings_plot.html"/>
+   </context>
+   <context id="score_plot" title="Score Plot">
+      <description>In the Score Plot, the data points represent the Samples. Their position explain the similarity to other Samples according to the respective components.</description>
+      <topic label="Controls" href="html/controls/score_plot.html"/>
+   </context>
+</contexts>

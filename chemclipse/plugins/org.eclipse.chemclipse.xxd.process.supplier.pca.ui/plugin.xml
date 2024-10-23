@@ -29,4 +29,17 @@
             name="Loading Plot">
       </page>
       </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="controls.xml">
+      </toc>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml"
+            plugin="org.eclipse.chemclipse.xxd.process.supplier.pca.ui">
+      </contexts>
+   </extension>
 </plugin>
