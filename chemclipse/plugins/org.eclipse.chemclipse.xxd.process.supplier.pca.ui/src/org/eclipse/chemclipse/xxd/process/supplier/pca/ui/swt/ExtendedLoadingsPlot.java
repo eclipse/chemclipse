@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.chemclipse.xxd.process.supplier.pca.ui.help.HelpContext;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
@@ -49,6 +50,7 @@ import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IMouseSupport;
 import org.eclipse.swtchart.extensions.core.UserSelection;
 import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
+import org.eclipse.ui.PlatformUI;
 
 public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 
@@ -83,6 +85,7 @@ public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 		//
 		createToolbarMain(this);
 		createPlot(this);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, HelpContext.LOADINGS_PLOT);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -91,10 +94,11 @@ public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
 		//
 		createPrincipalComponentUI(composite);
 		createSettingsButton(composite);
+		createButtonHelp(composite);
 	}
 
 	private void createPlot(Composite parent) {
