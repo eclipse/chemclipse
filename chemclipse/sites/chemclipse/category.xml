@@ -8,8 +8,8 @@
          Update site for derivative products.
       </description>
    </category-def>
-   <repository-reference location="https://download.eclipse.org/releases/2026-06/" enabled="true" />
-   <repository-reference location="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/2026-06" enabled="true" />
+   <repository-reference location="https://download.eclipse.org/releases/2026-09/" enabled="true" />
+   <repository-reference location="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/2026-09" enabled="true" />
    <repository-reference location="https://download.eclipse.org/nebula/updates/release/3.4.0/" enabled="true" />
    <repository-reference location="https://download.eclipse.org/technology/babel/update-site/R0.20.0/2022-12/" enabled="true" />
 </site>
