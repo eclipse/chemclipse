@@ -54,6 +54,7 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_SAVE_AS_FOLDER, "Save As... Folder", getFieldEditorParent()));
 		addField(new FileFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_LOAD_PROCESS_METHOD, "Load Process Method (*.ocm)", getFieldEditorParent()));
 		addIntegerField(PreferenceSupplier.P_DELTA_MILLISECONDS_PEAK_SELECTION, "Delta Peak Selection [ms]", PreferenceSupplier.MIN_DELTA_MILLISECONDS_PEAK_SELECTION, PreferenceSupplier.MAX_DELTA_MILLISECONDS_PEAK_SELECTION);
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_ZOOMED_IN_BASES, "Initial Nucleobases", getFieldEditorParent())); // TODO: move
 	}
 
 	private void addIntegerField(String name, String labelText, int min, int max) {

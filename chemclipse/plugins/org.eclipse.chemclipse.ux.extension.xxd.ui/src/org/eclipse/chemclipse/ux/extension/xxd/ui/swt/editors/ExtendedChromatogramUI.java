@@ -35,8 +35,6 @@ import org.eclipse.chemclipse.converter.methods.MetaProcessorProcessSupplier;
 import org.eclipse.chemclipse.converter.methods.UserMethodProcessSupplier;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.dsd.model.core.IChromatogramDSD;
-import org.eclipse.chemclipse.dsd.model.core.Nucleobase;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
@@ -45,12 +43,9 @@ import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.model.core.IMarkedTraces;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.core.MarkedTraceModus;
-import org.eclipse.chemclipse.model.core.MarkedTraces;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.supplier.IScanProcessSupplier;
@@ -86,16 +81,13 @@ import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.traces.ITrace;
-import org.eclipse.chemclipse.support.traces.TraceRasteredWSD;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.marker.PositionMarker;
 import org.eclipse.chemclipse.swt.ui.marker.RetentionIndexMarker;
 import org.eclipse.chemclipse.swt.ui.marker.TargetMarker;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
-import org.eclipse.chemclipse.swt.ui.support.ColorScheme;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.ui.editors.ProcessorSupplierMenuEntry;
 import org.eclipse.chemclipse.ux.extension.ui.methods.MethodCancelException;
 import org.eclipse.chemclipse.ux.extension.ui.methods.MethodParameters;
@@ -142,7 +134,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.NoiseFactorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramBaselinesUI;
@@ -914,56 +905,10 @@ public class ExtendedChromatogramUI extends Composite implements IToolbarConfig,
 	private void addChromatogramData(List<ILineSeriesData> lineSeriesDataList) {
 
 		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceSupplier.P_ENABLE_CHROMATOGRAM_AREA);
-
-		if(chromatogramSelection.getChromatogram() instanceof IChromatogramDSD chromatogramDSD) {
-			addSequencingData(lineSeriesDataList, chromatogramDSD, enableChromatogramArea);
-		} else {
-			Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM));
-			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM, displayType, color, false);
-			lineSeriesData.getSettings().setEnableArea(enableChromatogramArea);
-			lineSeriesDataList.add(lineSeriesData);
-		}
-	}
-
-	/**
-	 * A sequencing trace is shown as its four dye traces instead of a summed signal.
-	 * Multiple wavelengths stacked. Otherwise the bases can't be told apart.
-	 */
-	private void addSequencingData(List<ILineSeriesData> lineSeriesDataList, IChromatogramDSD chromatogramDSD, boolean enableChromatogramArea) {
-
-		IColorScheme colorScheme = generateColorScheme(chromatogramDSD);
-
-		for(Float wavelength : chromatogramDSD.getWavelengthMapping().keySet()) {
-			IMarkedTraces<ITrace> markedTraces = new MarkedTraces(MarkedTraceModus.INCLUDE);
-			markedTraces.add(new TraceRasteredWSD(wavelength));
-			Nucleobase nucleobase = chromatogramDSD.getWavelengthMapping().get(wavelength);
-			String seriesId = SERIES_ID_CHROMATOGRAM + " " + nucleobase.letter();
-			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramDSD, seriesId, DisplayType.XWC, Derivative.NONE, colorScheme.getColor(), markedTraces);
-			lineSeriesData.getSettings().setEnableArea(enableChromatogramArea);
-			lineSeriesData.getSettings().setDescription(String.valueOf(nucleobase.label()));
-			lineSeriesDataList.add(lineSeriesData);
-			colorScheme.incrementColor();
-		}
-	}
-
-	private IColorScheme generateColorScheme(IChromatogramDSD chromatogramDSD) {
-
-		List<Color> colorsNucleobases = new ArrayList<>();
-		for(Nucleobase nucleobase : chromatogramDSD.getWavelengthMapping().values()) {
-			if(nucleobase == Nucleobase.ADENINE) {
-				colorsNucleobases.add(new Color(0, 175, 0));
-			}
-			if(nucleobase == Nucleobase.CYTOSINE) {
-				colorsNucleobases.add(new Color(0, 0, 255));
-			}
-			if(nucleobase == Nucleobase.GUANINE) {
-				colorsNucleobases.add(new Color(0, 0, 0));
-			}
-			if(nucleobase == Nucleobase.THYMINE) {
-				colorsNucleobases.add(new Color(255, 0, 0));
-			}
-		}
-		return new ColorScheme(colorsNucleobases);
+		Color color = Colors.getColor(preferenceStore.getString(PreferenceSupplier.P_COLOR_CHROMATOGRAM));
+		ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM, displayType, color, false);
+		lineSeriesData.getSettings().setEnableArea(enableChromatogramArea);
+		lineSeriesDataList.add(lineSeriesData);
 	}
 
 	private void addPeakData(List<ILineSeriesData> lineSeriesDataList, ITargetDisplaySettings settings) {
@@ -1105,10 +1050,8 @@ public class ExtendedChromatogramUI extends Composite implements IToolbarConfig,
 					TargetReferenceSettings targetReferenceSettings = new TargetReferenceSettings(scanReferences, targetDisplaySettings, symbolSize * 2);
 					targetReferenceSettings.setBaseChart(baseChart);
 					targetReferenceSettings.setLabel(LABEL_SCAN_TARGETS);
-					targetReferenceSettings.setDescription("Identified Scans");
-					Optional<String> chromatogramSeriesId = lineSeriesDataList.stream().map(l -> l.getSeriesData().getId()).filter(s -> s.startsWith(SERIES_ID_CHROMATOGRAM)).findFirst();
-					if(chromatogramSeriesId.isPresent()) {
-						targetReferenceSettings.setReferenceSeriesId(chromatogramSeriesId.get());
+					if(baseChart.getSeriesIds().contains(SERIES_ID_CHROMATOGRAM)) {
+						targetReferenceSettings.setReferenceSeriesId(SERIES_ID_CHROMATOGRAM);
 					}
 					TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(targetReferenceSettings);
 					plotArea.addCustomPaintListener(scanLabelMarker);

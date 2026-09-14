@@ -12,33 +12,33 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 
 public class DynamicHandler extends AbstractHandler {
 
 	private IChartMenuEntry cachedEntry;
-	private ChromatogramChart chromatogramChart;
+	private ScrollableChart chart;
 
-	public DynamicHandler(IChartMenuEntry cachedEntry, ChromatogramChart chromatogramChart) {
+	public DynamicHandler(IChartMenuEntry cachedEntry, ScrollableChart chart) {
 
 		this.cachedEntry = cachedEntry;
-		this.chromatogramChart = chromatogramChart;
+		this.chart = chart;
 	}
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
-		cachedEntry.execute(chromatogramChart.getShell(), chromatogramChart);
+		cachedEntry.execute(chart.getShell(), chart);
 		return null;
 	}
 
 	@Override
 	public boolean isEnabled() {
 
-		return cachedEntry.isEnabled(chromatogramChart);
+		return cachedEntry.isEnabled(chart);
 	}
 }

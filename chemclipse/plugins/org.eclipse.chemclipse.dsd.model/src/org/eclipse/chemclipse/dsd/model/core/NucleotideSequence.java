@@ -68,7 +68,13 @@ public class NucleotideSequence {
 		return null;
 	}
 
-	private static Nucleobase getNucleobase(IIdentificationTarget target) {
+	/**
+	 * A base call is stored as an identification target whose library name is the single letter of the nucleobase.
+	 *
+	 * @param target
+	 * @return {@link Nucleobase} or null if the target is no base call
+	 */
+	public static Nucleobase getNucleobase(IIdentificationTarget target) {
 
 		String name = target.getLibraryInformation().getName();
 		if(name.length() == 1) {
