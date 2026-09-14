@@ -872,6 +872,11 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 	public static final String DEF_LIST_PATH_IMPORT = "";
 	public static final String P_LIST_PATH_EXPORT = "listPathExport";
 	public static final String DEF_LIST_PATH_EXPORT = "";
+	/*
+	 * Gene Analyzer
+	 */
+	public static final String P_ZOOMED_IN_BASES = "startZoomedNucleoBasesX";
+	public static final int DEF_ZOOMED_IN_BASES = 120;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -1164,6 +1169,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 
 		putDefault(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
 		putDefault(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
+
+		putDefault(P_ZOOMED_IN_BASES, DEF_ZOOMED_IN_BASES);
 	}
 
 	private void initializeChromatogramDefaults() {
@@ -1480,5 +1487,10 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 	public static boolean useAlternateWindowMoveDirection() {
 
 		return INSTANCE().getBoolean(P_ALTERNATE_WINDOW_MOVE_DIRECTION, DEF_ALTERNATE_WINDOW_MOVE_DIRECTION);
+	}
+
+	public static int getZoomedInNucleobasesStart() {
+
+		return INSTANCE().getInteger(P_ZOOMED_IN_BASES, DEF_ZOOMED_IN_BASES);
 	}
 }

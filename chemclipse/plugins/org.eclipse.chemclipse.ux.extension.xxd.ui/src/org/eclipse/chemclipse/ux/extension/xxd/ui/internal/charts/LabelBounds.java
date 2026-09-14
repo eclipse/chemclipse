@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2025 Lablicate GmbH.
+ * Copyright (c) 2020, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -44,10 +44,10 @@ public class LabelBounds {
 	private final GC gc;
 	private Region region;
 
-	public LabelBounds(GC gc, TargetLabel targetLabel) {
+	public LabelBounds(GC gc, String text) {
 
 		this.gc = gc;
-		Point labelSize = gc.textExtent(targetLabel.getLabel());
+		Point labelSize = gc.textExtent(text);
 		width = labelSize.x;
 		height = labelSize.y;
 	}

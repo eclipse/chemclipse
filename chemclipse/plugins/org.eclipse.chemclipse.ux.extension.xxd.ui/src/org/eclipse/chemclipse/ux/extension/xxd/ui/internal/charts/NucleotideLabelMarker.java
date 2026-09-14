@@ -9,11 +9,10 @@
  *
  * Contributors:
  * Christoph Läubrich - initial API and implementation
- * Philip Wenig - refactoring target label support
+ * Matthias Mailänder - adapted for nucleotide display
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,21 +21,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IChromatogramPeak;
+import org.eclipse.chemclipse.dsd.model.core.Nucleobase;
+import org.eclipse.chemclipse.dsd.model.core.NucleotideSequence;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.ISignal;
-import org.eclipse.chemclipse.model.targets.DisplayOption;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.model.targets.ITargetReference;
-import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.model.targets.TargetReference;
-import org.eclipse.chemclipse.model.targets.TargetReferenceType;
-import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
@@ -57,27 +52,22 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.themes.ITheme;
 import org.eclipse.ui.themes.IThemeManager;
 
-public class TargetReferenceLabelMarker implements ICustomPaintListener {
+public class NucleotideLabelMarker implements ICustomPaintListener {
 
 	private static final int NO_ALPHA = 255;
 
-	private static final DecimalFormat DECIMAL_FORMAT_RI = ValueFormat.getDecimalFormatEnglish("0.00");
-	private static final DecimalFormat DECIMAL_FORMAT_AREA_PERCENT = ValueFormat.getDecimalFormatEnglish("0.000");
-
 	private IThemeManager themeManager = PlatformUI.getWorkbench().getThemeManager();
 	private ITheme currentTheme = themeManager.getCurrentTheme();
-	private ColorRegistry colorRegistry = currentTheme.getColorRegistry();
 	private FontRegistry fontRegistry = currentTheme.getFontRegistry();
 
 	private TargetReferenceSettings targetReferenceSettings;
-	private List<TargetLabel> targetLabels = new ArrayList<>();
+	private List<NucleotideLabel> nucleotideLabels = new ArrayList<>();
 	private ICustomSeries customSeries = null;
 
 	private boolean visible = true;
-	private int rotation = 0;
 	private int detectionDepth = 0;
 
-	public TargetReferenceLabelMarker(TargetReferenceSettings targetReferenceSettings) {
+	public NucleotideLabelMarker(TargetReferenceSettings targetReferenceSettings) {
 
 		this.targetReferenceSettings = targetReferenceSettings;
 
@@ -96,9 +86,9 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	 *
 	 * @return {@link List}
 	 */
-	public List<TargetLabel> getTargetLabels() {
+	public List<NucleotideLabel> getNucleotideLabels() {
 
-		return Collections.unmodifiableList(targetLabels);
+		return Collections.unmodifiableList(nucleotideLabels);
 	}
 
 	public ICustomSeries getCustomSeries() {
@@ -109,7 +99,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	@Override
 	public void paintControl(PaintEvent event) {
 
-		if(visible && !targetLabels.isEmpty()) {
+		if(visible && !nucleotideLabels.isEmpty()) {
 			Widget widget = event.widget;
 			if(widget instanceof IPlotArea plotArea) {
 				Chart chart = plotArea.getChart();
@@ -163,15 +153,16 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		oldTransform.getElements(identityMatrix);
 
 		try {
-			Color colorActive = colorRegistry.get(TargetReferenceLabelMarker.class.getName() + ".ActiveColor");
-			Color colorInactive = colorRegistry.get(TargetReferenceLabelMarker.class.getName() + ".InactiveColor");
-			Color colorId = colorRegistry.get(TargetReferenceLabelMarker.class.getName() + ".IdColor");
+			/*
+			 * The registry returns null if the theme definition is missing, which would let the GC fail the whole plot area repaint.
+			 */
 
 			Rectangle clipping = gc.getClipping();
-			TargetLabel lastReference = null;
+			NucleotideLabel lastReference = null;
 
 			int collisions = 0;
-			for(TargetLabel reference : targetLabels) {
+			for(NucleotideLabel reference : nucleotideLabels) {
+
 				int x = xAxis.getPixelCoordinate(reference.getX());
 				int y = yAxis.getPixelCoordinate(reference.getY());
 				if(!clipping.contains(x, y)) {
@@ -183,10 +174,10 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				if(customSeries != null) {
 					TextElement textElement = new TextElement();
 					textElement.setLabel(reference.getLabel());
-					textElement.setColor(reference.isActive() ? colorActive : colorInactive);
+					textElement.setColor(reference.getColor());
 					textElement.setX(reference.getX());
 					textElement.setY(reference.getY());
-					textElement.setRotation(-rotation);
+					textElement.setRotation(0);
 					customSeries.getTextElements().add(textElement);
 				}
 
@@ -200,11 +191,11 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				String label = reference.getLabel();
 				setTransform(transform, x, y, reference, identityMatrix);
 				if(reference.isActive()) {
-					gc.setForeground(colorActive);
-					gc.setBackground(colorActive);
+					gc.setForeground(reference.getColor());
+					gc.setBackground(reference.getColor());
 				} else {
-					gc.setForeground(colorInactive);
-					gc.setBackground(colorInactive);
+					gc.setForeground(reference.getColor());
+					gc.setBackground(reference.getColor());
 				}
 
 				if(detectionDepth > 0) {
@@ -252,12 +243,12 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				gc.drawText(label, 0, 0, true);
 
 				if(reference.getId() != null && reference.isActive()) {
-					gc.setForeground(colorId);
+					gc.setForeground(reference.getColor());
 					gc.drawText(reference.getId(), reference.getBounds().getWidth() + offset / 2, 0, true);
 				}
 			}
 
-			for(TargetLabel reference : targetLabels) {
+			for(NucleotideLabel reference : nucleotideLabels) {
 				if(reference.getBounds() != null) {
 					reference.getBounds().dispose();
 					reference.setBounds(null);
@@ -274,22 +265,22 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		}
 	}
 
-	private int setTransform(Transform transform, float x, float y, TargetLabel reference, float[] identityMatrix) {
+	private int setTransform(Transform transform, float x, float y, NucleotideLabel reference, float[] identityMatrix) {
 
-		int offset = targetReferenceSettings.getOffset();
+		int offset = reference.getBounds().getWidth();
 		int h = reference.getBounds().getHeight();
 		transform.setElements(identityMatrix[0], identityMatrix[1], identityMatrix[2], identityMatrix[3], identityMatrix[4], identityMatrix[5]);
 		transform.translate(x, y - offset);
-		transform.rotate(-rotation);
+		transform.rotate(0);
 		transform.translate(0, -h / 2);
 		reference.getBounds().setTransform(transform);
 
 		return h;
 	}
 
-	private void drawHandle(GC gc, TargetLabel reference, int x, int y, boolean upsideDown, float[] identityMatrix) {
+	private void drawHandle(GC gc, NucleotideLabel reference, int x, int y, boolean upsideDown, float[] identityMatrix) {
 
-		int offset = targetReferenceSettings.getOffset();
+		int offset = reference.getBounds().getWidth();
 		float cx = reference.getBounds().getCx() - identityMatrix[4];
 		float cy = reference.getBounds().getCy() - identityMatrix[5] + offset;
 		gc.setLineStyle(SWT.LINE_DASHDOT);
@@ -314,6 +305,16 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		gc.fillOval((int)(cx - ow), (int)(cy - ow), ow * 2, ow * 2);
 	}
 
+	private Nucleobase getNucleobase(ITargetReference targetReference) {
+
+		IIdentificationTarget identificationTarget = targetReference.getBestIdentificationTarget();
+		if(identificationTarget != null) {
+			return NucleotideSequence.getNucleobase(identificationTarget);
+		}
+
+		return null;
+	}
+
 	private Predicate<ITargetReference> setTargetReferences(Collection<? extends TargetReference> targetReferences) {
 
 		return setTargetReferences(targetReferences, _ -> true);
@@ -321,7 +322,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
 	private Predicate<ITargetReference> setTargetReferences(Collection<? extends TargetReference> targetReferences, Predicate<ITargetReference> activeFilter) {
 
-		targetLabels.clear();
+		nucleotideLabels.clear();
 
 		ITargetDisplaySettings targetDisplaySettings = targetReferenceSettings.getTargetDisplaySettings();
 		Predicate<ITargetReference> visibilityFilter = TargetReference.createVisibilityFilter(targetDisplaySettings);
@@ -330,106 +331,34 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			/*
 			 * Settings
 			 */
-			rotation = targetDisplaySettings.getRotation();
 			detectionDepth = targetDisplaySettings.getCollisionDetectionDepth();
-			DisplayOption displayOption = targetDisplaySettings.getDisplayOption();
-			LibraryField libraryField = targetDisplaySettings.getLibraryField();
 
-			Font peakFont = fontRegistry.get(TargetReferenceLabelMarker.class.getName() + ".Peak.Font");
-			Font scanFont = fontRegistry.get(TargetReferenceLabelMarker.class.getName() + ".Scan.Font");
+			Font scanFont = fontRegistry.get(NucleotideLabelMarker.class.getName() + ".Scan.Font");
 
-			int number = 1;
 			for(ITargetReference targetReference : targetReferences) {
 				if(visibilityFilter.test(targetReference)) {
 					/*
 					 * Get the label.
 					 */
-					String labelDisplay = null;
-					String labelStandard = targetReference.getTargetLabel(libraryField);
-
-					switch(displayOption) {
-						case NUMBERS:
-							labelDisplay = String.valueOf(number++);
-							break;
-						case NUMBERS_STANDARD:
-							labelDisplay = getConcatenatedLabel(String.valueOf(number++), labelStandard);
-							break;
-						case RETENTION_TIME:
-							labelDisplay = targetReference.getRetentionTimeMinutes();
-							break;
-						case RETENTION_TIME_STANDARD:
-							labelDisplay = getConcatenatedLabel(targetReference.getRetentionTimeMinutes(), labelStandard);
-							break;
-						case RETENTION_INDEX:
-							labelDisplay = DECIMAL_FORMAT_RI.format(targetReference.getRetentionIndex());
-							break;
-						case RETENTION_INDEX_STANDARD:
-							labelDisplay = getConcatenatedLabel(DECIMAL_FORMAT_RI.format(targetReference.getRetentionIndex()), labelStandard);
-							break;
-						case RETENTION_INDEX_AREA_PERCENT:
-							labelDisplay = DECIMAL_FORMAT_RI.format(targetReference.getRetentionIndex()) + " (" + getAreaPercent(targetReference) + ")";
-							break;
-						case AREA_PERCENT:
-							labelDisplay = getAreaPercent(targetReference);
-							break;
-						case AREA_PERCENT_STANDARD:
-							labelDisplay = getConcatenatedLabel(getAreaPercent(targetReference), labelStandard);
-							break;
-						default:
-							labelDisplay = labelStandard;
-							if(labelDisplay == null || labelDisplay.isEmpty()) {
-								continue;
-							}
-							break;
+					Nucleobase nucleobase = getNucleobase(targetReference);
+					if(nucleobase == null) {
+						continue;
 					}
 
-					boolean isPeakLabel = TargetReferenceType.PEAK.equals(targetReference.getType());
-					boolean isScanLabel = TargetReferenceType.SCAN.equals(targetReference.getType());
 					boolean isActive = activeFilter == null || activeFilter.test(targetReference);
 
 					ISignal scan = targetReference.getSignal();
 					Font font;
-					if(isPeakLabel) {
-						font = peakFont;
-					} else if(isScanLabel) {
-						font = scanFont;
-					} else {
-						font = null;
-					}
+					font = scanFont;
 
-					TargetLabel targetLabel = new TargetLabel(labelDisplay, targetReferenceSettings.isShowReferenceId() ? targetReference.getRetentionTimeMinutes() : null, font, isActive, scan.getX(), scan.getY());
-					targetLabels.add(targetLabel);
+					double x = scan instanceof IScan scanX ? scanX.getScanNumber() : scan.getX();
+					NucleotideLabel targetLabel = new NucleotideLabel(nucleobase, null, font, isActive, x, scan.getY());
+					nucleotideLabels.add(targetLabel);
 				}
 			}
 		}
 
-		Collections.sort(targetLabels, (o1, o2) -> Double.compare(o1.getX(), o2.getX()));
+		Collections.sort(nucleotideLabels, (o1, o2) -> Double.compare(o1.getX(), o2.getX()));
 		return visibilityFilter;
-	}
-
-	private String getConcatenatedLabel(String displayLabel, String targetLabel) {
-
-		if(targetLabel == null || targetLabel.isEmpty()) {
-			return displayLabel;
-		} else {
-			return displayLabel + " [" + targetLabel + "]";
-		}
-	}
-
-	private String getAreaPercent(ITargetReference targetReference) {
-
-		ISignal signal = targetReference.getSignal();
-		if(signal instanceof IChromatogramPeak chromatogramPeak) {
-			IChromatogram chromatogram = chromatogramPeak.getChromatogram();
-			if(chromatogram != null) {
-				double chromatogramPeakArea = chromatogram.getPeakIntegratedArea();
-				if(chromatogramPeakArea > 0) {
-					double peakAreaPercent = (100.0d / chromatogramPeakArea) * chromatogramPeak.getIntegratedArea();
-					return DECIMAL_FORMAT_AREA_PERCENT.format(peakAreaPercent);
-				}
-			}
-		}
-
-		return "";
 	}
 }

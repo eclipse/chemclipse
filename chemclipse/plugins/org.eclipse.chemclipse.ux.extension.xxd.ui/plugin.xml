@@ -759,6 +759,15 @@
             The target reference scan label font.
         </description>
     </fontDefinition>
+    <fontDefinition
+        categoryId="org.eclipse.chemclipse.ux.extension.xxd.ui.charts"
+        id="org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.NucleotideLabelMarker.Scan.Font"
+        label="Electropherogram Chart Nucleotide Label Font"
+        value="Verdana-regular-8">
+        <description>
+            The nucleotide label font.
+        </description>
+    </fontDefinition>
     <colorDefinition
         categoryId="org.eclipse.chemclipse.ux.extension.xxd.ui.charts"
         id="org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ScanChart.ColorScanOne"
