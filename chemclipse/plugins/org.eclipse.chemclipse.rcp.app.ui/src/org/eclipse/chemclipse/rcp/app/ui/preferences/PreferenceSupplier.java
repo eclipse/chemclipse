@@ -23,6 +23,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 	public static final boolean DEF_SHOW_PERSPECTIVE_DIALOG = true;
 	public static final String P_CHANGE_PERSPECTIVE_AUTOMATICALLY = "changePerspectiveAutomatically";
 	public static final boolean DEF_CHANGE_PERSPECTIVE_AUTOMATICALLY = true;
+	public static final String P_SHOW_PERSPECTIVE_SWITCHER = "showPerspectiveSwitcher";
+	public static final boolean DEF_SHOW_PERSPECTIVE_SWITCHER = true;
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -45,6 +47,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 		putDefault(P_SELECTED_PROFILE, DEF_SELECTED_PROFILE);
 		putDefault(P_SHOW_PERSPECTIVE_DIALOG, DEF_SHOW_PERSPECTIVE_DIALOG);
 		putDefault(P_CHANGE_PERSPECTIVE_AUTOMATICALLY, DEF_CHANGE_PERSPECTIVE_AUTOMATICALLY);
+		putDefault(P_SHOW_PERSPECTIVE_SWITCHER, DEF_SHOW_PERSPECTIVE_SWITCHER);
 	}
 
 	public static void setChangePerspectivesAutomatically(boolean changeAutomatically) {
@@ -87,5 +90,21 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 	public static void setChangePerspectiveAutomatically(boolean changePerspectiveAutomatically) {
 
 		INSTANCE().setBoolean(P_CHANGE_PERSPECTIVE_AUTOMATICALLY, changePerspectiveAutomatically);
+	}
+
+	/**
+	 * Returns whether the perspective switcher shall be shown in the top trim bar or not.
+	 */
+	public static boolean getShowPerspectiveSwitcher() {
+
+		return INSTANCE().getBoolean(P_SHOW_PERSPECTIVE_SWITCHER);
+	}
+
+	/**
+	 * Sets whether the perspective switcher shall be shown in the top trim bar or not.
+	 */
+	public static void setShowPerspectiveSwitcher(boolean showPerspectiveSwitcher) {
+
+		INSTANCE().setBoolean(P_SHOW_PERSPECTIVE_SWITCHER, showPerspectiveSwitcher);
 	}
 }

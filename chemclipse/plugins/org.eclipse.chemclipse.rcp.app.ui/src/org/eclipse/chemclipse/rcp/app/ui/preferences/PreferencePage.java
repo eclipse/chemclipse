@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.app.profiles.Profiles;
 import org.eclipse.chemclipse.rcp.app.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferencePageContainer;
@@ -34,9 +35,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.dialogs.PreferencesUtil;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -44,6 +48,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	private Label selectedProfileFieldEditor;
 	private Combo availableProfilesCombo;
 	private Text newProfileNameText;
+	private boolean showPerspectiveSwitcher;
 
 	public PreferencePage() {
 
@@ -63,9 +68,11 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		/*
 		 * Change perspectives dialog
 		 */
+		showPerspectiveSwitcher = getPreferenceStore().getBoolean(PreferenceSupplier.P_SHOW_PERSPECTIVE_SWITCHER);
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_PERSPECTIVE_DIALOG, "Show the perspective dialog.", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_CHANGE_PERSPECTIVE_AUTOMATICALLY, "Change perspectives and views automatically.", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_PERSPECTIVE_SWITCHER, "Show the perspective switcher in the toolbar (restart required).", getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		/*
 		 * Profiles
@@ -196,6 +203,57 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		});
 	}
 
+	@Override
+	public boolean performOk() {
+
+		boolean performOk = super.performOk();
+		if(performOk) {
+			boolean showPerspectiveSwitcherNew = getPreferenceStore().getBoolean(PreferenceSupplier.P_SHOW_PERSPECTIVE_SWITCHER);
+			if(showPerspectiveSwitcher != showPerspectiveSwitcherNew) {
+				showPerspectiveSwitcher = showPerspectiveSwitcherNew;
+				requestRestart();
+			}
+		}
+		return performOk;
+	}
+
+	/**
+	 * The perspective switcher is evaluated when the application model is created.
+	 */
+	private void requestRestart() {
+
+		MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText("Restart?");
+		messageBox.setMessage("The perspective switcher setting takes effect after a restart. Do you want to restart now?");
+		if(messageBox.open() == SWT.YES) {
+			/*
+			 * Let the preference dialog close first.
+			 */
+			getShell().getDisplay().asyncExec(this::restart);
+		}
+	}
+
+	private void restart() {
+
+		Bundle bundle = FrameworkUtil.getBundle(getClass());
+		BundleContext bundleContext = (bundle != null) ? bundle.getBundleContext() : null;
+		if(bundleContext == null) {
+			return;
+		}
+		ServiceReference<IWorkbench> serviceReference = bundleContext.getServiceReference(IWorkbench.class);
+		if(serviceReference == null) {
+			return;
+		}
+		try {
+			IWorkbench workbench = bundleContext.getService(serviceReference);
+			if(workbench != null) {
+				workbench.restart();
+			}
+		} finally {
+			bundleContext.ungetService(serviceReference);
+		}
+	}
+
 	private void setProfileName(String name) {
 
 		/*
@@ -244,7 +302,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	}
 
 	@Override
-	public void init(IWorkbench workbench) {
+	public void init(org.eclipse.ui.IWorkbench workbench) {
 
 	}
 }

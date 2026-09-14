@@ -101,6 +101,15 @@
       <children xsi:type="menu:ToolBar" xmi:id="_dz9NIF6nEe2sw_cXqaBWMw" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.plugins">
         <children xsi:type="menu:HandledToolItem" xmi:id="_G9eogOToEeK3p9M57zVYqQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.updates" visible="false" label="Updates" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/updates.gif" enabled="false" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>
       </children>
+      <children xsi:type="menu:ToolControl" xmi:id="_oBxRMHw0EfGlceNpx4XSsQ" elementId="PerspectiveSpacer" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.renderers.swt/org.eclipse.e4.ui.workbench.renderers.swt.LayoutModifierToolControl">
+        <tags>stretch</tags>
+        <tags>SHOW_RESTORE_MENU</tags>
+      </children>
+      <children xsi:type="menu:ToolControl" xmi:id="_quxC8Hw0EfGlceNpx4XSsQ" elementId="org.eclipse.e4.ui.PerspectiveSwitcher" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.e4.ui.workbench.addons.perspectiveswitcher.PerspectiveSwitcher">
+        <tags>Draggable</tags>
+        <tags>HIDEABLE</tags>
+        <tags>SHOW_RESTORE_MENU</tags>
+      </children>
     </trimBars>
     <trimBars xmi:id="_CT96oF6VEeO_3ZCXGA_PQg" elementId="org.eclipse.ui.trim.status" side="Bottom">
       <children xsi:type="menu:ToolControl" xmi:id="_6CqUoHB1EemL5_T8nUqtDA" elementId="org.eclipse.ui.StatusLine" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.StandardTrim">
@@ -174,4 +183,5 @@
   <addons xmi:id="_4q-U0CGaEeutTb-F-_fKDg" elementId="org.eclipse.chemclipse.rcp.app.ui.addon.contextSupport" contributionURI="bundleclass://org.eclipse.chemclipse.support.ui/org.eclipse.chemclipse.support.ui.activator.ContextAddon"/>
   <addons xmi:id="_rRrvoCgVEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.addons.PerspectiveSupport" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.addons.PerspectiveSupport"/>
   <addons xmi:id="_y_CRsEfLEfGSmdLsAusSyg" elementId="org.eclipse.chemclipse.progress.ui.addons.ProgressAddon" contributionURI="bundleclass://org.eclipse.chemclipse.progress.ui/org.eclipse.chemclipse.progress.ui.addons.ProgressAddon"/>
+  <addons xmi:id="_tYqL4Hw3EfGlceNpx4XSsQ" elementId="org.eclipse.chemclipse.rcp.app.ui.addon.perspectiveSwitcherAddon" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.addons.PerspectiveSwitcherAddon"/>
 </application:Application>
