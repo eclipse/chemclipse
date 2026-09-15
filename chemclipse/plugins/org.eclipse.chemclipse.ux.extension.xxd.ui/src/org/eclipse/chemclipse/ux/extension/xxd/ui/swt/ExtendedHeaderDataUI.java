@@ -184,6 +184,17 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 		TabFolder tabFolder = new TabFolder(parent, SWT.BOTTOM);
 		tabFolder.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		/*
+		 * Tabs
+		 */
+		createHeaderDataTable(tabFolder);
+		createTextMiscellaneous(tabFolder);
+		createTextFindings(tabFolder);
+		/*
+		 * The listener is added after the tabs on purpose. Creating the first
+		 * tab item selects it and fires a selection event, synchronously on
+		 * Windows, while the tab controls are still being created.
+		 */
 		tabFolder.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -192,12 +203,6 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 				updateInput();
 			}
 		});
-		/*
-		 * Tabs
-		 */
-		createHeaderDataTable(tabFolder);
-		createTextMiscellaneous(tabFolder);
-		createTextFindings(tabFolder);
 	}
 
 	private void createHeaderDataTable(TabFolder tabFolder) {
