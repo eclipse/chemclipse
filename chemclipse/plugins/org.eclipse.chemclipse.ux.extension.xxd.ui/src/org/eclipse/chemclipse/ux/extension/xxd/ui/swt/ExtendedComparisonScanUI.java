@@ -10,6 +10,7 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  * Christoph Läubrich - make this configurable, null check for scan
+ * Lorenz Gerber - inherit background mode in Tabfolder charts
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -631,6 +632,7 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 	private void createTabFolderCharts(Composite parent) {
 
 		TabFolder tabFolder = new TabFolder(parent, SWT.BOTTOM);
+		tabFolder.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		createScanChartComparison(tabFolder);
