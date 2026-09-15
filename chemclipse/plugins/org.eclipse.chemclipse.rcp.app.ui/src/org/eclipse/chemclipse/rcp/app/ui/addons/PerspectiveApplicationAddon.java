@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.rcp.app.ui.addons;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -34,10 +35,20 @@ import jakarta.annotation.PostConstruct;
 public class PerspectiveApplicationAddon {
 
 	private static final String PROPERTY_PERSPECTIVE = "application.perspective";
+	/*
+	 * The legacy action sets of org.eclipse.ui.editors are marked as initially visible and are
+	 * therefore activated in every perspective, which adds their disabled tool items to the trim.
+	 */
+	private static final String HIDDEN_ITEMS_KEY = "persp.hiddenItems";
+	private static final String HIDDEN_ACTION_SET_PREFIX = "persp.hideActionSetSC:";
+	private static final List<String> HIDDEN_ACTION_SET_IDS = List.of( //
+			"org.eclipse.ui.edit.text.actionSet.annotationNavigation", //
+			"org.eclipse.ui.edit.text.actionSet.navigation");
 
 	@PostConstruct
 	public void postConstruct(MApplication application, EModelService modelService, IEventBroker eventBroker) {
-
+		// TODO remove once e4 is fixed to not inject action sets unconditionally
+		hideActionSets(application, modelService);
 		MPerspective perspective = findPerspective(application, modelService);
 		if(perspective == null) {
 			return;
@@ -50,6 +61,26 @@ public class PerspectiveApplicationAddon {
 		if(eventBroker != null) {
 			eventBroker.send(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, perspective.getElementId());
 			scheduleSnapshot(application, modelService, perspectiveStack, eventBroker);
+		}
+	}
+
+	/*
+	 * Marks the action sets as hidden before the compatibility layer sets up its workbench page,
+	 * which activates each initially visible action set in every perspective it knows.
+	 */
+	private void hideActionSets(MApplication application, EModelService modelService) {
+
+		for(MPerspective perspective : modelService.findElements(application, null, MPerspective.class)) {
+			Map<String, String> persistedState = perspective.getPersistedState();
+			String hiddenItems = persistedState.getOrDefault(HIDDEN_ITEMS_KEY, "");
+			StringBuilder builder = new StringBuilder(hiddenItems);
+			for(String actionSetId : HIDDEN_ACTION_SET_IDS) {
+				String hiddenItem = HIDDEN_ACTION_SET_PREFIX + actionSetId + ",";
+				if(!hiddenItems.contains(hiddenItem)) {
+					builder.append(hiddenItem);
+				}
+			}
+			persistedState.put(HIDDEN_ITEMS_KEY, builder.toString());
 		}
 	}
 
