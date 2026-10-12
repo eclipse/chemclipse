@@ -41,6 +41,7 @@ public interface ICategories {
 	String USER_INTERFACE = ProcessingMessages.userInterface;
 	String FILTER = ProcessingMessages.filter;
 	String MASS_SPECTRUM = ProcessingMessages.massSpectrum;
+	String MASS_SPECTRUM_EXPORT = ProcessingMessages.massSpectrumExport;
 	String MASS_SPECTRUM_FILTER = ProcessingMessages.massSpectrumFilter;
 	String MASS_SPECTRUM_IDENTIFIER = ProcessingMessages.massSpectrumIdentifier;
 	String MASS_SPECTRUM_REPORTS = ProcessingMessages.massSpectrumReports;

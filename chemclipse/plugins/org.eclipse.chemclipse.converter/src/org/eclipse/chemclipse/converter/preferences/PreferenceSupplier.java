@@ -20,6 +20,8 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 
 	public static final String P_CHROMATOGRAM_EXPORT_FOLDER = "chromatogramExportFolder";
 	public static final String DEF_CHROMATOGRAM_EXPORT_FOLDER = "";
+	public static final String P_MASS_SPECTRUM_EXPORT_FOLDER = "massSpectrumExportFolder";
+	public static final String DEF_MASS_SPECTRUM_EXPORT_FOLDER = "";
 	public static final String P_METHOD_EXPLORER_PATH_ROOT_FOLDER = "methodExplorerPathRootFolder";
 	public static final String DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER = "";
 	public static final String P_SELECTED_METHOD_FILENAME = "selectedMethodName";
@@ -40,6 +42,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 	public void initializeDefaults() {
 
 		putDefault(P_CHROMATOGRAM_EXPORT_FOLDER, DEF_CHROMATOGRAM_EXPORT_FOLDER);
+		putDefault(P_MASS_SPECTRUM_EXPORT_FOLDER, DEF_MASS_SPECTRUM_EXPORT_FOLDER);
 		putDefault(P_METHOD_EXPLORER_PATH_ROOT_FOLDER, DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER);
 		putDefault(P_SELECTED_METHOD_FILENAME, DEF_SELECTED_METHOD_FILENAME);
 	}
@@ -52,6 +55,11 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 	public static String getChromatogramExportFolder() {
 
 		return INSTANCE().get(P_CHROMATOGRAM_EXPORT_FOLDER, DEF_CHROMATOGRAM_EXPORT_FOLDER);
+	}
+
+	public static String getMassSpectrumExportFolder() {
+
+		return INSTANCE().get(P_MASS_SPECTRUM_EXPORT_FOLDER, DEF_MASS_SPECTRUM_EXPORT_FOLDER);
 	}
 
 	public static String getSelectedMethodFileName() {

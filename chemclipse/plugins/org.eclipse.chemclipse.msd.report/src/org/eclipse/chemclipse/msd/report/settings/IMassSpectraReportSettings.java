@@ -18,11 +18,6 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 
 public interface IMassSpectraReportSettings extends IProcessSettings {
 
-	/*
-	 * File name placeholder
-	 */
-	String VARIABLE_MASSSPECTRUM_NAME = "{massspectrum_name}";
-
 	File getExportFolder();
 
 	boolean isAppend();

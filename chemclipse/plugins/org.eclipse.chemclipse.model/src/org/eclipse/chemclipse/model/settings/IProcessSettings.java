@@ -30,6 +30,13 @@ public interface IProcessSettings {
 	public static final String VARIABLE_CHROMATOGRAM_INSTRUMENT = "{chromatogram_instrument}";
 	public static final String VARIABLE_CHROMATOGRAM_TAGS = "{chromatogram_tags}";
 
+	public static final String VARIABLE_MASSSPECTRUM_NAME = "{massspectrum_name}";
+	public static final String VARIABLE_MASSSPECTRUM_SAMPLENAME = "{massspectrum_samplename}";
+	public static final String VARIABLE_MASSSPECTRUM_OPERATOR = "{massspectrum_operator}";
+	public static final String VARIABLE_MASSSPECTRUM_INSTRUMENT = "{massspectrum_instrument}";
+	public static final String VARIABLE_MASSSPECTRUM_PLATE = "{massspectrum_plate}";
+	public static final String VARIABLE_MASSSPECTRUM_POSITION = "{massspectrum_position}";
+
 	public static final String VARIABLE_EXTENSION = "{extension}";
 	/*
 	 * Directory placeholder

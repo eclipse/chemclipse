@@ -36,9 +36,17 @@ public abstract class AbstractProcessSettings implements IProcessSettings {
 
 		String fileName = replaceFileName(chromatogram, fileNamePattern);
 		fileName = replaceFileExtension(fileName, extension);
-		/*
-		 * Remove OS specific file system control characters.
-		 */
+		return toLegalFileName(fileName);
+	}
+
+	/**
+	 * Removes the OS specific file system control characters.
+	 * 
+	 * @param fileName
+	 * @return String
+	 */
+	protected static String toLegalFileName(String fileName) {
+
 		return FileSystem.getCurrent().toLegalFileName(fileName, '-');
 	}
 
@@ -86,7 +94,7 @@ public abstract class AbstractProcessSettings implements IProcessSettings {
 		return fileName;
 	}
 
-	private static String replaceVariable(String fileNamePattern, String variable, String replacement, String defaultReplacement) {
+	protected static String replaceVariable(String fileNamePattern, String variable, String replacement, String defaultReplacement) {
 
 		String result = fileNamePattern;
 		if(fileNamePattern.contains(variable)) {
@@ -99,7 +107,7 @@ public abstract class AbstractProcessSettings implements IProcessSettings {
 		return result;
 	}
 
-	private static String replaceFileExtension(String fileName, String extension) {
+	protected static String replaceFileExtension(String fileName, String extension) {
 
 		return fileName.replace(VARIABLE_EXTENSION, extension);
 	}
