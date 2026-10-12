@@ -162,10 +162,8 @@ public class SearchSupportUI extends Composite {
 
 				if(e.detail == SWT.ICON_CANCEL) {
 					text.setText("");
-					runSearch();
-				} else if(e.detail == SWT.ICON_SEARCH) {
-					runSearch();
 				}
+				runSearch();
 			}
 		});
 
