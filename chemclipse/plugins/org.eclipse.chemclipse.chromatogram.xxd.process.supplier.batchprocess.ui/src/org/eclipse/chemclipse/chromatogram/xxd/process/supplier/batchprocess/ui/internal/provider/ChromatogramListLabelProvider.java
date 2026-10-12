@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.internal.provider;
 
-import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
+import org.eclipse.chemclipse.process.supplier.batchprocess.io.IBatchProcessInputEntry;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -47,7 +47,7 @@ public class ChromatogramListLabelProvider extends AbstractChemClipseLabelProvid
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IChromatogramInputEntry entry) {
+		if(element instanceof IBatchProcessInputEntry entry) {
 			switch(columnIndex) {
 				case 0:
 					text = entry.getName();

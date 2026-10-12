@@ -9,40 +9,4 @@
             uri="fragment.e4xmi">
       </fragment>
    </extension>
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            id="org.eclipse.chemclipse.chromatogram.xxd.batchprocess.ui"
-            name="Batch Process">
-      </category>
-      <wizard
-            category="org.eclipse.chemclipse.chromatogram.xxd.batchprocess.ui"
-            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.wizards.WizardProcessor"
-            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif"
-            id="org.eclipse.chemclipse.chromatogram.xxd.batchprocess.ui.wizards.wizardProcessor"
-            name="Batch Process Job">
-      </wizard>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.adapters">
-      <factory
-            adaptableType="org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.BatchJobFileSupplier"
-            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.internal.provider.BatchJobFileEditorAdapterFactory">
-         <adapter
-               type="org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport">
-         </adapter>
-         <adapter
-               type="org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor">
-         </adapter>
-      </factory>
-   </extension>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            category="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePage"
-            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.preferences.PreferencePage"
-            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.preferences.preferencePage"
-            name="Batch Process">
-      </page>
-   </extension>
 </plugin>

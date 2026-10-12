@@ -356,4 +356,12 @@
          id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.truyols.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.process.batchprocess.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.process.supplier.batchprocess.feature"
+         version="0.0.0"/>
+
 </feature>

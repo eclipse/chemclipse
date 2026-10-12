@@ -15,8 +15,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui
 import java.io.File;
 import java.util.Date;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.process.supplier.batchprocess.core.BatchProcessJob;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.jface.viewers.ArrayContentProvider;

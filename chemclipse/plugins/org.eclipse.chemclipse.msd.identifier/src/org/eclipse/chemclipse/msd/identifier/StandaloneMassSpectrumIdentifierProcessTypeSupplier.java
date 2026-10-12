@@ -68,7 +68,7 @@ public class StandaloneMassSpectrumIdentifierProcessTypeSupplier implements IPro
 		@SuppressWarnings("unchecked")
 		public StandaloneMassSpectrumIdentifierProcessorSupplier(IMassSpectrumIdentifierSupplier supplier, IProcessTypeSupplier parent) {
 
-			super("ScanMassSpectrumIdentifier." + supplier.getId(), supplier.getIdentifierName(), supplier.getDescription(), (Class<IMassSpectrumIdentifierSettings>)supplier.getSettingsClass(), parent, DataType.MSD);
+			super("ScanMassSpectrumIdentifier." + supplier.getId(), supplier.getIdentifierName(), supplier.getDescription(), (Class<IMassSpectrumIdentifierSettings>)supplier.getSettingsClass(), parent, DataType.MALDI);
 			this.supplier = supplier;
 			getLiteratureReferences().addAll(supplier.getLiteratureReferences());
 		}

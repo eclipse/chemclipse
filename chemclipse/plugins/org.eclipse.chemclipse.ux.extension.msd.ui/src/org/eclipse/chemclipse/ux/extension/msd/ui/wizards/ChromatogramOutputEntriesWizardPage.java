@@ -15,9 +15,9 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.wizards;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.converter.model.ChromatogramOutputEntry;
-import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.process.supplier.batchprocess.io.BatchOutputEntry;
+import org.eclipse.chemclipse.process.supplier.batchprocess.io.IBatchProcessOutputEntry;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -55,7 +55,7 @@ public class ChromatogramOutputEntriesWizardPage extends WizardPage {
 	 * @return String
 	 * @throws NoConverterAvailableException
 	 */
-	public IChromatogramOutputEntry getChromatogramOutputEntry() throws NoConverterAvailableException {
+	public IBatchProcessOutputEntry getChromatogramOutputEntry() throws NoConverterAvailableException {
 
 		String converterId = "";
 		String outputFolder = "";
@@ -79,7 +79,7 @@ public class ChromatogramOutputEntriesWizardPage extends WizardPage {
 		/*
 		 * Output entry
 		 */
-		return new ChromatogramOutputEntry(outputFolder, converterId);
+		return new BatchOutputEntry(outputFolder, converterId);
 	}
 
 	@Override

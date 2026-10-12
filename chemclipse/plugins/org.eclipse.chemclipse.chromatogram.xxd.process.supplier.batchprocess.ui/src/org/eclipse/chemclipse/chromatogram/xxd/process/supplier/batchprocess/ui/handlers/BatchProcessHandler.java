@@ -14,9 +14,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui
 
 import java.io.File;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.internal.provider.BatchJobFileEditorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.wizards.WizardProcessor;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.process.supplier.batchprocess.ui.provider.BatchJobFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.core.di.annotations.Execute;
