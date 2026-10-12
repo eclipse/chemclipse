@@ -124,6 +124,10 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 							} else if(annotation instanceof IntSettingsProperty settingsProperty) {
 								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Integer.class));
 								inputValue.addValidator(new EvenOddValidatorInteger(property.getName(), settingsProperty.validation()));
+								inputValue.setUseSpinner(settingsProperty.useSpinner());
+								inputValue.setSpinnerMinValue(settingsProperty.minValue());
+								inputValue.setSpinnerMaxValue(settingsProperty.maxValue());
+								inputValue.setSpinnerStep(settingsProperty.step());
 							} else if(annotation instanceof LongSettingsProperty settingsProperty) {
 								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Long.class));
 								inputValue.addValidator(new EvenOddValidatorLong(property.getName(), settingsProperty.validation()));

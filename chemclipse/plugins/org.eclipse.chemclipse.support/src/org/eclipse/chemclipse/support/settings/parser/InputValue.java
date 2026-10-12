@@ -39,6 +39,10 @@ public class InputValue {
 	private String tooltip = "";
 	private String contributorURI = "";
 	private String[] proposals = new String[0];
+	private boolean useSpinner = false;
+	private int spinnerMinValue = Integer.MIN_VALUE;
+	private int spinnerMaxValue = Integer.MAX_VALUE;
+	private int spinnerStep = 1;
 
 	public boolean hasRegexConstraint() {
 
@@ -186,5 +190,45 @@ public class InputValue {
 	public void setProposals(String[] proposals) {
 
 		this.proposals = (proposals != null) ? proposals : new String[0];
+	}
+
+	public boolean isUseSpinner() {
+
+		return useSpinner;
+	}
+
+	public void setUseSpinner(boolean useSpinner) {
+
+		this.useSpinner = useSpinner;
+	}
+
+	public int getSpinnerMinValue() {
+
+		return spinnerMinValue;
+	}
+
+	public void setSpinnerMinValue(int spinnerMinValue) {
+
+		this.spinnerMinValue = spinnerMinValue;
+	}
+
+	public int getSpinnerMaxValue() {
+
+		return spinnerMaxValue;
+	}
+
+	public void setSpinnerMaxValue(int spinnerMaxValue) {
+
+		this.spinnerMaxValue = spinnerMaxValue;
+	}
+
+	public int getSpinnerStep() {
+
+		return spinnerStep;
+	}
+
+	public void setSpinnerStep(int spinnerStep) {
+
+		this.spinnerStep = spinnerStep;
 	}
 }
