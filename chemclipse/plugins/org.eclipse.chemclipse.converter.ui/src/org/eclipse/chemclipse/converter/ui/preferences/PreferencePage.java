@@ -34,6 +34,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	protected void createFieldEditors() {
 
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_EXPORT_FOLDER, "Chromatogram Export Folder", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_MASS_SPECTRUM_EXPORT_FOLDER, "Mass Spectrum Export Folder", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, "Methods Folder", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceSupplier.P_SELECTED_METHOD_FILENAME, "Method Name", getFieldEditorParent()));
 	}
