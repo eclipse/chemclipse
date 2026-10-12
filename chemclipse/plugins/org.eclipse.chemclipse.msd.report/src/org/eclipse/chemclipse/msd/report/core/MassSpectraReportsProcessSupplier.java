@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.model.supplier.ScanProcessSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.IStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.report.exceptions.NoReportSupplierAvailableException;
 import org.eclipse.chemclipse.msd.report.settings.DefaultMassSpectraReportSettings;
 import org.eclipse.chemclipse.msd.report.settings.IMassSpectraReportSettings;
@@ -69,7 +70,7 @@ public class MassSpectraReportsProcessSupplier implements IProcessTypeSupplier {
 		@SuppressWarnings("unchecked")
 		public MassSpectraReportProcessorSupplier(IMassSpectraReportSupplier supplier, IProcessTypeSupplier parent) {
 
-			super(supplier.getId(), supplier.getReportName(), supplier.getDescription(), (Class<IMassSpectraReportSettings>)supplier.getSettingsClass(), parent, DataType.MSD);
+			super(supplier.getId(), supplier.getReportName(), supplier.getDescription(), (Class<IMassSpectraReportSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.MALDI);
 			this.supplier = supplier;
 		}
 
@@ -125,7 +126,13 @@ public class MassSpectraReportsProcessSupplier implements IProcessTypeSupplier {
 
 		private String getFileName(IScanMSD massSpectrum, IMassSpectraReportSettings settings) {
 
-			String name = massSpectrum.getIdentifier();
+			String name = null;
+			if(massSpectrum instanceof IStandaloneMassSpectrum standaloneMassSpectrum) {
+				name = standaloneMassSpectrum.getName();
+			}
+			if(name == null || name.isEmpty()) {
+				name = massSpectrum.getIdentifier();
+			}
 			if(name == null || name.isEmpty()) {
 				name = supplier.getFileName();
 			}
@@ -137,6 +144,9 @@ public class MassSpectraReportsProcessSupplier implements IProcessTypeSupplier {
 
 		private File getCurrentDirectory(IScanMSD massSpectrum) {
 
+			if(massSpectrum instanceof IStandaloneMassSpectrum standaloneMassSpectrum && standaloneMassSpectrum.getFile() != null) {
+				return standaloneMassSpectrum.getFile().getParentFile();
+			}
 			IChromatogram chromatogram = massSpectrum.getParentChromatogram();
 			if(chromatogram != null && chromatogram.getFile() != null) {
 				return chromatogram.getFile().getParentFile();
