@@ -352,4 +352,8 @@
          id="org.eclipse.chemclipse.xxd.edit.supplier.alsl.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.truyols.feature"
+         version="0.0.0"/>
+
 </feature>

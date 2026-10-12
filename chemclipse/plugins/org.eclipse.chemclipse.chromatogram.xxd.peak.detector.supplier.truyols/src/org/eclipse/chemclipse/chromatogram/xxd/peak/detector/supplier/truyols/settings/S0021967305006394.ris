@@ -1,0 +1,24 @@
+TY  - JOUR
+T1  - Automatic program for peak detection and deconvolution of multi-overlapped chromatographic signals: Part II: Peak model and deconvolution algorithms
+AU  - Vivó-Truyols, G.
+AU  - Torres-Lapasió, J.R.
+AU  - van Nederkassel, A.M.
+AU  - Vander Heyden, Y.
+AU  - Massart, D.L.
+JO  - Journal of Chromatography A
+VL  - 1096
+IS  - 1
+SP  - 146
+EP  - 155
+PY  - 2005
+DA  - 2005/11/25/
+T2  - Chemical Separations and Chemometrics
+SN  - 0021-9673
+DO  - https://doi.org/10.1016/j.chroma.2005.03.072
+UR  - https://www.sciencedirect.com/science/article/pii/S0021967305006394
+KW  - Peak deconvolution
+KW  - Chromatographic one-way signals
+KW  - Monolithic silica
+KW  - Genetic algorithms
+AB  - Several interlinked algorithms for peak deconvolution by non-linear regression are presented. These procedures, together with the peak detection methods outlined in Part I, have allowed the implementation of an automatic method able to process multi-overlapped signals, requiring little user interaction. A criterion based on the evaluation of the multivariate selectivity of the chromatographic signal is used to auto-select the most efficient deconvolution procedure for each chromatographic situation. In this way, non-optimal local solutions are avoided in cases of high overlap, and short computation times are obtained in situations of high resolution. A new algorithm, fitting both the original signal and the second derivatives is proved to avoid local optima in intermediate coelution situations. This allows achieving the global optimum without the need of background knowledge by the user. A previously reported peak model, a Gaussian with a polynomial standard deviation whose complexity can be modulated to enhance the fitting quality, was applied. However, the original formulation was modified to account baseline outside the peak region. Also, the optimal model complexity was auto-selected via error propagation theory. The method is able to process simultaneously several related chromatograms. The software was tested with both simulated and experimental chromatograms obtained with monolithic silica columns.
+ER  - 

@@ -1,0 +1,24 @@
+TY  - JOUR
+T1  - Automatic program for peak detection and deconvolution of multi-overlapped chromatographic signals: Part I: Peak detection
+AU  - Vivó-Truyols, G.
+AU  - Torres-Lapasió, J.R.
+AU  - van Nederkassel, A.M.
+AU  - Vander Heyden, Y.
+AU  - Massart, D.L.
+JO  - Journal of Chromatography A
+VL  - 1096
+IS  - 1
+SP  - 133
+EP  - 145
+PY  - 2005
+DA  - 2005/11/25/
+T2  - Chemical Separations and Chemometrics
+SN  - 0021-9673
+DO  - https://doi.org/10.1016/j.chroma.2005.03.092
+UR  - https://www.sciencedirect.com/science/article/pii/S0021967305006424
+KW  - Overlapped peaks
+KW  - Chromatographic one-way signals
+KW  - Peak detection
+KW  - Smoothing
+AB  - A series of two papers describing a procedure for automated peak deconvolution is presented. The goal is to develop a package of routines that can be used by non-experienced users. Part I (this paper) concerns peak detection, whereas Part II is dedicated to the deconvolution itself. In this first part, the most interesting features of the peak detection algorithms, which precede the deconvolution step, are outlined. High-order derivatives provide valuable information to assess the number of underlying compounds under a given peak cluster. A smoothing technique was found essential to compute properly the derivatives, since the noise is amplified when differences are calculated. The Savitsky–Golay smoother was applied in combination with the Durbin–Watson criterion to automate the window size selection. This strategy removed the noise without loosing valuable information. In some cases, it was found preferable to split the chromatogram in different elution regions, and apply the Durbin–Watson test and the Savitsky–Golay smoother to each region, separately. The derivatives allowed obtaining estimates of both peak parameters and the corresponding ranges for each eluting compound to be used in the deconvolution. An algorithm oriented to compare peaks from different chromatograms is also presented to perform deconvolution, using information from several related chromatograms.
+ER  - 
