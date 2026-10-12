@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025 Lablicate GmbH.
+ * Copyright (c) 2025, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,6 +11,8 @@
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.ui.internal.provider;
+
+import java.util.Collection;
 
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.jface.viewers.Viewer;
@@ -44,6 +46,10 @@ public class LibraryInformationFilter extends ViewerFilter {
 	public boolean isMatch(ILibraryInformation libraryInformation) {
 
 		if(contains(libraryInformation.getName())) {
+			return true;
+		}
+
+		if(contains(libraryInformation.getSynonyms())) {
 			return true;
 		}
 
@@ -86,5 +92,16 @@ public class LibraryInformationFilter extends ViewerFilter {
 
 		String content = caseSensitive ? field : field.toLowerCase();
 		return content.contains(searchText);
+	}
+
+	private boolean contains(Collection<String> fields) {
+
+		for(String field : fields) {
+			if(contains(field)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
