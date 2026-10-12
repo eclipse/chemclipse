@@ -53,6 +53,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
 public class WidgetItem {
@@ -82,7 +83,18 @@ public class WidgetItem {
 
 	public void restoreDefaults(Control control) {
 
-		if(control instanceof Text text) {
+		if(control instanceof Spinner spinner) {
+			Object defaultValue = inputValue.getDefaultValue();
+			if(defaultValue instanceof Number number) {
+				spinner.setSelection(number.intValue());
+			} else if(defaultValue != null) {
+				try {
+					spinner.setSelection(Integer.parseInt(defaultValue.toString().trim()));
+				} catch(NumberFormatException e) {
+					spinner.setSelection(0);
+				}
+			}
+		} else if(control instanceof Text text) {
 			text.setText((String)inputValue.getDefaultValue());
 		} else if(control instanceof Button button) {
 			button.setSelection(Boolean.valueOf((String)inputValue.getDefaultValue()));
@@ -204,6 +216,12 @@ public class WidgetItem {
 				return currentSelection;
 			}
 			/*
+			 * Spinner
+			 */
+			if(control instanceof Spinner spinner) {
+				return spinner.getSelection();
+			}
+			/*
 			 * Text
 			 */
 			if(control instanceof Text text) {
@@ -314,6 +332,9 @@ public class WidgetItem {
 				ComboViewer viewer = createGenericCombo(parent, inputValue.getComboSupplier());
 				return viewer.getControl();
 			} else if(rawType == int.class || rawType == Integer.class) {
+				if(inputValue.isUseSpinner()) {
+					return createSpinnerWidget(parent);
+				}
 				return createTextWidgetNormal(parent);
 			} else if(rawType == long.class || rawType == Long.class) {
 				return createTextWidgetNormal(parent);
@@ -566,6 +587,37 @@ public class WidgetItem {
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		return button;
+	}
+
+	private Control createSpinnerWidget(Composite parent) {
+
+		Spinner spinner = new Spinner(parent, SWT.BORDER);
+		/*
+		 * Widen the widget range so that typed out-of-range values are not
+		 * silently clamped. The MinMaxValidator attached from the annotation
+		 * will flag out-of-range values via the ControlDecoration, mirroring
+		 * the behavior of the plain text input.
+		 */
+		spinner.setMinimum(Integer.MIN_VALUE);
+		spinner.setMaximum(Integer.MAX_VALUE);
+		spinner.setIncrement(inputValue.getSpinnerStep());
+		spinner.setSelection(getValueAsInt());
+		spinner.setToolTipText(inputValue.getDescription());
+		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return spinner;
+	}
+
+	private int getValueAsInt() {
+
+		String value = getValueAsString();
+		if(value == null || value.isEmpty()) {
+			return 0;
+		}
+		try {
+			return Integer.parseInt(value.trim());
+		} catch(NumberFormatException e) {
+			return 0;
+		}
 	}
 
 	private ComboViewer createLabeledEnumComboViewerWidget(Composite parent, Enum<?>[] input) {

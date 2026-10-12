@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2025 Lablicate GmbH.
+ * Copyright (c) 2018, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -33,6 +33,8 @@ public @interface IntSettingsProperty {
 	int maxValue() default Integer.MAX_VALUE;
 
 	Validation validation() default Validation.NONE;
+
+	boolean useSpinner() default false;
 
 	public enum Validation {
 		ODD_NUMBER_INCLUDING_ZERO, ODD_NUMBER, EVEN_NUMBER, NONE;
