@@ -65,7 +65,7 @@ public class MassSpectrumFilterProcessSupplier implements IProcessTypeSupplier {
 		@SuppressWarnings("unchecked")
 		public MassSpectrumFilterProcessorSupplier(IMassSpectrumFilterSupplier supplier, IProcessTypeSupplier parent) {
 
-			super(supplier.getId(), supplier.getFilterName(), supplier.getDescription(), (Class<IMassSpectrumFilterSettings>)supplier.getSettingsClass(), parent, DataType.MSD);
+			super(supplier.getId(), supplier.getFilterName(), supplier.getDescription(), (Class<IMassSpectrumFilterSettings>)supplier.getSettingsClass(), parent, DataType.MALDI);
 			getLiteratureReferences().addAll(supplier.getLiteratureReferences());
 			IMassSpectrumFilterSettings massSpectrumFilterSettings = createSettings();
 			if(massSpectrumFilterSettings != null) {

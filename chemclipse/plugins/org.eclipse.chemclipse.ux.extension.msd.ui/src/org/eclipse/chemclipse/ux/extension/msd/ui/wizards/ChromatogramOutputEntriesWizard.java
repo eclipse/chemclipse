@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2025 Lablicate GmbH.
+ * Copyright (c) 2011, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -12,10 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.wizards;
 
-import org.eclipse.jface.wizard.Wizard;
-
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
+import org.eclipse.chemclipse.process.supplier.batchprocess.io.IBatchProcessOutputEntry;
+import org.eclipse.jface.wizard.Wizard;
 
 /**
  * @author Dr. Philip Wenig
@@ -24,9 +23,10 @@ import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
 public class ChromatogramOutputEntriesWizard extends Wizard {
 
 	private ChromatogramOutputEntriesWizardPage outputEntriesPage;
-	private IChromatogramOutputEntry outputEntry = null;
+	private IBatchProcessOutputEntry outputEntry = null;
 
 	public ChromatogramOutputEntriesWizard() {
+
 		super();
 		setNeedsProgressMonitor(true);
 	}
@@ -37,7 +37,7 @@ public class ChromatogramOutputEntriesWizard extends Wizard {
 	 * 
 	 * @return IChromatogramOutputEntry
 	 */
-	public IChromatogramOutputEntry getChromatogramOutputEntry() {
+	public IBatchProcessOutputEntry getChromatogramOutputEntry() {
 
 		return outputEntry;
 	}

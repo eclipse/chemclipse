@@ -14,9 +14,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui
 
 import java.io.File;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.io.JobWriter;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.process.supplier.batchprocess.core.BatchProcessJob;
+import org.eclipse.chemclipse.process.supplier.batchprocess.io.JobWriter;
+import org.eclipse.chemclipse.processing.methods.ProcessMethod;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractWizard;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -69,7 +70,8 @@ public class WizardProcessor extends AbstractWizard {
 
 	private BatchProcessJob createBatchProcessJob() {
 
-		BatchProcessJob batchProcessJob = new BatchProcessJob();
+		ProcessMethod processMethod = new ProcessMethod(ProcessMethod.CHROMATOGRAPHY);
+		BatchProcessJob batchProcessJob = new BatchProcessJob(processMethod);
 		batchProcessJob.setDataType(pageDataType.getDataType());
 
 		return batchProcessJob;
