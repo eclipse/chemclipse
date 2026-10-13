@@ -757,7 +757,7 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 
 		if(scanMSD != null) {
 			try {
-				DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), scanMSD, fileName);
+				DatabaseFileSupport.saveMassSpectrum(getShell(), scanMSD, fileName);
 			} catch(NoConverterAvailableException e1) {
 				logger.warn(e1);
 			}

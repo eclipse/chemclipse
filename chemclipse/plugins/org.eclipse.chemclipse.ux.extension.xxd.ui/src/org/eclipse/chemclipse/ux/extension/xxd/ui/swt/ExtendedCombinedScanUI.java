@@ -42,7 +42,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -424,7 +423,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 
 				try {
 					if(combinedScan instanceof ICombinedMassSpectrum combinedMassSpectrum) {
-						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), combinedMassSpectrum, "CombinedScan");
+						DatabaseFileSupport.saveMassSpectrum(button.getShell(), combinedMassSpectrum, "CombinedScan");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);

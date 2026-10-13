@@ -35,7 +35,6 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -258,7 +257,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 			public void widgetSelected(SelectionEvent e) {
 
 				if(sequence != null) {
-					DirectoryDialog directoryDialog = new DirectoryDialog(DisplayUtils.getShell(button));
+					DirectoryDialog directoryDialog = new DirectoryDialog(button.getShell());
 					directoryDialog.setText("Sequence Folder");
 					directoryDialog.setMessage("Select the sequence root folder.");
 					IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();

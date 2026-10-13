@@ -148,7 +148,7 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 	@Persist
 	public boolean save() {
 
-		Shell shell = DisplayUtils.getShell();
+		Shell shell = extendedMassSpectrumUI.getShell();
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		IRunnableWithProgress runnable = monitor -> {
 

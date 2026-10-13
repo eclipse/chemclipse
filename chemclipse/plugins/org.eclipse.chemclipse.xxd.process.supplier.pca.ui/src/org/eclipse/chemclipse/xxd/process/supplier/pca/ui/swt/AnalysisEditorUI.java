@@ -663,7 +663,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void execute(ExtendedTableViewer extendedTableViewer) {
 
-				Shell shell = DisplayUtils.getShell();
+				Shell shell = extendedTableViewer.getControl().getShell();
 				Display display = DisplayUtils.getDisplay();
 				InputDialog inputDialog = new InputDialog(shell, "Apply Selected Samples to Classification columm", "Enter Character to apply:", "", null);
 				if(inputDialog.open() == Window.OK) {

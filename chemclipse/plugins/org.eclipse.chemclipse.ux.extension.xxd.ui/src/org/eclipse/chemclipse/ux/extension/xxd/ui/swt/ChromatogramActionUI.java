@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramEditorActionExtension;
@@ -183,7 +182,7 @@ public class ChromatogramActionUI extends Composite implements IExtendedPartUI
 							e.display.asyncExec(() -> chromatogramSelection.update(false));
 						}
 					} else {
-						MessageDialog.openInformation(DisplayUtils.getShell(), "Action", "Please select a execute method first via the button popup menu (right mouse click).");
+						MessageDialog.openInformation(button.getShell(), "Action", "Please select a execute method first via the button popup menu (right mouse click).");
 					}
 				}
 			}

@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.DataMapSupportUI;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
@@ -247,7 +246,7 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 				 * Show a message if certain keys couldn't be removed.
 				 */
 				if(!keysNotRemoved.isEmpty()) {
-					MessageDialog.openWarning(DisplayUtils.getShell(), HEADER_ENTRY, "The following keys can't be removed: " + keysNotRemoved);
+					MessageDialog.openWarning(shell, HEADER_ENTRY, "The following keys can't be removed: " + keysNotRemoved);
 				}
 
 				updateInput();

@@ -213,7 +213,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				DirectoryDialog directoryDialog = new DirectoryDialog(DisplayUtils.getShell(button));
+				DirectoryDialog directoryDialog = new DirectoryDialog(button.getShell());
 				directoryDialog.setText("Sequence Folder");
 				directoryDialog.setMessage("Select the sequence root folder.");
 				directoryDialog.setFilterPath(preferenceStore.getString(PreferenceSupplier.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER));
@@ -374,7 +374,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 	private void setSequenceListContent(File file) {
 
 		if(file.isDirectory()) {
-			ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
+			ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
 			SequenceFileRunnable runnable = new SequenceFileRunnable(file);
 			try {
 				dialog.run(true, true, runnable);
