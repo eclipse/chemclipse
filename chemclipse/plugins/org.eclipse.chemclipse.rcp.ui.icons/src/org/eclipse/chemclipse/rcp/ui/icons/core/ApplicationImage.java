@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -34,6 +35,8 @@ import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.Bundle;
 
 public class ApplicationImage implements IApplicationImage {
+
+	private static final Logger logger = Logger.getLogger(ApplicationImage.class);
 
 	private static final String PATH_SEPARATOR = "/";
 	private static final String PLATFORM_PREFIX = "platform:/plugin/";
@@ -130,7 +133,7 @@ public class ApplicationImage implements IApplicationImage {
 				}
 			}
 		} catch(IOException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		return images;
