@@ -68,6 +68,9 @@ public class ApplicationImage implements IApplicationImage {
 				int width = Integer.valueOf(sizes[0]);
 				int height = Integer.valueOf(sizes[1]);
 				URL fileLocation = FileLocator.find(bundle, new Path(path), null);
+				if(fileLocation == null) {
+					return null;
+				}
 				try {
 					ImageData data = rasterizer.rasterizeSVG(fileLocation.openStream(), width, height);
 					image = new Image(Display.getCurrent(), data);
