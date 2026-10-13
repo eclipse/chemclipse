@@ -53,7 +53,6 @@ import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 
 public class FileIdentifier {
@@ -216,11 +215,8 @@ public class FileIdentifier {
 		int total = unknownList.size();
 
 		for(T item : unknownList) {
-			/*
-			 * Abort condition.
-			 */
 			if(subMonitor.isCanceled()) {
-				throw new OperationCanceledException();
+				return matched;
 			}
 			/*
 			 * Do the match.
