@@ -223,7 +223,7 @@ public class FileIdentifier {
 			 */
 			subMonitor.subTask("Reference " + count + "/" + total + " (matches found: " + matched + ")");
 			IScanMSD unknown = extractor.apply(item);
-			Map<IComparisonResult, IScanMSD> matches = new FindMatchingSpectras(unknown, references, fileIdentifierSettings, massSpectrumComparator).invoke();
+			Map<IComparisonResult, IScanMSD> matches = new FindMatchingSpectras(unknown, references, fileIdentifierSettings, massSpectrumComparator, subMonitor).invoke();
 			if(matches.size() > 0) {
 				matched++;
 				List<IComparisonResult> resultList = new ArrayList<>(matches.keySet());
@@ -266,15 +266,17 @@ public class FileIdentifier {
 		private final List<? extends IScanMSD> references;
 		private final IFileIdentifierSettings settings;
 		private final IMassSpectrumComparator spectrumComparator;
+		private final transient IProgressMonitor monitor;
 
 		private MatchConstraints matchConstraints;
 
-		public FindMatchingSpectras(IScanMSD unknown, List<? extends IScanMSD> references, IFileIdentifierSettings settings, IMassSpectrumComparator spectrumComparator) {
+		public FindMatchingSpectras(IScanMSD unknown, List<? extends IScanMSD> references, IFileIdentifierSettings settings, IMassSpectrumComparator spectrumComparator, IProgressMonitor monitor) {
 
 			this.unknown = unknown;
 			this.references = references;
 			this.settings = settings;
 			this.spectrumComparator = spectrumComparator;
+			this.monitor = monitor;
 			/*
 			 * Adjusted to max 1.0 = 100%
 			 */
@@ -289,9 +291,9 @@ public class FileIdentifier {
 			int size = references.size();
 			if(size > THRESHOLD) {
 				int half = size / 2;
-				FindMatchingSpectras forkPart = new FindMatchingSpectras(unknown, references.subList(0, half), settings, spectrumComparator);
+				FindMatchingSpectras forkPart = new FindMatchingSpectras(unknown, references.subList(0, half), settings, spectrumComparator, monitor);
 				forkPart.fork();
-				FindMatchingSpectras directPart = new FindMatchingSpectras(unknown, references.subList(half, size), settings, spectrumComparator);
+				FindMatchingSpectras directPart = new FindMatchingSpectras(unknown, references.subList(half, size), settings, spectrumComparator, monitor);
 				Map<IComparisonResult, IScanMSD> map = directPart.compute();
 				map.putAll(forkPart.join());
 				return map;
@@ -307,6 +309,9 @@ public class FileIdentifier {
 			float minReverseMatchFactor = settings.getMinReverseMatchFactor();
 
 			for(IScanMSD reference : references) {
+				if(monitor.isCanceled()) {
+					return results;
+				}
 				IProcessingInfo<IComparisonResult> infoCompare = spectrumComparator.compare(unknown, reference, matchConstraints);
 				IComparisonResult comparisonResult = infoCompare.getProcessingResult();
 				boolean useTarget = DeltaCalculationSupport.useTarget(unknown, reference, settings);
