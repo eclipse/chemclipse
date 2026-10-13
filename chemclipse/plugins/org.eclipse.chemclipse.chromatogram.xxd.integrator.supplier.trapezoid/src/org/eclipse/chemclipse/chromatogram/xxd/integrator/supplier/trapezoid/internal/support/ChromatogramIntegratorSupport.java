@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramInt
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor.BackgroundIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor.ChromatogramIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
@@ -37,7 +36,7 @@ public class ChromatogramIntegratorSupport {
 
 	private static TranslationService translationService = TranslationSupport.getTranslationService();
 
-	public static final String INTEGRATOR_DESCRIPTION = translationService.translate("%Trapezoid", Activator.getContributorURI());
+	public static final String INTEGRATOR_DESCRIPTION = translationService.translate("%Trapezoid", TranslationSupport.getContributorURI(ChromatogramIntegratorSupport.class));
 
 	public IChromatogramIntegrationResults calculateChromatogramIntegrationResults(IChromatogramSelection chromatogramSelection, ChromatogramIntegrationSettings chromatogramIntegrationSettings) {
 

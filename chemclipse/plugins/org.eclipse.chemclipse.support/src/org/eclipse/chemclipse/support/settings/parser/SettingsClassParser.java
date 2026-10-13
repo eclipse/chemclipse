@@ -39,7 +39,6 @@ import org.eclipse.chemclipse.support.settings.validation.MinMaxValidator;
 import org.eclipse.chemclipse.support.settings.validation.RegularExpressionValidator;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.e4.core.services.translation.TranslationService;
-import org.osgi.framework.FrameworkUtil;
 
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -93,7 +92,7 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 					if(annotatedField != null) {
 
 						InputValue inputValue = new InputValue();
-						String contributorURI = "platform:/plugin/" + FrameworkUtil.getBundle(clazz).getSymbolicName();
+						String contributorURI = TranslationSupport.getContributorURI(clazz);
 						inputValue.setContributorURI(contributorURI);
 						inputValue.setRawType(annotatedField.getRawType());
 						inputValue.setName((property.getName() == null) ? "" : property.getName());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2025 Lablicate GmbH.
+ * Copyright (c) 2023, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.support.Activator;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.translation.TranslationProviderFactory;
 import org.eclipse.e4.core.services.translation.TranslationService;
+import org.osgi.framework.FrameworkUtil;
 
 public class TranslationSupport {
 
@@ -33,5 +34,10 @@ public class TranslationSupport {
 			context.set(TranslationService.class, service);
 		}
 		return service;
+	}
+
+	public static String getContributorURI(Class<?> clazz) {
+
+		return "platform:/plugin/" + FrameworkUtil.getBundle(clazz).getSymbolicName();
 	}
 }
