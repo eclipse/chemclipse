@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2025 Lablicate GmbH.
+ * Copyright (c) 2019, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -26,10 +26,10 @@ public enum ProcessorCategory implements ILabel {
 	/**
 	 * Indicates that this item is located in the Filtering domain, that means it adds/removes/changes a specific item
 	 */
-	FILTER(TranslationSupport.getTranslationService().translate("%ProcessorCategory.FILTER", Activator.getContributorURI())), //$NON-NLS-1$
-	DETECTOR(TranslationSupport.getTranslationService().translate("%ProcessorCategory.DETECTOR", Activator.getContributorURI())), //$NON-NLS-1$
-	EXPORT(TranslationSupport.getTranslationService().translate("%ProcessorCategory.DETECTOR", Activator.getContributorURI())), //$NON-NLS-1$
-	CALCULATOR(TranslationSupport.getTranslationService().translate("%ProcessorCategory.CALCULATOR", Activator.getContributorURI())); //$NON-NLS-1$
+	FILTER(TranslationSupport.getTranslationService().translate("%ProcessorCategory.FILTER", TranslationSupport.getContributorURI(ProcessorCategory.class))), //$NON-NLS-1$
+	DETECTOR(TranslationSupport.getTranslationService().translate("%ProcessorCategory.DETECTOR", TranslationSupport.getContributorURI(ProcessorCategory.class))), //$NON-NLS-1$
+	EXPORT(TranslationSupport.getTranslationService().translate("%ProcessorCategory.DETECTOR", TranslationSupport.getContributorURI(ProcessorCategory.class))), //$NON-NLS-1$
+	CALCULATOR(TranslationSupport.getTranslationService().translate("%ProcessorCategory.CALCULATOR", TranslationSupport.getContributorURI(ProcessorCategory.class))); //$NON-NLS-1$
 
 	private String label;
 

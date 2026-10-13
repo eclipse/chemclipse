@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2025 Lablicate GmbH.
+ * Copyright (c) 2011, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNo
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor.PeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -42,7 +41,7 @@ public class PeakIntegratorSupport {
 		/*
 		 * Get the peak integration results.
 		 */
-		monitor.subTask(translationService.translate("%IntegratePeaks", Activator.getContributorURI()));
+		monitor.subTask(translationService.translate("%IntegratePeaks", TranslationSupport.getContributorURI(PeakIntegratorSupport.class)));
 		IPeakIntegrationResults peakIntegrationResults;
 		if(peaks != null) {
 			PeakIntegrator peakIntegrator = new PeakIntegrator();
@@ -75,7 +74,7 @@ public class PeakIntegratorSupport {
 
 	public IPeakIntegrationResult calculatePeakIntegrationResult(IPeak peak, PeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
-		monitor.subTask(translationService.translate("%IntegratePeak", Activator.getContributorURI()));
+		monitor.subTask(translationService.translate("%IntegratePeak", TranslationSupport.getContributorURI(PeakIntegratorSupport.class)));
 		PeakIntegrator peakIntegrator = new PeakIntegrator();
 		return peakIntegrator.integrate(peak, peakIntegrationSettings);
 	}

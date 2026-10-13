@@ -23,7 +23,6 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.firstderivative.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
@@ -93,8 +92,8 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 				}
 				chromatogram.setDirty(true);
 				TranslationService translationService = TranslationSupport.getTranslationService();
-				String peakDetectedMessage = MessageFormat.format(translationService.translate("%PeaksDetected", Activator.getContributorURI()), String.valueOf(peaks.size()));
-				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, translationService.translate("%FirstDerivative", Activator.getContributorURI()), peakDetectedMessage));
+				String peakDetectedMessage = MessageFormat.format(translationService.translate("%PeaksDetected", TranslationSupport.getContributorURI(PeakDetectorMSD.class)), String.valueOf(peaks.size()));
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, translationService.translate("%FirstDerivative", TranslationSupport.getContributorURI(PeakDetectorMSD.class)), peakDetectedMessage));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsMSD.class);
 			}
@@ -242,7 +241,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 				 */
 				if(isValidPeak(peak, peakDetectorSettings)) {
 					TranslationService translationService = TranslationSupport.getTranslationService();
-					peak.setDetectorDescription(translationService.translate("%FirstDerivative", Activator.getContributorURI()));
+					peak.setDetectorDescription(translationService.translate("%FirstDerivative", TranslationSupport.getContributorURI(PeakDetectorMSD.class)));
 					peaks.add(peak);
 				}
 			} catch(Exception e) {

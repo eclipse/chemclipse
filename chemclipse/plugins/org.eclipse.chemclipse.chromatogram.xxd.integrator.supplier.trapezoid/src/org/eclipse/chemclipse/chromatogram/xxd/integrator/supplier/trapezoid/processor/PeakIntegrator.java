@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegratio
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
@@ -71,7 +70,7 @@ public class PeakIntegrator extends AbstractIntegrator {
 	 * Otherwise, the peak areas are too high.
 	 */
 	private static TranslationService translationService = TranslationSupport.getTranslationService();
-	private static final String INTEGRATOR_DESCRIPTION = translationService.translate("%Trapezoid", Activator.getContributorURI());
+	private static final String INTEGRATOR_DESCRIPTION = translationService.translate("%Trapezoid", TranslationSupport.getContributorURI(PeakIntegrator.class));
 
 	public IPeakIntegrationResult integrate(IPeak peak, PeakIntegrationSettings peakIntegrationSettings) throws ValueMustNotBeNullException {
 
@@ -108,7 +107,7 @@ public class PeakIntegrator extends AbstractIntegrator {
 		 * Iterate through all peaks and decide if they should be reported.
 		 */
 		for(IPeak peak : peaks) {
-			monitor.subTask(MessageFormat.format(translationService.translate("%IntegratePeakNumber", Activator.getContributorURI()), peakNumber++));
+			monitor.subTask(MessageFormat.format(translationService.translate("%IntegratePeakNumber", TranslationSupport.getContributorURI(PeakIntegrator.class)), peakNumber++));
 			try {
 				peakIntegrationResult = integrate(peak, peakIntegrationSettings);
 			} catch(ValueMustNotBeNullException e) {
@@ -492,7 +491,7 @@ public class PeakIntegrator extends AbstractIntegrator {
 		 * Reset some values. A summed peak has no S/N ration, respectively
 		 * purity ...
 		 */
-		peakIntegrationSumResult.setPeakType(translationService.translate("%SummedIntegratedArea", Activator.getContributorURI()));
+		peakIntegrationSumResult.setPeakType(translationService.translate("%SummedIntegratedArea", TranslationSupport.getContributorURI(PeakIntegrator.class)));
 		peakIntegrationSumResult.setPurity(0.0f);
 		peakIntegrationSumResult.setSN(0.0f);
 		peakIntegrationSumResult.setTailing(0.0f);
