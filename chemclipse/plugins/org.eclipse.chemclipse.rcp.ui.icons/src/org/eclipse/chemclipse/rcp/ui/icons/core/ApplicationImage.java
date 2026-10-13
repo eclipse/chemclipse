@@ -99,9 +99,7 @@ public class ApplicationImage implements IApplicationImage {
 	public InputStream getImageAsInputStream(String fileName, String size) throws IOException {
 
 		URL url = FileLocator.find(bundle, new Path(getPath(fileName, size)), null);
-		InputStream inputStream = url.openConnection().getInputStream();
-
-		return inputStream;
+		return url.openConnection().getInputStream();
 	}
 
 	@Override
