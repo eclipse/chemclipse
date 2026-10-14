@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.logging.slf4j;
 
+import org.eclipse.chemclipse.logging.core.LogLevel;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.slf4j.Marker;
 import org.slf4j.event.Level;
@@ -20,7 +21,8 @@ import org.slf4j.helpers.MessageFormatter;
 
 /**
  * Forwards SLF4J log events to the ChemClipse logger, which decides
- * by -Declipse.log.level which levels are logged.
+ * by -Declipse.log.level which levels are logged. The name of the
+ * SLF4J logger, usually a class, is shown as the plug-in.
  */
 public class ChemClipseLoggerAdapter extends LegacyAbstractLogger {
 
@@ -71,13 +73,13 @@ public class ChemClipseLoggerAdapter extends LegacyAbstractLogger {
 	@Override
 	protected void handleNormalizedLoggingCall(Level level, Marker marker, String messagePattern, Object[] arguments, Throwable throwable) {
 
-		String message = name + ": " + MessageFormatter.basicArrayFormat(messagePattern, arguments);
-		switch(level) {
-			case ERROR -> logger.error(message, throwable);
-			case WARN -> logger.warn(message, throwable);
-			case INFO -> logger.info(message, throwable);
-			case DEBUG -> logger.debug(message, throwable);
-			case TRACE -> logger.trace(message, throwable);
-		}
+		LogLevel logLevel = switch(level) {
+			case ERROR -> LogLevel.ERROR;
+			case WARN -> LogLevel.WARN;
+			case INFO -> LogLevel.INFO;
+			case DEBUG -> LogLevel.DEBUG;
+			case TRACE -> LogLevel.TRACE;
+		};
+		logger.log(logLevel, name, MessageFormatter.basicArrayFormat(messagePattern, arguments), throwable);
 	}
 }
