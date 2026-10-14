@@ -6,8 +6,6 @@
     <elements xsi:type="commands:Command" xmi:id="_Sf8MsNyxEeKWl9EwadOLIw" elementId="org.eclipse.chemclipse.ux.extension.ui.command.saveAs" commandName="Save As..."/>
     <elements xsi:type="commands:Command" xmi:id="_OfJloFxGEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.command.previousChromatogram" commandName="Previous Chromatogram"/>
     <elements xsi:type="commands:Command" xmi:id="_x1FVQFxCEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.command.nextChromatogram" commandName="Next Chromatogram"/>
-    <elements xsi:type="commands:Command" xmi:id="_F7hAgENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.command.infoSpectra" commandName="Info Spectra"/>
-    <elements xsi:type="commands:Command" xmi:id="_JZm4AENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.command.infoControls" commandName="Info Controls"/>
     <elements xsi:type="commands:Command" xmi:id="_pJXCsLiYEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.ux.extension.ui.command.closeall" commandName="Close All"/>
     <elements xsi:type="commands:Command" xmi:id="_4lggQLibEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.ux.extension.ui.command.close" commandName="Close"/>
   </fragments>
@@ -16,8 +14,6 @@
     <elements xsi:type="commands:Handler" xmi:id="_W2TwANyxEeKWl9EwadOLIw" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.file.saveAs" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.SaveAsHandler" command="_Sf8MsNyxEeKWl9EwadOLIw"/>
     <elements xsi:type="commands:Handler" xmi:id="_UNlvIFxGEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.previousChromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.PreviousChromatogramHandler" command="_OfJloFxGEeOAeeYL1z-yzQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_5k-ZIFxCEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.nextChromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.NextChromatogramHandler" command="_x1FVQFxCEeOAeeYL1z-yzQ"/>
-    <elements xsi:type="commands:Handler" xmi:id="_MpzdcENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.infoSpectra" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.InfoSpectraHandler" command="_F7hAgENOEeaHxO-Ahlk0cA"/>
-    <elements xsi:type="commands:Handler" xmi:id="_NPzGcENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.infoControls" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.InfoControlsHandler" command="_JZm4AENOEeaHxO-Ahlk0cA"/>
     <elements xsi:type="commands:Handler" xmi:id="_t_ZkkLiYEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.closeall" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.CloseAllHandler" command="_pJXCsLiYEeu05KeOzWexnw"/>
     <elements xsi:type="commands:Handler" xmi:id="_6Y7lsLibEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.ux.extension.ui.handler.close" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.handlers.CloseHandler" command="_4lggQLibEeu05KeOzWexnw"/>
   </fragments>
