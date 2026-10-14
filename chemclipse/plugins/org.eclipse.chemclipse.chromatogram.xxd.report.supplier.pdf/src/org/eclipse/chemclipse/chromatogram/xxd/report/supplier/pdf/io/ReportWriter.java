@@ -55,12 +55,8 @@ public class ReportWriter {
 
 	public void generate(File file, boolean append, IChromatogram chromatogram, ReportSettings reportSettings, IProgressMonitor monitor) throws IOException {
 
-		if(file.exists() && append) {
-			try (PDDocument document = Loader.loadPDF(file)) {
-				addPages(document, file, chromatogram, reportSettings, monitor);
-			}
-		}
-		try (PDDocument document = new PDDocument()) {
+		boolean existingReport = file.isFile() && file.length() > 0;
+		try (PDDocument document = append && existingReport ? Loader.loadPDF(file) : new PDDocument()) {
 			addPages(document, file, chromatogram, reportSettings, monitor);
 		}
 	}
