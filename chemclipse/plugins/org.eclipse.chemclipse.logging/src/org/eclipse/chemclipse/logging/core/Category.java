@@ -115,6 +115,24 @@ public class Category {
 		}
 	}
 
+	/**
+	 * Logs on behalf of a component that is no plug-in, e.g. a library class.
+	 * The log then shows the given name instead of the plug-in of this logger.
+	 */
+	public void log(LogLevel level, String plugin, final String message, Throwable t) {
+
+		if(LEVEL.includes(level)) {
+			int severity = switch(level) {
+				case ERROR -> IStatus.ERROR;
+				case WARN -> IStatus.WARNING;
+				case INFO -> IStatus.INFO;
+				case DEBUG, TRACE -> IStatus.OK;
+			};
+			String pluginId = plugin == null || plugin.isEmpty() ? logger.getBundle().getSymbolicName() : plugin;
+			logger.log(new Status(severity, pluginId, message, t));
+		}
+	}
+
 	public boolean isErrorEnabled() {
 
 		return LEVEL.includes(LogLevel.ERROR);

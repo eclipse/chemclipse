@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 public class LoggingBridge_ITest {
 
-	private static final String MESSAGE = LoggingBridge_ITest.class.getName() + ": Bridge test 42";
+	private static final String MESSAGE = "Bridge test 42";
 	private static final LogLevel LEVEL = LogLevel.of(System.getProperty(LogLevel.D_ECLIPSE_LOG_LEVEL));
 
 	@Test
@@ -76,6 +76,6 @@ public class LoggingBridge_ITest {
 
 	private static boolean contains(List<IStatus> statuses, int severity) {
 
-		return statuses.stream().anyMatch(status -> status.getSeverity() == severity && status.getMessage().equals(MESSAGE));
+		return statuses.stream().anyMatch(status -> status.getSeverity() == severity && status.getPlugin().equals(LoggingBridge_ITest.class.getName()) && status.getMessage().equals(MESSAGE));
 	}
 }
