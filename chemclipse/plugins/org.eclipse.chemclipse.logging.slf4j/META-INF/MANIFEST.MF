@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.logging.slf4j
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: org.eclipse.chemclipse.logging.slf4j
+Bundle-Version: 0.9.0.qualifier
+Bundle-Vendor: %Bundle-Vendor
+Fragment-Host: slf4j.api;bundle-version="[2.0.0,3.0.0)"
+Require-Bundle: org.eclipse.chemclipse.logging;bundle-version="0.9.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-25
+Provide-Capability: osgi.serviceloader;osgi.serviceloader="org.slf4j.spi.SLF4JServiceProvider"
