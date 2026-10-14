@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.pdf.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -55,12 +56,8 @@ public class ReportWriter {
 
 	public void generate(File file, boolean append, IChromatogram chromatogram, ReportSettings reportSettings, IProgressMonitor monitor) throws IOException {
 
-		if(file.exists() && append) {
-			try (PDDocument document = Loader.loadPDF(file)) {
-				addPages(document, file, chromatogram, reportSettings, monitor);
-			}
-		}
-		try (PDDocument document = new PDDocument()) {
+		boolean existingReport = file.isFile() && file.length() > 0;
+		try (PDDocument document = append && existingReport ? Loader.loadPDF(Files.readAllBytes(file.toPath())) : new PDDocument()) {
 			addPages(document, file, chromatogram, reportSettings, monitor);
 		}
 	}
