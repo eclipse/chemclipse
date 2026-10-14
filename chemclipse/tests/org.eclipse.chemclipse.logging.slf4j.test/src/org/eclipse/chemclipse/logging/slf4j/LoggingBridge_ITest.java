@@ -17,14 +17,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
+import org.eclipse.chemclipse.logging.core.LogLevel;
 import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LoggingBridge_ITest {
+
+	private static final String MESSAGE = LoggingBridge_ITest.class.getName() + ": Bridge test 42";
+	private static final LogLevel LEVEL = LogLevel.of(System.getProperty(LogLevel.D_ECLIPSE_LOG_LEVEL));
 
 	@Test
 	public void testProvider() {
@@ -33,16 +39,43 @@ public class LoggingBridge_ITest {
 	}
 
 	@Test
-	public void testLog() {
+	public void testWarn() {
+
+		List<IStatus> statuses = log(logger -> logger.warn("Bridge test {}", 42));
+		assertTrue(contains(statuses, IStatus.WARNING));
+	}
+
+	@Test
+	public void testDebug() {
+
+		List<IStatus> statuses = log(logger -> logger.debug("Bridge test {}", 42));
+		assertEquals(LEVEL.includes(LogLevel.DEBUG), LoggerFactory.getLogger(LoggingBridge_ITest.class).isDebugEnabled());
+		assertEquals(LEVEL.includes(LogLevel.DEBUG), contains(statuses, IStatus.OK));
+	}
+
+	@Test
+	public void testTrace() {
+
+		List<IStatus> statuses = log(logger -> logger.trace("Bridge test {}", 42));
+		assertEquals(LEVEL.includes(LogLevel.TRACE), LoggerFactory.getLogger(LoggingBridge_ITest.class).isTraceEnabled());
+		assertEquals(LEVEL.includes(LogLevel.TRACE), contains(statuses, IStatus.OK));
+	}
+
+	private static List<IStatus> log(Consumer<Logger> consumer) {
 
 		List<IStatus> statuses = new CopyOnWriteArrayList<>();
 		ILogListener listener = (status, _) -> statuses.add(status);
 		Platform.addLogListener(listener);
 		try {
-			LoggerFactory.getLogger(LoggingBridge_ITest.class).warn("Bridge test {}", 42);
+			consumer.accept(LoggerFactory.getLogger(LoggingBridge_ITest.class));
 		} finally {
 			Platform.removeLogListener(listener);
 		}
-		assertTrue(statuses.stream().anyMatch(status -> status.getSeverity() == IStatus.WARNING && status.getMessage().equals(LoggingBridge_ITest.class.getName() + ": Bridge test 42")));
+		return statuses;
+	}
+
+	private static boolean contains(List<IStatus> statuses, int severity) {
+
+		return statuses.stream().anyMatch(status -> status.getSeverity() == severity && status.getMessage().equals(MESSAGE));
 	}
 }

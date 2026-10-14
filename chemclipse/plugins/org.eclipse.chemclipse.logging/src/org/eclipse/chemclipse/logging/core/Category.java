@@ -13,8 +13,12 @@
 package org.eclipse.chemclipse.logging.core;
 
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 public class Category {
+
+	private static final LogLevel LEVEL = LogLevel.of(System.getProperty(LogLevel.D_ECLIPSE_LOG_LEVEL));
 
 	private final ILog logger;
 
@@ -77,5 +81,62 @@ public class Category {
 		if(t != null) {
 			logger.warn(t.getMessage(), t);
 		}
+	}
+
+	/**
+	 * Eclipse logs debug messages as IStatus.OK.
+	 * They are only logged with -Declipse.log.level=DEBUG.
+	 */
+	public void debug(final String message) {
+
+		debug(message, null);
+	}
+
+	public void debug(final String message, Throwable t) {
+
+		if(isDebugEnabled()) {
+			logger.log(new Status(IStatus.OK, logger.getBundle().getSymbolicName(), message, t));
+		}
+	}
+
+	/**
+	 * Eclipse has no trace severity, so trace messages are logged as IStatus.OK as well.
+	 * They are only logged with -Declipse.log.level=TRACE.
+	 */
+	public void trace(final String message) {
+
+		trace(message, null);
+	}
+
+	public void trace(final String message, Throwable t) {
+
+		if(isTraceEnabled()) {
+			logger.log(new Status(IStatus.OK, logger.getBundle().getSymbolicName(), message, t));
+		}
+	}
+
+	public boolean isErrorEnabled() {
+
+		return LEVEL.includes(LogLevel.ERROR);
+	}
+
+	public boolean isWarnEnabled() {
+
+		return LEVEL.includes(LogLevel.WARN);
+	}
+
+	public boolean isInfoEnabled() {
+
+		return LEVEL.includes(LogLevel.INFO);
+	}
+
+	public boolean isDebugEnabled() {
+
+		return LEVEL.includes(LogLevel.DEBUG);
+	}
+
+	public boolean isTraceEnabled() {
+
+		return LEVEL.includes(LogLevel.TRACE);
 	}
 }
