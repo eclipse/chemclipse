@@ -19,8 +19,8 @@ import org.slf4j.helpers.LegacyAbstractLogger;
 import org.slf4j.helpers.MessageFormatter;
 
 /**
- * Forwards SLF4J log events to the ChemClipse logger. The Eclipse log has no
- * debug or trace level, so these are dropped to keep the error log readable.
+ * Forwards SLF4J log events to the ChemClipse logger, which decides
+ * by -Declipse.log.level which levels are logged.
  */
 public class ChemClipseLoggerAdapter extends LegacyAbstractLogger {
 
@@ -35,31 +35,31 @@ public class ChemClipseLoggerAdapter extends LegacyAbstractLogger {
 	@Override
 	public boolean isTraceEnabled() {
 
-		return false;
+		return logger.isTraceEnabled();
 	}
 
 	@Override
 	public boolean isDebugEnabled() {
 
-		return false;
+		return logger.isDebugEnabled();
 	}
 
 	@Override
 	public boolean isInfoEnabled() {
 
-		return true;
+		return logger.isInfoEnabled();
 	}
 
 	@Override
 	public boolean isWarnEnabled() {
 
-		return true;
+		return logger.isWarnEnabled();
 	}
 
 	@Override
 	public boolean isErrorEnabled() {
 
-		return true;
+		return logger.isErrorEnabled();
 	}
 
 	@Override
@@ -75,7 +75,9 @@ public class ChemClipseLoggerAdapter extends LegacyAbstractLogger {
 		switch(level) {
 			case ERROR -> logger.error(message, throwable);
 			case WARN -> logger.warn(message, throwable);
-			case INFO, DEBUG, TRACE -> logger.info(message, throwable);
+			case INFO -> logger.info(message, throwable);
+			case DEBUG -> logger.debug(message, throwable);
+			case TRACE -> logger.trace(message, throwable);
 		}
 	}
 }
