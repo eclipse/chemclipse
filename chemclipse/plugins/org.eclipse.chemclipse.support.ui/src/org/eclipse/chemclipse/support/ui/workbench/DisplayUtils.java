@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2025 Lablicate GmbH.
+ * Copyright (c) 2018, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  * Philip Wenig - initial API and implementation
  * Christoph Läubrich - add methods for ensure execution in even thread and to ensure background work
@@ -33,7 +33,6 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
-import org.eclipse.ui.PlatformUI;
 
 public class DisplayUtils {
 
@@ -71,20 +70,9 @@ public class DisplayUtils {
 		}
 	};
 
-	public static Display getDisplay(Widget widget) {
-
-		Display display = null;
-		if(widget instanceof Control control) {
-			display = control.getDisplay();
-		} else {
-			display = getDisplay();
-		}
-		return display;
-	}
-
 	/**
 	 * Invokes the given action in the user interface thread either directly if the current thread is the user-interface-thread or synchronous if the current thread is an application-thread and returns the result to the caller. If the action throws an exception, it is wrapped in
-	 * 
+	 *
 	 * @param action
 	 * @return
 	 * @throws InterruptedException
@@ -127,7 +115,7 @@ public class DisplayUtils {
 
 	/**
 	 * Executes the given action in a background thread showing a busy-indicator until it is done
-	 * 
+	 *
 	 * @param action
 	 * @return
 	 * @throws InterruptedException
@@ -164,32 +152,15 @@ public class DisplayUtils {
 		});
 	}
 
+	/**
+	 * Avoid this method or even static {@link Display#getDefault()} lookups. Use
+	 * {@code widget.getDisplay()} or {@code shell.getDisplay()},
+	 * or in e4 inject {@link org.eclipse.e4.ui.di.UISynchronize}
+	 * or the active {@code Shell}.
+	 */
 	public static Display getDisplay() {
 
-		Display display = null;
-
-		display = Display.getDefault();
-		if(display == null) {
-			logger.info("Default Display is null.");
-			display = Display.getCurrent();
-			if(display == null) {
-				logger.info("Current Display is null.");
-				try {
-					display = PlatformUI.getWorkbench().getDisplay();
-					if(display == null) {
-						logger.info("PlatformUI Display is null.");
-					}
-				} catch(Exception e) {
-					logger.warn(e);
-				}
-			}
-		}
-
-		if(display == null) {
-			logger.warn("Display is null!");
-		}
-
-		return display;
+		return Display.getDefault();
 	}
 
 	public static Shell getShell(Widget widget) {
