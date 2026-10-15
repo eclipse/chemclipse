@@ -8,7 +8,7 @@
             description="Picks local maxima above a threshold of baseline, noise and a sigmoid sensitivity curve"
             id="org.eclipse.chemclipse.msd.peakpicker.sigmoid"
             filter="org.eclipse.chemclipse.msd.peakpicker.sigmoid.SigmoidThresholdPeakPickerFilter"
-            filterName="Sigmoid Threshold Peak Picker">
+            filterName="Sigmoid Threshold">
       </MassSpectrumFilterSupplier>
    </extension>
 </plugin>
