@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.SequenceImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
@@ -39,6 +38,8 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
@@ -84,7 +85,7 @@ public class SequenceEditor {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);
 			part.setVisible(false);
-			DisplayUtils.getDisplay().asyncExec(() -> partStack.getChildren().remove(part));
+			Display.getDefault().asyncExec(() -> partStack.getChildren().remove(part));
 		}
 	}
 
@@ -99,10 +100,10 @@ public class SequenceEditor {
 	private void initialize(Composite parent) {
 
 		extendedSequenceListUI = new ExtendedSequenceListUI(parent, SWT.NONE);
-		extendedSequenceListUI.update(loadSequence());
+		extendedSequenceListUI.update(loadSequence(parent.getShell()));
 	}
 
-	private synchronized ISequence<? extends ISequenceRecord> loadSequence() {
+	private synchronized ISequence<? extends ISequenceRecord> loadSequence(Shell shell) {
 
 		ISequence<? extends ISequenceRecord> sequence = null;
 		try {
@@ -113,7 +114,7 @@ public class SequenceEditor {
 				 */
 				File file = new File((String)map.get(EditorSupport.MAP_FILE));
 				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
-				sequence = loadSequence(file, batch);
+				sequence = loadSequence(file, shell, batch);
 			} else {
 				/*
 				 * Already available.
@@ -130,10 +131,10 @@ public class SequenceEditor {
 		return sequence;
 	}
 
-	private synchronized ISequence<? extends ISequenceRecord> loadSequence(File file, boolean batch) throws ChromatogramIsNullException {
+	private synchronized ISequence<? extends ISequenceRecord> loadSequence(File file, Shell shell, boolean batch) throws ChromatogramIsNullException {
 
 		ISequence<? extends ISequenceRecord> sequence = null;
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		SequenceImportRunnable runnable = new SequenceImportRunnable(file);
 		try {
 			/*

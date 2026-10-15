@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.support.ui.workbench.PerspectiveSupport;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.IWelcomeTileDefinition;
@@ -38,6 +37,7 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 
 public class DemoWelcomeTile implements IWelcomeTileDefinition {
 
@@ -67,7 +67,7 @@ public class DemoWelcomeTile implements IWelcomeTileDefinition {
 				/*
 				 * Open the chromatogram Editor.
 				 */
-				DisplayUtils.getDisplay().syncExec(() -> {
+				Display.getDefault().syncExec(() -> {
 
 					try {
 						if(chromatogramFile != null && chromatogramFile.exists()) {

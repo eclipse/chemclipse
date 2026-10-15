@@ -35,7 +35,6 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -828,7 +827,8 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 
 	private void setCursor(int cursorId) {
 
-		chartControl.get().getBaseChart().setCursor(DisplayUtils.getDisplay().getSystemCursor(cursorId));
+		BaseChart baseChart = chartControl.get().getBaseChart();
+		baseChart.setCursor(baseChart.getDisplay().getSystemCursor(cursorId));
 	}
 
 	private void setCursorDefault() {

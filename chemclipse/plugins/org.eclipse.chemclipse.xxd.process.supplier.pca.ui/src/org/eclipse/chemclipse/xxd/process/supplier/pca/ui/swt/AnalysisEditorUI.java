@@ -34,7 +34,6 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -664,7 +663,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			public void execute(ExtendedTableViewer extendedTableViewer) {
 
 				Shell shell = extendedTableViewer.getControl().getShell();
-				Display display = DisplayUtils.getDisplay();
+				Display display = shell.getDisplay();
 				InputDialog inputDialog = new InputDialog(shell, "Apply Selected Samples to Classification columm", "Enter Character to apply:", "", null);
 				if(inputDialog.open() == Window.OK) {
 					String userInput = inputDialog.getValue();

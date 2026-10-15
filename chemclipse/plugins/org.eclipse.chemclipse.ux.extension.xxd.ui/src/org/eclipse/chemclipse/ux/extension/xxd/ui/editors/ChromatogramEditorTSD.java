@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.tsd.model.core.IChromatogramTSD;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
@@ -38,6 +37,7 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import jakarta.annotation.PreDestroy;
@@ -87,7 +87,7 @@ public class ChromatogramEditorTSD implements IChemClipseEditor {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);
 			part.setVisible(false);
-			DisplayUtils.getDisplay().asyncExec(() -> partStack.getChildren().remove(part));
+			Display.getDefault().asyncExec(() -> partStack.getChildren().remove(part));
 		}
 	}
 

@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2025 Lablicate GmbH.
+ * Copyright (c) 2018, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorSupportFactory;
@@ -41,7 +40,7 @@ public class ChromatogramTypeSupportUI extends ChromatogramTypeSupport {
 
 	public void openFiles(List<File> files) throws Exception {
 
-		Display display = DisplayUtils.getDisplay();
+		Display display = Display.getDefault();
 
 		if(display != null) {
 			for(File file : files) {

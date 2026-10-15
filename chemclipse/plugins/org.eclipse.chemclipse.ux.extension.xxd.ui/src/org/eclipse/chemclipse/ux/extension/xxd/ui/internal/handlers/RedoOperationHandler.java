@@ -17,7 +17,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
 import org.eclipse.chemclipse.rcp.app.undo.UndoContextFactory;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.l10n.ExtensionMessages;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -50,7 +49,7 @@ public class RedoOperationHandler {
 
 			Cursor cursor = shell.getCursor();
 			try {
-				Cursor cursorNew = DisplayUtils.getDisplay().getSystemCursor(SWT.CURSOR_WAIT);
+				Cursor cursorNew = shell.getDisplay().getSystemCursor(SWT.CURSOR_WAIT);
 				shell.setCursor(cursorNew);
 				/*
 				 * Undo the operation.

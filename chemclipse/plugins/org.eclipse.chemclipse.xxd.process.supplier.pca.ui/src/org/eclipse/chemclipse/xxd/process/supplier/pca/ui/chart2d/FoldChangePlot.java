@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2025 Lablicate GmbH.
+ * Copyright (c) 2025, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  * Lorenz Gerber- initial API and implementation
  *******************************************************************************/
@@ -19,7 +19,6 @@ import java.util.Locale;
 
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.IVariable;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.custom.IRangeSupport;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IEvaluation;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IResult;
@@ -28,6 +27,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.support.SeriesConverte
 import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt.FoldChangeLimits;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.IAxis;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.IAxisSet;
@@ -78,7 +78,7 @@ public class FoldChangePlot extends ScatterChart implements IRangeSupport {
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.setTitle(title);
 		chartSettings.setTitleVisible(true);
-		chartSettings.setTitleColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		chartSettings.setTitleColor(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
 		chartSettings.setBackground(null);
 		chartSettings.setBackgroundChart(null);
 		chartSettings.setBackgroundPlotArea(null);
@@ -95,9 +95,9 @@ public class FoldChangePlot extends ScatterChart implements IRangeSupport {
 		rangeRestriction.setExtend(0.25d);
 
 		chartSettings.setShowAxisZeroMarker(true);
-		chartSettings.setColorAxisZeroMarker(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		chartSettings.setColorAxisZeroMarker(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
 		chartSettings.setShowSeriesLabelMarker(true);
-		chartSettings.setColorSeriesLabelMarker(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		chartSettings.setColorSeriesLabelMarker(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
 		chartSettings.setUseSeriesLabelDescription(true);
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableCompress(false);
@@ -127,12 +127,12 @@ public class FoldChangePlot extends ScatterChart implements IRangeSupport {
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("log2(fold change)");
 		primaryAxisSettingsX.setDecimalFormat(decimalFormat);
-		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		primaryAxisSettingsX.setColor(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
 
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("-log10(pValue)");
 		primaryAxisSettingsY.setDecimalFormat(decimalFormat);
-		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		primaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
 	}
 
 	private void addSecondaryAxisSet(IChartSettings chartSettings) {
@@ -141,14 +141,14 @@ public class FoldChangePlot extends ScatterChart implements IRangeSupport {
 		secondaryAxisSettingsX.setTitle("");
 		secondaryAxisSettingsX.setPosition(Position.Secondary);
 		secondaryAxisSettingsX.setDecimalFormat(decimalFormat);
-		secondaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		secondaryAxisSettingsX.setColor(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
 		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 
 		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("-log10(pValue)", new PassThroughConverter());
 		secondaryAxisSettingsY.setTitle("");
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(decimalFormat);
-		secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		secondaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
 		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 	}
 

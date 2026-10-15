@@ -6,7 +6,7 @@
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -21,12 +21,12 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramEditorDialog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import jakarta.inject.Named;
@@ -44,7 +44,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 			if(shell != null) {
 				subtractChromatogram(shell, chromatogramSelection);
 			} else {
-				DisplayUtils.getDisplay().syncExec(() -> {
+				Display.getDefault().syncExec(() -> {
 
 					/*
 					 * Create a new shell and set
