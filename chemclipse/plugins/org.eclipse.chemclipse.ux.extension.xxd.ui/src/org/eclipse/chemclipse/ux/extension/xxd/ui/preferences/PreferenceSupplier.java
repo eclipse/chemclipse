@@ -186,7 +186,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 	 * Overlay
 	 */
 	public static final String P_OVERLAY_CHART_COMPRESSION_TYPE = "overlayChartCompressionType";
-	public static final String DEF_OVERLAY_CHART_COMPRESSION_TYPE = ICompressionSupport.COMPRESSION_MEDIUM;
+	public static final String DEF_OVERLAY_CHART_COMPRESSION_TYPE = ICompressionSupport.COMPRESSION_NONE;
 	public static final String P_SHOW_REFERENCED_CHROMATOGRAMS = "showReferencedChromatograms";
 	public static final boolean DEF_SHOW_REFERENCED_CHROMATOGRAMS = true;
 	public static final String P_OVERLAY_ADD_TYPE_INFO = "overlayAddTypeInfo";
@@ -504,7 +504,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 	 * Chromatogram
 	 */
 	public static final String P_CHROMATOGRAM_CHART_COMPRESSION_TYPE = "chromatogramChartCompressionType";
-	public static final String DEF_CHROMATOGRAM_CHART_COMPRESSION_TYPE = ICompressionSupport.COMPRESSION_MEDIUM;
+	public static final String DEF_CHROMATOGRAM_CHART_COMPRESSION_TYPE = ICompressionSupport.COMPRESSION_NONE;
 	public static final String P_COLOR_CHROMATOGRAM = "colorChromatogram";
 	public static final String DEF_COLOR_CHROMATOGRAM = "255,0,0";
 	public static final String P_COLOR_CHROMATOGRAM_INACTIVE = "colorChromatogramInactive";
@@ -800,7 +800,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 	 * Baseline
 	 */
 	public static final String P_BASELINE_CHART_COMPRESSION_TYPE = "baselineChartCompressionType";
-	public static final String DEF_BASELINE_CHART_COMPRESSION_TYPE = ICompressionSupport.COMPRESSION_MEDIUM;
+	public static final String DEF_BASELINE_CHART_COMPRESSION_TYPE = ICompressionSupport.COMPRESSION_NONE;
 	public static final String P_COLOR_SCHEME_DISPLAY_BASELINE = "colorSchemeDisplayBaseline";
 	public static final String DEF_COLOR_SCHEME_DISPLAY_BASELINE = Colors.COLOR_SCHEME_RED;
 	/*
