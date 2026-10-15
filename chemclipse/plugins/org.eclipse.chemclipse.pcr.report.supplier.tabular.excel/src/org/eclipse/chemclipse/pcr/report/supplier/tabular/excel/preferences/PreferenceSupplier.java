@@ -16,11 +16,11 @@ package org.eclipse.chemclipse.pcr.report.supplier.tabular.excel.preferences;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.chemclipse.pcr.report.supplier.tabular.Activator;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.model.ChannelMappings;
 import org.eclipse.chemclipse.pcr.report.supplier.tabular.preferences.StringUtils;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.osgi.framework.FrameworkUtil;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier {
 
@@ -45,7 +45,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 	@Override
 	public String getPreferenceNode() {
 
-		return Activator.getContext().getBundle().getSymbolicName();
+		return FrameworkUtil.getBundle(ChannelMappings.class).getSymbolicName();
 	}
 
 	@Override

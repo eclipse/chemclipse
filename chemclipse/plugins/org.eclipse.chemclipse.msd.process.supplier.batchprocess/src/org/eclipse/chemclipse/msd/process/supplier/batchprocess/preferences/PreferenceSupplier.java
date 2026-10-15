@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.process.supplier.batchprocess.preferences;
 
-import org.eclipse.chemclipse.msd.process.supplier.batchprocess.Activator;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.osgi.framework.FrameworkUtil;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier {
 
@@ -28,7 +28,7 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 	@Override
 	public String getPreferenceNode() {
 
-		return Activator.getContext().getBundle().getSymbolicName();
+		return FrameworkUtil.getBundle(PreferenceSupplier.class).getSymbolicName();
 	}
 
 	@Override
