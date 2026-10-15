@@ -30,6 +30,7 @@ public interface ICategories {
 	String PEAK_FILTER = ProcessingMessages.peakFilter;
 	String PEAK_IDENTIFIER = ProcessingMessages.peakIdentifier;
 	String PEAK_INTEGRATOR = ProcessingMessages.peakIntegrator;
+	String PEAK_PICKER = ProcessingMessages.peakPicker;
 	String PEAK_QUANTIFIER = ProcessingMessages.peakQuantifier;
 	String PROCESS = ProcessingMessages.process;
 	String SCAN_FILTER = ProcessingMessages.scanFilter;

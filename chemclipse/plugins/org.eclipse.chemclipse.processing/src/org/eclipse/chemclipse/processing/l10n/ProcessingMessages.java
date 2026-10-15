@@ -33,6 +33,7 @@ public class ProcessingMessages extends NLS {
 	public static String peakFilter;
 	public static String peakIdentifier;
 	public static String peakIntegrator;
+	public static String peakPicker;
 	public static String peakQuantifier;
 	public static String process;
 	public static String scanFilter;

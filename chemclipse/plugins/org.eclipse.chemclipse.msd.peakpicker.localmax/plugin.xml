@@ -8,7 +8,7 @@
             description="Sliding-window local maximum detector"
             id="org.eclipse.chemclipse.msd.peakpicker.localmax"
             filter="org.eclipse.chemclipse.msd.peakpicker.localmax.LocalMaximaPeakPickerFilter"
-            filterName="Local Maxima Peak Picker">
+            filterName="Local Maxima">
       </MassSpectrumFilterSupplier>
    </extension>
 </plugin>
