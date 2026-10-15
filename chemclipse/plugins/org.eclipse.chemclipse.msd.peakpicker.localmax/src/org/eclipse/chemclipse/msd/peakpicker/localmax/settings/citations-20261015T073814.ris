@@ -1,0 +1,21 @@
+TY  - JOUR
+AU  - Gibb, Sebastian
+AU  - Strimmer, Korbinian
+T1  - MALDIquant: a versatile R package for the analysis of mass spectrometry data
+PY  - 2012
+Y1  - 2012/09/01
+DO  - 10.1093/bioinformatics/bts447
+JO  - Bioinformatics
+JA  - Bioinformatics
+VL  - 28
+IS  - 17
+SP  - 2270
+EP  - 2271
+SN  - 1367-4803
+AB  - Summary:  MALDIquant is an R package providing a complete and modular analysis pipeline for quantitative analysis of mass spectrometry data. MALDIquant is specifically designed with application in clinical diagnostics in mind and implements sophisticated routines for importing raw data, preprocessing, non-linear peak alignment and calibration. It also handles technical replicates as well as spectra with unequal resolution.
+Y2  - 10/15/2026
+UR  - https://doi.org/10.1093/bioinformatics/bts447
+ER  - 
+
+
+
