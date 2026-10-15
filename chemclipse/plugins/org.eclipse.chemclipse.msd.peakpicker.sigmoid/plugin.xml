@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.massSpectrumFilterSupplier">
+      <MassSpectrumFilterSupplier
+      		config="org.eclipse.chemclipse.msd.peakpicker.sigmoid.settings.SigmoidThresholdPeakPickerFilterSettings"
+            description="Picks local maxima above a threshold of baseline, noise and a sigmoid sensitivity curve"
+            id="org.eclipse.chemclipse.msd.peakpicker.sigmoid"
+            filter="org.eclipse.chemclipse.msd.peakpicker.sigmoid.SigmoidThresholdPeakPickerFilter"
+            filterName="Sigmoid Threshold Peak Picker">
+      </MassSpectrumFilterSupplier>
+   </extension>
+</plugin>

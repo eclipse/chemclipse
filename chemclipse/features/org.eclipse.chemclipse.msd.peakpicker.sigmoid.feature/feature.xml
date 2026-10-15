@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.chemclipse.msd.peakpicker.sigmoid.feature"
+      label="Sigmoid Threshold Peak Picker"
+      version="0.9.0.qualifier"
+      provider-name="ChemClipse"
+      plugin="org.eclipse.chemclipse.feature.branding"
+      license-feature="org.eclipse.license"
+      license-feature-version="2.0.2.qualifier">
+
+   <description url="https://www.chemclipse.net">
+      This plugin picks peaks of profile mass spectra above an m/z dependent sigmoid threshold.
+   </description>
+
+   <copyright url="https://www.chemclipse.net">
+      Copyright (c) 2026 Lablicate GmbH.
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <requires>
+      <import feature="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.feature" version="0.9.0.qualifier"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.chemclipse.msd.peakpicker.sigmoid"
+         version="0.0.0"/>
+
+</feature>
