@@ -238,6 +238,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 		if(!category.equals(ICategories.MASS_SPECTRUM_FILTER) //
 				&& !category.equals(ICategories.BASELINE_DETECTOR) //
 				&& !category.equals(ICategories.PEAK_PICKER) //
+				&& !category.equals(ICategories.NOISE_ESTIMATOR) //
 				&& !category.equals(ICategories.MASS_SPECTRUM_IDENTIFIER) //
 				&& !category.equals(ICategories.MASS_SPECTRUM_REPORTS)) {
 			return false;

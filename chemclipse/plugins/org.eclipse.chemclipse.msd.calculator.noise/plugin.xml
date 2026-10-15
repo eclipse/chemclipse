@@ -8,14 +8,14 @@
             description="Median Absolute Deviation (MAD) noise estimation"
             id="org.eclipse.chemclipse.msd.calculator.noise.mad"
             filter="org.eclipse.chemclipse.msd.calculator.noise.mad.MedianAbsoluteDeviationFilter"
-            filterName="Median Noise">
+            filterName="Median">
       </MassSpectrumFilterSupplier>
       <MassSpectrumFilterSupplier
       		config="org.eclipse.chemclipse.msd.calculator.noise.loess.LoessInterpolatorFilterSettings"
             description="LOESS noise estimation"
             id="org.eclipse.chemclipse.msd.calculator.noise.loess"
             filter="org.eclipse.chemclipse.msd.calculator.noise.loess.LoessInterpolatorFilter"
-            filterName="LOESS Noise">
+            filterName="LOESS">
       </MassSpectrumFilterSupplier>
    </extension>
 </plugin>

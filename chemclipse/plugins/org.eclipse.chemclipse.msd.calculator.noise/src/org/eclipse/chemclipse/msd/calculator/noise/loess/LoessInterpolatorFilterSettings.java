@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.AbstractMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
+import org.eclipse.chemclipse.processing.core.ICategories;
 
 public class LoessInterpolatorFilterSettings extends AbstractMassSpectrumFilterSettings {
 
@@ -24,5 +25,11 @@ public class LoessInterpolatorFilterSettings extends AbstractMassSpectrumFilterS
 	public List<MassSpectrumType> appliesToMassSpectrumTypes() {
 
 		return Arrays.asList(MassSpectrumType.PROFILE);
+	}
+
+	@Override
+	public String getCategory() {
+
+		return ICategories.NOISE_ESTIMATOR;
 	}
 }
