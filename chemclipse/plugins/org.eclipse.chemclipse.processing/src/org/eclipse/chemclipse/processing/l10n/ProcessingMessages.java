@@ -28,6 +28,7 @@ public class ProcessingMessages extends NLS {
 	public static String chromatogramIntegrator;
 	public static String chromatogramReports;
 	public static String combinedChromatogramPeakIntegrator;
+	public static String noiseEstimator;
 	public static String peakDetector;
 	public static String peakExport;
 	public static String peakFilter;

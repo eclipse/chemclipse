@@ -25,6 +25,7 @@ public interface ICategories {
 	String CHROMATOGRAM_INTEGRATOR = ProcessingMessages.chromatogramIntegrator;
 	String CHROMATOGRAM_REPORTS = ProcessingMessages.chromatogramReports;
 	String COMBINED_CHROMATOGRAM_PEAK_INTEGRATOR = ProcessingMessages.combinedChromatogramPeakIntegrator;
+	String NOISE_ESTIMATOR = ProcessingMessages.noiseEstimator;
 	String PEAK_DETECTOR = ProcessingMessages.peakDetector;
 	String PEAK_EXPORT = ProcessingMessages.peakExport;
 	String PEAK_FILTER = ProcessingMessages.peakFilter;
