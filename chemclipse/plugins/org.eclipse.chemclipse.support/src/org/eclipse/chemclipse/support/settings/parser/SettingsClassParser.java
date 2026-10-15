@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 import org.eclipse.chemclipse.support.l10n.TranslationSupport;
 import org.eclipse.chemclipse.support.settings.ByteSettingsProperty;
 import org.eclipse.chemclipse.support.settings.ComboSettingsProperty;
+import org.eclipse.chemclipse.support.settings.DependencySettingsProperty;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
@@ -95,6 +96,7 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 						String contributorURI = TranslationSupport.getContributorURI(clazz);
 						inputValue.setContributorURI(contributorURI);
 						inputValue.setRawType(annotatedField.getRawType());
+						inputValue.setFieldName(annotatedField.getName());
 						inputValue.setName((property.getName() == null) ? "" : property.getName());
 						PropertyMetadata propertyMetadata = property.getMetadata();
 						inputValue.setDescription((propertyMetadata.getDescription() == null) ? "" : propertyMetadata.getDescription());
@@ -167,6 +169,12 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 									inputValue.addValidator(validator);
 								} catch(Exception e) {
 									throw new RuntimeException("The validator can't be instantiated.", e);
+								}
+							} else if(annotation instanceof DependencySettingsProperty dependencySettingsProperty) {
+								try {
+									inputValue.setSettingsDependency(dependencySettingsProperty.dependency().getDeclaredConstructor().newInstance());
+								} catch(Exception e) {
+									throw new RuntimeException("The settings dependency can't be instantiated.", e);
 								}
 							} else {
 								/*

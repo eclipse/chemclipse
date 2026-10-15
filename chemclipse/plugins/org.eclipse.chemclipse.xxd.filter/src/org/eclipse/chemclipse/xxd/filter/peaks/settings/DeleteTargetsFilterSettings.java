@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2025 Lablicate GmbH.
+ * Copyright (c) 2020, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -12,8 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.filter.peaks.settings;
 
-import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
+import org.eclipse.chemclipse.support.settings.DependencySettingsProperty;
 import org.eclipse.chemclipse.xxd.filter.support.TargetsDeleteOption;
+import org.eclipse.chemclipse.xxd.filter.support.TargetsDeleteOptionDependency;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -21,10 +22,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class DeleteTargetsFilterSettings {
 
 	@JsonProperty(value = "Target Delete Option", defaultValue = "ALL_TARGETS")
+	@DependencySettingsProperty(dependency = TargetsDeleteOptionDependency.class)
 	private TargetsDeleteOption targetDeleteOption = TargetsDeleteOption.ALL_TARGETS;
 	@JsonProperty(value = "Property", defaultValue = "")
 	@JsonPropertyDescription(value = "Define a property if the appropriate option is selected.")
-	@StringSettingsProperty(allowEmpty = true, isMultiLine = false)
 	private String property = "";
 
 	public TargetsDeleteOption getTargetDeleteOption() {
