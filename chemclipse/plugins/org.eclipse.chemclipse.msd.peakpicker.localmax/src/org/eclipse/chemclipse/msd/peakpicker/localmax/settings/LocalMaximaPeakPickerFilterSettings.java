@@ -12,11 +12,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.peakpicker.localmax.settings;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.AbstractMassSpectrumFilterSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
+import org.eclipse.chemclipse.support.literature.LiteratureReference;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -56,5 +59,25 @@ public class LocalMaximaPeakPickerFilterSettings extends AbstractMassSpectrumFil
 	public List<MassSpectrumType> appliesToMassSpectrumTypes() {
 
 		return Arrays.asList(MassSpectrumType.PROFILE);
+	}
+
+	@Override
+	public List<LiteratureReference> getLiteratureReferences() {
+
+		List<LiteratureReference> literatureReferences = new ArrayList<>();
+		literatureReferences.add(createLiteratureReference("citations-20261015T073814.ris", "https://doi.org/10.1093/bioinformatics/bts447"));
+		return literatureReferences;
+	}
+
+	private static LiteratureReference createLiteratureReference(String file, String url) {
+
+		String content;
+		try {
+			content = new String(LocalMaximaPeakPickerFilterSettings.class.getResourceAsStream(file).readAllBytes());
+		} catch(Exception e) {
+			content = url;
+			Logger.getLogger(LocalMaximaPeakPickerFilterSettings.class).warn(e);
+		}
+		return new LiteratureReference(content);
 	}
 }
