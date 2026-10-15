@@ -15,13 +15,16 @@
 package org.eclipse.chemclipse.ux.extension.ui.methods;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
 import org.eclipse.chemclipse.support.settings.ComboSettingsProperty.ComboSupplier;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
+import org.eclipse.chemclipse.support.settings.SettingsPropertyState;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.support.settings.validation.InputValidator;
+import org.eclipse.chemclipse.support.settings.validation.RegularExpressionValidator;
 import org.eclipse.chemclipse.support.text.ILabel;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.AdapterLabelProvider;
@@ -29,6 +32,7 @@ import org.eclipse.chemclipse.support.ui.services.IAnnotationWidgetService;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.l10n.ExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -64,6 +68,8 @@ public class WidgetItem {
 	private ControlDecoration controlDecoration;
 	private Control control;
 	private Object currentSelection;
+	private Label label;
+	private SettingsPropertyState settingsPropertyState;
 
 	public WidgetItem(InputValue inputValue, Object currentSelection) {
 
@@ -168,6 +174,98 @@ public class WidgetItem {
 		return control;
 	}
 
+	public Label getLabel() {
+
+		return label;
+	}
+
+	public void setLabel(Label label) {
+
+		this.label = label;
+	}
+
+	/**
+	 * Returns true if the widget is not disabled by a settings dependency.
+	 * 
+	 * @return boolean
+	 */
+	public boolean isDependencyEnabled() {
+
+		return settingsPropertyState == null || settingsPropertyState.isEnabled();
+	}
+
+	/**
+	 * Returns the current value of the widget. Enum values are returned as enum constants.
+	 * 
+	 * @return Object
+	 */
+	public Object getDependencyValue() {
+
+		Object value;
+		try {
+			value = getValue();
+		} catch(RuntimeException e) {
+			value = null;
+		}
+
+		Class<?> rawType = inputValue.getRawType();
+		if(value != null && rawType != null && rawType.isEnum() && !rawType.isInstance(value)) {
+			for(Object constant : rawType.getEnumConstants()) {
+				if(((Enum<?>)constant).name().equals(value.toString())) {
+					return constant;
+				}
+			}
+			return getEnumFrom(value.toString(), rawType);
+		}
+		return value;
+	}
+
+	/**
+	 * Overrides the static settings annotations of the field on demand.
+	 * 
+	 * @param settingsPropertyState
+	 */
+	public void applySettingsPropertyState(SettingsPropertyState settingsPropertyState) {
+
+		this.settingsPropertyState = settingsPropertyState;
+		if(control == null || control.isDisposed()) {
+			return;
+		}
+
+		boolean enabled = isDependencyEnabled();
+		String description = getDescription();
+		setEnabledAndToolTip(control, enabled, description);
+		if(label != null && !label.isDisposed()) {
+			label.setEnabled(enabled);
+			if(inputValue.getTooltip() == null || inputValue.getTooltip().isEmpty()) {
+				label.setToolTipText(description);
+			}
+		}
+
+		if(!enabled && controlDecoration != null) {
+			controlDecoration.hide();
+		}
+	}
+
+	private void setEnabledAndToolTip(Control control, boolean enabled, String description) {
+
+		control.setEnabled(enabled);
+		control.setToolTipText(description);
+		if(control instanceof Composite composite) {
+			for(Control child : composite.getChildren()) {
+				setEnabledAndToolTip(child, enabled, description);
+			}
+		}
+	}
+
+	private String getDescription() {
+
+		if(settingsPropertyState != null && settingsPropertyState.getDescription() != null) {
+			return settingsPropertyState.getDescription();
+		}
+		return inputValue.getDescription();
+	}
+
 	public void initializeControl(Composite parent) {
 
 		control = createControl(parent);
@@ -190,6 +288,10 @@ public class WidgetItem {
 
 	private IStatus getStatus() {
 
+		if(!isDependencyEnabled()) {
+			return ValidationStatus.ok();
+		}
+
 		Object currentValue;
 		try {
 			currentValue = getValue();
@@ -197,12 +299,39 @@ public class WidgetItem {
 			currentValue = null;
 		}
 		for(IValidator<Object> validator : inputValue.getValidators()) {
+			if(settingsPropertyState != null && validator instanceof RegularExpressionValidator) {
+				/*
+				 * Replaced by the settings dependency.
+				 */
+				continue;
+			}
 			IStatus validate = validator.validate(currentValue);
 			if(!validate.isOK()) {
 				return validate;
 			}
 		}
+		if(settingsPropertyState != null && currentValue instanceof String stringValue) {
+			IStatus validate = validate(settingsPropertyState, stringValue);
+			if(!validate.isOK()) {
+				return validate;
+			}
+		}
 		return inputValidator.validate(currentValue);
+	}
+
+	private IStatus validate(SettingsPropertyState settingsPropertyState, String value) {
+
+		String name = inputValue.getName();
+		if(value.isEmpty()) {
+			return settingsPropertyState.isAllowEmpty() ? ValidationStatus.ok() : ValidationStatus.error("A value is required for " + name);
+		}
+
+		String regExp = settingsPropertyState.getRegExp();
+		if(!regExp.isEmpty()) {
+			RegularExpressionValidator validator = new RegularExpressionValidator(name, Pattern.compile(regExp), settingsPropertyState.getRegExpDescription(), settingsPropertyState.isMultiLine(), settingsPropertyState.isAllowEmpty());
+			return validator.validate(value);
+		}
+		return ValidationStatus.ok();
 	}
 
 	public Object getValue() {

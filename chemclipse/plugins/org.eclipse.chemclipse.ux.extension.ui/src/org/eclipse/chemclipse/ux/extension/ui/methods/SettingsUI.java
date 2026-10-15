@@ -25,6 +25,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.support.l10n.TranslationSupport;
+import org.eclipse.chemclipse.support.settings.ISettingsDependency;
+import org.eclipse.chemclipse.support.settings.SettingsPropertyState;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.ux.extension.ui.l10n.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.ui.methods.SettingsUIProvider.SettingsUIControl;
@@ -120,6 +122,7 @@ public class SettingsUI<T> extends Composite {
 
 			if(!widgetItems.isEmpty()) {
 				createOptionWidgets(container);
+				initializeSettingsDependencies();
 			} else {
 				createNoOptionsMessage(container);
 			}
@@ -135,6 +138,53 @@ public class SettingsUI<T> extends Composite {
 			for(Label label : labels) {
 				label.setEnabled(enabled);
 			}
+
+			if(enabled) {
+				updateSettingsDependencies();
+			}
+		}
+
+		private void initializeSettingsDependencies() {
+
+			for(WidgetItem widgetItem : widgetItems) {
+				if(widgetItem.getInputValue().getSettingsDependency() != null) {
+					Control control = widgetItem.getControl();
+					if(control != null) {
+						control.addListener(SWT.Selection, _ -> updateSettingsDependencies());
+						control.addListener(SWT.Modify, _ -> updateSettingsDependencies());
+					}
+				}
+			}
+			updateSettingsDependencies();
+		}
+
+		private void updateSettingsDependencies() {
+
+			for(WidgetItem widgetItem : widgetItems) {
+				ISettingsDependency settingsDependency = widgetItem.getInputValue().getSettingsDependency();
+				if(settingsDependency != null) {
+					Map<String, SettingsPropertyState> states = settingsDependency.getFieldStates(widgetItem.getDependencyValue());
+					if(states != null) {
+						for(Entry<String, SettingsPropertyState> entry : states.entrySet()) {
+							WidgetItem dependentItem = getWidgetItem(entry.getKey());
+							if(dependentItem != null) {
+								dependentItem.applySettingsPropertyState(entry.getValue());
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private WidgetItem getWidgetItem(String name) {
+
+			for(WidgetItem widgetItem : widgetItems) {
+				InputValue inputValue = widgetItem.getInputValue();
+				if(inputValue.getFieldName().equals(name) || inputValue.getName().equals(name)) {
+					return widgetItem;
+				}
+			}
+			return null;
 		}
 
 		private void createOptionWidgets(Composite parent) {
@@ -149,6 +199,7 @@ public class SettingsUI<T> extends Composite {
 				data.horizontalIndent = 5;
 				label.setLayoutData(data);
 				labels.add(label);
+				widgetItem.setLabel(label);
 				widgetItem.initializeControl(parent);
 			}
 		}
@@ -210,6 +261,7 @@ public class SettingsUI<T> extends Composite {
 			for(WidgetItem widgetItem : widgetItems) {
 				widgetItem.restoreDefaults();
 			}
+			updateSettingsDependencies();
 		}
 
 		@Override

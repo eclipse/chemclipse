@@ -20,11 +20,13 @@ import java.util.List;
 
 import org.eclipse.chemclipse.support.settings.ComboSettingsProperty.ComboSupplier;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
+import org.eclipse.chemclipse.support.settings.ISettingsDependency;
 import org.eclipse.core.databinding.validation.IValidator;
 
 public class InputValue {
 
 	private Class<?> rawType = null;
+	private String fieldName = "";
 	private String name = "";
 	private String description = "";
 	private Object defaultValue;
@@ -43,6 +45,7 @@ public class InputValue {
 	private int spinnerMinValue = Integer.MIN_VALUE;
 	private int spinnerMaxValue = Integer.MAX_VALUE;
 	private int spinnerStep = 1;
+	private ISettingsDependency settingsDependency;
 
 	public boolean hasRegexConstraint() {
 
@@ -57,6 +60,16 @@ public class InputValue {
 	public void setRawType(Class<?> rawType) {
 
 		this.rawType = rawType;
+	}
+
+	public String getFieldName() {
+
+		return fieldName;
+	}
+
+	public void setFieldName(String fieldName) {
+
+		this.fieldName = fieldName;
 	}
 
 	public String getName() {
@@ -230,5 +243,15 @@ public class InputValue {
 	public void setSpinnerStep(int spinnerStep) {
 
 		this.spinnerStep = spinnerStep;
+	}
+
+	public ISettingsDependency getSettingsDependency() {
+
+		return settingsDependency;
+	}
+
+	public void setSettingsDependency(ISettingsDependency settingsDependency) {
+
+		this.settingsDependency = settingsDependency;
 	}
 }
