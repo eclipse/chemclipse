@@ -12,11 +12,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.converter.supplier.xy.preferences;
 
-import org.eclipse.chemclipse.csd.converter.supplier.xy.Activator;
 import org.eclipse.chemclipse.csd.converter.supplier.xy.io.DelimiterFormat;
 import org.eclipse.chemclipse.csd.converter.supplier.xy.io.RetentionTimeFormat;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.osgi.framework.FrameworkUtil;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier {
 
@@ -34,13 +34,13 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 
 	public static boolean isAvailable() {
 
-		return Activator.getContext() != null;
+		return FrameworkUtil.getBundle(PreferenceSupplier.class) != null;
 	}
 
 	@Override
 	public String getPreferenceNode() {
 
-		return Activator.getContext().getBundle().getSymbolicName();
+		return FrameworkUtil.getBundle(PreferenceSupplier.class).getSymbolicName();
 	}
 
 	@Override

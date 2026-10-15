@@ -15,11 +15,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.Activator;
 import org.eclipse.chemclipse.support.model.SegmentWidth;
 import org.eclipse.chemclipse.support.preferences.AbstractPreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.osgi.framework.BundleContext;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 public class PreferenceSupplier extends AbstractPreferenceSupplier {
 
@@ -39,9 +39,9 @@ public class PreferenceSupplier extends AbstractPreferenceSupplier {
 	@Override
 	public String getPreferenceNode() {
 
-		BundleContext context = Activator.getContext();
-		if(context != null) {
-			return context.getBundle().getSymbolicName();
+		Bundle bundle = FrameworkUtil.getBundle(PreferenceSupplier.class);
+		if(bundle != null) {
+			return bundle.getSymbolicName();
 		} else {
 			return getClass().getName();
 		}

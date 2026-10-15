@@ -4,7 +4,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Tabular PCR report shareds modules
 Bundle-SymbolicName: org.eclipse.chemclipse.pcr.report.supplier.tabular;singleton:=true
 Bundle-Version: 0.9.0.qualifier
-Bundle-Activator: org.eclipse.chemclipse.pcr.report.supplier.tabular.Activator
 Bundle-Vendor: ChemClipse
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.support,
