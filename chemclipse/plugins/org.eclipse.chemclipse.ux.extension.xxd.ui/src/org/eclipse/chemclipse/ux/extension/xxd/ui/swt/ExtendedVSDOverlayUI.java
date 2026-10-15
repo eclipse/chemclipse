@@ -149,7 +149,7 @@ public class ExtendedVSDOverlayUI extends Composite implements IExtendedPartUI {
 				color = colorSchemeNormal.getNextColor();
 			}
 
-			chartVSD.addSeriesData(lineSeriesDataList, ICompressionSupport.MEDIUM_COMPRESSION);
+			chartVSD.addSeriesData(lineSeriesDataList, ICompressionSupport.NO_COMPRESSION);
 		}
 	}
 
