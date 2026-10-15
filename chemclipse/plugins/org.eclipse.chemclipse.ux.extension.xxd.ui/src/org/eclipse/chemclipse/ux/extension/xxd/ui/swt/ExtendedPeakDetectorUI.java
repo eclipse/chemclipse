@@ -370,7 +370,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 				lineSeriesDataList.add(peakChartSupport.getPeak(peak, true, mirrored, colorPeak, ID_PEAK));
 			}
 
-			chartControl.get().addSeriesData(lineSeriesDataList, ICompressionSupport.LOW_COMPRESSION);
+			chartControl.get().addSeriesData(lineSeriesDataList, ICompressionSupport.NO_COMPRESSION);
 		}
 	}
 

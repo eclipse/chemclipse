@@ -243,7 +243,7 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 				lineSeriesDataList.add(lineSeriesData);
 				color = colorSchemeNormal.getNextColor();
 			}
-			chart.addSeriesData(lineSeriesDataList, ICompressionSupport.MEDIUM_COMPRESSION);
+			chart.addSeriesData(lineSeriesDataList, ICompressionSupport.NO_COMPRESSION);
 		}
 	}
 

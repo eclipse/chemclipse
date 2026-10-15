@@ -253,7 +253,7 @@ public class ExtendedNMROverlayUI extends Composite implements PropertyChangeLis
 				}
 			}
 
-			chartNMR.addSeriesData(lineSeriesDataList, ICompressionSupport.MEDIUM_COMPRESSION);
+			chartNMR.addSeriesData(lineSeriesDataList, ICompressionSupport.NO_COMPRESSION);
 		}
 	}
 
