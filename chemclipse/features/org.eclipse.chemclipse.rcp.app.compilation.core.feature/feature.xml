@@ -321,6 +321,10 @@
          version="0.0.0"/>
 
    <includes
+         id="org.eclipse.chemclipse.msd.peakpicker.sigmoid.feature"
+         version="0.0.0"/>
+
+   <includes
          id="org.eclipse.chemclipse.xxd.edit.supplier.tophat.feature"
          version="0.0.0"/>
 
