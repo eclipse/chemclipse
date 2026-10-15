@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorWSD;
@@ -99,7 +98,7 @@ public class ScanEditorWSD implements IScanEditorWSD {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);
 			part.setVisible(false);
-			DisplayUtils.getDisplay().asyncExec(() -> partStack.getChildren().remove(part));
+			Display.getDefault().asyncExec(() -> partStack.getChildren().remove(part));
 		}
 	}
 

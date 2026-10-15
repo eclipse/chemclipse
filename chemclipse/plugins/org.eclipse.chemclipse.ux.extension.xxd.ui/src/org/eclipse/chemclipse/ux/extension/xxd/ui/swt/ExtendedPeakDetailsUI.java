@@ -6,7 +6,7 @@
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.ux.extension.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
@@ -121,7 +120,7 @@ public class ExtendedPeakDetailsUI extends Composite implements IExtendedPartUI 
 		if(clipboard != null && !clipboard.isDisposed()) {
 			clipboard.dispose();
 		}
-		clipboard = new Clipboard(DisplayUtils.getDisplay());
+		clipboard = new Clipboard(parent.getDisplay());
 		list = new List(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		list.setLayoutData(new GridData(GridData.FILL_BOTH));
 		list.addKeyListener(new KeyAdapter() {

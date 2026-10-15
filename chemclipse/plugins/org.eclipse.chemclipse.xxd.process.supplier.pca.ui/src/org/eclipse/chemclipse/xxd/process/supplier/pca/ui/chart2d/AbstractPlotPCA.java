@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2025 Lablicate GmbH.
+ * Copyright (c) 2017, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  * Jan Holy - initial API and implementation
  * Philip Wenig - improvements
@@ -21,12 +21,12 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.custom.IRangeSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.IAxis;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.IAxisSet;
@@ -121,7 +121,7 @@ public abstract class AbstractPlotPCA extends ScatterChart implements IRangeSupp
 
 		chartSettings.setShowAxisZeroMarker(true);
 		chartSettings.setShowSeriesLabelMarker(true);
-		chartSettings.setColorSeriesLabelMarker(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		chartSettings.setColorSeriesLabelMarker(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
 		chartSettings.setUseSeriesLabelDescription(true);
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableCompress(false);

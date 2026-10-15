@@ -13,7 +13,6 @@
 package org.eclipse.chemclipse.ux.extension.ui.handlers;
 
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
@@ -27,6 +26,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 
 public class CreateSnapshotHandler {
 
@@ -40,7 +40,7 @@ public class CreateSnapshotHandler {
 
 		Image image = getImage(composite);
 		if(image == null) {
-			openMessageBox("The focus of the selected view/editor couldn't be retrieved.");
+			openMessageBox(composite.getShell(), "The focus of the selected view/editor couldn't be retrieved.");
 		} else {
 			/*
 			 * There is a bug on Linux x86 and x86_64.
@@ -49,7 +49,7 @@ public class CreateSnapshotHandler {
 				/*
 				 * Save the image to a file.
 				 */
-				FileDialog fileDialog = new FileDialog(DisplayUtils.getShell(), SWT.SAVE);
+				FileDialog fileDialog = new FileDialog(composite.getShell(), SWT.SAVE);
 				fileDialog.setText("Save Clipboard To File");
 				fileDialog.setFileName("Clipboard.png");
 				fileDialog.setFilterExtensions("*.png");
@@ -68,10 +68,10 @@ public class CreateSnapshotHandler {
 				ImageTransfer imageTransfer = ImageTransfer.getInstance();
 				Object[] data = new Object[]{image.getImageData()};
 				Transfer[] dataTypes = new Transfer[]{imageTransfer};
-				Clipboard clipboard = new Clipboard(DisplayUtils.getDisplay());
+				Clipboard clipboard = new Clipboard(composite.getDisplay());
 				clipboard.setContents(data, dataTypes);
 				clipboard.dispose();
-				openMessageBox("The selected view/editor has been copied to clipboard.");
+				openMessageBox(composite.getShell(), "The selected view/editor has been copied to clipboard.");
 			}
 			image.dispose();
 		}
@@ -97,10 +97,10 @@ public class CreateSnapshotHandler {
 		return image;
 	}
 
-	private void openMessageBox(String message) {
+	private void openMessageBox(Shell shell, String message) {
 
 		String text = "Copy Selection To Clipboard";
-		MessageBox messageBox = new MessageBox(DisplayUtils.getShell(), SWT.NONE);
+		MessageBox messageBox = new MessageBox(shell, SWT.NONE);
 		messageBox.setText(text);
 		messageBox.setMessage(message);
 		messageBox.open();

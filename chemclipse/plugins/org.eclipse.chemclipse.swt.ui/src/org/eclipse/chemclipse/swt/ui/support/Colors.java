@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
@@ -30,21 +29,21 @@ public class Colors {
 	/*
 	 * System colors
 	 */
-	public static final Color WHITE = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WHITE);
-	public static final Color BLACK = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK);
-	public static final Color RED = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_RED);
-	public static final Color DARK_RED = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_RED);
-	public static final Color GREEN = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_GREEN);
-	public static final Color DARK_GREEN = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_GREEN);
-	public static final Color GRAY = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_GRAY);
-	public static final Color DARK_GRAY = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
-	public static final Color CYAN = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_CYAN);
-	public static final Color DARK_CYAN = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_CYAN);
-	public static final Color BLUE = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLUE);
-	public static final Color DARK_BLUE = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_BLUE);
-	public static final Color MAGENTA = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_MAGENTA);
-	public static final Color YELLOW = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_YELLOW);
-	public static final Color DARK_YELLOW = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_YELLOW);
+	public static final Color WHITE = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
+	public static final Color BLACK = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+	public static final Color RED = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+	public static final Color DARK_RED = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
+	public static final Color GREEN = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
+	public static final Color DARK_GREEN = Display.getDefault().getSystemColor(SWT.COLOR_DARK_GREEN);
+	public static final Color GRAY = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+	public static final Color DARK_GRAY = Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
+	public static final Color CYAN = Display.getDefault().getSystemColor(SWT.COLOR_CYAN);
+	public static final Color DARK_CYAN = Display.getDefault().getSystemColor(SWT.COLOR_DARK_CYAN);
+	public static final Color BLUE = Display.getDefault().getSystemColor(SWT.COLOR_BLUE);
+	public static final Color DARK_BLUE = Display.getDefault().getSystemColor(SWT.COLOR_DARK_BLUE);
+	public static final Color MAGENTA = Display.getDefault().getSystemColor(SWT.COLOR_MAGENTA);
+	public static final Color YELLOW = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
+	public static final Color DARK_YELLOW = Display.getDefault().getSystemColor(SWT.COLOR_DARK_YELLOW);
 	/*
 	 * Map specific colors
 	 */
@@ -345,7 +344,7 @@ public class Colors {
 
 	private static List<Color> initialize(int[] colorIds) {
 
-		Display display = DisplayUtils.getDisplay();
+		Display display = Display.getDefault();
 		List<Color> colors = new ArrayList<>();
 		for(int colorId : colorIds) {
 			Color color = display.getSystemColor(colorId);

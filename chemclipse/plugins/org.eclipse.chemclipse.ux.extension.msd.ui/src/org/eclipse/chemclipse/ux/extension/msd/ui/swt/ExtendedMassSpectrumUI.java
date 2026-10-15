@@ -37,7 +37,6 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.AuditTrailSupport;
@@ -271,7 +270,7 @@ public class ExtendedMassSpectrumUI extends Composite implements IExtendedPartUI
 				AuditTrailSupport.updateAuditTrail(standaloneMassSpectrum, processingInfo, processMethod, processTypeSupport);
 			}
 
-			DisplayUtils.getDisplay().syncExec(() -> {
+			parent.getDisplay().syncExec(() -> {
 				update(scanMSD);
 				massSpectrumChart.update();
 				MassSpectrumUpdateNotifierUI.update(getDisplay(), scanMSD);

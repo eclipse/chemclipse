@@ -6,7 +6,7 @@
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -78,72 +78,70 @@ public class ChromatogramFileExportProcessSupplier implements IProcessTypeSuppli
 				DisplayUtils.executeBusy(() -> {
 
 					Display display = Display.getDefault();
-					if(display != null) {
-						display.syncExec(() -> {
+					display.syncExec(() -> {
 
-							IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-							String fileName = chromatogram.getName().isEmpty() ? VersionConstants.FILE_NAME_CHROMATOGRAM : chromatogram.getName() + VersionConstants.FILE_EXTENSION_CHROMATOGRAM;
-							/*
-							 * Sometimes the shell is null.
-							 */
-							boolean disposeShell = false;
-							Shell shell = display.getActiveShell();
-							if(shell == null) {
-								shell = new Shell(display);
-								disposeShell = true;
-							}
+						IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+						String fileName = chromatogram.getName().isEmpty() ? VersionConstants.FILE_NAME_CHROMATOGRAM : chromatogram.getName() + VersionConstants.FILE_EXTENSION_CHROMATOGRAM;
+						/*
+						 * Sometimes the shell is null.
+						 */
+						boolean disposeShell = false;
+						Shell shell = display.getActiveShell();
+						if(shell == null) {
+							shell = new Shell(display);
+							disposeShell = true;
+						}
 
-							FileDialog fileDialog = new FileDialog(display.getActiveShell(), SWT.SAVE);
-							fileDialog.setOverwrite(true);
-							fileDialog.setText(VersionConstants.DESCRIPTION_CHROMATOGRAM);
-							fileDialog.setFilterExtensions(VersionConstants.FILTER_EXTENSION_CHROMATOGRAM);
-							fileDialog.setFilterNames(VersionConstants.FILTER_NAME_CHROMATOGRAM);
-							fileDialog.setFileName(fileName);
-							fileDialog.setFilterPath(PreferenceSupplier.getListPathExport());
-							String path = fileDialog.open();
-							if(path != null) {
-								try {
+						FileDialog fileDialog = new FileDialog(display.getActiveShell(), SWT.SAVE);
+						fileDialog.setOverwrite(true);
+						fileDialog.setText(VersionConstants.DESCRIPTION_CHROMATOGRAM);
+						fileDialog.setFilterExtensions(VersionConstants.FILTER_EXTENSION_CHROMATOGRAM);
+						fileDialog.setFilterNames(VersionConstants.FILTER_NAME_CHROMATOGRAM);
+						fileDialog.setFileName(fileName);
+						fileDialog.setFilterPath(PreferenceSupplier.getListPathExport());
+						String path = fileDialog.open();
+						if(path != null) {
+							try {
+								/*
+								 * Save the chromatogram in a specific version.
+								 */
+								PreferenceSupplier.setListPathExport(fileDialog.getFilterPath());
+								ChromatogramVersion chromatogramVersion = processSettings.getChromatogramVersion();
+								String version = chromatogramVersion.getVersion();
+
+								File file = new File(path);
+								if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 									/*
-									 * Save the chromatogram in a specific version.
+									 * CSD
 									 */
-									PreferenceSupplier.setListPathExport(fileDialog.getFilterPath());
-									ChromatogramVersion chromatogramVersion = processSettings.getChromatogramVersion();
-									String version = chromatogramVersion.getVersion();
-
-									File file = new File(path);
-									if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
-										/*
-										 * CSD
-										 */
-										ChromatogramWriterCSD writer = new ChromatogramWriterCSD();
-										writer.writeChromatogram(file, version, chromatogramCSD, context.getProgressMonitor());
-									} else if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
-										/*
-										 * MSD
-										 */
-										ChromatogramWriterMSD writer = new ChromatogramWriterMSD();
-										writer.writeChromatogram(file, version, chromatogramMSD, context.getProgressMonitor());
-									} else if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
-										/*
-										 * WSD
-										 */
-										ChromatogramWriterWSD writer = new ChromatogramWriterWSD();
-										writer.writeChromatogram(file, chromatogramWSD, context.getProgressMonitor());
-									}
-								} catch(Exception e) {
-									logger.warn(e);
+									ChromatogramWriterCSD writer = new ChromatogramWriterCSD();
+									writer.writeChromatogram(file, version, chromatogramCSD, context.getProgressMonitor());
+								} else if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
+									/*
+									 * MSD
+									 */
+									ChromatogramWriterMSD writer = new ChromatogramWriterMSD();
+									writer.writeChromatogram(file, version, chromatogramMSD, context.getProgressMonitor());
+								} else if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
+									/*
+									 * WSD
+									 */
+									ChromatogramWriterWSD writer = new ChromatogramWriterWSD();
+									writer.writeChromatogram(file, chromatogramWSD, context.getProgressMonitor());
 								}
+							} catch(Exception e) {
+								logger.warn(e);
 							}
-							/*
-							 * Dispose the shell on demand.
-							 */
-							if(disposeShell) {
-								if(!shell.isDisposed()) {
-									shell.dispose();
-								}
+						}
+						/*
+						 * Dispose the shell on demand.
+						 */
+						if(disposeShell) {
+							if(!shell.isDisposed()) {
+								shell.dispose();
 							}
-						});
-					}
+						}
+					});
 
 					return null;
 				});

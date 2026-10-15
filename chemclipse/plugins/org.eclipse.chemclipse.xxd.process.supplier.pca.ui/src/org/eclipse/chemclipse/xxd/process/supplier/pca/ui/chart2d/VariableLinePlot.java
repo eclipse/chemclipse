@@ -6,7 +6,7 @@
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  * Lorenz Gerber- initial API and implementation
  *******************************************************************************/
@@ -20,7 +20,6 @@ import java.util.Locale;
 
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.IVariable;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.custom.IRangeSupport;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IEvaluation;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IResult;
@@ -34,6 +33,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.IAxis;
 import org.eclipse.swtchart.IAxisSet;
 import org.eclipse.swtchart.IPlotArea;
@@ -136,7 +136,7 @@ public class VariableLinePlot extends LineChart implements IRangeSupport {
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.setTitle(title);
 		chartSettings.setTitleVisible(true);
-		chartSettings.setTitleColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		chartSettings.setTitleColor(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
 		chartSettings.setBackground(null);
 		chartSettings.setBackgroundChart(null);
 		chartSettings.setBackgroundPlotArea(null);
@@ -168,12 +168,12 @@ public class VariableLinePlot extends LineChart implements IRangeSupport {
 
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("Samples");
-		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		primaryAxisSettingsX.setColor(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
 
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Signal");
 		primaryAxisSettingsY.setDecimalFormat(decimalFormat);
-		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		primaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
 
 	}
 

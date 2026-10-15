@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -50,6 +49,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 
 public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPartUI {
@@ -80,7 +80,7 @@ public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPa
 	private void createControl() {
 
 		setLayout(new GridLayout(1, true));
-		setBackground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 
 		createToolbarMain(this);
 		toolbarSearch = createToolbarSearch(this);

@@ -1,18 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2025 Lablicate GmbH.
+ * Copyright (c) 2011, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.support;
 
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
@@ -38,7 +37,7 @@ public class BaselineSelectionPaintListener implements ICustomPaintListener {
 			if(x1 != x2) {
 				Color foreground = e.gc.getForeground();
 				Color background = e.gc.getBackground();
-				e.gc.setForeground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+				e.gc.setForeground(e.gc.getDevice().getSystemColor(SWT.COLOR_BLACK));
 				e.gc.drawLine(x1, y1 - VERTICAL_MARKER_SIZE, x1, y1 + VERTICAL_MARKER_SIZE); // vertical start
 				e.gc.drawLine(x1, y1, x2, y2);
 				e.gc.drawLine(x2, y2 - VERTICAL_MARKER_SIZE, x2, y2 + VERTICAL_MARKER_SIZE); // vertical stop

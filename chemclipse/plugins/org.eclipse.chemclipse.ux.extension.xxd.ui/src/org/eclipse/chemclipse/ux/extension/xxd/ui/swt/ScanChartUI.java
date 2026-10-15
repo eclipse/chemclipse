@@ -6,7 +6,7 @@
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.MassSpectrumType;
 import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.BarSeriesValue;
@@ -50,6 +49,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.IAxis;
 import org.eclipse.swtchart.IBarSeries;
 import org.eclipse.swtchart.IBarSeries.BarWidthStyle;
@@ -107,7 +107,7 @@ public class ScanChartUI extends ScrollableChart {
 	private DecimalFormat decimalFormatLowIntensity = ValueFormat.getDecimalFormatEnglish("0.0000");
 	private DecimalFormat decimalFormatHighResolution = ValueFormat.getDecimalFormatEnglish("0.000###");
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
-	private Font systemFont = DisplayUtils.getDisplay().getSystemFont();
+	private Font systemFont = Display.getDefault().getSystemFont();
 
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 
@@ -117,7 +117,7 @@ public class ScanChartUI extends ScrollableChart {
 
 		/**
 		 * If true, the x value will be used. Otherwise, the y value.
-		 * 
+		 *
 		 * @param useX
 		 */
 		public LabelPaintListener(boolean useX) {

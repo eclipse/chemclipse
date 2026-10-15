@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Lablicate GmbH.
+ * Copyright (c) 2008, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  * Philip Wenig - initial API and implementation
  * Matthias Mailänder - fix status line not appearing
@@ -17,7 +17,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.progress.core.IStatusLineMessageListener;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.ui.exceptions.StatusLineManagerException;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.swt.widgets.Display;
@@ -32,7 +31,7 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * Prints messages to the status line.
- * 
+ *
  * @author Philip Wenig
  */
 public class UIStatusLineLogger implements IStatusLineMessageListener {
@@ -43,7 +42,7 @@ public class UIStatusLineLogger implements IStatusLineMessageListener {
 	@Override
 	public void setInfo(final InfoType infoType, final String message) {
 
-		Display display = DisplayUtils.getDisplay();
+		Display display = Display.getDefault();
 		display.asyncExec(() -> {
 
 			try {
@@ -82,7 +81,7 @@ public class UIStatusLineLogger implements IStatusLineMessageListener {
 
 	/**
 	 * Get the status line manager.
-	 * 
+	 *
 	 * @return {@link StatusLineManager}
 	 * @param actionBars
 	 */
@@ -97,7 +96,7 @@ public class UIStatusLineLogger implements IStatusLineMessageListener {
 
 	/**
 	 * Returns a valid workbench window instance.
-	 * 
+	 *
 	 * @return {@link IWorkbenchWindow}
 	 * @throws StatusLineManagerException
 	 */
@@ -112,7 +111,7 @@ public class UIStatusLineLogger implements IStatusLineMessageListener {
 
 	/**
 	 * Returns a workbench page instance.
-	 * 
+	 *
 	 * @param workbenchWindow
 	 * @return {@link IWorkbenchPage}
 	 * @throws StatusLineManagerException
@@ -139,7 +138,7 @@ public class UIStatusLineLogger implements IStatusLineMessageListener {
 
 	/**
 	 * Returns the action bars.
-	 * 
+	 *
 	 * @param workbenchPartSite
 	 * @return {@link IActionBars}
 	 * @throws StatusLineManagerException

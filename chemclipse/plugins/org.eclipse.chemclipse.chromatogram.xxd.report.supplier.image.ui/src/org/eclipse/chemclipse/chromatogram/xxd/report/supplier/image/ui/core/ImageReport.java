@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2025 Lablicate GmbH.
+ * Copyright (c) 2023, 2026 Lablicate GmbH.
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
@@ -22,8 +22,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.settings
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.image.ui.settings.ImageReportSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.swt.widgets.Display;
 
 public class ImageReport extends AbstractChromatogramReportGenerator {
 
@@ -35,7 +35,7 @@ public class ImageReport extends AbstractChromatogramReportGenerator {
 		if(!processingInfo.hasErrorMessages()) {
 			if(chromatogramReportSettings instanceof IChromatogramImageReportSettings imageReportSettings) {
 				ImageRunnableGeneric imageRunnable = new ImageRunnableGeneric(file, chromatogram, imageReportSettings);
-				DisplayUtils.getDisplay().syncExec(imageRunnable);
+				Display.getDefault().syncExec(imageRunnable);
 				processingInfo.setProcessingResult(file);
 			}
 		}
