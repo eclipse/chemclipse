@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.AbstractPeakIdentifierMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.model.support.LimitSupport;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support.Identifier;
@@ -33,6 +34,8 @@ import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakIdentifier extends AbstractPeakIdentifierMSD {
+
+	private static final Logger logger = Logger.getLogger(PeakIdentifier.class);
 
 	@Override
 	public IProcessingInfo<IPeakIdentificationResults> identify(List<? extends IPeakMSD> peaks, IPeakIdentifierSettingsMSD identifierSettings, IProgressMonitor monitor) {
@@ -58,7 +61,8 @@ public class PeakIdentifier extends AbstractPeakIdentifierMSD {
 				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, Messages.nistDbIdentifier, numberOfIdentifiedPeaks + " peaks were identified successfully."));
 				processingInfo.setProcessingResult(peakIdentificationResults);
 			} catch(FileNotFoundException e) {
-				processingInfo.addErrorMessage(Messages.nistDbIdentifier, "An I/O error ocurred.");
+				processingInfo.addErrorMessage(Messages.nistDbIdentifier, "File not found.", "Setup folders in preferences.");
+				logger.error(e);
 			}
 		} else {
 			processingInfo.addErrorMessage(Messages.nistDbIdentifier, "The settings are not of type: " + PeakIdentifierSettings.class);
