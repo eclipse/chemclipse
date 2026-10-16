@@ -106,29 +106,29 @@ public class Identifier {
 			 * Remove unnecessary files. Afterwards, prepare the peaks and analyze
 			 * them using the NIST application.
 			 */
-			logger.info("Backup control files.");
+			logger.debug("Backup control files.");
 			backupControlFiles(runtimeSupport);
-			logger.info("Clean files.");
+			logger.debug("Clean files.");
 			cleanFiles(runtimeSupport, monitor);
 
 			try {
 				/*
 				 * At least 1 mass spectrum is needed.
 				 */
-				logger.info("Get the mass spectra.");
+				logger.debug("Get the mass spectra.");
 				boolean isUseOptimizedMassSpectrum = searchSettings.isUseOptimizedMassSpectrum();
 				massSpectra = getMassSpectra(massSpectrumList, isUseOptimizedMassSpectrum);
 				if(!massSpectra.isEmpty()) {
 					int numberOfUnknownEntriesToProcess = massSpectra.size();
-					logger.info("Process: " + numberOfUnknownEntriesToProcess);
+					logger.debug("Process: " + numberOfUnknownEntriesToProcess);
 					runtimeSupport.getNistSupport().setNumberOfUnknownEntriesToProcess(numberOfUnknownEntriesToProcess);
-					logger.info("Prepare");
+					logger.debug("Prepare");
 					prepareFiles(runtimeSupport, massSpectra, monitor);
 					long maxProcessTime = (long)(searchSettings.getTimeoutInMinutes() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
-					logger.info("Max Process Time: " + maxProcessTime);
-					logger.info("Run Identification");
+					logger.debug("Max Process Time: " + maxProcessTime);
+					logger.debug("Run Identification");
 					Compounds compounds = runNistApplication(runtimeSupport, maxProcessTime, waitTime, monitor);
-					logger.info("Assign Compounds");
+					logger.debug("Assign Compounds");
 					assignMassSpectrumCompounds(compounds.getCompounds(), massSpectrumList, identificationResults, searchSettings, monitor);
 				}
 			} catch(IOException e) {
@@ -367,7 +367,7 @@ public class Identifier {
 		HLMFilenameFilter hlmFileNameFilter = new HLMFilenameFilter();
 		for(String hlmFile : directory.list(hlmFileNameFilter)) {
 			deleteFile(nistApplicationPath + File.separator + hlmFile);
-			logger.info("Delete: " + nistApplicationPath + File.separator + hlmFile);
+			logger.debug("Delete: " + nistApplicationPath + File.separator + hlmFile);
 		}
 	}
 
@@ -380,7 +380,7 @@ public class Identifier {
 
 		File file = new File(path);
 		if(file.delete()) {
-			logger.info("Delete: " + path);
+			logger.debug("Delete: " + path);
 		}
 	}
 
@@ -391,21 +391,21 @@ public class Identifier {
 		 * autoimp.msd
 		 */
 		File autoimpFile = new File(nistSupport.getAutoimpFile());
-		logger.info("autoimp.msd: " + autoimpFile.getAbsolutePath());
+		logger.debug("autoimp.msd: " + autoimpFile.getAbsolutePath());
 		File autoimpFileBackup = new File(nistSupport.getAutoimpFile() + BACKUP_CONTROL_EXTENSION);
 		if(autoimpFile.exists()) {
 			boolean statusRename = autoimpFile.renameTo(autoimpFileBackup);
-			logger.info("Status backup autoimp.msd: " + statusRename);
+			logger.debug("Status backup autoimp.msd: " + statusRename);
 		}
 		/*
 		 * filespec.fil
 		 */
 		File filespecFile = new File(nistSupport.getFilespecFile());
-		logger.info("filespec.fil: " + filespecFile.getAbsolutePath());
+		logger.debug("filespec.fil: " + filespecFile.getAbsolutePath());
 		File filespecFileBackup = new File(nistSupport.getFilespecFile() + BACKUP_CONTROL_EXTENSION);
 		if(filespecFile.exists()) {
 			boolean statusRename = filespecFile.renameTo(filespecFileBackup);
-			logger.info("Status backup filespec.fil: " + statusRename);
+			logger.debug("Status backup filespec.fil: " + statusRename);
 		}
 	}
 
@@ -419,7 +419,7 @@ public class Identifier {
 		File autoimpFile = new File(nistSupport.getAutoimpFile());
 		if(autoimpFileBackup.exists()) {
 			boolean statusRename = autoimpFileBackup.renameTo(autoimpFile);
-			logger.info("Status restore autoimp.msd: " + statusRename);
+			logger.debug("Status restore autoimp.msd: " + statusRename);
 		}
 		/*
 		 * filespec.fil
@@ -428,7 +428,7 @@ public class Identifier {
 		File filespecFile = new File(nistSupport.getFilespecFile());
 		if(filespecFileBackup.exists()) {
 			boolean statusRename = filespecFileBackup.renameTo(filespecFile);
-			logger.info("Status restore filespec.fil: " + statusRename);
+			logger.debug("Status restore filespec.fil: " + statusRename);
 		}
 	}
 
@@ -482,7 +482,7 @@ public class Identifier {
 		monitor.beginTask("Run the NIST-DB application.", IProgressMonitor.UNKNOWN);
 		boolean batchModus = runtimeSupport.isBatchModus();
 		Process process = runtimeSupport.executeRunCommand();
-		logger.info("Spawned " + process);
+		logger.debug("Spawned " + process);
 		try {
 			/*
 			 * Parse results.
@@ -491,7 +491,7 @@ public class Identifier {
 				long start = System.currentTimeMillis();
 				long max = start + maxProcessTime;
 				waitForFile(new File(runtimeSupport.getNistSupport().getSrcreadyFile()), monitor, max);
-				logger.info("Process time to get NIST results [ms]: " + (System.currentTimeMillis() - start));
+				logger.debug("Process time to get NIST results [ms]: " + (System.currentTimeMillis() - start));
 				NistResultFileParser nistResultFileParser = new NistResultFileParser();
 				File results = new File(runtimeSupport.getNistSupport().getSrcresltFile());
 				waitForFile(results, monitor, max);
@@ -545,7 +545,7 @@ public class Identifier {
 		monitor.subTask("Start the NIST-DB application.");
 		try {
 			Process process = runtimeSupport.executeOpenCommand();
-			logger.info("Run " + runtimeSupport.getApplication() + " as " + process.pid());
+			logger.debug("Run " + runtimeSupport.getApplication() + " as " + process.pid());
 		} catch(Exception e) {
 			logger.warn(e);
 		}
