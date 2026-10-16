@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.process.supplier.batchprocess.core.BatchJobFileSupplier;
 import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.msd.ui.support.DatabaseSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.MassSpectrumSupport;
 import org.eclipse.chemclipse.ux.extension.ui.model.DataExplorerTreeSettings;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
@@ -40,6 +41,7 @@ public class MassSpectrumFileExplorer {
 		MultiDataExplorerTreeUI explorerUI = new MultiDataExplorerTreeUI(parent, SWT.NONE, new DataExplorerTreeSettings(Activator.getDefault().getPreferenceStore()));
 		List<ISupplierFileEditorSupport> editorSupportList = new ArrayList<>();
 		editorSupportList.add(MassSpectrumSupport.getInstanceEditorSupport());
+		editorSupportList.add(DatabaseSupport.getInstanceEditorSupport());
 		/*
 		 * The batch job editor is contributed by a downstream plug-in.
 		 */
