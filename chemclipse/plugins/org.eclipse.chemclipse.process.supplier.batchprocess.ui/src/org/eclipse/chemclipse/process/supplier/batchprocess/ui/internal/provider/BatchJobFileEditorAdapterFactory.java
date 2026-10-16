@@ -15,7 +15,7 @@ package org.eclipse.chemclipse.process.supplier.batchprocess.ui.internal.provide
 import org.eclipse.chemclipse.process.supplier.batchprocess.ui.provider.BatchJobFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.BatchJobFileSupplier;
+import org.eclipse.chemclipse.process.supplier.batchprocess.core.BatchJobFileSupplier;
 import org.eclipse.core.runtime.IAdapterFactory;
 
 public class BatchJobFileEditorAdapterFactory implements IAdapterFactory {
