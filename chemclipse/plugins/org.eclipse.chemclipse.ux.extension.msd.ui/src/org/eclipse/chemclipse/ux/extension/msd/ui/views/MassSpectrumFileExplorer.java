@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.process.supplier.batchprocess.core.BatchJobFileSup
 import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.DatabaseSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.MassSpectrumSupport;
+import org.eclipse.chemclipse.ux.extension.ui.methods.MethodEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.model.DataExplorerTreeSettings;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.swt.MultiDataExplorerTreeUI;
@@ -41,6 +42,7 @@ public class MassSpectrumFileExplorer {
 		MultiDataExplorerTreeUI explorerUI = new MultiDataExplorerTreeUI(parent, SWT.NONE, new DataExplorerTreeSettings(Activator.getDefault().getPreferenceStore()));
 		List<ISupplierFileEditorSupport> editorSupportList = new ArrayList<>();
 		editorSupportList.add(MassSpectrumSupport.getInstanceEditorSupport());
+		editorSupportList.add(new MethodEditorSupport());
 		editorSupportList.add(DatabaseSupport.getInstanceEditorSupport());
 		/*
 		 * The batch job editor is contributed by a downstream plug-in.
