@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.core.runtime.adapters">
       <factory
-            adaptableType="org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.BatchJobFileSupplier"
+            adaptableType="org.eclipse.chemclipse.process.supplier.batchprocess.core.BatchJobFileSupplier"
             class="org.eclipse.chemclipse.process.supplier.batchprocess.ui.internal.provider.BatchJobFileEditorAdapterFactory">
          <adapter
                type="org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport">

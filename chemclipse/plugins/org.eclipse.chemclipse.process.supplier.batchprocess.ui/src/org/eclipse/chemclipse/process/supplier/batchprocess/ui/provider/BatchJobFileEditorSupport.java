@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.support.HeaderField;
+import org.eclipse.chemclipse.process.supplier.batchprocess.core.BatchJobFileSupplier;
 import org.eclipse.chemclipse.process.supplier.batchprocess.ui.editors.BatchJobEditor;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
@@ -32,7 +33,7 @@ public class BatchJobFileEditorSupport extends AbstractSupplierFileEditorSupport
 
 	public BatchJobFileEditorSupport() {
 
-		super(Collections.emptyList());
+		super(Collections.singletonList(new BatchJobFileSupplier()));
 	}
 
 	@Override

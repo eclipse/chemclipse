@@ -10,7 +10,7 @@
  * Contributors:
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors;
+package org.eclipse.chemclipse.process.supplier.batchprocess.core;
 
 import java.io.File;
 
