@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.model.SeparationColumnType;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.updates.IUpdateListener;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -76,6 +77,13 @@ public class ProcessMethodProfiles extends Composite {
 	public void setUpdateListener(IUpdateListener updateListener) {
 
 		this.updateListener = updateListener;
+	}
+
+	public void setColumnsVisible(boolean visible) {
+
+		GridLayout gridLayout = (GridLayout)getLayout();
+		gridLayout.numColumns = visible ? 4 : 3;
+		PartSupport.setCompositeVisibility(comboViewerColumns.get().getCombo(), visible);
 	}
 
 	private void createControl() {

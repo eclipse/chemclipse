@@ -157,6 +157,11 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 		toolbarProfile.get().setEnabledEdit(enabledEdit);
 	}
 
+	public void setToolbarProfileColumnsVisible(boolean visible) {
+
+		toolbarProfile.get().setColumnsVisible(visible);
+	}
+
 	public void setToolbarHeaderVisible(boolean visible) {
 
 		enableToolbar(toolbarHeader, buttonToolbarHeader.get(), IMAGE_HEADER, TOOLTIP_HEADER, visible);

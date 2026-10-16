@@ -166,6 +166,7 @@ public class BatchJobUI {
 		extendedMethodUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		extendedMethodUI.setToolbarHeaderVisible(false);
 		extendedMethodUI.setToolbarMainVisible(false);
+		extendedMethodUI.setToolbarProfileColumnsVisible(dataCategory != DataCategory.MALDI);
 		extendedMethodUI.setModificationHandler(this::setEditorDirty);
 
 		return extendedMethodUI;
