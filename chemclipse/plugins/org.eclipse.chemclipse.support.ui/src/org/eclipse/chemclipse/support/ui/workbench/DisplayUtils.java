@@ -24,15 +24,8 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.swt.widgets.Widget;
 
 public class DisplayUtils {
 
@@ -152,28 +145,6 @@ public class DisplayUtils {
 		});
 	}
 
-	/**
-	 * Avoid this method or even static {@link Display#getDefault()} lookups. Use
-	 * {@code widget.getDisplay()} or {@code shell.getDisplay()},
-	 * or in e4 inject {@link org.eclipse.e4.ui.di.UISynchronize}
-	 * or the active {@code Shell}.
-	 */
-	public static Display getDisplay() {
-
-		return Display.getDefault();
-	}
-
-	public static Shell getShell(Widget widget) {
-
-		Shell shell = null;
-		if(widget instanceof Control control) {
-			shell = control.getShell();
-		} else {
-			shell = getShell();
-		}
-		return shell;
-	}
-
 	public static Shell getShell() {
 
 		if(Display.getCurrent() == null) {
@@ -183,13 +154,11 @@ public class DisplayUtils {
 		}
 		Shell shell = null;
 
-		Display display = getDisplay();
-		if(display != null) {
-			try {
-				shell = display.getActiveShell();
-			} catch(Exception e) {
-				logger.error(e);
-			}
+		Display display = Display.getDefault();
+		try {
+			shell = display.getActiveShell();
+		} catch(Exception e) {
+			logger.error(e);
 		}
 
 		if(shell == null) {
@@ -212,25 +181,4 @@ public class DisplayUtils {
 		return shell;
 	}
 
-	public static Shell getShell(Event event) {
-
-		Widget widget = event.widget;
-		if(widget instanceof Control control) {
-			return control.getShell();
-		}
-		if(widget instanceof ToolItem toolItem) {
-			return toolItem.getParent().getShell();
-		}
-		if(widget instanceof MenuItem menuItem) {
-			return menuItem.getParent().getShell();
-		}
-		if(widget instanceof TreeItem treeItem) {
-			return treeItem.getParent().getShell();
-		}
-		if(widget instanceof TableItem tableItem) {
-			return tableItem.getParent().getShell();
-		}
-		// possibly add more...
-		return null;
-	}
 }
