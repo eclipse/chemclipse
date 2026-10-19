@@ -37,7 +37,7 @@ public class PeakDetectorSettingsCSD extends AbstractPeakDetectorCSDSettings {
 
 	@JsonProperty(value = "Window Size", defaultValue = "9")
 	@LabelProperty(value = "%WindowSize", tooltip = "%WindowSizeDescription")
-	@IntSettingsProperty(useSpinner = true, minValue = 5, maxValue = 45, validation = Validation.ODD_NUMBER_INCLUDING_ZERO)
+	@IntSettingsProperty(useSpinner = true, minValue = 3, maxValue = 75, validation = Validation.ODD_NUMBER_INCLUDING_ZERO)
 	private int windowSize = 9;
 
 	@JsonProperty(value = "Polynomial Order", defaultValue = "2")
@@ -47,7 +47,7 @@ public class PeakDetectorSettingsCSD extends AbstractPeakDetectorCSDSettings {
 
 	@JsonProperty(value = "Noise Factor", defaultValue = "5.0")
 	@LabelProperty(value = "%NoiseFactor", tooltip = "%NoiseFactorDescription")
-	@FloatSettingsProperty(minValue = 1.0f, maxValue = 100.0f)
+	@FloatSettingsProperty(minValue = 0.1f, maxValue = 100.0f)
 	private float noiseFactor = 5.0f;
 
 	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
