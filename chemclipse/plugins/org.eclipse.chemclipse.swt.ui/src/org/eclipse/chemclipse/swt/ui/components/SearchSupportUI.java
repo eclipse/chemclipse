@@ -142,12 +142,14 @@ public class SearchSupportUI extends Composite {
 			@Override
 			public void keyReleased(KeyEvent e) {
 
+				/*
+				 * Reset text when blank to avoid that invisible blank
+				 * fields are searched.
+				 */
 				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
 					runSearch();
-				} else if(text.getText().trim().equals("")) {
-					/*
-					 * Reset when empty.
-					 */
+				} else if(text.getText().isBlank()) {
+					text.setText("");
 					runSearch();
 				}
 			}
@@ -162,8 +164,10 @@ public class SearchSupportUI extends Composite {
 
 				if(e.detail == SWT.ICON_CANCEL) {
 					text.setText("");
+					runSearch();
+				} else if(e.detail == SWT.ICON_SEARCH) {
+					runSearch();
 				}
-				runSearch();
 			}
 		});
 
