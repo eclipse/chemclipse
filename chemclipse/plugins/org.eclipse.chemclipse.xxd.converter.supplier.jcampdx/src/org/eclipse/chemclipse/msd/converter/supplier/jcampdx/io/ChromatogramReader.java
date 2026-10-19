@@ -45,6 +45,19 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 	private static final Logger logger = Logger.getLogger(ChromatogramReader.class);
 
 	/*
+	 * Note MassFinder5 - no '##SCAN_NUMBER=' marker
+	 * ##TIC=11974
+	 * ##TIME=4.0930
+	 * ##NPOINTS=22
+	 * ##XYDATA=(X,Y)
+	 * 39 332
+	 * 40 1642
+	 * 41 791
+	 */
+	private static final String HEADER_MASSFINDER_3 = "##PROGRAM=MassFinder3";
+	private static final String HEADER_MASSFINDER_4 = "##PROGRAM=MassFinder4";
+	private static final String HEADER_MASSFINDER_5 = "##PROGRAM=MassFinder5";
+	/*
 	 * ##NAME=Toluol
 	 * ##TIC=11143
 	 * ##SCAN=530
@@ -54,8 +67,6 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 	 * ##LIB=279181791
 	 * ##MARKED=1
 	 */
-	private static final String HEADER_MASSFINDER_3 = "##PROGRAM=MassFinder3";
-	private static final String HEADER_MASSFINDER_4 = "##PROGRAM=MassFinder4";
 	private static final String HEADER_MARKER = "##";
 	private static final String HEADER_TITLE = "##TITLE=";
 	private static final String HEADER_PROGRAM = "##PROGRAM=";
@@ -105,6 +116,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 			boolean readIonsSpace = false;
 			boolean adjustTotalSignal = false;
 			float totalSignalFromFile = 0.0f;
+			boolean specialCaseTIC = false;
 
 			String line;
 			while((line = bufferedReader.readLine()) != null && !monitor.isCanceled()) {
@@ -125,7 +137,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 				 * 28 1631
 				 * 29 3914
 				 */
-				if(line.startsWith(SCAN_NUMBER_MARKER) || line.startsWith(SCAN_MARKER)) {
+				if(line.startsWith(SCAN_NUMBER_MARKER) || line.startsWith(SCAN_MARKER) || (specialCaseTIC && line.startsWith(TIC_MARKER))) {
 					/*
 					 * Store an existing scan.
 					 */
@@ -134,6 +146,15 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 							massSpectrum.adjustTotalSignal(totalSignalFromFile);
 						}
 						chromatogram.addScan(massSpectrum);
+					}
+					/*
+					 * TIC
+					 */
+					if(specialCaseTIC) {
+						if(line.startsWith(TIC_MARKER)) {
+							String value = line.replace(TIC_MARKER, "").trim();
+							totalSignalFromFile = Float.parseFloat(value);
+						}
 					}
 					/*
 					 * Create a new scan.
@@ -150,6 +171,9 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 					adjustTotalSignal = true;
 				} else if(line.startsWith(HEADER_MASSFINDER_4)) {
 					adjustTotalSignal = false;
+				} else if(line.startsWith(HEADER_MASSFINDER_5)) {
+					adjustTotalSignal = false;
+					specialCaseTIC = true;
 				}
 				/*
 				 * Read the scan data.
