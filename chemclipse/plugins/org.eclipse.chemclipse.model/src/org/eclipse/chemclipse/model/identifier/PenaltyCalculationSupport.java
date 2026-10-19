@@ -78,6 +78,8 @@ public class PenaltyCalculationSupport {
 					} else {
 						penalty = penaltyCalculationSettings.getPenaltyMissingReference();
 					}
+				} else {
+					penalty = penaltyCalculationSettings.getPenaltyMissingReference();
 				}
 				break;
 			case RETENTION_TIME_MIN:
@@ -87,6 +89,8 @@ public class PenaltyCalculationSupport {
 					} else {
 						penalty = penaltyCalculationSettings.getPenaltyMissingReference();
 					}
+				} else {
+					penalty = penaltyCalculationSettings.getPenaltyMissingReference();
 				}
 				break;
 			case RETENTION_INDEX:
@@ -96,6 +100,8 @@ public class PenaltyCalculationSupport {
 					} else {
 						penalty = penaltyCalculationSettings.getPenaltyMissingReference();
 					}
+				} else {
+					penalty = penaltyCalculationSettings.getPenaltyMissingReference();
 				}
 				break;
 			default:
