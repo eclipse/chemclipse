@@ -119,6 +119,10 @@ public class PerspectiveSwitcherAddon {
 						int index = menu.indexOf(menuItem);
 						menuItem.dispose();
 						createCloseItem(menu, perspective, index);
+					} else if(WorkbenchMessages.PerspectiveBar_reset.equals(text)) {
+						int index = menu.indexOf(menuItem);
+						menuItem.dispose();
+						createResetItem(menu, index);
 					}
 				}
 			}
@@ -135,6 +139,23 @@ public class PerspectiveSwitcherAddon {
 		MenuItem menuItem = new MenuItem(menu, SWT.PUSH, index);
 		menuItem.setText(WorkbenchMessages.WorkbenchWindow_close);
 		menuItem.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> closePerspective(perspective)));
+	}
+
+	/*
+	 * The platform resets the perspective via the compatibility layer, which drops the shared
+	 * editor area. Execute the same command as the Window > Reset Perspective menu entry instead.
+	 * Like the platform, the selected perspective is reset.
+	 */
+	private void createResetItem(Menu menu, int index) {
+
+		MenuItem menuItem = new MenuItem(menu, SWT.PUSH, index);
+		menuItem.setText(WorkbenchMessages.PerspectiveBar_reset);
+		menuItem.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> {
+			MPerspective perspective = perspectiveStack.getSelectedElement();
+			if(perspective != null) {
+				resetPerspective(perspective);
+			}
+		}));
 	}
 
 	private void closePerspective(MPerspective perspective) {
