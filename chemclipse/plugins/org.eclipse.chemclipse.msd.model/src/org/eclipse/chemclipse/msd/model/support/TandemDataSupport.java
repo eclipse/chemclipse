@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,6 +47,7 @@ public class TandemDataSupport {
 		DecimalFormat decimalFormat = getDecimalFormat(condenseOption);
 		Map<Integer, Map<TraceTandemMSD, List<IIon>>> scanRangesMap = new HashMap<>();
 		List<Integer> retentionTimes = new ArrayList<>();
+		Set<Integer> retentionTimesUnique = new HashSet<>();
 
 		for(IScan scan : chromatogramMSD.getScans()) {
 			if(scan instanceof IScanMSD scanMSD) {
@@ -70,15 +72,18 @@ public class TandemDataSupport {
 					/*
 					 * Harmonize times.
 					 */
-					if(!retentionTimes.contains(retentionTime)) {
+					if(retentionTimesUnique.add(retentionTime)) {
 						retentionTimes.add(retentionTime);
 					}
 					/*
 					 * Collect Traces
 					 */
-					for(TraceTandemMSD trace : traces) {
-						for(IIon ion : scanMSD.getIons()) {
-							if(ion instanceof IIonMSn ionMSn && matches(trace, ionMSn)) {
+					for(IIon ion : scanMSD.getIons()) {
+						if(!(ion instanceof IIonMSn ionMSn)) {
+							continue;
+						}
+						for(TraceTandemMSD trace : traces) {
+							if(matches(trace, ionMSn)) {
 								/*
 								 * Collect
 								 */
@@ -112,6 +117,12 @@ public class TandemDataSupport {
 			for(TraceTandemMSD trace : traces) {
 				Map<Integer, List<IIon>> scanIonsMap = new HashMap<>();
 				collectTraces(Arrays.asList(trace), scanRangesMap, retentionTimes, scanIonsMap);
+				/*
+				 * Several scans could be mapped to the same condensed retention time.
+				 * Sum the intensities like in the combined mode. Otherwise, only the
+				 * highest intensity would be kept and the original ion would be modified.
+				 */
+				condenseTraces(scanIonsMap);
 				createReferenceChromatogram(chromatograms, chromatogramMSD, retentionTimes, scanIonsMap, headerField, trace.toString(), enforceFullTimeRange);
 			}
 		} else {
@@ -229,9 +240,7 @@ public class TandemDataSupport {
 			scanMSD.setRetentionTime(retentionTime);
 			List<IIon> ions = scanIonsMap.get(retentionTime);
 			if(ions != null) {
-				for(IIon ion : ions) {
-					scanMSD.addIon(ion);
-				}
+				scanMSD.addIons(ions, false);
 			}
 			/*
 			 * Scan
