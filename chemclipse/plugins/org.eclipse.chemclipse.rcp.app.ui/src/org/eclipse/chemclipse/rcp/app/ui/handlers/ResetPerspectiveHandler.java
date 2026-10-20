@@ -61,6 +61,7 @@ public class ResetPerspectiveHandler {
 			return;
 		}
 		reconnectEditorArea(modelService, window, resetPerspective, editorArea);
+		reconnectPlaceholders(modelService, perspective, resetPerspective);
 		modelService.hideLocalPlaceholders(window, resetPerspective);
 		List<MPartSashContainerElement> resetChildren = resetPerspective.getChildren();
 		List<MPartSashContainerElement> perspectiveChildren = perspective.getChildren();
@@ -92,6 +93,26 @@ public class ResetPerspectiveHandler {
 				if(createdArea != null) {
 					window.getSharedElements().remove(createdArea);
 				}
+			}
+		}
+	}
+
+	/*
+	 * The snapshot placeholders are resolved by their elementId, which fails for placeholders
+	 * that reference an imported shared part with a different elementId. Take the reference
+	 * from the matching placeholder of the current perspective instead.
+	 */
+	private void reconnectPlaceholders(EModelService modelService, MPerspective perspective, MPerspective resetPerspective) {
+
+		for(MPlaceholder placeholder : modelService.findElements(resetPerspective, null, MPlaceholder.class)) {
+			if(placeholder.getRef() != null) {
+				continue;
+			}
+			if(modelService.find(placeholder.getElementId(), perspective) instanceof MPlaceholder current && current.getRef() != null) {
+				placeholder.setRef(current.getRef());
+			} else {
+				logger.warn("The placeholder could not be resolved: " + placeholder.getElementId());
+				placeholder.setToBeRendered(false);
 			}
 		}
 	}
