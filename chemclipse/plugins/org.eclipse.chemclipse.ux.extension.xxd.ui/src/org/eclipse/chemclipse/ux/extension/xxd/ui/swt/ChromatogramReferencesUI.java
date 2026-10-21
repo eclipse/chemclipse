@@ -18,6 +18,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -39,6 +40,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.ControlBuilder;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramEditorDialog;
@@ -56,9 +58,15 @@ import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.fieldassist.ContentProposal;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.IContentProposal;
+import org.eclipse.jface.fieldassist.IContentProposalListener;
+import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -123,8 +131,12 @@ public class ChromatogramReferencesUI extends Composite {
 			List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
 			chromatogramSelections.add(chromatogramSelection);
 			for(IChromatogram chromatogramReference : chromatogram.getReferencedChromatograms()) {
-				chromatogramSelections.add(createChromatogramSelection(chromatogramReference));
+				IChromatogramSelection referenceSelection = createChromatogramSelection(chromatogramReference);
+				if(referenceSelection != null) {
+					chromatogramSelections.add(referenceSelection);
+				}
 			}
+			sortReferences(chromatogramSelections);
 			comboChromatograms.data = chromatogramSelections;
 		}
 
@@ -164,13 +176,30 @@ public class ChromatogramReferencesUI extends Composite {
 						referenceSelections.put(referencedChromatogram, referenceSelection);
 					}
 				}
-				chromatogramMasterAndReferences.add(referenceSelection);
+				if(referenceSelection != null) {
+					chromatogramMasterAndReferences.add(referenceSelection);
+				}
 			}
+			sortReferences(chromatogramMasterAndReferences);
 		}
 
 		if(comboChromatograms != null) {
 			comboChromatograms.setInput(chromatogramMasterAndReferences);
 			comboChromatograms.refreshUI();
+		}
+	}
+
+	/**
+	 * The master chromatogram stays on position 0, the referenced chromatograms are sorted by their label.
+	 * A constant index is used, otherwise the default labels would contain the current position.
+	 * The sort is stable, hence references without a label keep their order.
+	 *
+	 * @param chromatogramSelections
+	 */
+	private void sortReferences(List<IChromatogramSelection> chromatogramSelections) {
+
+		if(chromatogramSelections.size() > 2) {
+			chromatogramSelections.subList(1, chromatogramSelections.size()).sort(Comparator.comparing(chromatogramSelection -> ChromatogramDataSupport.getReferenceLabel(chromatogramSelection.getChromatogram(), 1, true), String.CASE_INSENSITIVE_ORDER));
 		}
 	}
 
@@ -251,7 +280,7 @@ public class ChromatogramReferencesUI extends Composite {
 
 	private void createComboChromatograms(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.NONE);
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(new ArrayContentProvider());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
@@ -275,10 +304,46 @@ public class ChromatogramReferencesUI extends Composite {
 			}
 		});
 
-		combo.setToolTipText("Select a referenced chromatogram.");
+		combo.setToolTipText("Select or type in a referenced chromatogram.");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		enableAutoComplete(comboViewer);
 
 		comboViewerReferencesControl.set(comboViewer);
+	}
+
+	private void enableAutoComplete(ComboViewer comboViewer) {
+
+		Combo combo = comboViewer.getCombo();
+		IContentProposalProvider proposalProvider = (contents, _) -> {
+			List<IContentProposal> proposals = new ArrayList<>();
+			if(contents != null && comboChromatograms != null) {
+				/*
+				 * Prefer the exact matches.
+				 */
+				String search = contents.trim().toLowerCase();
+				List<IContentProposal> contains = new ArrayList<>();
+				ILabelProvider labelProvider = (ILabelProvider)comboViewer.getLabelProvider();
+				for(IChromatogramSelection chromatogramSelection : comboChromatograms.data) {
+					String label = labelProvider.getText(chromatogramSelection);
+					String labelSearch = label.toLowerCase();
+					if(labelSearch.startsWith(search)) {
+						proposals.add(new ChromatogramProposal(label, chromatogramSelection));
+					} else if(labelSearch.contains(search)) {
+						contains.add(new ChromatogramProposal(label, chromatogramSelection));
+					}
+				}
+				proposals.addAll(contains);
+			}
+			return proposals.toArray(new IContentProposal[0]);
+		};
+
+		ContentProposalAdapter contentProposalAdapter = ControlBuilder.autoComplete(combo, proposalProvider);
+		contentProposalAdapter.addContentProposalListener((IContentProposalListener)proposal -> {
+			if(proposal instanceof ChromatogramProposal chromatogramProposal && comboChromatograms != null) {
+				comboChromatograms.setSelection(new StructuredSelection(chromatogramProposal.chromatogramSelection));
+				updateButtons();
+			}
+		});
 	}
 
 	private void createButtonSelectNextChromatogram(Composite parent) {
@@ -462,6 +527,10 @@ public class ChromatogramReferencesUI extends Composite {
 
 			masterSelection.getChromatogram().setDirty(true);
 		}
+
+		if(comboChromatograms != null) {
+			sortReferences(comboChromatograms.data);
+		}
 	}
 
 	private void createButtonOpenReference(Composite parent) {
@@ -538,6 +607,17 @@ public class ChromatogramReferencesUI extends Composite {
 			}
 		} catch(Exception e) {
 			logger.warn(e);
+		}
+	}
+
+	private static final class ChromatogramProposal extends ContentProposal {
+
+		private final IChromatogramSelection chromatogramSelection;
+
+		public ChromatogramProposal(String label, IChromatogramSelection chromatogramSelection) {
+
+			super(label);
+			this.chromatogramSelection = chromatogramSelection;
 		}
 	}
 
