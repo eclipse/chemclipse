@@ -151,7 +151,7 @@ public class OpenSnippetHandler {
 			if(element instanceof MStackElement stackElement) {
 				MUIElement uiElement = modelService.find(stackID, searchRoot);
 				if(uiElement instanceof MPartStack partStack) {
-					logger.info("Part Stack: " + partStack);
+					logger.debug("Part Stack: " + partStack);
 					partStack.getChildren().add(stackElement);
 				}
 			}
@@ -241,7 +241,7 @@ public class OpenSnippetHandler {
 		@SuppressWarnings("unchecked")
 		T snippet = (T)modelService.cloneSnippet(snippetContainer, snippetId, null);
 		if(snippet != null) {
-			logger.info("Clone Snippet: " + snippet);
+			logger.debug("Clone Snippet: " + snippet);
 			snippet.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
 			snippet.setElementId(snippetId + "." + UUID.randomUUID().toString());
 		} else {
@@ -310,7 +310,7 @@ public class OpenSnippetHandler {
 		return element -> {
 			if(element instanceof MPart part) {
 				if(partService != null) {
-					logger.info("Activate part: " + part);
+					logger.debug("Activate part: " + part);
 					part.setCloseable(true);
 					partService.showPart(part, PartState.ACTIVATE);
 				}
@@ -323,14 +323,14 @@ public class OpenSnippetHandler {
 		/*
 		 * Track additional information.
 		 */
-		logger.info("Application: " + application);
-		logger.info("Model Service: " + modelService);
-		logger.info("Part Service: " + partService);
+		logger.debug("Application: " + application);
+		logger.debug("Model Service: " + modelService);
+		logger.debug("Part Service: " + partService);
 
 		if(partService instanceof PartServiceImpl) {
-			logger.info("The correct part service is used.");
+			logger.debug("The correct part service is used.");
 		} else if(partService instanceof ApplicationPartServiceImpl) {
-			logger.info("The 'ApplicationPartServiceImpl' is used.");
+			logger.debug("The 'ApplicationPartServiceImpl' is used.");
 		} else {
 			logger.error("You are in serious troubles! The part service must be not null.");
 		}
