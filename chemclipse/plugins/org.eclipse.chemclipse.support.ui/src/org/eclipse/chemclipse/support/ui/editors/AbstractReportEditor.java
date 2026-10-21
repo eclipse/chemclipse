@@ -108,7 +108,6 @@ public abstract class AbstractReportEditor extends MultiPageEditorPart implement
 		while(iterator.hasNext()) {
 			IMultiEditorPage page = iterator.next();
 			if(page.getPageIndex() == activePageIndex) {
-				logger.info("Page set focus: " + page.getEditorTitle());
 				page.setFocus();
 				break exitloop;
 			}
@@ -135,7 +134,6 @@ public abstract class AbstractReportEditor extends MultiPageEditorPart implement
 						 * Don't call page.setFocus() here.
 						 * It will be called by default.
 						 */
-						logger.info("Set active page: " + page.getEditorTitle());
 						setActivePage(pageIndex);
 					}
 					break exitloop;
