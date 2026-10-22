@@ -63,29 +63,32 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or methods.
 	 */
-	private static final long serialVersionUID = -5705437012632871947L;
+	private static final long serialVersionUID = -5705437012632871948L;
 
 	private static final Logger logger = Logger.getLogger(AbstractScanMSD.class);
 
 	private static final float NORMALIZATION_BASE = 100.0f;
 	private static final int LIMIT_SIM_MEASUREMENT = 10; // 10 m/z values
+	/*
+	 * Shared by all scans without ions. It is replaced by a modifiable
+	 * list as soon as the first ion is added.
+	 */
+	private static final List<IIon> NO_IONS = Collections.emptyList();
 
 	private boolean isNormalized = false;
 	private float normalizationBase = 0.0f;
 	private List<IIon> ionsList;
-	private ImmutableZeroIon immutableZeroIon;
 	private IScanMSD optimizedMassSpectrum;
 
 	protected AbstractScanMSD() {
 
 		super();
-		init();
+		createNewIonList();
 	}
 
 	protected AbstractScanMSD(final Collection<? extends IIon> ions) {
 
 		super();
-		init();
 		this.ionsList = new ArrayList<>(ions);
 	}
 
@@ -99,25 +102,10 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	protected AbstractScanMSD(IScanMSD templateScan) {
 
 		super(templateScan);
-		init();
 		this.ionsList = new ArrayList<>(templateScan.getIons()); // Shallow copy.
 		this.isNormalized = templateScan.isNormalized();
 		this.normalizationBase = templateScan.getNormalizationBase();
 		this.optimizedMassSpectrum = templateScan.getOptimizedMassSpectrum();
-		if(templateScan instanceof AbstractScanMSD templateScanAbstract) {
-			this.immutableZeroIon = templateScanAbstract.immutableZeroIon;
-		}
-	}
-
-	private void init() {
-
-		/*
-		 * If mass spectrum will be cloned, the ion list will be created as a new
-		 * instance in the method createNewIonList().<br/> The ions of the object to be
-		 * cloned will be stored in the new object again by each implementing class.
-		 */
-		createNewIonList();
-		immutableZeroIon = new ImmutableZeroIon();
 	}
 
 	@Override
@@ -129,6 +117,14 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	@Override
 	public AbstractScanMSD addIons(List<IIon> ions, boolean addIntensities) {
 
+		/*
+		 * Size the list once instead of growing it ion by ion.
+		 */
+		if(ionsList == NO_IONS) {
+			ionsList = new ArrayList<>(ions.size());
+		} else if(ionsList instanceof ArrayList<IIon> arrayList) {
+			arrayList.ensureCapacity(ionsList.size() + ions.size());
+		}
 		for(IIon ion : ions) {
 			if(ion == null) {
 				continue;
@@ -183,7 +179,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		 * Add a new ion.
 		 */
 		if(addNew) {
-			this.ionsList.add(ion);
+			getModifiableIonsList().add(ion);
 			setDirty(true);
 		}
 		return this;
@@ -195,7 +191,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		if(checked) {
 			addIon(ion);
 		} else {
-			ionsList.add(ion);
+			getModifiableIonsList().add(ion);
 			setDirty(true);
 		}
 		return this;
@@ -217,7 +213,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	@Override
 	public AbstractScanMSD removeAllIons() {
 
-		ionsList.clear();
+		clearIons();
 		return this;
 	}
 
@@ -301,12 +297,21 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	@Override
 	public List<IIon> getIons() {
 
+		if(ionsList == NO_IONS) {
+			return NO_IONS;
+		}
 		return Collections.unmodifiableList(ionsList);
 	}
 
 	public void clearIons() {
 
-		this.ionsList.clear();
+		/*
+		 * Release the backing array, otherwise its capacity is retained.
+		 */
+		ionsList.clear();
+		if(ionsList instanceof ArrayList<IIon> arrayList) {
+			arrayList.trimToSize();
+		}
 	}
 
 	@Override
@@ -347,12 +352,9 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	@Override
 	public float getTotalSignal() {
 
-		IIon ion;
 		float totalSignal = 0;
-		Iterator<IIon> iterator = ionsList.iterator();
-		while(iterator.hasNext()) {
-			ion = iterator.next();
-			totalSignal += ion.getAbundance();
+		for(int i = 0; i < ionsList.size(); i++) {
+			totalSignal += ionsList.get(i).getAbundance();
 		}
 		return totalSignal;
 	}
@@ -416,7 +418,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			Comparator<IIon> comparator = new IonCombinedComparator(IonComparatorMode.ABUNDANCE_FIRST);
 			return Collections.max(ionsList, comparator);
 		} else {
-			return immutableZeroIon;
+			return ImmutableZeroIon.INSTANCE;
 		}
 	}
 
@@ -427,7 +429,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			Comparator<IIon> comparator = new IonCombinedComparator(IonComparatorMode.MZ_FIRST);
 			return Collections.max(ionsList, comparator);
 		} else {
-			return immutableZeroIon;
+			return ImmutableZeroIon.INSTANCE;
 		}
 	}
 
@@ -438,7 +440,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			Comparator<IIon> comparator = new IonCombinedComparator(IonComparatorMode.ABUNDANCE_FIRST);
 			return Collections.min(ionsList, comparator);
 		} else {
-			return immutableZeroIon;
+			return ImmutableZeroIon.INSTANCE;
 		}
 	}
 
@@ -449,7 +451,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			Comparator<IIon> comparator = new IonCombinedComparator(IonComparatorMode.MZ_FIRST);
 			return Collections.min(ionsList, comparator);
 		} else {
-			return immutableZeroIon;
+			return ImmutableZeroIon.INSTANCE;
 		}
 	}
 
@@ -869,11 +871,25 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 
 	/**
 	 * This method is used only to create a new ion list. The list has to be filled
-	 * by the implementation specific ions of each implementing class.
+	 * by the implementation specific ions of each implementing class.<br/>
+	 * If mass spectrum will be cloned, the ion list will be created as a new
+	 * instance. The ions of the object to be cloned will be stored in the new
+	 * object again by each implementing class.<br/>
+	 * Don't allocate a list up front. Empty scans share {@link #NO_IONS}.
+	 * Large chromatograms (e.g. MRM traces) contain millions of scans,
+	 * often empty or with a few ions only.
 	 */
 	private void createNewIonList() {
 
-		ionsList = new ArrayList<>(200);
+		ionsList = NO_IONS;
+	}
+
+	private List<IIon> getModifiableIonsList() {
+
+		if(ionsList == NO_IONS) {
+			ionsList = new ArrayList<>();
+		}
+		return ionsList;
 	}
 
 	/**

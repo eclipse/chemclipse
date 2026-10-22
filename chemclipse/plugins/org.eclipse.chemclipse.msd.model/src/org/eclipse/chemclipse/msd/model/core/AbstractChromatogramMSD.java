@@ -66,7 +66,6 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 	public static final int DEFAULT_SEGMENT_WIDTH = 10;
 
 	private IIonTransitionSettings ionTransitionSettings = new IonTransitionSettings();
-	private ImmutableZeroIon immutableZeroIon = new ImmutableZeroIon();
 	private IScanMSD combinedMassSpectrum;
 
 	@Override
@@ -259,7 +258,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 
 	private boolean isZeroImmutableIon(IIon ion) {
 
-		if(immutableZeroIon.equals(ion)) {
+		if(ImmutableZeroIon.INSTANCE.equals(ion)) {
 			return true;
 		} else {
 			return false;

@@ -49,7 +49,10 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	private int timeSegmentId = 1; // Default 1
 	private int cycleNumber = 1; // Default 1
 
-	private Set<IIdentificationTarget> identificationTargets = new HashSet<>();
+	/*
+	 * Created lazily, most scans don't contain targets.
+	 */
+	private Set<IIdentificationTarget> identificationTargets = null;
 	/*
 	 * Do not persist (only for internal use)
 	 */
@@ -274,6 +277,9 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	@Override
 	public Set<IIdentificationTarget> getTargets() {
 
+		if(identificationTargets == null) {
+			identificationTargets = new HashSet<>();
+		}
 		return identificationTargets;
 	}
 

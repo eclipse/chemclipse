@@ -97,7 +97,7 @@ public class PeakMassSpectrum extends AbstractPeakMassSpectrum {
 		 * Make a deep copy of all ions.
 		 */
 		for(IIon ion : getIons()) {
-			peakIon = new PeakIon(ion.getIon(), ion.getAbundance());
+			peakIon = createPeakIon(ion, ion.getAbundance());
 			massSpectrum.addIon(peakIon);
 		}
 		return massSpectrum;

@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.msd.model.implementation.PeakIon;
+import org.eclipse.chemclipse.msd.model.implementation.PeakIonMSn;
 
 public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectrum implements IPeakMassSpectrum {
 
@@ -49,7 +50,7 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 		/*
 		 * Add the ions.
 		 */
-		PeakIon peakIon;
+		IPeakIon peakIon;
 		float abundance;
 		/*
 		 * Cast to double to get a higher precision.
@@ -58,7 +59,7 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 		List<IIon> ions = peakMassSpectrum.getIons();
 		for(IIon ion : ions) {
 			abundance = (float)(ion.getAbundance() * intensityFactor);
-			peakIon = new PeakIon(ion.getIon(), abundance);
+			peakIon = createPeakIon(ion, abundance);
 			addIon(peakIon);
 		}
 	}
@@ -94,12 +95,12 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 		/*
 		 * Add the ions.
 		 */
-		PeakIon peakIon;
+		IPeakIon peakIon;
 		float abundance;
 		List<IIon> ions = massSpectrum.getIons();
 		for(IIon ion : ions) {
 			abundance = (ion.getAbundance() / actualPercentageIntensity) * 100.0f;
-			peakIon = new PeakIon(ion.getIon(), abundance);
+			peakIon = createPeakIon(ion, abundance);
 			addIon(peakIon, false);
 		}
 	}
@@ -112,11 +113,27 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 		/*
 		 * Add the ions.
 		 */
-		PeakIon peakIon;
+		IPeakIon peakIon;
 		List<IIon> ions = massSpectrum.getIons();
 		for(IIon ion : ions) {
-			peakIon = new PeakIon(ion);
+			peakIon = createPeakIon(ion, ion.getAbundance());
 			addIon(peakIon);
+		}
+	}
+
+	/**
+	 * Creates a peak ion. The ion transition is kept in case of tandem MS data.
+	 *
+	 * @param ion
+	 * @param abundance
+	 * @return {@link IPeakIon}
+	 */
+	protected static IPeakIon createPeakIon(IIon ion, float abundance) {
+
+		if(ion instanceof IIonMSn ionMSn && ionMSn.getIonTransition() != null) {
+			return new PeakIonMSn(ion.getIon(), abundance, ionMSn.getIonTransition());
+		} else {
+			return new PeakIon(ion.getIon(), abundance);
 		}
 	}
 
