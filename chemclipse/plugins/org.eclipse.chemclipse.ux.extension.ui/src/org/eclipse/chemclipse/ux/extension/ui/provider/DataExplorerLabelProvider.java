@@ -34,9 +34,8 @@ import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.navigator.IDescriptionProvider;
 
-public class DataExplorerLabelProvider extends ColumnLabelProvider implements IDescriptionProvider {
+public class DataExplorerLabelProvider extends ColumnLabelProvider {
 
 	private final Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> supplierFunction;
 	private ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
@@ -55,21 +54,6 @@ public class DataExplorerLabelProvider extends ColumnLabelProvider implements ID
 	public void dispose() {
 
 		resourceManager.dispose();
-	}
-
-	@Override
-	public String getDescription(Object element) {
-
-		if(element instanceof File file) {
-			String name;
-			if(file.getName().equals("")) {
-				name = file.getAbsolutePath();
-			} else {
-				name = file.getName();
-			}
-			return "This is: " + name;
-		}
-		return "";
 	}
 
 	@Override

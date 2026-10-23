@@ -21,25 +21,9 @@ import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.PeakIdentifie
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.navigator.IDescriptionProvider;
 
 // TODO Merge with ChromatogramFileExplorer
-public class PeakFileExplorerLabelProvider extends LabelProvider implements IDescriptionProvider {
-
-	@Override
-	public String getDescription(Object anElement) {
-
-		if(anElement instanceof File file) {
-			String name;
-			if(file.getName().equals("")) {
-				name = file.getAbsolutePath();
-			} else {
-				name = file.getName();
-			}
-			return "This is: " + name;
-		}
-		return "";
-	}
+public class PeakFileExplorerLabelProvider extends LabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
