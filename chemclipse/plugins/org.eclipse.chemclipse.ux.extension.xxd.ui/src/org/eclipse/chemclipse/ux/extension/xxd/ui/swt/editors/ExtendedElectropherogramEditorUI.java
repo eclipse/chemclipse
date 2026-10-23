@@ -117,6 +117,7 @@ import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExp
 import org.eclipse.core.commands.Category;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.commands.MCommand;
@@ -126,6 +127,7 @@ import org.eclipse.e4.ui.model.application.ui.menu.MHandledMenuItem;
 import org.eclipse.e4.ui.model.application.ui.menu.MMenu;
 import org.eclipse.e4.ui.model.application.ui.menu.MMenuElement;
 import org.eclipse.e4.ui.model.application.ui.menu.MMenuFactory;
+import org.eclipse.e4.ui.services.EContextService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -160,8 +162,6 @@ import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 import org.eclipse.swtchart.extensions.model.ICustomSeries;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
-import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.internal.keys.model.KeyController;
 import org.eclipse.ui.keys.IBindingService;
 
@@ -203,8 +203,8 @@ public class ExtendedElectropherogramEditorUI extends Composite implements ITool
 			ICategories.PEAK_FILTER, //
 			ICategories.SYSTEM);
 
-	private ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
-	private IContextService contextService = (IContextService)PlatformUI.getWorkbench().getService(IContextService.class);
+	private ECommandService commandService = Activator.getDefault().getApplication().getContext().get(ECommandService.class);
+	private EContextService contextService = Activator.getDefault().getApplication().getContext().get(EContextService.class);
 	private IBindingService bindingService = PlatformUI.getWorkbench().getService(IBindingService.class);
 
 	private AtomicReference<ProcessorToolbarUI> processorToolbarControl = new AtomicReference<>();

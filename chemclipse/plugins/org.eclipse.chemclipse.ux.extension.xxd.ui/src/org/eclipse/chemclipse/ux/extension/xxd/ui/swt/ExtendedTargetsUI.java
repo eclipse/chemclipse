@@ -63,6 +63,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.targets.ComboTarget;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
+import org.eclipse.e4.ui.services.EContextService;
 import org.eclipse.jface.bindings.TriggerSequence;
 import org.eclipse.jface.bindings.keys.KeySequence;
 import org.eclipse.jface.bindings.keys.KeyStroke;
@@ -86,7 +87,6 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.keys.IBindingService;
 
 import jakarta.inject.Inject;
@@ -100,7 +100,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private static final String COMMAND_PEAK_SELECTION_NEXT = "org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI.PeakSelectionNext";
 	private static final String COMMAND_PEAK_SELECTION_PREVIOUS = "org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI.PeakSelectionPrevious";
 
-	private IContextService contextService = (IContextService)PlatformUI.getWorkbench().getService(IContextService.class);
+	private EContextService contextService = Activator.getDefault().getApplication().getContext().get(EContextService.class);
 	private IBindingService bindingService = PlatformUI.getWorkbench().getService(IBindingService.class);
 
 	private AtomicReference<Button> buttonToolbarInfo = new AtomicReference<>();
