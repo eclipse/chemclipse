@@ -78,6 +78,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.Inter
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
+import org.eclipse.e4.ui.services.EContextService;
 import org.eclipse.jface.bindings.TriggerSequence;
 import org.eclipse.jface.bindings.keys.KeySequence;
 import org.eclipse.jface.bindings.keys.KeyStroke;
@@ -102,7 +103,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.keys.IBindingService;
 
 public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI, ConfigurableUI<PeakScanListUIConfig> {
@@ -115,7 +115,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private static final String KEY_CLASS_PREFIX = "org.eclipse.chemclipse.ux.extension.xxd.ui.PeakScanList.";
 
-	private IContextService contextService = (IContextService)PlatformUI.getWorkbench().getService(IContextService.class);
+	private EContextService contextService = Activator.getDefault().getApplication().getContext().get(EContextService.class);
 	private IBindingService bindingService = PlatformUI.getWorkbench().getService(IBindingService.class);
 
 	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();

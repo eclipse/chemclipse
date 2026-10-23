@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.dsd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.ui.swt.IExtendedPartUI;
+import org.eclipse.e4.ui.services.EContextService;
 import org.eclipse.jface.bindings.TriggerSequence;
 import org.eclipse.jface.bindings.keys.KeySequence;
 import org.eclipse.jface.bindings.keys.KeyStroke;
@@ -52,7 +53,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.keys.IBindingService;
 
 public class ExtendedBaseCallerListUI extends Composite implements IExtendedPartUI {
@@ -61,7 +61,7 @@ public class ExtendedBaseCallerListUI extends Composite implements IExtendedPart
 
 	private static final String KEY_CLASS_PREFIX = "org.eclipse.chemclipse.ux.extension.xxd.ui.PeakScanList."; // reuse hotkeys
 
-	private IContextService contextService = (IContextService)PlatformUI.getWorkbench().getService(IContextService.class);
+	private EContextService contextService = Activator.getDefault().getApplication().getContext().get(EContextService.class);
 	private IBindingService bindingService = PlatformUI.getWorkbench().getService(IBindingService.class);
 
 	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();
