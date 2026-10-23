@@ -25,16 +25,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.navigator.IDescriptionProvider;
 import org.osgi.framework.Bundle;
 
-public class ProjectLabelProvider extends LabelProvider implements IDescriptionProvider {
-
-	@Override
-	public String getDescription(Object anElement) {
-
-		return "";
-	}
+public class ProjectLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(Object element) {
